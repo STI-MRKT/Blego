@@ -1,0 +1,27 @@
+*{box-sizing:border-box}
+html,body{height:100%}
+#app{height:100%}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:var(--bg);
+  font-size:13.5px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow:hidden;
+}
+::selection{background:var(--accent-ring)}
+button{font:inherit;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3,p{margin:0}
+svg{display:block;flex:0 0 auto}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sk{0%{background-position:100% 0}100%{background-position:0 0}}
+@keyframes load{from{width:6%}to{width:100%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-4px)}40%,60%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

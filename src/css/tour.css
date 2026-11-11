@@ -1,0 +1,107 @@
+#tour-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  font-family: var(--font);
+}
+#tour-root .tour-block {
+  position: fixed;
+  background: rgba(5, 5, 10, .74);
+  pointer-events: auto;
+  transition: all .24s cubic-bezier(.2, .8, .2, 1);
+}
+#tour-root .tour-ring {
+  position: fixed;
+  display: none;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 0 30px var(--accent-ring);
+  pointer-events: none;
+  transition: all .24s cubic-bezier(.2, .8, .2, 1);
+}
+#tour-root .tour-tip {
+  position: fixed;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  padding: 16px 16px 14px;
+  border: 1px solid var(--border-2);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  z-index: 10001;
+}
+#tour-root .tour-step {
+  font-size: 9.5px;
+  font-weight: 650;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+#tour-root .tour-title {
+  margin: 7px 0 0;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  color: var(--text);
+}
+#tour-root .tour-text {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+#tour-root .tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+#tour-root .tour-actions .btn {
+  height: 30px;
+  padding: 0 11px;
+  font-size: 11px;
+}
+#tour-root .tour-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+#tour-root .tour-tip.pos-below .tour-arrow {
+  top: -8px;
+  left: 34px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--panel);
+}
+#tour-root .tour-tip.pos-above .tour-arrow {
+  bottom: -8px;
+  left: 34px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--panel);
+}
+#tour-root .tour-tip.pos-right .tour-arrow {
+  left: -8px;
+  top: 26px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--panel);
+}
+#tour-root .tour-tip.pos-floating .tour-arrow {
+  display: none;
+}
+#tour-root.is-finish {
+  pointer-events: auto;
+  background: rgba(5, 5, 10, .74);
+}
+#tour-root.is-finish .tour-block,
+#tour-root.is-finish .tour-ring {
+  display: none;
+}
+@media (max-width: 560px) {
+  #tour-root .tour-tip {
+    width: calc(100vw - 24px);
+  }
+}

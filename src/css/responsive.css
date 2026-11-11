@@ -1,0 +1,28 @@
+@media (max-width:1200px){
+  .window{grid-template-columns:216px minmax(0,1fr)}
+  .content{padding:22px 22px 36px}
+  .demo-card{grid-template-columns:250px minmax(0,1fr)}
+}
+@media (max-width:1040px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat-v{font-size:22px}
+  .head-actions{padding-top:0}
+  .tbl th,.tbl td{padding-left:9px;padding-right:9px}
+  .net-grid,.net-grid2{grid-template-columns:1fr}
+  .net-side{order:2}
+}
+@media (max-width:900px){
+  .window{grid-template-columns:72px minmax(0,1fr)}
+  .nav-item{justify-content:center;padding:0}
+  .nav-item .label,.nav-label,.brand-text,.side-user .meta{display:none}
+  .side-brand{justify-content:center;padding-bottom:12px}
+  .credit{text-align:center;font-size:8px;line-height:1.5;padding:10px 2px}
+  .demo-card,.sk-card{grid-template-columns:1fr}
+  .demo-left{border-right:0;border-bottom:1px solid var(--border)}
+  .fields{grid-template-columns:1fr}
+  .prof-grid{grid-template-columns:1fr}
+  .btn span.lbl{display:none}
+  .page-head{flex-wrap:wrap}
+  .news-cols{grid-template-columns:1fr}
+  .net-facts{grid-template-columns:1fr 1fr}
+}
