@@ -52,6 +52,7 @@ test(
     );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('#image-group-panel summary').click();
     await page.locator('#image-group-name').fill('Explicit group');
     await page.locator('[data-action="group-create"]').click();
     await page
@@ -153,6 +154,7 @@ test(
         (ops) => ops.find((op) => op.field === 'title').value === 'A revised'
       )
     );
+    await page.locator('#photo-preset-panel summary').click();
     await page.locator('#metadata-preset-name').fill('Does not create a metadata draft');
     await page.locator('[data-image-select]').nth(1).check();
     await page.locator('#metadata-form [type="submit"]').click();
