@@ -20,6 +20,12 @@ async function lookupProviders(ip, providers, signal) {
           status: 'ok',
           proxy: data.proxy,
           hosting: data.hosting,
+          risk: Number.isInteger(data.risk) && data.risk >= 0 && data.risk <= 100 ? data.risk : null,
+          vpn: data.vpn === true,
+          tor: data.tor === true,
+          type: typeof data.type === 'string' ? data.type : null,
+          country: typeof data.country === 'string' ? data.country : null,
+          asn: typeof data.asn === 'string' ? data.asn : null,
           checkedAt: new Date().toISOString()
         };
       } catch (e) {
