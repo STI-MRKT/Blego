@@ -137,7 +137,9 @@ test(
     assert.ok(tsv.includes("'0050"));
     // Native text editing shortcuts remain native; application shortcut is scoped outside editors.
     await page.locator('[data-copy-control="query"]').fill('local text');
-    await page.locator('[data-copy-control="query"]').press(process.platform === 'darwin' ? 'Meta+a' : 'Control+a');
+    await page
+      .locator('[data-copy-control="query"]')
+      .press(process.platform === 'darwin' ? 'Meta+a' : 'Control+a');
     assert.equal(
       await page
         .locator('[data-copy-control="query"]')
