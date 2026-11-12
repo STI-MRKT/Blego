@@ -1,0 +1,14 @@
+
+> blego@1.1.0 dist
+> electron-builder --linux --dir --publish never
+
+  • electron-builder  version=25.1.8 os=6.18.57
+  • loaded configuration  file=package.json ("build" field)
+  • executing @electron/rebuild  electronVersion=32.3.3 arch=x64 buildFromSource=false appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=linux arch=x64 electron=32.3.3 appOutDir=release/linux-unpacked
+  • downloading     url=https://github.com/electron/electron/releases/download/v32.3.3/electron-v32.3.3-linux-x64.zip size=107 MB parts=8
+  • downloaded      url=https://github.com/electron/electron/releases/download/v32.3.3/electron-v32.3.3-linux-x64.zip duration=2.441s
+  • Cannot detect repository by .git/config. Please specify "repository" in the package.json (https://docs.npmjs.com/files/package.json#repository).
+Please see https://electron.build/publish

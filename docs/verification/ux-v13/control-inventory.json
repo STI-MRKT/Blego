@@ -1,0 +1,722 @@
+[
+  {
+    "action": "archive-back",
+    "renderSites": [
+      "src/js/ui/history.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:685"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-delete",
+    "renderSites": [
+      "src/js/ui/history.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:668"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-directory",
+    "renderSites": [
+      "src/js/ui/settings.js:38"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:704"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-export",
+    "renderSites": [
+      "src/js/ui/history.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:659"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-folder",
+    "renderSites": [
+      "src/js/ui/history.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:681"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-open",
+    "renderSites": [
+      "src/js/ui/history.js:10"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:649"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "archive-page",
+    "renderSites": [
+      "src/js/ui/history.js:10"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:638"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "ask-delete",
+    "renderSites": [
+      "src/js/ui/modal.js:31"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:811"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "cell-expand",
+    "renderSites": [
+      "src/js/ui/cell.js:8"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:774"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "checker-cancel",
+    "renderSites": [
+      "src/js/ui/checker.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1157"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "checker-clear",
+    "renderSites": [
+      "src/js/ui/checker.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1182"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "checker-run",
+    "renderSites": [
+      "src/js/main.js:324",
+      "src/js/ui/checker.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1137"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "checker-status",
+    "renderSites": [
+      "src/js/ui/checker.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1153"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "clear-demo",
+    "renderSites": [
+      "src/js/ui/generator.js:28"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:744"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "close-modal",
+    "renderSites": [
+      "src/js/ui/modal.js:13",
+      "src/js/ui/modal.js:33",
+      "src/js/ui/modal.js:42"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:823"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "copy",
+    "renderSites": [
+      "src/js/ui/cell.js:8",
+      "src/js/ui/modal.js:23"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:770"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "copy-model",
+    "renderSites": [
+      "src/js/ui/checker.js:21",
+      "src/js/ui/generator.js:29",
+      "src/js/ui/generator.js:8",
+      "src/js/ui/history.js:7",
+      "src/js/ui/import.js:14",
+      "src/js/ui/news.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:756"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "delete-entry",
+    "renderSites": [
+      "src/js/ui/modal.js:43"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:816"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "facebook-note",
+    "renderSites": [
+      "src/js/ui/checker.js:21"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1165"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "facebook-open",
+    "renderSites": [
+      "src/js/ui/checker.js:21"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1161"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "friends-geo",
+    "renderSites": [
+      "src/js/ui/friends.js:18",
+      "src/js/ui/friends.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1132"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "generate",
+    "renderSites": [
+      "src/js/ui/generator.js:28",
+      "src/js/ui/tour.js:16"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:740"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-create",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:872"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-delete",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:886"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-move",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:893"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-operations",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:926"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-rename",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:880"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-save",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:906"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "group-select",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:895"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "image-copy",
+    "renderSites": [
+      "src/js/ui/photos.js:71"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1053"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "image-preview",
+    "renderSites": [
+      "src/js/ui/photos.js:71"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1063"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "images-choose",
+    "renderSites": [
+      "src/js/ui/photos.js:68"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1049"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "import-copy",
+    "renderSites": [
+      "src/js/ui/import.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:787"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "import-page",
+    "renderSites": [
+      "src/js/ui/import.js:15"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:783"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "import-reset",
+    "renderSites": [
+      "src/js/ui/import.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:793"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "import-sample",
+    "renderSites": [
+      "src/js/ui/import.js:34"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:779"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-cancel",
+    "renderSites": [
+      "src/js/ui/photos.js:104"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:984"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-cancel-group",
+    "renderSites": [
+      "src/js/ui/photos.js:104"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:980"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-export",
+    "renderSites": [
+      "src/js/ui/photos.js:101"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:998"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-preset-import",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1106"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-preset-plan",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1072"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-preset-save",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1106",
+      "src/js/main.js:1108"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-report",
+    "renderSites": [
+      "src/js/ui/photos.js:117"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:990"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "metadata-retry",
+    "renderSites": [
+      "src/js/ui/photos.js:125"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:968"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "net-run",
+    "renderSites": [
+      "src/js/ui/network.js:8",
+      "src/js/ui/tour.js:27"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:852"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "news-cancel",
+    "renderSites": [
+      "src/js/ui/news.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:835"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "news-refresh",
+    "renderSites": [
+      "src/js/ui/news.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:839"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "news-topic",
+    "renderSites": [
+      "src/js/ui/news.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:843"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "overlay",
+    "renderSites": [
+      "src/js/ui/modal.js:58"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:828"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "photo-remove",
+    "renderSites": [
+      "src/js/ui/photos.js:71"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1124"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "photos-clear",
+    "renderSites": [
+      "src/js/ui/photos.js:68"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:1128"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "pool-apply",
+    "renderSites": [
+      "src/js/ui/settings.js:36"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:721"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "pool-bundled",
+    "renderSites": [
+      "src/js/ui/settings.js:20"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:727"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "pool-cancel",
+    "renderSites": [
+      "src/js/ui/settings.js:36"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:724"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "pool-choose",
+    "renderSites": [
+      "src/js/ui/settings.js:19"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:716"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "pool-select",
+    "renderSites": [
+      "src/js/ui/settings.js:21"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:728"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "preset-delete",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "preset-duplicate",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "preset-export",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "preset-rename",
+    "renderSites": [
+      "src/js/ui/photos.js:83"
+    ],
+    "handlerReferences": [],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "proxy-cancel",
+    "renderSites": [
+      "src/js/ui/network.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:856"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "proxy-check",
+    "renderSites": [
+      "src/js/ui/network.js:7"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:860"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "reference-choose",
+    "renderSites": [
+      "src/js/ui/photos.js:135"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:930"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "reference-use",
+    "renderSites": [
+      "src/js/ui/photos.js:145"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:932"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  },
+  {
+    "action": "set-view",
+    "renderSites": [
+      "src/js/ui/shell.js:27"
+    ],
+    "handlerReferences": [
+      "src/js/main.js:690"
+    ],
+    "buttonAcceptance": "NOT_INDIVIDUALLY_VERIFIED",
+    "note": "Runtime success is not inferred from handler presence; see FUNCTION_MAP.md for checked scenarios."
+  }
+]

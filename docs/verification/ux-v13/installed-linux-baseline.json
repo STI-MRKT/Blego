@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "code": 0,
+  "checkedAt": "2026-11-12T15:32:51.771Z",
+  "host": "linux-x64",
+  "osRelease": "6.18.57",
+  "executable": "/tmp/blego-v13-baseline-installed/BLEGO/blego",
+  "executableSha256": "c8e64073703ee96c02b6e70ba08e67489f9bb222c78894af7c624e5d60d5d555",
+  "codeSha": "7de572764e4f09c5b1a542fbec22161bd1be9f42",
+  "tests": [
+    "tests/ui/app.test.cjs",
+    "tests/ui/copy-all-sections.test.cjs",
+    "tests/ui/image-groups.test.cjs"
+  ],
+  "log": "/tmp/blego-v13-installed-baseline.json.log",
+  "dataIsolation": "Every test supplies its own temporary user-data directory; no default user store",
+  "scope": "Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates."
+}

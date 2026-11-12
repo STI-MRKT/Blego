@@ -1,0 +1,65 @@
+{
+  "refs": {
+    "6e57eabfb5b51af4475b90686fa580b5ce57e9b0": "6e57eabfb5b51af4475b90686fa580b5ce57e9b0",
+    "7de572764e4f09c5b1a542fbec22161bd1be9f42": "7de572764e4f09c5b1a542fbec22161bd1be9f42",
+    "origin/codex/blego-ux-restoration-20261112": "fdd57e83cd8bcf87993c2f0b500ecd92932cbb10",
+    "origin/codex/blego-classic-ux-functional-20261112": "8c9535acf2df1404c3f2c577f782e3929c112145"
+  },
+  "branch": "codex/blego-original-ux-v13",
+  "pr1": {
+    "state": "open",
+    "draft": true,
+    "changed": false
+  },
+  "protected": {
+    "src/css/tokens.css": {
+      "originalSha256": "cbb1198522afd61a877bc4789cb1591a6c734d9189f94ab61e260726774ccff9",
+      "baselineSha256": "cbb1198522afd61a877bc4789cb1591a6c734d9189f94ab61e260726774ccff9",
+      "identical": true
+    },
+    "src/css/base.css": {
+      "originalSha256": "a4841f7395b3752aaa422a0984d0c4f613b3c830c89106c05ae43221a5285dbc",
+      "baselineSha256": "a4841f7395b3752aaa422a0984d0c4f613b3c830c89106c05ae43221a5285dbc",
+      "identical": true
+    },
+    "src/css/components.css": {
+      "originalSha256": "7b2392068524d30f96a8222ce959006a17ea2686ef51abe21383841f17371b8c",
+      "baselineSha256": "7b2392068524d30f96a8222ce959006a17ea2686ef51abe21383841f17371b8c",
+      "identical": true
+    },
+    "src/css/shell.css": {
+      "originalSha256": "1cc7f0a3887b642395e05ae49a043093b8c53c755fc13748a9db47fb3ede789a",
+      "baselineSha256": "1cc7f0a3887b642395e05ae49a043093b8c53c755fc13748a9db47fb3ede789a",
+      "identical": true
+    },
+    "src/css/tools.css": {
+      "originalSha256": "ebf988d7d4e0cf4e0244ca6ee9175a922a468bcbb84c0d72750bb7df16c72ce3",
+      "baselineSha256": "ebf988d7d4e0cf4e0244ca6ee9175a922a468bcbb84c0d72750bb7df16c72ce3",
+      "identical": true
+    },
+    "src/css/views.css": {
+      "originalSha256": "5e6c5aa70b0501fb80b81789fc6edb0c549e45d5c1e190116a01fc7dad0af0d0",
+      "baselineSha256": "5e6c5aa70b0501fb80b81789fc6edb0c549e45d5c1e190116a01fc7dad0af0d0",
+      "identical": true
+    },
+    "src/js/icons.js": {
+      "originalSha256": "0e711cd3185d75f5e494f67d8e5b6da1a84e224df19a573eb5851e649f3ebe30",
+      "baselineSha256": "0e711cd3185d75f5e494f67d8e5b6da1a84e224df19a573eb5851e649f3ebe30",
+      "identical": true
+    }
+  },
+  "existingRuns": [
+    {
+      "sha": "7de572764e4f09c5b1a542fbec22161bd1be9f42",
+      "runId": 43225047042,
+      "conclusion": "success",
+      "scope": "historical Mac baseline; not new-candidate acceptance"
+    },
+    {
+      "sha": "8c9535acf2df1404c3f2c577f782e3929c112145",
+      "runId": 43241671846,
+      "conclusion": "failure",
+      "failedStep": "Verify installed app outside repository"
+    }
+  ]
+}

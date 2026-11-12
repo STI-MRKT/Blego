@@ -1,0 +1,832 @@
+{
+  "at": "2026-11-12T15:32:10.353Z",
+  "platform": "linux",
+  "method": "existing fetchFeed via cloud HTTP proxy; not app display or relevance/usage approval",
+  "topics": {
+    "fashion": {
+      "candidates": 5,
+      "parsed": 5,
+      "received": 222,
+      "uniqueLinks": 222,
+      "displayed": null,
+      "acceptance": "NOT_ACCEPTED_SOURCE_AUDIT_ONLY"
+    },
+    "ai": {
+      "candidates": 5,
+      "parsed": 5,
+      "received": 157,
+      "uniqueLinks": 157,
+      "displayed": null,
+      "acceptance": "NOT_ACCEPTED_SOURCE_AUDIT_ONLY"
+    },
+    "crypto": {
+      "candidates": 5,
+      "parsed": 5,
+      "received": 242,
+      "uniqueLinks": 242,
+      "displayed": null,
+      "acceptance": "NOT_ACCEPTED_SOURCE_AUDIT_ONLY"
+    },
+    "finance": {
+      "candidates": 5,
+      "parsed": 4,
+      "received": 178,
+      "uniqueLinks": 178,
+      "displayed": null,
+      "acceptance": "NOT_ACCEPTED_SOURCE_AUDIT_ONLY"
+    },
+    "tech": {
+      "candidates": 6,
+      "parsed": 6,
+      "received": 220,
+      "uniqueLinks": 220,
+      "displayed": null,
+      "acceptance": "NOT_ACCEPTED_SOURCE_AUDIT_ONLY"
+    }
+  },
+  "sources": [
+    {
+      "id": "wwd",
+      "name": "WWD",
+      "topic": "fashion",
+      "url": "https://wwd.com/feed/",
+      "attemptedAt": "2026-11-12T15:32:07.828Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://wwd.com/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 10,
+      "uniqueLinks": 10,
+      "latest": "2026-11-12T15:25:29.000Z",
+      "samples": [
+        {
+          "title": "Ariana Grande May Be Switching Up Her Hairstyle&#160;Again",
+          "link": "https://wwd.com/pop-culture/celebrity-news/ariana-grande-hairstyle-focker-in-law-premiere-1239412539/"
+        },
+        {
+          "title": "Delphine Arnault Receives Honorary Doctorate in&#160;Seoul",
+          "link": "https://wwd.com/fashion-news/designer-luxury/delphine-arnault-honorary-doctorate-seoul-ewha-1239412437/"
+        }
+      ],
+      "ms": 197
+    },
+    {
+      "id": "guardian-fashion",
+      "name": "The Guardian Fashion",
+      "topic": "fashion",
+      "url": "https://www.theguardian.com/fashion/rss",
+      "attemptedAt": "2026-11-12T15:32:07.829Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.theguardian.com/fashion/rss",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 33,
+      "uniqueLinks": 33,
+      "latest": "2026-11-12T12:22:41.000Z",
+      "samples": [
+        {
+          "title": "Burberry returns to profit as sales soar, from £85 socks to £9,000 coats",
+          "link": "https://www.theguardian.com/business/2026/nov/12/burberry-profit-sales-socks-bags-china-us"
+        },
+        {
+          "title": "Jess Cartner-Morley on fashion: this season’s big idea? Wear a skirt. It’s that simple",
+          "link": "https://www.theguardian.com/fashion/2026/nov/11/jess-cartner-morley-on-fashion-fashions-big-idea-this-season-wear-a-skirt"
+        }
+      ],
+      "ms": 278
+    },
+    {
+      "id": "vogue-uk",
+      "name": "British Vogue",
+      "topic": "fashion",
+      "url": "https://www.vogue.co.uk/feed/rss",
+      "attemptedAt": "2026-11-12T15:32:07.828Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.vogue.co.uk/feed/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 50,
+      "uniqueLinks": 50,
+      "latest": "2026-11-12T14:37:50.000Z",
+      "samples": [
+        {
+          "title": "Ariana Grande Brings Her Two Great Loves – Ricky Álvarez And Rare Vintage – To The Red Carpet",
+          "link": "https://www.vogue.co.uk/article/ariana-grande-ricky-alvarez-red-carpet"
+        },
+        {
+          "title": "Reality Check: Daniel Lee On Burberry, Bradford & Bringing Fashion Home",
+          "link": "https://www.vogue.co.uk/article/daniel-lee-burberry"
+        }
+      ],
+      "ms": 303
+    },
+    {
+      "id": "vogue-us",
+      "name": "Vogue",
+      "topic": "fashion",
+      "url": "https://www.vogue.com/feed/rss",
+      "attemptedAt": "2026-11-12T15:32:07.806Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.vogue.com/feed/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 29,
+      "uniqueLinks": 29,
+      "latest": "2026-11-12T15:14:15.000Z",
+      "samples": [
+        {
+          "title": "Nicola Coughlan Goes “Cowboy Beige” For Fall",
+          "link": "https://www.vogue.com/article/nicola-coughlan-goes-cowboy-beige-for-fall"
+        },
+        {
+          "title": "The Health Benefits of Stair Climbing",
+          "link": "https://www.vogue.com/article/stair-climbing-benefits"
+        }
+      ],
+      "ms": 335
+    },
+    {
+      "id": "techcrunch-ai",
+      "name": "TechCrunch AI",
+      "topic": "ai",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "attemptedAt": "2026-11-12T15:32:08.025Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 20,
+      "uniqueLinks": 20,
+      "latest": "2026-11-12T15:18:14.000Z",
+      "samples": [
+        {
+          "title": "Norwest pushes deeper into AI with new $4B fund",
+          "link": "https://techcrunch.com/2026/11/12/norwest-pushes-deeper-into-ai-with-new-4b-fund/"
+        },
+        {
+          "title": "Cyberattack on Fireworks AI allowed hackers to access Notion customers&#8217; chat transcripts",
+          "link": "https://techcrunch.com/2026/11/12/cyberattack-on-fireworks-ai-allowed-hackers-to-access-notion-customers-chat-transcripts/"
+        }
+      ],
+      "ms": 226
+    },
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch",
+      "topic": "tech",
+      "url": "https://techcrunch.com/feed/",
+      "attemptedAt": "2026-11-12T15:32:08.251Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://techcrunch.com/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 20,
+      "uniqueLinks": 20,
+      "latest": "2026-11-12T15:18:14.000Z",
+      "samples": [
+        {
+          "title": "Norwest pushes deeper into AI with new $4B fund",
+          "link": "https://techcrunch.com/2026/11/12/norwest-pushes-deeper-into-ai-with-new-4b-fund/"
+        },
+        {
+          "title": "Cyberattack on Fireworks AI allowed hackers to access Notion customers&#8217; chat transcripts",
+          "link": "https://techcrunch.com/2026/11/12/cyberattack-on-fireworks-ai-allowed-hackers-to-access-notion-customers-chat-transcripts/"
+        }
+      ],
+      "ms": 56
+    },
+    {
+      "id": "wired-ai",
+      "name": "WIRED AI",
+      "topic": "ai",
+      "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "attemptedAt": "2026-11-12T15:32:08.107Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 10,
+      "uniqueLinks": 10,
+      "latest": "2026-11-12T14:14:33.000Z",
+      "samples": [
+        {
+          "title": "Meet Colette Kress, Nvidia’s New Interim CEO",
+          "link": "https://www.wired.com/story/who-is-colette-kress-the-woman-who-could-succeed-jensen-huang/"
+        },
+        {
+          "title": "Jensen Huang Resigns as Nvidia CEO",
+          "link": "https://www.wired.com/story/nvidia-ceo-jensen-huang-steps-down/"
+        }
+      ],
+      "ms": 313
+    },
+    {
+      "id": "guardian-ai",
+      "name": "The Guardian AI",
+      "topic": "ai",
+      "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+      "attemptedAt": "2026-11-12T15:32:08.141Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 20,
+      "uniqueLinks": 20,
+      "latest": "2026-11-12T15:00:44.000Z",
+      "samples": [
+        {
+          "title": "US workers are fighting to protect their jobs from AI – and winning",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/us-workers-governments-unions-ai"
+        },
+        {
+          "title": "Zimbabwean author Simbarashe Kundizeza cleared of using AI to write prize-winning story",
+          "link": "https://www.theguardian.com/books/2026/nov/12/zimbabwean-author-simbarashe-kundizeza-cleared-ai-caine-prize-winning-story"
+        }
+      ],
+      "ms": 297
+    },
+    {
+      "id": "venturebeat-ai",
+      "name": "VentureBeat AI",
+      "topic": "ai",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "attemptedAt": "2026-11-12T15:32:08.131Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://venturebeat.com/category/ai/feed/",
+          "status": 308,
+          "contentType": "text/plain"
+        },
+        {
+          "url": "https://venturebeat.com/category/ai/feed",
+          "status": 200,
+          "contentType": "text/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 7,
+      "uniqueLinks": 7,
+      "latest": "2026-08-27T14:01:00.000Z",
+      "samples": [
+        {
+          "title": "Enterprise AI's real risk isn't autonomous agents. It's the complexity between them.",
+          "link": "https://venturebeat.com/ai/enterprise-ais-real-risk-isnt-autonomous-agents-its-the-complexity-between-them"
+        },
+        {
+          "title": "When agents act on their own, governance has to live in the data layer",
+          "link": "https://venturebeat.com/security/when-agents-act-on-their-own-governance-has-to-live-in-the-data-layer"
+        }
+      ],
+      "ms": 419
+    },
+    {
+      "id": "ars",
+      "name": "Ars Technica",
+      "topic": "tech",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "attemptedAt": "2026-11-12T15:32:08.307Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://feeds.arstechnica.com/arstechnica/index",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 20,
+      "uniqueLinks": 20,
+      "latest": "2026-11-12T14:50:17.000Z",
+      "samples": [
+        {
+          "title": "Google pushes privacy angle as Gemini-powered smartglasses debut starting at $395",
+          "link": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/"
+        },
+        {
+          "title": "Nvidia CEO Jensen Huang has resigned",
+          "link": "https://arstechnica.com/gadgets/2026/11/ceo-jensen-huangs-job-is-suddenly-on-the-line-at-nvidia/"
+        }
+      ],
+      "ms": 289
+    },
+    {
+      "id": "verge",
+      "name": "The Verge",
+      "topic": "tech",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "attemptedAt": "2026-11-12T15:32:08.420Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.theverge.com/rss/index.xml",
+          "status": 200,
+          "contentType": "application/xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 10,
+      "uniqueLinks": 10,
+      "latest": "2026-11-12T15:19:58.000Z",
+      "samples": [
+        {
+          "title": "A power bank that can quickly charge three gadgets is just $49",
+          "link": "https://www.theverge.com/gadgets/1031951/fast-laptop-power-bank-battery-obsession-gaming-deal-sale"
+        },
+        {
+          "title": "Nvidia CEO Jensen Huang has resigned. What happens next?",
+          "link": "https://www.theverge.com/ai-artificial-intelligence/1030422/nvidia-jensen-huang-ai-china-alice-huang"
+        }
+      ],
+      "ms": 185
+    },
+    {
+      "id": "engadget",
+      "name": "Engadget",
+      "topic": "tech",
+      "url": "https://www.engadget.com/rss.xml",
+      "attemptedAt": "2026-11-12T15:32:08.438Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.engadget.com/rss.xml",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 20,
+      "uniqueLinks": 20,
+      "latest": "2026-11-12T15:16:55.000Z",
+      "samples": [
+        {
+          "title": "Pre-orders for some Apple Home Collection devices will open November 13",
+          "link": "https://www.engadget.com/2314724/pre-orders-for-some-apple-home-collection-devices-will-open-november-13/"
+        },
+        {
+          "title": "Jensen Huang is out as NVIDIA CEO",
+          "link": "https://www.engadget.com/2314584/jensen-huang-is-out-as-nvidia-ceo/"
+        }
+      ],
+      "ms": 228
+    },
+    {
+      "id": "wired",
+      "name": "WIRED",
+      "topic": "tech",
+      "url": "https://www.wired.com/feed/rss",
+      "attemptedAt": "2026-11-12T15:32:08.550Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.wired.com/feed/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 50,
+      "uniqueLinks": 50,
+      "latest": "2026-11-12T15:00:00.000Z",
+      "samples": [
+        {
+          "title": "Best Open Earbuds (2026): Shokz, Bose, Soundcore, and More",
+          "link": "https://www.wired.com/story/best-open-earbuds/"
+        },
+        {
+          "title": "Meet Colette Kress, Nvidia’s New Interim CEO",
+          "link": "https://www.wired.com/story/who-is-colette-kress-the-woman-who-could-succeed-jensen-huang/"
+        }
+      ],
+      "ms": 213
+    },
+    {
+      "id": "decrypt",
+      "name": "Decrypt",
+      "topic": "crypto",
+      "url": "https://decrypt.co/feed",
+      "attemptedAt": "2026-11-12T15:32:08.666Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://decrypt.co/feed",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 37,
+      "uniqueLinks": 37,
+      "latest": "2026-11-12T14:44:39.000Z",
+      "samples": [
+        {
+          "title": "Jensen Huang Resigns as Nvidia CEO, With CFO Colette Kress Named Interim Chief",
+          "link": "https://decrypt.co/383134/jensen-huang-resigns-as-nvidia-ceo-with-cfo-colette-kress-named-interim-chief"
+        },
+        {
+          "title": "SoFi Brings Its Bank-Issued Stablecoin to Polygon’s Payments Stack",
+          "link": "https://decrypt.co/383096/sofi-brings-bank-issued-stablecoin-polygon-payments-stack"
+        }
+      ],
+      "ms": 188
+    },
+    {
+      "id": "cointelegraph",
+      "name": "Cointelegraph",
+      "topic": "crypto",
+      "url": "https://cointelegraph.com/rss",
+      "attemptedAt": "2026-11-12T15:32:08.605Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://cointelegraph.com/rss",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 30,
+      "uniqueLinks": 30,
+      "latest": "2026-11-12T13:59:02.000Z",
+      "samples": [
+        {
+          "title": "Jensen Huang resigns as Nvidia CEO, exits board; shares plunge 13%",
+          "link": "https://cointelegraph.com/news/jensen-huang-resigns-nvidia-ceo-board-member?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        },
+        {
+          "title": "Bit Digital stock falls 5% in pre-market after Q3 revenue miss",
+          "link": "https://cointelegraph.com/news/bit-digital-stock-falls-q3-revenue-miss?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "ms": 259
+    },
+    {
+      "id": "bbc-business",
+      "name": "BBC Business",
+      "topic": "finance",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "attemptedAt": "2026-11-12T15:32:08.854Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+          "status": 200,
+          "contentType": "text/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 57,
+      "uniqueLinks": 57,
+      "latest": "2026-11-12T15:26:39.000Z",
+      "samples": [
+        {
+          "title": "What we know as Nvidia CEO Jensen Huang resigns over affair allegations",
+          "link": "https://www.bbc.co.uk/news/articles/ckgel338xql3o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "title": "Who is Nvidia's interim CEO Colette Kress and who could take over after Jensen Huang resigned?",
+          "link": "https://www.bbc.co.uk/news/articles/cqgm37dv20e8o?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "ms": 160
+    },
+    {
+      "id": "marketwatch",
+      "name": "MarketWatch",
+      "topic": "finance",
+      "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+      "attemptedAt": "2026-11-12T15:32:08.864Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 10,
+      "uniqueLinks": 10,
+      "latest": "2026-11-12T15:30:00.000Z",
+      "samples": [
+        {
+          "title": "&#x2018;The thought of living to 100 terrifies me&#x2019;: Is Social Security a giant Ponzi scheme?",
+          "link": "https://www.marketwatch.com/story/the-thought-of-living-to-100-terrifies-me-is-social-security-a-giant-ponzi-scheme-84a64e7e?mod=mw_rss_topstories"
+        },
+        {
+          "title": "&#x2018;He calls my plans a fantasy&#x2019;: My husband says we can&#x2019;t afford our $200,000-a-year dream retirement. I think he&#x2019;s cheap.",
+          "link": "https://www.marketwatch.com/story/he-calls-my-plans-a-fantasy-my-husband-says-we-cant-afford-our-200-000-a-year-dream-retirement-i-think-hes-cheap-45bc5b4e?mod=mw_rss_topstories"
+        }
+      ],
+      "ms": 228
+    },
+    {
+      "id": "economist-finance",
+      "name": "The Economist",
+      "topic": "finance",
+      "url": "https://www.economist.com/finance-and-economics/rss.xml",
+      "attemptedAt": "2026-11-12T15:32:09.014Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.economist.com/finance-and-economics/rss.xml",
+          "status": 402,
+          "contentType": "application/json"
+        }
+      ],
+      "status": "failed",
+      "error": "HTTP_ERROR",
+      "ms": 223
+    },
+    {
+      "id": "coindesk",
+      "name": "CoinDesk",
+      "topic": "crypto",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "attemptedAt": "2026-11-12T15:32:08.597Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+          "status": 308,
+          "contentType": "text/plain"
+        },
+        {
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 25,
+      "uniqueLinks": 25,
+      "latest": "2026-11-12T14:45:00.000Z",
+      "samples": [
+        {
+          "title": "Jupiter adds Anchorage-backed USDGO to its $1 billion Solana lending platform",
+          "link": "https://www.coindesk.com/business/2026/11/12/jupiter-adds-anchorage-backed-usdgo-to-its-usd1-billion-solana-lending-platform"
+        },
+        {
+          "title": "The next Congress will write rules for AI and emerging tech. They should use the stuff first.",
+          "link": "https://www.coindesk.com/opinion/2026/11/12/the-next-congress-will-write-rules-for-ai-and-emerging-tech-they-should-use-the-stuff-first"
+        }
+      ],
+      "ms": 707
+    },
+    {
+      "id": "international-ai",
+      "name": "International AI",
+      "topic": "ai",
+      "url": "https://news.google.com/rss/search?q=artificial%20intelligence%20AI%20site%3Atechcrunch.com%20OR%20site%3Awired.com%20OR%20site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen",
+      "attemptedAt": "2026-11-12T15:32:09.304Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://news.google.com/rss/search?q=artificial%20intelligence%20AI%20site%3Atechcrunch.com%20OR%20site%3Awired.com%20OR%20site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 100,
+      "uniqueLinks": 100,
+      "latest": "2026-11-12T15:24:48.000Z",
+      "samples": [
+        {
+          "title": "Nvidia CEO Jensen Huang resigns in big blow to AI boom - Reuters",
+          "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOMEFwN0FWdjB6blNtR0RZaTBWZXZDaWVwYkhXREttY2FaYVNNVC1qNEFHYm9Yd1pDODBDN2tvNzhnMTY4cmxWYTg1WVFidzFlNVFEdlZNb3IyZG1nS2FKcHAzUERhQW9EdG9oOER6YmwydXZOd0t1VHRub1BCdFdoR1V4dktlUVUydjZWeU53aVdKMGwtOGFtZmd2T3VhODF3eXhPazVtbV81b0hpUi1vcw?oc=5"
+        },
+        {
+          "title": "The unfolding Jensen Huang scandal: a timeline - TechCrunch",
+          "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOeEVpcnFGTGhmMG5GS2EweTZsRzJPRFhBMnVEM2lxLUtmei04WUxRc0NlektYWmVzQ0RScmlZdWpYd1l4MUd3YkxUX2JnUldrQ05jNUZVOTByTXZmM29XaUNDSi13dzlyTGo1aUxDZFdlQ3hrTjJFbFA2Smh5bEdNRkFQSkJEemYtRFFlb3N3S2pfUktIb0o1U0hsQ1BtUi12NUNycg?oc=5"
+        }
+      ],
+      "ms": 219
+    },
+    {
+      "id": "blockworks",
+      "name": "Blockworks",
+      "topic": "crypto",
+      "url": "https://blockworks.co/feed",
+      "attemptedAt": "2026-11-12T15:32:08.763Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://blockworks.co/feed",
+          "status": 308,
+          "contentType": "text/plain"
+        },
+        {
+          "url": "https://blockworks.com/feed",
+          "status": 200,
+          "contentType": "text/xml"
+        }
+      ],
+      "status": "parsed",
+      "items": 50,
+      "uniqueLinks": 50,
+      "latest": "2026-01-07T14:00:00.000Z",
+      "samples": [
+        {
+          "title": "Venezuela’s sanctions are stablecoins’ proof of concept",
+          "link": "https://blockworks.com/news/venezuelas-sanctions-stablecoins"
+        },
+        {
+          "title": "The Strategy playbook looks different in 2026",
+          "link": "https://blockworks.com/news/strategy-playbook-2026"
+        }
+      ],
+      "ms": 863
+    },
+    {
+      "id": "ft",
+      "name": "Financial Times",
+      "topic": "finance",
+      "url": "https://www.ft.com/rss/home/international",
+      "attemptedAt": "2026-11-12T15:32:09.092Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://www.ft.com/rss/home/international",
+          "status": 200,
+          "contentType": "text/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 11,
+      "uniqueLinks": 11,
+      "latest": "2026-11-12T14:32:51.000Z",
+      "samples": [
+        {
+          "title": "Singapore barred Alice Huang for giving police ‘inaccurate information’",
+          "link": "https://www.ft.com/content/fa23a8ad-29bf-4971-aa44-6b25b247c193?syn-25a6b1a6=1"
+        },
+        {
+          "title": "Ukraine says Starlink restrictions are back as US envoys land in Moscow",
+          "link": "https://www.ft.com/content/6cd890f1-2e4d-468a-807f-529f45e1678e?syn-25a6b1a6=1"
+        }
+      ],
+      "ms": 676
+    },
+    {
+      "id": "international-fashion",
+      "name": "International fashion",
+      "topic": "fashion",
+      "url": "https://news.google.com/rss/search?q=fashion%20runway%20designer%20site%3Avogue.com%20OR%20site%3Awwd.com%20OR%20site%3Atheguardian.com&hl=en-US&gl=US&ceid=US%3Aen",
+      "attemptedAt": "2026-11-12T15:32:09.237Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://news.google.com/rss/search?q=fashion%20runway%20designer%20site%3Avogue.com%20OR%20site%3Awwd.com%20OR%20site%3Atheguardian.com&hl=en-US&gl=US&ceid=US%3Aen",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 100,
+      "uniqueLinks": 100,
+      "latest": "2026-11-12T12:04:54.000Z",
+      "samples": [
+        {
+          "title": "Kim Kardashian Plays Nurse in One of Louis Vuitton’s Rarest Runway Looks - Vogue",
+          "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNcEsxdDJPNFJDUzhSZV9uZ2ozbmU1ekZqRzB4aklwVmVmLXR5ZG9tX3dWZ0dJOFFmWllEQ3V5QzI5bzdmNHBaWVQzbTRlNnBTVmhZTVd0SmYzdzBNZWxvR25BNzR4NXNUaFVRdDN3bWlfbWI1RVF5OTJaR2VRU003UVNLUDJCUEE4?oc=5"
+        },
+        {
+          "title": "Ariana Grande Brings Her Two Great Loves—Ricky Álvarez and Rare Vintage—to the Red Carpet - Vogue",
+          "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOSDQwY3VaVVRTTkxzU3ZmQno0andELVpjZTZjM1A4NWdpb0NvYlRDTFkxcVdzMGF5U0RPSmhXaGotZUp6MlpOMy0waWlpRXN2UVBBZUFQcEYwdXB0aUk5YTRsdlNkYlZheWlDTUhBQml6dEhkQjFNOGFYVFczaTYyTFBvempTSW9aWmhmRkdn?oc=5"
+        }
+      ],
+      "ms": 596
+    },
+    {
+      "id": "international-tech",
+      "name": "International technology",
+      "topic": "tech",
+      "url": "https://news.google.com/rss/search?q=technology%20cybersecurity%20site%3Atheverge.com%20OR%20site%3Areuters.com%20OR%20site%3Aarstechnica.com&hl=en-US&gl=US&ceid=US%3Aen",
+      "attemptedAt": "2026-11-12T15:32:09.523Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://news.google.com/rss/search?q=technology%20cybersecurity%20site%3Atheverge.com%20OR%20site%3Areuters.com%20OR%20site%3Aarstechnica.com&hl=en-US&gl=US&ceid=US%3Aen",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 100,
+      "uniqueLinks": 100,
+      "latest": "2026-11-12T14:35:00.000Z",
+      "samples": [
+        {
+          "title": "VIEW Nvidia CEO Jensen Huang steps down - Reuters",
+          "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNZC1uZTVNUkdPM3M1UzkxWjJDbmNFa1RwZm9iVmFuZ0FUMW1Sa1p4NlYxY3AxbE91d3VyN0J6aHM4UWpqTHpPZkdWbS04OEFyM3JqSzdoUUxhVWlTMlBReUZvQnRQbVhxdXhFMG8yenFBeUw1aVNxR0tzMWdMSzNlME80eW1ZZWlGcXJFUg?oc=5"
+        },
+        {
+          "title": "Who is Nvidia interim CEO Colette Kress? - Reuters",
+          "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOX1JRcXNDUmNTX3hYTkxSOC12bE1PajdrdjByNkRpa3dpY0hsc2FqR3NEeTROdVFDVFRMWTYxSHduZGxoQVl0QkJIckk5MTdJaWxBZTVQLVFwWTY5TXZKS0NlTy0wYmNNa0NpUGJIWlFkQ3VsNGxEMVB3eFhSaExUVllwdVBkWE1SMl9kR2pXbw?oc=5"
+        }
+      ],
+      "ms": 450
+    },
+    {
+      "id": "international-crypto",
+      "name": "International crypto",
+      "topic": "crypto",
+      "url": "https://news.google.com/rss/search?q=bitcoin%20crypto%20site%3Acoindesk.com%20OR%20site%3Acointelegraph.com%20OR%20site%3Adecrypt.co&hl=en-US&gl=US&ceid=US%3Aen",
+      "attemptedAt": "2026-11-12T15:32:09.626Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://news.google.com/rss/search?q=bitcoin%20crypto%20site%3Acoindesk.com%20OR%20site%3Acointelegraph.com%20OR%20site%3Adecrypt.co&hl=en-US&gl=US&ceid=US%3Aen",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 100,
+      "uniqueLinks": 100,
+      "latest": "2026-11-12T12:15:00.000Z",
+      "samples": [
+        {
+          "title": "Bitcoin (BTC) price weakness erases September's bullish signal: Crypto Daily - CoinDesk",
+          "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVjF4R3RiaUphZkJaNnhNUnFCOS1GNHY2aTMyZldjWWNtZ0hrc2xiUnMtSWF6UWdNX2tHcVpZRGo5Snhnb0JjTG1rSl9wdHZHNjd2NFZucThsVEtZSWtDVjBqNE1Wbk0yTFF6UUFUNGFwb3VURmdaV3lwLWQ4T2dsZjJyX3ZsQnBHZmdYWC1vUS12Sjhsd2dFR1MxTXBzdw?oc=5"
+        },
+        {
+          "title": "Bitcoin slips with tech stocks as Nvidia CEO turmoil and ETF outflows weigh - CoinDesk",
+          "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQcU54SUVyeng5QXhCMi1RS00tSzQ5QjkyVElxR2hZcURCVFJZS01jaFVCZXVIMVdWZVBfMUV0VEVRdTFZeDlSM0NQREVWZ1dicWFYckY4WlJ5emtPRVI1Y3F6cWl2cTJFaHM1VDlLTHh0amdjNENDVVpJNmVCQUFwckpqcFZGQkkyNkZEU2NVOUg5RUoydnRsMkhtZHJLZVZF?oc=5"
+        }
+      ],
+      "ms": 471
+    },
+    {
+      "id": "international-finance",
+      "name": "International finance",
+      "topic": "finance",
+      "url": "https://news.google.com/rss/search?q=stocks%20finance%20site%3Areuters.com%20OR%20site%3Aft.com%20OR%20site%3Acnbc.com&hl=en-US&gl=US&ceid=US%3Aen",
+      "attemptedAt": "2026-11-12T15:32:09.769Z",
+      "parser": "existing feeds.cjs",
+      "responses": [
+        {
+          "url": "https://news.google.com/rss/search?q=stocks%20finance%20site%3Areuters.com%20OR%20site%3Aft.com%20OR%20site%3Acnbc.com&hl=en-US&gl=US&ceid=US%3Aen",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "status": "parsed",
+      "items": 100,
+      "uniqueLinks": 100,
+      "latest": "2026-11-12T14:36:35.000Z",
+      "samples": [
+        {
+          "title": "Who is Colette Kress? Nvidia's finance chief steps in as interim CEO after Huang exit - CNBC",
+          "link": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQMVE2M21kYUJiU0wzeC1rb3cwY1FzNXV1bHpzT184bXZsM2FabkdUT2M1MWRDYUVoVHhvdVVtRTk5dVpBUXN1Rm14ZFFERzY2d1NfTTEyamRrdFJLNl9DNEVRZkNYNWl5anpGRGRUU0lXWHJiOFNWOU4yZVpHVThQMGE4eXl1R21TYVNZ?oc=5"
+        },
+        {
+          "title": "Who is Nvidia interim CEO Colette Kress? - Reuters",
+          "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOX1JRcXNDUmNTX3hYTkxSOC12bE1PajdrdjByNkRpa3dpY0hsc2FqR3NEeTROdVFDVFRMWTYxSHduZGxoQVl0QkJIckk5MTdJaWxBZTVQLVFwWTY5TXZKS0NlTy0wYmNNa0NpUGJIWlFkQ3VsNGxEMVB3eFhSaExUVllwdVBkWE1SMl9kR2pXbw?oc=5"
+        }
+      ],
+      "ms": 584
+    }
+  ]
+}

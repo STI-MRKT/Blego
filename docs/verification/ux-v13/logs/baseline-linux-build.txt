@@ -1,0 +1,21 @@
+
+> blego@1.2.0 pack:linux
+> npm run prepare:metadata && electron-builder --linux --dir --x64 --publish never
+
+
+> blego@1.2.0 prepare:metadata
+> node scripts/prepare-metadata-runtime.cjs
+
+Verified existing embedded v5.40.1: 1715 files.
+  • electron-builder  version=26.18.0 os=6.18.57
+  • loaded configuration  file=package.json ("build" field)
+  • executing @electron/rebuild  electronVersion=45.3.1 arch=x64 buildFromSource=false workspaceRoot=/workspace/BLEGO-v13 projectDir=./ appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=linux arch=x64 electron=45.3.1 appOutDir=release/linux-unpacked
+  • downloaded      label=electron progress=100%
+  • downloaded electron zip extracted successfully  output=/workspace/BLEGO-v13/release/linux-unpacked
+  • searching for node modules  pm=npm searchDir=/workspace/BLEGO-v13
+  • duplicate dependency references  dependencies=["@emnapi/runtime@1.11.3","debug@4.4.3"]
+  • Cannot detect repository by .git/config. Please specify "repository" in the package.json (https://docs.npmjs.com/files/package.json#repository).
+Please see https://electron.build/publish

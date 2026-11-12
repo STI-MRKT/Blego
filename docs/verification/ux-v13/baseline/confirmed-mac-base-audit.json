@@ -1,0 +1,2618 @@
+{
+  "label": "confirmed-mac-base",
+  "root": "/workspace/BLEGO-v13",
+  "at": "2026-11-12T15:28:27.985Z",
+  "platform": "linux",
+  "arch": "x64",
+  "window": {
+    "width": 1280,
+    "height": 900
+  },
+  "externalRequests": "blocked for visual audit only",
+  "errors": [],
+  "screens": [
+    {
+      "name": "generator-empty",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Brazil · +55\nUnited States · +1\nFrance · +33\nPoland · +48\nGermany · +49\nSpain · +34\nItaly · +39\nUnited Kingdom",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "model\ntech\ncrypto",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear",
+          "action": "clear-demo",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Generate",
+          "action": "generate",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Refresh",
+          "action": "news-refresh",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "All",
+          "action": "news-topic",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Source status",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "generator-hover",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Brazil · +55\nUnited States · +1\nFrance · +33\nPoland · +48\nGermany · +49\nSpain · +34\nItaly · +39\nUnited Kingdom",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "model\ntech\ncrypto",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear",
+          "action": "clear-demo",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Generate",
+          "action": "generate",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Refresh",
+          "action": "news-refresh",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "All",
+          "action": "news-topic",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Source status",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "generator-loading",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Brazil · +55\nUnited States · +1\nFrance · +33\nPoland · +48\nGermany · +49\nSpain · +34\nItaly · +39\nUnited Kingdom",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "model\ntech\ncrypto",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear",
+          "action": "clear-demo",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Generate",
+          "action": "generate",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy full set",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy name",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy bio",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy email",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy phone",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy handle",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy postalCode",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy city",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy address",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy status",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy number",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy categories",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy symbols",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Refresh",
+          "action": "news-refresh",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "All",
+          "action": "news-topic",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Source status",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "generator-result",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Brazil · +55\nUnited States · +1\nFrance · +33\nPoland · +48\nGermany · +49\nSpain · +34\nItaly · +39\nUnited Kingdom",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "model\ntech\ncrypto",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear",
+          "action": "clear-demo",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Generate",
+          "action": "generate",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy full set",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy name",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy bio",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy email",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy phone",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy handle",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy postalCode",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy city",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy address",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy status",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy number",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy categories",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy symbols",
+          "action": "copy-model",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Refresh",
+          "action": "news-refresh",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "All",
+          "action": "news-topic",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Source status",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "network",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "http://user:password@host:port or socks5://host:port",
+          "action": null,
+          "id": "proxy-input",
+          "type": "password",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Check direct connection",
+          "action": "proxy-check",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Existing connection diagnostics",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "",
+          "action": "net-run",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "news",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Refresh",
+          "action": "news-refresh",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "All",
+          "action": "news-topic",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SUMMARY",
+          "label": "Source status",
+          "action": null,
+          "id": null,
+          "type": null,
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 1
+    },
+    {
+      "name": "checker",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear",
+          "action": "checker-clear",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Cancel",
+          "action": "checker-cancel",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Check public page",
+          "action": "checker-status",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Validate input",
+          "action": "checker-run",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    },
+    {
+      "name": "photos",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Add images",
+          "action": "images-choose",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear list",
+          "action": "photos-clear",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Без группы (0)",
+          "action": null,
+          "id": "image-group",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Group name",
+          "action": null,
+          "id": "image-group-name",
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Create group",
+          "action": "group-create",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Rename group",
+          "action": "group-rename",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Delete group",
+          "action": "group-delete",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Select files in group",
+          "action": "group-select",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Move selected here",
+          "action": "group-move",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Selected files (overrides)\nCurrent group",
+          "action": null,
+          "id": "image-edit-target",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Save group settings locally",
+          "action": "group-save",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Choose reference image",
+          "action": "reference-choose",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    },
+    {
+      "name": "photos-loaded",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Add images",
+          "action": "images-choose",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Clear list",
+          "action": "photos-clear",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Без группы (1)",
+          "action": null,
+          "id": "image-group",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Group name",
+          "action": null,
+          "id": "image-group-name",
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Create group",
+          "action": "group-create",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Rename group",
+          "action": "group-rename",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Delete group",
+          "action": "group-delete",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Select files in group",
+          "action": "group-select",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Move selected here",
+          "action": "group-move",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Selected files (overrides)\nCurrent group",
+          "action": null,
+          "id": "image-edit-target",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Save group settings locally",
+          "action": "group-save",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Choose reference image",
+          "action": "reference-choose",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "View image",
+          "action": "image-preview",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy image pixels",
+          "action": "image-copy",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Remove",
+          "action": "photo-remove",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "date-local",
+          "action": null,
+          "id": null,
+          "type": "datetime-local",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Offset, e.g. +03:00; leave unspecified if unknown",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nSet\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Latitude −90…90",
+          "action": null,
+          "id": null,
+          "type": "number",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Longitude −180…180",
+          "action": null,
+          "id": null,
+          "type": "number",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Optional altitude",
+          "action": null,
+          "id": null,
+          "type": "number",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Inherit group\nKeep\nRemove",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "confirm-maker",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Apply to selected files",
+          "action": "group-operations",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Selected files\nCurrent group\nAll groups",
+          "action": null,
+          "id": "image-export-scope",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Choose folders and preview changes",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Remove selected personal metadata",
+          "action": null,
+          "id": "metadata-preset",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Preview preset",
+          "action": "metadata-preset-plan",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Name for current changes",
+          "action": null,
+          "id": "metadata-preset-name",
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Save current changes as preset",
+          "action": "metadata-preset-save",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import preset",
+          "action": "metadata-preset-import",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Rename",
+          "action": "preset-rename",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Duplicate",
+          "action": "preset-duplicate",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Delete preset",
+          "action": "preset-delete",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Export preset JSON",
+          "action": "preset-export",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    },
+    {
+      "name": "history",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "Source name",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "from",
+          "action": null,
+          "id": null,
+          "type": "date",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "to",
+          "action": null,
+          "id": null,
+          "type": "date",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "All states\ncompleted\npartial_confirmed",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Newest\nOldest",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Filter",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Previous",
+          "action": "archive-page",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Next",
+          "action": "archive-page",
+          "id": null,
+          "type": "submit",
+          "disabled": true,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "BR\nUS\nFR\nPL\nDE\nES\nIT\nGB",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "model\ntech\ncrypto",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "symbols",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "fieldOrder",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "disabledFields",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "allowRepeats",
+          "action": null,
+          "id": null,
+          "type": "text",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "bulkMode",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Preview JSON / ZIP data package",
+          "action": "pool-choose",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Use bundled data for BR",
+          "action": "pool-bundled",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Choose archive folder",
+          "action": "archive-directory",
+          "id": null,
+          "type": "button",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "includeOriginal",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "proxyEnabled",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "facebookEnabled",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "newsEnabled",
+          "action": null,
+          "id": null,
+          "type": "checkbox",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "15 minutes\n30 minutes\n60 minutes\n180 minutes",
+          "action": null,
+          "id": null,
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Save settings",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    },
+    {
+      "name": "import",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "label": "Generator",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Import",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Archive",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "News",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Settings",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Network",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Photos",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Friends",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Checker",
+          "action": "set-view",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Copy data…",
+          "action": null,
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "SELECT",
+          "label": "Auto: BOM, otherwise assume UTF-8\nUTF-8\nUTF-16LE\nUTF-16BE\nWindows-1251",
+          "action": null,
+          "id": "import-encoding",
+          "type": "select-one",
+          "disabled": false,
+          "visible": true
+        },
+        {
+          "tag": "INPUT",
+          "label": "",
+          "action": null,
+          "id": "file-input",
+          "type": "file",
+          "disabled": false,
+          "visible": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Load synthetic sample",
+          "action": "import-sample",
+          "id": null,
+          "type": "submit",
+          "disabled": false,
+          "visible": true
+        }
+      ],
+      "animations": [],
+      "technicalBlocks": 0
+    }
+  ],
+  "electron": "45.3.1",
+  "status": "captured"
+}

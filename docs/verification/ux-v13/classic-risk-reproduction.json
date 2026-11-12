@@ -1,0 +1,31 @@
+{
+  "sha": "8c9535acf2df1404c3f2c577f782e3929c112145",
+  "kind": "controlled malformed-provider response, not live reputation",
+  "status": "FAIL",
+  "rows": [
+    {
+      "input": "",
+      "risk": 0,
+      "trust": 100,
+      "expectedTrust": null
+    },
+    {
+      "input": false,
+      "risk": 0,
+      "trust": 100,
+      "expectedTrust": null
+    },
+    {
+      "input": [],
+      "risk": 0,
+      "trust": 100,
+      "expectedTrust": null
+    },
+    {
+      "input": null,
+      "risk": null,
+      "trust": null,
+      "expectedTrust": null
+    }
+  ]
+}
