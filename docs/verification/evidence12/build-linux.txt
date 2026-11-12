@@ -1,0 +1,31 @@
+
+> blego@1.2.0 dist:linux
+> npm run prepare:metadata && electron-builder --linux tar.gz --x64 --publish never
+
+
+> blego@1.2.0 prepare:metadata
+> node scripts/prepare-metadata-runtime.cjs
+
+Verified existing embedded v5.40.1: 1715 files.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
+  • electron-builder  version=26.18.0 os=6.18.57
+  • loaded configuration  file=package.json ("build" field)
+  • executing @electron/rebuild  electronVersion=45.3.1 arch=x64 buildFromSource=false workspaceRoot=/workspace/BLEGO projectDir=./ appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=linux arch=x64 electron=45.3.1 appOutDir=release/linux-unpacked
+  • downloaded      label=electron progress=100%
+  • downloaded electron zip extracted successfully  output=/workspace/BLEGO/release/linux-unpacked
+  • searching for node modules  pm=npm searchDir=/workspace/BLEGO
+  • collector stderr output  dependencies=["npm notice\nnpm notice New major version of npm available! 11.9.0 -> 12.2.2\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2\nnpm notice To update run: npm install -g npm@12.2.2\nnpm notice\n"]
+  • duplicate dependency references  dependencies=["@emnapi/runtime@1.11.3","debug@4.4.3"]
+  • building        target=tar.gz arch=x64 file=release/BLEGO-1.2.0-x64-linux.tar.gz
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

@@ -1,0 +1,13 @@
+✔ actual exclusive-link collision retries without overwriting existing Unicode files (1783.059648ms)
+✔ preflight rejects unsupported linking and actual read-only destination before export (219.979556ms)
+✔ same canonical path deduplicates, group overrides and presets remain explicit (92.415716ms)
+✔ applied preset is a snapshot after rename/delete; reference can be explicitly promoted (625.921733ms)
+✔ concurrent registration cannot create hidden duplicate canonical paths (8.026552ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2297.272313

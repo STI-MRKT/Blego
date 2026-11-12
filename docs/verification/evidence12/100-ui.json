@@ -1,0 +1,11 @@
+{
+  "files": 100,
+  "reads": 100,
+  "completed": 100,
+  "outputFiles": 100,
+  "elapsedSeconds": 48.293,
+  "eventLoopTicks": 1887,
+  "maxEventLoopGapMs": 190,
+  "progressRows": 100,
+  "fixture": "12×8 RGBA PNG; not maximum-size stress"
+}

@@ -32,6 +32,14 @@ test('same canonical path deduplicates, group overrides and presets remain expli
     name: 'One',
     operations: [{ field: 'iso', action: 'set', value: 100 }]
   });
+  const before = service.presets();
+  for (const invalid of [
+    { schemaVersion: 99, name: 'Bad', operations: [] },
+    { schemaVersion: 1, name: 'Bad', operations: [{ field: 'iso', action: 'set', value: -1 }] },
+    { schemaVersion: 1, name: 'Bad', operations: [], sourcePath: '/private/path' }
+  ])
+    assert.throws(() => service.importPreset(invalid));
+  assert.deepEqual(service.presets(), before, 'invalid preset import is atomic');
   const copy = service.managePreset({ action: 'duplicate', id: preset.id, name: 'Two' });
   service.managePreset({ action: 'rename', id: copy.id, name: 'Renamed' });
   assert.equal(service.managePreset({ action: 'export', id: copy.id }).name, 'Renamed');

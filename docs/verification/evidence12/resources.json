@@ -1,0 +1,20 @@
+{
+  "os": "linux",
+  "arch": "x64",
+  "checks": [
+    "40MP actual decode/write/readback PASS",
+    "40,005,000 pixels rejected PASS",
+    "50MiB actual bounded read/decode (PNG with valid private ancillary chunk) PASS",
+    "50MiB + 1 rejected PASS",
+    "512MiB registered exactly; over-limit rejected PASS (not whole-batch decode)",
+    "reference consumes shared byte limit PASS",
+    "512MiB actual whole-batch read; export/cancel/selective retry verified every file PASS"
+  ],
+  "heavyFiles": 11,
+  "heavyCancelled": 10,
+  "cancelSettledMs": 465,
+  "elapsedSeconds": 81.283,
+  "peakParentAndDirectChildRssMiB": 467,
+  "maxNodeEventLoopGapMs": 1934,
+  "limitations": "512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination."
+}

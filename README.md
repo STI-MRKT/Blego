@@ -10,7 +10,18 @@ parsed and shown as `rules_pending`. That state cannot be confirmed or archived
 as a classified result. A35/A8 is deferred. Archive functionality is verified
 with explicitly TEST-ONLY classification fixtures, never customer rules.
 
-## Addendum 01 / current Cloud branch
+## Unified v1.2 continuation
+
+D8–D14 add explicit grouped image-metadata editing, preserved per-file overrides,
+reference/preset snapshots, verified export retry/cancellation, source geography
+and native QA gates. Existing styling and service ownership are preserved.
+The new [E01–E60 acceptance](docs/verification/UNIFIED_12_ACCEPTANCE.md) records
+49 PASS, 2 FAIL and 9 BLOCKED; [commands/artifacts/limits](docs/verification/UNIFIED_12_RELEASE.md)
+include a rebuilt Linux package actually tested outside the checkout. Mac/Windows,
+signing, full dictionary minima and live Facebook response coverage remain open.
+No release has been published and classification still remains rules_pending.
+
+## Historical Addendum 01 / Cloud branch
 
 Development now continues in [STI-MRKT/Blego](https://github.com/STI-MRKT/Blego),
 branch `codex/blego-local-v1`; Kinetic58/BLEGO remains the preserved upstream.
