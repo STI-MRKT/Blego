@@ -1,0 +1,90 @@
+/* BLEGO quick-workflow layer. Preserves the original dark visual system. */
+.ux-generator .ux-primary-controls {
+  display:flex;align-items:flex-end;gap:14px;padding:16px 18px;margin-bottom:18px;
+  border-color:var(--border-2);
+  background:linear-gradient(120deg,var(--panel),var(--panel-2));
+}
+.ux-generator .ux-primary-controls .ctl {flex:1 1 170px;max-width:260px}
+.ux-generator .ux-primary-controls .ctl-actions {margin-left:auto;display:flex;gap:8px;align-items:flex-end}
+.ux-generator .demo-card {border-color:var(--border-2);box-shadow:var(--shadow-sm)}
+.ux-generator .demo-left {gap:7px}
+.ux-generator .demo-left .avatar.xl {margin-bottom:6px}
+.ux-generator .ux-copy-set {align-self:stretch;margin-top:15px}
+.ux-generator .demo-right>.fields {margin:14px 0 10px}
+.ux-generator .field-value {overflow-wrap:anywhere}
+.ux-generator .news-card {margin-top:20px}
+.ux-generator .ux-diagnostics {margin-top:14px}
+.ux-details {margin-top:14px;border:1px solid var(--border);border-radius:11px;background:var(--panel-2);overflow:hidden}
+.ux-details summary {padding:12px 14px;color:var(--muted);font-size:12.5px;font-weight:620;cursor:pointer;user-select:none;list-style-position:inside}
+.ux-details summary:hover,.ux-details[open] summary {color:var(--text);background:var(--accent-soft)}
+.ux-details[open] {background:var(--panel);border-color:var(--border-2)}
+.ux-details>p,.ux-details>div:not(.table-wrap),.ux-details>pre {margin:12px 14px}
+.ux-details>.fields {margin:10px 12px 14px}
+.ux-details>.table-wrap {margin:8px 12px 14px}
+.ux-details>.btn {margin:6px 6px 10px 12px}
+.ux-json {max-height:240px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;color:var(--muted)}
+.ux-network .net-hero,.ux-network .net-side {border-color:var(--border-2)}
+.ux-network .net-head {padding-bottom:4px}
+.ux-network .net-facts b {font-variant-numeric:tabular-nums}
+.ux-network .ping-row b {font-variant-numeric:tabular-nums}
+.ux-network .ux-permission {display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ux-network .ux-permission p {margin:3px 0 0;color:var(--muted)}
+.ux-network .ux-permission .btn {margin-left:auto;flex:0 0 auto}
+.ux-network .proxy-form {display:flex;gap:8px}
+.ux-network .proxy-form input {flex:1 1 150px;min-width:100px}
+.ux-network .proxy-form button {flex:0 0 auto}
+.ux-network .risk-factors {margin-top:10px}
+.ux-network .net-side .net-empty {min-height:110px}
+.ux-network .net-side .hint {margin-top:12px}
+.ux-network .proxy-result {margin-top:14px}
+.ux-network .ux-details {margin-top:16px}
+.ux-news .news-head {align-items:center}
+.ux-news .news-item-card h3 {font-size:13px;line-height:1.5;margin:0;font-weight:650}
+.ux-news .ux-news-description {font-size:12px;line-height:1.55;max-height:48px;overflow:hidden}
+.ux-news .news-copy {color:var(--muted)}
+.ux-news .news-copy:hover {color:var(--text)}
+.ux-news .ux-news-sources {margin:10px 18px 16px}
+.ux-settings .ux-settings-basics {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.ux-settings .ux-settings-basics>.fl {margin:0}
+.ux-settings .ux-settings-toggle-panel {grid-column:1/-1;display:flex;flex-direction:column;gap:11px;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--panel-2)}
+.ux-settings .ux-settings-toggle-panel h3 {margin:0;font-size:13px}
+.ux-settings .ux-settings-toggle-panel p {margin:0}
+.ux-settings .ux-settings-toggle-panel .fl {margin:0}
+.ux-settings .ux-settings-advanced {margin:18px 0}
+.ux-settings .ux-settings-advanced>.fl {display:block;margin:12px 14px}
+.ux-settings .ux-settings-advanced>.btn {margin:8px 0 6px 14px}
+.ux-settings .ux-settings-advanced>.fields {margin:12px 14px}
+.ux-settings .ux-settings-advanced>.card {margin:14px}
+.ux-settings .ux-settings-advanced>p {margin:12px 14px}
+.ux-settings .ux-save-settings {min-width:190px}
+.ux-photos .ux-photo-stats {display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px}
+.ux-photos .ux-photo-stats .pill {color:var(--muted)}
+.ux-photos .ux-advanced-metadata {margin-bottom:15px}
+.ux-photos .ux-preset-tools {padding-bottom:12px}
+.ux-photos .ux-preset-tools>.input,
+.ux-photos .ux-preset-tools>.fl {display:block;margin:10px 14px;width:calc(100% - 28px)}
+.ux-photos #metadata-form>.table-wrap {margin:12px 0}
+.ux-photos #metadata-form .tbl td {vertical-align:middle}
+.ux-photos #metadata-form textarea.input {height:auto;min-height:38px;resize:vertical}
+.ux-photos .ux-details .tbl {width:100%}
+.ux-photos .card.pad {margin-bottom:16px}
+.ux-photos .table-wrap {border-radius:11px}
+@media (max-width:920px) {
+  .ux-generator .ux-primary-controls {flex-wrap:wrap}
+  .ux-generator .ux-primary-controls .ctl-actions {margin-left:0;width:100%;justify-content:flex-end}
+  .ux-network .ux-permission {flex-wrap:wrap}
+  .ux-network .ux-permission .btn {margin-left:0}
+}
+@media (max-width:640px) {
+  .ux-settings .ux-settings-basics {grid-template-columns:1fr}
+  .ux-generator .ux-primary-controls .ctl {max-width:none}
+  .ux-network .proxy-form {flex-wrap:wrap}
+  .ux-network .proxy-form input {flex:1 1 100%}
+  .ux-generator .ux-primary-controls .ctl-actions {justify-content:stretch}
+  .ux-generator .ux-primary-controls .ctl-actions .btn {flex:1}
+}
+@media (prefers-reduced-motion:reduce) {
+  .ux-network .packets i,.ux-network .gauge-sweep,
+  .ux-network .net-pulse i,.ux-network .speed-progress i {animation:none!important}
+  .ux-generator .sk {animation:none!important}
+}
