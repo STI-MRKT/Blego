@@ -76,39 +76,6 @@ async function ipInfo() {
   return data;
 }
 
-async function fbCheck(id) {
-  const value = String(id || '').trim();
-  if (!/^[a-z0-9._-]{3,50}$/i.test(value)) throw new Error('Invalid ID');
-  const target = `https://www.facebook.com/${encodeURIComponent(value)}`;
-  const started = performance.now();
-  const response = await fetch(target, {
-    signal: AbortSignal.timeout(12000),
-    redirect: 'follow',
-    headers: {
-      'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      accept: 'text/html,application/xhtml+xml',
-      'accept-language': 'en-GB,en;q=0.9'
-    }
-  });
-  const html = await response.text();
-  const ms = Math.round(performance.now() - started);
-  const finalUrl = response.url || target;
-  const titleRaw = (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || '';
-  const title = decodeEntities(titleRaw).replace(/\s+/g, ' ').trim().slice(0, 140);
-  const unavailable =
-    /(content isn't available|content isn’t available|this page isn't available|this page isn’t available|link you followed may be broken|may have been removed|page not found)/i.test(
-      html
-    );
-  const login = /\/login|checkpoint/i.test(finalUrl) || /log in|log into facebook/i.test(title);
-  let status = 'unknown';
-  if (response.status === 404) status = 'not_found';
-  else if (unavailable) status = 'unavailable';
-  else if (login) status = 'login';
-  else if (response.ok && /property=["']og:title["']/i.test(html)) status = 'active';
-  return { id: value, status, http: response.status, finalUrl, title, ms };
-}
-
 function pingHost(host, port, timeoutMs = 2500) {
   return new Promise((resolve) => {
     const started = performance.now();
@@ -171,7 +138,7 @@ async function handleApi(request, response, url) {
     if (url.pathname === '/api/net/ping') return sendJson(response, await pingAll());
     if (url.pathname === '/api/net/speed') return sendJson(response, await speedTest());
     if (url.pathname === '/api/fb/check')
-      return sendJson(response, await fbCheck(url.searchParams.get('id')));
+      return sendJson(response, { error: 'USE_DESKTOP_PROFILE_DIAGNOSTICS' }, 410);
     return sendJson(response, { error: 'Not found' }, 404);
   } catch (error) {
     return sendJson(response, { error: 'REQUEST_FAILED' }, 502);

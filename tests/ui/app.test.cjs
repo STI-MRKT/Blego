@@ -157,6 +157,35 @@ test(
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
         1563
     );
+    await page.locator('[data-view="checker"]').click();
+    await page
+      .locator('#checker-input')
+      .fill('0012345678901234567890123\nhttps://facebook.com/groups');
+    await page.locator('[data-action="checker-run"]').click();
+    await page.locator('#fb-note-status-0').waitFor();
+    assert.equal(await page.locator('[data-action="checker-status"]').isDisabled(), true);
+    await page.locator('[aria-label="Copy Facebook ID"]').first().click();
+    await checkClipboard('0012345678901234567890123');
+    await page.locator('#fb-note-status-0').selectOption('blocked');
+    await page.locator('#fb-note-comment-0').fill('Synthetic owner report');
+    await page.locator('[data-action="facebook-note"]').click();
+    await page.getByText('1 owner reports', { exact: true }).waitFor();
+    assert.equal(
+      await page.getByText('Unknown — public check cannot confirm a ban', { exact: true }).count(),
+      2
+    );
+    const disabled = await page.evaluate(async () => {
+      try {
+        await window.blego.checkFacebook({
+          targets: [{ canonicalUrl: 'https://www.facebook.com/alice' }],
+          runId: 'test-disabled'
+        });
+        return false;
+      } catch (error) {
+        return error.message === 'MODULE_DISABLED';
+      }
+    });
+    assert.equal(disabled, true);
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'кириллица.txt',

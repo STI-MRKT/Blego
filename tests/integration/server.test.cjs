@@ -9,6 +9,7 @@ test('loopback serves the existing interface', async (t) => {
   const res = await fetch(url);
   assert.equal(res.status, 200);
   assert.match(await res.text(), /BLEGO/);
+  assert.equal((await fetch(url + 'api/fb/check?id=123')).status, 410);
 });
 test('invalid_url_does_not_exit and untrusted Host is rejected', async (t) => {
   const { server, url } = await startServer(path.resolve('src'));

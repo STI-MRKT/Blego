@@ -131,11 +131,11 @@ function bindView() {
       const count = event.target.value.trim()
         ? event.target.value
             .trim()
-            .split(/[\s,;|]+/)
-            .filter(Boolean).length
+            .split(/\r?\n/)
+            .filter((line) => line.trim()).length
         : 0;
       const label = document.getElementById('checker-count');
-      if (label) label.textContent = `${count} tokens`;
+      if (label) label.textContent = `${count} rows`;
       const button = document.querySelector('[data-action="checker-run"]');
       if (button) button.disabled = !event.target.value.trim();
     };
@@ -632,7 +632,18 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-run') {
-    state.checker.rows = parseIds(state.checker.input);
+    await window.blego.cancelFacebook();
+    const runId = crypto.randomUUID();
+    state.checker.runId = runId;
+    try {
+      const rows = await parseIds(state.checker.input);
+      if (state.checker.runId !== runId) return;
+      state.checker.rows = rows;
+      state.checker.checking = null;
+    } catch (error) {
+      toast(error.message, 'err');
+      return;
+    }
     renderView();
     return;
   }
@@ -640,7 +651,33 @@ document.addEventListener('click', async (event) => {
     runCheckerStatus();
     return;
   }
+  if (action === 'checker-cancel') {
+    await window.blego.cancelFacebook();
+    return;
+  }
+  if (action === 'facebook-open') {
+    await window.blego.openFacebook(target.dataset.target);
+    return;
+  }
+  if (action === 'facebook-note') {
+    const index = Number(target.dataset.index),
+      row = state.checker.rows[index];
+    try {
+      const note = await window.blego.saveFacebookNote({
+        targetKey: row.link,
+        status: document.getElementById(`fb-note-status-${index}`).value,
+        comment: document.getElementById(`fb-note-comment-${index}`).value
+      });
+      for (const item of state.checker.rows)
+        if (item.link === row.link) item.notes = [...(item.notes || []), note];
+      renderView();
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
   if (action === 'checker-clear') {
+    await window.blego.cancelFacebook();
     state.checker = { input: '', rows: null };
     renderView();
   }
@@ -649,26 +686,31 @@ document.addEventListener('click', async (event) => {
 async function runCheckerStatus() {
   const rows = state.checker.rows;
   if (!rows || state.checker.checking) return;
-  const targets = rows.filter((row) => row.link && row.type !== 'invalid');
-  if (!targets.length) return;
-  state.checker.checking = { done: 0, total: targets.length };
+  const targets = rows.filter((row) => row.link);
+  const runId = crypto.randomUUID();
+  state.checker.runId = runId;
+  state.checker.checking = { done: 0, total: new Set(targets.map((row) => row.link)).size };
   renderView();
-  const results = await checkProfiles(
-    targets.map((row) => row.id),
-    (done, total) => {
+  try {
+    const result = await checkProfiles(targets, runId, (done, total) => {
+      if (state.checker.runId !== runId) return;
       state.checker.checking = { done, total };
       const label = document.getElementById('checker-progress-text');
-      if (label) label.textContent = `Checking live status ${done} of ${total}`;
+      if (label) label.textContent = `Checking ${done} of ${total}`;
       const fill = document.getElementById('checker-progress-fill');
-      if (fill) fill.style.width = `${Math.round((done / total) * 100)}%`;
+      if (fill) fill.style.width = `${(100 * done) / total}%`;
+    });
+    if (state.checker.runId !== runId) return;
+    for (const row of state.checker.rows || [])
+      row.check = result.results.find((value) => value.canonicalUrl === row.link);
+  } catch (error) {
+    if (state.checker.runId === runId) toast(error.message, 'err');
+  } finally {
+    if (state.checker.runId === runId) {
+      state.checker.checking = null;
+      renderView();
     }
-  );
-  for (const row of state.checker.rows) {
-    const result = results.get(row.id);
-    if (result) row.check = result;
   }
-  state.checker.checking = null;
-  renderView();
 }
 
 if (window.blego) {

@@ -12,6 +12,7 @@ const defaults = {
   includeOriginal: false,
   newsEnabled: false,
   proxyEnabled: false,
+  facebookEnabled: false,
   newsInterval: 30,
   newsSources: [],
   newsTopic: ''
@@ -32,7 +33,14 @@ function validateSettings(patch) {
     if (key === 'country' && !countries.includes(value)) throw Error('INVALID_COUNTRY');
     if (key === 'type' && !['model', 'tech', 'crypto'].includes(value)) throw Error('INVALID_TYPE');
     if (
-      ['newsEnabled', 'proxyEnabled', 'includeOriginal', 'bulkMode', 'bulkConsent'].includes(key) &&
+      [
+        'newsEnabled',
+        'proxyEnabled',
+        'facebookEnabled',
+        'includeOriginal',
+        'bulkMode',
+        'bulkConsent'
+      ].includes(key) &&
       typeof value !== 'boolean'
     )
       throw Error('INVALID_BOOLEAN');

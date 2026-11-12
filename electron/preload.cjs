@@ -5,6 +5,16 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  normalizeFacebook: (text) => call('facebookNormalize', text),
+  checkFacebook: (request) => call('facebookCheck', request),
+  cancelFacebook: () => call('facebookCancel'),
+  saveFacebookNote: (note) => call('facebookNote', note),
+  openFacebook: (target) => call('facebookOpen', target),
+  onFacebookResult: (callback) => {
+    const listener = (_event, result) => callback(result);
+    ipcRenderer.on('local:facebook-result', listener);
+    return () => ipcRenderer.removeListener('local:facebook-result', listener);
+  },
   newsSnapshot: () => call('newsSnapshot'),
   refreshNews: (options) => call('newsRefresh', options),
   cancelNews: () => call('newsCancel'),

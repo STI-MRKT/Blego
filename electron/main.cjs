@@ -22,11 +22,14 @@ const { createArchiveService } = require('./features/archive/service.cjs');
 const { checkProxy } = require('./features/proxy/service.cjs');
 let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
-let store, mainWindow, archives, news, poolCatalog;
+const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
+const { createFacebookService } = require('./features/facebook/service.cjs');
+let store, mainWindow, archives, news, poolCatalog, facebook;
 let recoveryReports = [];
 async function initialize() {
   store = await openStore(app.getPath('userData'));
   poolCatalog = createPoolCatalog({ store });
+  facebook = createFacebookService({ store });
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -69,6 +72,34 @@ async function initialize() {
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      facebookNormalize: (text) => {
+        const result = normalizeFacebookTargets(text);
+        return {
+          ...result,
+          manualNotes: Object.fromEntries(
+            result.targets.map((target) => [
+              target.canonicalUrl,
+              facebook.notes(target.canonicalUrl)
+            ])
+          )
+        };
+      },
+      facebookCheck: async (request) => {
+        if (!getSettings(store).facebookEnabled) throw Error('MODULE_DISABLED');
+        const results = [];
+        for await (const result of facebook.check(request)) {
+          results.push(result);
+          if (mainWindow && !mainWindow.isDestroyed())
+            mainWindow.webContents.send('local:facebook-result', result);
+        }
+        return { runId: request.runId, results };
+      },
+      facebookCancel: () => {
+        facebook.cancel();
+        return true;
+      },
+      facebookNote: (note) => facebook.saveManualNote(note),
+      facebookOpen: (target) => shell.openExternal(normalizeTarget(target).canonicalUrl),
       newsSnapshot: () => news.snapshot(),
       newsRefresh: (options) => news.refreshNews(options || {}),
       newsCancel: () => news.cancel(),
@@ -157,6 +188,7 @@ async function initialize() {
             resolvePreset(c, t, next, loadDataset(store, c));
         const updated = updateSettings(store, patch);
         if (!updated.proxyEnabled) proxyController?.abort();
+        if (!updated.facebookEnabled) facebook.cancel();
         news.configure();
         return updated;
       },
@@ -260,6 +292,7 @@ if (!hasLock) {
     if (serverInstance) serverInstance.close();
     proxyController?.abort();
     news?.close();
+    facebook?.cancel();
     classification.close();
     if (store) store.close();
   });
