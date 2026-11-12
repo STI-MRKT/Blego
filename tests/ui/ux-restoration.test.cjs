@@ -27,6 +27,10 @@ test(
     await page.evaluate(() => window.blego.markTour()).catch(() => {});
     await page.locator('[data-action="generate"]').first().click();
     await page.locator('.demo-card').waitFor();
+  if (process.env.BLEGO_CAPTURE_UX === '1') {
+    fs.mkdirSync('release', { recursive: true });
+    await page.screenshot({ path: 'release/ux-generator.png' });
+  }
     assert.equal(await page.locator('.ux-generator .ux-copy-set').isVisible(), true);
     const extra = page.locator('details.ux-extra-fields');
     if (await extra.count()) assert.equal(await extra.evaluate((element) => element.open), false);
@@ -54,6 +58,8 @@ test(
     await page.locator('[data-view="generator"]').click();
     await page.locator('[data-view="network"]').click();
     assert.equal(await page.locator('.ping-row').count(), 2);
+  if (process.env.BLEGO_CAPTURE_UX === '1')
+    await page.screenshot({ path: 'release/ux-network.png' });
     assert.equal(await page.locator('#speed-value').getAttribute('data-value'), '96.5');
     assert.equal((await page.getByText('18 ms').count()) > 0, true);
 
