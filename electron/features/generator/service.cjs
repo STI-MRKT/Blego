@@ -43,6 +43,8 @@ async function generateProfile(
         ['phone', 'email', 'handle'].every((f) => !r.used(f, row[f]))
       );
       if (!row) exhausted('pool', p);
+      if (typeof row.name !== 'string' || !p.first.some((name) => row.name.startsWith(name + ' ')))
+        throw Error('POOL_NAME_NOT_FEMALE');
       Object.assign(values, row);
       if (
         !new RegExp(`^\\+${p.phonePrefix}\\d{${p.phoneDigits}}$`).test(values.phone) ||
@@ -113,6 +115,9 @@ async function generateProfile(
       id,
       country: p.country,
       type: p.type,
+      nameGender: p.nameGender,
+      datasetId: p.datasetId,
+      datasetVersion: p.datasetVersion,
       fields: values,
       fieldOrder: p.fieldOrder,
       rulesVersion: p.rulesVersion,

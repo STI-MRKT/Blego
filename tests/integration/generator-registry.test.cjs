@@ -94,7 +94,7 @@ test('configured local pool uses the same persistent registry', async (t) => {
       common: {
         pool: [
           {
-            name: 'Synthetic Example',
+            name: 'Olivia Example',
             phone: '+12020000000',
             email: 'pool@example.com',
             handle: 'pool.fixture'
