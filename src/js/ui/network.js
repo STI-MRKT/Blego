@@ -2,10 +2,9 @@ import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 
-const valueText = (value) => value === null || value === undefined || value === '' ? '—' : esc(String(value));
-const msText = (value) => Number.isFinite(value) ? `${Math.round(value)} ms` : '—';
-
-
+const valueText = (value) =>
+  value === null || value === undefined || value === '' ? '—' : esc(String(value));
+const msText = (value) => (Number.isFinite(value) ? `${Math.round(value)} ms` : '—');
 
 function gaugeHTML() {
   const mbps = state.network.speed ? state.network.speed.mbps : 0;
@@ -26,9 +25,11 @@ function gaugeHTML() {
 
 function packetsHTML() {
   const mbps = state.network.speed ? state.network.speed.mbps : 1;
-  const duration = state.network.running ? 1.6 : Math.max(0.9, Math.min(2.6, 22 / Math.max(mbps, 1)));
+  const duration = state.network.running
+    ? 1.6
+    : Math.max(0.9, Math.min(2.6, 22 / Math.max(mbps, 1)));
   return `<div class="packets" style="--dur:${duration.toFixed(2)}s">
-    ${Array.from({ length: 8 }, (_, index) => `<i style="animation-delay:-${(index * duration / 8).toFixed(2)}s"></i>`).join('')}
+    ${Array.from({ length: 8 }, (_, index) => `<i style="animation-delay:-${((index * duration) / 8).toFixed(2)}s"></i>`).join('')}
   </div>`;
 }
 
@@ -36,21 +37,25 @@ function pingBarsHTML() {
   const ping = state.network.ping;
   if (!ping || !ping.targets) return '<div class="net-empty small">Узлы пока не проверены</div>';
   return `<div class="ping-bars">
-    ${ping.targets.map((target) => {
-      const width = target.ms === null ? 4 : Math.max(6, Math.min(100, (target.ms / 200) * 100));
-      return `<div class="ping-row">
+    ${ping.targets
+      .map((target) => {
+        const width = target.ms === null ? 4 : Math.max(6, Math.min(100, (target.ms / 200) * 100));
+        return `<div class="ping-row">
         <span>${esc(target.label)}</span>
         <div class="ping-track"><i style="width:${width}%" class="${target.ms === null ? 'dead' : ''}"></i></div>
         <b>${target.ms === null ? '—' : `${target.ms} ms`}</b>
       </div>`;
-    }).join('')}
+      })
+      .join('')}
   </div>`;
 }
 
 function ipBlockHTML() {
   const ip = state.network.ip;
-  if (!ip) return `<div class="net-empty">${I.globe}<span>Нажмите «Пинг» или «Проверить сеть», чтобы увидеть IP и задержку.</span></div>`;
-  if (ip.connection !== 'ok') return `<div class="net-empty small">${I.alert}<span>Внешний IP не определён. Пинг и скорость доступны независимо.</span></div>`;
+  if (!ip)
+    return `<div class="net-empty">${I.globe}<span>Нажмите «Пинг» или «Проверить сеть», чтобы увидеть IP и задержку.</span></div>`;
+  if (ip.connection !== 'ok')
+    return `<div class="net-empty small">${I.alert}<span>Внешний IP не определён. Пинг и скорость доступны независимо.</span></div>`;
   return `<div class="net-loc"><span class="cc">IP</span>
     <div><b class="mono">${valueText(ip.exitIp)}</b><span>Внешний адрес · прямое соединение</span></div></div>
     <div class="net-rows"><div><span>Подключение</span><b>${msText(ip.timings?.connectionMs)}</b></div>
@@ -72,7 +77,8 @@ function riskHTML(result) {
 }
 
 function proxyHTML() {
-  const n = state.network, r = n.proxy;
+  const n = state.network,
+    r = n.proxy;
   return `<section class="card pad proxy-card">
     <div class="mini-head"><span class="t">Проверка прокси</span><span class="pill tiny">HTTP / HTTPS / SOCKS5</span></div>
     <div class="proxy-form">
@@ -85,7 +91,9 @@ function proxyHTML() {
     <p class="hint">Пустое поле — прямое соединение. Пароли не включаются в отчёт.</p>
     ${n.proxyLoading ? '<div class="proxy-loading"><div class="sk" style="height:45px"></div><div class="sk" style="width:60%;height:12px"></div></div>' : ''}
     ${n.proxyError ? `<div class="banner err">${I.alert}<div>${esc(n.proxyError)}</div></div>` : ''}
-    ${r ? `<div class="proxy-result">
+    ${
+      r
+        ? `<div class="proxy-result">
       <div class="net-loc"><span class="cc">${r.connection === 'ok' ? 'OK' : '!'}</span>
         <div><b>${r.connection === 'ok' ? 'Соединение установлено' : 'Ошибка подключения'}</b>
           <span class="mono">${valueText(r.exitIp)} ${r.code ? '· ' + valueText(r.code) : ''}</span></div></div>
@@ -99,20 +107,31 @@ function proxyHTML() {
       <details class="ux-details"><summary>Источники и технические сведения</summary>
         <p class="hint">${valueText(r.protocol)} · ${valueText(r.mode)} · ${valueText(r.checkedAt)}</p>
         <pre class="ux-json">${esc(JSON.stringify(r.sources || [], null, 2))}</pre></details>
-    </div>` : ''}
+    </div>`
+        : ''
+    }
   </section>`;
 }
 
 function interfacesHTML() {
   const info = state.network.info;
-  if (!info) return `<section class="card pad iface-card"><div class="mini-head"><span class="t">Local interfaces</span></div><div class="net-empty small">${I.bolt}<span>Network interfaces load with the first test.</span></div></section>`;
+  if (!info)
+    return `<section class="card pad iface-card"><div class="mini-head"><span class="t">Local interfaces</span></div><div class="net-empty small">${I.bolt}<span>Network interfaces load with the first test.</span></div></section>`;
   return `<section class="card pad iface-card">
     <div class="mini-head"><span class="t">Local interfaces</span><span class="pill tiny">${esc(info.hostname)}</span></div>
     <div class="iface-list">
-      ${info.interfaces.length ? info.interfaces.map((entry) => `<div class="iface-row">
+      ${
+        info.interfaces.length
+          ? info.interfaces
+              .map(
+                (entry) => `<div class="iface-row">
         <div><b>${esc(entry.name)}</b><span class="mono">${esc(entry.address)} · ${esc(entry.mac)}</span></div>
         <span class="pill">IPv4</span>
-      </div>`).join('') : '<div class="net-empty small">No active IPv4 interfaces</div>'}
+      </div>`
+              )
+              .join('')
+          : '<div class="net-empty small">No active IPv4 interfaces</div>'
+      }
     </div>
     <div class="iface-foot">${esc(info.platform)} ${esc(info.release)} · uptime ${Math.floor(info.uptime / 3600)} h</div>
   </section>`;

@@ -62,10 +62,24 @@ export function readMetadataData(data, origins = {}) {
     return op;
   }).filter((op) => op.action !== 'unchanged');
 }
-const SIMPLE_FIELDS = new Set(['title', 'description', 'author', 'copyright', 'keywords', 'comment']);
+const SIMPLE_FIELDS = new Set([
+  'title',
+  'description',
+  'author',
+  'copyright',
+  'keywords',
+  'comment'
+]);
 function metadataTable(fields, selected) {
   return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Поле</th><th>Сейчас</th><th>Действие</th><th>Новое значение</th></tr></thead>
-    <tbody>${fields.map((field) => editor(field, selected.map((photo) => photo.view.tags.find((tag) => tag.field === field)?.value))).join('')}</tbody></table></div>`;
+    <tbody>${fields
+      .map((field) =>
+        editor(
+          field,
+          selected.map((photo) => photo.view.tags.find((tag) => tag.field === field)?.value)
+        )
+      )
+      .join('')}</tbody></table></div>`;
 }
 export function photosHTML() {
   const selected = state.photos.filter((photo) => photo.selected && photo.view);
@@ -77,9 +91,15 @@ export function photosHTML() {
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Selected original image"><figcaption>Original visual preview; export will create a separate file.</figcaption></figure>` : ''}
  ${
    selected.length
-     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>Редактирование · ${selected.length} фото</h3><p class="sub">Выберите «Оставить», «Задать» или «Удалить». Сохранение затронет только отдельные копии. Настройки группы и файла применяются согласно выбранному режиму.</p>${metadataTable(METADATA_FIELDS.filter((field) => SIMPLE_FIELDS.has(field)), selected)}
+     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>Редактирование · ${selected.length} фото</h3><p class="sub">Выберите «Оставить», «Задать» или «Удалить». Сохранение затронет только отдельные копии. Настройки группы и файла применяются согласно выбранному режиму.</p>${metadataTable(
+         METADATA_FIELDS.filter((field) => SIMPLE_FIELDS.has(field)),
+         selected
+       )}
 <details class="ux-details ux-advanced-metadata"><summary>Дополнительные поля камеры, даты, GPS и приватности · ${METADATA_FIELDS.filter((field) => !SIMPLE_FIELDS.has(field)).length}</summary>
-${metadataTable(METADATA_FIELDS.filter((field) => !SIMPLE_FIELDS.has(field)), selected)}</details>
+${metadataTable(
+  METADATA_FIELDS.filter((field) => !SIMPLE_FIELDS.has(field)),
+  selected
+)}</details>
 <label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label><button type="submit" class="btn btn-primary">Choose folders and preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><details class="ux-details ux-preset-tools"><summary>Управление шаблонами и экспорт JSON</summary><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button><button type="button" class="btn" data-action="preset-rename">Rename</button><button type="button" class="btn" data-action="preset-duplicate">Duplicate</button><button type="button" class="btn" data-action="preset-delete">Delete preset</button><button type="button" class="btn" data-action="preset-export">Export preset JSON</button><p class="sub">Saved presets and group rules may contain personal metadata. They stay in the local database; exported JSON includes those values. File overrides are session-only. Original paths and access permissions are never saved.</p></details></fieldset></form>`
      : ''
  }

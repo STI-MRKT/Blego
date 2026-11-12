@@ -5,10 +5,18 @@ import { LOCALES } from '../data/locales.js';
 import { newsBlockHTML } from './news.js';
 
 const LABELS = {
-  name: 'Имя', handle: 'Имя пользователя', phone: 'Телефон', email: 'Электронная почта',
-  city: 'Город', postalCode: 'Почтовый индекс', address: 'Адрес',
-  bio: 'О себе', status: 'Статус', categories: 'Категории',
-  symbols: 'Символы', number: 'Номер'
+  name: 'Имя',
+  handle: 'Имя пользователя',
+  phone: 'Телефон',
+  email: 'Электронная почта',
+  city: 'Город',
+  postalCode: 'Почтовый индекс',
+  address: 'Адрес',
+  bio: 'О себе',
+  status: 'Статус',
+  categories: 'Категории',
+  symbols: 'Символы',
+  number: 'Номер'
 };
 const QUICK_FIELDS = new Set(['name', 'phone', 'email', 'handle', 'city', 'postalCode', 'address']);
 
@@ -39,24 +47,40 @@ function loadingHTML() {
 function profileHTML() {
   if (state.demoBusy) return loadingHTML();
   const p = state.demo;
-  if (!p) return `<div class="card empty">
+  if (!p)
+    return `<div class="card empty">
     <div class="orb">BLEGO</div><h3>Профиль пока не создан</h3>
     <p>Выберите страну и тип профиля. Все данные формируются локально.</p>
     <button class="btn btn-primary" data-action="generate">${I.spark} Создать профиль</button></div>`;
-  const fields = p.fields || {}, keys = p.fieldOrder || [];
+  const fields = p.fields || {},
+    keys = p.fieldOrder || [];
   const primary = keys.filter((key) => QUICK_FIELDS.has(key));
   const extended = keys.filter((key) => !QUICK_FIELDS.has(key));
   const name = textValue(fields.name);
   const hue = [...name].reduce((n, c) => n + c.codePointAt(0), 160) % 360;
   const categories = Array.isArray(fields.categories) ? fields.categories : [];
   const date = Number.isFinite(Date.parse(p.createdAt))
-    ? new Date(p.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })
+    ? new Date(p.createdAt).toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      })
     : 'сохранено локально';
   return `<article class="card demo-card lift">
     <div class="demo-left">
-      <div class="avatar xl" style="--h:${hue}">${esc(name.split(/\s+/).map((word) => word[0] || '').slice(0, 2).join('').toUpperCase())}</div>
+      <div class="avatar xl" style="--h:${hue}">${esc(
+        name
+          .split(/\s+/)
+          .map((word) => word[0] || '')
+          .slice(0, 2)
+          .join('')
+          .toUpperCase()
+      )}</div>
       <div class="name">${esc(name)}</div><div class="handle">@${esc(textValue(fields.handle))}</div>
-      <div class="row-chips">${categories.slice(0, 4).map((c) => `<span class="pill accent">${esc(c)}</span>`).join('')}</div>
+      <div class="row-chips">${categories
+        .slice(0, 4)
+        .map((c) => `<span class="pill accent">${esc(c)}</span>`)
+        .join('')}</div>
       <p class="bio">${esc(textValue(fields.bio) || textValue(fields.status) || 'Локальный синтетический профиль')}</p>
       <div class="demo-meta">${esc(LOCALES[p.country]?.name?.en || p.country)} · ${esc(p.type)}<br>${esc(date)} · сохранено локально</div>
       <button class="btn btn-primary ux-copy-set" data-action="copy-model" data-source="generator" data-card="true">${I.copy} Copy full set</button>
@@ -64,15 +88,21 @@ function profileHTML() {
     <div class="demo-right">
       <div class="mini-head"><span class="t">Основные поля</span><span class="ttl"><i></i>Сохранено локально</span></div>
       <div class="fields">${primary.map((key) => fieldHTML(key, fields[key])).join('')}</div>
-      ${extended.length ? `<details class="ux-details ux-extra-fields">
+      ${
+        extended.length
+          ? `<details class="ux-details ux-extra-fields">
         <summary>Дополнительные поля · ${extended.length}</summary>
         <div class="fields">${extended.map((key) => fieldHTML(key, fields[key])).join('')}</div>
-      </details>` : ''}
+      </details>`
+          : ''
+      }
       <div class="demo-note">${I.alert}<span>Синтетические данные. Контакты уникальны в рамках истории этой установки, а не во всём мире. Ничего автоматически не отправляется.</span></div>
     </div>
   </article>`;
 }
-export function ttlText() { return 'Сохранено локально'; }
+export function ttlText() {
+  return 'Сохранено локально';
+}
 export function generatorHTML() {
   const stats = state.poolStats;
   return `<div class="page ux-generator">
@@ -83,10 +113,15 @@ export function generatorHTML() {
     </div>
     <div class="card controls ux-primary-controls">
       <div class="ctl ctl-sm"><label class="fl">Страна</label><select class="input" data-input="locale">
-        ${Object.entries(LOCALES).map(([key, locale]) => `<option value="${key}" ${state.locale === key ? 'selected' : ''}>${esc(locale.name.en)} · ${esc(locale.dial)}</option>`).join('')}
+        ${Object.entries(LOCALES)
+          .map(
+            ([key, locale]) =>
+              `<option value="${key}" ${state.locale === key ? 'selected' : ''}>${esc(locale.name.en)} · ${esc(locale.dial)}</option>`
+          )
+          .join('')}
       </select></div>
       <div class="ctl ctl-sm"><label class="fl">Тип профиля</label><select class="input" data-input="type">
-        ${['model','tech','crypto'].map((type) => `<option value="${type}" ${state.type === type ? 'selected' : ''}>${type}</option>`).join('')}
+        ${['model', 'tech', 'crypto'].map((type) => `<option value="${type}" ${state.type === type ? 'selected' : ''}>${type}</option>`).join('')}
       </select></div>
       <div class="ctl-actions">
         <button class="btn btn-quiet" data-action="clear-demo" ${state.demo ? '' : 'disabled'}>Очистить</button>
