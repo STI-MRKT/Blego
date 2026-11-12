@@ -13,6 +13,11 @@ export async function copyText(text, button) {
     } else if (navigator.clipboard && window.isSecureContext)
       await navigator.clipboard.writeText(String(text));
     else {
+      const focused = document.activeElement;
+      const selection = window.getSelection(),
+        ranges = [];
+      for (let i = 0; i < (selection?.rangeCount || 0); i++)
+        ranges.push(selection.getRangeAt(i).cloneRange());
       const area = document.createElement('textarea');
       area.value = String(text);
       document.body.appendChild(area);
@@ -22,6 +27,9 @@ export async function copyText(text, button) {
         ok = document.execCommand('copy');
       } finally {
         area.remove();
+        focused?.focus({ preventScroll: true });
+        selection?.removeAllRanges();
+        for (const range of ranges) selection?.addRange(range);
       }
       if (!ok) throw Error('CLIPBOARD_FAILED');
     }

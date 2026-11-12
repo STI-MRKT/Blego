@@ -1,4 +1,14 @@
-const { app, BrowserWindow, Menu, shell, screen, ipcMain, clipboard, dialog } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  shell,
+  screen,
+  ipcMain,
+  clipboard,
+  dialog,
+  nativeImage
+} = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { startServer } = require('./server.cjs');
@@ -129,6 +139,11 @@ async function initialize() {
         await fs.promises.writeFile(result.filePath, text, { flag: 'wx', mode: 0o600 });
         return true;
       },
+      imageCopy: async (id) =>
+        require('./local/ipc.cjs').copyImage(
+          nativeImage.createFromBuffer(await images.clipboardPNG(id)),
+          clipboard
+        ),
       imageRead: (id) => images.readImageMetadata(id),
       imagePreview: (id) => images.preview(id),
       imagesPlan: (request) => images.planMetadataChanges(request),
@@ -242,7 +257,51 @@ async function initialize() {
       importRead: (arg) => classification.read(arg, { encoding: arg.encoding || undefined }),
       importPage: (arg) => classification.page(arg.operationId, arg.offset),
       importCancel: (id) => classification.cancel(id),
-      importCopy: (id) => copyText(classification.sourceText(id), clipboard),
+      importText: (id) => classification.sourceText(id),
+      copyPreferences: () => store.get('copy:preferences') || {},
+      copyPreferencesSave: (preferences) => {
+        if (
+          !preferences ||
+          typeof preferences !== 'object' ||
+          Array.isArray(preferences) ||
+          JSON.stringify(preferences).length > 16384
+        )
+          throw Error('INVALID_SETTINGS');
+        for (const [key, value] of Object.entries(preferences)) {
+          if (
+            !/^[a-zA-Z0-9_-]{1,60}$/.test(key) ||
+            ['__proto__', 'constructor', 'prototype'].includes(key) ||
+            !value ||
+            Object.keys(value).some((k) => !['format', 'order'].includes(k)) ||
+            !['values', 'labelled', 'json', 'tsv'].includes(value.format) ||
+            !Array.isArray(value.order) ||
+            value.order.length > 100 ||
+            value.order.some((k) => typeof k !== 'string' || k.length > 200)
+          )
+            throw Error('INVALID_SETTINGS');
+        }
+        store.set('copy:preferences', preferences);
+        return preferences;
+      },
+      importCopy: async (id) => {
+        const { serializeCopy } = require('../shared/copy-format.mjs');
+        const { copySource } = require('../shared/copy-sources.mjs');
+        const payload = await serializeCopy(
+          {
+            sourceIds: ['import-source'],
+            scope: 'value',
+            selection: ['source'],
+            orderedFields: ['text'],
+            format: 'text'
+          },
+          {
+            resolveSource: async () =>
+              copySource('import-source', { text: classification.sourceText(id) }),
+            revealedFields: ['text']
+          }
+        );
+        return copyText(payload.text, clipboard);
+      },
       classificationConfirm: (arg) =>
         classification.confirmClassification(arg.operationId, arg.decision),
       generate: (request) => generateProfile(request, { store }),

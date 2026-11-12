@@ -1,3 +1,4 @@
+import { mountCopyActions, initCopyPreferences, copyModelValue } from './utils/copy-actions.js';
 import { readSettingsForm } from './ui/settings.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
@@ -73,6 +74,7 @@ async function refreshPoolStats() {
   if (state.locale === country && state.type === type) state.poolStats = stats;
 }
 function bindView() {
+  mountCopyActions();
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -350,6 +352,12 @@ async function refreshNews(force) {
 function updateNews() {
   const block = document.getElementById('news-block');
   if (block) {
+    const selection = window.getSelection();
+    if (
+      block.contains(document.activeElement) ||
+      (selection?.toString() && block.contains(selection.anchorNode))
+    )
+      return;
     const content = document.getElementById('view');
     const top = content?.scrollTop;
     block.outerHTML = newsBlockHTML();
@@ -578,6 +586,20 @@ document.addEventListener('click', async (event) => {
     toast('Set cleared');
     return;
   }
+  if (action === 'copy-model') {
+    try {
+      await copyModelValue(
+        target.dataset.source,
+        target.dataset.row,
+        target.dataset.field,
+        target,
+        { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true' }
+      );
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
   if (action === 'copy') {
     copyText(target.dataset.copy || '', target);
     return;
@@ -712,6 +734,16 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'images-choose') {
     await addPhotos();
+    return;
+  }
+  if (action === 'image-copy') {
+    try {
+      const result = await window.blego.copyImage(target.dataset.id);
+      if (!result.ok) throw Error(result.code);
+      toast('Image pixels copied; metadata is not transferred.');
+    } catch {
+      toast('Image copy failed.', 'err');
+    }
     return;
   }
   if (action === 'image-preview') {
@@ -852,6 +884,7 @@ async function runCheckerStatus() {
 if (window.blego) {
   try {
     state.settings = await window.blego.getSettings();
+    await initCopyPreferences();
     state.locale = state.settings.country;
     state.type = state.settings.type;
     await refreshPoolStats();

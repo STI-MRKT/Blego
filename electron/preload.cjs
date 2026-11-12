@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('blego', {
     ipcRenderer.on('local:image-progress', listener);
     return () => ipcRenderer.removeListener('local:image-progress', listener);
   },
+  copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
   readImageMetadata: (id) => call('imageRead', id),
   previewImage: (id) => call('imagePreview', id),
@@ -52,6 +53,9 @@ contextBridge.exposeInMainWorld('blego', {
   readInput: (arg) => call('importRead', arg),
   importPage: (arg) => call('importPage', arg),
   cancelImport: (id) => call('importCancel', id),
+  importText: (id) => call('importText', id),
+  copyPreferences: () => call('copyPreferences'),
+  saveCopyPreferences: (preferences) => call('copyPreferencesSave', preferences),
   copySource: (id) => call('importCopy', id),
   confirmClassification: (arg) => call('classificationConfirm', arg),
   generate: (request) => call('generate', request),

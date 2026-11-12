@@ -28,6 +28,32 @@ async function copyText(text, clipboard) {
     return { ok: false, code: 'CLIPBOARD_FAILED' };
   }
 }
+async function copyImage(image, clipboard, api) {
+  try {
+    api ||= require('electron');
+    if (image.isEmpty()) throw Error('EMPTY_IMAGE');
+    const before = image.toBitmap(),
+      size = image.getSize();
+    await clipboard.write([
+      new api.ClipboardItem({ 'image/png': new Blob([image.toPNG()], { type: 'image/png' }) })
+    ]);
+    const items = await clipboard.read();
+    const entry = items.find((item) => item.types.includes('image/png'));
+    if (!entry) throw Error('CLIPBOARD_MISMATCH');
+    const blob = await entry.getType('image/png');
+    const actual = api.nativeImage.createFromBuffer(Buffer.from(await blob.arrayBuffer()));
+    if (
+      actual.isEmpty() ||
+      actual.getSize().width !== size.width ||
+      actual.getSize().height !== size.height ||
+      !actual.toBitmap().equals(before)
+    )
+      throw Error('CLIPBOARD_MISMATCH');
+    return { ok: true };
+  } catch {
+    return { ok: false, code: 'CLIPBOARD_FAILED' };
+  }
+}
 function registerIpc(ipcMain, getWindow, getUrl, handlers) {
   for (const [name, handler] of Object.entries(handlers))
     ipcMain.handle(`local:${name}`, async (event, arg) => {
@@ -45,4 +71,4 @@ function registerIpc(ipcMain, getWindow, getUrl, handlers) {
       }
     });
 }
-module.exports = { validateSender, externalUrl, copyText, registerIpc };
+module.exports = { validateSender, externalUrl, copyText, copyImage, registerIpc };

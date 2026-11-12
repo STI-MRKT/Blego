@@ -199,6 +199,20 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
         );
       return { id, ...clean };
     },
+    async clipboardPNG(fileId) {
+      return withSlot(async () => {
+        const item = files.get(fileId);
+        if (!item?.view) throw Error('INVALID_FILE_TOKEN');
+        const bytes = await readBounded(item.path);
+        if (createHash('sha256').update(bytes).digest('hex') !== item.view.sourceHash)
+          throw Error('SOURCE_CHANGED');
+        // Pixel-only clipboard representation. Sharp strips metadata by default.
+        return require('sharp')(bytes, { limitInputPixels: IMAGE_LIMITS.pixels, failOn: 'warning' })
+          .rotate()
+          .png()
+          .toBuffer();
+      });
+    },
     async preview(fileId) {
       const item = files.get(fileId);
       if (!item?.view) throw Error('INVALID_FILE_TOKEN');
