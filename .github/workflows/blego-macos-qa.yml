@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: blego-qa-mac-${{ github.ref }}-${{ env.TARGET_ARCH }}
+  group: blego-qa-mac-${{ github.ref }}-${{ inputs.target || 'arm64' }}
   cancel-in-progress: false
 
 jobs:
