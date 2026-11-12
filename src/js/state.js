@@ -1,7 +1,6 @@
-
 export const state = {
   view: 'generator',
-  settings: {newsEnabled:false,proxyEnabled:false},
+  settings: { newsEnabled: false, proxyEnabled: false },
   locale: 'BR',
   type: 'model',
   demo: null,
@@ -14,8 +13,8 @@ export const state = {
   importSaved: null,
   historyQuery: '',
   history: [],
-  archives: {items:[],total:0},
-  archiveView:null,
+  archives: { items: [], total: 0 },
+  archiveView: null,
   modal: null,
   news: { items: [], counts: {}, loading: false, error: '', updatedAt: 0, topic: '', order: [] },
   network: {

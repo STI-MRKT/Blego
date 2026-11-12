@@ -1,4 +1,5 @@
-module.exports=db=>db.exec(`
+module.exports = (db) =>
+  db.exec(`
  CREATE TABLE kv(key TEXT PRIMARY KEY, value TEXT NOT NULL);
  CREATE TABLE issued(field TEXT NOT NULL, scope TEXT NOT NULL, value TEXT NOT NULL, profile_id TEXT NOT NULL, PRIMARY KEY(field,scope,value));
  CREATE TABLE requests(request_id TEXT PRIMARY KEY, profile_id TEXT NOT NULL, profile TEXT NOT NULL);
