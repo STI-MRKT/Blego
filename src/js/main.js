@@ -181,6 +181,14 @@ async function prepareImageExport(retry = {}) {
 }
 function bindView() {
   mountCopyActions();
+  for (const [id, key] of [
+    ['image-group-panel', 'photoGroupsOpen'],
+    ['photo-preset-panel', 'photoPresetsOpen'],
+    ['photo-advanced-panel', 'photoAdvancedOpen']
+  ]) {
+    const details = document.getElementById(id);
+    if (details) details.ontoggle = () => { state[key] = details.open; };
+  }
   const newsTopic = document.getElementById('news-topic');
   if (newsTopic) newsTopic.onchange = async (event) => {
     state.news.topic = event.target.value;
