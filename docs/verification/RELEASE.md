@@ -172,3 +172,25 @@ builder mac documentation; see README links and stage reports.
 Review without applying: `git log --oneline --reverse 6e57eab..HEAD` and
 `git show <commit>`. Each stage report contains its actual red/green checks and
 limits. The final A7 report supersedes earlier unverified GUI/API assumptions.
+
+## Git handoff
+
+`git push -u origin codex/blego-local-v1` was attempted after the A7 commit.
+GitHub returned HTTP 403: `Permission to Kinetic58/BLEGO.git denied to STI-marketing`.
+This is a remote repository write-permission failure, not an automatic approval
+review rejection. The remote branch/PR was not created; main was not modified.
+No alternate identity or publication path was used.
+
+A self-contained Git bundle is supplied separately as `BLEGO-local-v1.bundle`.
+It contains the complete branch and stage commits, without build outputs or user
+storage. Restore in another authorized Cloud workspace with:
+
+```sh
+git clone -b codex/blego-local-v1 /path/to/BLEGO-local-v1.bundle BLEGO
+cd BLEGO
+git remote set-url origin https://github.com/Kinetic58/BLEGO.git
+```
+
+After repository write access is configured for the intended GitHub identity,
+`git push -u origin codex/blego-local-v1` sends the branch. No force push or merge
+is required. No application deployment/purchase occurred.
