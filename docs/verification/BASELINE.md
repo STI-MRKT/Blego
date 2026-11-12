@@ -44,3 +44,13 @@ Changed requirements vs legacy prototype: no office server/auth, contacts are
 mandatory, synthetic example email domains, no automatic expiry, no invented
 classification, persistent uniqueness, unknown reputation instead of low risk.
 Classification acceptance A35 remains deferred throughout A0–A7.
+
+## Separate runtime upgrade
+
+Proxy-aware baseline `npm ci` succeeded (405 packages). Electron 45 uses the
+Node fetch environment proxy: `NODE_USE_ENV_PROXY=1 node node_modules/electron/install.js`
+succeeded. Runtime probe actually executed Electron 45.3.1, embedded Node
+24.22.2, SQLite 3.53.4; CREATE/open/query/close works. `npm run verify` PASS:
+39 syntax checks, 2 unit, 1 integration. GUI launch attempted on Linux without
+DISPLAY; this is not an installed macOS/Windows validation. Playwright is pinned
+locally for reproducibility. No application behavior changed in this commit.

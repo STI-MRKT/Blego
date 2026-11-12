@@ -19,8 +19,9 @@
     "verify": "npm run lint && npm run test:unit && npm run test:integration"
   },
   "devDependencies": {
-    "electron": "^32.2.0",
-    "electron-builder": "^25.1.8"
+    "electron": "45.3.1",
+    "electron-builder": "26.18.0",
+    "playwright": "1.65.0"
   },
   "build": {
     "appId": "com.blemish.blego",
