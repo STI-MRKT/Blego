@@ -1,6 +1,9 @@
 name: BLEGO macOS QA build (manual, unsigned)
 
 on:
+  push:
+    branches:
+      - codex/macos-qa-bootstrap-20261112
   workflow_dispatch:
     inputs:
       target:
@@ -16,16 +19,18 @@ permissions:
   contents: read
 
 concurrency:
-  group: blego-qa-mac-${{ github.ref }}-${{ inputs.target }}
+  group: blego-qa-mac-${{ github.ref }}-${{ env.TARGET_ARCH }}
   cancel-in-progress: false
 
 jobs:
   mac:
-    # The repository is PRIVATE: a manual run consumes GitHub Actions compute allowance.
-    runs-on: ${{ inputs.target == 'x64' && 'macos-15-intel' || 'macos-15' }}
+    # Private repository: a marked commit deliberately authorizes one compute-consuming job.
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[mac-qa-run]') || contains(github.event.head_commit.message, '[mac-qa-run-x64]') }}
+    runs-on: ${{ (contains(github.event.head_commit.message, '[mac-qa-run-x64]') || inputs.target == 'x64') && 'macos-15-intel' || 'macos-15' }}
     timeout-minutes: 60
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,16 +48,16 @@ jobs:
       - name: Native read-write-readback gate
         run: |
           mkdir -p release
-          node scripts/check-metadata-native.cjs --target darwin-${{ inputs.target }} --root build/metadata-runtime/darwin-${{ inputs.target }} --report release/native-darwin-${{ inputs.target }}.json
+          node scripts/check-metadata-native.cjs --target darwin-${{ env.TARGET_ARCH }} --root build/metadata-runtime/darwin-${{ env.TARGET_ARCH }} --report release/native-darwin-${{ env.TARGET_ARCH }}.json
       - name: Test
         run: npm run verify
       - name: Build unsigned DMG
-        run: npm run dist:mac -- --${{ inputs.target }}
+        run: npm run dist:mac -- --${{ env.TARGET_ARCH }}
       - name: Verify packaged executable (outside repo)
         run: |
           set -euo pipefail
-          ditto "release/mac-${{ inputs.target }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
-          node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ inputs.target }}.json
+          ditto "release/mac-${{ env.TARGET_ARCH }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json
       - name: Record checksums
         run: |
           shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
@@ -62,7 +67,7 @@ jobs:
       - name: Upload private QA packages
         uses: actions/upload-artifact@v4
         with:
-          name: BLEGO-mac-${{ inputs.target }}-QA
+          name: BLEGO-mac-${{ env.TARGET_ARCH }}-QA
           retention-days: 5
           if-no-files-found: error
           path: |
