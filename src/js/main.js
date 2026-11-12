@@ -715,6 +715,8 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'set-view') {
     state.view = target.dataset.view;
+    if (state.view === 'news' && !state.news.loading)
+      refreshNews(false);
     if (state.view === 'history')
       window.blego
         .listArchives()
