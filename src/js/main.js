@@ -13,6 +13,7 @@ import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/ph
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
+import { NEWS_SOURCES, sourcesForTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
 
@@ -180,6 +181,13 @@ async function prepareImageExport(retry = {}) {
 }
 function bindView() {
   mountCopyActions();
+  const newsTopic = document.getElementById('news-topic');
+  if (newsTopic) newsTopic.onchange = async (event) => {
+    state.news.topic = event.target.value;
+    await window.blego.updateSettings({ newsTopic: state.news.topic });
+    updateNews(true);
+    await refreshNews(true);
+  };
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -463,17 +471,27 @@ async function importPage(offset) {
 }
 
 function ensureNews() {
-  if (!state.settings.newsEnabled) return;
-  if (!state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
+  // Never fetch in the background merely because the Generator is visible.
+  if (state.view === 'news' && state.settings.newsEnabled &&
+      !state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
 }
 
 async function refreshNews(force) {
   if (state.news.loading) return;
+  // Opening News or pressing Refresh is explicit permission for the listed foreign RSS sources.
+  if (!state.settings.newsEnabled || !state.settings.newsSources?.length) {
+    try {
+      state.settings = await window.blego.updateSettings({ newsEnabled: true, newsSources: NEWS_SOURCES });
+    } catch (error) {
+      toast('Не удалось открыть ленту: ' + error.message, 'err');
+      return;
+    }
+  }
   state.news.loading = true;
   state.news.error = '';
   updateNews();
   try {
-    const data = await loadNews(force);
+    const data = await loadNews(force, sourcesForTopic(state.news.topic || 'fashion'));
     state.news.items = data.items;
     state.news.counts = data.counts || {};
     state.news.updatedAt = data.lastSuccessfulAt ? Date.parse(data.lastSuccessfulAt) : 0;
@@ -490,16 +508,16 @@ async function refreshNews(force) {
     state.news.error = 'News is unavailable. Check the connection and try again.';
   }
   state.news.loading = false;
-  updateNews();
+  updateNews(true);
 }
 
-function updateNews() {
+function updateNews(force = false) {
   const block = document.getElementById('news-block');
   if (block) {
     const selection = window.getSelection();
     if (
-      block.contains(document.activeElement) ||
-      (selection?.toString() && block.contains(selection.anchorNode))
+      !force && (block.contains(document.activeElement) ||
+      (selection?.toString() && block.contains(selection.anchorNode)))
     )
       return;
     const content = document.getElementById('view');
@@ -838,15 +856,6 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'news-refresh') {
     refreshNews(true);
-    return;
-  }
-  if (action === 'news-topic') {
-    state.news.topic = target.dataset.topic || '';
-    window.blego.updateSettings({ newsTopic: state.news.topic });
-    if (!state.news.topic && !state.news.order.length) {
-      state.news.order = shuffle(state.news.items.map((item) => item.link));
-    }
-    updateNews();
     return;
   }
   if (action === 'net-run') {
