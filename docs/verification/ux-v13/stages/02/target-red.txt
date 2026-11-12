@@ -1,0 +1,111 @@
+✖ SOCKS5 uses local DNS while SOCKS5h delegates DNS, with real auth and TLS (120.455888ms)
+✖ proxy errors distinguish HTTP auth and TLS without echoing credentials (65.557851ms)
+✖ user input cannot connect to local or service proxies; request cannot override dependencies (3.747204ms)
+✖ timeout is distinct from explicit cancellation and does not report a successful check (10001.224529ms)
+✖ only numeric, IP-bound provider risk can produce Trust; missing and malformed values remain unknown (2.388206ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10397.685429
+
+✖ failing tests:
+
+test at tests/integration/proxy-boundaries.test.cjs:7:1
+✖ SOCKS5 uses local DNS while SOCKS5h delegates DNS, with real auth and TLS (120.455888ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/proxy-boundaries.test.cjs:15:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/integration/proxy-boundaries.test.cjs:20:1
+✖ proxy errors distinguish HTTP auth and TLS without echoing credentials (65.557851ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'HTTP_ERROR'
+  - 'AUTH_FAILED'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/proxy-boundaries.test.cjs:24:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'HTTP_ERROR',
+    expected: 'AUTH_FAILED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/integration/proxy-boundaries.test.cjs:30:1
+✖ user input cannot connect to local or service proxies; request cannot override dependencies (3.747204ms)
+  AssertionError [ERR_ASSERTION]: 127.0.0.1
+  + actual - expected
+  
+  + 'TRANSPORT_FAILED'
+  - 'REQUEST_BLOCKED'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/proxy-boundaries.test.cjs:33:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'TRANSPORT_FAILED',
+    expected: 'REQUEST_BLOCKED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/integration/proxy-boundaries.test.cjs:36:1
+✖ timeout is distinct from explicit cancellation and does not report a successful check (10001.224529ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'TRANSPORT_FAILED'
+  - 'TIMEOUT'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/proxy-boundaries.test.cjs:40:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'TRANSPORT_FAILED',
+    expected: 'TIMEOUT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/proxy-reputation.test.cjs:3:1
+✖ only numeric, IP-bound provider risk can produce Trust; missing and malformed values remain unknown (2.388206ms)
+  Error: Cannot find module '../../electron/features/proxy/proxycheck.cjs'
+  Require stack:
+  - /workspace/BLEGO-v13/tests/unit/proxy-reputation.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at require (node:internal/modules/helpers:157:16)
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/unit/proxy-reputation.test.cjs:4:40)
+      at Test.runInAsyncScope (node:async_hooks:227:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '/workspace/BLEGO-v13/tests/unit/proxy-reputation.test.cjs' ]
+  }

@@ -1,0 +1,28 @@
+✖ original visual controls and individual values remain usable with advanced data folded (1324.918939ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1938.146385
+
+✖ failing tests:
+
+test at tests/ui/original-ux.test.cjs:8:1
+✖ original visual controls and individual values remain usable with advanced data folded (1324.918939ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/original-ux.test.cjs:51:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,290 @@
+{
+  "at": "2026-11-12T16:22:59.564Z",
+  "os": "linux",
+  "arch": "x64",
+  "mode": "real Electron app and production pinned-DNS transport; no fixture feeds",
+  "topics": [
+    {
+      "topic": "fashion",
+      "configured": 3,
+      "successful": 3,
+      "received": 72,
+      "validUnique": 24,
+      "displayed": 24,
+      "uniqueDisplayed": 24,
+      "lastSuccessfulAt": "2026-11-12T16:23:00.439Z",
+      "sourceStates": {
+        "vogue-us": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:00.437Z",
+          "lastAttemptAt": "2026-11-12T16:23:00.437Z",
+          "code": null,
+          "received": 29
+        },
+        "wwd": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:00.439Z",
+          "lastAttemptAt": "2026-11-12T16:23:00.439Z",
+          "code": null,
+          "received": 10
+        },
+        "guardian-fashion": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:00.439Z",
+          "lastAttemptAt": "2026-11-12T16:23:00.439Z",
+          "code": null,
+          "received": 33
+        }
+      },
+      "examples": [
+        {
+          "title": "Loewe’s ‘Nightmare Before Christmas’ Collection Has Arrived, and It’s a Far Cry From Your Usual Holiday Merch",
+          "link": "https://wwd.com/shop/shop-fashion/loewe-disney-tim-burton-nightmare-before-christmas-collab-1239412651/",
+          "publishedAt": 1794500075000
+        },
+        {
+          "title": "Armed Robbers Target De Beers London’s Paris Flagship",
+          "link": "https://wwd.com/accessories-news/jewelry/de-beers-londons-paris-flagship-armed-robbery-1239412598/",
+          "publishedAt": 1794498666000
+        },
+        {
+          "title": "The 40th Annual FNAAs Will Honor Spike Lee, Tory Burch, Jaden Smith, Ronnie Fieg, Adidas’ Record-Breaking Sneaker and More",
+          "link": "https://wwd.com/footwear-news/shoe-industry-news/footwear-news-fnaa-2026-winners-1239400682/",
+          "publishedAt": 1794498010000
+        }
+      ]
+    },
+    {
+      "topic": "ai",
+      "configured": 3,
+      "successful": 3,
+      "received": 50,
+      "validUnique": 50,
+      "displayed": 40,
+      "uniqueDisplayed": 40,
+      "lastSuccessfulAt": "2026-11-12T16:23:08.384Z",
+      "sourceStates": {
+        "techcrunch-ai": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:08.384Z",
+          "lastAttemptAt": "2026-11-12T16:23:08.384Z",
+          "code": null,
+          "received": 20
+        },
+        "wired-ai": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:08.384Z",
+          "lastAttemptAt": "2026-11-12T16:23:08.384Z",
+          "code": null,
+          "received": 10
+        },
+        "guardian-ai": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:08.384Z",
+          "lastAttemptAt": "2026-11-12T16:23:08.384Z",
+          "code": null,
+          "received": 20
+        }
+      },
+      "examples": [
+        {
+          "title": "From washing dishes at Denny’s to rockstar of AI: the rise and fall of Nvidia’s Jensen Huang",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/rise-and-fall-of-nvidia-ceo-jensen-huang-profile",
+          "publishedAt": 1794500251000
+        },
+        {
+          "title": "Trump floats Apple chairman Tim Cook as Jensen Huang’s successor",
+          "link": "https://techcrunch.com/2026/11/12/trump-floats-apple-chairman-tim-cook-as-jensen-huangs-successor/",
+          "publishedAt": 1794499964000
+        },
+        {
+          "title": "Jensen Huang is out at Nvidia — who is Colette Kress, his interim replacement?",
+          "link": "https://techcrunch.com/2026/11/12/jensen-huang-is-out-at-nvidia-who-is-colette-kress-his-interim-replacement/",
+          "publishedAt": 1794497849000
+        }
+      ]
+    },
+    {
+      "topic": "crypto",
+      "configured": 3,
+      "successful": 3,
+      "received": 92,
+      "validUnique": 92,
+      "displayed": 40,
+      "uniqueDisplayed": 40,
+      "lastSuccessfulAt": "2026-11-12T16:23:14.496Z",
+      "sourceStates": {
+        "coindesk": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:14.496Z",
+          "lastAttemptAt": "2026-11-12T16:23:14.496Z",
+          "code": null,
+          "received": 25
+        },
+        "cointelegraph": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:14.496Z",
+          "lastAttemptAt": "2026-11-12T16:23:14.496Z",
+          "code": null,
+          "received": 30
+        },
+        "decrypt": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:14.496Z",
+          "lastAttemptAt": "2026-11-12T16:23:14.496Z",
+          "code": null,
+          "received": 37
+        }
+      },
+      "examples": [
+        {
+          "title": "Anchorage Digital’s Stablecoins Can Now Settle Payments on Visa’s Network",
+          "link": "https://decrypt.co/383098/anchorage-digital-stablecoins-settle-payments-visa-network",
+          "publishedAt": 1794499263000
+        },
+        {
+          "title": "Tether Gold Gets Clean KPMG Audit Confirming $2.2B in Physical Gold Backing",
+          "link": "https://decrypt.co/383137/tether-gold-gets-clean-kpmg-audit-confirming-2-2b-in-physical-gold-backing",
+          "publishedAt": 1794498938000
+        },
+        {
+          "title": "Bitcoin slides toward $71K as Nvidia stock tumbles after Huang steps down",
+          "link": "https://cointelegraph.com/markets/bitcoin-price-drops-71k-stocks-nvidia-huang-resignation",
+          "publishedAt": 1794498366000
+        }
+      ]
+    },
+    {
+      "topic": "finance",
+      "configured": 3,
+      "successful": 3,
+      "received": 107,
+      "validUnique": 32,
+      "displayed": 32,
+      "uniqueDisplayed": 32,
+      "lastSuccessfulAt": "2026-11-12T16:23:15.482Z",
+      "sourceStates": {
+        "bbc-business": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:15.482Z",
+          "lastAttemptAt": "2026-11-12T16:23:15.482Z",
+          "code": null,
+          "received": 57
+        },
+        "marketwatch": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:15.482Z",
+          "lastAttemptAt": "2026-11-12T16:23:15.482Z",
+          "code": null,
+          "received": 10
+        },
+        "guardian-business": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:15.482Z",
+          "lastAttemptAt": "2026-11-12T16:23:15.482Z",
+          "code": null,
+          "received": 40
+        }
+      },
+      "examples": [
+        {
+          "title": "Nvidia CEO Jensen Huang resigns over scandal and is replaced by CFO Colette Kress on interim basis – follow live",
+          "link": "https://www.theguardian.com/technology/live/2026/nov/12/nvidia-ceo-jensen-huang-affairs-share-price-plunges-live-latest",
+          "publishedAt": 1794499370000
+        },
+        {
+          "title": "Home sales plummet to lowest level since ‘Great Recession’ as prices hit all-time high",
+          "link": "https://www.marketwatch.com/story/home-sales-plummet-to-lowest-level-since-the-great-recession-as-buyers-flee-the-market-624e6270?mod=mw_rss_topstories",
+          "publishedAt": 1794498720000
+        },
+        {
+          "title": "Poundland gets more time to secure a rescue deal as emergency talks continue",
+          "link": "https://www.bbc.co.uk/news/articles/c3702jjkez4ko?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794493799000
+        }
+      ]
+    },
+    {
+      "topic": "tech",
+      "configured": 5,
+      "successful": 5,
+      "received": 120,
+      "validUnique": 63,
+      "displayed": 40,
+      "uniqueDisplayed": 40,
+      "lastSuccessfulAt": "2026-11-12T16:23:21.937Z",
+      "sourceStates": {
+        "techcrunch": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:21.560Z",
+          "lastAttemptAt": "2026-11-12T16:23:21.560Z",
+          "code": null,
+          "received": 20
+        },
+        "ars": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:21.560Z",
+          "lastAttemptAt": "2026-11-12T16:23:21.560Z",
+          "code": null,
+          "received": 20
+        },
+        "verge": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:21.560Z",
+          "lastAttemptAt": "2026-11-12T16:23:21.560Z",
+          "code": null,
+          "received": 10
+        },
+        "engadget": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:21.560Z",
+          "lastAttemptAt": "2026-11-12T16:23:21.560Z",
+          "code": null,
+          "received": 20
+        },
+        "wired": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-12T16:23:21.937Z",
+          "lastAttemptAt": "2026-11-12T16:23:21.937Z",
+          "code": null,
+          "received": 50
+        }
+      },
+      "examples": [
+        {
+          "title": "Trump floats Apple chairman Tim Cook as Jensen Huang’s successor",
+          "link": "https://techcrunch.com/2026/11/12/trump-floats-apple-chairman-tim-cook-as-jensen-huangs-successor/",
+          "publishedAt": 1794499964000
+        },
+        {
+          "title": "Read Nvidia’s internal emails about the ‘extraordinarily difficult period’ amid CEO shakeup",
+          "link": "https://www.theverge.com/ai-artificial-intelligence/1032028/read-nvidias-internal-emails-jensen-huang",
+          "publishedAt": 1794498492000
+        },
+        {
+          "title": "Jensen Huang is out at Nvidia — who is Colette Kress, his interim replacement?",
+          "link": "https://techcrunch.com/2026/11/12/jensen-huang-is-out-at-nvidia-who-is-colette-kress-his-interim-replacement/",
+          "publishedAt": 1794497849000
+        }
+      ]
+    }
+  ],
+  "completed": true
+}

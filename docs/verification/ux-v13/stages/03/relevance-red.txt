@@ -1,0 +1,39 @@
+✔ RSS/Atom Unicode, single-quoted namespace links and unknown dates (10.649876ms)
+✔ external XML entities, malformed XML, oversized feeds reject (2.47669ms)
+✖ broad editorial feeds exclude unrelated and sponsored entries using explicit catalog policy (3.420719ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98.418268
+
+✖ failing tests:
+
+test at tests/unit/feeds.test.cjs:28:1
+✖ broad editorial feeds exclude unrelated and sponsored entries using explicit catalog policy (3.420719ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'A designer brings a new collection to the runway',
+  +   'A guide to the best hotels in Rome',
+  +   'Sponsored: buy a dress today'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/unit/feeds.test.cjs:32:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A designer brings a new collection to the runway', 'A guide to the best hotels in Rome', 'Sponsored: buy a dress today' ],
+    expected: [ 'A designer brings a new collection to the runway' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

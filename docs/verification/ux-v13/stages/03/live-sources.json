@@ -1,0 +1,323 @@
+{
+  "at": "2026-11-12T16:21:24.279Z",
+  "os": "linux",
+  "method": "production publicFetch with pinned DNS; actual response headers and publisher rights declarations; no bypass",
+  "sources": [
+    {
+      "id": "guardian-fashion",
+      "name": "The Guardian Fashion",
+      "topic": "fashion",
+      "url": "https://www.theguardian.com/fashion/rss",
+      "at": "2026-11-12T16:21:12.269Z",
+      "responses": [
+        {
+          "url": "https://www.theguardian.com/fashion/rss",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": "Guardian News and Media Limited or its affiliated companies. All rights reserved. 2026",
+      "received": 33,
+      "relevant": 32,
+      "result": "PASS"
+    },
+    {
+      "id": "wwd",
+      "name": "WWD",
+      "topic": "fashion",
+      "url": "https://wwd.com/feed/",
+      "at": "2026-11-12T16:21:12.269Z",
+      "responses": [
+        {
+          "url": "https://wwd.com/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 10,
+      "relevant": 6,
+      "result": "PASS"
+    },
+    {
+      "id": "vogue-us",
+      "name": "Vogue",
+      "topic": "fashion",
+      "url": "https://www.vogue.com/feed/rss",
+      "at": "2026-11-12T16:21:12.259Z",
+      "responses": [
+        {
+          "url": "https://www.vogue.com/feed/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "declaredRights": "© Condé Nast 2026",
+      "received": 29,
+      "relevant": 9,
+      "result": "PASS"
+    },
+    {
+      "id": "techcrunch-ai",
+      "name": "TechCrunch AI",
+      "topic": "ai",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "at": "2026-11-12T16:21:12.269Z",
+      "responses": [
+        {
+          "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 20,
+      "relevant": 20,
+      "result": "PASS"
+    },
+    {
+      "id": "wired-ai",
+      "name": "WIRED AI",
+      "topic": "ai",
+      "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "at": "2026-11-12T16:21:17.509Z",
+      "responses": [
+        {
+          "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "declaredRights": "© Condé Nast 2026",
+      "received": 10,
+      "relevant": 10,
+      "result": "PASS"
+    },
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch",
+      "topic": "tech",
+      "url": "https://techcrunch.com/feed/",
+      "at": "2026-11-12T16:21:17.557Z",
+      "responses": [
+        {
+          "url": "https://techcrunch.com/feed/",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 20,
+      "relevant": 16,
+      "result": "PASS"
+    },
+    {
+      "id": "ars",
+      "name": "Ars Technica",
+      "topic": "tech",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "at": "2026-11-12T16:21:17.610Z",
+      "responses": [
+        {
+          "url": "https://feeds.arstechnica.com/arstechnica/index",
+          "status": 200,
+          "contentType": "application/rss+xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 20,
+      "relevant": 15,
+      "result": "PASS"
+    },
+    {
+      "id": "verge",
+      "name": "The Verge",
+      "topic": "tech",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "at": "2026-11-12T16:21:17.650Z",
+      "responses": [
+        {
+          "url": "https://www.theverge.com/rss/index.xml",
+          "status": 200,
+          "contentType": "application/xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 10,
+      "relevant": 9,
+      "result": "PASS"
+    },
+    {
+      "id": "guardian-ai",
+      "name": "The Guardian AI",
+      "topic": "ai",
+      "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+      "at": "2026-11-12T16:21:17.539Z",
+      "responses": [
+        {
+          "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": "Guardian News &amp; Media Limited or its affiliated companies. All rights reserved. 2026",
+      "received": 20,
+      "relevant": 20,
+      "result": "PASS"
+    },
+    {
+      "id": "wired",
+      "name": "WIRED",
+      "topic": "tech",
+      "url": "https://www.wired.com/feed/rss",
+      "at": "2026-11-12T16:21:23.010Z",
+      "responses": [
+        {
+          "url": "https://www.wired.com/feed/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "declaredRights": "© Condé Nast 2026",
+      "received": 50,
+      "relevant": 20,
+      "result": "PASS"
+    },
+    {
+      "id": "cointelegraph",
+      "name": "Cointelegraph",
+      "topic": "crypto",
+      "url": "https://cointelegraph.com/rss",
+      "at": "2026-11-12T16:21:23.123Z",
+      "responses": [
+        {
+          "url": "https://cointelegraph.com/rss",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 30,
+      "relevant": 30,
+      "result": "PASS"
+    },
+    {
+      "id": "engadget",
+      "name": "Engadget",
+      "topic": "tech",
+      "url": "https://www.engadget.com/rss.xml",
+      "at": "2026-11-12T16:21:22.959Z",
+      "responses": [
+        {
+          "url": "https://www.engadget.com/rss.xml",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": null,
+      "received": 20,
+      "relevant": 17,
+      "result": "PASS"
+    },
+    {
+      "id": "marketwatch",
+      "name": "MarketWatch",
+      "topic": "finance",
+      "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+      "at": "2026-11-12T16:21:23.487Z",
+      "responses": [
+        {
+          "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+          "status": 200,
+          "contentType": "application/xml; charset=utf-8"
+        }
+      ],
+      "declaredRights": "Copyright &#169; Dow Jones & Company, Inc. All rights reserved.",
+      "received": 10,
+      "relevant": 2,
+      "result": "PASS"
+    },
+    {
+      "id": "decrypt",
+      "name": "Decrypt",
+      "topic": "crypto",
+      "url": "https://decrypt.co/feed",
+      "at": "2026-11-12T16:21:23.422Z",
+      "responses": [
+        {
+          "url": "https://decrypt.co/feed",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "declaredRights": "Decrypt Media",
+      "received": 37,
+      "relevant": 37,
+      "result": "PASS"
+    },
+    {
+      "id": "coindesk",
+      "name": "CoinDesk",
+      "topic": "crypto",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "at": "2026-11-12T16:21:23.029Z",
+      "responses": [
+        {
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+          "status": 308,
+          "contentType": "text/plain"
+        },
+        {
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss",
+          "status": 200,
+          "contentType": "application/xml"
+        }
+      ],
+      "declaredRights": "© 2026 CoinDesk, Inc.",
+      "received": 25,
+      "relevant": 25,
+      "result": "PASS"
+    },
+    {
+      "id": "bbc-business",
+      "name": "BBC Business",
+      "topic": "finance",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "at": "2026-11-12T16:21:23.448Z",
+      "responses": [
+        {
+          "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+          "status": 200,
+          "contentType": "text/xml; charset=utf-8"
+        }
+      ],
+      "declaredRights": "Copyright: (C) British Broadcasting Corporation, see https://www.bbc.co.uk/usingthebbc/terms-of-use/#15metadataandrssfeeds for terms and conditions of reuse.",
+      "received": 57,
+      "relevant": 21,
+      "result": "PASS"
+    },
+    {
+      "id": "guardian-business",
+      "name": "The Guardian Business",
+      "topic": "finance",
+      "url": "https://www.theguardian.com/business/rss",
+      "at": "2026-11-12T16:21:23.777Z",
+      "responses": [
+        {
+          "url": "https://www.theguardian.com/business/rss",
+          "status": 302,
+          "contentType": null
+        },
+        {
+          "url": "https://www.theguardian.com/uk/business/rss",
+          "status": 200,
+          "contentType": "text/xml; charset=UTF-8"
+        }
+      ],
+      "declaredRights": "Guardian News and Media Limited or its affiliated companies. All rights reserved. 2026",
+      "received": 40,
+      "relevant": 27,
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-export const loadNews = (force) => window.blego.refreshNews({ force });
+export const loadNews = (force, topic) => window.blego.refreshNews({ force, topic });

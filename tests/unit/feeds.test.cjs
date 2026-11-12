@@ -25,3 +25,31 @@ test('external XML entities, malformed XML, oversized feeds reject', () => {
   ])
     assert.throws(() => parseFeed(xml, source));
 });
+test('broad editorial feeds exclude unrelated and sponsored entries using explicit catalog policy', () => {
+  const { NEWS_SOURCES } = require('../../shared/news-catalog.mjs');
+  const source = NEWS_SOURCES.find((s) => s.id === 'vogue-us');
+  const xml =
+    '<rss><channel>' +
+    [
+      'A designer brings a new collection to the runway',
+      'A guide to the best hotels in Rome',
+      'Sponsored: buy a dress today'
+    ]
+      .map(
+        (title, i) => `<item><title>${title}</title><link>https://example.com/${i}</link></item>`
+      )
+      .join('') +
+    '</channel></rss>';
+  assert.deepEqual(
+    parseFeed(xml, source).map((i) => i.title),
+    ['A designer brings a new collection to the runway']
+  );
+});
+test('CDATA HTML entities become readable headlines and descriptions without markup', () => {
+  const [item] = parseFeed(
+    '<rss><channel><item><title><![CDATA[Designer&#8217;s &amp; brand&#160;news]]></title><link>https://example.com/a</link><description><![CDATA[&lt;b&gt;Hello&lt;/b&gt;]]></description></item></channel></rss>',
+    source
+  );
+  assert.equal(item.title, 'Designer’s & brand news');
+  assert.equal(item.description, 'Hello');
+});

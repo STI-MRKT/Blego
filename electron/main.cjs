@@ -243,7 +243,7 @@ async function initialize() {
       },
       facebookNote: (note) => facebook.saveManualNote(note),
       facebookOpen: (target) => shell.openExternal(normalizeTarget(target).canonicalUrl),
-      newsSnapshot: () => news.snapshot(),
+      newsSnapshot: (topic) => news.snapshot(topic),
       newsRefresh: (options) => news.refreshNews(options || {}),
       newsCancel: () => news.cancel(),
       proxyCheck: async (request) => {

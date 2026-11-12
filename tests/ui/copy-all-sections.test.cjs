@@ -166,6 +166,8 @@ test(
         sources: [],
         password: 'DO-NOT-COPY'
       };
+      state.news.topic = 'fashion';
+      state.news.lastAttemptAt = new Date().toISOString();
       state.news.items = [
         {
           id: 'news-test',
@@ -173,7 +175,7 @@ test(
           source: 'Local fixture',
           link: 'https://example.com/?token=DO-NOT-COPY',
           description: 'Provided summary',
-          topic: 'test'
+          topic: 'fashion'
         }
       ];
     });
@@ -196,6 +198,7 @@ test(
     });
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].webContents.send('local:news-updated', {
+        topic: 'fashion',
         items: [
           {
             id: 'news-next',

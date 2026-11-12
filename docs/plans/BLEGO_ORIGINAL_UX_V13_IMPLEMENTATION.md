@@ -48,11 +48,11 @@ Interfaces: `checkProxy({value}, signal)` returns safe error code, route, IP, ti
 
 Files: `shared/news-catalog.mjs` (new catalog only); existing feeds/service/settings/main/state/news UI; new news topic/race/security tests.
 Interfaces: `refreshNews({topic,force})` and `snapshot(topic)` return selected-topic items/source states/last success; cache remains existing SQLite news store.
-- [ ] RED tests topic-only requests, rapid switching/coalescing, 20 unique valid items where available, stale cache/429, redirect/private/DNS guard, encodings and normalized duplicates.
-- [ ] Select verified official topical feeds, implement chosen-topic persistence and cache throttling without all-topic background timer.
-- [ ] Restore original cards/loading effects, five-topic dropdown and individual title/link/source copying; hide News Settings.
-- [ ] Run live selected-topic checks with source/HTTP/received/unique/displayed/time report, regression and GUI; do not substitute fixtures for live acceptance.
-- [ ] Commit and ledger.
+- [x] RED tests topic-only requests, rapid switching/coalescing, 20 unique valid items where available, stale cache/429, redirect/private/DNS guard, encodings and normalized duplicates.
+- [x] Select verified official topical feeds, implement chosen-topic persistence and cache throttling without all-topic background timer.
+- [x] Restore original cards/loading effects, five-topic dropdown and individual title/link/source copying; hide News Settings.
+- [x] Run live selected-topic checks with source/HTTP/received/unique/displayed/time report, regression and GUI; do not substitute fixtures for live acceptance.
+- [x] Commit and ledger.
 
 ## Task 4: Facebook
 

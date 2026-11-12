@@ -10,3 +10,6 @@ Task 2: in progress. Official proxycheck docs confirm v2 supported until 2035, o
 
 Task 2: complete implementation; lint PASS, unit/integration pass counts ['45', '77'], GUI 4/4. Controlled real HTTP/HTTPS/SOCKS5/SOCKS5h transports, strict provider/IP parsing, direct diagnostic bounds and cancellation verified. Live proxycheck adapter response PASS. External user-proxy egress and native Mac remain BLOCKED pending environment/credentials. Logs stages/02.
 Task 3: in progress.
+
+Task 3: implementation complete. lint PASS; unit 47/47; integration 80/80; GUI 5/5. All 17 included RSS/Atom sources returned HTTP 200 in production transport audit. Real Electron per-topic displayed counts: {'fashion': 24, 'ai': 40, 'crypto': 40, 'finance': 32, 'tech': 40}. Raw/unique/source/time evidence and screenshots stages/03. Source-specific commercial redistribution rights beyond checked RSS policies NOT_VERIFIED; no publication authorized. Native Mac remains UX7. Stage2 .log evidence copied to tracked .txt files (repository ignores *.log).
+Task 4: in progress.

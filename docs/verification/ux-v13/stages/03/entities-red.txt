@@ -1,0 +1,38 @@
+✔ RSS/Atom Unicode, single-quoted namespace links and unknown dates (14.385636ms)
+✔ external XML entities, malformed XML, oversized feeds reject (6.495369ms)
+✔ broad editorial feeds exclude unrelated and sponsored entries using explicit catalog policy (2.396239ms)
+✖ CDATA HTML entities become readable headlines and descriptions without markup (1.841918ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120.526534
+
+✖ failing tests:
+
+test at tests/unit/feeds.test.cjs:48:1
+✖ CDATA HTML entities become readable headlines and descriptions without markup (1.841918ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Designer&#8217;s &amp; brand&#160;news'
+  - 'Designer’s & brand news'
+             ^
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/unit/feeds.test.cjs:50:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Designer&#8217;s &amp; brand&#160;news',
+    expected: 'Designer’s & brand news',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -16,7 +16,7 @@ export const state = {
   archives: { items: [], total: 0 },
   archiveView: null,
   modal: null,
-  news: { items: [], counts: {}, loading: false, error: '', updatedAt: 0, topic: '', order: [] },
+  news: { items: [], counts: {}, loading: false, error: '', updatedAt: 0, topic: 'fashion', order: [] },
   network: {
     running: false,
     stage: '',
