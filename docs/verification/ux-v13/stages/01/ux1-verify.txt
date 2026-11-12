@@ -1,0 +1,161 @@
+
+> blego@1.2.0 verify
+> npm run lint && npm run test:unit && npm run test:integration
+
+
+> blego@1.2.0 lint
+> node scripts/check.cjs && npm run format:check
+
+Syntax checked 141 JavaScript files; git diff --check exit 0
+
+> blego@1.2.0 format:check
+> prettier --check "electron/**/*.cjs" "shared/*.mjs" "tests/**/*.cjs" "scripts/*.cjs"
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> blego@1.2.0 test:unit
+> node --test tests/unit/*.test.cjs
+
+✔ safe archive names preserve Cyrillic and reject extraction attacks (3.010389ms)
+✔ manifest metadata cannot carry HTML in numeric fields (2.421083ms)
+✔ existing supported country set remains available (3.333872ms)
+✔ HTML escaping preserves text without executable tags (0.91173ms)
+✔ clipboard_failure_is_not_success (1.974866ms)
+✔ untrusted_ipc_is_rejected (0.644445ms)
+✔ Electron 45 async clipboard success is awaited (0.280257ms)
+✔ single_value_is_exact, absent values stay empty (6.663224ms)
+✔ card_obeys_saved_order and mandatory profile contacts cannot be omitted (0.724605ms)
+✔ copy_filter_includes_offscreen_rows; selected rows span pages; all includes 120 (3.384952ms)
+✔ tsv_quotes_roundtrip and explicit spreadsheet safety preserves raw single copying (2.072488ms)
+✔ mass_report_excludes_secrets and personal fields require deliberate disclosure (1.11846ms)
+✔ over_10_mib rejects before exposing a partial payload; input model snapshot survives yields (30.429103ms)
+✔ copy adapters cover every section from models and omit credentials/private metadata by default (11.802629ms)
+✔ mass import strips nested credentials and URL secrets while exact disclosed cell remains available (1.28754ms)
+✔ JSON unsafe numeric ID keeps its source lexeme and adapters reject already rounded numbers (15.614266ms)
+✔ missing CSV fields render empty in structural preview rather than the word null (5.912064ms)
+✔ long IDs retain exact digits; canonical duplicates preserve input mappings (4.532029ms)
+✔ spoofed hosts, credentials, reserved paths, invalid IDs and overlarge batches reject locally (2.891029ms)
+✔ public responses never establish account sanctions and one og:title proves nothing (4.008666ms)
+✔ RSS/Atom Unicode, single-quoted namespace links and unknown dates (8.584586ms)
+✔ external XML entities, malformed XML, oversized feeds reject (12.106148ms)
+✔ every country uses an explicitly female, normalized and traceable name dataset (27.884036ms)
+✔ all 24 country/type presets are complete and thematic (35.764521ms)
+✔ local configuration is data only and contacts cannot be disabled (2.364533ms)
+✔ explicit_keep_overrides_group_set; inherit resolves group; defaults never invent values (12.994154ms)
+✔ empty set, implicit origins, unknown fields and executable/path-shaped workspace input reject (1.436917ms)
+✔ all JSON fields and nested raw values survive, including record 51 (14.53572ms)
+✔ CSV conflicting headers, extra cells, multiline locations are retained (3.54928ms)
+✔ unclosed quote, invalid JSON, malformed encoding and oversize are explicit errors (0.9387ms)
+✔ UTF16LE/BE BOM and explicit Windows1251 retain Cyrillic (2.327168ms)
+✔ invalid JSON record shapes remain accounted for rather than dropped (0.921233ms)
+✔ packaging refuses absent native runtime and foreign host instead of shipping a broken metadata editor (3.129196ms)
+✔ metadata operations enforce keep/set/remove, fixed fields, real dates and explicit GPS (5.002329ms)
+✔ Keep preserves multi-value or unknown camera metadata, which is not a writable scalar (2.920996ms)
+✔ native gate rejects foreign host, unsafe manifest entries and changed runtime bytes (11.892655ms)
+✔ catalog reports real capacities and data deficits, not product-sized full profile promises (25.058742ms)
+✔ bulk mode requires explicit consent while existing optional-repeat settings remain compatible (4.870513ms)
+✔ explicit proxy protocols, authentication and direct mode (1.469311ms)
+✔ missing reputation stays unknown and latency is not a risk input (1.78398ms)
+✔ secret vault never falls back to plaintext (1.112909ms)
+✔ settings reject unknown and invalid values (2.07072ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 609.96708
+
+> blego@1.2.0 pretest:integration
+> npm run prepare:metadata
+
+
+> blego@1.2.0 prepare:metadata
+> node scripts/prepare-metadata-runtime.cjs
+
+Verified existing embedded v5.40.1: 1715 files.
+
+> blego@1.2.0 test:integration
+> node --test tests/integration/*.test.cjs
+
+✔ upgrade actual 211d2a2 store: ZIP, registry, last card, presets, notes and settings survive (206.610346ms)
+✔ upgrade actual aeb8c237780088d33a1ac8c2f05549144088d192 store: ZIP, registry, last card, presets, notes and settings survive (216.582562ms)
+✔ failure after no-overwrite finalization recovers ZIP and lost catalogue (85.031912ms)
+✔ write faults never report ready and corrupt ZIP is rejected (49.531478ms)
+✔ verified temp before finalization resumes without reclassification (31.338952ms)
+✔ ZIP byte limits, symlinks, traversal and CRC tampering reject (29.915458ms)
+✔ real permission denial preserves old ZIP; cancelled save is not ready (23.921498ms)
+✔ test-only classification ZIP roundtrip, idempotence, original opt-in, last opened (73.054394ms)
+✔ pending input rejected and original copy preserves exact bytes (86.533464ms)
+✔ same source and processing second have distinct immutable filenames (43.571703ms)
+✔ date filter includes full UTC day and archive removal keeps issued contacts (43.066834ms)
+✔ rules_pending cannot be confirmed or forged and production refuses fixtures (51.516357ms)
+✔ explicit test rules account for all records and partial requires consent (30.427096ms)
+✔ cancellation terminates parse worker without producing an operation (2.202812ms)
+✔ over_10_mib_does_not_replace_clipboard, exact 10 MiB succeeds (16.767857ms)
+✔ copy_denied_has_no_success, read-back mismatch has no success (0.501587ms)
+✔ image clipboard rejects denial and pixel readback mismatch (3.902448ms)
+✔ queue is sequential, rate-limited, pauses at 429 and never overwrites owner notes (20.518778ms)
+✔ deadline and cancellation settle even when an injected transport ignores abort; old run cannot leak (2.072794ms)
+✔ transport guards redirects, private addresses and decoded body size (18.808382ms)
+✔ 24 localized thematic presets retain contacts, paired geography and sufficient authored templates (33.585894ms)
+✔ transliteration preserves displayed accents and phone/postal exhaustion does not spend contacts (1462.843594ms)
+✔ female-only generation covers 24 presets, preserves old cards and rejects incompatible custom pools (379.295506ms)
+✔ unique_contacts_survive_restart: 10000 artificial-capacity requests (23313.942493ms)
+✔ parallel requests, idempotent retry, clear and cached provenance (46.256224ms)
+✔ small_pool_exhausts_explicitly and failed operation reserves nothing (15.828098ms)
+✔ every country/type actually issues mandatory contacts (60.254154ms)
+✔ configured local pool uses the same persistent registry (11.230149ms)
+✔ camera numbers validate and round-trip in real JPEG PNG WebP copies (3880.286551ms)
+✔ real multi-value ISO survives a title-only grouped export (1156.477824ms)
+✔ actual exclusive-link collision retries without overwriting existing Unicode files (835.391059ms)
+✔ preflight rejects unsupported linking and actual read-only destination before export (219.098042ms)
+✔ group report and effective operations use existing copy policy and preserve selected order (12.467341ms)
+✔ group plans freeze per-file rules, reject stale revisions, double click writes once and retry is selective (1817.56258ms)
+✔ group cancellation leaves other groups running and stale run cannot cancel (1513.869657ms)
+✔ same canonical path deduplicates, group overrides and presets remain explicit (21.333647ms)
+✔ applied preset is a snapshot after rename/delete; reference can be explicitly promoted (257.443348ms)
+✔ concurrent registration cannot create hidden duplicate canonical paths (7.66466ms)
+✔ reference copies only explicitly selected available fields and detects changed source (645.222175ms)
+✔ saved reference proof requires fresh explicit authorization and can be rebound by unchanged hash (1098.61725ms)
+✔ workspace explicit save/reopen preserves presets/settings; session file tokens are not restored (25.256358ms)
+✔ privacy removes actual ExifIFD OwnerName and SerialNumber tags (2059.749935ms)
+✔ GPS set removes stale IPTC Extension locations and verifies each remaining coordinate copy (1405.697663ms)
+✔ JPEG COM comment is updated and removed along with EXIF/XMP comment copies (2091.829471ms)
+✔ real JPEG/PNG/WebP read and plans preserve originals; tokens do not authorize arbitrary files (1722.336168ms)
+✔ animation, signed provenance, mixed values and external ExifTool config are handled explicitly (365.036273ms)
+✔ missing and mixed metadata remain distinct and file/queue/total limits reject atomically (1833.381239ms)
+✔ cancel reading aborts active engines and prevents queued readers from starting (17.013611ms)
+✔ real JPEG PNG WebP exports update known copies, preserve originals, encoded content and rendered orientation/color/alpha (3714.281498ms)
+✔ export refuses changed originals, tampered verification and invalid destination; keep-only creates no file (1300.105882ms)
+✔ GPS dates text namespaces and privacy preset round-trip all static formats (6053.759035ms)
+✔ write failures, cancellation and restart cleanup preserve originals and unrelated files (1560.688822ms)
+✔ export keeps heavy read and clipboard jobs out of its two-worker budget (805.60291ms)
+✔ success → partial failure → total failure → reopen retains per-source cache (25.786356ms)
+✔ disabled module makes no fetch, timer uses configured interval, disabling aborts (9.05634ms)
+✔ four-worker limit and cancellation prevent late cache writes (55.119684ms)
+✔ feed fetch enforces HTTP, byte and redirect limits (41.559869ms)
+✔ package preview/apply keeps registry; changed or invalid imports cannot switch active dataset (123.633625ms)
+✔ controlled HTTPS via HTTP/HTTPS/SOCKS5 auth=false (243.590636ms)
+✔ controlled HTTPS via HTTP/HTTPS/SOCKS5 auth=true (140.611469ms)
+✔ HTTP 503 with success body is not success (76.545938ms)
+✔ HTTP 429 with success body is not success (53.482614ms)
+✔ invalid JSON and cancellation are honest failures (114.168075ms)
+✔ reputation wait never changes transport timing or assessment (33.208188ms)
+✔ unavailable and malformed reputation adapters cannot produce clean scores (0.694363ms)
+✔ wrong proxy credentials fail for all controlled transports (48.510096ms)
+✔ loopback serves the existing interface (57.897764ms)
+✔ invalid_url_does_not_exit and untrusted Host is rejected (24.555127ms)
+✔ settings_survive_reopen and transaction rollback (14.121683ms)
+✔ failed_migration_preserves_previous_store (15.660888ms)
+✔ missing established registry is not silently recreated (6.422374ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26128.177746

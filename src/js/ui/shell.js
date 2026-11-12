@@ -3,19 +3,25 @@ import { I } from '../icons.js';
 import { viewHTML } from './views.js';
 
 const NAV = [
-  { group: 'Workspace', items: [
-    { view: 'generator', icon: I.spark, label: 'Generator' },
-    { view: 'import', icon: I.upload, label: 'Import' },
-    { view: 'history', icon: I.clock, label: 'Archive' },
-    { view: 'news', icon: I.globe, label: 'News' },
-    { view: 'settings', icon: I.shield, label: 'Settings' }
-  ] },
-  { group: 'Tools', items: [
-    { view: 'network', icon: I.globe, label: 'Network' },
-    { view: 'photos', icon: I.image, label: 'Photos' },
-    { view: 'friends', icon: I.users, label: 'Friends' },
-    { view: 'checker', icon: I.shield, label: 'Checker' }
-  ] }
+  {
+    group: 'Workspace',
+    items: [
+      { view: 'generator', icon: I.spark, label: 'Generator' },
+      { view: 'news', icon: I.globe, label: 'News' }
+    ]
+  },
+  {
+    group: 'Tools',
+    items: [
+      { view: 'network', icon: I.globe, label: 'Network' },
+      { view: 'photos', icon: I.image, label: 'Photos' },
+      { view: 'checker', icon: I.shield, label: 'Checker' },
+      { view: 'import', icon: I.upload, label: 'Import' },
+      { view: 'friends', icon: I.users, label: 'Friends' },
+      { view: 'settings', icon: I.shield, label: 'Settings' },
+      { view: 'history', icon: I.clock, label: 'Archive' }
+    ]
+  }
 ];
 
 export const titleOf = (view) => {

@@ -90,6 +90,7 @@ test(
       }
       assert.equal(actual, expected);
     }
+    await page.locator('[data-profile-extra] > summary').click();
     for (const field of card.fieldOrder) {
       await page.locator(`[aria-label="Copy ${field}"]`).click();
       await checkClipboard(

@@ -187,7 +187,7 @@ test(
     assert.ok(!news.includes('DO-NOT-COPY'));
     assert.ok(!news.includes('body'));
     await page.evaluate(() => {
-      const node = document.querySelector('.news-title h3').firstChild;
+      const node = document.querySelector('.news-title').firstChild;
       const range = document.createRange();
       range.selectNodeContents(node);
       const selection = window.getSelection();
@@ -208,7 +208,7 @@ test(
     );
     await page.waitForTimeout(100);
     assert.equal(await page.evaluate(() => window.getSelection().toString()), 'Synthetic article');
-    assert.equal(await page.locator('.news-title h3').textContent(), 'Synthetic article');
+    assert.equal(await page.locator('.news-title').textContent(), 'Synthetic article');
     await page.evaluate(() => window.getSelection().removeAllRanges());
 
     await page.evaluate(async () => {

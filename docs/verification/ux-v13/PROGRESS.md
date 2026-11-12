@@ -1,0 +1,9 @@
+# Execution ledger — BLEGO_ORIGINAL_UX_V13_IMPLEMENTATION.md
+
+User approved design and execution, with individual copy next to every working value. 2026-11-12.
+Baseline: 487487e66e1298b27553ccc1774b474c158ef08b; app code 7de5727. Worktree /workspace/BLEGO-v13.
+Pre-flight: tasks 1→2/3/4/5/6 preserve renderer exports/state; tasks 2/3 add scoped result state only; task 5 extends existing operations backwards-compatibly; task 7 tests exact final candidate.
+Ruling: use current isolated worktree and a versioned progress ledger; cloud skills' filesystem helper scripts are not local. User explicitly authorized execution, no repeated planning approval.
+Task 1: in progress.
+Task 1: complete. Target GUI RED (gauge missing) → GREEN. npm run verify: lint PASS, unit 42/42, integration 71/71. GUI 4/4 after updating selection test to the original news-title element (h3 wrapper intentionally removed). Original graphics/individual copying restored; screenshots stages/01. Protected CSS/assets/icons unchanged. No new backend readiness claimed in this stage.
+Task 2: in progress. Official proxycheck docs confirm v2 supported until 2035, optional key (100 unkeyed requests/day), risk=1 scale 0–100. Use HTTPS and strict numeric/IP-bound parsing; no paid activation.
