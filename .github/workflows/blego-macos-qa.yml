@@ -1,0 +1,74 @@
+name: BLEGO macOS QA build (manual, unsigned)
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Mac architecture
+        required: true
+        type: choice
+        default: arm64
+        options:
+          - arm64
+          - x64
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blego-qa-mac-${{ github.ref }}-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  mac:
+    # The repository is PRIVATE: a manual run consumes GitHub Actions compute allowance.
+    runs-on: ${{ inputs.target == 'x64' && 'macos-15-intel' || 'macos-15' }}
+    timeout-minutes: 60
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Install pinned dependencies
+        run: |
+          npm ci
+          node node_modules/electron/install.js
+      - name: Prepare native Perl / ExifTool runtime
+        run: bash scripts/prepare-metadata-darwin.sh
+      - name: Native read-write-readback gate
+        run: |
+          mkdir -p release
+          node scripts/check-metadata-native.cjs --target darwin-${{ inputs.target }} --root build/metadata-runtime/darwin-${{ inputs.target }} --report release/native-darwin-${{ inputs.target }}.json
+      - name: Test
+        run: npm run verify
+      - name: Build unsigned DMG
+        run: npm run dist:mac -- --${{ inputs.target }}
+      - name: Verify packaged executable (outside repo)
+        run: |
+          set -euo pipefail
+          ditto "release/mac-${{ inputs.target }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ inputs.target }}.json
+      - name: Record checksums
+        run: |
+          shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
+          sw_vers > release/macOS-env.txt
+          uname -m >> release/macOS-env.txt
+          echo 'QA only; not notarized or Developer ID signed' >> release/macOS-env.txt
+      - name: Upload private QA packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-mac-${{ inputs.target }}-QA
+          retention-days: 5
+          if-no-files-found: error
+          path: |
+            release/*.dmg
+            release/SHA256SUMS-mac.txt
+            release/macOS-env.txt
+            release/native-darwin-*.json
+            release/installed-darwin-*.json
+            release/installed-darwin-*.json.log
