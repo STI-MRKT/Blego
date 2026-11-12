@@ -1,3 +1,4 @@
+const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
 // Explicit synthetic 100-file GUI load check, not part of each quick regression run.
 const fs = require('node:fs'),
   path = require('node:path'),
@@ -46,7 +47,8 @@ const { openStore } = require('../electron/local/store.cjs');
       }, paths);
     await choose(Array(100).fill(file));
     await page.locator('[data-action="images-choose"]').click();
-    await page.waitForFunction(
+    await waitForAsync(
+      page,
       async () => {
         const { state } = await import('/js/state.js');
         return state.photos.length === 100 && !state.imagesBusy;
@@ -58,7 +60,15 @@ const { openStore } = require('../electron/local/store.cjs');
       const { state } = await import('/js/state.js');
       return state.photos.filter((p) => p.status === 'ready').length;
     });
-    if (reads !== 100) throw Error(`Read count ${reads}`);
+    if (reads !== 100) {
+      const statuses = await page.evaluate(async () => {
+        const { state } = await import('/js/state.js');
+        return state.photos.slice(0, 3).map((p) => ({ status: p.status, error: p.error }));
+      });
+      throw Error(
+        `Read count ${reads}: ${JSON.stringify(statuses)}; toasts=${await page.locator('.toasts').textContent()}`
+      );
+    }
     console.log('100 files read');
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Synthetic GUI batch');
@@ -66,7 +76,8 @@ const { openStore } = require('../electron/local/store.cjs');
     await page.locator('[data-action="metadata-export"]').waitFor();
     await choose([output]);
     await page.locator('[data-action="metadata-export"]').click();
-    await page.waitForFunction(
+    await waitForAsync(
+      page,
       async () => {
         const { state } = await import('/js/state.js');
         return Boolean(state.metadataExport) && !state.imagesBusy;

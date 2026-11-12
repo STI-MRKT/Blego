@@ -1,3 +1,4 @@
+const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 const { test } = require('node:test'),
   assert = require('node:assert/strict');
 const fs = require('node:fs'),
@@ -228,7 +229,7 @@ test(
     await page.locator('[data-action="archive-back"]').click();
     await page.locator('#archive-filter [name="order"]').selectOption('oldest');
     await page.locator('#archive-filter button').click();
-    await page.waitForFunction(async () => {
+    await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
       return state.archives.items[0]?.originalName === 'old.txt';
     });

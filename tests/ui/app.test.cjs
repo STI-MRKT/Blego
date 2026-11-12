@@ -1,3 +1,4 @@
+const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -110,7 +111,7 @@ test(
     await page.locator('[data-view="settings"]').click();
     await page.locator('[name="symbols"]').fill('★');
     await page.locator('#settings-form button[type="submit"]').click();
-    await page.waitForFunction(async () => (await window.blego.getSettings()).symbols === '★');
+    await waitForAsync(page, async () => (await window.blego.getSettings()).symbols === '★');
     // The dialog is the permission boundary; replace only the native chooser with a
     // controlled fixture, exercising real preview, apply, settings and storage.
     const poolFile = path.join(root, 'female-data.json');
@@ -144,15 +145,17 @@ test(
     await page.locator('[data-action="pool-apply"]').waitFor({ state: 'detached' });
     await choosePoolFixture();
     await page.locator('[data-action="pool-apply"]').click();
-    await page.waitForFunction(
+    await waitForAsync(
+      page,
       async () =>
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1
     );
     await page.locator('[name="bulkMode"]').check();
     await page.locator('#settings-form button[type="submit"]').click();
-    await page.waitForFunction(async () => (await window.blego.getSettings()).bulkMode === true);
+    await waitForAsync(page, async () => (await window.blego.getSettings()).bulkMode === true);
     await page.locator('[data-action="pool-bundled"]').click();
-    await page.waitForFunction(
+    await waitForAsync(
+      page,
       async () =>
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
         1563
