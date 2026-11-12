@@ -1,0 +1,21 @@
+name: BLEGO cookie test formatting output
+
+on:
+  push:
+    branches:
+      - codex/blego-ux-restoration-20261112
+
+permissions:
+  contents: read
+
+jobs:
+  print:
+    if: ${{ contains(github.event.head_commit.message, '[print-cookie-format]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Show exact project formatting for cookie UI test
+        run: npx --yes prettier@3.10.0 --config .prettierrc.json tests/ui/import-cookie.test.cjs
