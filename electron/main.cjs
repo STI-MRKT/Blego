@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell, screen, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, shell, screen, ipcMain, clipboard, dialog } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { startServer } = require('./server.cjs');
@@ -6,27 +6,26 @@ const { startServer } = require('./server.cjs');
 let serverInstance = null;
 let serverUrl = null;
 
-const statePath = () => path.join(app.getPath('userData'), 'blego-state.json');
-
-function readState() {
-  try {
-    return JSON.parse(fs.readFileSync(statePath(), 'utf8'));
-  } catch {
-    return {};
+const {openStore} = require('./local/store.cjs');
+const {getSettings,updateSettings} = require('./local/settings.cjs');
+const {registerIpc,externalUrl,copyText} = require('./local/ipc.cjs');
+let store, mainWindow;
+async function initialize() {
+  store = await openStore(app.getPath('userData'));
+  // Preserve the existing onboarding marker; no legacy user file is removed.
+  if (store.get('tourSeen') === undefined) {
+    try { store.set('tourSeen', !!JSON.parse(fs.readFileSync(path.join(app.getPath('userData'),'blego-state.json'),'utf8')).tourSeen); } catch { /* absent legacy marker */ }
   }
+  registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
+    settingsGet:()=>getSettings(store),
+    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');return updateSettings(store,patch);},
+    archiveDirectory:async()=>{const r=await dialog.showOpenDialog(mainWindow,{properties:['openDirectory','createDirectory']});return r.canceled?getSettings(store):updateSettings(store,{archiveRoot:r.filePaths[0]});},
+    copy:text=>copyText(text,clipboard),
+    tourSeen:()=>!!store.get('tourSeen'),
+    tourMark:()=>{store.set('tourSeen',true);return true;}
+  });
+  await createWindow();
 }
-
-function writeState(patch) {
-  const next = { ...readState(), ...patch };
-  fs.mkdirSync(path.dirname(statePath()), { recursive: true });
-  fs.writeFileSync(statePath(), JSON.stringify(next));
-}
-
-ipcMain.handle('tour:seen', () => Boolean(readState().tourSeen));
-ipcMain.handle('tour:mark', () => {
-  writeState({ tourSeen: true });
-  return true;
-});
 
 async function ensureServer() {
   if (!serverUrl) {
@@ -58,10 +57,14 @@ async function createWindow() {
       preload: path.join(__dirname, 'preload.cjs')
     }
   });
+  mainWindow = window;
+  window.webContents.on('will-navigate', (event, target) => { if(target !== url) event.preventDefault(); });
+  window.webContents.session.setPermissionRequestHandler((_wc,_permission,callback)=>callback(false));
   window.once('ready-to-show', () => window.show());
   window.loadURL(url);
   window.webContents.setWindowOpenHandler(({ url: target }) => {
-    shell.openExternal(target);
+    const safe=externalUrl(target);
+    if(safe) shell.openExternal(safe).catch(()=>{});
     return { action: 'deny' };
   });
 }
@@ -79,7 +82,7 @@ if (!hasLock) {
       window.focus();
     }
   });
-  app.whenReady().then(createWindow);
+  app.whenReady().then(initialize).catch(()=>{dialog.showErrorBox('BLEGO','Local storage could not be opened. Restore its backup; no new history was created.');app.quit();});
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
@@ -88,5 +91,6 @@ if (!hasLock) {
   });
   app.on('before-quit', () => {
     if (serverInstance) serverInstance.close();
+    if(store) store.close();
   });
 }

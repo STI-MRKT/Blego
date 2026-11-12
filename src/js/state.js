@@ -2,6 +2,7 @@ import { seedHistory } from './data/seed.js';
 
 export const state = {
   view: 'generator',
+  settings: {newsEnabled:false,proxyEnabled:false},
   locale: 'BR',
   demo: null,
   demoBusy: false,

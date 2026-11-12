@@ -344,7 +344,7 @@ async function handleApi(request, response, url) {
     if (url.pathname === '/api/fb/check') return sendJson(response, await fbCheck(url.searchParams.get('id')));
     return sendJson(response, { error: 'Not found' }, 404);
   } catch (error) {
-    return sendJson(response, { error: error.message || 'Request failed' });
+    return sendJson(response, { error: 'REQUEST_FAILED' }, 502);
   }
 }
 
@@ -352,7 +352,11 @@ function startServer(rootDir, port = 0) {
   const root = path.resolve(rootDir);
   return new Promise((resolve, reject) => {
     const server = http.createServer((request, response) => {
-      const url = new URL(request.url || '/', 'http://127.0.0.1');
+      if(!['GET','HEAD'].includes(request.method)){response.writeHead(405);response.end();return;}
+      const expected=`127.0.0.1:${server.address().port}`;
+      if(request.headers.host!==expected || (request.headers.origin && request.headers.origin!==`http://${expected}`)){response.writeHead(403);response.end();return;}
+      let url;
+      try {url=new URL(request.url || '/', `http://${expected}`);decodeURIComponent(url.pathname);} catch {response.writeHead(400);response.end();return;}
       if (url.pathname.startsWith('/api/')) {
         handleApi(request, response, url);
         return;
@@ -365,7 +369,7 @@ function startServer(rootDir, port = 0) {
       }
       if (pathname === '/') pathname = '/index.html';
       const filePath = path.join(root, path.normalize(pathname).replace(/^([/\\])+/, ''));
-      if (!filePath.startsWith(root)) {
+      if (!filePath.startsWith(root + path.sep)) {
         response.writeHead(403);
         response.end('forbidden');
         return;

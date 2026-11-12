@@ -1,3 +1,4 @@
+import {readSettingsForm} from './ui/settings.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
 import { pad2 } from './utils/random.js';
@@ -68,6 +69,9 @@ function animateSpeedValue() {
 }
 
 function bindView() {
+  const settingsForm=document.getElementById('settings-form');
+  if(settingsForm)settingsForm.onsubmit=async event=>{event.preventDefault();try{state.settings=await window.blego.updateSettings(readSettingsForm(settingsForm));state.locale=state.settings.country;toast('Settings saved');renderView();}catch(e){toast(`Settings were not saved: ${e.message}`,'err');}};
+
   document.querySelectorAll('[data-input="locale"]').forEach((select) => {
     select.onchange = (event) => { state.locale = event.target.value; };
   });
@@ -240,6 +244,7 @@ function saveImport() {
 }
 
 function ensureNews() {
+  if(!state.settings.newsEnabled) return;
   if (!state.news.updatedAt && !state.news.loading) refreshNews(false);
 }
 
@@ -269,6 +274,7 @@ function updateNews() {
 }
 
 function maybeAutoNetwork() {
+  if(!state.settings.proxyEnabled) return;
   if (state.view !== 'network') return;
   if (document.getElementById('tour-root')) return;
   if (state.network.ip || state.network.running || state.network.error) return;
@@ -361,6 +367,7 @@ document.addEventListener('click', (event) => {
     renderAll();
     return;
   }
+  if(action==='archive-directory'){window.blego.chooseArchiveDirectory().then(s=>{state.settings=s;renderView();}).catch(()=>toast('Folder unchanged','err'));return;}
   if (action === 'generate') { generate(); return; }
   if (action === 'clear-demo') {
     state.demo = null;
@@ -486,6 +493,7 @@ setInterval(() => {
   if (head) head.textContent = text;
 }, 1000);
 
+if(window.blego){try{state.settings=await window.blego.getSettings();state.locale=state.settings.country;}catch{toast('Settings unavailable','err');}}
 renderAll();
 setTimeout(() => {
   startTour({
