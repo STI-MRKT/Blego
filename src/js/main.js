@@ -7,7 +7,6 @@ import { appHTML } from './ui/shell.js';
 import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
-import { historyRowsHTML, historyFiltered } from './ui/history.js';
 import { newsBlockHTML } from './ui/news.js';
 import { PHOTO_LIMIT } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
@@ -77,16 +76,8 @@ function bindView() {
   document.querySelectorAll('[data-input="type"]').forEach(select=>{
     select.onchange=async event=>{state.type=event.target.value;state.settings=await window.blego.updateSettings({type:state.type});};
   });
-  const search = document.getElementById('history-search');
-  if (search) {
-    search.oninput = (event) => {
-      state.historyQuery = event.target.value;
-      const list = document.getElementById('history-list');
-      if (list) list.innerHTML = historyRowsHTML();
-      const counter = document.getElementById('history-count');
-      if (counter) counter.textContent = `${historyFiltered().length} of ${state.history.length}`;
-    };
-  }
+  const archiveFilter=document.getElementById('archive-filter');
+  if(archiveFilter)archiveFilter.onsubmit=async event=>{event.preventDefault();const d=new FormData(archiveFilter);state.archiveQuery=Object.fromEntries(d);try{state.archives=await window.blego.listArchives(state.archiveQuery);renderView();}catch(e){toast(e.message,'err');}};
   const proxy = document.getElementById('proxy-input');
   if (proxy) {
     proxy.oninput = (event) => { state.network.proxyInput = event.target.value; };
@@ -283,8 +274,14 @@ document.addEventListener('click', (event) => {
   if (!target) return;
   const action = target.dataset.action;
 
+  if(action==='archive-open'){window.blego.openArchive(target.dataset.id).then(v=>{state.archiveView=v;renderView();}).catch(e=>toast(e.message,'err'));return;}
+  if(action==='archive-export'){window.blego.exportArchive({id:target.dataset.id,text:target.dataset.kind==='txt'}).then(r=>{if(r.ok)toast('Exported');}).catch(e=>toast(e.message,'err'));return;}
+  if(action==='archive-delete'){window.blego.removeArchive(target.dataset.id).then(async ok=>{if(ok){state.archiveView=null;state.archives=await window.blego.listArchives();renderView();}}).catch(e=>toast(e.message,'err'));return;}
+  if(action==='archive-folder'){window.blego.archiveFolder(target.dataset.id);return;}
+  if(action==='archive-back'){state.archiveView=null;renderView();return;}
   if (action === 'set-view') {
     state.view = target.dataset.view;
+    if(state.view==='history')window.blego.listArchives().then(v=>{state.archives=v;renderView();}).catch(e=>toast(e.message,'err'));
     state.modal = null;
     renderAll();
     return;

@@ -6,7 +6,7 @@ const NAV = [
   { group: 'Workspace', items: [
     { view: 'generator', icon: I.spark, label: 'Generator' },
     { view: 'import', icon: I.upload, label: 'Import' },
-    { view: 'history', icon: I.clock, label: 'History' },
+    { view: 'history', icon: I.clock, label: 'Archive' },
     { view: 'settings', icon: I.shield, label: 'Settings' }
   ] },
   { group: 'Tools', items: [

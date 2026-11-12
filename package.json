@@ -80,5 +80,9 @@
       "title": "BLEGO"
     }
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "yauzl": "3.4.0",
+    "yazl": "3.3.1"
+  }
 }

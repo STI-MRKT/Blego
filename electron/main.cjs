@@ -13,15 +13,25 @@ const {generateProfile,clearCard}=require('./features/generator/service.cjs');
 const {resolvePreset}=require('./features/generator/sources.cjs');
 const {createClassificationService}=require('./features/classification/service.cjs');
 const classification=createClassificationService();
-let store, mainWindow;
+const {createArchiveService}=require('./features/archive/service.cjs');
+let store, mainWindow, archives;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
+  archives=createArchiveService({store,classification});
+  const roots=new Set([getSettings(store).archiveRoot||path.join(store.root,'archives'),...store.db.prepare('SELECT metadata FROM archives').all().map(r=>JSON.parse(r.metadata).archiveRoot)]);
+  for(const root of roots)await archives.recover(root);
   // Preserve the existing onboarding marker; no legacy user file is removed.
   if (store.get('tourSeen') === undefined) {
     try { store.set('tourSeen', !!JSON.parse(fs.readFileSync(path.join(app.getPath('userData'),'blego-state.json'),'utf8')).tourSeen); } catch { /* absent legacy marker */ }
   }
   registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
     settingsGet:()=>getSettings(store),
+    archiveList:q=>archives.listArchives(q),
+    archiveOpen:async id=>{const r=await archives.openArchive(id);return {entry:r.entry,resultText:r.entries['result.txt'].toString(),unresolvedText:r.entries['unresolved.txt']?.toString()||'',diagnostics:r.entries['diagnostics.jsonl'].toString()};},
+    archiveSave:id=>{const s=getSettings(store);return archives.saveArchive(id,{archiveRoot:s.archiveRoot,includeOriginal:s.includeOriginal});},
+    archiveExport:async arg=>{const e=archives.entry(arg.id);const r=await dialog.showSaveDialog(mainWindow,{defaultPath:arg.text?'result.txt':e.fileName});if(r.canceled)return {ok:false,code:'CANCELLED'};return archives.exportArchive(arg.id,r.filePath,{text:arg.text===true});},
+    archiveRemove:async id=>{archives.entry(id);const r=await dialog.showMessageBox(mainWindow,{type:'warning',message:'Delete this archive? The generator uniqueness history will remain.',buttons:['Cancel','Delete'],defaultId:0,cancelId:0});return r.response===1?archives.removeArchive(id):false;},
+    archiveFolder:id=>{const e=archives.entry(id);shell.showItemInFolder(path.join(e.archiveRoot,e.fileName));return true;},
     importRead:arg=>classification.read(arg,{encoding:arg.encoding||undefined}),
     importPage:arg=>classification.page(arg.operationId,arg.offset),
     importCancel:id=>classification.cancel(id),
