@@ -3,3 +3,10 @@ release/
 out/
 .DS_Store
 *.log
+
+*.sqlite*
+*.db
+.env*
+artifacts/
+test-results/
+playwright-report/

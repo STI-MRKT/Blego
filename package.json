@@ -11,7 +11,12 @@
     "serve": "node electron/server.cjs",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",
-    "dist:mac": "electron-builder --mac"
+    "dist:mac": "electron-builder --mac",
+    "test:unit": "node --test tests/unit/*.test.cjs",
+    "test:integration": "node --test tests/integration/*.test.cjs",
+    "test:ui": "node --test tests/ui/*.test.cjs",
+    "lint": "node scripts/check.cjs",
+    "verify": "npm run lint && npm run test:unit && npm run test:integration"
   },
   "devDependencies": {
     "electron": "^32.2.0",
