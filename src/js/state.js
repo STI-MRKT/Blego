@@ -31,6 +31,9 @@ export const state = {
     error: ''
   },
   photos: [],
+  photoGroupsOpen: false,
+  photoPresetsOpen: false,
+  photoAdvancedOpen: false,
   friendsGeo: '',
   checker: { input: '', rows: null, checking: null }
 };
