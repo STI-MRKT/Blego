@@ -90,6 +90,8 @@ test(
       }
       assert.equal(actual, expected);
     }
+    const extraFields = page.locator('details.ux-extra-fields');
+    if (await extraFields.count()) await extraFields.locator('summary').click();
     for (const field of card.fieldOrder) {
       await page.locator(`[aria-label="Copy ${field}"]`).click();
       await checkClipboard(
