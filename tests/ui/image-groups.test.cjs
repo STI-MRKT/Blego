@@ -52,6 +52,7 @@ test(
     );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('details.ux-group-controls summary').click();
     await page.locator('#image-group-name').fill('Explicit group');
     await page.locator('[data-action="group-create"]').click();
     await page
