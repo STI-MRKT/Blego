@@ -126,6 +126,13 @@ test(
       .update(JSON.stringify(dataset))
       .digest('hex');
     fs.writeFileSync(poolFile, JSON.stringify(dataset));
+    async function openAdvancedSettings() {
+      const advanced = page.locator('details.ux-settings-advanced');
+      if (await advanced.count()) {
+        if (!(await advanced.evaluate((element) => element.open)))
+          await advanced.locator('summary').click();
+      }
+    }
     async function choosePoolFixture() {
       await app.evaluate(({ dialog }, file) => {
         const original = dialog.showOpenDialog;
@@ -134,8 +141,10 @@ test(
           return { canceled: false, filePaths: [file] };
         };
       }, poolFile);
+      await openAdvancedSettings();
       await page.locator('[data-action="pool-choose"]').click();
       await page.locator('[data-action="pool-apply"]').waitFor();
+      await openAdvancedSettings();
     }
     await choosePoolFixture();
     assert.equal(
@@ -152,9 +161,11 @@ test(
       async () =>
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1
     );
+    await openAdvancedSettings();
     await page.locator('[name="bulkMode"]').check();
     await page.locator('#settings-form button[type="submit"]').click();
     await waitForAsync(page, async () => (await window.blego.getSettings()).bulkMode === true);
+    await openAdvancedSettings();
     await page.locator('[data-action="pool-bundled"]').click();
     await waitForAsync(
       page,
