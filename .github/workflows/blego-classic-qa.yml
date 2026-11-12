@@ -1,0 +1,89 @@
+name: BLEGO classic interface Mac M1 QA
+
+on:
+  push:
+    branches:
+      - codex/blego-classic-ux-functional-20261112
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blego-classic-m1-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  mac:
+    if: ${{ contains(github.event.head_commit.message, '[classic-qa-run]') }}
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      BLEGO_CAPTURE_UX: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Install pinned dependencies
+        run: |
+          npm ci
+          node node_modules/electron/install.js
+      - uses: actions/cache@v4
+        with:
+          path: build/metadata-runtime/darwin-arm64
+          key: blego-classic-perl-5.40.1-darwin-arm64-v1
+      - name: Prepare bundled metadata interpreter
+        run: bash scripts/prepare-metadata-darwin.sh
+      - name: Native metadata protection checks
+        run: |
+          mkdir -p release
+          node scripts/check-metadata-native.cjs --target darwin-arm64 --root build/metadata-runtime/darwin-arm64 --report release/classic-native-arm64.json
+      - name: Unit and integration regression
+        run: npm run verify
+      - name: Build M1 DMG (unsigned QA only)
+        run: npm run dist:mac -- --arm64
+      - name: Verify installed app outside repository
+        run: |
+          set -euo pipefail
+          ditto release/mac-arm64/BLEGO.app "$RUNNER_TEMP/BLEGO-classic.app"
+          if ! node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-classic.app/Contents/MacOS/BLEGO" --report release/classic-installed-arm64.json; then
+            cat release/classic-installed-arm64.json.log || true
+            exit 1
+          fi
+      - name: Checksums and environment
+        run: |
+          shasum -a 256 release/BLEGO-1.2.0-arm64.dmg > release/classic-SHA256SUMS.txt
+          sw_vers > release/classic-macOS-env.txt
+          uname -m >> release/classic-macOS-env.txt
+          echo 'QA only. Not Developer ID signed or notarized.' >> release/classic-macOS-env.txt
+      - name: Upload verified QA archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-classic-M1-QA
+          retention-days: 5
+          if-no-files-found: error
+          path: |
+            release/BLEGO-1.2.0-arm64.dmg
+            release/classic-SHA256SUMS.txt
+            release/classic-macOS-env.txt
+            release/classic-native-arm64.json
+            release/classic-installed-arm64.json
+            release/classic-installed-arm64.json.log
+            release/classic-*.png
+      - name: Upload failure diagnostics only
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-classic-M1-failure
+          retention-days: 3
+          if-no-files-found: warn
+          path: |
+            release/classic-installed-arm64.json
+            release/classic-installed-arm64.json.log
+            release/classic-native-arm64.json
+            release/classic-*.png
