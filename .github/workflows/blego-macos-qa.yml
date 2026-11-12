@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - codex/blego-ux-restoration-20261112
+      - codex/blego-classifier-next
   workflow_dispatch:
     inputs:
       target:
@@ -39,7 +40,7 @@ jobs:
       - run: npm run lint
   mac:
     needs: lint
-    # Private repository: a marked commit deliberately authorizes one compute-consuming job.
+    # A marked QA commit deliberately starts one native validation job.
     if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[mac-qa-run]') || contains(github.event.head_commit.message, '[mac-qa-run-x64]') }}
     runs-on: ${{ (contains(github.event.head_commit.message, '[mac-qa-run-x64]') || inputs.target == 'x64') && 'macos-15-intel' || 'macos-15' }}
     timeout-minutes: 60
@@ -78,7 +79,11 @@ jobs:
       - name: Verify packaged executable (outside repo)
         run: |
           set -euo pipefail
-          ditto "release/mac-${{ env.TARGET_ARCH }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          mountpoint="$RUNNER_TEMP/blego-dmg-mounted"
+          mkdir -p "$mountpoint"
+          hdiutil attach release/*-${{ env.TARGET_ARCH }}.dmg -readonly -nobrowse -mountpoint "$mountpoint"
+          trap 'hdiutil detach "$mountpoint"' EXIT
+          ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
           if ! node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
@@ -89,8 +94,12 @@ jobs:
           shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
           sw_vers > release/macOS-env.txt
           uname -m >> release/macOS-env.txt
+          sysctl -n hw.model >> release/macOS-env.txt
+          sysctl -n machdep.cpu.brand_string >> release/macOS-env.txt
+          git rev-parse HEAD >> release/macOS-env.txt
+          cat release/SHA256SUMS-mac.txt
           echo 'QA only; not notarized or Developer ID signed' >> release/macOS-env.txt
-      - name: Upload private QA packages
+      - name: Upload QA packages after all gates
         uses: actions/upload-artifact@v4
         with:
           name: BLEGO-mac-${{ env.TARGET_ARCH }}-QA
