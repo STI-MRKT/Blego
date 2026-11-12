@@ -3,6 +3,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { createHash } = require('node:crypto');
+if (process.platform === 'darwin') {
+  // Build and verify a native Perl runtime from pinned official source; never use a user Mac's system Perl.
+  execFileSync('/bin/bash', [path.join(__dirname, 'prepare-metadata-darwin.sh')], {
+    stdio: 'inherit',
+    timeout: 30 * 60 * 1000
+  });
+  process.exit(0);
+}
 if (process.platform === 'win32') {
   require.resolve('exiftool-vendored.exe');
   console.log(
