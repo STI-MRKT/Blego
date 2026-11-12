@@ -1,22 +1,57 @@
 import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
+
 const labels = {
-  profile_visible: 'Profile page visible',
-  login_required: 'Login required',
-  unavailable: 'Page unavailable',
-  challenge_required: 'Request challenge',
-  request_limited: 'Requests limited',
-  network_error: 'Network error',
-  unsupported_target: 'Unsupported target',
-  unknown: 'Insufficient evidence',
-  cancelled: 'Cancelled'
+  profile_visible: 'Страница доступна',
+  login_required: 'Требуется вход',
+  unavailable: 'Страница недоступна',
+  challenge_required: 'Нужна проверка',
+  request_limited: 'Временное ограничение',
+  network_error: 'Ошибка соединения',
+  unsupported_target: 'Неподдерживаемая ссылка',
+  unknown: 'Нет данных',
+  cancelled: 'Отменено'
 };
 export function checkerHTML() {
   const { input, rows, checking } = state.checker;
-  const valid = rows?.filter((row) => row.link) || [];
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">TOOLS</div><h1>Facebook profile check</h1><p class="sub">Public page availability and account restrictions are separate. Without account authorization, ban assessment remains unknown. A visible page does not prove the absence of restrictions.</p></div></div>
- <div class="card pad checker-card"><label class="fl" for="checker-input">Up to 100 profile IDs or direct links, one per line</label><textarea class="input checker-input" id="checker-input" data-input="checker" spellcheck="false">${esc(input || '')}</textarea><div class="checker-actions"><span id="checker-count" class="faint">${(input || '').split(/\r?\n/).filter((x) => x.trim()).length} rows</span><button class="btn btn-quiet" data-action="checker-clear">Clear</button><button class="btn btn-quiet" data-action="checker-cancel" ${checking ? '' : 'disabled'}>Cancel</button><button class="btn" data-action="checker-status" ${valid.length && !checking && state.settings.facebookEnabled ? '' : 'disabled'}>Check public page</button><button class="btn btn-primary" data-action="checker-run" ${input?.trim() ? '' : 'disabled'}>Validate input</button></div><p class="sub">${state.settings.facebookEnabled ? 'Network checks run only on request. One target at a time, starts at least 2 seconds apart.' : 'Public network checks are disabled. Enable them in Settings; local validation and manual notes still work.'} No login, cookies or CAPTCHA bypass. A rate limit or challenge pauses the remaining queue.</p></div>
- ${checking ? `<div class="card pad"><span id="checker-progress-text">Checking ${checking.done} of ${checking.total}</span><div class="checker-bar"><i id="checker-progress-fill" style="width:${checking.total ? (100 * checking.done) / checking.total : 0}%"></i></div></div>` : ''}
- ${rows ? `<div class="table-wrap checker-table"><table class="tbl"><thead><tr><th>Input</th><th>Target / link</th><th>Availability</th><th>Account restrictions</th><th>Owner report (separate)</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td>${row.inputIndex + 1}<br>${esc(row.status)}</td><td><span class="cell-val mono">${esc(row.id)}</span><button class="copy tiny" data-action="copy-model" data-source="checker" data-row="${index}" data-field="id" aria-label="Copy Facebook ID">${I.copy}</button>${row.link ? `<br><button class="btn btn-quiet" data-action="facebook-open" data-target="${esc(row.link)}">Open profile</button><button class="copy" data-action="copy-model" data-source="checker" data-row="${index}" data-field="link" aria-label="Copy Facebook link">${I.copy}</button>` : ''}</td><td>${row.check ? `${esc(labels[row.check.availability] || labels.unknown)}<br><span class="faint">${esc(row.check.reasonCode)} · ${esc(row.check.checkedAt)} · ${row.check.durationMs} ms</span><button class="copy" data-action="copy-model" data-source="checker" data-row="${index}" data-field="reason" aria-label="Copy uncertainty reason">${I.copy}</button>` : 'Not checked'}</td><td>Unknown — public check cannot confirm a ban</td><td>${row.link ? `<label class="fl">Owner statement<select class="input" id="fb-note-status-${index}"><option value="not_checked">Not checked by owner</option><option value="blocked">Owner reports a block</option><option value="not_blocked">Owner reports no block</option></select></label><input class="input" id="fb-note-comment-${index}" maxlength="2000" placeholder="Optional owner comment"><button class="btn" data-action="facebook-note" data-index="${index}">Save owner report</button><details><summary>${row.notes?.length || 0} owner reports</summary>${(row.notes || []).map((note) => `<p>${esc(note.reportedAt)} · ${esc(note.status)} · ${esc(note.comment)}</p>`).join('')}</details>` : ''}</td></tr>`).join('')}</tbody></table></div><p class="sub">Repeated targets are requested once; their original input rows remain visible. Owner reports are not automatically verified and are not overwritten by public checks. The owner should consult Facebook’s official Account Status screen after opening their profile in their own browser.</p>` : ''}</div>`;
+  const count = (input || '').split(/\r?\n/).filter((x) => x.trim()).length;
+  const percent = checking?.total ? Math.round(100 * checking.done / checking.total) : 0;
+  return `<div class="page">
+    <div class="page-head"><div><div class="eyebrow">ПРОВЕРКА</div>
+      <h1>Facebook-чекер</h1><p class="sub">Вставьте ссылки или ID аккаунтов — по одному на строку.</p></div></div>
+    <div class="card pad checker-card">
+      <textarea class="input checker-input" id="checker-input" data-input="checker" spellcheck="false"
+        placeholder="100000000000000&#10;https://www.facebook.com/profile.php?id=..." aria-label="Список аккаунтов">${esc(input || '')}</textarea>
+      <div class="checker-actions">
+        <span id="checker-count" class="faint">${count} шт.</span>
+        <button class="btn btn-quiet" data-action="checker-clear">Очистить</button>
+        ${checking ? '<button class="btn btn-quiet" data-action="checker-cancel">Стоп</button>' : ''}
+        <button class="btn btn-primary" data-action="checker-run"
+          ${!input?.trim() || checking ? 'disabled' : ''}>${I.shield}Проверить</button>
+      </div>
+    </div>
+    ${checking ? `<div class="card pad">
+      <div class="checker-progress-head"><span id="checker-progress-text">${checking.done} из ${checking.total}</span><b>${percent}%</b></div>
+      <div class="checker-bar"><i id="checker-progress-fill" style="width:${percent}%"></i></div>
+    </div>` : ''}
+    ${rows ? `<div class="table-wrap checker-table"><table class="tbl">
+      <thead><tr><th>Аккаунт</th><th>Доступность страницы</th><th>Действие</th></tr></thead>
+      <tbody>${rows.map((row, index) => `<tr>
+        <td><span class="mono cell-val">${esc(row.id || String(row.inputIndex + 1))}</span>
+          <button class="copy tiny" data-action="copy-model" data-source="checker" data-row="${index}" data-field="id" aria-label="Copy Facebook ID">${I.copy}</button></td>
+        <td><span class="pill ${row.check?.availability === 'profile_visible' ? 'ok' : row.check?.availability === 'network_error' ? 'warn' : ''}">
+          ${esc(labels[row.check?.availability] || (row.link ? 'Ожидает проверки' : 'Неверный ввод'))}</span>
+          <div class="faint">${row.check ? 'Статус блокировки не установлен' : ''}</div></td>
+        <td>${row.link ? `<button class="btn btn-quiet" data-action="facebook-open" data-target="${esc(row.link)}">Открыть</button>
+          <details><summary>Заметка владельца</summary>
+            <label class="fl">Моя проверка<select class="input" id="fb-note-status-${index}">
+              <option value="not_checked">Не проверял</option><option value="blocked">Есть ограничение</option>
+              <option value="not_blocked">Нет ограничений</option></select></label>
+            <input class="input" id="fb-note-comment-${index}" maxlength="2000" placeholder="Комментарий">
+            <button class="btn" data-action="facebook-note" data-index="${index}">Сохранить</button>
+            ${(row.notes || []).map((note) => `<p class="faint">${esc(note.reportedAt)} · ${esc(note.status)}</p>`).join('')}
+          </details>` : ''}</td>
+      </tr>`).join('')}</tbody></table></div>` : ''}
+  </div>`;
 }
