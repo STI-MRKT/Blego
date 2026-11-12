@@ -13,7 +13,7 @@ async function setup(t, tags) {
   const file = await imageFixture(root),
     output = path.join(root, 'out');
   fs.mkdirSync(output);
-  const runtime = path.resolve('build/metadata-runtime/linux-x64');
+  const runtime = path.resolve('build/metadata-runtime', `${process.platform}-${process.arch}`);
   execFileSync(
     path.join(runtime, 'bin/perl'),
     [
