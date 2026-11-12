@@ -97,6 +97,10 @@ export function mountCopyActions() {
     !['generator', 'import', 'history', 'checker', 'network', 'news', 'photos'].includes(state.view)
   )
     return;
+  // A copy menu belongs to its current view; an archive detail is a distinct source.
+  // Never leave its panel covering navigation or the selected document's actions.
+  if (panel && (panel.view !== state.view || (state.view === 'history' && panel.id !== sourceForView())))
+    panel = null;
   const bar = document.createElement('div');
   bar.className = 'ux-copy-actions';
   bar.id = 'copy-actions';
