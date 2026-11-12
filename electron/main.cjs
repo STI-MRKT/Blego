@@ -301,8 +301,11 @@ async function initialize() {
         shell.showItemInFolder(path.join(e.archiveRoot, e.fileName));
         return true;
       },
-      importRead: (arg) => classification.read(arg, { encoding: arg.encoding || undefined }),
-      importPage: (arg) => classification.page(arg.operationId, arg.offset),
+      importRead: (arg) =>
+        classification.read(arg, { ...arg.options, encoding: arg.encoding || undefined }),
+      importPage: (arg) => classification.page(arg.operationId, arg.offset, arg.options),
+      importReclassify: (arg) => classification.reclassify(arg.operationId, arg.options),
+      importCell: (arg) => classification.cell(arg.operationId, arg.recordId, arg.field),
       importCancel: (id) => classification.cancel(id),
       importText: (id) => classification.sourceText(id),
       copyPreferences: () => store.get('copy:preferences') || {},

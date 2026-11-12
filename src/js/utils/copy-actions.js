@@ -3,6 +3,7 @@ import { state } from '../state.js';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
 import { copyText } from './clipboard.js';
+import { CORE_FIELDS } from '../../../shared/classifier.mjs';
 import { copySource } from '../../../shared/copy-sources.mjs';
 import { serializeCopy } from '../../../shared/copy-format.mjs';
 let preferences = {},
@@ -72,7 +73,7 @@ export async function resolveCopySource(id) {
     let columns = [];
     for (let offset = 0; ; offset += 50) {
       const page = await window.blego.importPage({ operationId, offset });
-      columns = page.columns;
+      columns = page.rulesVersion === 'synthetic-records-1' ? CORE_FIELDS : page.columns;
       records.push(...page.records);
       for (const d of page.diagnostics) diagnostics.set(JSON.stringify(d), d);
       if (records.length >= page.counts.total) break;

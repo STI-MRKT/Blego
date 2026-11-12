@@ -117,13 +117,13 @@ test(
           )
       )
     });
-    await page.getByText('rules_pending — Classification rules are not configured').waitFor();
+    await page.locator('[data-classifier-status]').waitFor();
     await page.locator('[data-copy-action="open"]').click();
     await page.locator('[data-copy-control="format"]').waitFor();
     const all = JSON.parse(await preview());
     assert.equal(all.length, 51);
-    assert.equal(all[50].id, '0050');
-    assert.equal(all[50].empty, '');
+    assert.equal(all[50].accountId, '0050');
+    assert.equal(all[50].email, '');
     await page.locator('[data-copy-row]').first().check();
     await page.locator('[data-copy-action="next"]').click();
     await page.locator('[data-copy-row]').first().check();

@@ -60,6 +60,8 @@ contextBridge.exposeInMainWorld('blego', {
   archiveFolder: (id) => call('archiveFolder', id),
   readInput: (arg) => call('importRead', arg),
   importPage: (arg) => call('importPage', arg),
+  reclassify: (arg) => call('importReclassify', arg),
+  importCell: (arg) => call('importCell', arg),
   cancelImport: (id) => call('importCancel', id),
   importText: (id) => call('importText', id),
   copyPreferences: () => call('copyPreferences'),

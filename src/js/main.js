@@ -11,7 +11,6 @@ import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
 import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
-import { isCookieColumn } from './ui/import.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
@@ -333,6 +332,15 @@ function bindView() {
     encoding.onchange = (e) => {
       state.importEncoding = e.target.value;
     };
+  for (const [id,key] of [['classifier-schema','schema'],['classifier-headers','headers']]) {
+    const el = document.getElementById(id);
+    if (el) el.onchange = () => { state.classifierOptions ||= {}; state.classifierOptions[key] = el.value; };
+  }
+  document.querySelectorAll('[data-classifier-map]').forEach(el => {
+    el.onchange = () => {state.classifierOptions ||= {}; state.classifierOptions.mapping ||= {}; if(el.value) state.classifierOptions.mapping[el.dataset.classifierMap]=el.value; else delete state.classifierOptions.mapping[el.dataset.classifierMap];};
+  });
+  const sort = document.getElementById('classifier-sort');
+  if (sort) sort.onchange = () => {state.classifierDescending=sort.value==='descending'; importPage(0);};
   const fileInput = document.getElementById('file-input');
   if (fileInput) {
     fileInput.onchange = (event) => {
@@ -400,9 +408,16 @@ async function generate() {
   }
 }
 
+function classificationOptions() {
+  const o = state.classifierOptions || {};
+  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, encoding:state.importEncoding || undefined};
+}
 async function handleFile(file) {
+  const epoch = state.importEpoch = (state.importEpoch || 0) + 1;
   if (state.importRequest || state.importData?.operationId)
     await window.blego.cancelImport(state.importRequest || state.importData.operationId);
+  if (state.importEpoch !== epoch) return;
+  state.classifierQuery = ''; state.classifierDescending = false; state.importSaved = null;
   state.importName = file.name;
   state.importData = null;
   state.view = 'import';
@@ -423,16 +438,16 @@ async function handleFile(file) {
       requestId: id,
       originalName: file.name,
       bytes,
+      options: classificationOptions(),
       encoding: state.importEncoding || undefined
     });
     if (state.importRequest !== id) {
       await window.blego.cancelImport(result.operationId);
       return;
     }
-    state.importData = await window.blego.importPage({
-      operationId: result.operationId,
-      offset: 0
-    });
+    const data = await window.blego.importPage({operationId:result.operationId,offset:0});
+    if (state.importEpoch !== epoch) { await window.blego.cancelImport(result.operationId); return; }
+    state.importData = data;
     state.importStep = 'preview';
   } catch (e) {
     if (state.importRequest === id) {
@@ -447,22 +462,32 @@ async function handleFile(file) {
 function loadSample() {
   return handleFile(
     new File(
-      ['project,owner,note\nExample,Sample,"Кириллица"\nExample,Sample,"Кириллица"'],
+      ['fullName,accountId,email,geo\nExample Person,0001,person@example.com,GB\nSecond Person,0002,second@example.com,US'],
       'sample.csv',
       { type: 'text/csv' }
     )
   );
 }
 async function importPage(offset) {
+  const operationId = state.importData?.operationId, epoch = state.importEpoch;
+  const request = state.importPageRequest = (state.importPageRequest || 0) + 1;
   try {
-    state.importData = await window.blego.importPage({
-      operationId: state.importData.operationId,
-      offset
-    });
-    renderView();
-  } catch (e) {
-    toast(e.message, 'err');
-  }
+    const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending}});
+    if (state.importData?.operationId !== operationId || state.importEpoch !== epoch || state.importPageRequest !== request) return;
+    state.importData = data; renderView();
+  } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
+}
+async function reclassifyInput() {
+  const operationId = state.importData?.operationId, epoch = state.importEpoch;
+  if(!operationId) return;
+  state.importStep='loading'; state.importRequest=operationId; renderView();
+  try {
+    await window.blego.reclassify({operationId,options:classificationOptions()});
+    if(state.importEpoch !== epoch) return;
+    state.classifierQuery=''; state.classifierDescending=false;
+    state.importStep='preview'; await importPage(0);
+  } catch {if(state.importEpoch===epoch) {state.importStep='preview';toast('Не удалось применить соответствие', 'err');}}
+  finally {if(state.importEpoch===epoch) {state.importRequest=null;renderView();}}
 }
 
 function ensureNews() {
@@ -756,20 +781,15 @@ document.addEventListener('click', async (event) => {
     toast('Set cleared');
     return;
   }
-  if (action === 'import-cookie-copy') {
-    const row = state.importData?.records?.find((entry) => entry.id === target.dataset.row);
-    const field = target.dataset.field;
-    if (!row || !isCookieColumn(field) || !Object.hasOwn(row.data, field)) {
-      toast('Не удалось найти cookie в выбранной строке', 'err');
-      return;
-    }
-    const raw = row.data[field];
-    const full = typeof raw === 'string' ? raw : raw == null ? '' : JSON.stringify(raw);
-    if (!full) {
-      toast('Значение cookie пустое', 'err');
-      return;
-    }
-    await copyText(full, target);
+  if (action === 'classifier-apply') {await reclassifyInput(); return;}
+  if (action === 'classifier-filter') {state.classifierQuery=document.getElementById('classifier-query')?.value || '';await importPage(0);return;}
+  if (action === 'import-cookie-copy' || action === 'classifier-copy-cell') {
+    const operationId = state.importData?.operationId, epoch=state.importEpoch;
+    try {
+      const full = await window.blego.importCell({operationId, recordId:target.dataset.row, field:target.dataset.field});
+      if (state.importEpoch!==epoch || state.importData?.operationId!==operationId) return;
+      if(full) await copyText(full,target);
+    } catch {toast('Не удалось скопировать выбранное поле','err');}
     return;
   }
   if (action === 'copy-model') {
@@ -810,6 +830,9 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'import-reset') {
+    state.importEpoch = (state.importEpoch || 0) + 1;
+    state.classifierQuery=''; state.classifierDescending=false;
+    if(state.classifierOptions) state.classifierOptions.mapping={};
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);
     state.importRequest = null;
