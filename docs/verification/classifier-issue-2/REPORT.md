@@ -29,7 +29,7 @@ Commands were run in Codex Cloud Linux 6.18.57, Node v24.22.1. Tool sandbox cann
 
 ## Native candidate
 
-Pending final gate execution; no PASS inferred from old runs. Workflow now mounts the generated DMG, copies BLEGO.app from that mounted image outside checkout and runs all eight GUI scenarios, with the native metadata runtime gate before packaging. QA upload remains success-only; unsigned, not notarized, no official release.
+Current candidate **62d6f6b95290981bb176cb9dc8f4e1635c77dff4** passed [Mac QA run 43318440049](https://github.com/STI-MRKT/Blego/actions/runs/43318440049). macOS **15.8.2 (24H232), Apple M1 (Virtual), arm64**, Node 24.22.1. Workflow mounts the generated DMG, copies BLEGO.app from that mounted image outside checkout and runs all eight GUI scenarios, with the native metadata runtime gate before packaging. QA upload remains success-only; unsigned, not notarized, no official release.
 
 ## Final local regression
 
@@ -48,5 +48,62 @@ Pending final gate execution; no PASS inferred from old runs. Workflow now mount
 | Worker cancellation, reset memory, no extra store/network/auth | service integration + reset GUI + source review | PASS |
 | Existing phone/generator/News/photos/tour/copy regressions | complete existing suite; generator untouched in branch | PASS |
 | Visual comparison to original and no protected asset edits | actual 1280×900 screenshots + diff + copy-icon geometry GUI | PASS |
-| Native macOS ARM64 runtime, DMG, installed GUI, checksums | Awaiting current candidate CI | NOT RUN |
+| Native macOS ARM64 runtime, DMG, installed GUI, checksums | Run 43318440049, native read/write/readback PASS, DMG PASS, installed 8/8 | PASS |
 | Developer ID / notarization / owner acceptance | Explicitly outside unsigned QA scope | NOT VERIFIED |
+
+
+### Download and integrity
+
+[Download QA ZIP (contains BLEGO-1.2.0-arm64.dmg)](https://github.com/STI-MRKT/Blego/actions/runs/43318440049/artifacts/13988729295). GitHub artifact retention expires **2026-11-17 22:20:19 UTC**. This is a QA artifact, not an official release.
+
+- Tested application SHA: `62d6f6b95290981bb176cb9dc8f4e1635c77dff4`.
+- DMG SHA-256: `4bad19a26f6e8545fbdde41d634d7fb03008bcc000f9aa29cc2e051ddfb6f2ea`.
+- Artifact ZIP SHA-256: `aaaee02a3570dab983970977d6f563ab7a27a644534e4d302181e6967e794111`.
+- Independently downloaded the connector-provided artifact into Cloud, checked ZIP CRC and both digests. Direct GitHub redirect download returned 403; connector download succeeded. No signed temporary download URL retained in Git.
+- Native Perl 5.40.1, empty PATH, JPEG/PNG/WebP actual read/write/readback all PASS. Originals/pixels/protected payload checks PASS.
+- Mac `npm run verify`: lint PASS, 56 unit + 75 integration PASS; installed app suite 8/8 PASS, zero failures/skips, 51.9997 seconds. Actual system clipboard API exercised. OS dialog choices use controlled fixtures; physical owner machine/Gatekeeper/notarization are not claimed.
+- Native artifact reports, exact test list, SHA and OS: [NATIVE_EVIDENCE.json](NATIVE_EVIDENCE.json). Native screenshot: [Mac classifier](visual/mac-classifier.png).
+- Earlier run 43317496131 on 92210a3 also passed, but is superseded by the explicitly rerun final candidate; its PASS was not carried forward.
+
+### Installation and first evaluation
+
+Download the ZIP, extract the DMG, verify `shasum -a 256 BLEGO-1.2.0-arm64.dmg` against the checksum above, mount the DMG and copy BLEGO.app to Applications. The build is not Developer ID signed or notarized; no universal Gatekeeper acceptance is claimed and no system protection should be disabled. Keep existing user data; no migration or data deletion is introduced.
+
+Start with **Load synthetic sample** or a synthetic TXT/CSV/TSV/JSON. For an unnamed file choose the confirmed 7/10/11-column layout and headers No. Check missing cells, separate account/mail passwords, exact cookie copying from the intended row, and seven-field output. Do not share real passwords/tokens/cookies in feedback or screenshots. Owner acceptance remains a separate step.
+
+### Files changed
+
+- `.github/workflows/blego-macos-qa.yml`
+- `docs/plans/CLASSIFIER_ISSUE_2.md`
+- `docs/specs/CLASSIFIER_ISSUE_2.md`
+- `docs/verification/classifier-issue-2/REPORT.md`
+- `docs/verification/classifier-issue-2/visual/candidate-generator-empty.png`
+- `docs/verification/classifier-issue-2/visual/classifier.png`
+- `docs/verification/classifier-issue-2/visual/original-generator-empty.png`
+- `electron/features/classification/service.cjs`
+- `electron/features/classification/worker.cjs`
+- `electron/main.cjs`
+- `electron/preload.cjs`
+- `scripts/check-installed-app.cjs`
+- `shared/classifier-copy.mjs`
+- `shared/classifier.mjs`
+- `shared/copy-format.mjs`
+- `shared/importer.mjs`
+- `src/css/ux.css`
+- `src/js/main.js`
+- `src/js/ui/history.js`
+- `src/js/ui/import.js`
+- `src/js/utils/copy-actions.js`
+- `tests/integration/classification-contract.test.cjs`
+- `tests/integration/classifier-production.test.cjs`
+- `tests/ui/app.test.cjs`
+- `tests/ui/classifier-copy.test.cjs`
+- `tests/ui/classifier-reset.test.cjs`
+- `tests/ui/classifier.test.cjs`
+- `tests/ui/copy-all-sections.test.cjs`
+- `tests/unit/classifier-copy.test.cjs`
+- `tests/unit/classifier.test.cjs`
+- `tests/unit/copy-sources.test.cjs`
+- `docs/verification/classifier-issue-2/NATIVE_EVIDENCE.json`
+- `docs/verification/classifier-issue-2/SHA256SUMS-mac.txt`
+- `docs/verification/classifier-issue-2/visual/mac-classifier.png`

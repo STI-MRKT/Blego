@@ -1,0 +1,1 @@
+4bad19a26f6e8545fbdde41d634d7fb03008bcc000f9aa29cc2e051ddfb6f2ea  BLEGO-1.2.0-arm64.dmg

@@ -22,29 +22,29 @@ Base: 44b3fe63d25a2ca6626d69767b6e83e2cd51ed55 (remote HEAD checked 2026-11-12; 
 5. Sorting/filtering/pagination must keep stable IDs and copy the intended original value.
 
 ## Stage 1 — schema / recognition
-- [ ] Add failing tests in tests/unit/classifier.test.cjs and importer regressions for explicit headers, selected headerless schemas, JSON source slices, dates, ambiguity, duplicate aliases, ID precision, empty positions and delimiters.
-- [ ] Extend shared/importer.mjs with opt-in classification parsing options; add shared/classifier.mjs exposing CLASSIFIER_FIELDS, CORE_FIELDS, classifyRecords(parsed, options).
-- [ ] Run focused tests and npm run verify; commit.
+- [x] Add failing tests in tests/unit/classifier.test.cjs and importer regressions for explicit headers, selected headerless schemas, JSON source slices, dates, ambiguity, duplicate aliases, ID precision, empty positions and delimiters.
+- [x] Extend shared/importer.mjs with opt-in classification parsing options; add shared/classifier.mjs exposing CLASSIFIER_FIELDS, CORE_FIELDS, classifyRecords(parsed, options).
+- [x] Run focused tests and npm run verify; commit.
 
 ## Stage 2 — model / worker
-- [ ] Integration tests for production preview, stable IDs, paging/filter/sort, remap, cancellation, confirmation and sanitized archive result.
-- [ ] Worker runs classification; service holds one existing operation model, exposes page/cell/export/reclassify. Explicit confirmation retains existing archive contract; default result excludes cookie/token/UA and unknown raw text.
-- [ ] Run integration and npm run verify; commit.
+- [x] Integration tests for production preview, stable IDs, paging/filter/sort, remap, cancellation, confirmation and sanitized archive result.
+- [x] Worker runs classification; service holds one existing operation model, exposes page/cell/export/reclassify. Explicit confirmation retains existing archive contract; default result excludes cookie/token/UA and unknown raw text.
+- [x] Run integration and npm run verify; commit.
 
 ## Stage 3 — UI
-- [ ] GUI test for fixed columns, compact long values, mapping/schema selection, sorting/filter and clear; reproduce failures before implementation.
-- [ ] Update existing import view/handlers only, add minimal local CSS if needed using current variables. No full values in attributes.
-- [ ] Run verify and GUI; commit.
+- [x] GUI test for fixed columns, compact long values, mapping/schema selection, sorting/filter and clear; reproduce failures before implementation.
+- [x] Update existing import view/handlers only, add minimal local CSS if needed using current variables. No full values in attributes.
+- [x] Run verify and GUI; commit.
 
 ## Stage 4 — copying
-- [ ] Test exact cookie copy (12/1000/10000 chars), empty disabled, correct record across pages, seven-field TSV/CSV with formulas escaped.
-- [ ] Reuse copyText IPC; introduce explicit classifier copy model without relaxing import/global redaction.
-- [ ] Run verify and GUI; commit.
+- [x] Test exact cookie copy (12/1000/10000 chars), empty disabled, correct record across pages, seven-field TSV/CSV with formulas escaped.
+- [x] Reuse copyText IPC; introduce explicit classifier copy model without relaxing import/global redaction.
+- [x] Run verify and GUI; commit.
 
 ## Stage 5 — review / native QA
-- [ ] Whole-branch independent review, fix important findings with failing regression tests.
-- [ ] Run complete suite, visual comparison; include classifier GUI in installed-app gate, mount DMG and run copied app outside checkout.
-- [ ] Push feature branch, trigger existing Mac QA workflow; collect SHA, checksum, OS, artifacts and per-requirement status.
+- [x] Whole-branch independent review, fix important findings with failing regression tests.
+- [x] Run complete suite, visual comparison; include classifier GUI in installed-app gate, mount DMG and run copied app outside checkout.
+- [x] Push feature branch, trigger existing Mac QA workflow; collect SHA, checksum, OS, artifacts and per-requirement status.
 - [ ] Create review PR against UX base, attach PR, do not merge.
 
 ## Progress / decisions
@@ -60,3 +60,5 @@ Base: 44b3fe63d25a2ca6626d69767b6e83e2cd51ed55 (remote HEAD checked 2026-11-12; 
 - Ruling: native QA and visual comparison were set aside by the read-only reviewer because those executions belong to the parent; they remain required gates, not assumed passes. Format/export retains 10 MiB limit; larger payloads fail explicitly.
 - Final Linux regression after review fixes: lint PASS; unit 56/56, integration 75/75, GUI 8/8 with zero skips. Native-installed gate now includes all eight scenarios. Commands: npm run verify; BLEGO_HEADLESS=1 BLEGO_CAPTURE_UX=1 npm run test:ui.
 - Final copy review removed the obsolete Archive sentence saying classification rules were pending. No storage/UI structure change. Full rerun after this one-line correction: lint PASS, unit 56/56, integration 75/75, GUI 8/8. This final application SHA requires its own Mac QA, not automatic inheritance from 92210a3.
+
+- Native final gate complete: run 43318440049, source 62d6f6b, macOS 15.8.2 Apple M1 (Virtual) arm64; runtime/DMG/installed 8 GUI PASS. Artifact 13988729295 independently verified. Report-only follow-up does not change application bytes.
