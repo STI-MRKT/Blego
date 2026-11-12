@@ -10,7 +10,7 @@ function importCellHTML(record, column) {
   const shown = cookie && raw.length > 12 ? raw.slice(0, 12) + '…' : raw;
   const action = cookie ? 'import-cookie-copy' : 'copy-model';
   const hint = cookie ? 'Копировать cookie целиком' : 'Копировать';
-  return `<td><span class="${cookie ? 'mono' : ''}">${esc(shown)}</span><button class="copy" data-action="${action}" data-source="import" data-row="${esc(record.id)}" data-field="${esc(column)}" aria-label="${hint}">${I.copy}</button></td>`;
+  return `<td><span class="${cookie ? 'mono' : ''}">${esc(shown)}</span><button class="copy" data-action="${action}" data-source="import" data-row="${esc(record.id)}" data-field="${esc(column)}" aria-label="${hint}" ${cookie && !raw ? 'disabled' : ''}>${I.copy}</button></td>`;
 }
 export function importHTML() {
   const p = state.importData;
