@@ -1,0 +1,26 @@
+{
+  "os": "linux",
+  "arch": "x64",
+  "conditions": "Codex Cloud; official public organization pages; no login, cookies, proxy bypass or challenge solving; existing bounded client and sequential rate-limited queue; body not persisted",
+  "results": [
+    {
+      "label": "public-organization-1",
+      "checkedAt": "2026-11-12T10:37:10.171Z",
+      "availability": "network_error",
+      "reasonCode": "NETWORK_FAILURE",
+      "banAssessment": "unknown",
+      "parserVersion": "public-evidence-v1",
+      "durationMs": 5056
+    },
+    {
+      "label": "public-organization-2",
+      "checkedAt": "2026-11-12T10:37:10.201Z",
+      "availability": "network_error",
+      "reasonCode": "NETWORK_FAILURE",
+      "banAssessment": "unknown",
+      "parserVersion": "public-evidence-v1",
+      "durationMs": 30
+    }
+  ],
+  "coverage": "Only these observed responses; not a representative profile corpus or a ban classifier."
+}

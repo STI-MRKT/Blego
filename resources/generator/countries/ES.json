@@ -1,0 +1,2797 @@
+{
+  "version": "3",
+  "code": "ES",
+  "language": "es",
+  "first": [
+    "Adela",
+    "Adriana",
+    "Alejandra",
+    "Alicia",
+    "Amalia",
+    "Ana",
+    "Ana Luisa",
+    "Ana María",
+    "Andrea",
+    "Anita",
+    "Anni",
+    "Antonia",
+    "Ariadna",
+    "Barbara",
+    "Beatriz",
+    "Berta",
+    "Blanca",
+    "Caridad",
+    "Carla",
+    "Carlota",
+    "Carmen",
+    "Carolina",
+    "Catalina",
+    "Cecilia",
+    "Clara",
+    "Claudia",
+    "Concepción",
+    "Conchita",
+    "Cristina",
+    "Daniela",
+    "Diana",
+    "Dolores",
+    "Dorotea",
+    "Débora",
+    "Elena",
+    "Elisa",
+    "Eloisa",
+    "Elsa",
+    "Elvira",
+    "Emilia",
+    "Esperanza",
+    "Estela",
+    "Ester",
+    "Eva",
+    "Florencia",
+    "Francisca",
+    "Gabriela",
+    "Gloria",
+    "Graciela",
+    "Guadalupe",
+    "Guillermina",
+    "Inés",
+    "Irene",
+    "Isabel",
+    "Isabela",
+    "Jennifer",
+    "Josefina",
+    "Juana",
+    "Julia",
+    "Laura",
+    "Leonor",
+    "Leticia",
+    "Lilia",
+    "Lola",
+    "Lorena",
+    "Lourdes",
+    "Lucía",
+    "Luisa",
+    "Luz",
+    "Magdalena",
+    "Maica",
+    "Manuela",
+    "Marcela",
+    "Margarita",
+    "Mariana",
+    "Maricarmen",
+    "Marilú",
+    "Marisol",
+    "Marta",
+    "María",
+    "María Cristina",
+    "María Elena",
+    "María Eugenia",
+    "María José",
+    "María Luisa",
+    "María Soledad",
+    "María Teresa",
+    "María de los Ángeles",
+    "María del Carmen",
+    "Matilde",
+    "Mayte",
+    "Mercedes",
+    "Micaela",
+    "Mónica",
+    "Natalia",
+    "Norma",
+    "Olivia",
+    "Patricia",
+    "Pilar",
+    "Ramona",
+    "Raquel",
+    "Rebeca",
+    "Reina",
+    "Rocío",
+    "Rosa",
+    "Rosalia",
+    "Rosario",
+    "Roser",
+    "Sara",
+    "Silvia",
+    "Sofía",
+    "Soledad",
+    "Sonia",
+    "Susana",
+    "Teresa",
+    "Verónica",
+    "Victoria",
+    "Virginia",
+    "Yolanda",
+    "Ángela"
+  ],
+  "last": [
+    "Abeyta",
+    "Abrego",
+    "Abreu",
+    "Acevedo",
+    "Acosta",
+    "Acuña",
+    "Adame",
+    "Adorno",
+    "Agosto",
+    "Aguayo",
+    "Aguilar",
+    "Aguilera",
+    "Aguirre",
+    "Alanis",
+    "Alaníz",
+    "Alarcón",
+    "Alba",
+    "Alcalá",
+    "Alcaraz",
+    "Alcántar",
+    "Alejandro",
+    "Alemán",
+    "Alfaro",
+    "Alicea",
+    "Almanza",
+    "Almaráz",
+    "Almonte",
+    "Alonso",
+    "Alonzo",
+    "Altamirano",
+    "Alva",
+    "Alvarado",
+    "Amador",
+    "Amaya",
+    "Anaya",
+    "Anguiano",
+    "Angulo",
+    "Aparicio",
+    "Apodaca",
+    "Aponte",
+    "Aragón",
+    "Aranda",
+    "Araña",
+    "Arce",
+    "Archuleta",
+    "Arellano",
+    "Arenas",
+    "Arevalo",
+    "Argüello",
+    "Arias",
+    "Armas",
+    "Armendáriz",
+    "Armenta",
+    "Armijo",
+    "Arredondo",
+    "Arreola",
+    "Arriaga",
+    "Arroyo",
+    "Arteaga",
+    "Atencio",
+    "Avilés",
+    "Ayala",
+    "Baca",
+    "Badillo",
+    "Baeza",
+    "Bahena",
+    "Balderas",
+    "Ballesteros",
+    "Banda",
+    "Barajas",
+    "Barela",
+    "Barragán",
+    "Barraza",
+    "Barrera",
+    "Barreto",
+    "Barrientos",
+    "Barrios",
+    "Batista",
+    "Bañuelos",
+    "Becerra",
+    "Beltrán",
+    "Benavides",
+    "Benavídez",
+    "Benítez",
+    "Bermúdez",
+    "Bernal",
+    "Berríos",
+    "Betancourt",
+    "Blanco",
+    "Bonilla",
+    "Borrego",
+    "Botello",
+    "Bravo",
+    "Briones",
+    "Briseño",
+    "Brito",
+    "Bueno",
+    "Burgos",
+    "Bustamante",
+    "Bustos",
+    "Báez",
+    "Caballero",
+    "Cabrera",
+    "Cabán",
+    "Cadena",
+    "Caldera",
+    "Calderón",
+    "Calvillo",
+    "Camacho",
+    "Camarillo",
+    "Campos",
+    "Canales",
+    "Candelaria",
+    "Cano",
+    "Cantú",
+    "Caraballo",
+    "Carbajal",
+    "Cardona",
+    "Carmona",
+    "Carranza",
+    "Carrasco",
+    "Carrasquillo",
+    "Carrera",
+    "Carrero",
+    "Carreón",
+    "Carrillo",
+    "Carrión",
+    "Carvajal",
+    "Casanova",
+    "Casares",
+    "Casarez",
+    "Casas",
+    "Casillas",
+    "Castañeda",
+    "Castellanos",
+    "Castillo",
+    "Castro",
+    "Cavazos",
+    "Cazares",
+    "Ceballos",
+    "Cedillo",
+    "Ceja",
+    "Centeno",
+    "Cepeda",
+    "Cerda",
+    "Cervantes",
+    "Cervántez",
+    "Chacón",
+    "Chapa",
+    "Chavarría",
+    "Chávez",
+    "Cintrón",
+    "Cisneros",
+    "Collado",
+    "Collazo",
+    "Colunga",
+    "Colón",
+    "Concepción",
+    "Contreras",
+    "Cordero",
+    "Cornejo",
+    "Corona",
+    "Coronado",
+    "Corral",
+    "Corrales",
+    "Correa",
+    "Cortés",
+    "Cortéz",
+    "Cotto",
+    "Covarrubias",
+    "Crespo",
+    "Cruz",
+    "Cuellar",
+    "Curiel",
+    "Cárdenas",
+    "Córdova",
+    "Delacrúz",
+    "Delafuente",
+    "Delagarza",
+    "Delao",
+    "Delapaz",
+    "Delarosa",
+    "Delatorre",
+    "Deleón",
+    "Delgadillo",
+    "Delgado",
+    "Delrío",
+    "Delvalle",
+    "Domínguez",
+    "Duarte",
+    "Dueñas",
+    "Durán",
+    "Dávila",
+    "Díaz",
+    "Echevarría",
+    "Elizondo",
+    "Enríquez",
+    "Escalante",
+    "Escamilla",
+    "Escobar",
+    "Escobedo",
+    "Esparza",
+    "Espinal",
+    "Espino",
+    "Espinosa",
+    "Espinosa de los Monteros",
+    "Espinoza",
+    "Esquibel",
+    "Esquivel",
+    "Estrada",
+    "Estévez",
+    "Fajardo",
+    "Farías",
+    "Feliciano",
+    "Fernández",
+    "Ferrer",
+    "Fierro",
+    "Figueroa",
+    "Flores",
+    "Flórez",
+    "Fonseca",
+    "Frías",
+    "Fuentes",
+    "Gaitán",
+    "Galarza",
+    "Galindo",
+    "Gallardo",
+    "Gallegos",
+    "Galván",
+    "Gamboa",
+    "Gaona",
+    "Garay",
+    "García",
+    "Garibay",
+    "Garica",
+    "Garrido",
+    "Garza",
+    "Gastélum",
+    "Gaytán",
+    "Gil",
+    "Girón",
+    "Godoy",
+    "Godínez",
+    "González",
+    "Gracia",
+    "Granado",
+    "Granados",
+    "Griego",
+    "Grijalva",
+    "Guajardo",
+    "Guardado",
+    "Guerra",
+    "Guerrero",
+    "Guevara",
+    "Guillén",
+    "Gurule",
+    "Gutiérrez",
+    "Guzmán",
+    "Gálvez",
+    "Gámez",
+    "Gómez",
+    "Haro",
+    "Henríquez",
+    "Heredia",
+    "Hernández",
+    "Herrera",
+    "Hidalgo",
+    "Hinojosa",
+    "Holguín",
+    "Huerta",
+    "Hurtado",
+    "Ibarra",
+    "Iglesias",
+    "Irizarry",
+    "Jaime",
+    "Jaimes",
+    "Jaramillo",
+    "Jasso",
+    "Jiménez",
+    "Jurado",
+    "Juárez",
+    "Jáquez",
+    "Laboy",
+    "Lara",
+    "Laureano",
+    "Leal",
+    "Lebrón",
+    "Ledesma",
+    "Leiva",
+    "Lemus",
+    "Lerma",
+    "Leyva",
+    "León",
+    "Limón",
+    "Linares",
+    "Lira",
+    "Llamas",
+    "Loera",
+    "Lomeli",
+    "Longoria",
+    "Lovato",
+    "Loya",
+    "Lozada",
+    "Lozano",
+    "Lucero",
+    "Lucio",
+    "Luevano",
+    "Lugo",
+    "Luna",
+    "López",
+    "Macías",
+    "Madera",
+    "Madrid",
+    "Madrigal",
+    "Maestas",
+    "Magaña",
+    "Malave",
+    "Maldonado",
+    "Manzanares",
+    "Mares",
+    "Marrero",
+    "Marroquín",
+    "Martínez",
+    "Marín",
+    "Mascareñas",
+    "Mata",
+    "Mateo",
+    "Matos",
+    "Matías",
+    "Maya",
+    "Mayorga",
+    "Medina",
+    "Medrano",
+    "Mejía",
+    "Melgar",
+    "Meléndez",
+    "Mena",
+    "Menchaca",
+    "Mendoza",
+    "Menéndez",
+    "Meraz",
+    "Mercado",
+    "Merino",
+    "Mesa",
+    "Meza",
+    "Miramontes",
+    "Miranda",
+    "Mireles",
+    "Mojica",
+    "Molina",
+    "Mondragón",
+    "Monroy",
+    "Montalvo",
+    "Montañez",
+    "Montaño",
+    "Montemayor",
+    "Montenegro",
+    "Montero",
+    "Montes",
+    "Montoya",
+    "Montéz",
+    "Mora",
+    "Morales",
+    "Moreno",
+    "Mota",
+    "Moya",
+    "Munguía",
+    "Murillo",
+    "Muro",
+    "Muñiz",
+    "Muñoz",
+    "Márquez",
+    "Méndez",
+    "Naranjo",
+    "Narváez",
+    "Nava",
+    "Navarrete",
+    "Navarro",
+    "Nazario",
+    "Negrete",
+    "Negrón",
+    "Nevárez",
+    "Nieto",
+    "Nieves",
+    "Niño",
+    "Noriega",
+    "Nájera",
+    "Núñez",
+    "Ocampo",
+    "Ocasio",
+    "Ochoa",
+    "Ojeda",
+    "Olivares",
+    "Olivas",
+    "Olivera",
+    "Olivo",
+    "Olivárez",
+    "Olmos",
+    "Olvera",
+    "Ontiveros",
+    "Oquendo",
+    "Ordóñez",
+    "Orellana",
+    "Ornelas",
+    "Orosco",
+    "Orozco",
+    "Orta",
+    "Ortega",
+    "Ortiz",
+    "Osorio",
+    "Otero",
+    "Ozuna",
+    "Pabón",
+    "Pacheco",
+    "Padilla",
+    "Padrón",
+    "Pagan",
+    "Palacios",
+    "Palomino",
+    "Palomo",
+    "Pantoja",
+    "Paredes",
+    "Parra",
+    "Partida",
+    "Patiño",
+    "Paz",
+    "Pedraza",
+    "Pedroza",
+    "Pelayo",
+    "Perales",
+    "Peralta",
+    "Perea",
+    "Peña",
+    "Pichardo",
+    "Pineda",
+    "Pizarro",
+    "Piña",
+    "Polanco",
+    "Ponce",
+    "Porras",
+    "Portillo",
+    "Posada",
+    "Prado",
+    "Preciado",
+    "Prieto",
+    "Puente",
+    "Puga",
+    "Pulido",
+    "Páez",
+    "Pérez",
+    "Quesada",
+    "Quezada",
+    "Quintana",
+    "Quintanilla",
+    "Quintero",
+    "Quiróz",
+    "Quiñones",
+    "Quiñónez",
+    "Rael",
+    "Ramos",
+    "Ramírez",
+    "Rangel",
+    "Rascón",
+    "Raya",
+    "Razo",
+    "Regalado",
+    "Rendón",
+    "Rentería",
+    "Reséndez",
+    "Reyes",
+    "Reyna",
+    "Reynoso",
+    "Rico",
+    "Rincón",
+    "Riojas",
+    "Rivas",
+    "Rivera",
+    "Rivero",
+    "Robledo",
+    "Robles",
+    "Rocha",
+    "Rodarte",
+    "Rodríguez",
+    "Rojas",
+    "Rojo",
+    "Roldán",
+    "Rolón",
+    "Romero",
+    "Romo",
+    "Roque",
+    "Rosado",
+    "Rosales",
+    "Rosario",
+    "Rosas",
+    "Roybal",
+    "Rubio",
+    "Ruelas",
+    "Ruíz",
+    "Ríos",
+    "Saavedra",
+    "Saiz",
+    "Salas",
+    "Salazar",
+    "Salcedo",
+    "Salcido",
+    "Saldaña",
+    "Saldivar",
+    "Salgado",
+    "Salinas",
+    "Samaniego",
+    "Sanabria",
+    "Sandoval",
+    "Santacruz",
+    "Santana",
+    "Santiago",
+    "Santillán",
+    "Sarabia",
+    "Sauceda",
+    "Saucedo",
+    "Sedillo",
+    "Segovia",
+    "Segura",
+    "Sepúlveda",
+    "Serna",
+    "Serrano",
+    "Serrato",
+    "Sevilla",
+    "Sierra",
+    "Sisneros",
+    "Solano",
+    "Soliz",
+    "Solorio",
+    "Solorzano",
+    "Solís",
+    "Soria",
+    "Sosa",
+    "Sotelo",
+    "Soto",
+    "Suárez",
+    "Sáenz",
+    "Sánchez",
+    "Tafoya",
+    "Tamayo",
+    "Tamez",
+    "Tapia",
+    "Tejada",
+    "Tejeda",
+    "Tello",
+    "Terrazas",
+    "Terán",
+    "Tijerina",
+    "Tirado",
+    "Toledo",
+    "Toro",
+    "Torres",
+    "Tovar",
+    "Trejo",
+    "Treviño",
+    "Trujillo",
+    "Téllez",
+    "Tórrez",
+    "Ulibarri",
+    "Ulloa",
+    "Urbina",
+    "Ureña",
+    "Uribe",
+    "Urrutia",
+    "Urías",
+    "Vaca",
+    "Valadez",
+    "Valdez",
+    "Valdivia",
+    "Valdés",
+    "Valencia",
+    "Valentín",
+    "Valenzuela",
+    "Valladares",
+    "Valle",
+    "Vallejo",
+    "Valles",
+    "Valverde",
+    "Vanegas",
+    "Varela",
+    "Vargas",
+    "Vega",
+    "Vela",
+    "Velasco",
+    "Velásquez",
+    "Velázquez",
+    "Venegas",
+    "Vera",
+    "Verdugo",
+    "Verduzco",
+    "Vergara",
+    "Viera",
+    "Vigil",
+    "Villa",
+    "Villagómez",
+    "Villalobos",
+    "Villalpando",
+    "Villanueva",
+    "Villarreal",
+    "Villaseñor",
+    "Villegas",
+    "Vázquez",
+    "Vélez",
+    "Véliz",
+    "Ybarra",
+    "Yáñez",
+    "Zambrano",
+    "Zamora",
+    "Zamudio",
+    "Zapata",
+    "Zaragoza",
+    "Zarate",
+    "Zavala",
+    "Zayas",
+    "Zelaya",
+    "Zepeda",
+    "Zúñiga",
+    "de Anda",
+    "de Jesús",
+    "Álvarez",
+    "Ávalos",
+    "Ávila"
+  ],
+  "places": [
+    {
+      "city": "25 De Gener (Bloc)",
+      "postal": "43518"
+    },
+    {
+      "city": "A Coruña",
+      "postal": "15001"
+    },
+    {
+      "city": "Aba (Santa Maria De Dexo-Oleiros)",
+      "postal": "15177"
+    },
+    {
+      "city": "Ababuj",
+      "postal": "44155"
+    },
+    {
+      "city": "Abade (Santiago)",
+      "postal": "15563"
+    },
+    {
+      "city": "Abadengo De Torio",
+      "postal": "24891"
+    },
+    {
+      "city": "Abades",
+      "postal": "32633"
+    },
+    {
+      "city": "Abades (Santa Maria)",
+      "postal": "36589"
+    },
+    {
+      "city": "Abadia",
+      "postal": "10748"
+    },
+    {
+      "city": "Abadia La Mena",
+      "postal": "09586"
+    },
+    {
+      "city": "Abadin (Casco Urbano)",
+      "postal": "27730"
+    },
+    {
+      "city": "Abadin (Santa Maria)",
+      "postal": "27730"
+    },
+    {
+      "city": "Abadiño",
+      "postal": "48220"
+    },
+    {
+      "city": "Abadiño-Zelaieta",
+      "postal": "48220"
+    },
+    {
+      "city": "Abaigar",
+      "postal": "31280"
+    },
+    {
+      "city": "Abajas De Bureba",
+      "postal": "09141"
+    },
+    {
+      "city": "Aballe",
+      "postal": "33559"
+    },
+    {
+      "city": "Abalo (San Mamede)",
+      "postal": "36612"
+    },
+    {
+      "city": "Abalos",
+      "postal": "26339"
+    },
+    {
+      "city": "Abaltzisketa",
+      "postal": "20269"
+    },
+    {
+      "city": "Abama",
+      "postal": "38687"
+    },
+    {
+      "city": "Abamia",
+      "postal": "33556"
+    },
+    {
+      "city": "Abanades",
+      "postal": "19432"
+    },
+    {
+      "city": "Abanceña",
+      "postal": "33814"
+    },
+    {
+      "city": "Abanco",
+      "postal": "42368"
+    },
+    {
+      "city": "Abandames",
+      "postal": "33579"
+    },
+    {
+      "city": "Abango",
+      "postal": "33836"
+    },
+    {
+      "city": "Abaniella",
+      "postal": "33890"
+    },
+    {
+      "city": "Abanilla",
+      "postal": "30640"
+    },
+    {
+      "city": "Abanillas",
+      "postal": "39549"
+    },
+    {
+      "city": "Abano",
+      "postal": "24397"
+    },
+    {
+      "city": "Abanqueiro",
+      "postal": "15938"
+    },
+    {
+      "city": "Abanqueiro (San Cristovo)",
+      "postal": "15938"
+    },
+    {
+      "city": "Abanto",
+      "postal": "48500"
+    },
+    {
+      "city": "Abanto Y Ciervana",
+      "postal": "48500"
+    },
+    {
+      "city": "Abanto-Zierbena",
+      "postal": "48500"
+    },
+    {
+      "city": "Abantro",
+      "postal": "33994"
+    },
+    {
+      "city": "Abaran",
+      "postal": "30550"
+    },
+    {
+      "city": "Abarca De Campos",
+      "postal": "34338"
+    },
+    {
+      "city": "Abarrio",
+      "postal": "33424"
+    },
+    {
+      "city": "Abarzuza",
+      "postal": "31178"
+    },
+    {
+      "city": "Abastas",
+      "postal": "34307"
+    },
+    {
+      "city": "Abastillas",
+      "postal": "34307"
+    },
+    {
+      "city": "Abaurregaina/Abaurrea Alta",
+      "postal": "31692"
+    },
+    {
+      "city": "Abaurrepea/Abaurrea Baja",
+      "postal": "31692"
+    },
+    {
+      "city": "Abavides",
+      "postal": "32695"
+    },
+    {
+      "city": "Abay",
+      "postal": "22713"
+    },
+    {
+      "city": "Abayu",
+      "postal": "33315"
+    },
+    {
+      "city": "Abaño",
+      "postal": "39549"
+    },
+    {
+      "city": "Abdet",
+      "postal": "03517"
+    },
+    {
+      "city": "Abeancos (San Salvador)",
+      "postal": "15809"
+    },
+    {
+      "city": "Abedes",
+      "postal": "32615"
+    },
+    {
+      "city": "Abedul (Belmonte)",
+      "postal": "33844"
+    },
+    {
+      "city": "Abedul (Laviana)",
+      "postal": "33979"
+    },
+    {
+      "city": "Abedul (Oviedo)",
+      "postal": "33919"
+    },
+    {
+      "city": "Abedul (Piloña)",
+      "postal": "33538"
+    },
+    {
+      "city": "Abegondo",
+      "postal": "15318"
+    },
+    {
+      "city": "Abegondo (Santa Eulalia)",
+      "postal": "15318"
+    },
+    {
+      "city": "Abejar",
+      "postal": "42146"
+    },
+    {
+      "city": "Abejera",
+      "postal": "49591"
+    },
+    {
+      "city": "Abejorreras (Cordoba)",
+      "postal": "14005"
+    },
+    {
+      "city": "Abejuela",
+      "postal": "02439"
+    },
+    {
+      "city": "Abeleda (Teixeira)",
+      "postal": "32764"
+    },
+    {
+      "city": "Abeleda, A (Ourense)",
+      "postal": "32980"
+    },
+    {
+      "city": "Abeleda, A (Xunqueira De Ambia)",
+      "postal": "32679"
+    },
+    {
+      "city": "Abeledo",
+      "postal": "27730"
+    },
+    {
+      "city": "Abeledos, Os",
+      "postal": "32790"
+    },
+    {
+      "city": "Abeleira, A (Padrenda)",
+      "postal": "32228"
+    },
+    {
+      "city": "Abeleiras De Abaixo",
+      "postal": "15178"
+    },
+    {
+      "city": "Abelenda (Avion)",
+      "postal": "32520"
+    },
+    {
+      "city": "Abelenda Das Penas",
+      "postal": "32433"
+    },
+    {
+      "city": "Abelenda De Balongo",
+      "postal": "32213"
+    },
+    {
+      "city": "Abelendo (Moaña)",
+      "postal": "36954"
+    },
+    {
+      "city": "Abelgas",
+      "postal": "24145"
+    },
+    {
+      "city": "Abelida, A",
+      "postal": "32212"
+    },
+    {
+      "city": "Abella",
+      "postal": "17869"
+    },
+    {
+      "city": "Abella (Santo Estevo)",
+      "postal": "15685"
+    },
+    {
+      "city": "Abella D'Adons",
+      "postal": "25556"
+    },
+    {
+      "city": "Abella De La Conca",
+      "postal": "25651"
+    },
+    {
+      "city": "Abellas",
+      "postal": "32212"
+    },
+    {
+      "city": "Abelleira (Angoares)",
+      "postal": "36867"
+    },
+    {
+      "city": "Abelleira (San Estevo)",
+      "postal": "15290"
+    },
+    {
+      "city": "Abelleira De Arriba, A",
+      "postal": "32235"
+    },
+    {
+      "city": "Abelleira, A (Celanova)",
+      "postal": "32816"
+    },
+    {
+      "city": "Abelleira, A (Pontedeva)",
+      "postal": "32235"
+    },
+    {
+      "city": "Abelon",
+      "postal": "49254"
+    },
+    {
+      "city": "Abena",
+      "postal": "22620"
+    },
+    {
+      "city": "Abenfigo",
+      "postal": "44565"
+    },
+    {
+      "city": "Abengibre",
+      "postal": "02250"
+    },
+    {
+      "city": "Abenilla",
+      "postal": "22621"
+    },
+    {
+      "city": "Abenojar",
+      "postal": "13180"
+    },
+    {
+      "city": "Abenozas",
+      "postal": "22437"
+    },
+    {
+      "city": "Abeo",
+      "postal": "33347"
+    },
+    {
+      "city": "Aberasturi",
+      "postal": "01193"
+    },
+    {
+      "city": "Aberin",
+      "postal": "31264"
+    },
+    {
+      "city": "Abertura",
+      "postal": "10262"
+    },
+    {
+      "city": "Abetxuko",
+      "postal": "01013"
+    },
+    {
+      "city": "Abeu (Fuentes-Villaviciosa)",
+      "postal": "33310"
+    },
+    {
+      "city": "Abeu De Arriba (Carda-Villaviciosa)",
+      "postal": "33316"
+    },
+    {
+      "city": "Abezames",
+      "postal": "49834"
+    },
+    {
+      "city": "Abezia",
+      "postal": "01449"
+    },
+    {
+      "city": "Abi",
+      "postal": "22463"
+    },
+    {
+      "city": "Abia De Las Torres",
+      "postal": "34479"
+    },
+    {
+      "city": "Abia De Obispalia",
+      "postal": "16195"
+    },
+    {
+      "city": "Abiada",
+      "postal": "39210"
+    },
+    {
+      "city": "Abiar, L' (Partida)",
+      "postal": "03726"
+    },
+    {
+      "city": "Abiego",
+      "postal": "22143"
+    },
+    {
+      "city": "Abiegos",
+      "postal": "33557"
+    },
+    {
+      "city": "Abinzano",
+      "postal": "31473"
+    },
+    {
+      "city": "Abio",
+      "postal": "03100"
+    },
+    {
+      "city": "Abion",
+      "postal": "42127"
+    },
+    {
+      "city": "Abioncillo",
+      "postal": "42193"
+    },
+    {
+      "city": "Abionzo",
+      "postal": "39639"
+    },
+    {
+      "city": "Abizanda",
+      "postal": "22392"
+    },
+    {
+      "city": "Abiña (Andoni Deuna)",
+      "postal": "48395"
+    },
+    {
+      "city": "Abla",
+      "postal": "04510"
+    },
+    {
+      "city": "Ablaneda (Corbera)",
+      "postal": "33416"
+    },
+    {
+      "city": "Ablaneda (Salas)",
+      "postal": "33869"
+    },
+    {
+      "city": "Ablaneda (Tineo)",
+      "postal": "33875"
+    },
+    {
+      "city": "Ablanedo (Luarca)",
+      "postal": "33708"
+    },
+    {
+      "city": "Ablanedo (Morcin)",
+      "postal": "33162"
+    },
+    {
+      "city": "Ablanedo (Pravia)",
+      "postal": "33128"
+    },
+    {
+      "city": "Ablanedo (Riosa)",
+      "postal": "33160"
+    },
+    {
+      "city": "Ablanedo (Salas)",
+      "postal": "33891"
+    },
+    {
+      "city": "Ablanedo (Turon)",
+      "postal": "33610"
+    },
+    {
+      "city": "Ablano (Lena)",
+      "postal": "33637"
+    },
+    {
+      "city": "Ablanosa",
+      "postal": "33160"
+    },
+    {
+      "city": "Ablanque",
+      "postal": "19442"
+    },
+    {
+      "city": "Ablaña",
+      "postal": "33650"
+    },
+    {
+      "city": "Ables",
+      "postal": "33424"
+    },
+    {
+      "city": "Ablitas",
+      "postal": "31523"
+    },
+    {
+      "city": "Abonion",
+      "postal": "33947"
+    },
+    {
+      "city": "Abornikano",
+      "postal": "01449"
+    },
+    {
+      "city": "Aboño",
+      "postal": "33492"
+    },
+    {
+      "city": "Abragan",
+      "postal": "27164"
+    },
+    {
+      "city": "Abraido",
+      "postal": "33775"
+    },
+    {
+      "city": "Abrajanejo",
+      "postal": "11630"
+    },
+    {
+      "city": "Abranedo",
+      "postal": "33719"
+    },
+    {
+      "city": "Abraveses De Tera",
+      "postal": "49624"
+    },
+    {
+      "city": "Abrera",
+      "postal": "08630"
+    },
+    {
+      "city": "Abres",
+      "postal": "33779"
+    },
+    {
+      "city": "Abrevadero",
+      "postal": "30399"
+    },
+    {
+      "city": "Abriojal",
+      "postal": "04260"
+    },
+    {
+      "city": "Abrucena",
+      "postal": "04520"
+    },
+    {
+      "city": "Abruciños",
+      "postal": "32172"
+    },
+    {
+      "city": "Abruñeiros",
+      "postal": "33717"
+    },
+    {
+      "city": "Abuime",
+      "postal": "27546"
+    },
+    {
+      "city": "Abuin (San Pedro De Baroña-Porto Do Son)",
+      "postal": "15979"
+    },
+    {
+      "city": "Abuin (Santa Maria De Leiro-Rianxo)",
+      "postal": "15928"
+    },
+    {
+      "city": "Abuli",
+      "postal": "33010"
+    },
+    {
+      "city": "Abusejo",
+      "postal": "37640"
+    },
+    {
+      "city": "Academia General Basica De Suboficiales",
+      "postal": "25640"
+    },
+    {
+      "city": "Academia General Del Aire",
+      "postal": "30729"
+    },
+    {
+      "city": "Academia General Militar",
+      "postal": "50090"
+    },
+    {
+      "city": "Acantilados De Los Gigantes",
+      "postal": "38683"
+    },
+    {
+      "city": "Acardece",
+      "postal": "38892"
+    },
+    {
+      "city": "Acea Da Ma (Fonteculler)",
+      "postal": "15174"
+    },
+    {
+      "city": "Acea De Ama (O Burgo)",
+      "postal": "15670"
+    },
+    {
+      "city": "Acea, A (Allariz)",
+      "postal": "32668"
+    },
+    {
+      "city": "Acea, A (Serres)",
+      "postal": "15259"
+    },
+    {
+      "city": "Acebal (Pola De Laviana)",
+      "postal": "33987"
+    },
+    {
+      "city": "Acebal, La (Bimenes)",
+      "postal": "33527"
+    },
+    {
+      "city": "Acebal, La (El Entrego)",
+      "postal": "33947"
+    },
+    {
+      "city": "Acebal, La (Espina)",
+      "postal": "33891"
+    },
+    {
+      "city": "Acebal, La (Lieres)",
+      "postal": "33580"
+    },
+    {
+      "city": "Acebedo",
+      "postal": "01427"
+    },
+    {
+      "city": "Acebedo (Aller)",
+      "postal": "33685"
+    },
+    {
+      "city": "Acebedo (Grado)",
+      "postal": "33829"
+    },
+    {
+      "city": "Acebedo (Mieres)",
+      "postal": "33616"
+    },
+    {
+      "city": "Acebes Del Paramo",
+      "postal": "24357"
+    },
+    {
+      "city": "Acebo",
+      "postal": "10857"
+    },
+    {
+      "city": "Acebo (Corvera)",
+      "postal": "33470"
+    },
+    {
+      "city": "Acebo (Mieres)",
+      "postal": "33616"
+    },
+    {
+      "city": "Acebo (Sariego)",
+      "postal": "33518"
+    },
+    {
+      "city": "Acebo De San Miguel",
+      "postal": "24413"
+    },
+    {
+      "city": "Acebosa, La (Abanillas)",
+      "postal": "39549"
+    },
+    {
+      "city": "Acebreiral",
+      "postal": "33794"
+    },
+    {
+      "city": "Acebuchal",
+      "postal": "23211"
+    },
+    {
+      "city": "Acebuchal, El (Alcala De Guadaira)",
+      "postal": "41500"
+    },
+    {
+      "city": "Acebuchal, El (Lora Del Rio)",
+      "postal": "41440"
+    },
+    {
+      "city": "Acebuche",
+      "postal": "21342"
+    },
+    {
+      "city": "Aceca",
+      "postal": "45292"
+    },
+    {
+      "city": "Acedera",
+      "postal": "06730"
+    },
+    {
+      "city": "Acedillo",
+      "postal": "09129"
+    },
+    {
+      "city": "Acedo",
+      "postal": "31282"
+    },
+    {
+      "city": "Acedre",
+      "postal": "27437"
+    },
+    {
+      "city": "Acehuche",
+      "postal": "10879"
+    },
+    {
+      "city": "Aceituna",
+      "postal": "10666"
+    },
+    {
+      "city": "Acequia Marrero",
+      "postal": "35329"
+    },
+    {
+      "city": "Acequias",
+      "postal": "18656"
+    },
+    {
+      "city": "Acequilla",
+      "postal": "19200"
+    },
+    {
+      "city": "Acera De La Vega",
+      "postal": "34111"
+    },
+    {
+      "city": "Acered",
+      "postal": "50347"
+    },
+    {
+      "city": "Acereda",
+      "postal": "39698"
+    },
+    {
+      "city": "Aceredo",
+      "postal": "32870"
+    },
+    {
+      "city": "Aces De Candamo",
+      "postal": "33828"
+    },
+    {
+      "city": "Aceuchal",
+      "postal": "06207"
+    },
+    {
+      "city": "Aceveda",
+      "postal": "32372"
+    },
+    {
+      "city": "Acevedin",
+      "postal": "33794"
+    },
+    {
+      "city": "Acevedo (Ponte Sampaio)",
+      "postal": "36690"
+    },
+    {
+      "city": "Acevedo (Salas)",
+      "postal": "33866"
+    },
+    {
+      "city": "Acevedo (Tapia)",
+      "postal": "33747"
+    },
+    {
+      "city": "Acevedo (Villaviciosa)",
+      "postal": "33317"
+    },
+    {
+      "city": "Acevido",
+      "postal": "32779"
+    },
+    {
+      "city": "Acevo (Santiago)",
+      "postal": "27243"
+    },
+    {
+      "city": "Aceña La Borrega",
+      "postal": "10515"
+    },
+    {
+      "city": "Aceña, La /Atxuriaga",
+      "postal": "48191"
+    },
+    {
+      "city": "Aceñas",
+      "postal": "33710"
+    },
+    {
+      "city": "Achadiza, A (Beluso)",
+      "postal": "36937"
+    },
+    {
+      "city": "Achan (Taborda-Tomiño)",
+      "postal": "36739"
+    },
+    {
+      "city": "Achas, As (San Sebastian)",
+      "postal": "36888"
+    },
+    {
+      "city": "Aciana",
+      "postal": "33868"
+    },
+    {
+      "city": "Aciberos",
+      "postal": "49574"
+    },
+    {
+      "city": "Aciera",
+      "postal": "33118"
+    },
+    {
+      "city": "Acio",
+      "postal": "33814"
+    },
+    {
+      "city": "Acisa De Las Arrimadas",
+      "postal": "24877"
+    },
+    {
+      "city": "Aciveiro (Santa Maria)",
+      "postal": "36555"
+    },
+    {
+      "city": "Acojeja",
+      "postal": "38688"
+    },
+    {
+      "city": "Acoran",
+      "postal": "38111"
+    },
+    {
+      "city": "Acosta",
+      "postal": "01138"
+    },
+    {
+      "city": "Acra",
+      "postal": "23488"
+    },
+    {
+      "city": "Acumuer",
+      "postal": "22612"
+    },
+    {
+      "city": "Acusa Verde",
+      "postal": "35350"
+    },
+    {
+      "city": "Acuña (Vilaboa)",
+      "postal": "36141"
+    },
+    {
+      "city": "Ada",
+      "postal": "27511"
+    },
+    {
+      "city": "Adahuesca",
+      "postal": "22147"
+    },
+    {
+      "city": "Adai (Santa Maria Magdalena)(Lugo)",
+      "postal": "27297"
+    },
+    {
+      "city": "Adai (Santa Mariña)(Paramo)",
+      "postal": "27363"
+    },
+    {
+      "city": "Adai (Santiago) (Corgo)",
+      "postal": "27162"
+    },
+    {
+      "city": "Adal",
+      "postal": "39761"
+    },
+    {
+      "city": "Adalia",
+      "postal": "47129"
+    },
+    {
+      "city": "Adamuz",
+      "postal": "14430"
+    },
+    {
+      "city": "Adana",
+      "postal": "01207"
+    },
+    {
+      "city": "Adanero",
+      "postal": "05296"
+    },
+    {
+      "city": "Adansa",
+      "postal": "31454"
+    },
+    {
+      "city": "Adeje Casco",
+      "postal": "38670"
+    },
+    {
+      "city": "Adelan",
+      "postal": "27773"
+    },
+    {
+      "city": "Adelfas, Las (Urbanizacion)",
+      "postal": "03710"
+    },
+    {
+      "city": "Ademouran",
+      "postal": "32815"
+    },
+    {
+      "city": "Ademuz",
+      "postal": "46140"
+    },
+    {
+      "city": "Aderiz",
+      "postal": "31194"
+    },
+    {
+      "city": "Adina (Santa Maria)",
+      "postal": "36979"
+    },
+    {
+      "city": "Adino",
+      "postal": "39788"
+    },
+    {
+      "city": "Adios",
+      "postal": "31153"
+    },
+    {
+      "city": "Admiracion De Iglesia",
+      "postal": "33469"
+    },
+    {
+      "city": "Adoain",
+      "postal": "31448"
+    },
+    {
+      "city": "Adobes",
+      "postal": "19325"
+    },
+    {
+      "city": "Adons",
+      "postal": "25556"
+    },
+    {
+      "city": "Ador",
+      "postal": "46729"
+    },
+    {
+      "city": "Adra",
+      "postal": "04770"
+    },
+    {
+      "city": "Adrada De Haza",
+      "postal": "09462"
+    },
+    {
+      "city": "Adrada De Piron",
+      "postal": "40192"
+    },
+    {
+      "city": "Adradas",
+      "postal": "42216"
+    },
+    {
+      "city": "Adrado",
+      "postal": "33783"
+    },
+    {
+      "city": "Adrados",
+      "postal": "24859"
+    },
+    {
+      "city": "Adrados De Ordas",
+      "postal": "24277"
+    },
+    {
+      "city": "Adraen",
+      "postal": "25717"
+    },
+    {
+      "city": "Adragonte (Santiago)",
+      "postal": "15314"
+    },
+    {
+      "city": "Adrales",
+      "postal": "33813"
+    },
+    {
+      "city": "Adrall",
+      "postal": "25797"
+    },
+    {
+      "city": "Adri",
+      "postal": "17199"
+    },
+    {
+      "city": "Adriano",
+      "postal": "41728"
+    },
+    {
+      "city": "Adro (San Martiño De Rodis-Cerceda)",
+      "postal": "15186"
+    },
+    {
+      "city": "Adsubia (Ajuntament Adsubia)",
+      "postal": "03786"
+    },
+    {
+      "city": "Aduana De Coron, A (Caleiro)",
+      "postal": "36629"
+    },
+    {
+      "city": "Aduanas De Mar",
+      "postal": "03730"
+    },
+    {
+      "city": "Aduna",
+      "postal": "20150"
+    },
+    {
+      "city": "Ael",
+      "postal": "09515"
+    },
+    {
+      "city": "Aeroport D'Eivissa",
+      "postal": "07817"
+    },
+    {
+      "city": "Aeroport De Girona - Costa Brava",
+      "postal": "17185"
+    },
+    {
+      "city": "Aeropuerto Central Ciudad Real",
+      "postal": "13434"
+    },
+    {
+      "city": "Aeropuerto De A Lavacolla",
+      "postal": "15820"
+    },
+    {
+      "city": "Aeropuerto De Algoncillo",
+      "postal": "26160"
+    },
+    {
+      "city": "Aeropuerto De Alvedro",
+      "postal": "15180"
+    },
+    {
+      "city": "Aeropuerto De Fuerteventura",
+      "postal": "35610"
+    },
+    {
+      "city": "Aeropuerto De Garrapinillos (Zaragoza)",
+      "postal": "50190"
+    },
+    {
+      "city": "Aeropuerto De Gran Canaria",
+      "postal": "35230"
+    },
+    {
+      "city": "Aeropuerto De Hierro",
+      "postal": "38910"
+    },
+    {
+      "city": "Aeropuerto De La Palma",
+      "postal": "38738"
+    },
+    {
+      "city": "Aeropuerto De Lanzarote",
+      "postal": "35509"
+    },
+    {
+      "city": "Aeropuerto De Loiu",
+      "postal": "48180"
+    },
+    {
+      "city": "Aeropuerto De Los Rodeos (Santa Cruz De Tenerife)",
+      "postal": "38297"
+    },
+    {
+      "city": "Aeropuerto De Los Rodeos, Residencial (Zona)",
+      "postal": "38297"
+    },
+    {
+      "city": "Aeropuerto De Manises (Valencia)",
+      "postal": "46940"
+    },
+    {
+      "city": "Aeropuerto De Noain (Pamplona)",
+      "postal": "31110"
+    },
+    {
+      "city": "Aeropuerto Reina Sofia (Santa Cruz De Tenerife)",
+      "postal": "38610"
+    },
+    {
+      "city": "Aes",
+      "postal": "39670"
+    },
+    {
+      "city": "Aforados De Moneo",
+      "postal": "09515"
+    },
+    {
+      "city": "Afur",
+      "postal": "38139"
+    },
+    {
+      "city": "Agadir",
+      "postal": "35107"
+    },
+    {
+      "city": "Agaete (Capital Municipal)",
+      "postal": "35480"
+    },
+    {
+      "city": "Agallas",
+      "postal": "37510"
+    },
+    {
+      "city": "Agar (Santa Mariña)",
+      "postal": "36685"
+    },
+    {
+      "city": "Agarre (Lemoa)",
+      "postal": "48330"
+    },
+    {
+      "city": "Age",
+      "postal": "17529"
+    },
+    {
+      "city": "Agelan",
+      "postal": "33778"
+    },
+    {
+      "city": "Ager",
+      "postal": "25691"
+    },
+    {
+      "city": "Ages",
+      "postal": "09199"
+    },
+    {
+      "city": "Agicampe (Loja)",
+      "postal": "18360"
+    },
+    {
+      "city": "Aginaga (Eibar)",
+      "postal": "20600"
+    },
+    {
+      "city": "Aginaga (Usurbil)",
+      "postal": "20170"
+    },
+    {
+      "city": "Aginaga (Zumarraga)",
+      "postal": "20710"
+    },
+    {
+      "city": "Agirre (Arrieta)",
+      "postal": "48114"
+    },
+    {
+      "city": "Agirre (Arrigorriaga)",
+      "postal": "48480"
+    },
+    {
+      "city": "Agirre (Bermeo)",
+      "postal": "48370"
+    },
+    {
+      "city": "Agirre-Aperribai",
+      "postal": "48960"
+    },
+    {
+      "city": "Agiñaga",
+      "postal": "01479"
+    },
+    {
+      "city": "Agoitz",
+      "postal": "31430"
+    },
+    {
+      "city": "Agolada",
+      "postal": "36520"
+    },
+    {
+      "city": "Agon",
+      "postal": "50560"
+    },
+    {
+      "city": "Agoncillo",
+      "postal": "26160"
+    },
+    {
+      "city": "Agones",
+      "postal": "33129"
+    },
+    {
+      "city": "Agorreta",
+      "postal": "31639"
+    },
+    {
+      "city": "Agoso (Santa Baia De Oza-Teo)",
+      "postal": "15883"
+    },
+    {
+      "city": "Agost",
+      "postal": "03698"
+    },
+    {
+      "city": "Agoveda",
+      "postal": "33875"
+    },
+    {
+      "city": "Agra",
+      "postal": "02409"
+    },
+    {
+      "city": "Agra (Pereiro De Aguiar)",
+      "postal": "32711"
+    },
+    {
+      "city": "Agra (San Miguel)",
+      "postal": "36526"
+    },
+    {
+      "city": "Agra Da Pedra (San Xian De Serantes-Oleiros)",
+      "postal": "15177"
+    },
+    {
+      "city": "Agra De Desteriz",
+      "postal": "32236"
+    },
+    {
+      "city": "Agra Dos Campos San Martiño De Arins-Santiago)",
+      "postal": "15892"
+    },
+    {
+      "city": "Agra, A (San Cristovo De Cea)",
+      "postal": "32141"
+    },
+    {
+      "city": "Agra, A (Santa Mariña De Xuño-Porto Do Son)",
+      "postal": "15995"
+    },
+    {
+      "city": "Agracea",
+      "postal": "23369"
+    },
+    {
+      "city": "Agrade, A (San Vicente)",
+      "postal": "27513"
+    },
+    {
+      "city": "Agradiellos",
+      "postal": "33616"
+    },
+    {
+      "city": "Agramon",
+      "postal": "02490"
+    },
+    {
+      "city": "Agramunt",
+      "postal": "25310"
+    },
+    {
+      "city": "Agrande (Santa Maria De Castro-Naron)",
+      "postal": "15578"
+    },
+    {
+      "city": "Agreda",
+      "postal": "42100"
+    },
+    {
+      "city": "Agrelo, O",
+      "postal": "32880"
+    },
+    {
+      "city": "Agres",
+      "postal": "03837"
+    },
+    {
+      "city": "Agro Maior",
+      "postal": "32101"
+    },
+    {
+      "city": "Agrobello (Santa Maria De Lira-Carnota)",
+      "postal": "15292"
+    },
+    {
+      "city": "Agron",
+      "postal": "18132"
+    },
+    {
+      "city": "Agron ( Santa Eulalia)",
+      "postal": "15805"
+    },
+    {
+      "city": "Agron (San Lourenzo)",
+      "postal": "15864"
+    },
+    {
+      "city": "Agronovo (Padron)",
+      "postal": "15910"
+    },
+    {
+      "city": "Agrufeixe",
+      "postal": "32212"
+    },
+    {
+      "city": "Agrupacion De Mogon",
+      "postal": "23312"
+    },
+    {
+      "city": "Agrupacion Santo Tome",
+      "postal": "23311"
+    },
+    {
+      "city": "Agua De Bueyes",
+      "postal": "35638"
+    },
+    {
+      "city": "Agua Garcia",
+      "postal": "38355"
+    },
+    {
+      "city": "Agua Levada",
+      "postal": "32814"
+    },
+    {
+      "city": "Agua Salada",
+      "postal": "30439"
+    },
+    {
+      "city": "Aguada (Santa Baia)",
+      "postal": "27529"
+    },
+    {
+      "city": "Aguaderas",
+      "postal": "30815"
+    },
+    {
+      "city": "Aguadina",
+      "postal": "33116"
+    },
+    {
+      "city": "Aguadulce",
+      "postal": "04720"
+    },
+    {
+      "city": "Aguafria",
+      "postal": "21290"
+    },
+    {
+      "city": "Aguain",
+      "postal": "33600"
+    },
+    {
+      "city": "Agualada (Coristanco)",
+      "postal": "15148"
+    },
+    {
+      "city": "Agualatente",
+      "postal": "35299"
+    },
+    {
+      "city": "Agualejas",
+      "postal": "03600"
+    },
+    {
+      "city": "Agualestro",
+      "postal": "33683"
+    },
+    {
+      "city": "Aguamansa",
+      "postal": "38310"
+    },
+    {
+      "city": "Aguamarga",
+      "postal": "04149"
+    },
+    {
+      "city": "Aguamarga (Urracal)",
+      "postal": "04879"
+    },
+    {
+      "city": "Aguamaroza",
+      "postal": "33718"
+    },
+    {
+      "city": "Aguanes",
+      "postal": "33887"
+    },
+    {
+      "city": "Aguarda, A (San Martiño)",
+      "postal": "27248"
+    },
+    {
+      "city": "Aguaron",
+      "postal": "50408"
+    },
+    {
+      "city": "Aguarrios (Zona)",
+      "postal": "03610"
+    },
+    {
+      "city": "Aguas",
+      "postal": "22141"
+    },
+    {
+      "city": "Aguas Candidas",
+      "postal": "09593"
+    },
+    {
+      "city": "Aguas Nuevas",
+      "postal": "02049"
+    },
+    {
+      "city": "Aguas Santas (San Xurxo)",
+      "postal": "27205"
+    },
+    {
+      "city": "Aguasal",
+      "postal": "47418"
+    },
+    {
+      "city": "Aguasantas (Santa Maria)",
+      "postal": "36854"
+    },
+    {
+      "city": "Aguascaldas",
+      "postal": "22451"
+    },
+    {
+      "city": "Aguasmestas",
+      "postal": "33842"
+    },
+    {
+      "city": "Aguasmestas, Ventas De",
+      "postal": "24133"
+    },
+    {
+      "city": "Aguatavar",
+      "postal": "38780"
+    },
+    {
+      "city": "Aguaton",
+      "postal": "44382"
+    },
+    {
+      "city": "Aguatona El Nuevo",
+      "postal": "35259"
+    },
+    {
+      "city": "Aguatona El Viejo",
+      "postal": "35259"
+    },
+    {
+      "city": "Aguaviva",
+      "postal": "44566"
+    },
+    {
+      "city": "Aguaviva De La Vega",
+      "postal": "42258"
+    },
+    {
+      "city": "Aguda",
+      "postal": "33392"
+    },
+    {
+      "city": "Agudelo (San Martiño )",
+      "postal": "36190"
+    },
+    {
+      "city": "Agudo",
+      "postal": "13410"
+    },
+    {
+      "city": "Agueda Del Caudillo",
+      "postal": "37594"
+    },
+    {
+      "city": "Aguela",
+      "postal": "27578"
+    },
+    {
+      "city": "Aguelle",
+      "postal": "33317"
+    },
+    {
+      "city": "Aguera",
+      "postal": "33785"
+    },
+    {
+      "city": "Aguera (Belmonte)",
+      "postal": "33844"
+    },
+    {
+      "city": "Aguera (Cangas De Onis)",
+      "postal": "33547"
+    },
+    {
+      "city": "Aguera (Corvera)",
+      "postal": "33470"
+    },
+    {
+      "city": "Aguera (Las Regueras)",
+      "postal": "33190"
+    },
+    {
+      "city": "Aguera (Llanera)",
+      "postal": "33425"
+    },
+    {
+      "city": "Aguera De Candamo",
+      "postal": "33829"
+    },
+    {
+      "city": "Aguera De Carriles",
+      "postal": "33875"
+    },
+    {
+      "city": "Aguera De Castañedo",
+      "postal": "33813"
+    },
+    {
+      "city": "Aguera De Coto",
+      "postal": "33814"
+    },
+    {
+      "city": "Aguera De La Barca",
+      "postal": "33876"
+    },
+    {
+      "city": "Aguera De Montija",
+      "postal": "09569"
+    },
+    {
+      "city": "Aguera De Salcedo",
+      "postal": "33827"
+    },
+    {
+      "city": "Aguera, Las (Riosa)",
+      "postal": "33160"
+    },
+    {
+      "city": "Agueras De Quiros",
+      "postal": "33118"
+    },
+    {
+      "city": "Aguerche",
+      "postal": "38591"
+    },
+    {
+      "city": "Agueria (Moreda)",
+      "postal": "33678"
+    },
+    {
+      "city": "Aguerina",
+      "postal": "33844"
+    },
+    {
+      "city": "Aguero",
+      "postal": "22808"
+    },
+    {
+      "city": "Agues",
+      "postal": "33993"
+    },
+    {
+      "city": "Aguete (Seixo)",
+      "postal": "36913"
+    },
+    {
+      "city": "Aguiar",
+      "postal": "24569"
+    },
+    {
+      "city": "Aguieira (Santa Maria De Dexo-Oleiros)",
+      "postal": "15178"
+    },
+    {
+      "city": "Aguil",
+      "postal": "32769"
+    },
+    {
+      "city": "Aguilafuente",
+      "postal": "40340"
+    },
+    {
+      "city": "Aguilar",
+      "postal": "22461"
+    },
+    {
+      "city": "Aguilar (Boltaña)",
+      "postal": "22348"
+    },
+    {
+      "city": "Aguilar De Alfambra",
+      "postal": "44156"
+    },
+    {
+      "city": "Aguilar De Anguita",
+      "postal": "19283"
+    },
+    {
+      "city": "Aguilar De Bassella",
+      "postal": "25790"
+    },
+    {
+      "city": "Aguilar De Bureba",
+      "postal": "09249"
+    },
+    {
+      "city": "Aguilar De Campoo",
+      "postal": "34800"
+    },
+    {
+      "city": "Aguilar De Campos",
+      "postal": "47814"
+    },
+    {
+      "city": "Aguilar De Codes",
+      "postal": "31228"
+    },
+    {
+      "city": "Aguilar De Ebro",
+      "postal": "50175"
+    },
+    {
+      "city": "Aguilar De La Frontera",
+      "postal": "14920"
+    },
+    {
+      "city": "Aguilar De Montuenga",
+      "postal": "42259"
+    },
+    {
+      "city": "Aguilar De Segarra",
+      "postal": "08256"
+    },
+    {
+      "city": "Aguilar De Tera",
+      "postal": "49624"
+    },
+    {
+      "city": "Aguilar Del Rio Alhama",
+      "postal": "26530"
+    },
+    {
+      "city": "Aguilarejo",
+      "postal": "47281"
+    },
+    {
+      "city": "Aguilarejo Alto Y Bajo (Cordoba) (Nucleo)",
+      "postal": "14005"
+    },
+    {
+      "city": "Aguilas",
+      "postal": "30880"
+    },
+    {
+      "city": "Aguilera",
+      "postal": "42366"
+    },
+    {
+      "city": "Aguilero",
+      "postal": "33470"
+    },
+    {
+      "city": "Aguillo",
+      "postal": "09216"
+    },
+    {
+      "city": "Aguillon (Castropol)",
+      "postal": "33778"
+    },
+    {
+      "city": "Aguillon (Taramundi)",
+      "postal": "33775"
+    },
+    {
+      "city": "Aguilo",
+      "postal": "43429"
+    },
+    {
+      "city": "Aguilon",
+      "postal": "50155"
+    },
+    {
+      "city": "Aguimes (Capital Municipal)",
+      "postal": "35260"
+    },
+    {
+      "city": "Aguinaga De Iza",
+      "postal": "31867"
+    },
+    {
+      "city": "Aguinaliu",
+      "postal": "22588"
+    },
+    {
+      "city": "Aguino",
+      "postal": "33840"
+    },
+    {
+      "city": "Aguions (Santa Maria)",
+      "postal": "36685"
+    },
+    {
+      "city": "Aguiro",
+      "postal": "25511"
+    },
+    {
+      "city": "Aguis",
+      "postal": "32634"
+    },
+    {
+      "city": "Aguis (Blancos)",
+      "postal": "32634"
+    },
+    {
+      "city": "Aguisar",
+      "postal": "32515"
+    },
+    {
+      "city": "Aguiño (Ribeira)",
+      "postal": "15965"
+    },
+    {
+      "city": "Agullana",
+      "postal": "17707"
+    },
+    {
+      "city": "Agullent",
+      "postal": "46890"
+    },
+    {
+      "city": "Agullo",
+      "postal": "25692"
+    },
+    {
+      "city": "Agulo",
+      "postal": "38830"
+    },
+    {
+      "city": "Agurain",
+      "postal": "01200"
+    },
+    {
+      "city": "Agustin",
+      "postal": "27143"
+    },
+    {
+      "city": "Agüeira (San Xoan)",
+      "postal": "27678"
+    },
+    {
+      "city": "Agüera De Trucios",
+      "postal": "39880"
+    },
+    {
+      "city": "Agüero",
+      "postal": "39719"
+    },
+    {
+      "city": "Ahedo",
+      "postal": "48891"
+    },
+    {
+      "city": "Ahedo (Ampuero)",
+      "postal": "39849"
+    },
+    {
+      "city": "Ahigal",
+      "postal": "10650"
+    },
+    {
+      "city": "Ahigal De Los Aceiteros",
+      "postal": "37248"
+    },
+    {
+      "city": "Ahigal De Villarino",
+      "postal": "37173"
+    },
+    {
+      "city": "Ahillas",
+      "postal": "46176"
+    },
+    {
+      "city": "Ahillones",
+      "postal": "06940"
+    },
+    {
+      "city": "Aia",
+      "postal": "20809"
+    },
+    {
+      "city": "Aia (Ataun)",
+      "postal": "20211"
+    },
+    {
+      "city": "Aian",
+      "postal": "15181"
+    },
+    {
+      "city": "Aiara",
+      "postal": "01476"
+    },
+    {
+      "city": "Aiastai (San Migel)",
+      "postal": "20870"
+    },
+    {
+      "city": "Aiazo (San Pedro)",
+      "postal": "15686"
+    },
+    {
+      "city": "Aibar/Oibar",
+      "postal": "31460"
+    },
+    {
+      "city": "Aidi",
+      "postal": "25595"
+    },
+    {
+      "city": "Aielo De Malferit",
+      "postal": "46812"
+    },
+    {
+      "city": "Aielo De Rugat",
+      "postal": "46842"
+    },
+    {
+      "city": "Aientsa",
+      "postal": "31790"
+    },
+    {
+      "city": "Aiguabella",
+      "postal": "25515"
+    },
+    {
+      "city": "Aiguablava, D' (Platja)",
+      "postal": "17255"
+    },
+    {
+      "city": "Aiguafreda",
+      "postal": "08591"
+    },
+    {
+      "city": "Aiguafreda, D' (Platja)",
+      "postal": "17255"
+    },
+    {
+      "city": "Aiguamurcia",
+      "postal": "43815"
+    },
+    {
+      "city": "Aiguaviva",
+      "postal": "17181"
+    },
+    {
+      "city": "Aiguaviva (El Montmell)",
+      "postal": "43714"
+    },
+    {
+      "city": "Aigües",
+      "postal": "03569"
+    },
+    {
+      "city": "Ailanes De Zamanzas",
+      "postal": "09146"
+    },
+    {
+      "city": "Ailes",
+      "postal": "50152"
+    },
+    {
+      "city": "Ain",
+      "postal": "12222"
+    },
+    {
+      "city": "Ainet De Besan",
+      "postal": "25573"
+    },
+    {
+      "city": "Ainet De Cardos",
+      "postal": "25571"
+    },
+    {
+      "city": "Aineto",
+      "postal": "22623"
+    },
+    {
+      "city": "Ainsa",
+      "postal": "22330"
+    },
+    {
+      "city": "Aintzialde",
+      "postal": "31713"
+    },
+    {
+      "city": "Aintzioa",
+      "postal": "31697"
+    },
+    {
+      "city": "Ainzon",
+      "postal": "50570"
+    },
+    {
+      "city": "Aios (Noalla)",
+      "postal": "36990"
+    },
+    {
+      "city": "Airas, As",
+      "postal": "32920"
+    },
+    {
+      "city": "Airavedra",
+      "postal": "32769"
+    },
+    {
+      "city": "Airavella (Porqueira)",
+      "postal": "32641"
+    },
+    {
+      "city": "Airela",
+      "postal": "33730"
+    },
+    {
+      "city": "Airoa De Beacan",
+      "postal": "32449"
+    },
+    {
+      "city": "Aisa",
+      "postal": "22860"
+    },
+    {
+      "city": "Aita San Miguel",
+      "postal": "48215"
+    },
+    {
+      "city": "Aitasemegi",
+      "postal": "31754"
+    },
+    {
+      "city": "Aitona",
+      "postal": "25182"
+    }
+  ],
+  "streets": [
+    "Calle de Alcalá",
+    "Gran Vía",
+    "Passeig de Gràcia",
+    "Calle Larios",
+    "Calle Betis",
+    "Calle Uría",
+    "Calle Colón",
+    "Avenida Diagonal"
+  ],
+  "phonePrefix": "34",
+  "phoneDigits": 9,
+  "nationalPrefix": "6",
+  "schemaVersion": 1,
+  "datasetId": "blego-es-female",
+  "datasetVersion": "2026-11-12.2",
+  "nameGender": "female",
+  "preparedAt": "2026-11-12",
+  "normalizationVersion": "NFKC-name-v1",
+  "provenance": {
+    "names": {
+      "package": "@faker-js/faker",
+      "version": "10.6.0",
+      "locale": "es",
+      "license": "MIT",
+      "source": "https://github.com/faker-js/faker/tree/v10.6.0/src/locales",
+      "firstNames": "person.first_name.female only",
+      "surnames": "person.last_name.generic",
+      "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
+    },
+    "geography": {
+      "source": "https://download.geonames.org/export/zip/ES.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "ff2cc67332910f51bc466db14b4e3dae8463dbafd4361e6b4d1cbdaf6d538f7b",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
+      "verifiedPostalLinks": 0,
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    }
+  },
+  "checksum": "24ebac4e21939fed3bf024f9794f1fb6e0a01e62e070fe0891f4ee6bf6c8b188"
+}

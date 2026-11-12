@@ -1,3 +1,5 @@
+import { settingsHTML } from './settings.js';
+import { newsBlockHTML } from './news.js';
 import { state } from '../state.js';
 import { generatorHTML } from './generator.js';
 import { importHTML } from './import.js';
@@ -9,6 +11,8 @@ import { checkerHTML } from './checker.js';
 
 export function viewHTML() {
   switch (state.view) {
+    case 'news': return `<div class="page">${newsBlockHTML()}</div>`;
+    case 'settings': return settingsHTML();
     case 'generator':
       return generatorHTML();
     case 'import':

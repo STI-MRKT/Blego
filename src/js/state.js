@@ -1,8 +1,8 @@
-import { seedHistory } from './data/seed.js';
-
 export const state = {
   view: 'generator',
+  settings: { newsEnabled: false, proxyEnabled: false },
   locale: 'BR',
+  type: 'model',
   demo: null,
   demoBusy: false,
   importStep: 'idle',
@@ -12,7 +12,9 @@ export const state = {
   importError: '',
   importSaved: null,
   historyQuery: '',
-  history: seedHistory(),
+  history: [],
+  archives: { items: [], total: 0 },
+  archiveView: null,
   modal: null,
   news: { items: [], counts: {}, loading: false, error: '', updatedAt: 0, topic: '', order: [] },
   network: {

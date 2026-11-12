@@ -1,0 +1,2635 @@
+{
+  "version": "3",
+  "code": "FR",
+  "language": "fr",
+  "first": [
+    "Abdonie",
+    "Abeline",
+    "Abigaelle",
+    "Abigaïl",
+    "Acacie",
+    "Acanthe",
+    "Adalbaude",
+    "Adalsinde",
+    "Adegrine",
+    "Adeline",
+    "Adeltrude",
+    "Adolphie",
+    "Adonise",
+    "Adrastée",
+    "Adrehilde",
+    "Adrienne",
+    "Adèle",
+    "Adélaïde",
+    "Adélie",
+    "Agathe",
+    "Agilberte",
+    "Aglaé",
+    "Agnane",
+    "Agneflète",
+    "Agnès",
+    "Agrippine",
+    "Aimée",
+    "Alaine",
+    "Alaïs",
+    "Albane",
+    "Alberte",
+    "Albérade",
+    "Alcidie",
+    "Alcine",
+    "Alcyone",
+    "Aldegonde",
+    "Aleth",
+    "Alexandrine",
+    "Alexanne",
+    "Alexine",
+    "Alice",
+    "Aliette",
+    "Aline",
+    "Alizé",
+    "Aliénor",
+    "Aloyse",
+    "Aloïse",
+    "Alphonsine",
+    "Althée",
+    "Amaliane",
+    "Amalthée",
+    "Amande",
+    "Amandine",
+    "Amante",
+    "Amarande",
+    "Amaranthe",
+    "Amaryllis",
+    "Ambre",
+    "Ambroisie",
+    "Ameline",
+    "Aminte",
+    "Améliane",
+    "Amélie",
+    "Améthyste",
+    "Anastasie",
+    "Anatolie",
+    "Anaëlle",
+    "Anaïs",
+    "Anceline",
+    "Andrée",
+    "Angadrême",
+    "Angeline",
+    "Angilberte",
+    "Angèle",
+    "Angélina",
+    "Angélique",
+    "Anicette",
+    "Anicée",
+    "Annabelle",
+    "Annette",
+    "Annonciade",
+    "Ansberte",
+    "Anstrudie",
+    "Anthelmette",
+    "Antigone",
+    "Antoinette",
+    "Antonine",
+    "Anémone",
+    "Aphélie",
+    "Apolline",
+    "Aquiline",
+    "Arabelle",
+    "Arcadie",
+    "Argine",
+    "Ariane",
+    "Aricie",
+    "Arielle",
+    "Arlette",
+    "Armance",
+    "Armande",
+    "Armandine",
+    "Armeline",
+    "Armelle",
+    "Armide",
+    "Armine",
+    "Arnaude",
+    "Arsènie",
+    "Arthurine",
+    "Artémis",
+    "Asceline",
+    "Ascension",
+    "Assomption",
+    "Astarté",
+    "Astride",
+    "Astrée",
+    "Astérie",
+    "Athalie",
+    "Athanasie",
+    "Athina",
+    "Athénaïs",
+    "Aube",
+    "Aubertine",
+    "Aude",
+    "Audeline",
+    "Audrey",
+    "Augustine",
+    "Aure",
+    "Aurelle",
+    "Auriane",
+    "Aurore",
+    "Aurélie",
+    "Aurélienne",
+    "Auxane",
+    "Aveline",
+    "Avigaëlle",
+    "Avoye",
+    "Axeline",
+    "Axelle",
+    "Aymardine",
+    "Aymonde",
+    "Azalée",
+    "Azeline",
+    "Azélie",
+    "Barbe",
+    "Basilisse",
+    "Bathilde",
+    "Bernadette",
+    "Berthe",
+    "Bertille",
+    "Betty",
+    "Beuve",
+    "Blanche",
+    "Blandine",
+    "Brigitte",
+    "Brunehaut",
+    "Brunehilde",
+    "Béatrice",
+    "Bénédicte",
+    "Bérangère",
+    "Capucine",
+    "Carine",
+    "Caroline",
+    "Catherine",
+    "Chantal",
+    "Charlaine",
+    "Charline",
+    "Charlotte",
+    "Chloé",
+    "Christelle",
+    "Christiane",
+    "Christine",
+    "Claire",
+    "Clara",
+    "Clarisse",
+    "Claudine",
+    "Clio",
+    "Clotilde",
+    "Clélie",
+    "Clémence",
+    "Clémentine",
+    "Coline",
+    "Conception",
+    "Coralie",
+    "Coraline",
+    "Corentine",
+    "Corinne",
+    "Cyrielle",
+    "Cécile",
+    "Célestine",
+    "Céline",
+    "Danielle",
+    "Daphné",
+    "Delphine",
+    "Denise",
+    "Diane",
+    "Dieudonnée",
+    "Doriane",
+    "Dorine",
+    "Dorothée",
+    "Douce",
+    "Débora",
+    "Edmée",
+    "Ella",
+    "Elsa",
+    "Emma",
+    "Emmanuelle",
+    "Emmelie",
+    "Ernestine",
+    "Estelle",
+    "Esther",
+    "Eudoxie",
+    "Eugénie",
+    "Eulalie",
+    "Euphrasie",
+    "Eusébie",
+    "Eva",
+    "Fanny",
+    "Fantine",
+    "Faustine",
+    "Flavie",
+    "Fleur",
+    "Flore",
+    "Florence",
+    "Florie",
+    "Fortunée",
+    "France",
+    "Francette",
+    "Francia",
+    "Francine",
+    "Françoise",
+    "Frédérique",
+    "Félicie",
+    "Gabrielle",
+    "Garance",
+    "Gaëlle",
+    "Geneviève",
+    "Georgette",
+    "Gerberge",
+    "Germaine",
+    "Gertrude",
+    "Gisèle",
+    "Guenièvre",
+    "Guilhemine",
+    "Guillemette",
+    "Gustavine",
+    "Gwenaëlle",
+    "Henriette",
+    "Hermine",
+    "Honorine",
+    "Hortense",
+    "Huguette",
+    "Héloïse",
+    "Hélène",
+    "Inès",
+    "Irina",
+    "Iris",
+    "Irène",
+    "Isabelle",
+    "Iseult",
+    "Ismérie",
+    "Jacinthe",
+    "Jacqueline",
+    "Jade",
+    "Janine",
+    "Jeanne",
+    "Jeanne d’Arc",
+    "Jehanne",
+    "Jocelyne",
+    "Joséphine",
+    "Joëlle",
+    "Judith",
+    "Julia",
+    "Julie",
+    "Juliette",
+    "Justine",
+    "Laura",
+    "Laurane",
+    "Laure",
+    "Laureline",
+    "Laurence",
+    "Lauriane",
+    "Laurine",
+    "Laurène",
+    "Lorraine",
+    "Lucie",
+    "Lucienne",
+    "Lucille",
+    "Ludivine",
+    "Lydie",
+    "Léa",
+    "Léna",
+    "Léonie",
+    "Léonne",
+    "Léopoldine",
+    "Madeleine",
+    "Magali",
+    "Maguelone",
+    "Mahaut",
+    "Mallaury",
+    "Manon",
+    "Marceline",
+    "Margot",
+    "Marguerite",
+    "Marianne",
+    "Marie",
+    "Marine",
+    "Marion",
+    "Marlène",
+    "Marthe",
+    "Martine",
+    "Mathilde",
+    "Maud",
+    "Maureen",
+    "Mauricette",
+    "Maxellende",
+    "Michèle",
+    "Mireille",
+    "Miriam",
+    "Monique",
+    "Morgane",
+    "Moïsette",
+    "Muriel",
+    "Mylène",
+    "Mégane",
+    "Mélanie",
+    "Mélisande",
+    "Mélissa",
+    "Mélissandre",
+    "Mélodie",
+    "Nadine",
+    "Nadège",
+    "Nathalie",
+    "Nicole",
+    "Nine",
+    "Noémie",
+    "Noëlle",
+    "Océane",
+    "Odette",
+    "Odile",
+    "Olive",
+    "Olympe",
+    "Ombline",
+    "Ophélie",
+    "Oriande",
+    "Oriane",
+    "Orlane",
+    "Ozanne",
+    "Pascale",
+    "Paule",
+    "Paulette",
+    "Pauline",
+    "Perrine",
+    "Philippine",
+    "Philomène",
+    "Primerose",
+    "Priscille",
+    "Prudence",
+    "Pulchérie",
+    "Pécine",
+    "Pélagie",
+    "Pénélope",
+    "Pétronille",
+    "Quentine",
+    "Quintia",
+    "Quiéta",
+    "Rachel",
+    "Raphaëlle",
+    "Raymonde",
+    "Rebecca",
+    "Reine",
+    "Renée",
+    "Rita",
+    "Rolande",
+    "Romane",
+    "Rosalie",
+    "Rose",
+    "Roseline",
+    "Régine",
+    "Réjeanne",
+    "Sabine",
+    "Salomé",
+    "Sandra",
+    "Sandrine",
+    "Sarah",
+    "Sibylle",
+    "Simone",
+    "Sixtine",
+    "Solange",
+    "Soline",
+    "Sophie",
+    "Stéphanie",
+    "Suzanne",
+    "Suzon",
+    "Swassane",
+    "Sylviane",
+    "Sylvie",
+    "Ségolène",
+    "Séverine",
+    "Tatiana",
+    "Thaïs",
+    "Théodora",
+    "Thérèse",
+    "Tiphaine",
+    "Ursule",
+    "Valentine",
+    "Valérie",
+    "Victoire",
+    "Vinciane",
+    "Violette",
+    "Virginie",
+    "Viviane",
+    "Véronique",
+    "Xavière",
+    "Yolande",
+    "Ysaline",
+    "Yseult",
+    "Yvette",
+    "Yvonne",
+    "Zoé",
+    "Zoéva",
+    "Ève",
+    "Édith",
+    "Élia",
+    "Éliane",
+    "Élisabeth",
+    "Élise",
+    "Élodie",
+    "Éloïse",
+    "Éléonore",
+    "Émeline",
+    "Émilie",
+    "Émérance",
+    "Émérencie",
+    "Évangéline",
+    "Évelyne"
+  ],
+  "last": [
+    "Adam",
+    "Andre",
+    "Arnaud",
+    "Aubert",
+    "Aubry",
+    "Barbier",
+    "Baron",
+    "Barre",
+    "Benoit",
+    "Berger",
+    "Bernard",
+    "Bertrand",
+    "Blanc",
+    "Blanchard",
+    "Bonnet",
+    "Bourgeois",
+    "Boyer",
+    "Breton",
+    "Brun",
+    "Brunet",
+    "Caron",
+    "Carpentier",
+    "Carre",
+    "Charles",
+    "Charpentier",
+    "Chevalier",
+    "Clement",
+    "Colin",
+    "Collet",
+    "Cousin",
+    "Da silva",
+    "David",
+    "Denis",
+    "Deschamps",
+    "Dubois",
+    "Dufour",
+    "Dumas",
+    "Dumont",
+    "Dupont",
+    "Dupuis",
+    "Dupuy",
+    "Durand",
+    "Duval",
+    "Fabre",
+    "Faure",
+    "Fernandez",
+    "Fleury",
+    "Fontaine",
+    "Fournier",
+    "Francois",
+    "Gaillard",
+    "Garcia",
+    "Garnier",
+    "Gauthier",
+    "Gautier",
+    "Gerard",
+    "Girard",
+    "Giraud",
+    "Gonzalez",
+    "Guerin",
+    "Guillaume",
+    "Guillot",
+    "Guyot",
+    "Henry",
+    "Hubert",
+    "Huet",
+    "Jacquet",
+    "Jean",
+    "Joly",
+    "Julien",
+    "Lacroix",
+    "Laine",
+    "Lambert",
+    "Laurent",
+    "Le gall",
+    "Le roux",
+    "Leclerc",
+    "Leclercq",
+    "Lecomte",
+    "Lefebvre",
+    "Lefevre",
+    "Legrand",
+    "Lemaire",
+    "Lemoine",
+    "Leroux",
+    "Leroy",
+    "Lopez",
+    "Louis",
+    "Lucas",
+    "Maillard",
+    "Marchal",
+    "Marchand",
+    "Marie",
+    "Martin",
+    "Martinez",
+    "Marty",
+    "Masson",
+    "Mathieu",
+    "Menard",
+    "Mercier",
+    "Meunier",
+    "Meyer",
+    "Michel",
+    "Moreau",
+    "Morel",
+    "Morin",
+    "Moulin",
+    "Muller",
+    "Nguyen",
+    "Nicolas",
+    "Noel",
+    "Olivier",
+    "Paris",
+    "Paul",
+    "Perez",
+    "Perrin",
+    "Perrot",
+    "Petit",
+    "Philippe",
+    "Picard",
+    "Pierre",
+    "Poirier",
+    "Pons",
+    "Prevost",
+    "Remy",
+    "Renard",
+    "Renaud",
+    "Renault",
+    "Rey",
+    "Richard",
+    "Riviere",
+    "Robert",
+    "Robin",
+    "Roche",
+    "Rodriguez",
+    "Roger",
+    "Rolland",
+    "Rousseau",
+    "Roussel",
+    "Roux",
+    "Roy",
+    "Royer",
+    "Sanchez",
+    "Schmitt",
+    "Schneider",
+    "Simon",
+    "Thomas",
+    "Vasseur",
+    "Vidal",
+    "Vincent"
+  ],
+  "places": [
+    {
+      "city": "Aast",
+      "postal": "64460"
+    },
+    {
+      "city": "Abainville",
+      "postal": "55130"
+    },
+    {
+      "city": "Abancourt",
+      "postal": "59268"
+    },
+    {
+      "city": "Abaucourt",
+      "postal": "54610"
+    },
+    {
+      "city": "Abaucourt-Hautecourt",
+      "postal": "55400"
+    },
+    {
+      "city": "Abbans-Dessous",
+      "postal": "25320"
+    },
+    {
+      "city": "Abbans-Dessus",
+      "postal": "25440"
+    },
+    {
+      "city": "Abbaretz",
+      "postal": "44170"
+    },
+    {
+      "city": "Abbecourt",
+      "postal": "60430"
+    },
+    {
+      "city": "Abbenans",
+      "postal": "25340"
+    },
+    {
+      "city": "Abbeville",
+      "postal": "80100"
+    },
+    {
+      "city": "Abbeville-Saint-Lucien",
+      "postal": "60480"
+    },
+    {
+      "city": "Abbécourt",
+      "postal": "02300"
+    },
+    {
+      "city": "Abbéville-la-Rivière",
+      "postal": "91150"
+    },
+    {
+      "city": "Abbéville-lès-Conflans",
+      "postal": "54800"
+    },
+    {
+      "city": "Abbévillers",
+      "postal": "25310"
+    },
+    {
+      "city": "Abeilhan",
+      "postal": "34290"
+    },
+    {
+      "city": "Abelcourt",
+      "postal": "70300"
+    },
+    {
+      "city": "Abergement-la-Ronce",
+      "postal": "39500"
+    },
+    {
+      "city": "Abergement-le-Grand",
+      "postal": "39600"
+    },
+    {
+      "city": "Abergement-le-Petit",
+      "postal": "39800"
+    },
+    {
+      "city": "Abergement-lès-Thésy",
+      "postal": "39110"
+    },
+    {
+      "city": "Abidos",
+      "postal": "64150"
+    },
+    {
+      "city": "Abilly",
+      "postal": "37160"
+    },
+    {
+      "city": "Abitain",
+      "postal": "64390"
+    },
+    {
+      "city": "Abjat-sur-Bandiat",
+      "postal": "24300"
+    },
+    {
+      "city": "Ablain-Saint-Nazaire",
+      "postal": "62153"
+    },
+    {
+      "city": "Ablaincourt-Pressoir",
+      "postal": "80320"
+    },
+    {
+      "city": "Ablainzevelle",
+      "postal": "62116"
+    },
+    {
+      "city": "Ablancourt",
+      "postal": "51240"
+    },
+    {
+      "city": "Ableiges",
+      "postal": "95450"
+    },
+    {
+      "city": "Ablis",
+      "postal": "78660"
+    },
+    {
+      "city": "Ablon",
+      "postal": "14600"
+    },
+    {
+      "city": "Ablon-sur-Seine",
+      "postal": "94480"
+    },
+    {
+      "city": "Aboncourt",
+      "postal": "54115"
+    },
+    {
+      "city": "Aboncourt-Gesincourt",
+      "postal": "70500"
+    },
+    {
+      "city": "Aboncourt-sur-Seille",
+      "postal": "57590"
+    },
+    {
+      "city": "Abondance",
+      "postal": "74360"
+    },
+    {
+      "city": "Abondant",
+      "postal": "28410"
+    },
+    {
+      "city": "Abos",
+      "postal": "64360"
+    },
+    {
+      "city": "Aboën",
+      "postal": "42380"
+    },
+    {
+      "city": "Abreschviller",
+      "postal": "57560"
+    },
+    {
+      "city": "Abrest",
+      "postal": "03200"
+    },
+    {
+      "city": "Abriès",
+      "postal": "05460"
+    },
+    {
+      "city": "Abscon",
+      "postal": "59215"
+    },
+    {
+      "city": "Abzac",
+      "postal": "16500"
+    },
+    {
+      "city": "Abère",
+      "postal": "64160"
+    },
+    {
+      "city": "Accolans",
+      "postal": "25250"
+    },
+    {
+      "city": "Accolay",
+      "postal": "89460"
+    },
+    {
+      "city": "Accons",
+      "postal": "07160"
+    },
+    {
+      "city": "Accous",
+      "postal": "64490"
+    },
+    {
+      "city": "Achain",
+      "postal": "57340"
+    },
+    {
+      "city": "Achen",
+      "postal": "57412"
+    },
+    {
+      "city": "Achenheim",
+      "postal": "67204"
+    },
+    {
+      "city": "Achery",
+      "postal": "02800"
+    },
+    {
+      "city": "Acheux-en-Amiénois",
+      "postal": "80560"
+    },
+    {
+      "city": "Acheux-en-Vimeu",
+      "postal": "80210"
+    },
+    {
+      "city": "Acheville",
+      "postal": "62320"
+    },
+    {
+      "city": "Achey",
+      "postal": "70180"
+    },
+    {
+      "city": "Achicourt",
+      "postal": "62217"
+    },
+    {
+      "city": "Achiet-le-Grand",
+      "postal": "62121"
+    },
+    {
+      "city": "Achiet-le-Petit",
+      "postal": "62121"
+    },
+    {
+      "city": "Achun",
+      "postal": "58110"
+    },
+    {
+      "city": "Achy",
+      "postal": "60690"
+    },
+    {
+      "city": "Achères",
+      "postal": "18250"
+    },
+    {
+      "city": "Achères-la-Forêt",
+      "postal": "77760"
+    },
+    {
+      "city": "Acigné",
+      "postal": "35690"
+    },
+    {
+      "city": "Aclou",
+      "postal": "27800"
+    },
+    {
+      "city": "Acon",
+      "postal": "27570"
+    },
+    {
+      "city": "Acq",
+      "postal": "62144"
+    },
+    {
+      "city": "Acqueville",
+      "postal": "14220"
+    },
+    {
+      "city": "Acquigny",
+      "postal": "27400"
+    },
+    {
+      "city": "Acquin-Westbécourt",
+      "postal": "62380"
+    },
+    {
+      "city": "Acy",
+      "postal": "02200"
+    },
+    {
+      "city": "Acy-Romance",
+      "postal": "08300"
+    },
+    {
+      "city": "Acy-en-Multien",
+      "postal": "60620"
+    },
+    {
+      "city": "Adaincourt",
+      "postal": "57580"
+    },
+    {
+      "city": "Adainville",
+      "postal": "78113"
+    },
+    {
+      "city": "Adam-lès-Passavant",
+      "postal": "25360"
+    },
+    {
+      "city": "Adam-lès-Vercel",
+      "postal": "25530"
+    },
+    {
+      "city": "Adamswiller",
+      "postal": "67320"
+    },
+    {
+      "city": "Adast",
+      "postal": "65260"
+    },
+    {
+      "city": "Adelange",
+      "postal": "57380"
+    },
+    {
+      "city": "Adelans-et-le-Val-de-Bithaine",
+      "postal": "70200"
+    },
+    {
+      "city": "Adervielle-Pouchergues",
+      "postal": "65240"
+    },
+    {
+      "city": "Adilly",
+      "postal": "79200"
+    },
+    {
+      "city": "Adinfer",
+      "postal": "62116"
+    },
+    {
+      "city": "Adissan",
+      "postal": "34230"
+    },
+    {
+      "city": "Adon",
+      "postal": "45230"
+    },
+    {
+      "city": "Adriers",
+      "postal": "86430"
+    },
+    {
+      "city": "Adé",
+      "postal": "65100"
+    },
+    {
+      "city": "Afa",
+      "postal": "20167"
+    },
+    {
+      "city": "Affieux",
+      "postal": "19260"
+    },
+    {
+      "city": "Affléville",
+      "postal": "54800"
+    },
+    {
+      "city": "Affoux",
+      "postal": "69170"
+    },
+    {
+      "city": "Affracourt",
+      "postal": "54740"
+    },
+    {
+      "city": "Affringues",
+      "postal": "62380"
+    },
+    {
+      "city": "Agassac",
+      "postal": "31230"
+    },
+    {
+      "city": "Agde",
+      "postal": "34300"
+    },
+    {
+      "city": "Agel",
+      "postal": "34210"
+    },
+    {
+      "city": "Agen",
+      "postal": "47000"
+    },
+    {
+      "city": "Agen-d'Aveyron",
+      "postal": "12630"
+    },
+    {
+      "city": "Agencourt",
+      "postal": "21700"
+    },
+    {
+      "city": "Agenville",
+      "postal": "80370"
+    },
+    {
+      "city": "Agenvillers",
+      "postal": "80150"
+    },
+    {
+      "city": "Ageville",
+      "postal": "52340"
+    },
+    {
+      "city": "Agey",
+      "postal": "21410"
+    },
+    {
+      "city": "Aghione",
+      "postal": "20270"
+    },
+    {
+      "city": "Agincourt",
+      "postal": "54770"
+    },
+    {
+      "city": "Agmé",
+      "postal": "47350"
+    },
+    {
+      "city": "Agnac",
+      "postal": "47800"
+    },
+    {
+      "city": "Agnat",
+      "postal": "43100"
+    },
+    {
+      "city": "Agneaux",
+      "postal": "50180"
+    },
+    {
+      "city": "Agnetz",
+      "postal": "60600"
+    },
+    {
+      "city": "Agnez-lès-Duisans",
+      "postal": "62161"
+    },
+    {
+      "city": "Agnicourt-et-Séchelles",
+      "postal": "02340"
+    },
+    {
+      "city": "Agnin",
+      "postal": "38150"
+    },
+    {
+      "city": "Agnières",
+      "postal": "62690"
+    },
+    {
+      "city": "Agnières-en-Dévoluy",
+      "postal": "05250"
+    },
+    {
+      "city": "Agnos",
+      "postal": "64400"
+    },
+    {
+      "city": "Agny",
+      "postal": "62217"
+    },
+    {
+      "city": "Agon-Coutainville",
+      "postal": "50230"
+    },
+    {
+      "city": "Agonac",
+      "postal": "24460"
+    },
+    {
+      "city": "Agonges",
+      "postal": "03210"
+    },
+    {
+      "city": "Agonès",
+      "postal": "34190"
+    },
+    {
+      "city": "Agos",
+      "postal": "65400"
+    },
+    {
+      "city": "Agris",
+      "postal": "16110"
+    },
+    {
+      "city": "Agudelle",
+      "postal": "17500"
+    },
+    {
+      "city": "Aguessac",
+      "postal": "12520"
+    },
+    {
+      "city": "Aguilcourt",
+      "postal": "02190"
+    },
+    {
+      "city": "Aguts",
+      "postal": "81470"
+    },
+    {
+      "city": "Agy",
+      "postal": "14400"
+    },
+    {
+      "city": "Ahaxe",
+      "postal": "64220"
+    },
+    {
+      "city": "Ahetze",
+      "postal": "64210"
+    },
+    {
+      "city": "Ahuillé",
+      "postal": "53940"
+    },
+    {
+      "city": "Ahun",
+      "postal": "23150"
+    },
+    {
+      "city": "Ahuy",
+      "postal": "21121"
+    },
+    {
+      "city": "Ahéville",
+      "postal": "88500"
+    },
+    {
+      "city": "Aibes",
+      "postal": "59149"
+    },
+    {
+      "city": "Aibre",
+      "postal": "25750"
+    },
+    {
+      "city": "Aiffres",
+      "postal": "79230"
+    },
+    {
+      "city": "Aigaliers",
+      "postal": "30700"
+    },
+    {
+      "city": "Aiglemont",
+      "postal": "08090"
+    },
+    {
+      "city": "Aiglepierre",
+      "postal": "39110"
+    },
+    {
+      "city": "Aigleville",
+      "postal": "27120"
+    },
+    {
+      "city": "Aiglun",
+      "postal": "06910"
+    },
+    {
+      "city": "Aignan",
+      "postal": "32290"
+    },
+    {
+      "city": "Aignay-le-Duc",
+      "postal": "21510"
+    },
+    {
+      "city": "Aigne",
+      "postal": "34210"
+    },
+    {
+      "city": "Aignerville",
+      "postal": "14710"
+    },
+    {
+      "city": "Aignes",
+      "postal": "31550"
+    },
+    {
+      "city": "Aignes-et-Puypéroux",
+      "postal": "16190"
+    },
+    {
+      "city": "Aigneville",
+      "postal": "80210"
+    },
+    {
+      "city": "Aigny",
+      "postal": "51150"
+    },
+    {
+      "city": "Aigné",
+      "postal": "72650"
+    },
+    {
+      "city": "Aigonnay",
+      "postal": "79370"
+    },
+    {
+      "city": "Aigre",
+      "postal": "16140"
+    },
+    {
+      "city": "Aigrefeuille",
+      "postal": "31280"
+    },
+    {
+      "city": "Aigrefeuille-d'Aunis",
+      "postal": "17290"
+    },
+    {
+      "city": "Aigrefeuille-sur-Maine",
+      "postal": "44140"
+    },
+    {
+      "city": "Aigremont",
+      "postal": "30350"
+    },
+    {
+      "city": "Aiguebelette-le-Lac",
+      "postal": "73610"
+    },
+    {
+      "city": "Aiguebelle",
+      "postal": "73220"
+    },
+    {
+      "city": "Aigueblanche",
+      "postal": "73260"
+    },
+    {
+      "city": "Aiguefonde",
+      "postal": "81200"
+    },
+    {
+      "city": "Aigueperse",
+      "postal": "63260"
+    },
+    {
+      "city": "Aigues-Juntes",
+      "postal": "09240"
+    },
+    {
+      "city": "Aigues-Mortes",
+      "postal": "30220"
+    },
+    {
+      "city": "Aigues-Vives",
+      "postal": "09600"
+    },
+    {
+      "city": "Aiguilhe",
+      "postal": "43000"
+    },
+    {
+      "city": "Aiguilles",
+      "postal": "05470"
+    },
+    {
+      "city": "Aiguillon",
+      "postal": "47190"
+    },
+    {
+      "city": "Aiguines",
+      "postal": "83630"
+    },
+    {
+      "city": "Aigurande",
+      "postal": "36140"
+    },
+    {
+      "city": "Aiguèze",
+      "postal": "30760"
+    },
+    {
+      "city": "Ailhon",
+      "postal": "07200"
+    },
+    {
+      "city": "Aillant-sur-Milleron",
+      "postal": "45230"
+    },
+    {
+      "city": "Aillant-sur-Tholon",
+      "postal": "89110"
+    },
+    {
+      "city": "Aillas",
+      "postal": "33124"
+    },
+    {
+      "city": "Ailleux",
+      "postal": "42130"
+    },
+    {
+      "city": "Aillevans",
+      "postal": "70110"
+    },
+    {
+      "city": "Ailleville",
+      "postal": "10200"
+    },
+    {
+      "city": "Aillevillers-et-Lyaumont",
+      "postal": "70320"
+    },
+    {
+      "city": "Aillianville",
+      "postal": "52700"
+    },
+    {
+      "city": "Aillières-Beauvoir",
+      "postal": "72600"
+    },
+    {
+      "city": "Aillon-le-Jeune",
+      "postal": "73340"
+    },
+    {
+      "city": "Aillon-le-Vieux",
+      "postal": "73340"
+    },
+    {
+      "city": "Ailloncourt",
+      "postal": "70300"
+    },
+    {
+      "city": "Ailly",
+      "postal": "27600"
+    },
+    {
+      "city": "Ailly-le-Haut-Clocher",
+      "postal": "80690"
+    },
+    {
+      "city": "Ailly-sur-Noye",
+      "postal": "80250"
+    },
+    {
+      "city": "Ailly-sur-Somme",
+      "postal": "80470"
+    },
+    {
+      "city": "Aimargues",
+      "postal": "30470"
+    },
+    {
+      "city": "Aime",
+      "postal": "73210"
+    },
+    {
+      "city": "Aime-la-Plagne",
+      "postal": "73210"
+    },
+    {
+      "city": "Ainay-le-Château",
+      "postal": "03360"
+    },
+    {
+      "city": "Ainay-le-Vieil",
+      "postal": "18200"
+    },
+    {
+      "city": "Aincille",
+      "postal": "64220"
+    },
+    {
+      "city": "Aincourt",
+      "postal": "95510"
+    },
+    {
+      "city": "Aincreville",
+      "postal": "55110"
+    },
+    {
+      "city": "Aingeray",
+      "postal": "54460"
+    },
+    {
+      "city": "Aingeville",
+      "postal": "88140"
+    },
+    {
+      "city": "Aingoulaincourt",
+      "postal": "52230"
+    },
+    {
+      "city": "Ainharp",
+      "postal": "64130"
+    },
+    {
+      "city": "Ainhice",
+      "postal": "64220"
+    },
+    {
+      "city": "Ainhoa",
+      "postal": "64250"
+    },
+    {
+      "city": "Ainvelle",
+      "postal": "70800"
+    },
+    {
+      "city": "Airaines",
+      "postal": "80270"
+    },
+    {
+      "city": "Airan",
+      "postal": "14370"
+    },
+    {
+      "city": "Aire",
+      "postal": "08190"
+    },
+    {
+      "city": "Aire-sur-l'Adour",
+      "postal": "40800"
+    },
+    {
+      "city": "Aire-sur-la-Lys",
+      "postal": "62120"
+    },
+    {
+      "city": "Airel",
+      "postal": "50680"
+    },
+    {
+      "city": "Airion",
+      "postal": "60600"
+    },
+    {
+      "city": "Airon-Notre-Dame",
+      "postal": "62180"
+    },
+    {
+      "city": "Airon-Saint-Vaast",
+      "postal": "62180"
+    },
+    {
+      "city": "Airoux",
+      "postal": "11320"
+    },
+    {
+      "city": "Airvault",
+      "postal": "79600"
+    },
+    {
+      "city": "Aiserey",
+      "postal": "21110"
+    },
+    {
+      "city": "Aisey-et-Richecourt",
+      "postal": "70500"
+    },
+    {
+      "city": "Aisey-sur-Seine",
+      "postal": "21400"
+    },
+    {
+      "city": "Aisonville-et-Bernoville",
+      "postal": "02110"
+    },
+    {
+      "city": "Aisy-sous-Thil",
+      "postal": "21390"
+    },
+    {
+      "city": "Aisy-sur-Armançon",
+      "postal": "89390"
+    },
+    {
+      "city": "Aiti",
+      "postal": "20244"
+    },
+    {
+      "city": "Aiton",
+      "postal": "73220"
+    },
+    {
+      "city": "Aix",
+      "postal": "19200"
+    },
+    {
+      "city": "Aix-Noulette",
+      "postal": "62160"
+    },
+    {
+      "city": "Aix-Villemaur-Pâlis",
+      "postal": "10160"
+    },
+    {
+      "city": "Aix-en-Diois",
+      "postal": "26150"
+    },
+    {
+      "city": "Aix-en-Ergny",
+      "postal": "62650"
+    },
+    {
+      "city": "Aix-en-Issart",
+      "postal": "62170"
+    },
+    {
+      "city": "Aix-en-Othe",
+      "postal": "10160"
+    },
+    {
+      "city": "Aix-en-Provence",
+      "postal": "13080"
+    },
+    {
+      "city": "Aix-en-Pévèle",
+      "postal": "59310"
+    },
+    {
+      "city": "Aix-la-Fayette",
+      "postal": "63980"
+    },
+    {
+      "city": "Aix-les-Bains",
+      "postal": "73100"
+    },
+    {
+      "city": "Aixe-sur-Vienne",
+      "postal": "87700"
+    },
+    {
+      "city": "Aizac",
+      "postal": "07530"
+    },
+    {
+      "city": "Aizanville",
+      "postal": "52120"
+    },
+    {
+      "city": "Aize",
+      "postal": "36150"
+    },
+    {
+      "city": "Aizecourt-le-Bas",
+      "postal": "80240"
+    },
+    {
+      "city": "Aizecourt-le-Haut",
+      "postal": "80200"
+    },
+    {
+      "city": "Aizelles",
+      "postal": "02820"
+    },
+    {
+      "city": "Aizenay",
+      "postal": "85190"
+    },
+    {
+      "city": "Aizier",
+      "postal": "27500"
+    },
+    {
+      "city": "Aizy-Jouy",
+      "postal": "02370"
+    },
+    {
+      "city": "Ajac",
+      "postal": "11300"
+    },
+    {
+      "city": "Ajaccio",
+      "postal": "20000"
+    },
+    {
+      "city": "Ajain",
+      "postal": "23380"
+    },
+    {
+      "city": "Ajat",
+      "postal": "24210"
+    },
+    {
+      "city": "Ajoncourt",
+      "postal": "57590"
+    },
+    {
+      "city": "Ajou",
+      "postal": "27410"
+    },
+    {
+      "city": "Ajoux",
+      "postal": "07000"
+    },
+    {
+      "city": "Alaigne",
+      "postal": "11240"
+    },
+    {
+      "city": "Alaincourt",
+      "postal": "02240"
+    },
+    {
+      "city": "Alaincourt-la-Côte",
+      "postal": "57590"
+    },
+    {
+      "city": "Alairac",
+      "postal": "11290"
+    },
+    {
+      "city": "Alan",
+      "postal": "31420"
+    },
+    {
+      "city": "Alando",
+      "postal": "20212"
+    },
+    {
+      "city": "Alata",
+      "postal": "20167"
+    },
+    {
+      "city": "Alba-la-Romaine",
+      "postal": "07400"
+    },
+    {
+      "city": "Alban",
+      "postal": "81250"
+    },
+    {
+      "city": "Albaret-Sainte-Marie",
+      "postal": "48200"
+    },
+    {
+      "city": "Albaret-le-Comtal",
+      "postal": "48310"
+    },
+    {
+      "city": "Albas",
+      "postal": "11360"
+    },
+    {
+      "city": "Albefeuille-Lagarde",
+      "postal": "82290"
+    },
+    {
+      "city": "Albens",
+      "postal": "73410"
+    },
+    {
+      "city": "Albepierre-Bredons",
+      "postal": "15300"
+    },
+    {
+      "city": "Albert",
+      "postal": "80300"
+    },
+    {
+      "city": "Albertacce",
+      "postal": "20224"
+    },
+    {
+      "city": "Albertville",
+      "postal": "73200"
+    },
+    {
+      "city": "Albestroff",
+      "postal": "57670"
+    },
+    {
+      "city": "Albi",
+      "postal": "81000"
+    },
+    {
+      "city": "Albiac",
+      "postal": "31460"
+    },
+    {
+      "city": "Albias",
+      "postal": "82350"
+    },
+    {
+      "city": "Albiez-Montrond",
+      "postal": "73300"
+    },
+    {
+      "city": "Albiez-le-Jeune",
+      "postal": "73300"
+    },
+    {
+      "city": "Albignac",
+      "postal": "19190"
+    },
+    {
+      "city": "Albigny-sur-Saône",
+      "postal": "69250"
+    },
+    {
+      "city": "Albine",
+      "postal": "81240"
+    },
+    {
+      "city": "Albitreccia",
+      "postal": "20128"
+    },
+    {
+      "city": "Albières",
+      "postal": "11330"
+    },
+    {
+      "city": "Albiès",
+      "postal": "09310"
+    },
+    {
+      "city": "Albon",
+      "postal": "26140"
+    },
+    {
+      "city": "Albon-d'Ardèche",
+      "postal": "07190"
+    },
+    {
+      "city": "Alboussière",
+      "postal": "07440"
+    },
+    {
+      "city": "Albussac",
+      "postal": "19380"
+    },
+    {
+      "city": "Alby-sur-Chéran",
+      "postal": "74540"
+    },
+    {
+      "city": "Albé",
+      "postal": "67220"
+    },
+    {
+      "city": "Aldudes",
+      "postal": "64430"
+    },
+    {
+      "city": "Alembon",
+      "postal": "62850"
+    },
+    {
+      "city": "Alençon",
+      "postal": "61000"
+    },
+    {
+      "city": "Alet-les-Bains",
+      "postal": "11580"
+    },
+    {
+      "city": "Alette",
+      "postal": "62650"
+    },
+    {
+      "city": "Aleu",
+      "postal": "09320"
+    },
+    {
+      "city": "Alex",
+      "postal": "74290"
+    },
+    {
+      "city": "Alexain",
+      "postal": "53240"
+    },
+    {
+      "city": "Aleyrac",
+      "postal": "26770"
+    },
+    {
+      "city": "Alfortville",
+      "postal": "94140"
+    },
+    {
+      "city": "Algajola",
+      "postal": "20220"
+    },
+    {
+      "city": "Algans",
+      "postal": "81470"
+    },
+    {
+      "city": "Algolsheim",
+      "postal": "68600"
+    },
+    {
+      "city": "Algrange",
+      "postal": "57440"
+    },
+    {
+      "city": "Alignan-du-Vent",
+      "postal": "34290"
+    },
+    {
+      "city": "Alincourt",
+      "postal": "08310"
+    },
+    {
+      "city": "Alincthun",
+      "postal": "62142"
+    },
+    {
+      "city": "Alise-Sainte-Reine",
+      "postal": "21150"
+    },
+    {
+      "city": "Alissas",
+      "postal": "07210"
+    },
+    {
+      "city": "Alix",
+      "postal": "69380"
+    },
+    {
+      "city": "Alixan",
+      "postal": "26300"
+    },
+    {
+      "city": "Alizay",
+      "postal": "27460"
+    },
+    {
+      "city": "Alièze",
+      "postal": "39270"
+    },
+    {
+      "city": "Allain",
+      "postal": "54170"
+    },
+    {
+      "city": "Allaines",
+      "postal": "80200"
+    },
+    {
+      "city": "Allaines-Mervilliers",
+      "postal": "28310"
+    },
+    {
+      "city": "Allainville",
+      "postal": "28500"
+    },
+    {
+      "city": "Allaire",
+      "postal": "56350"
+    },
+    {
+      "city": "Allamont",
+      "postal": "54800"
+    },
+    {
+      "city": "Allamps",
+      "postal": "54112"
+    },
+    {
+      "city": "Allan",
+      "postal": "26780"
+    },
+    {
+      "city": "Allanche",
+      "postal": "15160"
+    },
+    {
+      "city": "Alland'Huy-et-Sausseuil",
+      "postal": "08130"
+    },
+    {
+      "city": "Allarmont",
+      "postal": "88110"
+    },
+    {
+      "city": "Allas-Bocage",
+      "postal": "17150"
+    },
+    {
+      "city": "Allas-Champagne",
+      "postal": "17500"
+    },
+    {
+      "city": "Allas-les-Mines",
+      "postal": "24220"
+    },
+    {
+      "city": "Allassac",
+      "postal": "19240"
+    },
+    {
+      "city": "Allauch",
+      "postal": "13190"
+    },
+    {
+      "city": "Alleins",
+      "postal": "13980"
+    },
+    {
+      "city": "Allemagne-en-Provence",
+      "postal": "04500"
+    },
+    {
+      "city": "Allemanche-Launay-et-Soyer",
+      "postal": "51260"
+    },
+    {
+      "city": "Allemans",
+      "postal": "24600"
+    },
+    {
+      "city": "Allemans-du-Dropt",
+      "postal": "47800"
+    },
+    {
+      "city": "Allemant",
+      "postal": "02320"
+    },
+    {
+      "city": "Allemond",
+      "postal": "38114"
+    },
+    {
+      "city": "Allenay",
+      "postal": "80130"
+    },
+    {
+      "city": "Allenc",
+      "postal": "48190"
+    },
+    {
+      "city": "Allenjoie",
+      "postal": "25490"
+    },
+    {
+      "city": "Allennes-les-Marais",
+      "postal": "59251"
+    },
+    {
+      "city": "Allenwiller",
+      "postal": "67310"
+    },
+    {
+      "city": "Allerey",
+      "postal": "21230"
+    },
+    {
+      "city": "Allerey-sur-Saône",
+      "postal": "71350"
+    },
+    {
+      "city": "Allery",
+      "postal": "80270"
+    },
+    {
+      "city": "Alles-sur-Dordogne",
+      "postal": "24480"
+    },
+    {
+      "city": "Alleuze",
+      "postal": "15100"
+    },
+    {
+      "city": "Allevard",
+      "postal": "38580"
+    },
+    {
+      "city": "Allex",
+      "postal": "26400"
+    },
+    {
+      "city": "Alleyrac",
+      "postal": "43150"
+    },
+    {
+      "city": "Alleyras",
+      "postal": "43580"
+    },
+    {
+      "city": "Alleyrat",
+      "postal": "19200"
+    },
+    {
+      "city": "Allez-et-Cazeneuve",
+      "postal": "47110"
+    },
+    {
+      "city": "Alliancelles",
+      "postal": "51250"
+    },
+    {
+      "city": "Alliat",
+      "postal": "09400"
+    },
+    {
+      "city": "Allibaudières",
+      "postal": "10700"
+    },
+    {
+      "city": "Allichamps",
+      "postal": "52130"
+    },
+    {
+      "city": "Allier",
+      "postal": "65360"
+    },
+    {
+      "city": "Alligny-Cosne",
+      "postal": "58200"
+    },
+    {
+      "city": "Alligny-en-Morvan",
+      "postal": "58230"
+    },
+    {
+      "city": "Allineuc",
+      "postal": "22460"
+    },
+    {
+      "city": "Allinges",
+      "postal": "74200"
+    },
+    {
+      "city": "Allières",
+      "postal": "09240"
+    },
+    {
+      "city": "Allogny",
+      "postal": "18110"
+    },
+    {
+      "city": "Allondans",
+      "postal": "25550"
+    },
+    {
+      "city": "Allondaz",
+      "postal": "73200"
+    },
+    {
+      "city": "Allondrelle",
+      "postal": "54260"
+    },
+    {
+      "city": "Allonne",
+      "postal": "60000"
+    },
+    {
+      "city": "Allonnes",
+      "postal": "28150"
+    },
+    {
+      "city": "Allons",
+      "postal": "04170"
+    },
+    {
+      "city": "Allonville",
+      "postal": "80260"
+    },
+    {
+      "city": "Allonzier-la-Caille",
+      "postal": "74350"
+    },
+    {
+      "city": "Allos",
+      "postal": "04260"
+    },
+    {
+      "city": "Allouagne",
+      "postal": "62157"
+    },
+    {
+      "city": "Alloue",
+      "postal": "16490"
+    },
+    {
+      "city": "Allouis",
+      "postal": "18500"
+    },
+    {
+      "city": "Allouville-Bellefosse",
+      "postal": "76190"
+    },
+    {
+      "city": "Alluy",
+      "postal": "58110"
+    },
+    {
+      "city": "Alluyes",
+      "postal": "28800"
+    },
+    {
+      "city": "Ally",
+      "postal": "15700"
+    },
+    {
+      "city": "Allègre",
+      "postal": "43270"
+    },
+    {
+      "city": "Allègre-les-Fumades",
+      "postal": "30500"
+    },
+    {
+      "city": "Allèves",
+      "postal": "74540"
+    },
+    {
+      "city": "Allériot",
+      "postal": "71380"
+    },
+    {
+      "city": "Almayrac",
+      "postal": "81190"
+    },
+    {
+      "city": "Almenêches",
+      "postal": "61570"
+    },
+    {
+      "city": "Almont-les-Junies",
+      "postal": "12300"
+    },
+    {
+      "city": "Alos",
+      "postal": "09200"
+    },
+    {
+      "city": "Alos-Sibas-Abense",
+      "postal": "64470"
+    },
+    {
+      "city": "Aloxe-Corton",
+      "postal": "21420"
+    },
+    {
+      "city": "Alpuech",
+      "postal": "12210"
+    },
+    {
+      "city": "Alquines",
+      "postal": "62850"
+    },
+    {
+      "city": "Alrance",
+      "postal": "12430"
+    },
+    {
+      "city": "Alsting",
+      "postal": "57515"
+    },
+    {
+      "city": "Altagène",
+      "postal": "20112"
+    },
+    {
+      "city": "Alteckendorf",
+      "postal": "67270"
+    },
+    {
+      "city": "Altenach",
+      "postal": "68210"
+    },
+    {
+      "city": "Altenheim",
+      "postal": "67490"
+    },
+    {
+      "city": "Althen-des-Paluds",
+      "postal": "84210"
+    },
+    {
+      "city": "Altiani",
+      "postal": "20251"
+    },
+    {
+      "city": "Altier",
+      "postal": "48800"
+    },
+    {
+      "city": "Altillac",
+      "postal": "19120"
+    },
+    {
+      "city": "Altkirch",
+      "postal": "68130"
+    },
+    {
+      "city": "Altorf",
+      "postal": "67120"
+    },
+    {
+      "city": "Altrippe",
+      "postal": "57660"
+    },
+    {
+      "city": "Altviller",
+      "postal": "57730"
+    },
+    {
+      "city": "Altwiller",
+      "postal": "67260"
+    },
+    {
+      "city": "Aluze",
+      "postal": "71510"
+    },
+    {
+      "city": "Alvignac",
+      "postal": "46500"
+    },
+    {
+      "city": "Alvimare",
+      "postal": "76640"
+    },
+    {
+      "city": "Alzen",
+      "postal": "09240"
+    },
+    {
+      "city": "Alzi",
+      "postal": "20212"
+    },
+    {
+      "city": "Alzing",
+      "postal": "57320"
+    },
+    {
+      "city": "Alzon",
+      "postal": "30770"
+    },
+    {
+      "city": "Alzonne",
+      "postal": "11170"
+    },
+    {
+      "city": "Alçay",
+      "postal": "64470"
+    },
+    {
+      "city": "Alès",
+      "postal": "30100"
+    },
+    {
+      "city": "Alénya",
+      "postal": "66200"
+    },
+    {
+      "city": "Aléria",
+      "postal": "20270"
+    },
+    {
+      "city": "Amage",
+      "postal": "70280"
+    },
+    {
+      "city": "Amagne",
+      "postal": "08300"
+    },
+    {
+      "city": "Amagney",
+      "postal": "25220"
+    },
+    {
+      "city": "Amailloux",
+      "postal": "79350"
+    },
+    {
+      "city": "Amance",
+      "postal": "10140"
+    },
+    {
+      "city": "Amancey",
+      "postal": "25330"
+    },
+    {
+      "city": "Amancy",
+      "postal": "74800"
+    },
+    {
+      "city": "Amange",
+      "postal": "39700"
+    },
+    {
+      "city": "Amanlis",
+      "postal": "35150"
+    },
+    {
+      "city": "Amanty",
+      "postal": "55130"
+    },
+    {
+      "city": "Amanvillers",
+      "postal": "57865"
+    },
+    {
+      "city": "Amanzé",
+      "postal": "71800"
+    },
+    {
+      "city": "Amarens",
+      "postal": "81170"
+    },
+    {
+      "city": "Amathay-Vésigneux",
+      "postal": "25330"
+    },
+    {
+      "city": "Amayé-sur-Orne",
+      "postal": "14210"
+    },
+    {
+      "city": "Amayé-sur-Seulles",
+      "postal": "14310"
+    },
+    {
+      "city": "Amazy",
+      "postal": "58190"
+    },
+    {
+      "city": "Ambacourt",
+      "postal": "88500"
+    },
+    {
+      "city": "Ambarès-et-Lagrave",
+      "postal": "33440"
+    },
+    {
+      "city": "Ambax",
+      "postal": "31230"
+    },
+    {
+      "city": "Ambazac",
+      "postal": "87240"
+    },
+    {
+      "city": "Ambel",
+      "postal": "38970"
+    },
+    {
+      "city": "Ambenay",
+      "postal": "27250"
+    },
+    {
+      "city": "Ambernac",
+      "postal": "16490"
+    },
+    {
+      "city": "Amberre",
+      "postal": "86110"
+    },
+    {
+      "city": "Ambert",
+      "postal": "63600"
+    },
+    {
+      "city": "Ambeyrac",
+      "postal": "12260"
+    },
+    {
+      "city": "Ambialet",
+      "postal": "81430"
+    },
+    {
+      "city": "Ambiegna",
+      "postal": "20151"
+    },
+    {
+      "city": "Ambierle",
+      "postal": "42820"
+    },
+    {
+      "city": "Ambillou",
+      "postal": "37340"
+    },
+    {
+      "city": "Ambillou-Château",
+      "postal": "49700"
+    },
+    {
+      "city": "Ambilly",
+      "postal": "74100"
+    },
+    {
+      "city": "Ambiévillers",
+      "postal": "70210"
+    },
+    {
+      "city": "Amblainville",
+      "postal": "60110"
+    },
+    {
+      "city": "Amblans-et-Velotte",
+      "postal": "70200"
+    },
+    {
+      "city": "Ambleny",
+      "postal": "02290"
+    },
+    {
+      "city": "Ambleteuse",
+      "postal": "62164"
+    },
+    {
+      "city": "Ambleville",
+      "postal": "16300"
+    },
+    {
+      "city": "Amblie",
+      "postal": "14480"
+    },
+    {
+      "city": "Amblimont",
+      "postal": "08210"
+    },
+    {
+      "city": "Ambloy",
+      "postal": "41310"
+    },
+    {
+      "city": "Ambly-Fleury",
+      "postal": "08130"
+    },
+    {
+      "city": "Ambly-sur-Meuse",
+      "postal": "55300"
+    },
+    {
+      "city": "Ambléon",
+      "postal": "01300"
+    },
+    {
+      "city": "Amboise",
+      "postal": "37400"
+    },
+    {
+      "city": "Ambon",
+      "postal": "56190"
+    },
+    {
+      "city": "Ambonil",
+      "postal": "26800"
+    },
+    {
+      "city": "Ambonnay",
+      "postal": "51150"
+    },
+    {
+      "city": "Ambonville",
+      "postal": "52110"
+    },
+    {
+      "city": "Ambrault",
+      "postal": "36120"
+    },
+    {
+      "city": "Ambres",
+      "postal": "81500"
+    },
+    {
+      "city": "Ambricourt",
+      "postal": "62310"
+    },
+    {
+      "city": "Ambrief",
+      "postal": "02200"
+    },
+    {
+      "city": "Ambrines",
+      "postal": "62127"
+    },
+    {
+      "city": "Ambrières",
+      "postal": "51290"
+    },
+    {
+      "city": "Ambrières-les-Vallées",
+      "postal": "53300"
+    },
+    {
+      "city": "Ambronay",
+      "postal": "01500"
+    },
+    {
+      "city": "Ambrugeat",
+      "postal": "19250"
+    },
+    {
+      "city": "Ambrumesnil",
+      "postal": "76550"
+    },
+    {
+      "city": "Ambrus",
+      "postal": "47160"
+    },
+    {
+      "city": "Ambutrix",
+      "postal": "01500"
+    },
+    {
+      "city": "Ambès",
+      "postal": "33810"
+    },
+    {
+      "city": "Ambérac",
+      "postal": "16140"
+    },
+    {
+      "city": "Ambérieu-en-Bugey",
+      "postal": "01500"
+    },
+    {
+      "city": "Ambérieux",
+      "postal": "69480"
+    },
+    {
+      "city": "Ambérieux-en-Dombes",
+      "postal": "01330"
+    },
+    {
+      "city": "Amel-sur-l'Étang",
+      "postal": "55230"
+    },
+    {
+      "city": "Amelécourt",
+      "postal": "57170"
+    },
+    {
+      "city": "Amendeuix",
+      "postal": "64120"
+    },
+    {
+      "city": "Amenoncourt",
+      "postal": "54450"
+    },
+    {
+      "city": "Amenucourt",
+      "postal": "95510"
+    },
+    {
+      "city": "Ames",
+      "postal": "62190"
+    },
+    {
+      "city": "Amettes",
+      "postal": "62260"
+    },
+    {
+      "city": "Ameugny",
+      "postal": "71460"
+    },
+    {
+      "city": "Ameuvelle",
+      "postal": "88410"
+    },
+    {
+      "city": "Amfreville",
+      "postal": "14860"
+    },
+    {
+      "city": "Amfreville-Saint-Amand",
+      "postal": "27370"
+    },
+    {
+      "city": "Amfreville-la-Campagne",
+      "postal": "27370"
+    },
+    {
+      "city": "Amfreville-la-Mi-Voie",
+      "postal": "76920"
+    },
+    {
+      "city": "Amfreville-les-Champs",
+      "postal": "27380"
+    },
+    {
+      "city": "Amfreville-sous-les-Monts",
+      "postal": "27380"
+    }
+  ],
+  "streets": [
+    "Rue de Rivoli",
+    "Av. des Champs-Élysées",
+    "Rue Saint-Denis",
+    "Bd. Voltaire",
+    "Rue Oberkampf",
+    "Rue de Vaugirard"
+  ],
+  "phonePrefix": "33",
+  "phoneDigits": 9,
+  "nationalPrefix": "6",
+  "schemaVersion": 1,
+  "datasetId": "blego-fr-female",
+  "datasetVersion": "2026-11-12.2",
+  "nameGender": "female",
+  "preparedAt": "2026-11-12",
+  "normalizationVersion": "NFKC-name-v1",
+  "provenance": {
+    "names": {
+      "package": "@faker-js/faker",
+      "version": "10.6.0",
+      "locale": "fr",
+      "license": "MIT",
+      "source": "https://github.com/faker-js/faker/tree/v10.6.0/src/locales",
+      "firstNames": "person.first_name.female only",
+      "surnames": "person.last_name.generic",
+      "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
+    },
+    "geography": {
+      "source": "https://download.geonames.org/export/zip/FR.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "33e09c469b6f64bed5da83e21f3c9b670f85caeb8123b512a92407652fb81730",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
+      "verifiedPostalLinks": 0,
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    }
+  },
+  "checksum": "46b3ea9b844937df8ebabb9f1e728057b064dfe345d9ac3c49c7087f78a8f07d"
+}

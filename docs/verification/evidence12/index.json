@@ -1,0 +1,32 @@
+{
+  "applicationCodeSha": "9f5ced97b79970f6204b9cdda26ab28ee24c6168",
+  "os": "Debian GNU/Linux 13.6, kernel 6.18.57, x86_64",
+  "node": "24.22.1",
+  "npm": "11.9.0",
+  "electron": "45.3.1",
+  "electronBuilder": "26.18.0",
+  "sharp": "0.35.5",
+  "exiftool": "13.63",
+  "embeddedPerl": "5.40.1",
+  "sourceTests": {
+    "unit": 42,
+    "integration": 71,
+    "gui": 3
+  },
+  "installedGuiTests": 3,
+  "packagedFilesMatchingCheckout": 112,
+  "artifacts": [
+    {
+      "path": "/workspace/BLEGO/release/BLEGO-1.2.0-x64-linux.tar.gz",
+      "bytes": 162690854,
+      "sha256": "d02c7fbd59de47aa2839e5fc5bf0542a468394fb4a195c5adcc8a4013e3eda6e"
+    },
+    {
+      "path": "/workspace/BLEGO/release/linux-unpacked/resources/app.asar",
+      "bytes": 3681072,
+      "sha256": "b404ab636a9a9d17037d24b933964014bd4da6a8e95140e4e43b6a31387e4684"
+    }
+  ],
+  "publication": false,
+  "merge": false
+}

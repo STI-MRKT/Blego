@@ -1,0 +1,9 @@
+# D4 — local metadata reader and plans (2026-11-12)
+
+Extended the existing Photos screen using existing visual classes. File chooser returns opaque tokens; paths stay in main. Added bounded JPEG/PNG/WebP structure inspection, ExifTool read, decoded-image hash, editable-field model, mixed values, Keep/Set/Remove, date/offset and GPS validation, before/after plans, local preset import/storage and personal-metadata preset. Original files are read only in this stage. Plan invalidates when form input changes; draft values survive preview rendering.
+
+Actual Linux x64 engine: ExifTool 13.63, embedded Perl v5.40.1, Sharp 0.35.5/libvips 8.18.7. Config-file execution disabled and tested with a sentinel. Argument arrays, no shell; 60 s and 8 MiB engine-output limits. 100 files, 50 MiB each, 512 MiB total, 40 megapixels, at most two read jobs. Original hash is checked after reads. Runtime/license/platform details: resources/metadata/README.md.
+
+Profile checks: real synthetic JPEG/PNG/WebP with Unicode filenames and title/GPS; source hashes unchanged; invalid tokens, disguised formats, animation, signed PNG marker, unsafe operations and dates rejected. `node --test tests/unit/metadata-policy.test.cjs tests/integration/metadata-read.test.cjs`: 3 passed. GUI exercised chooser, real read, edited title, preview, draft retention and stale-plan invalidation. Full checks: npm run verify and BLEGO_HEADLESS=1 npm run test:ui — 33 unit, 45 integration and 1 expanded GUI test passed. No metadata write, macOS/Windows execution, native signing or installed-platform result is claimed by D4.
+
+Logs: /tmp/blego-d4-green.log, /tmp/blego-d4-verify-final.log, /tmp/blego-d4-ui-final.log. Dependencies' Windows platform mismatch was corrected by using platform-optional packages, without forcing incompatible execution.

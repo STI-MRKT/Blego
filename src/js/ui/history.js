@@ -1,45 +1,11 @@
 import { state } from '../state.js';
-import { t } from '../i18n.js';
-import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
-import { rel } from '../utils/time.js';
-
-export function historyFiltered() {
-  const query = state.historyQuery.trim().toLowerCase();
-  if (!query) return state.history;
-  return state.history.filter((entry) => entry.name.toLowerCase().includes(query)
-    || entry.rows.some((row) => String(row.owner || '').toLowerCase().includes(query)
-      || String(row.project || '').toLowerCase().includes(query)));
-}
-
-export function historyRowsHTML() {
-  const list = historyFiltered();
-  if (!list.length) {
-    return `<div class="empty-mini">${state.historyQuery ? t('Ничего не найдено по запросу', 'Nothing matches this search') : t('История пока пуста. Загрузите первый файл.', 'History is empty. Upload your first file.')}</div>`;
-  }
-  return list.map((entry) => `<div class="hrow" data-action="open-entry" data-id="${entry.id}">
-    <div class="fi">${I.file}</div>
-    <div style="min-width:0">
-      <div class="nm">${esc(entry.name)}</div>
-      <div class="mt"><span>${entry.rows.length} ${t('записей', 'records')}</span><span>·</span><span>${entry.kind}</span><span>·</span><span>${esc(entry.rows[0]?.owner || '—')}</span></div>
-    </div>
-    <div>${entry.status === 'partial' ? `<span class="pill warn">${t('Частично', 'Partial')}</span>` : `<span class="pill ok">${t('Разобран', 'Parsed')}</span>`}</div>
-    <div class="time">${rel(entry.date)}</div>
-    <button class="icon-btn del" data-action="ask-delete" data-id="${entry.id}" aria-label="${t('Удалить', 'Delete')}">${I.trash}</button>
-  </div>`).join('');
-}
-
 export function historyHTML() {
-  return `<div class="page">
-    <div class="page-head">
-      <div><div class="eyebrow">${t('История', 'History')}</div><h1>${t('История импортов', 'Import history')}</h1>
-        <p class="sub">${t('Всё, что загружалось в этой сессии: имя файла, дата, количество записей и результат разбора.', 'Everything uploaded in this session: file name, date, record count and parse result.')}</p></div>
-      <div class="head-actions"><button class="btn" data-action="set-view" data-view="import">${I.upload}${t('Загрузить файл', 'Upload file')}</button></div>
-    </div>
-    <div class="history-head">
-      <div class="search">${I.search}<input class="input" id="history-search" data-input="history-search" placeholder="${t('Поиск по файлам, владельцам, проектам', 'Search files, owners, projects')}" value="${esc(state.historyQuery)}"></div>
-      <span class="faint" style="font-size:11px" id="history-count">${historyFiltered().length} ${t('из', 'of')} ${state.history.length}</span>
-    </div>
-    <div class="hlist" id="history-list">${historyRowsHTML()}</div>
-  </div>`;
+  const view = state.archiveView;
+  if (view) {
+    const e = view.entry;
+    return `<div class="page"><div class="page-head"><div><h1>${esc(e.originalName)}</h1><p class="sub">${esc(e.processedAt)} · ${esc(e.status)}</p></div><button class="btn" data-action="archive-back">Back</button></div><div class="head-actions"><button class="btn" data-action="copy-model" data-source="archive-open" data-field="resultText" data-personal="true">Copy result</button><button class="btn" data-action="archive-export" data-id="${e.archiveId}" data-kind="txt">Export TXT</button><button class="btn" data-action="archive-export" data-id="${e.archiveId}">Export ZIP</button><button class="btn" data-action="archive-folder" data-id="${e.archiveId}">Open folder</button><button class="btn" data-action="archive-delete" data-id="${e.archiveId}">Delete…</button></div><pre class="card pad" style="white-space:pre-wrap">${esc(view.resultText)}</pre><details class="card pad"><summary>Unresolved records and diagnostics</summary><pre style="white-space:pre-wrap">${esc(view.unresolvedText)}\n${esc(view.diagnostics)}</pre></details></div>`;
+  }
+  const q = state.archiveQuery || {};
+  return `<div class="page"><div class="page-head"><div><div class="eyebrow">Local ZIP storage</div><h1>Archive</h1><p class="sub">Only confirmed classification results appear here. Classification rules are pending.</p></div></div><form class="card controls" id="archive-filter"><input class="input" name="search" placeholder="Source name" value="${esc(q.search || '')}"><input class="input" name="from" type="date" value="${esc(q.from || '')}"><input class="input" name="to" type="date" value="${esc(q.to || '')}"><select class="input" name="status"><option value="">All states</option><option ${q.status === 'completed' ? 'selected' : ''}>completed</option><option ${q.status === 'partial_confirmed' ? 'selected' : ''}>partial_confirmed</option></select><select class="input" name="order"><option value="newest">Newest</option><option value="oldest" ${q.order === 'oldest' ? 'selected' : ''}>Oldest</option></select><button class="btn">Filter</button></form><div class="card pad">${state.archives.total} archives${state.archives.recoveryReports?.some((r) => r.errors.length) ? '<p class="banner warn">Some archives need recovery. Existing files have been preserved; check the archive folder and permissions.</p>' : ''}</div>${state.archives.items.map((e) => `<div class="card pad"><button class="btn" data-action="archive-open" data-id="${e.archiveId}">${esc(e.originalName)}</button><p class="sub">${esc(e.processedAt)} · ${esc(e.status)} · ${e.counts.total} records<br>Last opened: ${esc(e.lastOpenedAt || 'Unknown')}<br>Source: ${e.sizes.source} B · Result: ${e.sizes.result} B · ZIP: ${e.sizes.compressed} B · difference from result: ${e.sizes.result - e.sizes.compressed} B</p></div>`).join('')}<div class="head-actions"><button class="btn" data-action="archive-page" data-offset="${Math.max(0, (state.archives.offset || 0) - 50)}" ${!state.archives.offset ? 'disabled' : ''}>Previous</button><button class="btn" data-action="archive-page" data-offset="${(state.archives.offset || 0) + 50}" ${(state.archives.offset || 0) + 50 >= state.archives.total ? 'disabled' : ''}>Next</button></div></div>`;
 }

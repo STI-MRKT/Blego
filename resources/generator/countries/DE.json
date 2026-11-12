@@ -1,0 +1,4313 @@
+{
+  "version": "3",
+  "code": "DE",
+  "language": "de",
+  "first": [
+    "Aaliyah",
+    "Abby",
+    "Abigail",
+    "Ada",
+    "Adelina",
+    "Adriana",
+    "Aileen",
+    "Aimee",
+    "Alana",
+    "Alea",
+    "Alena",
+    "Alessa",
+    "Alessia",
+    "Alexa",
+    "Alexandra",
+    "Alexia",
+    "Alexis",
+    "Aleyna",
+    "Alia",
+    "Alica",
+    "Alice",
+    "Alicia",
+    "Alina",
+    "Alisa",
+    "Alisha",
+    "Alissa",
+    "Aliya",
+    "Aliyah",
+    "Allegra",
+    "Alma",
+    "Alyssa",
+    "Amalia",
+    "Amanda",
+    "Amelia",
+    "Amelie",
+    "Amina",
+    "Amira",
+    "Amy",
+    "Ana",
+    "Anabel",
+    "Anastasia",
+    "Andrea",
+    "Angela",
+    "Angelina",
+    "Angelique",
+    "Anja",
+    "Ann",
+    "Anna",
+    "Annabel",
+    "Annabell",
+    "Annabelle",
+    "Annalena",
+    "Anne",
+    "Anneke",
+    "Annelie",
+    "Annemarie",
+    "Anni",
+    "Annie",
+    "Annika",
+    "Anny",
+    "Anouk",
+    "Antonia",
+    "Ariana",
+    "Ariane",
+    "Arwen",
+    "Ashley",
+    "Asya",
+    "Aurelia",
+    "Aurora",
+    "Ava",
+    "Ayleen",
+    "Aylin",
+    "Ayse",
+    "Azra",
+    "Betty",
+    "Bianca",
+    "Bianka",
+    "Caitlin",
+    "Cara",
+    "Carina",
+    "Carla",
+    "Carlotta",
+    "Carmen",
+    "Carolin",
+    "Carolina",
+    "Caroline",
+    "Cassandra",
+    "Catharina",
+    "Catrin",
+    "Cecile",
+    "Cecilia",
+    "Celia",
+    "Celina",
+    "Celine",
+    "Ceyda",
+    "Ceylin",
+    "Chantal",
+    "Charleen",
+    "Charlotta",
+    "Charlotte",
+    "Chayenne",
+    "Cheyenne",
+    "Chiara",
+    "Christin",
+    "Christina",
+    "Cindy",
+    "Claire",
+    "Clara",
+    "Clarissa",
+    "Colleen",
+    "Collien",
+    "Cora",
+    "Corinna",
+    "Cosima",
+    "Dana",
+    "Daniela",
+    "Daria",
+    "Darleen",
+    "Defne",
+    "Delia",
+    "Denise",
+    "Diana",
+    "Dilara",
+    "Dina",
+    "Dorothea",
+    "Eda",
+    "Eileen",
+    "Ela",
+    "Elaine",
+    "Elanur",
+    "Elea",
+    "Elena",
+    "Eleni",
+    "Eleonora",
+    "Eliana",
+    "Elif",
+    "Elina",
+    "Elisa",
+    "Elisabeth",
+    "Ella",
+    "Ellen",
+    "Elli",
+    "Elly",
+    "Elsa",
+    "Emelie",
+    "Emely",
+    "Emilia",
+    "Emilie",
+    "Emily",
+    "Emma",
+    "Emmely",
+    "Emmi",
+    "Emmy",
+    "Enie",
+    "Enna",
+    "Enya",
+    "Esma",
+    "Estelle",
+    "Esther",
+    "Eva",
+    "Evelin",
+    "Evelina",
+    "Eveline",
+    "Evelyn",
+    "Fabienne",
+    "Fatima",
+    "Fatma",
+    "Felicia",
+    "Felicitas",
+    "Felina",
+    "Femke",
+    "Fenja",
+    "Fine",
+    "Finia",
+    "Finja",
+    "Finnja",
+    "Fiona",
+    "Flora",
+    "Florentine",
+    "Francesca",
+    "Franka",
+    "Franziska",
+    "Frederike",
+    "Freya",
+    "Frida",
+    "Frieda",
+    "Friederike",
+    "Giada",
+    "Gina",
+    "Giulia",
+    "Giuliana",
+    "Greta",
+    "Hailey",
+    "Hana",
+    "Hanna",
+    "Hannah",
+    "Heidi",
+    "Helen",
+    "Helena",
+    "Helene",
+    "Helin",
+    "Henriette",
+    "Henrike",
+    "Hermine",
+    "Ida",
+    "Ilayda",
+    "Imke",
+    "Ina",
+    "Ines",
+    "Inga",
+    "Inka",
+    "Irem",
+    "Isa",
+    "Isabel",
+    "Isabell",
+    "Isabella",
+    "Isabelle",
+    "Ivonne",
+    "Jacqueline",
+    "Jamila",
+    "Jana",
+    "Jane",
+    "Janin",
+    "Janina",
+    "Janine",
+    "Janna",
+    "Jara",
+    "Jasmin",
+    "Jasmina",
+    "Jasmine",
+    "Jella",
+    "Jenna",
+    "Jennifer",
+    "Jenny",
+    "Jessica",
+    "Jessy",
+    "Jette",
+    "Jil",
+    "Jill",
+    "Joana",
+    "Joanna",
+    "Joelina",
+    "Joeline",
+    "Joelle",
+    "Johanna",
+    "Joleen",
+    "Jolie",
+    "Jolien",
+    "Jolin",
+    "Jolina",
+    "Joline",
+    "Jonna",
+    "Josefin",
+    "Josefine",
+    "Josephin",
+    "Josephine",
+    "Josie",
+    "Josy",
+    "Joy",
+    "Joyce",
+    "Judith",
+    "Judy",
+    "Jule",
+    "Julia",
+    "Juliana",
+    "Juliane",
+    "Julie",
+    "Julienne",
+    "Julika",
+    "Julina",
+    "Juna",
+    "Justine",
+    "Kaja",
+    "Karina",
+    "Karla",
+    "Karlotta",
+    "Karolina",
+    "Karoline",
+    "Kassandra",
+    "Katarina",
+    "Katharina",
+    "Kathrin",
+    "Katja",
+    "Katrin",
+    "Kaya",
+    "Kayra",
+    "Kiana",
+    "Kiara",
+    "Kimberley",
+    "Kimberly",
+    "Kira",
+    "Klara",
+    "Korinna",
+    "Kristin",
+    "Kyra",
+    "Laila",
+    "Lana",
+    "Lara",
+    "Larissa",
+    "Laura",
+    "Laureen",
+    "Lavinia",
+    "Lea",
+    "Leah",
+    "Leana",
+    "Leandra",
+    "Leann",
+    "Lee",
+    "Leila",
+    "Lena",
+    "Lene",
+    "Leni",
+    "Lenia",
+    "Lenja",
+    "Lenya",
+    "Leona",
+    "Leoni",
+    "Leonie",
+    "Leonora",
+    "Leticia",
+    "Letizia",
+    "Levke",
+    "Leyla",
+    "Lia",
+    "Liah",
+    "Liana",
+    "Lili",
+    "Lilia",
+    "Lilian",
+    "Liliana",
+    "Lilith",
+    "Lilli",
+    "Lillian",
+    "Lilly",
+    "Lily",
+    "Lina",
+    "Linda",
+    "Lindsay",
+    "Line",
+    "Linn",
+    "Linnea",
+    "Lisa",
+    "Lisann",
+    "Lisanne",
+    "Liv",
+    "Livia",
+    "Liz",
+    "Lola",
+    "Loreen",
+    "Lorena",
+    "Lotta",
+    "Lotte",
+    "Louisa",
+    "Louise",
+    "Luana",
+    "Lucia",
+    "Lucie",
+    "Lucienne",
+    "Lucy",
+    "Luisa",
+    "Luise",
+    "Luna",
+    "Luzie",
+    "Lya",
+    "Lydia",
+    "Lyn",
+    "Lynn",
+    "Madeleine",
+    "Madita",
+    "Madleen",
+    "Madlen",
+    "Magdalena",
+    "Maike",
+    "Mailin",
+    "Maira",
+    "Maja",
+    "Malena",
+    "Malia",
+    "Malin",
+    "Malina",
+    "Mandy",
+    "Mara",
+    "Marah",
+    "Mareike",
+    "Maren",
+    "Maria",
+    "Mariam",
+    "Marie",
+    "Marieke",
+    "Mariella",
+    "Marika",
+    "Marina",
+    "Marisa",
+    "Marissa",
+    "Marit",
+    "Marla",
+    "Marleen",
+    "Marlen",
+    "Marlena",
+    "Marlene",
+    "Marta",
+    "Martha",
+    "Mary",
+    "Maryam",
+    "Mathilda",
+    "Mathilde",
+    "Matilda",
+    "Maxi",
+    "Maxima",
+    "Maxine",
+    "Maya",
+    "Mayra",
+    "Medina",
+    "Medine",
+    "Meike",
+    "Melanie",
+    "Melek",
+    "Melike",
+    "Melina",
+    "Melinda",
+    "Melis",
+    "Melisa",
+    "Melissa",
+    "Merle",
+    "Merve",
+    "Meryem",
+    "Mette",
+    "Mia",
+    "Michaela",
+    "Michelle",
+    "Mieke",
+    "Mila",
+    "Milana",
+    "Milena",
+    "Milla",
+    "Mina",
+    "Mira",
+    "Miray",
+    "Miriam",
+    "Mirja",
+    "Mona",
+    "Monique",
+    "Nadine",
+    "Nadja",
+    "Naemi",
+    "Nancy",
+    "Naomi",
+    "Natalia",
+    "Natalie",
+    "Nathalie",
+    "Neele",
+    "Nela",
+    "Nele",
+    "Nelli",
+    "Nelly",
+    "Nia",
+    "Nicole",
+    "Nika",
+    "Nike",
+    "Nila",
+    "Nina",
+    "Nisa",
+    "Noemi",
+    "Nora",
+    "Olivia",
+    "Patricia",
+    "Patrizia",
+    "Paula",
+    "Paulina",
+    "Pauline",
+    "Penelope",
+    "Philine",
+    "Phoebe",
+    "Pia",
+    "Rahel",
+    "Rania",
+    "Rebecca",
+    "Rebekka",
+    "Riana",
+    "Rieke",
+    "Rike",
+    "Romina",
+    "Romy",
+    "Ronja",
+    "Rosa",
+    "Rosalie",
+    "Ruby",
+    "Sabrina",
+    "Sahra",
+    "Sally",
+    "Salome",
+    "Samantha",
+    "Samia",
+    "Samira",
+    "Sandra",
+    "Sandy",
+    "Sanja",
+    "Saphira",
+    "Sara",
+    "Sarah",
+    "Saskia",
+    "Selin",
+    "Selina",
+    "Selma",
+    "Sena",
+    "Sidney",
+    "Sienna",
+    "Silja",
+    "Sina",
+    "Sinja",
+    "Smilla",
+    "Sofia",
+    "Sofie",
+    "Sonja",
+    "Sophia",
+    "Sophie",
+    "Soraya",
+    "Stefanie",
+    "Stella",
+    "Stephanie",
+    "Stina",
+    "Sude",
+    "Summer",
+    "Susanne",
+    "Svea",
+    "Svenja",
+    "Sydney",
+    "Tabea",
+    "Talea",
+    "Talia",
+    "Tamara",
+    "Tamia",
+    "Tamina",
+    "Tanja",
+    "Tara",
+    "Tarja",
+    "Teresa",
+    "Tessa",
+    "Thalea",
+    "Thalia",
+    "Thea",
+    "Theresa",
+    "Tia",
+    "Tina",
+    "Tomke",
+    "Tuana",
+    "Valentina",
+    "Valeria",
+    "Valerie",
+    "Vanessa",
+    "Vera",
+    "Veronika",
+    "Victoria",
+    "Viktoria",
+    "Viola",
+    "Vivian",
+    "Vivien",
+    "Vivienne",
+    "Wibke",
+    "Wiebke",
+    "Xenia",
+    "Yara",
+    "Yaren",
+    "Yasmin",
+    "Ylvi",
+    "Ylvie",
+    "Yvonne",
+    "Zara",
+    "Zehra",
+    "Zeynep",
+    "Zoe",
+    "Zoey",
+    "Zoé"
+  ],
+  "last": [
+    "Abel",
+    "Abicht",
+    "Abraham",
+    "Abramovic",
+    "Abt",
+    "Achilles",
+    "Achkinadze",
+    "Ackermann",
+    "Adam",
+    "Adams",
+    "Ade",
+    "Agostini",
+    "Ahlke",
+    "Ahrenberg",
+    "Ahrens",
+    "Aigner",
+    "Albert",
+    "Albrecht",
+    "Alexa",
+    "Alexander",
+    "Alizadeh",
+    "Allgeyer",
+    "Amann",
+    "Amberg",
+    "Anding",
+    "Anggreny",
+    "Apitz",
+    "Arendt",
+    "Arens",
+    "Arndt",
+    "Aryee",
+    "Aschenbroich",
+    "Assmus",
+    "Astafei",
+    "Auer",
+    "Axmann",
+    "Baarck",
+    "Bachmann",
+    "Badane",
+    "Bader",
+    "Baganz",
+    "Bahl",
+    "Bak",
+    "Balcer",
+    "Balck",
+    "Balkow",
+    "Balnuweit",
+    "Balzer",
+    "Banse",
+    "Barr",
+    "Bartels",
+    "Barth",
+    "Barylla",
+    "Baseda",
+    "Battke",
+    "Bauer",
+    "Bauermeister",
+    "Baumann",
+    "Baumeister",
+    "Bauschinger",
+    "Bauschke",
+    "Bayer",
+    "Beavogui",
+    "Beck",
+    "Beckel",
+    "Becker",
+    "Beckmann",
+    "Bedewitz",
+    "Beele",
+    "Beer",
+    "Beggerow",
+    "Beh",
+    "Behr",
+    "Behrenbruch",
+    "Belz",
+    "Bender",
+    "Benecke",
+    "Benner",
+    "Benninger",
+    "Benzing",
+    "Berends",
+    "Berger",
+    "Berner",
+    "Berning",
+    "Bertenbreiter",
+    "Best",
+    "Bethke",
+    "Betz",
+    "Beushausen",
+    "Beutelspacher",
+    "Beyer",
+    "Biba",
+    "Bichler",
+    "Bickel",
+    "Biedermann",
+    "Bieler",
+    "Bielert",
+    "Bienasch",
+    "Bienias",
+    "Biesenbach",
+    "Bigdeli",
+    "Birkemeyer",
+    "Bittner",
+    "Blank",
+    "Blaschek",
+    "Blassneck",
+    "Bloch",
+    "Blochwitz",
+    "Blockhaus",
+    "Blum",
+    "Blume",
+    "Bock",
+    "Bode",
+    "Bogdashin",
+    "Bogenrieder",
+    "Bohge",
+    "Bolm",
+    "Borgschulze",
+    "Bork",
+    "Bormann",
+    "Bornscheuer",
+    "Borrmann",
+    "Borsch",
+    "Boruschewski",
+    "Bos",
+    "Bosler",
+    "Bourrouag",
+    "Bouschen",
+    "Boxhammer",
+    "Boyde",
+    "Bozsik",
+    "Brand",
+    "Brandenburg",
+    "Brandis",
+    "Brandt",
+    "Brauer",
+    "Braun",
+    "Brehmer",
+    "Breitenstein",
+    "Bremer",
+    "Bremser",
+    "Brenner",
+    "Brettschneider",
+    "Breu",
+    "Breuer",
+    "Briesenick",
+    "Bringmann",
+    "Brinkmann",
+    "Brix",
+    "Broening",
+    "Brosch",
+    "Bruckmann",
+    "Bruder",
+    "Bruhns",
+    "Brunner",
+    "Bruns",
+    "Bräutigam",
+    "Brömme",
+    "Brüggmann",
+    "Buchholz",
+    "Buchrucker",
+    "Buder",
+    "Bultmann",
+    "Bunjes",
+    "Burger",
+    "Burghagen",
+    "Burkhard",
+    "Burkhardt",
+    "Burmeister",
+    "Busch",
+    "Buschbaum",
+    "Busemann",
+    "Buss",
+    "Busse",
+    "Bussmann",
+    "Byrd",
+    "Bäcker",
+    "Böhm",
+    "Bönisch",
+    "Börgeling",
+    "Börner",
+    "Böttner",
+    "Büchele",
+    "Bühler",
+    "Büker",
+    "Büngener",
+    "Bürger",
+    "Bürklein",
+    "Büscher",
+    "Büttner",
+    "Camara",
+    "Carlowitz",
+    "Carlsohn",
+    "Caspari",
+    "Caspers",
+    "Chapron",
+    "Christ",
+    "Cierpinski",
+    "Clarius",
+    "Cleem",
+    "Cleve",
+    "Co",
+    "Conrad",
+    "Cordes",
+    "Cornelsen",
+    "Cors",
+    "Cotthardt",
+    "Crews",
+    "Cronjäger",
+    "Crosskofp",
+    "Da",
+    "Dahm",
+    "Dahmen",
+    "Daimer",
+    "Damaske",
+    "Danneberg",
+    "Danner",
+    "Daub",
+    "Daubner",
+    "Daudrich",
+    "Dauer",
+    "Daum",
+    "Dauth",
+    "Dautzenberg",
+    "De",
+    "Decker",
+    "Deckert",
+    "Deerberg",
+    "Dehmel",
+    "Deja",
+    "Delonge",
+    "Demut",
+    "Dengler",
+    "Denner",
+    "Denzinger",
+    "Derr",
+    "Dertmann",
+    "Dethloff",
+    "Deuschle",
+    "Dieckmann",
+    "Diedrich",
+    "Diekmann",
+    "Dienel",
+    "Dies",
+    "Dietrich",
+    "Dietz",
+    "Dietzsch",
+    "Diezel",
+    "Dilla",
+    "Dingelstedt",
+    "Dippl",
+    "Dittmann",
+    "Dittmar",
+    "Dittmer",
+    "Dix",
+    "Dobbrunz",
+    "Dobler",
+    "Dohring",
+    "Dolch",
+    "Dold",
+    "Dombrowski",
+    "Donie",
+    "Doskoczynski",
+    "Dragu",
+    "Drechsler",
+    "Drees",
+    "Dreher",
+    "Dreier",
+    "Dreissigacker",
+    "Dressler",
+    "Drews",
+    "Duma",
+    "Dutkiewicz",
+    "Dyett",
+    "Dylus",
+    "Dächert",
+    "Döbel",
+    "Döring",
+    "Dörner",
+    "Dörre",
+    "Dück",
+    "Eberhard",
+    "Eberhardt",
+    "Ecker",
+    "Eckhardt",
+    "Edorh",
+    "Effler",
+    "Eggenmueller",
+    "Ehm",
+    "Ehmann",
+    "Ehrig",
+    "Eich",
+    "Eifert",
+    "Einert",
+    "Eisenlauer",
+    "Ekpo",
+    "Elbe",
+    "Eleyth",
+    "Elss",
+    "Emert",
+    "Emmelmann",
+    "Ender",
+    "Engel",
+    "Engelen",
+    "Engelmann",
+    "Eplinius",
+    "Erdmann",
+    "Erhardt",
+    "Erlei",
+    "Erm",
+    "Ernst",
+    "Ertl",
+    "Erwes",
+    "Esenwein",
+    "Esser",
+    "Evers",
+    "Everts",
+    "Ewald",
+    "Fahner",
+    "Faller",
+    "Falter",
+    "Farber",
+    "Fassbender",
+    "Faulhaber",
+    "Fehrig",
+    "Feld",
+    "Felke",
+    "Feller",
+    "Fenner",
+    "Fenske",
+    "Feuerbach",
+    "Fietz",
+    "Figl",
+    "Figura",
+    "Filipowski",
+    "Filsinger",
+    "Fincke",
+    "Fink",
+    "Finke",
+    "Fischer",
+    "Fitschen",
+    "Fleischer",
+    "Fleischmann",
+    "Floder",
+    "Florczak",
+    "Flore",
+    "Flottmann",
+    "Forkel",
+    "Forst",
+    "Frahmeke",
+    "Frank",
+    "Franke",
+    "Franta",
+    "Frantz",
+    "Franz",
+    "Franzis",
+    "Franzmann",
+    "Frauen",
+    "Frauendorf",
+    "Freigang",
+    "Freimann",
+    "Freimuth",
+    "Freisen",
+    "Frenzel",
+    "Frey",
+    "Fricke",
+    "Fried",
+    "Friedek",
+    "Friedenberg",
+    "Friedmann",
+    "Friedrich",
+    "Friess",
+    "Frisch",
+    "Frohn",
+    "Frosch",
+    "Fuchs",
+    "Fuhlbrügge",
+    "Fusenig",
+    "Fust",
+    "Förster",
+    "Gaba",
+    "Gabius",
+    "Gabler",
+    "Gadschiew",
+    "Gakstädter",
+    "Galander",
+    "Gamlin",
+    "Gamper",
+    "Gangnus",
+    "Ganzmann",
+    "Garatva",
+    "Gast",
+    "Gastel",
+    "Gatzka",
+    "Gauder",
+    "Gebhardt",
+    "Geese",
+    "Gehre",
+    "Gehrig",
+    "Gehring",
+    "Gehrke",
+    "Geiger",
+    "Geisler",
+    "Geissler",
+    "Gelling",
+    "Gens",
+    "Gerbennow",
+    "Gerdel",
+    "Gerhardt",
+    "Gerschler",
+    "Gerson",
+    "Gesell",
+    "Geyer",
+    "Ghirmai",
+    "Ghosh",
+    "Giehl",
+    "Gierisch",
+    "Giesa",
+    "Giesche",
+    "Gilde",
+    "Glatting",
+    "Goebel",
+    "Goedicke",
+    "Goldbeck",
+    "Goldfuss",
+    "Goldkamp",
+    "Goldkühle",
+    "Goller",
+    "Golling",
+    "Gollnow",
+    "Golomski",
+    "Gombert",
+    "Gotthardt",
+    "Gottschalk",
+    "Gotz",
+    "Goy",
+    "Gradzki",
+    "Graf",
+    "Grams",
+    "Grasse",
+    "Gratzky",
+    "Grau",
+    "Greb",
+    "Green",
+    "Greger",
+    "Greithanner",
+    "Greschner",
+    "Griem",
+    "Griese",
+    "Grimm",
+    "Gromisch",
+    "Gross",
+    "Grosser",
+    "Grossheim",
+    "Grosskopf",
+    "Grothaus",
+    "Grothkopp",
+    "Grotke",
+    "Grube",
+    "Gruber",
+    "Grundmann",
+    "Gruning",
+    "Gruszecki",
+    "Gröss",
+    "Grötzinger",
+    "Grün",
+    "Grüner",
+    "Gummelt",
+    "Gunkel",
+    "Gunther",
+    "Gutjahr",
+    "Gutowicz",
+    "Gutschank",
+    "Göbel",
+    "Göckeritz",
+    "Göhler",
+    "Görlich",
+    "Görmer",
+    "Götz",
+    "Götzelmann",
+    "Güldemeister",
+    "Günther",
+    "Günz",
+    "Gürbig",
+    "Haack",
+    "Haaf",
+    "Habel",
+    "Hache",
+    "Hackbusch",
+    "Hackelbusch",
+    "Hadfield",
+    "Hadwich",
+    "Haferkamp",
+    "Hahn",
+    "Hajek",
+    "Hallmann",
+    "Hamann",
+    "Hanenberger",
+    "Hannecker",
+    "Hanniske",
+    "Hansen",
+    "Hardy",
+    "Hargasser",
+    "Harms",
+    "Harnapp",
+    "Harter",
+    "Harting",
+    "Hartlieb",
+    "Hartmann",
+    "Hartwig",
+    "Hartz",
+    "Haschke",
+    "Hasler",
+    "Hasse",
+    "Hassfeld",
+    "Haug",
+    "Hauke",
+    "Haupt",
+    "Haverney",
+    "Heberstreit",
+    "Hechler",
+    "Hecht",
+    "Heck",
+    "Hedermann",
+    "Hehl",
+    "Heidelmann",
+    "Heidler",
+    "Heinemann",
+    "Heinig",
+    "Heinke",
+    "Heinrich",
+    "Heinze",
+    "Heiser",
+    "Heist",
+    "Hellmann",
+    "Helm",
+    "Helmke",
+    "Helpling",
+    "Hengmith",
+    "Henkel",
+    "Hennes",
+    "Henry",
+    "Hense",
+    "Hensel",
+    "Hentel",
+    "Hentschel",
+    "Hentschke",
+    "Hepperle",
+    "Herberger",
+    "Herbrand",
+    "Hering",
+    "Hermann",
+    "Hermecke",
+    "Herms",
+    "Herold",
+    "Herrmann",
+    "Herschmann",
+    "Hertel",
+    "Herweg",
+    "Herwig",
+    "Herzenberg",
+    "Hess",
+    "Hesse",
+    "Hessek",
+    "Hessler",
+    "Hetzler",
+    "Heuck",
+    "Heydemüller",
+    "Hiebl",
+    "Hildebrand",
+    "Hildenbrand",
+    "Hilgendorf",
+    "Hillard",
+    "Hiller",
+    "Hingsen",
+    "Hingst",
+    "Hinrichs",
+    "Hirsch",
+    "Hirschberg",
+    "Hirt",
+    "Hodea",
+    "Hoffman",
+    "Hoffmann",
+    "Hofmann",
+    "Hohenberger",
+    "Hohl",
+    "Hohn",
+    "Hohnheiser",
+    "Hold",
+    "Holdt",
+    "Holinski",
+    "Holl",
+    "Holtfreter",
+    "Holz",
+    "Holzdeppe",
+    "Holzner",
+    "Hommel",
+    "Honz",
+    "Hooss",
+    "Hoppe",
+    "Horak",
+    "Horn",
+    "Horna",
+    "Hornung",
+    "Hort",
+    "Howard",
+    "Huber",
+    "Huckestein",
+    "Hudak",
+    "Huebel",
+    "Hugo",
+    "Huhn",
+    "Hujo",
+    "Huke",
+    "Huls",
+    "Humbert",
+    "Huneke",
+    "Huth",
+    "Häber",
+    "Häfner",
+    "Höcke",
+    "Höft",
+    "Höhne",
+    "Hönig",
+    "Hördt",
+    "Hübenbecker",
+    "Hübl",
+    "Hübner",
+    "Hügel",
+    "Hüttcher",
+    "Hütter",
+    "Ibe",
+    "Ihly",
+    "Illing",
+    "Isak",
+    "Isekenmeier",
+    "Itt",
+    "Jacob",
+    "Jacobs",
+    "Jagusch",
+    "Jahn",
+    "Jahnke",
+    "Jakobs",
+    "Jakubczyk",
+    "Jambor",
+    "Jamrozy",
+    "Jander",
+    "Janich",
+    "Janke",
+    "Jansen",
+    "Jarets",
+    "Jaros",
+    "Jasinski",
+    "Jasper",
+    "Jegorov",
+    "Jellinghaus",
+    "Jeorga",
+    "Jerschabek",
+    "Jess",
+    "John",
+    "Jonas",
+    "Jossa",
+    "Jucken",
+    "Jung",
+    "Jungbluth",
+    "Jungton",
+    "Just",
+    "Jürgens",
+    "Kaczmarek",
+    "Kaesmacher",
+    "Kahl",
+    "Kahlert",
+    "Kahles",
+    "Kahlmeyer",
+    "Kaiser",
+    "Kalinowski",
+    "Kallabis",
+    "Kallensee",
+    "Kampf",
+    "Kampschulte",
+    "Kappe",
+    "Kappler",
+    "Karhoff",
+    "Karrass",
+    "Karst",
+    "Karsten",
+    "Karus",
+    "Kass",
+    "Kasten",
+    "Kastner",
+    "Katzinski",
+    "Kaufmann",
+    "Kaul",
+    "Kausemann",
+    "Kawohl",
+    "Kazmarek",
+    "Kedzierski",
+    "Keil",
+    "Keiner",
+    "Keller",
+    "Kelm",
+    "Kempe",
+    "Kemper",
+    "Kempter",
+    "Kerl",
+    "Kern",
+    "Kesselring",
+    "Kesselschläger",
+    "Kette",
+    "Kettenis",
+    "Keutel",
+    "Kick",
+    "Kiessling",
+    "Kinadeter",
+    "Kinzel",
+    "Kinzy",
+    "Kirch",
+    "Kirst",
+    "Kisabaka",
+    "Klaas",
+    "Klabuhn",
+    "Klapper",
+    "Klauder",
+    "Klaus",
+    "Kleeberg",
+    "Kleiber",
+    "Klein",
+    "Kleinert",
+    "Kleininger",
+    "Kleinmann",
+    "Kleinsteuber",
+    "Kleiss",
+    "Klemme",
+    "Klimczak",
+    "Klinger",
+    "Klink",
+    "Klopsch",
+    "Klose",
+    "Kloss",
+    "Kluge",
+    "Kluwe",
+    "Knabe",
+    "Kneifel",
+    "Knetsch",
+    "Knies",
+    "Knippel",
+    "Knobel",
+    "Knoblich",
+    "Knoll",
+    "Knorr",
+    "Knorscheidt",
+    "Knut",
+    "Kobs",
+    "Koch",
+    "Kochan",
+    "Kock",
+    "Koczulla",
+    "Koderisch",
+    "Koehl",
+    "Koehler",
+    "Koenig",
+    "Koester",
+    "Kofferschlager",
+    "Koha",
+    "Kohle",
+    "Kohlmann",
+    "Kohnle",
+    "Kohrt",
+    "Koj",
+    "Kolb",
+    "Koleiski",
+    "Kolokas",
+    "Komoll",
+    "Konieczny",
+    "Konig",
+    "Konow",
+    "Konya",
+    "Koob",
+    "Kopf",
+    "Kosenkow",
+    "Koster",
+    "Koszewski",
+    "Koubaa",
+    "Kovacs",
+    "Kowalick",
+    "Kowalinski",
+    "Kozakiewicz",
+    "Krabbe",
+    "Kraft",
+    "Kral",
+    "Kramer",
+    "Krauel",
+    "Kraus",
+    "Krause",
+    "Krauspe",
+    "Kreb",
+    "Krebs",
+    "Kreissig",
+    "Kresse",
+    "Kreutz",
+    "Krieger",
+    "Krippner",
+    "Krodinger",
+    "Krohn",
+    "Krol",
+    "Kron",
+    "Krueger",
+    "Krug",
+    "Kruger",
+    "Krull",
+    "Kruschinski",
+    "Krämer",
+    "Kröckert",
+    "Kröger",
+    "Krüger",
+    "Kubera",
+    "Kufahl",
+    "Kuhlee",
+    "Kuhnen",
+    "Kulimann",
+    "Kulma",
+    "Kumbernuss",
+    "Kummle",
+    "Kunz",
+    "Kupfer",
+    "Kupprion",
+    "Kuprion",
+    "Kurnicki",
+    "Kurrat",
+    "Kurschilgen",
+    "Kuschewitz",
+    "Kuschmann",
+    "Kuske",
+    "Kustermann",
+    "Kutscherauer",
+    "Kutzner",
+    "Kwadwo",
+    "Kähler",
+    "Käther",
+    "Köhler",
+    "Köhrbrück",
+    "Köhre",
+    "Kölotzei",
+    "König",
+    "Köpernick",
+    "Köseoglu",
+    "Kúhn",
+    "Kúhnert",
+    "Kühn",
+    "Kühnel",
+    "Kühnemund",
+    "Kühnert",
+    "Kühnke",
+    "Küsters",
+    "Küter",
+    "Laack",
+    "Lack",
+    "Ladewig",
+    "Lakomy",
+    "Lammert",
+    "Lamos",
+    "Landmann",
+    "Lang",
+    "Lange",
+    "Langfeld",
+    "Langhirt",
+    "Lanig",
+    "Lauckner",
+    "Lauinger",
+    "Laurén",
+    "Lausecker",
+    "Laux",
+    "Laws",
+    "Lax",
+    "Leberer",
+    "Lehmann",
+    "Lehner",
+    "Leibold",
+    "Leide",
+    "Leimbach",
+    "Leipold",
+    "Leist",
+    "Leiter",
+    "Leiteritz",
+    "Leitheim",
+    "Leiwesmeier",
+    "Lenfers",
+    "Lenk",
+    "Lenz",
+    "Lenzen",
+    "Leo",
+    "Lepthin",
+    "Lesch",
+    "Leschnik",
+    "Letzelter",
+    "Lewin",
+    "Lewke",
+    "Leyckes",
+    "Lg",
+    "Lichtenfeld",
+    "Lichtenhagen",
+    "Lichtl",
+    "Liebach",
+    "Liebe",
+    "Liebich",
+    "Liebold",
+    "Lieder",
+    "Lienshöft",
+    "Linden",
+    "Lindenberg",
+    "Lindenmayer",
+    "Lindner",
+    "Linke",
+    "Linnenbaum",
+    "Lippe",
+    "Lipske",
+    "Lipus",
+    "Lischka",
+    "Lobinger",
+    "Logsch",
+    "Lohmann",
+    "Lohre",
+    "Lohse",
+    "Lokar",
+    "Loogen",
+    "Lorenz",
+    "Losch",
+    "Loska",
+    "Lott",
+    "Loy",
+    "Lubina",
+    "Ludolf",
+    "Lufft",
+    "Lukoschek",
+    "Lutje",
+    "Lutz",
+    "Löser",
+    "Löwa",
+    "Lübke",
+    "Maak",
+    "Maczey",
+    "Madetzky",
+    "Madubuko",
+    "Mai",
+    "Maier",
+    "Maisch",
+    "Malek",
+    "Malkus",
+    "Mallmann",
+    "Malucha",
+    "Manns",
+    "Manz",
+    "Marahrens",
+    "Marchewski",
+    "Margis",
+    "Markowski",
+    "Marl",
+    "Marner",
+    "Marquart",
+    "Marschek",
+    "Martel",
+    "Marten",
+    "Martin",
+    "Marx",
+    "Marxen",
+    "Mathes",
+    "Mathies",
+    "Mathiszik",
+    "Matschke",
+    "Mattern",
+    "Matthes",
+    "Matula",
+    "Mau",
+    "Maurer",
+    "Mauroff",
+    "May",
+    "Maybach",
+    "Mayer",
+    "Mebold",
+    "Mehl",
+    "Mehlhorn",
+    "Mehlorn",
+    "Meier",
+    "Meisch",
+    "Meissner",
+    "Meloni",
+    "Melzer",
+    "Menga",
+    "Menne",
+    "Mensah",
+    "Mensing",
+    "Merkel",
+    "Merseburg",
+    "Mertens",
+    "Mesloh",
+    "Metzger",
+    "Metzner",
+    "Mewes",
+    "Meyer",
+    "Michallek",
+    "Michel",
+    "Mielke",
+    "Mikitenko",
+    "Milde",
+    "Minah",
+    "Mintzlaff",
+    "Mockenhaupt",
+    "Moede",
+    "Moedl",
+    "Moeller",
+    "Moguenara",
+    "Mohr",
+    "Mohrhard",
+    "Molitor",
+    "Moll",
+    "Moller",
+    "Molzan",
+    "Montag",
+    "Moormann",
+    "Mordhorst",
+    "Morgenstern",
+    "Morhelfer",
+    "Moritz",
+    "Moser",
+    "Motchebon",
+    "Motzenbbäcker",
+    "Mrugalla",
+    "Muckenthaler",
+    "Mues",
+    "Muller",
+    "Mulrain",
+    "Mächtig",
+    "Mäder",
+    "Möcks",
+    "Mögenburg",
+    "Möhsner",
+    "Möldner",
+    "Möllenbeck",
+    "Möller",
+    "Möllinger",
+    "Mörsch",
+    "Mühleis",
+    "Müller",
+    "Münch",
+    "Nabein",
+    "Nabow",
+    "Nagel",
+    "Nannen",
+    "Nastvogel",
+    "Nau",
+    "Naubert",
+    "Naumann",
+    "Ne",
+    "Neimke",
+    "Nerius",
+    "Neubauer",
+    "Neubert",
+    "Neuendorf",
+    "Neumair",
+    "Neumann",
+    "Neupert",
+    "Neurohr",
+    "Neuschwander",
+    "Newton",
+    "Ney",
+    "Nicolay",
+    "Niedermeier",
+    "Nieklauson",
+    "Niklaus",
+    "Nitzsche",
+    "Noack",
+    "Nodler",
+    "Nolte",
+    "Normann",
+    "Norris",
+    "Northoff",
+    "Nowak",
+    "Nussbeck",
+    "Nwachukwu",
+    "Nytra",
+    "Nöh",
+    "Oberem",
+    "Obergföll",
+    "Obermaier",
+    "Ochs",
+    "Oeser",
+    "Olbrich",
+    "Onnen",
+    "Ophey",
+    "Oppong",
+    "Orth",
+    "Orthmann",
+    "Oschkenat",
+    "Osei",
+    "Osenberg",
+    "Ostendarp",
+    "Ostwald",
+    "Otte",
+    "Otto",
+    "Paesler",
+    "Pajonk",
+    "Pallentin",
+    "Panzig",
+    "Paschke",
+    "Patzwahl",
+    "Paukner",
+    "Peselman",
+    "Peter",
+    "Peters",
+    "Petzold",
+    "Pfeiffer",
+    "Pfennig",
+    "Pfersich",
+    "Pfingsten",
+    "Pflieger",
+    "Pflügner",
+    "Philipp",
+    "Pichlmaier",
+    "Piesker",
+    "Pietsch",
+    "Pingpank",
+    "Pinnock",
+    "Pippig",
+    "Pitschugin",
+    "Plank",
+    "Plass",
+    "Platzer",
+    "Plauk",
+    "Plautz",
+    "Pletsch",
+    "Plotzitzka",
+    "Poehn",
+    "Poeschl",
+    "Pogorzelski",
+    "Pohl",
+    "Pohland",
+    "Pohle",
+    "Polifka",
+    "Polizzi",
+    "Pollmächer",
+    "Pomp",
+    "Ponitzsch",
+    "Porsche",
+    "Porth",
+    "Poschmann",
+    "Poser",
+    "Pottel",
+    "Prah",
+    "Prange",
+    "Prediger",
+    "Pressler",
+    "Preuk",
+    "Preuss",
+    "Prey",
+    "Priemer",
+    "Proske",
+    "Pusch",
+    "Pöche",
+    "Pöge",
+    "Raabe",
+    "Rabenstein",
+    "Rach",
+    "Radtke",
+    "Rahn",
+    "Ranftl",
+    "Rangen",
+    "Ranz",
+    "Rapp",
+    "Rath",
+    "Rau",
+    "Raubuch",
+    "Raukuc",
+    "Rautenkranz",
+    "Rehwagen",
+    "Reiber",
+    "Reichardt",
+    "Reichel",
+    "Reichling",
+    "Reif",
+    "Reifenrath",
+    "Reimann",
+    "Reinberg",
+    "Reinelt",
+    "Reinhardt",
+    "Reinke",
+    "Reitze",
+    "Renk",
+    "Rentz",
+    "Renz",
+    "Reppin",
+    "Restle",
+    "Restorff",
+    "Retzke",
+    "Reuber",
+    "Reumann",
+    "Reus",
+    "Reuss",
+    "Reusse",
+    "Rheder",
+    "Rhoden",
+    "Richards",
+    "Richter",
+    "Riedel",
+    "Riediger",
+    "Rieger",
+    "Riekmann",
+    "Riepl",
+    "Riermeier",
+    "Riester",
+    "Riethmüller",
+    "Rietmüller",
+    "Rietscher",
+    "Ringel",
+    "Ringer",
+    "Rink",
+    "Ripken",
+    "Ritosek",
+    "Ritschel",
+    "Ritter",
+    "Rittweg",
+    "Ritz",
+    "Roba",
+    "Rockmeier",
+    "Rodehau",
+    "Rodowski",
+    "Roecker",
+    "Roggatz",
+    "Rohländer",
+    "Rohrer",
+    "Rokossa",
+    "Roleder",
+    "Roloff",
+    "Roos",
+    "Rosbach",
+    "Roschinsky",
+    "Rose",
+    "Rosenauer",
+    "Rosenbauer",
+    "Rosenthal",
+    "Rosksch",
+    "Rossberg",
+    "Rossler",
+    "Roth",
+    "Rother",
+    "Ruch",
+    "Ruckdeschel",
+    "Rumpf",
+    "Rupprecht",
+    "Ruth",
+    "Ryjikh",
+    "Ryzih",
+    "Rädler",
+    "Räntsch",
+    "Rödiger",
+    "Röse",
+    "Röttger",
+    "Rücker",
+    "Rüdiger",
+    "Rüter",
+    "Sachse",
+    "Sack",
+    "Saflanis",
+    "Sagafe",
+    "Sagonas",
+    "Sahner",
+    "Saile",
+    "Sailer",
+    "Salow",
+    "Salzer",
+    "Salzmann",
+    "Sammert",
+    "Sander",
+    "Sarvari",
+    "Sattelmaier",
+    "Sauer",
+    "Sauerland",
+    "Saumweber",
+    "Savoia",
+    "Scc",
+    "Schacht",
+    "Schaefer",
+    "Schaffarzik",
+    "Schahbasian",
+    "Scharf",
+    "Schedler",
+    "Scheer",
+    "Schelk",
+    "Schellenbeck",
+    "Schembera",
+    "Schenk",
+    "Scherbarth",
+    "Scherer",
+    "Schersing",
+    "Scherz",
+    "Scheurer",
+    "Scheuring",
+    "Scheytt",
+    "Schielke",
+    "Schieskow",
+    "Schildhauer",
+    "Schilling",
+    "Schima",
+    "Schimmer",
+    "Schindzielorz",
+    "Schirmer",
+    "Schirrmeister",
+    "Schlachter",
+    "Schlangen",
+    "Schlawitz",
+    "Schlechtweg",
+    "Schley",
+    "Schlicht",
+    "Schlitzer",
+    "Schmalzle",
+    "Schmid",
+    "Schmidt",
+    "Schmidtchen",
+    "Schmitt",
+    "Schmitz",
+    "Schmuhl",
+    "Schneider",
+    "Schnelting",
+    "Schnieder",
+    "Schniedermeier",
+    "Schnürer",
+    "Schoberg",
+    "Scholz",
+    "Schonberg",
+    "Schondelmaier",
+    "Schorr",
+    "Schott",
+    "Schottmann",
+    "Schouren",
+    "Schrader",
+    "Schramm",
+    "Schreck",
+    "Schreiber",
+    "Schreiner",
+    "Schreiter",
+    "Schroder",
+    "Schröder",
+    "Schuermann",
+    "Schuff",
+    "Schuhaj",
+    "Schuldt",
+    "Schult",
+    "Schulte",
+    "Schultz",
+    "Schultze",
+    "Schulz",
+    "Schulze",
+    "Schumacher",
+    "Schumann",
+    "Schupp",
+    "Schuri",
+    "Schuster",
+    "Schwab",
+    "Schwalm",
+    "Schwanbeck",
+    "Schwandke",
+    "Schwanitz",
+    "Schwarthoff",
+    "Schwartz",
+    "Schwarz",
+    "Schwarzer",
+    "Schwarzkopf",
+    "Schwarzmeier",
+    "Schwatlo",
+    "Schweisfurth",
+    "Schwennen",
+    "Schwerdtner",
+    "Schwidde",
+    "Schwirkschlies",
+    "Schwuchow",
+    "Schäfer",
+    "Schäffel",
+    "Schäffer",
+    "Schäning",
+    "Schöckel",
+    "Schönball",
+    "Schönbeck",
+    "Schönberg",
+    "Schönebeck",
+    "Schönenberger",
+    "Schönfeld",
+    "Schönherr",
+    "Schönlebe",
+    "Schötz",
+    "Schüler",
+    "Schüppel",
+    "Schütz",
+    "Schütze",
+    "Seeger",
+    "Seelig",
+    "Sehls",
+    "Seibold",
+    "Seidel",
+    "Seiders",
+    "Seigel",
+    "Seiler",
+    "Seitz",
+    "Semisch",
+    "Senkel",
+    "Sewald",
+    "Siebel",
+    "Siebert",
+    "Siegling",
+    "Sielemann",
+    "Siemon",
+    "Siener",
+    "Sievers",
+    "Siewert",
+    "Sihler",
+    "Sillah",
+    "Simon",
+    "Sinnhuber",
+    "Sischka",
+    "Skibicki",
+    "Sladek",
+    "Slotta",
+    "Smieja",
+    "Soboll",
+    "Sokolowski",
+    "Soller",
+    "Sollner",
+    "Sommer",
+    "Somssich",
+    "Sonn",
+    "Sonnabend",
+    "Spahn",
+    "Spank",
+    "Spelmeyer",
+    "Spiegelburg",
+    "Spielvogel",
+    "Spinner",
+    "Spitzmüller",
+    "Splinter",
+    "Sporrer",
+    "Sprenger",
+    "Spöttel",
+    "Stahl",
+    "Stang",
+    "Stanger",
+    "Stauss",
+    "Steding",
+    "Steffen",
+    "Steffny",
+    "Steidl",
+    "Steigauf",
+    "Stein",
+    "Steinecke",
+    "Steinert",
+    "Steinkamp",
+    "Steinmetz",
+    "Stelkens",
+    "Stengel",
+    "Stengl",
+    "Stenzel",
+    "Stepanov",
+    "Stephan",
+    "Stern",
+    "Steuk",
+    "Stief",
+    "Stifel",
+    "Stoll",
+    "Stolle",
+    "Stolz",
+    "Storl",
+    "Storp",
+    "Stoutjesdijk",
+    "Stratmann",
+    "Straub",
+    "Strausa",
+    "Streck",
+    "Streese",
+    "Strege",
+    "Streit",
+    "Streller",
+    "Strieder",
+    "Striezel",
+    "Strogies",
+    "Strohschank",
+    "Strunz",
+    "Strutz",
+    "Stube",
+    "Stöckert",
+    "Stöppler",
+    "Stöwer",
+    "Stürmer",
+    "Suffa",
+    "Sujew",
+    "Sussmann",
+    "Suthe",
+    "Sutschet",
+    "Swillims",
+    "Szendrei",
+    "Sören",
+    "Sürth",
+    "Tafelmeier",
+    "Tang",
+    "Tasche",
+    "Taufratshofer",
+    "Tegethof",
+    "Teichmann",
+    "Tepper",
+    "Terheiden",
+    "Terlecki",
+    "Teufel",
+    "Theele",
+    "Thieke",
+    "Thimm",
+    "Thiomas",
+    "Thomas",
+    "Thriene",
+    "Thränhardt",
+    "Thust",
+    "Thyssen",
+    "Thöne",
+    "Tidow",
+    "Tiedtke",
+    "Tietze",
+    "Tilgner",
+    "Tillack",
+    "Timmermann",
+    "Tischler",
+    "Tischmann",
+    "Tittman",
+    "Tivontschik",
+    "Tonat",
+    "Tonn",
+    "Trampeli",
+    "Trauth",
+    "Trautmann",
+    "Travan",
+    "Treff",
+    "Tremmel",
+    "Tress",
+    "Tsamonikian",
+    "Tschiers",
+    "Tschirch",
+    "Tuch",
+    "Tucholke",
+    "Tudow",
+    "Tuschmo",
+    "Tächl",
+    "Többen",
+    "Töpfer",
+    "Uhlemann",
+    "Uhlig",
+    "Uhrig",
+    "Uibel",
+    "Uliczka",
+    "Ullmann",
+    "Ullrich",
+    "Umbach",
+    "Umlauft",
+    "Umminger",
+    "Unger",
+    "Unterpaintner",
+    "Urban",
+    "Urbaniak",
+    "Urbansky",
+    "Urhig",
+    "Vahlensieck",
+    "Van",
+    "Vangermain",
+    "Vater",
+    "Venghaus",
+    "Verniest",
+    "Verzi",
+    "Vey",
+    "Viellehner",
+    "Vieweg",
+    "Voelkel",
+    "Vogel",
+    "Vogelgsang",
+    "Vogt",
+    "Voigt",
+    "Vokuhl",
+    "Volk",
+    "Volker",
+    "Volkmann",
+    "Von",
+    "Vona",
+    "Vontein",
+    "Wachenbrunner",
+    "Wachtel",
+    "Wagner",
+    "Waibel",
+    "Wakan",
+    "Waldmann",
+    "Wallner",
+    "Wallstab",
+    "Walter",
+    "Walther",
+    "Walton",
+    "Walz",
+    "Wanner",
+    "Wartenberg",
+    "Waschbüsch",
+    "Wassilew",
+    "Wassiluk",
+    "Weber",
+    "Wehrsen",
+    "Weidlich",
+    "Weidner",
+    "Weigel",
+    "Weight",
+    "Weiler",
+    "Weimer",
+    "Weis",
+    "Weiss",
+    "Weller",
+    "Welsch",
+    "Welz",
+    "Welzel",
+    "Weniger",
+    "Wenk",
+    "Werle",
+    "Werner",
+    "Werrmann",
+    "Wessel",
+    "Wessinghage",
+    "Weyel",
+    "Wezel",
+    "Wichmann",
+    "Wickert",
+    "Wiebe",
+    "Wiechmann",
+    "Wiegelmann",
+    "Wierig",
+    "Wiese",
+    "Wieser",
+    "Wilhelm",
+    "Wilky",
+    "Will",
+    "Willwacher",
+    "Wilts",
+    "Wimmer",
+    "Winkelmann",
+    "Winkler",
+    "Winter",
+    "Wischek",
+    "Wischer",
+    "Wissing",
+    "Wittich",
+    "Wittl",
+    "Wolf",
+    "Wolfarth",
+    "Wolff",
+    "Wollenberg",
+    "Wollmann",
+    "Woytkowska",
+    "Wujak",
+    "Wurm",
+    "Wyludda",
+    "Wölpert",
+    "Wöschler",
+    "Wühn",
+    "Wünsche",
+    "Zach",
+    "Zaczkiewicz",
+    "Zahn",
+    "Zaituc",
+    "Zandt",
+    "Zanner",
+    "Zapletal",
+    "Zauber",
+    "Zeidler",
+    "Zekl",
+    "Zender",
+    "Zeuch",
+    "Zeyen",
+    "Zeyhle",
+    "Ziegler",
+    "Zimanyi",
+    "Zimmer",
+    "Zimmermann",
+    "Zinser",
+    "Zintl",
+    "Zipp",
+    "Zipse",
+    "Zschunke",
+    "Zuber",
+    "Zwiener",
+    "Zümsande",
+    "Östringer",
+    "Überacker"
+  ],
+  "places": [
+    {
+      "city": "-LABO- Landesamt für Bürger- und Ordnungsangelegenheiten",
+      "postal": "10958"
+    },
+    {
+      "city": "1&1 Versatel Deutschland GmbH Rechnungsprüfung",
+      "postal": "24945"
+    },
+    {
+      "city": "1. FC Kaiserslautern e.V.",
+      "postal": "67653"
+    },
+    {
+      "city": "1822 direkt Gesellschaft der Frankfurter Sparkasse mbH",
+      "postal": "60608"
+    },
+    {
+      "city": "2H GmbH & Co.KG",
+      "postal": "85747"
+    },
+    {
+      "city": "3 M Deutschland GmbH",
+      "postal": "41453"
+    },
+    {
+      "city": "3K Möbel GmbH",
+      "postal": "67545"
+    },
+    {
+      "city": "A. Jaekel Import-Export GmbH & Co. KG",
+      "postal": "28323"
+    },
+    {
+      "city": "A. Nattermann & Cie. GmbH",
+      "postal": "50820"
+    },
+    {
+      "city": "A. Raymond GmbH & Co. KG",
+      "postal": "79537"
+    },
+    {
+      "city": "A. W. Faber-Castell GmbH u. Co.",
+      "postal": "90546"
+    },
+    {
+      "city": "A.T.U Auto-Teile Unger Handels Gmbh & Co.KG Belegmanagement",
+      "postal": "31131"
+    },
+    {
+      "city": "ABB Business Services GmbH",
+      "postal": "68139"
+    },
+    {
+      "city": "ABB Reaktor GmbH",
+      "postal": "68140"
+    },
+    {
+      "city": "ABB Stotz Kontakt GmbH Standort Neumünster",
+      "postal": "24531"
+    },
+    {
+      "city": "ABK Allgemeine Beamten Bank AG",
+      "postal": "10898"
+    },
+    {
+      "city": "ABL SURSUM Bayerische Elektrozubehör GmbH & Co. KG",
+      "postal": "91205"
+    },
+    {
+      "city": "ABM Greiffenberger Antriebstechnik GmbH",
+      "postal": "95614"
+    },
+    {
+      "city": "ABN AMRO Bank (D) AG",
+      "postal": "10105"
+    },
+    {
+      "city": "ABP Induction Systems GmbH",
+      "postal": "44126"
+    },
+    {
+      "city": "ABUS Aug. Bremicker Söhne KG",
+      "postal": "58292"
+    },
+    {
+      "city": "ACCON-RVS-Accounting & Consulting GmbH",
+      "postal": "10361"
+    },
+    {
+      "city": "ACE Advanced Composite Engineering GmbH",
+      "postal": "88039"
+    },
+    {
+      "city": "ACE Auto Club Europa e.V.",
+      "postal": "70369"
+    },
+    {
+      "city": "ACO Guss GmbH",
+      "postal": "67653"
+    },
+    {
+      "city": "ADAC Autoversicherung AG",
+      "postal": "81363"
+    },
+    {
+      "city": "ADAC Autoversicherungs AG c/o Allianz Deutschland AG",
+      "postal": "53289"
+    },
+    {
+      "city": "ADAC Finanzservice",
+      "postal": "38089"
+    },
+    {
+      "city": "ADAC Hessen-Thüringen e.V.",
+      "postal": "60521"
+    },
+    {
+      "city": "ADAC Pfalz e.V.",
+      "postal": "67429"
+    },
+    {
+      "city": "ADAC Rechtsschutz Versicherung AG",
+      "postal": "81364"
+    },
+    {
+      "city": "ADAC Service GmbH Assistance Regulierung",
+      "postal": "81355"
+    },
+    {
+      "city": "ADAC Versicherung",
+      "postal": "81362"
+    },
+    {
+      "city": "ADAC Versicherung AG",
+      "postal": "81365"
+    },
+    {
+      "city": "ADAC Versicherung AG Assistance Regulierung",
+      "postal": "81356"
+    },
+    {
+      "city": "ADAC Zuhause Versicherung AG",
+      "postal": "81350"
+    },
+    {
+      "city": "ADAC e. V.",
+      "postal": "81360"
+    },
+    {
+      "city": "ADAC e.V. Schadenregulierung",
+      "postal": "81359"
+    },
+    {
+      "city": "ADE Schnellwaagen u. Aufschnittmaschinen Fabrik Walter R. Mayer (GmbH & Co.)",
+      "postal": "20347"
+    },
+    {
+      "city": "ADP Employer Services GmbH",
+      "postal": "70431"
+    },
+    {
+      "city": "AGA International S.A. Niederlassung für Deutschland",
+      "postal": "81536"
+    },
+    {
+      "city": "AGIAMONDO e.V.",
+      "postal": "50664"
+    },
+    {
+      "city": "AGRAVIS Raiffeisen AG",
+      "postal": "48136"
+    },
+    {
+      "city": "AIRBUS Operations GmbH",
+      "postal": "28183"
+    },
+    {
+      "city": "AK Heidberg",
+      "postal": "22413"
+    },
+    {
+      "city": "AK Ochsenzoll",
+      "postal": "22413"
+    },
+    {
+      "city": "AKAD Akademikergesellschaft für Erwachsenenfortbildung mbH",
+      "postal": "70466"
+    },
+    {
+      "city": "AKB Autobörse AG",
+      "postal": "50596"
+    },
+    {
+      "city": "AKS - Arbeitskreis Kultursponsoring",
+      "postal": "11053"
+    },
+    {
+      "city": "AKZO NOBEL Deco GmbH",
+      "postal": "31513"
+    },
+    {
+      "city": "ALD AutoLeasing D GmbH",
+      "postal": "65925"
+    },
+    {
+      "city": "ALDI GmbH & Co. KG",
+      "postal": "45697"
+    },
+    {
+      "city": "ALFONS HAAR Maschinenbau GmbH & Co.KG",
+      "postal": "22545"
+    },
+    {
+      "city": "ALK - Abello Arzneimittel GmbH",
+      "postal": "22758"
+    },
+    {
+      "city": "ALS-Verlag GmbH",
+      "postal": "63126"
+    },
+    {
+      "city": "ALSO Deutschland GmbH",
+      "postal": "59491"
+    },
+    {
+      "city": "ALSTOM Power Generation Aktiengesellschaft",
+      "postal": "68128"
+    },
+    {
+      "city": "AMAZON Logistik GmbH",
+      "postal": "36242"
+    },
+    {
+      "city": "AMB Generali Pensionskasse AG",
+      "postal": "50661"
+    },
+    {
+      "city": "AMB Generali Schadenmanagement GmbH",
+      "postal": "20076"
+    },
+    {
+      "city": "AMN Data Solutions GmbH",
+      "postal": "11516"
+    },
+    {
+      "city": "AMP Deutschland GmbH",
+      "postal": "63222"
+    },
+    {
+      "city": "ANKER Gebr. Schoeller GmbH + Co.KG",
+      "postal": "52348"
+    },
+    {
+      "city": "AOK",
+      "postal": "49375"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse",
+      "postal": "09099"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Altenkirchen",
+      "postal": "57609"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Bezirksdirektion Neckar-Fils",
+      "postal": "73726"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Bezirksdirektion Waldshut Tiengen",
+      "postal": "79749"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Biberach",
+      "postal": "88396"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Bodenseekreis",
+      "postal": "88660"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Calw",
+      "postal": "75363"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Heidelberg",
+      "postal": "68139"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Heilbronn",
+      "postal": "74064"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Ludwigsburg-Bietigheim",
+      "postal": "71631"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Reutlingen",
+      "postal": "72757"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Rhein-Neckar-Odenwald",
+      "postal": "68139"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Stuttgart",
+      "postal": "70153"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse Zollernalb",
+      "postal": "72334"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse für Nieder- sachsen Regionaldirektion Göttingen",
+      "postal": "37070"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse für Nieder- sachsen Regionaldirektion Stadthagen",
+      "postal": "31653"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse für Niedersachsen",
+      "postal": "31783"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse für Niedersachsen Reg.-Dir. Osterholz",
+      "postal": "27709"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse für den Schwarzwald-Baar-Kreis",
+      "postal": "78045"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse in Hessen",
+      "postal": "63060"
+    },
+    {
+      "city": "AOK - Die Gesundheitskasse in Rheinland- Pfalz Regionaldirektion Germersheim",
+      "postal": "76725"
+    },
+    {
+      "city": "AOK - Regionaldirektion Syke",
+      "postal": "28855"
+    },
+    {
+      "city": "AOK -Die Gesundheitskasse für Niedersachsen Beleglesezentrum",
+      "postal": "38083"
+    },
+    {
+      "city": "AOK -Die Gesundheitskasse in Rheinland- Pfalz Regionaldirektion Neustadt a.d.Wst",
+      "postal": "67429"
+    },
+    {
+      "city": "AOK -Die Gesundheitskasse in Rheinland- Pfalz Regionaldirektion Worms-Alzey",
+      "postal": "67545"
+    },
+    {
+      "city": "AOK Allgemeine Ortskrankenkasse",
+      "postal": "82317"
+    },
+    {
+      "city": "AOK Bad Kreuznach",
+      "postal": "55541"
+    },
+    {
+      "city": "AOK Baden-Württemberg",
+      "postal": "76070"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse",
+      "postal": "91124"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Augsburg",
+      "postal": "86134"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Bayern",
+      "postal": "96045"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Cham",
+      "postal": "93411"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Donauwörth",
+      "postal": "86607"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Günzburg",
+      "postal": "86379"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Landsberg",
+      "postal": "86896"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Lindau",
+      "postal": "88129"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion München",
+      "postal": "80266"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Direktion Schweinfurt",
+      "postal": "97419"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Geschäftsstelle Dachau",
+      "postal": "85219"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Geschäftsstelle Forchheim",
+      "postal": "91299"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Geschäftsstelle Lauf",
+      "postal": "91205"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Geschäftsstelle Neu-Ulm",
+      "postal": "89229"
+    },
+    {
+      "city": "AOK Bayern - Die Gesundheitskasse Geschäftsstelle Pasing",
+      "postal": "81238"
+    },
+    {
+      "city": "AOK Bayern Die Gesundheitskasse Direktion Weiden",
+      "postal": "92633"
+    },
+    {
+      "city": "AOK Bayern GSt Erlangen",
+      "postal": "91051"
+    },
+    {
+      "city": "AOK Bayern GSt. Traunstein",
+      "postal": "83276"
+    },
+    {
+      "city": "AOK Bayern- Die Gesundheitskasse",
+      "postal": "95440"
+    },
+    {
+      "city": "AOK Bundesverband",
+      "postal": "53170"
+    },
+    {
+      "city": "AOK Die Gesundheitskasse",
+      "postal": "26787"
+    },
+    {
+      "city": "AOK Die Gesundheitskasse für Niedersachsen",
+      "postal": "31533"
+    },
+    {
+      "city": "AOK Die Gesundheitskasse für Niedersachsen Regionaldirektion",
+      "postal": "30142"
+    },
+    {
+      "city": "AOK Die Gesundheitskasse in Hessen",
+      "postal": "34495"
+    },
+    {
+      "city": "AOK Geschäftsstelle",
+      "postal": "71520"
+    },
+    {
+      "city": "AOK Geschäftsstelle Groß-Gerau",
+      "postal": "64518"
+    },
+    {
+      "city": "AOK KundenCenter Baden-Baden",
+      "postal": "76520"
+    },
+    {
+      "city": "AOK Landesverband Bayern Die Gesundheitskasse Zentrale",
+      "postal": "92400"
+    },
+    {
+      "city": "AOK Ludwigsburg-Bietigheim",
+      "postal": "74319"
+    },
+    {
+      "city": "AOK NordWest",
+      "postal": "23547"
+    },
+    {
+      "city": "AOK Nordost Die Gesundheitskasse",
+      "postal": "14322"
+    },
+    {
+      "city": "AOK PLUS - Die Gesundheitskasse für Sachsen und Thüringen",
+      "postal": "04087"
+    },
+    {
+      "city": "AOK Regionaldirektion Kaiserslautern",
+      "postal": "67653"
+    },
+    {
+      "city": "AOK Rems-Murr",
+      "postal": "71328"
+    },
+    {
+      "city": "AOK Rheinland / Hamburg - Die Gesundheitskasse",
+      "postal": "22079"
+    },
+    {
+      "city": "AOK Rheinland / Hamburg Die Gesundheitskasse",
+      "postal": "51641"
+    },
+    {
+      "city": "AOK Rheinland Die Gesundheitskasse Regionaldirektion Heinsberg",
+      "postal": "52523"
+    },
+    {
+      "city": "AOK Rheinland Die Gesundheitskasse Regionaldirektion Kreis Aachen",
+      "postal": "52220"
+    },
+    {
+      "city": "AOK Rheinland Die Gesundheitskasse Regionaldirektion Kreis Euskirchen",
+      "postal": "53877"
+    },
+    {
+      "city": "AOK Rheinland Die Gesundheitskasse für Essen",
+      "postal": "45116"
+    },
+    {
+      "city": "AOK Rheinland Regionaldirektion Rhein-Sieg-Kreis",
+      "postal": "53719"
+    },
+    {
+      "city": "AOK Rheinland-Die Gesundheitskasse Regionaldirektion Mülheim an der Ruhr",
+      "postal": "45466"
+    },
+    {
+      "city": "AOK Rheinland-Pfalz / Saarland Die Gesundheitskasse",
+      "postal": "56040"
+    },
+    {
+      "city": "AOK Rheinland-Pfalz/Saarland",
+      "postal": "66104"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg -Die Gesundheitskasse Regionaldirektion Köln",
+      "postal": "50606"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg Die Gesundheitskasse",
+      "postal": "40466"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg-Die Gesundheitsk. Regionaldirektion Kr. Mettmann",
+      "postal": "42547"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg-Die Gesundheitsk. Regionaldirektion Kreis Wesel",
+      "postal": "47493"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg-Die Gesundheitsk. Regionaldirektion Neuss",
+      "postal": "41456"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg-Die Gesundheitsk. Regionaldirektion Solingen",
+      "postal": "42648"
+    },
+    {
+      "city": "AOK Rheinland/Hamburg-Die Gesundheitsk. Regionaldirektion Wuppertal",
+      "postal": "42097"
+    },
+    {
+      "city": "AOK Sachsen - Anhalt",
+      "postal": "06094"
+    },
+    {
+      "city": "AOK Sachsen - Die Gesundheitskasse",
+      "postal": "01058"
+    },
+    {
+      "city": "AOK Sachsen-Anhalt",
+      "postal": "39084"
+    },
+    {
+      "city": "AOK Schleswig-Holstein Direktion",
+      "postal": "24300"
+    },
+    {
+      "city": "AOK Wolfenbüttel",
+      "postal": "38299"
+    },
+    {
+      "city": "AOK für das Land Brandenburg",
+      "postal": "14510"
+    },
+    {
+      "city": "AOK- Die Gesundheitskasse BD Mittlerer Oberrhein",
+      "postal": "76097"
+    },
+    {
+      "city": "AOK-Die Gesundheitskasse Enzkreis und Stadt Pforzheim",
+      "postal": "75159"
+    },
+    {
+      "city": "AOK-Die Gesundheitskasse Regionaldirektion Neuwied",
+      "postal": "56562"
+    },
+    {
+      "city": "AOK-Die Gesundheitskasse in Hessen",
+      "postal": "61343"
+    },
+    {
+      "city": "AOK-Verlag GmbH",
+      "postal": "53423"
+    },
+    {
+      "city": "ARAG",
+      "postal": "40464"
+    },
+    {
+      "city": "ARAL Aktiengesellschaft",
+      "postal": "44776"
+    },
+    {
+      "city": "ARGE Land",
+      "postal": "67653"
+    },
+    {
+      "city": "ARGE Landkreis Kaiserslautern",
+      "postal": "67653"
+    },
+    {
+      "city": "ARGE Stadt Kaiserslautern",
+      "postal": "67653"
+    },
+    {
+      "city": "ARGUS DATA INSIGHTS Service GmbH",
+      "postal": "15224"
+    },
+    {
+      "city": "AS Abrechnungsstelle für Heil- Hilfs- und Pflegeberufe AG",
+      "postal": "28105"
+    },
+    {
+      "city": "ASK-Kugellagerfabrik Artur Seyfert GmbH",
+      "postal": "70822"
+    },
+    {
+      "city": "ASSIMA Handels GmbH & Co. KG",
+      "postal": "31131"
+    },
+    {
+      "city": "ASSTEL ProKunde Versicherungskonzepte GmbH",
+      "postal": "51175"
+    },
+    {
+      "city": "ASV GmbH Direktmarketing",
+      "postal": "20350"
+    },
+    {
+      "city": "ASmediaSystems/DCS",
+      "postal": "45116"
+    },
+    {
+      "city": "AT & T Communications Services Deutschland GmbH",
+      "postal": "60284"
+    },
+    {
+      "city": "ATIS systems GmbH",
+      "postal": "61343"
+    },
+    {
+      "city": "AUTEFA Solutions Germany GmbH",
+      "postal": "86313"
+    },
+    {
+      "city": "AUTOBILD Axel Springer Auto & Motorsport Verlag",
+      "postal": "20350"
+    },
+    {
+      "city": "AUTOSTADT GmbH",
+      "postal": "38435"
+    },
+    {
+      "city": "AVAYA GmbH & Co. KG Comergo",
+      "postal": "81664"
+    },
+    {
+      "city": "AVENA GmbH",
+      "postal": "55540"
+    },
+    {
+      "city": "AVG",
+      "postal": "68302"
+    },
+    {
+      "city": "AVM",
+      "postal": "10547"
+    },
+    {
+      "city": "AVNET E 2000 GmbH",
+      "postal": "70836"
+    },
+    {
+      "city": "AVS Automotive VersicherungsService GmbH",
+      "postal": "65424"
+    },
+    {
+      "city": "AVU Aktiengesellschaft für Versorgungs- Unternehmen",
+      "postal": "58283"
+    },
+    {
+      "city": "AXA / DBV Krankenversicherung AG",
+      "postal": "63059"
+    },
+    {
+      "city": "AXA Colonia Krankenversicherung AG",
+      "postal": "50592"
+    },
+    {
+      "city": "AXA Konzern AG",
+      "postal": "44126"
+    },
+    {
+      "city": "AXA Service AG (Corona GmbH)",
+      "postal": "51173"
+    },
+    {
+      "city": "AXA Versicherung AG",
+      "postal": "51059"
+    },
+    {
+      "city": "AXA Versicherung AG (Colonia)",
+      "postal": "51171"
+    },
+    {
+      "city": "AXEL SPRINGER SE",
+      "postal": "20350"
+    },
+    {
+      "city": "AZH GmbH",
+      "postal": "94232"
+    },
+    {
+      "city": "Aach",
+      "postal": "54298"
+    },
+    {
+      "city": "Aachen",
+      "postal": "52062"
+    },
+    {
+      "city": "AachenMünchener Lebensversicherung AG",
+      "postal": "50414"
+    },
+    {
+      "city": "AachenMünchener Versicherung AG",
+      "postal": "20081"
+    },
+    {
+      "city": "AachenMünchener Versicherung Aktiengesellschaft Direktion",
+      "postal": "52054"
+    },
+    {
+      "city": "Aachener und Münchener Versicherungen",
+      "postal": "76125"
+    },
+    {
+      "city": "Aalen",
+      "postal": "73430"
+    },
+    {
+      "city": "Aarbergen",
+      "postal": "65326"
+    },
+    {
+      "city": "Aasbüttel",
+      "postal": "25560"
+    },
+    {
+      "city": "Abbenrode",
+      "postal": "38871"
+    },
+    {
+      "city": "Abberode",
+      "postal": "06543"
+    },
+    {
+      "city": "Abele-Optik",
+      "postal": "65925"
+    },
+    {
+      "city": "Abenberg",
+      "postal": "91183"
+    },
+    {
+      "city": "Abensberg",
+      "postal": "93326"
+    },
+    {
+      "city": "Abentheuer",
+      "postal": "55767"
+    },
+    {
+      "city": "Abfall Wirtschaftsgesellschaft mbh",
+      "postal": "27209"
+    },
+    {
+      "city": "Abfallwirtschaft Landkreis Breisgau Hochschwarzwald",
+      "postal": "79081"
+    },
+    {
+      "city": "Absberg",
+      "postal": "91720"
+    },
+    {
+      "city": "Abstatt",
+      "postal": "74232"
+    },
+    {
+      "city": "Abtlöbnitz",
+      "postal": "06628"
+    },
+    {
+      "city": "Abtsbessingen",
+      "postal": "99713"
+    },
+    {
+      "city": "Abtsdorf",
+      "postal": "06888"
+    },
+    {
+      "city": "Abtsgmünd",
+      "postal": "73453"
+    },
+    {
+      "city": "Abtsteinach",
+      "postal": "69518"
+    },
+    {
+      "city": "Abtswind",
+      "postal": "97355"
+    },
+    {
+      "city": "Abtweiler",
+      "postal": "55568"
+    },
+    {
+      "city": "Achberg",
+      "postal": "88147"
+    },
+    {
+      "city": "Achern",
+      "postal": "77855"
+    },
+    {
+      "city": "Achim",
+      "postal": "28832"
+    },
+    {
+      "city": "Achslach",
+      "postal": "94250"
+    },
+    {
+      "city": "Achstetten",
+      "postal": "88480"
+    },
+    {
+      "city": "Acht",
+      "postal": "56729"
+    },
+    {
+      "city": "Achtelsbach",
+      "postal": "55767"
+    },
+    {
+      "city": "Achterwehr",
+      "postal": "24239"
+    },
+    {
+      "city": "Achtrup",
+      "postal": "25917"
+    },
+    {
+      "city": "Ackendorf",
+      "postal": "39343"
+    },
+    {
+      "city": "Actemium Cegelec West GmbH",
+      "postal": "50819"
+    },
+    {
+      "city": "Active Billing GmbH & Co. KG",
+      "postal": "64307"
+    },
+    {
+      "city": "Adam Opel AG",
+      "postal": "44782"
+    },
+    {
+      "city": "Adam Opel GmbH",
+      "postal": "10105"
+    },
+    {
+      "city": "Adamshoffnung",
+      "postal": "17213"
+    },
+    {
+      "city": "Adecco",
+      "postal": "79090"
+    },
+    {
+      "city": "Adecco Personaldienstleistungen GmbH",
+      "postal": "36030"
+    },
+    {
+      "city": "Adelberg",
+      "postal": "73099"
+    },
+    {
+      "city": "Adelebsen",
+      "postal": "37139"
+    },
+    {
+      "city": "Adelheidsdorf",
+      "postal": "29352"
+    },
+    {
+      "city": "Adelmannsfelden",
+      "postal": "73486"
+    },
+    {
+      "city": "Adelschlag",
+      "postal": "85111"
+    },
+    {
+      "city": "Adelsdorf",
+      "postal": "91325"
+    },
+    {
+      "city": "Adelsheim",
+      "postal": "74740"
+    },
+    {
+      "city": "Adelshofen",
+      "postal": "82276"
+    },
+    {
+      "city": "Adelsried",
+      "postal": "86477"
+    },
+    {
+      "city": "Adelzhausen",
+      "postal": "86559"
+    },
+    {
+      "city": "Adenau",
+      "postal": "53518"
+    },
+    {
+      "city": "Adenbach",
+      "postal": "67742"
+    },
+    {
+      "city": "Adenbüttel",
+      "postal": "38528"
+    },
+    {
+      "city": "Adendorf",
+      "postal": "21365"
+    },
+    {
+      "city": "Adenstedt",
+      "postal": "31079"
+    },
+    {
+      "city": "Aderstedt",
+      "postal": "06408"
+    },
+    {
+      "city": "Adient Seating Ltd.& Co. KG",
+      "postal": "32337"
+    },
+    {
+      "city": "Adler Modemärkte GmbH",
+      "postal": "63806"
+    },
+    {
+      "city": "Adlershorst Baugenossenschaft",
+      "postal": "22842"
+    },
+    {
+      "city": "Adlkofen",
+      "postal": "84166"
+    },
+    {
+      "city": "Admannshagen-Bargeshagen",
+      "postal": "18211"
+    },
+    {
+      "city": "AdmiralDirekt.de GmbH",
+      "postal": "51221"
+    },
+    {
+      "city": "Adolf Deil GmbH & Co. KG",
+      "postal": "66951"
+    },
+    {
+      "city": "Adolf Mähner GmbH & Co. KG Lorenz Kurt GmbH & Co.",
+      "postal": "82317"
+    },
+    {
+      "city": "Adolf Neuendorf GmbH",
+      "postal": "12274"
+    },
+    {
+      "city": "Adolf Würth GmbH & Co. KG",
+      "postal": "74650"
+    },
+    {
+      "city": "Adorf",
+      "postal": "08626"
+    },
+    {
+      "city": "Advigon Versicherung AG",
+      "postal": "20911"
+    },
+    {
+      "city": "AdvoCard Rechtschutzversicherung Aktiengesellschaft",
+      "postal": "20066"
+    },
+    {
+      "city": "Aebtissinwisch",
+      "postal": "25572"
+    },
+    {
+      "city": "Aerzen",
+      "postal": "31855"
+    },
+    {
+      "city": "Affalterbach",
+      "postal": "71563"
+    },
+    {
+      "city": "Affing",
+      "postal": "86444"
+    },
+    {
+      "city": "Affinghausen",
+      "postal": "27257"
+    },
+    {
+      "city": "Affler",
+      "postal": "54689"
+    },
+    {
+      "city": "Agathenburg",
+      "postal": "21684"
+    },
+    {
+      "city": "Agentur f. Arbeit Berlin Mitte",
+      "postal": "10956"
+    },
+    {
+      "city": "Agentur für Arbeit",
+      "postal": "17474"
+    },
+    {
+      "city": "Agentur für Arbeit Aachen",
+      "postal": "52028"
+    },
+    {
+      "city": "Agentur für Arbeit Aalen",
+      "postal": "73425"
+    },
+    {
+      "city": "Agentur für Arbeit Annaberg-Buchholz",
+      "postal": "09453"
+    },
+    {
+      "city": "Agentur für Arbeit Ansbach",
+      "postal": "91511"
+    },
+    {
+      "city": "Agentur für Arbeit Aschaffenburg",
+      "postal": "63715"
+    },
+    {
+      "city": "Agentur für Arbeit Augsburg",
+      "postal": "86135"
+    },
+    {
+      "city": "Agentur für Arbeit Bad Hersfeld",
+      "postal": "36247"
+    },
+    {
+      "city": "Agentur für Arbeit Bad Homburg",
+      "postal": "61342"
+    },
+    {
+      "city": "Agentur für Arbeit Bad Kreuznach",
+      "postal": "55538"
+    },
+    {
+      "city": "Agentur für Arbeit Bad Neustadt",
+      "postal": "97615"
+    },
+    {
+      "city": "Agentur für Arbeit Bad Oldesloe",
+      "postal": "23841"
+    },
+    {
+      "city": "Agentur für Arbeit Balingen",
+      "postal": "72332"
+    },
+    {
+      "city": "Agentur für Arbeit Bamberg",
+      "postal": "96045"
+    },
+    {
+      "city": "Agentur für Arbeit Bautzen",
+      "postal": "02619"
+    },
+    {
+      "city": "Agentur für Arbeit Bergisch Gladbach",
+      "postal": "51462"
+    },
+    {
+      "city": "Agentur für Arbeit Berlin Mitte",
+      "postal": "10859"
+    },
+    {
+      "city": "Agentur für Arbeit Berlin Mitte Gst. Mahrzahn-Hellersdorf",
+      "postal": "12616"
+    },
+    {
+      "city": "Agentur für Arbeit Berlin Nord",
+      "postal": "14045"
+    },
+    {
+      "city": "Agentur für Arbeit Berlin Süd",
+      "postal": "12039"
+    },
+    {
+      "city": "Agentur für Arbeit Berlin Süd Gst. Tempelhof-Schöneberg",
+      "postal": "12096"
+    },
+    {
+      "city": "Agentur für Arbeit Bielefeld",
+      "postal": "33591"
+    },
+    {
+      "city": "Agentur für Arbeit Bochum",
+      "postal": "44771"
+    },
+    {
+      "city": "Agentur für Arbeit Bonn",
+      "postal": "53104"
+    },
+    {
+      "city": "Agentur für Arbeit Braunschweig",
+      "postal": "38084"
+    },
+    {
+      "city": "Agentur für Arbeit Bremen",
+      "postal": "28189"
+    },
+    {
+      "city": "Agentur für Arbeit Brühl",
+      "postal": "50318"
+    },
+    {
+      "city": "Agentur für Arbeit Böblingen",
+      "postal": "71029"
+    },
+    {
+      "city": "Agentur für Arbeit Celle",
+      "postal": "29216"
+    },
+    {
+      "city": "Agentur für Arbeit Chemnitz",
+      "postal": "09091"
+    },
+    {
+      "city": "Agentur für Arbeit Coburg",
+      "postal": "96436"
+    },
+    {
+      "city": "Agentur für Arbeit Coesfeld",
+      "postal": "48649"
+    },
+    {
+      "city": "Agentur für Arbeit Cottbus",
+      "postal": "03039"
+    },
+    {
+      "city": "Agentur für Arbeit Darmstadt",
+      "postal": "64272"
+    },
+    {
+      "city": "Agentur für Arbeit Deggendorf",
+      "postal": "94466"
+    },
+    {
+      "city": "Agentur für Arbeit Detmold",
+      "postal": "32753"
+    },
+    {
+      "city": "Agentur für Arbeit Donauwörth",
+      "postal": "86606"
+    },
+    {
+      "city": "Agentur für Arbeit Dortmund",
+      "postal": "44116"
+    },
+    {
+      "city": "Agentur für Arbeit Dresden",
+      "postal": "01213"
+    },
+    {
+      "city": "Agentur für Arbeit Duisburg",
+      "postal": "47044"
+    },
+    {
+      "city": "Agentur für Arbeit Düsseldorf",
+      "postal": "40180"
+    },
+    {
+      "city": "Agentur für Arbeit Eberswalde",
+      "postal": "16222"
+    },
+    {
+      "city": "Agentur für Arbeit Elmshorn",
+      "postal": "25320"
+    },
+    {
+      "city": "Agentur für Arbeit Essen",
+      "postal": "45098"
+    },
+    {
+      "city": "Agentur für Arbeit Flensburg",
+      "postal": "24927"
+    },
+    {
+      "city": "Agentur für Arbeit Frankfurt (Oder)",
+      "postal": "15220"
+    },
+    {
+      "city": "Agentur für Arbeit Frankfurt am Main",
+      "postal": "60259"
+    },
+    {
+      "city": "Agentur für Arbeit Freiberg",
+      "postal": "09595"
+    },
+    {
+      "city": "Agentur für Arbeit Freiburg",
+      "postal": "79078"
+    },
+    {
+      "city": "Agentur für Arbeit Freising",
+      "postal": "85322"
+    },
+    {
+      "city": "Agentur für Arbeit Fulda",
+      "postal": "36028"
+    },
+    {
+      "city": "Agentur für Arbeit Gelsenkirchen",
+      "postal": "45801"
+    },
+    {
+      "city": "Agentur für Arbeit Gelsenkirchen-Buer",
+      "postal": "45877"
+    },
+    {
+      "city": "Agentur für Arbeit Gießen",
+      "postal": "35384"
+    },
+    {
+      "city": "Agentur für Arbeit Göppingen",
+      "postal": "73025"
+    },
+    {
+      "city": "Agentur für Arbeit Göttingen",
+      "postal": "37070"
+    },
+    {
+      "city": "Agentur für Arbeit Hagen",
+      "postal": "58080"
+    },
+    {
+      "city": "Agentur für Arbeit Hainichen",
+      "postal": "09660"
+    },
+    {
+      "city": "Agentur für Arbeit Hamburg",
+      "postal": "20070"
+    },
+    {
+      "city": "Agentur für Arbeit Hameln",
+      "postal": "31780"
+    },
+    {
+      "city": "Agentur für Arbeit Hamm",
+      "postal": "59056"
+    },
+    {
+      "city": "Agentur für Arbeit Hanau",
+      "postal": "63442"
+    },
+    {
+      "city": "Agentur für Arbeit Hannover",
+      "postal": "30147"
+    },
+    {
+      "city": "Agentur für Arbeit Heide",
+      "postal": "25744"
+    },
+    {
+      "city": "Agentur für Arbeit Heidelberg",
+      "postal": "69108"
+    },
+    {
+      "city": "Agentur für Arbeit Heilbronn",
+      "postal": "74064"
+    },
+    {
+      "city": "Agentur für Arbeit Helmstedt",
+      "postal": "38346"
+    },
+    {
+      "city": "Agentur für Arbeit Herford",
+      "postal": "32042"
+    },
+    {
+      "city": "Agentur für Arbeit Herne -Kasse-",
+      "postal": "44647"
+    },
+    {
+      "city": "Agentur für Arbeit Hildesheim",
+      "postal": "31121"
+    },
+    {
+      "city": "Agentur für Arbeit Hof",
+      "postal": "95027"
+    },
+    {
+      "city": "Agentur für Arbeit Hünfeld",
+      "postal": "36085"
+    },
+    {
+      "city": "Agentur für Arbeit Ingolstadt",
+      "postal": "85037"
+    },
+    {
+      "city": "Agentur für Arbeit Iserlohn",
+      "postal": "58603"
+    },
+    {
+      "city": "Agentur für Arbeit Jena",
+      "postal": "07740"
+    },
+    {
+      "city": "Agentur für Arbeit Kaiserslautern",
+      "postal": "67650"
+    },
+    {
+      "city": "Agentur für Arbeit Karlsruhe",
+      "postal": "76089"
+    },
+    {
+      "city": "Agentur für Arbeit Kassel",
+      "postal": "34195"
+    },
+    {
+      "city": "Agentur für Arbeit Kempten",
+      "postal": "87428"
+    },
+    {
+      "city": "Agentur für Arbeit Kiel",
+      "postal": "24131"
+    },
+    {
+      "city": "Agentur für Arbeit Koblenz",
+      "postal": "56063"
+    },
+    {
+      "city": "Agentur für Arbeit Konstanz",
+      "postal": "78454"
+    },
+    {
+      "city": "Agentur für Arbeit Korbach",
+      "postal": "34494"
+    },
+    {
+      "city": "Agentur für Arbeit Krefeld",
+      "postal": "47796"
+    },
+    {
+      "city": "Agentur für Arbeit Köln",
+      "postal": "50575"
+    },
+    {
+      "city": "Agentur für Arbeit Landau in der Pfalz",
+      "postal": "76825"
+    },
+    {
+      "city": "Agentur für Arbeit Landshut",
+      "postal": "84018"
+    },
+    {
+      "city": "Agentur für Arbeit Leer",
+      "postal": "26786"
+    },
+    {
+      "city": "Agentur für Arbeit Leipzig",
+      "postal": "04086"
+    },
+    {
+      "city": "Agentur für Arbeit Limburg an der Lahn",
+      "postal": "65546"
+    },
+    {
+      "city": "Agentur für Arbeit Ludwigsburg",
+      "postal": "71629"
+    },
+    {
+      "city": "Agentur für Arbeit Ludwigshafen am Rhein",
+      "postal": "67055"
+    },
+    {
+      "city": "Agentur für Arbeit Lörrach",
+      "postal": "79533"
+    },
+    {
+      "city": "Agentur für Arbeit Lübeck",
+      "postal": "23541"
+    },
+    {
+      "city": "Agentur für Arbeit Lüneburg",
+      "postal": "21332"
+    },
+    {
+      "city": "Agentur für Arbeit Mainz",
+      "postal": "55147"
+    },
+    {
+      "city": "Agentur für Arbeit Mannheim",
+      "postal": "68150"
+    },
+    {
+      "city": "Agentur für Arbeit Marburg",
+      "postal": "35036"
+    },
+    {
+      "city": "Agentur für Arbeit Mayen",
+      "postal": "56724"
+    },
+    {
+      "city": "Agentur für Arbeit Mettmann",
+      "postal": "40816"
+    },
+    {
+      "city": "Agentur für Arbeit Montabaur",
+      "postal": "56407"
+    },
+    {
+      "city": "Agentur für Arbeit Mönchengladbach",
+      "postal": "41054"
+    },
+    {
+      "city": "Agentur für Arbeit München",
+      "postal": "80304"
+    },
+    {
+      "city": "Agentur für Arbeit Münster",
+      "postal": "48135"
+    },
+    {
+      "city": "Agentur für Arbeit Nagold",
+      "postal": "72200"
+    },
+    {
+      "city": "Agentur für Arbeit Nebenstelle Fürth",
+      "postal": "90742"
+    },
+    {
+      "city": "Agentur für Arbeit Neubrandenburg",
+      "postal": "17050"
+    },
+    {
+      "city": "Agentur für Arbeit Neumünster",
+      "postal": "24530"
+    },
+    {
+      "city": "Agentur für Arbeit Neuruppin",
+      "postal": "16814"
+    },
+    {
+      "city": "Agentur für Arbeit Neuwied",
+      "postal": "56560"
+    },
+    {
+      "city": "Agentur für Arbeit Nordhorn",
+      "postal": "48522"
+    },
+    {
+      "city": "Agentur für Arbeit Nürnberg",
+      "postal": "90300"
+    },
+    {
+      "city": "Agentur für Arbeit Oberhausen",
+      "postal": "46040"
+    },
+    {
+      "city": "Agentur für Arbeit Offenbach",
+      "postal": "63057"
+    },
+    {
+      "city": "Agentur für Arbeit Offenburg",
+      "postal": "77642"
+    },
+    {
+      "city": "Agentur für Arbeit Oldenburg",
+      "postal": "26109"
+    },
+    {
+      "city": "Agentur für Arbeit Oschatz",
+      "postal": "04756"
+    },
+    {
+      "city": "Agentur für Arbeit Osnabrück",
+      "postal": "49068"
+    },
+    {
+      "city": "Agentur für Arbeit Paderborn",
+      "postal": "33095"
+    },
+    {
+      "city": "Agentur für Arbeit Passau",
+      "postal": "94028"
+    },
+    {
+      "city": "Agentur für Arbeit Pirna",
+      "postal": "01793"
+    },
+    {
+      "city": "Agentur für Arbeit Plauen",
+      "postal": "08520"
+    },
+    {
+      "city": "Agentur für Arbeit Potsdam",
+      "postal": "14462"
+    },
+    {
+      "city": "Agentur für Arbeit Ravensburg",
+      "postal": "88209"
+    },
+    {
+      "city": "Agentur für Arbeit Recklinghausen",
+      "postal": "45630"
+    },
+    {
+      "city": "Agentur für Arbeit Regensburg",
+      "postal": "93012"
+    },
+    {
+      "city": "Agentur für Arbeit Reutlingen",
+      "postal": "72757"
+    },
+    {
+      "city": "Agentur für Arbeit Rheine",
+      "postal": "48416"
+    },
+    {
+      "city": "Agentur für Arbeit Riesa",
+      "postal": "01585"
+    },
+    {
+      "city": "Agentur für Arbeit Rosenheim",
+      "postal": "83018"
+    },
+    {
+      "city": "Agentur für Arbeit Rostock",
+      "postal": "18048"
+    },
+    {
+      "city": "Agentur für Arbeit Saarbrücken",
+      "postal": "66088"
+    },
+    {
+      "city": "Agentur für Arbeit Sachsen-Anhalt Nord",
+      "postal": "39085"
+    },
+    {
+      "city": "Agentur für Arbeit Sachsen-Anhalt Ost",
+      "postal": "06838"
+    },
+    {
+      "city": "Agentur für Arbeit Sachsen-Anhalt Süd",
+      "postal": "06089"
+    },
+    {
+      "city": "Agentur für Arbeit Sachsen-Anhalt West",
+      "postal": "38817"
+    },
+    {
+      "city": "Agentur für Arbeit Schwandorf",
+      "postal": "92419"
+    },
+    {
+      "city": "Agentur für Arbeit Schweinfurt",
+      "postal": "97418"
+    },
+    {
+      "city": "Agentur für Arbeit Schwerin",
+      "postal": "19020"
+    },
+    {
+      "city": "Agentur für Arbeit Schwäbisch Gmünd",
+      "postal": "73522"
+    },
+    {
+      "city": "Agentur für Arbeit Schwäbisch Hall",
+      "postal": "74509"
+    },
+    {
+      "city": "Agentur für Arbeit Siegen",
+      "postal": "57070"
+    },
+    {
+      "city": "Agentur für Arbeit Soest",
+      "postal": "59490"
+    },
+    {
+      "city": "Agentur für Arbeit Stade",
+      "postal": "21676"
+    },
+    {
+      "city": "Agentur für Arbeit Stralsund",
+      "postal": "18432"
+    },
+    {
+      "city": "Agentur für Arbeit Stuttgart",
+      "postal": "70145"
+    },
+    {
+      "city": "Agentur für Arbeit Thüringen Mitte",
+      "postal": "99068"
+    },
+    {
+      "city": "Agentur für Arbeit Thüringen Nord",
+      "postal": "99738"
+    },
+    {
+      "city": "Agentur für Arbeit Thüringen Ost",
+      "postal": "07541"
+    },
+    {
+      "city": "Agentur für Arbeit Thüringen Südwest",
+      "postal": "98496"
+    },
+    {
+      "city": "Agentur für Arbeit Titisee-Neustadt",
+      "postal": "79821"
+    },
+    {
+      "city": "Agentur für Arbeit Traunstein",
+      "postal": "83274"
+    },
+    {
+      "city": "Agentur für Arbeit Trier",
+      "postal": "54187"
+    },
+    {
+      "city": "Agentur für Arbeit Uelzen Interner Dienstbetrieb Lüneburg",
+      "postal": "29523"
+    },
+    {
+      "city": "Agentur für Arbeit Ulm",
+      "postal": "89065"
+    },
+    {
+      "city": "Agentur für Arbeit Vechta",
+      "postal": "49374"
+    },
+    {
+      "city": "Agentur für Arbeit Verden",
+      "postal": "27279"
+    },
+    {
+      "city": "Agentur für Arbeit Villingen-Schwenningen",
+      "postal": "78041"
+    },
+    {
+      "city": "Agentur für Arbeit Waiblingen",
+      "postal": "71327"
+    },
+    {
+      "city": "Agentur für Arbeit Weiden i. d. OPf.",
+      "postal": "92620"
+    },
+    {
+      "city": "Agentur für Arbeit Weilheim i. OB",
+      "postal": "82360"
+    },
+    {
+      "city": "Agentur für Arbeit Weißenburg i. Bay.",
+      "postal": "91780"
+    },
+    {
+      "city": "Agentur für Arbeit Wesel",
+      "postal": "46480"
+    },
+    {
+      "city": "Agentur für Arbeit Wetzlar",
+      "postal": "35573"
+    },
+    {
+      "city": "Agentur für Arbeit Wiesbaden",
+      "postal": "65166"
+    },
+    {
+      "city": "Agentur für Arbeit Worms",
+      "postal": "67545"
+    },
+    {
+      "city": "Agentur für Arbeit Wuppertal",
+      "postal": "42268"
+    },
+    {
+      "city": "Agentur für Arbeit Würzburg",
+      "postal": "97024"
+    },
+    {
+      "city": "Agentur für Arbeit Zwickau",
+      "postal": "08037"
+    },
+    {
+      "city": "Agethorst",
+      "postal": "25560"
+    },
+    {
+      "city": "Agfa-Gevaert AG",
+      "postal": "81536"
+    },
+    {
+      "city": "Agis-Verlag GmbH",
+      "postal": "76524"
+    },
+    {
+      "city": "Aglasterhausen",
+      "postal": "74858"
+    },
+    {
+      "city": "Agrotechnic Handelsgesellschaft mbH Niederlassung Halle",
+      "postal": "06104"
+    },
+    {
+      "city": "Aham",
+      "postal": "84168"
+    },
+    {
+      "city": "Ahaus",
+      "postal": "48683"
+    },
+    {
+      "city": "Ahausen",
+      "postal": "27367"
+    },
+    {
+      "city": "Ahlbeck",
+      "postal": "17375"
+    },
+    {
+      "city": "Ahlbrandt System GmbH",
+      "postal": "36339"
+    },
+    {
+      "city": "Ahlden (Aller)",
+      "postal": "29693"
+    },
+    {
+      "city": "Ahlefeld",
+      "postal": "24811"
+    },
+    {
+      "city": "Ahlen",
+      "postal": "59227"
+    },
+    {
+      "city": "Ahlers AG",
+      "postal": "32044"
+    },
+    {
+      "city": "Ahlerstedt",
+      "postal": "21702"
+    },
+    {
+      "city": "Ahlsdorf",
+      "postal": "06313"
+    },
+    {
+      "city": "Ahlstädt",
+      "postal": "98553"
+    },
+    {
+      "city": "Ahlum",
+      "postal": "38489"
+    },
+    {
+      "city": "Ahnatal",
+      "postal": "34292"
+    },
+    {
+      "city": "Ahneby",
+      "postal": "24996"
+    },
+    {
+      "city": "Ahnsbeck",
+      "postal": "29353"
+    },
+    {
+      "city": "Ahnsen",
+      "postal": "31708"
+    },
+    {
+      "city": "Aholfing",
+      "postal": "94345"
+    },
+    {
+      "city": "Aholming",
+      "postal": "94527"
+    },
+    {
+      "city": "Ahorn",
+      "postal": "74744"
+    },
+    {
+      "city": "Ahorntal",
+      "postal": "95491"
+    },
+    {
+      "city": "Ahrbrück",
+      "postal": "53506"
+    },
+    {
+      "city": "Ahrens + Sieberz",
+      "postal": "53718"
+    },
+    {
+      "city": "Ahrensburg",
+      "postal": "22926"
+    },
+    {
+      "city": "Ahrensbök",
+      "postal": "23623"
+    },
+    {
+      "city": "Ahrensfelde",
+      "postal": "16356"
+    },
+    {
+      "city": "Ahrenshagen-Daskow",
+      "postal": "18320"
+    },
+    {
+      "city": "Ahrenshoop",
+      "postal": "18347"
+    },
+    {
+      "city": "Ahrenshöft",
+      "postal": "25853"
+    },
+    {
+      "city": "Ahrenviöl",
+      "postal": "25885"
+    },
+    {
+      "city": "Ahrenviölfeld",
+      "postal": "25885"
+    },
+    {
+      "city": "Aicha vorm Wald",
+      "postal": "94529"
+    },
+    {
+      "city": "Aichach",
+      "postal": "86551"
+    },
+    {
+      "city": "Aichelberg",
+      "postal": "73101"
+    },
+    {
+      "city": "Aichen",
+      "postal": "86479"
+    },
+    {
+      "city": "Aichhalden",
+      "postal": "78733"
+    },
+    {
+      "city": "Aichstetten",
+      "postal": "88317"
+    },
+    {
+      "city": "Aichtal",
+      "postal": "72631"
+    },
+    {
+      "city": "Aichwald",
+      "postal": "73773"
+    },
+    {
+      "city": "Aidenbach",
+      "postal": "94501"
+    },
+    {
+      "city": "Aidhausen",
+      "postal": "97491"
+    },
+    {
+      "city": "Aidlingen",
+      "postal": "71134"
+    },
+    {
+      "city": "Aiglsbach",
+      "postal": "84089"
+    },
+    {
+      "city": "Ailertchen",
+      "postal": "56459"
+    },
+    {
+      "city": "Aindling",
+      "postal": "86447"
+    },
+    {
+      "city": "Ainring",
+      "postal": "83404"
+    },
+    {
+      "city": "Airbus Group",
+      "postal": "81663"
+    },
+    {
+      "city": "Airbus Helicopters Deutschland GmbH",
+      "postal": "86607"
+    },
+    {
+      "city": "Airbus Industrie",
+      "postal": "22331"
+    },
+    {
+      "city": "Airtours International",
+      "postal": "60484"
+    },
+    {
+      "city": "Aislingen",
+      "postal": "89344"
+    },
+    {
+      "city": "Aiterhofen",
+      "postal": "94330"
+    },
+    {
+      "city": "Aitern",
+      "postal": "79677"
+    },
+    {
+      "city": "Aitrach",
+      "postal": "88319"
+    },
+    {
+      "city": "Aitrang",
+      "postal": "87648"
+    },
+    {
+      "city": "Aken",
+      "postal": "06385"
+    },
+    {
+      "city": "Aktion Mensch",
+      "postal": "53160"
+    },
+    {
+      "city": "Aktivbank AG Zentralregulierung",
+      "postal": "30157"
+    },
+    {
+      "city": "Albaching",
+      "postal": "83539"
+    },
+    {
+      "city": "Albbruck",
+      "postal": "79774"
+    }
+  ],
+  "streets": [
+    "Unter den Linden",
+    "Kurfürstendamm",
+    "Kastanienallee",
+    "Leopoldstraße",
+    "Schanzenstraße",
+    "Königstraße",
+    "Berger Straße",
+    "Rheinallee"
+  ],
+  "phonePrefix": "49",
+  "phoneDigits": 10,
+  "nationalPrefix": "151",
+  "schemaVersion": 1,
+  "datasetId": "blego-de-female",
+  "datasetVersion": "2026-11-12.2",
+  "nameGender": "female",
+  "preparedAt": "2026-11-12",
+  "normalizationVersion": "NFKC-name-v1",
+  "provenance": {
+    "names": {
+      "package": "@faker-js/faker",
+      "version": "10.6.0",
+      "locale": "de",
+      "license": "MIT",
+      "source": "https://github.com/faker-js/faker/tree/v10.6.0/src/locales",
+      "firstNames": "person.first_name.female only",
+      "surnames": "person.last_name.generic",
+      "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
+    },
+    "geography": {
+      "source": "https://download.geonames.org/export/zip/DE.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "f9e075e907de82c58c3a85026ee3f54f794b131fa34bf35c5e70fc36ba8676cf",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
+      "verifiedPostalLinks": 0,
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    }
+  },
+  "checksum": "21efd5fc01406bda0e8a0345f8e3f004f571fac23250318b6c644846c5d1e78a"
+}

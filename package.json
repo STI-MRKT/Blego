@@ -1,6 +1,6 @@
 {
   "name": "blego",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "BLEGO local studio",
   "main": "electron/main.cjs",
   "author": "blemish&alterego",
@@ -9,13 +9,25 @@
   "scripts": {
     "start": "electron .",
     "serve": "node electron/server.cjs",
-    "dist": "electron-builder",
-    "dist:win": "electron-builder --win",
-    "dist:mac": "electron-builder --mac"
+    "dist": "electron-builder --publish never",
+    "dist:win": "electron-builder --win --x64 --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "test:unit": "node --test tests/unit/*.test.cjs",
+    "test:integration": "node --test tests/integration/*.test.cjs",
+    "test:ui": "node --test tests/ui/*.test.cjs",
+    "lint": "node scripts/check.cjs && npm run format:check",
+    "verify": "npm run lint && npm run test:unit && npm run test:integration",
+    "dist:linux": "npm run prepare:metadata && electron-builder --linux tar.gz --x64 --publish never",
+    "pack:linux": "npm run prepare:metadata && electron-builder --linux --dir --x64 --publish never",
+    "format:check": "prettier --check \"electron/**/*.cjs\" \"shared/*.mjs\" \"tests/**/*.cjs\" \"scripts/*.cjs\"",
+    "prepare:metadata": "node scripts/prepare-metadata-runtime.cjs",
+    "pretest:integration": "npm run prepare:metadata"
   },
   "devDependencies": {
-    "electron": "^32.2.0",
-    "electron-builder": "^25.1.8"
+    "electron": "45.3.1",
+    "electron-builder": "26.18.0",
+    "playwright": "1.65.0",
+    "prettier": "3.10.0"
   },
   "build": {
     "appId": "com.blemish.blego",
@@ -28,7 +40,9 @@
     "files": [
       "electron/**/*",
       "src/**/*",
-      "package.json"
+      "package.json",
+      "shared/**/*",
+      "resources/**/*"
     ],
     "win": {
       "target": [
@@ -40,7 +54,13 @@
         }
       ],
       "icon": "build/icon.ico",
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "extraResources": [
+        {
+          "from": "build/metadata-runtime/win32-${arch}",
+          "to": "metadata-runtime"
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -66,10 +86,51 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "minimumSystemVersion": "13.0",
+      "extraResources": [
+        {
+          "from": "build/metadata-runtime/darwin-${arch}",
+          "to": "metadata-runtime"
+        }
+      ]
     },
     "dmg": {
       "title": "BLEGO"
-    }
+    },
+    "linux": {
+      "target": [
+        "tar.gz"
+      ],
+      "category": "Utility",
+      "artifactName": "${productName}-${version}-${arch}-linux.${ext}",
+      "extraResources": [
+        {
+          "from": "build/metadata-runtime/linux-x64",
+          "to": "metadata-runtime"
+        }
+      ]
+    },
+    "asarUnpack": [
+      "node_modules/exiftool-vendored.pl/**/*",
+      "node_modules/exiftool-vendored.exe/**/*",
+      "resources/metadata/perl-bootstrap.pl",
+      "node_modules/@img/**/*",
+      "node_modules/sharp/**/*"
+    ],
+    "beforePack": "scripts/metadata-before-pack.cjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "fast-xml-parser": "5.12.0",
+    "https-proxy-agent": "9.1.0",
+    "sharp": "0.35.5",
+    "socks-proxy-agent": "10.1.0",
+    "yauzl": "3.4.0",
+    "yazl": "3.3.1"
+  },
+  "optionalDependencies": {
+    "exiftool-vendored.exe": "13.63.0",
+    "exiftool-vendored.pl": "13.63.0"
   }
 }

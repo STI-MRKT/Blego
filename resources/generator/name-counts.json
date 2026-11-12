@@ -1,0 +1,74 @@
+[
+  {
+    "country": "BR",
+    "femaleNames": 81,
+    "surnames": 21,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 6
+  },
+  {
+    "country": "US",
+    "femaleNames": 1563,
+    "surnames": 473,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 6
+  },
+  {
+    "country": "FR",
+    "femaleNames": 435,
+    "surnames": 150,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 6
+  },
+  {
+    "country": "PL",
+    "femaleNames": 163,
+    "surnames": 710,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 6
+  },
+  {
+    "country": "DE",
+    "femaleNames": 573,
+    "surnames": 1688,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 8
+  },
+  {
+    "country": "ES",
+    "femaleNames": 120,
+    "surnames": 625,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 8
+  },
+  {
+    "country": "IT",
+    "femaleNames": 617,
+    "surnames": 2170,
+    "localities": 500,
+    "postalLinks": 500,
+    "verifiedPostalLinks": 0,
+    "streetElements": 8
+  },
+  {
+    "country": "GB",
+    "femaleNames": 1563,
+    "surnames": 473,
+    "localities": 6,
+    "postalLinks": 6,
+    "verifiedPostalLinks": 0,
+    "streetElements": 8
+  }
+]

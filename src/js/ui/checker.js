@@ -1,78 +1,22 @@
 import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
-
-const SHOW_LIMIT = 500;
-
-const LIVE = {
-  active: { label: 'Active', tone: 'ok' },
-  unavailable: { label: 'Unavailable', tone: 'err' },
-  not_found: { label: 'Not found', tone: 'err' },
-  login: { label: 'Login wall', tone: 'warn' },
-  unknown: { label: 'Unknown', tone: '' },
-  unreachable: { label: 'Unreachable', tone: 'warn' }
+const labels = {
+  profile_visible: 'Profile page visible',
+  login_required: 'Login required',
+  unavailable: 'Page unavailable',
+  challenge_required: 'Request challenge',
+  request_limited: 'Requests limited',
+  network_error: 'Network error',
+  unsupported_target: 'Unsupported target',
+  unknown: 'Insufficient evidence',
+  cancelled: 'Cancelled'
 };
-
-function liveCell(row) {
-  if (!row.check) return '<span class="faint">—</span>';
-  const meta = LIVE[row.check.status] || LIVE.unknown;
-  const title = row.check.error || row.check.title || '';
-  const ms = row.check.ms ? `<span class="faint" style="font-size:9.5px;margin-left:6px">${row.check.ms} ms</span>` : '';
-  return `<span class="pill ${meta.tone}" title="${esc(title)}">${meta.label}</span>${ms}`;
-}
-
 export function checkerHTML() {
   const { input, rows, checking } = state.checker;
-  const numeric = rows ? rows.filter((row) => row.type === 'numeric').length : 0;
-  const vanity = rows ? rows.filter((row) => row.type === 'vanity').length : 0;
-  const invalid = rows ? rows.filter((row) => row.type === 'invalid').length : 0;
-  const checked = rows ? rows.filter((row) => row.check).length : 0;
-  const active = rows ? rows.filter((row) => row.check?.status === 'active').length : 0;
-  const hasLinks = Boolean(rows && rows.some((row) => row.link));
-  const progress = checking && checking.total ? Math.round((checking.done / checking.total) * 100) : 0;
-  return `<div class="page">
-    <div class="page-head">
-      <div><div class="eyebrow">TOOLS</div><h1>Checker</h1>
-        <p class="sub">Paste IDs or profile links — new line, comma or space. Duplicates are removed and formats validated locally. Live status asks Facebook directly, so results depend on the network.</p></div>
-    </div>
-    <div class="card pad checker-card">
-      <label class="fl" for="checker-input">IDs or profile links</label>
-      <textarea class="input checker-input" id="checker-input" data-input="checker" spellcheck="false" placeholder="100089123456789&#10;https://www.facebook.com/profile.php?id=100089123456789&#10;zuck">${esc(input)}</textarea>
-      <div class="checker-actions">
-        <span class="faint" id="checker-count">${input.trim() ? input.trim().split(/[\s,;|]+/).filter(Boolean).length : 0} tokens</span>
-        <span style="flex:1"></span>
-        <button class="btn btn-quiet" data-action="checker-clear">Clear</button>
-        <button class="btn btn-quiet" data-action="checker-status" ${hasLinks && !checking ? '' : 'disabled'}>${checking ? '<span class="spinner"></span>Checking' : `${I.shield}Live status`}</button>
-        <button class="btn btn-primary" data-action="checker-run" ${input.trim() ? '' : 'disabled'}>${I.check}Check</button>
-      </div>
-    </div>
-    ${checking ? `<div class="card pad checker-summary" id="checker-progress-card">
-      <div class="checker-progress-head"><span class="spinner"></span><span id="checker-progress-text">Checking live status ${checking.done} of ${checking.total}</span><b style="margin-left:auto">${progress}%</b></div>
-      <div class="checker-bar"><i id="checker-progress-fill" style="width:${progress}%"></i></div>
-    </div>` : ''}
-    ${rows ? `<div class="summary checker-summary">
-      <span class="s-chip"><b>${rows.length}</b> unique</span>
-      <span class="s-chip" style="color:var(--ok)"><span class="dot ok"></span><b>${numeric}</b> numeric</span>
-      <span class="s-chip" style="color:var(--accent)"><span class="dot"></span><b>${vanity}</b> vanity</span>
-      <span class="s-chip" style="color:var(--err)"><span class="dot err"></span><b>${invalid}</b> invalid</span>
-      ${checked ? `<span class="s-chip" style="color:var(--ok)"><b>${active}</b> active</span>` : ''}
-    </div>
-    <div class="table-wrap checker-table">
-      <table class="tbl">
-        <thead><tr><th style="width:44px">#</th><th>ID</th><th style="width:92px">Type</th><th style="width:120px">Format</th><th style="width:132px">Live status</th><th style="width:210px">Profile link</th></tr></thead>
-        <tbody>
-          ${rows.slice(0, SHOW_LIMIT).map((row, index) => `<tr class="checker-row" style="animation-delay:${Math.min(index * 12, 600)}ms">
-            <td class="num">${index + 1}</td>
-            <td><div class="cell-box"><span class="cell-val mono" data-action="cell-expand" title="${esc(row.id)}">${esc(row.id)}</span><button class="copy tiny" data-action="copy" data-copy="${esc(row.id)}" aria-label="Copy">${I.copy}</button></div></td>
-            <td><span class="pill ${row.type === 'invalid' ? 'err' : row.type === 'vanity' ? 'accent' : ''}">${row.type}</span></td>
-            <td class="muted">${row.status}</td>
-            <td class="muted" data-live="${esc(row.id)}">${liveCell(row)}</td>
-            <td>${row.link ? `<div class="checker-link"><a class="mono" href="${esc(row.link)}" target="_blank" rel="noreferrer noopener">${esc(row.link.replace('https://www.', ''))}</a><button class="copy tiny always" data-action="copy" data-copy="${esc(row.link)}" aria-label="Copy link">${I.copy}</button></div>` : '<span class="faint">—</span>'}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-    ${rows.length > SHOW_LIMIT ? `<p class="faint" style="font-size:10.5px;margin-top:8px">Showing first ${SHOW_LIMIT} of ${rows.length} IDs</p>` : ''}
-    <p class="faint" style="font-size:10.5px;margin-top:8px">Format check is local. Live status requests the public profile and classifies the response as active, unavailable, login wall or unreachable. No login or Meta API key is used.</p>` : ''}
-  </div>`;
+  const valid = rows?.filter((row) => row.link) || [];
+  return `<div class="page"><div class="page-head"><div><div class="eyebrow">TOOLS</div><h1>Facebook profile check</h1><p class="sub">Public page availability and account restrictions are separate. Without account authorization, ban assessment remains unknown. A visible page does not prove the absence of restrictions.</p></div></div>
+ <div class="card pad checker-card"><label class="fl" for="checker-input">Up to 100 profile IDs or direct links, one per line</label><textarea class="input checker-input" id="checker-input" data-input="checker" spellcheck="false">${esc(input || '')}</textarea><div class="checker-actions"><span id="checker-count" class="faint">${(input || '').split(/\r?\n/).filter((x) => x.trim()).length} rows</span><button class="btn btn-quiet" data-action="checker-clear">Clear</button><button class="btn btn-quiet" data-action="checker-cancel" ${checking ? '' : 'disabled'}>Cancel</button><button class="btn" data-action="checker-status" ${valid.length && !checking && state.settings.facebookEnabled ? '' : 'disabled'}>Check public page</button><button class="btn btn-primary" data-action="checker-run" ${input?.trim() ? '' : 'disabled'}>Validate input</button></div><p class="sub">${state.settings.facebookEnabled ? 'Network checks run only on request. One target at a time, starts at least 2 seconds apart.' : 'Public network checks are disabled. Enable them in Settings; local validation and manual notes still work.'} No login, cookies or CAPTCHA bypass. A rate limit or challenge pauses the remaining queue.</p></div>
+ ${checking ? `<div class="card pad"><span id="checker-progress-text">Checking ${checking.done} of ${checking.total}</span><div class="checker-bar"><i id="checker-progress-fill" style="width:${checking.total ? (100 * checking.done) / checking.total : 0}%"></i></div></div>` : ''}
+ ${rows ? `<div class="table-wrap checker-table"><table class="tbl"><thead><tr><th>Input</th><th>Target / link</th><th>Availability</th><th>Account restrictions</th><th>Owner report (separate)</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td>${row.inputIndex + 1}<br>${esc(row.status)}</td><td><span class="cell-val mono">${esc(row.id)}</span><button class="copy tiny" data-action="copy-model" data-source="checker" data-row="${index}" data-field="id" aria-label="Copy Facebook ID">${I.copy}</button>${row.link ? `<br><button class="btn btn-quiet" data-action="facebook-open" data-target="${esc(row.link)}">Open profile</button><button class="copy" data-action="copy-model" data-source="checker" data-row="${index}" data-field="link" aria-label="Copy Facebook link">${I.copy}</button>` : ''}</td><td>${row.check ? `${esc(labels[row.check.availability] || labels.unknown)}<br><span class="faint">${esc(row.check.reasonCode)} · ${esc(row.check.checkedAt)} · ${row.check.durationMs} ms</span><button class="copy" data-action="copy-model" data-source="checker" data-row="${index}" data-field="reason" aria-label="Copy uncertainty reason">${I.copy}</button>` : 'Not checked'}</td><td>Unknown — public check cannot confirm a ban</td><td>${row.link ? `<label class="fl">Owner statement<select class="input" id="fb-note-status-${index}"><option value="not_checked">Not checked by owner</option><option value="blocked">Owner reports a block</option><option value="not_blocked">Owner reports no block</option></select></label><input class="input" id="fb-note-comment-${index}" maxlength="2000" placeholder="Optional owner comment"><button class="btn" data-action="facebook-note" data-index="${index}">Save owner report</button><details><summary>${row.notes?.length || 0} owner reports</summary>${(row.notes || []).map((note) => `<p>${esc(note.reportedAt)} · ${esc(note.status)} · ${esc(note.comment)}</p>`).join('')}</details>` : ''}</td></tr>`).join('')}</tbody></table></div><p class="sub">Repeated targets are requested once; their original input rows remain visible. Owner reports are not automatically verified and are not overwritten by public checks. The owner should consult Facebook’s official Account Status screen after opening their profile in their own browser.</p>` : ''}</div>`;
 }
