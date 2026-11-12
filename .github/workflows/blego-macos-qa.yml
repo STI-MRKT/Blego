@@ -1,9 +1,9 @@
-name: BLEGO macOS QA build (manual, unsigned)
+name: BLEGO UX macOS M1 QA build
 
 on:
   push:
     branches:
-      - codex/macos-qa-bootstrap-20261112
+      - codex/blego-ux-restoration-20261112
   workflow_dispatch:
     inputs:
       target:
@@ -45,6 +45,7 @@ jobs:
     timeout-minutes: 60
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      BLEGO_CAPTURE_UX: '1'
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -97,6 +98,7 @@ jobs:
           if-no-files-found: error
           path: |
             release/*.dmg
+            release/ux-*.png
             release/SHA256SUMS-mac.txt
             release/macOS-env.txt
             release/native-darwin-*.json
