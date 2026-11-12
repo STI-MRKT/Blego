@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 
 test('generated phone values display in human-readable country groups without changing their digits', async () => {
-  const { formatPhoneDisplay } = await import('../../shared/phone-display.mjs');
+  const { formatPhoneDisplay } = await import('../../src/js/utils/phone.mjs');
   const cases = [
     ['BR', '+5511900000000', '+55 (11) 90000-0000'],
     ['US', '+12020000000', '+1 (202) 000-0000'],
@@ -21,7 +21,7 @@ test('generated phone values display in human-readable country groups without ch
 });
 
 test('unknown or noncanonical phone strings are preserved exactly', async () => {
-  const { formatPhoneDisplay } = await import('../../shared/phone-display.mjs');
+  const { formatPhoneDisplay } = await import('../../src/js/utils/phone.mjs');
   assert.equal(formatPhoneDisplay('+44 (7700) 900-123', 'GB'), '+44 (7700) 900-123');
   assert.equal(formatPhoneDisplay('+12020000000', 'BR'), '+12020000000');
   assert.equal(formatPhoneDisplay('001234', 'US'), '001234');
