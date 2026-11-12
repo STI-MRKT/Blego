@@ -24,14 +24,35 @@ function textValue(value) {
   if (Array.isArray(value)) return value.join(', ');
   return value == null ? '' : String(value);
 }
+function conciseHandle(value, max = 28) {
+  const text = textValue(value);
+  return text.length > max ? text.slice(0, max - 1) + '…' : text;
+}
+function conciseEmail(value) {
+  const text = textValue(value);
+  const at = text.lastIndexOf('@');
+  if (at < 1) return text;
+  const domain = text.slice(at + 1);
+  const local = text.slice(0, at);
+  const visible = Math.max(4, 18 - domain.length - 2);
+  return local.length > visible ? local.slice(0, visible) + '…@' + domain : text;
+}
 function fieldHTML(key, value) {
   const text = textValue(value);
-  const display = key === 'phone' ? formatPhoneDisplay(text, state.demo?.country) : text;
+  const display =
+    key === 'phone'
+      ? formatPhoneDisplay(text, state.demo?.country)
+      : key === 'email'
+        ? conciseEmail(text)
+        : key === 'handle'
+          ? conciseHandle(text)
+          : text;
   const visual = ['email', 'handle'].includes(key)
     ? esc(display).replace(/([.@])/g, '$1<wbr>')
     : esc(display);
   const style = ['phone', 'email', 'postalCode'].includes(key) ? ' mono' : '';
-  return `<div class="field">
+  const rowStyle = ['phone', 'email'].includes(key) ? ` field-${key}` : '';
+  return `<div class="field${rowStyle}">
     <div class="field-main"><div class="field-label">${esc(LABELS[key] || key)}</div>
       <div class="field-value wrap${style}" title="${esc(text)}">${visual}</div></div>
     <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
@@ -83,7 +104,7 @@ function profileHTML() {
           .join('')
           .toUpperCase()
       )}</div>
-      <div class="name">${esc(name)}</div><div class="handle">@${esc(textValue(fields.handle))}</div>
+      <div class="name">${esc(name)}</div><div class="handle" title="${esc(textValue(fields.handle))}">@${esc(conciseHandle(fields.handle, 26))}</div>
       <div class="row-chips">${categories
         .slice(0, 4)
         .map((c) => `<span class="pill accent">${esc(c)}</span>`)
