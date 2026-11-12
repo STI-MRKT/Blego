@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-12T16:25:37.395Z",
+  "os": "linux",
+  "transport": "unchanged production fetchPublicProfile; anonymous, no cookies or login",
+  "results": [
+    {
+      "target": "facebook",
+      "canonicalUrl": "https://www.facebook.com/facebook",
+      "availability": "network_error",
+      "reasonCode": "NETWORK_FAILURE",
+      "banAssessment": "unknown",
+      "checkedAt": "2026-11-12T16:25:37.395Z",
+      "durationMs": 47,
+      "parserVersion": "public-evidence-v1",
+      "runId": "ux4-live-public-page",
+      "evidenceSummary": "NETWORK_FAILURE"
+    }
+  ],
+  "transportFailure": {
+    "code": "ECONNREFUSED",
+    "name": "AggregateError"
+  }
+}

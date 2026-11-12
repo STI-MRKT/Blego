@@ -1,0 +1,22 @@
+✖ one Check normalizes and checks public availability; copies and cancellation remain truthful (31036.63949ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31565.337074
+
+✖ failing tests:
+
+test at tests/ui/facebook-flow.test.cjs:8:1
+✖ one Check normalizes and checks public availability; copies and cancellation remain truthful (31036.63949ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('button', { name: 'Check', exact: true })[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/facebook-flow.test.cjs:30:68) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByRole('button', { name: 'Check', exact: true })" ]
+  }

@@ -13,3 +13,6 @@ Task 3: in progress.
 
 Task 3: implementation complete. lint PASS; unit 47/47; integration 80/80; GUI 5/5. All 17 included RSS/Atom sources returned HTTP 200 in production transport audit. Real Electron per-topic displayed counts: {'fashion': 24, 'ai': 40, 'crypto': 40, 'finance': 32, 'tech': 40}. Raw/unique/source/time evidence and screenshots stages/03. Source-specific commercial redistribution rights beyond checked RSS policies NOT_VERIFIED; no publication authorized. Native Mac remains UX7. Stage2 .log evidence copied to tracked .txt files (repository ignores *.log).
 Task 4: in progress.
+
+Task 4: implementation complete. lint PASS, unit 47/47, integration 80/80, GUI 6/6. Single Check, batch mobile-URL normalization, individual native clipboard, folded owner notes, early cancellation and late-response exclusion verified. Real production Facebook probe returned network_error; underlying ECONNREFUSED, public availability remains BLOCKED. No sanctions verdict. Evidence stages/04.
+Task 5: in progress.

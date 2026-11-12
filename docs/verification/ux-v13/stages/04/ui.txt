@@ -1,0 +1,18 @@
+
+> blego@1.2.0 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (8679.252131ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (10731.043507ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3252.349297ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (6545.143925ms)
+✔ News preserves topic, ignores late other-topic replies and copies each article value (3458.95399ms)
+✔ original visual controls and individual values remain usable with advanced data folded (3777.540915ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39588.142142

@@ -58,10 +58,10 @@ Interfaces: `refreshNews({topic,force})` and `snapshot(topic)` return selected-t
 
 Files: existing checker UI/main + tests; retain normalizer/service/transport unchanged unless test exposes defect.
 Interfaces unchanged `normalizeTargets`, `checkFacebook`, `cancelFacebook` with runId.
-- [ ] RED GUI single Check normalizes then checks; cancel/late result ignored; each ID/link/result copies individually.
-- [ ] Original textarea/card/progress, clear status labels, notes/history in disclosure; no sanctions inference.
-- [ ] Run input/response/queue tests, live bounded public check, full regression and GUI; record restrictions as restrictions.
-- [ ] Commit and ledger.
+- [x] RED GUI single Check normalizes then checks; cancel/late result ignored; each ID/link/result copies individually.
+- [x] Original textarea/card/progress, clear status labels, notes/history in disclosure; no sanctions inference.
+- [x] Run input/response/queue tests, live bounded public check, full regression and GUI; record restrictions as restrictions.
+- [x] Commit and ledger.
 
 ## Task 5: Photos date/GPS
 

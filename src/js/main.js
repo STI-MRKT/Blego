@@ -305,10 +305,14 @@ function bindView() {
       if (stale) stale.hidden = false;
     };
   }
+  const facebookDetails=document.getElementById('facebook-details');
+  if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
   const checker = document.getElementById('checker-input');
   if (checker) {
     checker.oninput = (event) => {
       state.checker.input = event.target.value;
+      const stale=document.querySelector('[data-checker-stale]');
+      if(stale)stale.hidden=state.checker.checkedInput===event.target.value;
       const count = event.target.value.trim()
         ? event.target.value
             .trim()
@@ -1145,28 +1149,30 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-run') {
-    await window.blego.cancelFacebook();
-    const runId = crypto.randomUUID();
-    state.checker.runId = runId;
+    if(state.checker.checking)return;
+    const runId=crypto.randomUUID(),input=state.checker.input;
+    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;
+    state.checker.checking={done:0,total:0};renderView();
     try {
-      const rows = await parseIds(state.checker.input);
-      if (state.checker.runId !== runId) return;
-      state.checker.rows = rows;
-      state.checker.checking = null;
-    } catch (error) {
-      toast(error.message, 'err');
-      return;
+      await window.blego.cancelFacebook();
+      const rows=await parseIds(input);
+      if(state.checker.runId!==runId)return;
+      state.checker.rows=rows;state.checker.checkedInput=input;
+      if(rows.some(row=>row.link)) {
+        if(!state.settings.facebookEnabled)state.settings=await window.blego.updateSettings({facebookEnabled:true});
+        if(state.checker.runId!==runId)return;
+        state.checker.checking=null;await runCheckerStatus(runId);
+      } else {state.checker.checking=null;renderView();}
+    }catch {
+      if(state.checker.runId!==runId)return;
+      state.checker.checking=null;renderView();toast('Could not start this check. Use up to 100 profile IDs or direct links.','err');
     }
-    renderView();
-    return;
-  }
-  if (action === 'checker-status') {
-    runCheckerStatus();
     return;
   }
   if (action === 'checker-cancel') {
-    await window.blego.cancelFacebook();
-    return;
+    state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={availability:'cancelled',reasonCode:'CANCELLED'};
+    renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
     await window.blego.openFacebook(target.dataset.target);
@@ -1190,23 +1196,23 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-clear') {
-    await window.blego.cancelFacebook();
     state.checker = { input: '', rows: null };
     renderView();
+    await window.blego.cancelFacebook();
   }
 });
 
-async function runCheckerStatus() {
+async function runCheckerStatus(runId = crypto.randomUUID()) {
   const rows = state.checker.rows;
   if (!rows || state.checker.checking) return;
   const targets = rows.filter((row) => row.link);
-  const runId = crypto.randomUUID();
   state.checker.runId = runId;
   state.checker.checking = { done: 0, total: new Set(targets.map((row) => row.link)).size };
   renderView();
   try {
-    const result = await checkProfiles(targets, runId, (done, total) => {
+    const result = await checkProfiles(targets, runId, (done, total, result) => {
       if (state.checker.runId !== runId) return;
+      for(const row of rows)if(row.link===result.canonicalUrl)row.check=result;
       state.checker.checking = { done, total };
       const label = document.getElementById('checker-progress-text');
       if (label) label.textContent = `Checking ${done} of ${total}`;
@@ -1217,7 +1223,7 @@ async function runCheckerStatus() {
     for (const row of state.checker.rows || [])
       row.check = result.results.find((value) => value.canonicalUrl === row.link);
   } catch (error) {
-    if (state.checker.runId === runId) toast(error.message, 'err');
+    if (state.checker.runId === runId) toast('Could not complete this check. Try again.', 'err');
   } finally {
     if (state.checker.runId === runId) {
       state.checker.checking = null;
