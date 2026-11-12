@@ -23,6 +23,7 @@ test(
       fs.rmSync(root, { recursive: true, force: true });
     });
     const page = await app.firstWindow();
+    await page.evaluate(() => window.blego.markTour()).catch(() => {});
     const rawCookie = 'FAKE_COOKIE_' + 'x'.repeat(1200);
     const second = 'FAKE_COOKIE_' + 'y'.repeat(1005);
     await page.locator('[data-view="import"]').click();
