@@ -59,6 +59,11 @@ jobs:
         run: |
           npm ci
           node node_modules/electron/install.js
+      - name: Restore compiled Mac Perl cache
+        uses: actions/cache@v4
+        with:
+          path: build/metadata-runtime/darwin-${{ env.TARGET_ARCH }}
+          key: blego-verified-perl-5.40.1-${{ runner.os }}-${{ env.TARGET_ARCH }}-v1
       - name: Prepare native Perl / ExifTool runtime
         run: bash scripts/prepare-metadata-darwin.sh
       - name: Native read-write-readback gate
