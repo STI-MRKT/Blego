@@ -27,8 +27,16 @@ test(
     await page.evaluate(() => window.blego.markTour()).catch(() => {});
     await page.locator('[data-action="generate"]').first().click();
     await page.locator('.demo-card').waitFor();
+    await page.waitForTimeout(900);
+    const tourSkip = page.locator('[data-tour-action="skip"]');
+    if (await tourSkip.isVisible()) await tourSkip.click();
+    await page.locator('.page-head .ux-copy-actions [data-copy-action="open"]').click();
+    await page.locator('[data-copy-control="format"]').waitFor();
+    await page.locator('[data-copy-action="close"]').click();
+
     if (process.env.BLEGO_CAPTURE_UX === '1') {
       fs.mkdirSync('release', { recursive: true });
+      await page.evaluate(() => document.getElementById('toasts')?.replaceChildren());
       await page.screenshot({ path: 'release/ux-generator.png' });
     }
     assert.equal(await page.locator('.ux-generator .ux-copy-set').isVisible(), true);
@@ -70,5 +78,11 @@ test(
       false
     );
     assert.equal(await page.locator('[name="proxyEnabled"]').isVisible(), true);
+    if (process.env.BLEGO_CAPTURE_UX === '1')
+      await page.screenshot({ path: 'release/ux-settings.png' });
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('[data-action="images-choose"]').waitFor();
+    if (process.env.BLEGO_CAPTURE_UX === '1')
+      await page.screenshot({ path: 'release/ux-photos.png' });
   }
 );
