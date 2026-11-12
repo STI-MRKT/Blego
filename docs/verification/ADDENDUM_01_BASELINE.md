@@ -138,3 +138,17 @@ unchanged. All A-stage commits and D0 remain in the current branch. A new
 self-contained bundle is prepared at `/workspace/BLEGO-STI-MRKT-transfer.bundle`
 outside the repository; it includes `main` and the working branch, not ignored
 build outputs or user storage.
+
+### Transfer completed after repository creation
+
+After the user created the destination, `git ls-remote --symref origin` succeeded
+with no refs (empty repository). `git push --atomic origin main:main
+codex/blego-local-v1:codex/blego-local-v1` then succeeded, creating both branches.
+The following values were read back from GitHub and matched the local refs:
+
+- `main`: `6e57eabfb5b51af4475b90686fa580b5ce57e9b0`.
+- `codex/blego-local-v1`: `d017f88419684b311971c53c7d8ac42d6029314d`.
+
+The working branch now tracks `origin/codex/blego-local-v1`. This supersedes the
+permission blockers above; they remain as the history of actual attempts.
+No force push, merge, deployment or application release was performed.
