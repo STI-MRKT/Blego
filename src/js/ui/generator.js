@@ -5,14 +5,12 @@ import { esc } from '../utils/dom.js';
 import { fmtDate } from '../utils/time.js';
 import { initialsOf } from '../utils/random.js';
 import { LOCALES } from '../data/locales.js';
-import { catLabel } from '../data/categories.js';
 import { newsBlockHTML } from './news.js';
 
 export function ttlText() { return 'Сохранено'; }
 
 function fieldHTML(label, value, options = {}) {
-  const copyValue = options.copy ?? value;
-  const key = options.key || String(label);
+    const key = options.key || String(label);
   const display = options.breakAt && String(value).includes(options.breakAt)
     ? String(value).split(options.breakAt).map(esc).join(`<wbr>${esc(options.breakAt)}`)
     : esc(value);
@@ -53,7 +51,7 @@ function demoAreaHTML() {
     </div>`;
   }
   const raw = state.demo;
-  const demo = { ...raw.fields, ...raw, locale: raw.country, postal: raw.fields.postalCode, hue: [...String(raw.fields.name || '')].reduce((n, c) => n + c.charCodeAt(0), 50) % 360 };
+  const demo = { ...raw.fields, ...raw, locale: raw.country, postal: raw.fields.postalCode, categories: Array.isArray(raw.fields.categories) ? raw.fields.categories : [], hue: [...String(raw.fields.name || '')].reduce((n, c) => n + c.charCodeAt(0), 50) % 360 };
   const locale = LOCALES[demo.locale] || { name: { en: demo.locale } };
   const primary = new Set(['name', 'phone', 'email', 'postalCode', 'address', 'city']);
   const more = demo.fieldOrder.filter((field) => !primary.has(field));
@@ -111,7 +109,6 @@ export function generatorHTML() {
           ${locales.map((key) => `<option value="${key}" ${state.locale === key ? 'selected' : ''}>${LOCALES[key].name.en} · ${LOCALES[key].dial}</option>`).join('')}
         </select>
       </div>
-      <div class="ctl-hint" style="display:none">${t('Категории страницы выбираются автоматически — три случайные, как в Facebook. Выбор только за GEO.', 'Page categories are picked automatically — three random ones, Facebook-style. Only GEO is yours to choose.')}</div>
       <div class="ctl ctl-sm"><label class="fl">Тип</label><select class="input" data-input="type">${['model', 'tech', 'crypto'].map((type) => `<option value="${type}" ${state.type === type ? 'selected' : ''}>${type}</option>`).join('')}</select></div>
       <div class="ctl-actions">
         <button class="btn btn-quiet" data-action="clear-demo" ${state.demo ? '' : 'disabled'}>${t('Очистить', 'Clear')}</button>
