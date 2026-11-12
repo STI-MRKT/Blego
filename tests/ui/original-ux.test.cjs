@@ -61,6 +61,12 @@ test(
       'none'
     );
     assert.equal(await page.locator('#view > #copy-actions').count(), 0);
+    assert.equal(await page.locator('.demo-card .fields').first().locator('.field').count(), 6);
+    assert.ok(await page.locator('.handle').evaluate((e) => e.scrollWidth <= e.clientWidth));
+    if (process.env.BLEGO_CAPTURE) {
+      fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+      await page.screenshot({ path: path.join(process.env.BLEGO_CAPTURE, 'generator.png') });
+    }
     const profile = await page.evaluate(() => window.blego.lastCard());
     for (const field of profile.fieldOrder) {
       const button = page.locator(`[aria-label="Copy ${field}"]`).first();

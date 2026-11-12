@@ -1,0 +1,60 @@
+
+> blego@1.2.0 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✖ Electron offline workflow, native clipboard, pending import, ZIP and restart (1649.899288ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (1383.46216ms)
+✖ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (36672.0136ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (2802.42865ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4357.697905ms)
+✔ News preserves topic, ignores late other-topic replies and copies each article value (2466.383641ms)
+✔ original visual controls and individual values remain usable with advanced data folded (2977.55007ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4596.359025ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60020.146356
+
+✖ failing tests:
+
+test at tests/ui/app.test.cjs:13:1
+✖ Electron offline workflow, native clipboard, pending import, ZIP and restart (1649.899288ms)
+  locator.click: Error: strict mode violation: locator('[aria-label="Copy handle"]') resolved to 2 elements:
+      1) <button data-field="handle" data-source="generator" class="copy tiny always" data-action="copy-model" aria-label="Copy handle">…</button> aka getByRole('button', { name: 'Copy handle' }).first()
+      2) <button class="copy" data-field="handle" data-source="generator" data-action="copy-model" aria-label="Copy handle">…</button> aka getByRole('group').getByRole('button', { name: 'Copy handle' })
+  
+  Call log:
+  [2m  - waiting for locator('[aria-label="Copy handle"]')[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/app.test.cjs:95:58) {
+    log: [ `  - waiting for locator('[aria-label="Copy handle"]')` ]
+  }
+
+test at tests/ui/copy-all-sections.test.cjs:10:1
+✖ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (36672.0136ms)
+  locator.selectOption: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#archive-filter [name="order"]')[22m
+  [2m    - locator resolved to <select name="order" class="input" aria-label="Archive order">…</select>[22m
+  [2m  - attempting select option action[22m
+  [2m    2 × waiting for element to be visible and enabled[22m
+  [2m      - element is not visible[22m
+  [2m    - retrying select option action[22m
+  [2m    - waiting 20ms[22m
+  [2m    2 × waiting for element to be visible and enabled[22m
+  [2m      - element is not visible[22m
+  [2m    - retrying select option action[22m
+  [2m      - waiting 100ms[22m
+  [2m    59 × waiting for element to be visible and enabled[22m
+  [2m       - element is not visible[22m
+  [2m     - retrying select option action[22m
+  [2m       - waiting 500ms[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/copy-all-sections.test.cjs:236:58) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('#archive-filter [name="order"]')`, '    - locator resolved to <select name="order" class="input" aria-label="Archive order">…</select>', '  - attempting select option action', '    2 × waiting for element to be visible and enabled', '      - element is not visible', '    - retrying select option action', '    - waiting 20ms', '    2 × waiting for element to be visible and enabled', '      - element is not visible', '    - retrying select option action', '      - waiting 100ms', '    59 × waiting for element to be visible and enabled', '       - element is not visible', '     - retrying select option action', '       - waiting 500ms' ]
+  }

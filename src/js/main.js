@@ -384,17 +384,14 @@ function bindDrop(id, onFiles) {
 async function generate() {
   if (state.demoBusy) return;
   state.demoBusy = true;
+  state.demoError='';
   renderView();
   try {
     state.demo = await makeDemo(state.locale, state.type);
     toast('New set saved');
   } catch (e) {
-    toast(
-      e.message === 'POOL_EXHAUSTED'
-        ? `Finite dictionary exhausted: ${e.details?.field || 'field'} (${e.details?.scope || 'local'}). Adjust optional repeats or extend the dictionary.`
-        : e.message,
-      'err'
-    );
+    state.demoError=e.message==='POOL_EXHAUSTED'?'No unused values remain. Choose another country or add a data package in Settings.':'Generation failed. Check your settings and try again.';
+    toast(state.demoError,'err');
   } finally {
     state.demoBusy = false;
     try {
@@ -699,7 +696,7 @@ document.addEventListener('click', async (event) => {
       .then(async (ok) => {
         if (ok) {
           state.archiveView = null;
-          state.archives = await window.blego.listArchives();
+          state.archives = await window.blego.listArchives(state.archiveQuery || {});
           renderView();
         }
       })
@@ -707,7 +704,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'archive-folder') {
-    window.blego.archiveFolder(target.dataset.id);
+    window.blego.archiveFolder(target.dataset.id).catch(()=>toast('Could not open the archive folder.', 'err'));
     return;
   }
   if (action === 'archive-back') {
@@ -719,7 +716,7 @@ document.addEventListener('click', async (event) => {
     state.view = target.dataset.view;
     if (state.view === 'history')
       window.blego
-        .listArchives()
+        .listArchives(state.archiveQuery || {})
         .then((v) => {
           state.archives = v;
           renderView();

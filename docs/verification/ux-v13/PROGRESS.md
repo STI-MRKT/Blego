@@ -19,3 +19,6 @@ Task 5: in progress.
 
 Task 5: complete implementation. lint PASS, unit 47/47, integration 84/84, GUI 7/7; expanded real UI cancellation target PASS. JPEG/PNG/WebP actual date/GPS writes/readback, independent namespace scopes and per-file timezone Keep, originals/image invariants, group persistence/reselection verified. Original Photos grid restored; primary/preview/export screenshots stages/05. Existing permission/full-disk fault injection and recovery tests re-run; no physical full-disk or Mac claim.
 Task 6: in progress.
+
+Task 6: complete. lint PASS, unit 47/47, integration 84/84, GUI 8/8. Compact original archive rows and six generator fields, all individual copy controls, actual TXT/ZIP exports and confirmation paths tested. Protected CSS/assets/icons unchanged. Evidence stages/06.
+Task 7: in progress.

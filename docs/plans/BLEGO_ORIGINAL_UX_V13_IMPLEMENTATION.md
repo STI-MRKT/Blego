@@ -76,9 +76,9 @@ Interfaces extend existing captureDate operation with explicit date representati
 ## Task 6: Generator and Archive
 
 Files: generator/history/main/copy controls; tests existing registry/archive plus new GUI actions.
-- [ ] RED compact original archive row actions/open/copy/TXT/ZIP/folder/delete confirm/filter/sort; generator extras and every independent value copy.
-- [ ] Finish compact flows; preserve ZIP and history/settings; short honest dictionary error; no expiry timer.
-- [ ] Regression/GUI/restart/protected-resource comparison, commit and ledger.
+- [x] RED compact original archive row actions/open/copy/TXT/ZIP/folder/delete confirm/filter/sort; generator extras and every independent value copy.
+- [x] Finish compact flows; preserve ZIP and history/settings; short honest dictionary error; no expiry timer.
+- [x] Regression/GUI/restart/protected-resource comparison, commit and ledger.
 
 ## Task 7: candidate verification and native QA
 
