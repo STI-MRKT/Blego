@@ -2,7 +2,7 @@ import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 import { LOCALES } from '../data/locales.js';
-import { newsBlockHTML } from './news.js';
+import { formatPhoneDisplay } from '../../../shared/phone-display.mjs';
 
 const LABELS = {
   name: 'Имя',
@@ -26,9 +26,14 @@ function textValue(value) {
 }
 function fieldHTML(key, value) {
   const text = textValue(value);
+  const display = key === 'phone' ? formatPhoneDisplay(text, state.demo?.country) : text;
+  const visual = ['email', 'handle'].includes(key)
+    ? esc(display).replace(/([.@])/g, '$1<wbr>')
+    : esc(display);
+  const style = ['phone', 'email', 'postalCode'].includes(key) ? ' mono' : '';
   return `<div class="field">
     <div class="field-main"><div class="field-label">${esc(LABELS[key] || key)}</div>
-      <div class="field-value wrap" title="${esc(text)}">${esc(text)}</div></div>
+      <div class="field-value wrap${style}" title="${esc(text)}">${visual}</div></div>
     <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
   </div>`;
 }
@@ -54,7 +59,9 @@ function profileHTML() {
     </div>`;
   const fields = p.fields || {},
     keys = p.fieldOrder || [];
-  const primary = keys.filter((key) => QUICK_FIELDS.has(key));
+  const primary = ['name', 'phone', 'email', 'postalCode', 'address', 'city', 'handle'].filter((key) =>
+    keys.includes(key)
+  );
   const extended = keys.filter((key) => !QUICK_FIELDS.has(key));
   const name = textValue(fields.name);
   const hue = [...name].reduce((n, c) => n + c.codePointAt(0), 160) % 360;
@@ -134,6 +141,5 @@ export function generatorHTML() {
       <p class="sub">${stats ? `${stats.counts.firstNames} имён · ${stats.counts.lastNames} фамилий · набор ${esc(stats.datasetVersions?.country || '')}` : 'Словари загружаются'}</p>
       <p class="sub">У некоторых стран ограниченные источники имён, улиц и географии. При исчерпании программа сообщит, какого поля не хватает. Подробные настройки — в разделе «Настройки».</p>
     </details>
-    ${newsBlockHTML()}
   </div>`;
 }
