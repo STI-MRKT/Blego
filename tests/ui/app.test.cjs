@@ -55,7 +55,7 @@ test(
           XDG_CACHE_HOME: path.join(root, 'cache')
         }
       });
-      assert.equal(await app.evaluate(({ app }) => app.getPath('userData')), data);
+      assert.equal(await app.evaluate(({ app }) => app.getPath('userData')), fs.realpathSync(data));
       const page = await app.firstWindow();
       await app.evaluate(({ BrowserWindow }) =>
         BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
