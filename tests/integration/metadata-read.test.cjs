@@ -107,3 +107,33 @@ test('animation, signed provenance, mixed values and external ExifTool config ar
     else process.env.EXIFTOOL_HOME = previous;
   }
 });
+test('missing and mixed metadata remain distinct and file/queue/total limits reject atomically', async (t) => {
+  const { createImageService } = require('../../electron/features/images/service.cjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-mixed-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const plain = await imageFixture(root, 'png', { metadata: false, name: 'empty.png' }),
+    tagged = await imageFixture(root, 'png', { name: 'tagged.png' });
+  const service = createImageService();
+  const items = await service.addFiles([plain, tagged]);
+  const views = await Promise.all(items.map((i) => service.readImageMetadata(i.fileId)));
+  assert.equal(views[0].tags.find((t) => t.field === 'title').value, null);
+  const plan = service.planMetadataChanges({
+    fileIds: items.map((i) => i.fileId),
+    operations: [
+      { field: 'title', action: 'keep' },
+      { field: 'author', action: 'remove' }
+    ]
+  });
+  assert.equal(plan.files[0].beforeAfter[0].before, null);
+  assert.equal(plan.files[1].beforeAfter[0].before, 'Исходный заголовок');
+  assert.equal(plan.files[0].beforeAfter[0].after, null);
+  await assert.rejects(service.addFiles(Array(101).fill(plain)), /IMAGE_QUEUE_LIMIT/);
+  const huge = path.join(root, 'huge.jpg');
+  fs.writeFileSync(huge, '');
+  fs.truncateSync(huge, 50 * 1024 * 1024 + 1);
+  await assert.rejects(service.addFiles([huge]), /IMAGE_TOO_LARGE/);
+  fs.truncateSync(huge, 50 * 1024 * 1024);
+  await assert.rejects(service.addFiles(Array(11).fill(huge)), /IMAGE_QUEUE_LIMIT/);
+  const [next] = await service.addFiles([plain]);
+  assert.ok(next.fileId);
+});

@@ -102,8 +102,11 @@
     "asarUnpack": [
       "node_modules/exiftool-vendored.pl/**/*",
       "node_modules/exiftool-vendored.exe/**/*",
-      "resources/metadata/perl-bootstrap.pl"
-    ]
+      "resources/metadata/perl-bootstrap.pl",
+      "node_modules/@img/**/*",
+      "node_modules/sharp/**/*"
+    ],
+    "beforePack": "scripts/metadata-before-pack.cjs"
   },
   "type": "module",
   "dependencies": {
