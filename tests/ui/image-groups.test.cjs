@@ -207,8 +207,9 @@ test(
     app = null;
     page = await launch();
     assert.equal(
-      await page.locator('#image-group option').filter({ hasText: 'Explicit group' }).count(),
-      1
+      await page.locator('#image-group').count(),
+      0,
+      'group tools stay collapsed when no images are present after restart'
     );
     assert.equal(await page.locator('[data-image-select]').count(), 0);
     const saved = await page.evaluate(() => window.blego.imageWorkspace());
