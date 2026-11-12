@@ -17,8 +17,9 @@ function externalUrl(raw) {
   }
 }
 async function copyText(text, clipboard) {
-  if (typeof text !== 'string' || text.length > 4 * 1024 * 1024)
-    return { ok: false, code: 'INVALID_TEXT' };
+  if (typeof text !== 'string') return { ok: false, code: 'INVALID_TEXT' };
+  if (Buffer.byteLength(text, 'utf8') > 10 * 1024 * 1024)
+    return { ok: false, code: 'COPY_TOO_LARGE' };
   try {
     await clipboard.writeText(text);
     if ((await clipboard.readText()) !== text) throw Error();

@@ -1,9 +1,12 @@
 import { I } from '../icons.js';
 import { t } from '../i18n.js';
 import { toast } from './toast.js';
+import { checkCopyText } from '../../../shared/copy-format.mjs';
 
 export async function copyText(text, button) {
   try {
+    text = text == null ? '' : String(text);
+    checkCopyText(text);
     if (window.blego) {
       const result = await window.blego.copyText(String(text));
       if (!result.ok) throw Error(result.code);
@@ -31,14 +34,19 @@ export async function copyText(text, button) {
     }
     toast(t('Скопировано', 'Copied'));
     return { ok: true };
-  } catch {
+  } catch (error) {
     toast(
-      t(
-        'Не удалось скопировать. Выделите текст вручную.',
-        'Copy failed. Select the text manually.'
-      ),
+      error.code === 'COPY_TOO_LARGE' || error.message === 'COPY_TOO_LARGE'
+        ? t(
+            'Больше 10 МиБ. Используйте экспорт файла.',
+            'Larger than 10 MiB. Export a file instead.'
+          )
+        : t(
+            'Не удалось скопировать. Выделите текст вручную.',
+            'Copy failed. Select the text manually.'
+          ),
       'err'
     );
-    return { ok: false };
+    return { ok: false, code: error.code || error.message || 'CLIPBOARD_FAILED' };
   }
 }
