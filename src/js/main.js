@@ -1,4 +1,4 @@
-import { mountCopyActions, initCopyPreferences, copyModelValue } from './utils/copy-actions.js';
+import { mountCopyActions, initCopyPreferences, copyModelValue, invalidateImportCopies } from './utils/copy-actions.js';
 import { readSettingsForm } from './ui/settings.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
@@ -415,6 +415,7 @@ function classificationOptions() {
   return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, encoding:state.importEncoding || undefined};
 }
 async function handleFile(file) {
+  invalidateImportCopies();
   const epoch = state.importEpoch = (state.importEpoch || 0) + 1;
   if (state.importRequest || state.importData?.operationId)
     await window.blego.cancelImport(state.importRequest || state.importData.operationId);
@@ -480,6 +481,7 @@ async function importPage(offset) {
   } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
 }
 async function reclassifyInput() {
+  invalidateImportCopies();
   const operationId = state.importData?.operationId, epoch = state.importEpoch;
   if(!operationId) return;
   state.importStep='loading'; state.importRequest=operationId; renderView();
@@ -859,6 +861,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'import-reset') {
+    invalidateImportCopies();
     state.importEpoch = (state.importEpoch || 0) + 1;
     state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
     if(state.classifierOptions) state.classifierOptions.mapping={};

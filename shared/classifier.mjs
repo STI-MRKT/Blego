@@ -95,19 +95,19 @@ export function classifyRecords(parsed, options = {}) {
       Object.entries(source.data).map(([column, value]) => ({ column, value }));
     entries.forEach((entry, position) => {
       let value = entry.value;
-      if (value == null || value === '') return;
+      if (value == null) value = '';
       if (typeof value === 'object') value = entry.rawText ?? JSON.stringify(value);
       else if (typeof value === 'number') value = entry.rawText ?? String(value);
       else value = String(value);
-      const named = parsed.headerless ? null : fieldForHeader(entry.column);
+      const named = parsed.headerless ? null : fieldForHeader(entry.header ?? entry.column);
       const schema = options.schema ? SCHEMAS[options.schema][position] : null;
-      const mapped = mapping[entry.column];
+      const mapped = Object.hasOwn(mapping, entry.column) ? mapping[entry.column] : null;
       const key = named || schema || mapped || guess(value);
       const priority = named ? 4 : schema ? 3 : mapped ? 2 : 1;
       const original = { ...entry, value, location: source.location };
       if (key === 'rowNumber') return;
       if (!key) {
-        unrecognized.push(original);
+        if (value !== '') unrecognized.push(original);
         return;
       }
       if (!candidates.has(key)) candidates.set(key, []);
@@ -118,11 +118,12 @@ export function classifyRecords(parsed, options = {}) {
       const winners = values.filter((v) => v.priority === best);
       const valid =
         winners.length === 1 &&
-        !(key === 'birthDate' && !validBirthDate(winners[0].value)) &&
-        !(key === 'email' && !emailValid(winners[0].value));
+        !(key === 'birthDate' && winners[0].value && !validBirthDate(winners[0].value)) &&
+        !(key === 'email' && winners[0].value && !emailValid(winners[0].value));
       if (valid) data[key] = winners[0].value;
       else report(winners.length > 1 ? 'AMBIGUOUS_FIELD' : 'INVALID_FIELD', key);
-      for (const v of values) if (!valid || v !== winners[0]) unrecognized.push(v.original);
+      for (const v of values)
+        if (v.value !== '' && (!valid || v !== winners[0])) unrecognized.push(v.original);
     }
     if (unrecognized.length) report('UNRECOGNIZED_VALUES');
     if (data.cookies && data.accountId) {

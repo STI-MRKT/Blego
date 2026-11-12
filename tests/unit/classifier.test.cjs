@@ -89,3 +89,56 @@ test('explicit mapping, alias collisions and invalid dates retain original unres
   assert.equal(bad.records[0].data.birthDate, '');
   assert.equal(bad.records[0].unrecognized.length, 3);
 });
+
+test('auto headers preserve headerless GEO ID and identical aliases remain ambiguous', async () => {
+  const p = await parse(
+    'Example One\t0001\tFAKE_PASS\t\tone@example.com\t01.02.2000\tID\nExample Two\t0002\t\t\ttwo@example.com\t\tUS',
+    'synthetic.tsv'
+  );
+  const c = await classify(p, { schema: 'core7' });
+  assert.equal(c.records.length, 2);
+  assert.equal(c.records[0].data.geo, 'ID');
+  assert.equal(c.records[1].data.accountId, '0002');
+  for (const [key, a, b, field] of [
+    ['id', '0001', '0002', 'accountId'],
+    ['email', 'one@example.com', 'two@example.com', 'email']
+  ]) {
+    const duplicate = await classify(await parse(`${key}\t${key}\n${a}\t${b}`));
+    assert.equal(duplicate.records[0].data[field], '');
+    assert.equal(duplicate.records[0].unrecognized.length, 2);
+  }
+});
+test('prototype-named columns remain unresolved without creating extra result fields', async () => {
+  const { CLASSIFIER_FIELDS } = await import('../../shared/classifier.mjs');
+  const p = await parse(
+    'id\tconstructor\ttoString\t__proto__\n0001\tFAKE_A\tFAKE_B\tFAKE_C',
+    'synthetic.tsv',
+    { headers: true }
+  );
+  const c = await classify(p);
+  assert.equal(c.records[0].unrecognized.length, 3);
+  assert.deepEqual(
+    Object.keys(c.records[0].data),
+    CLASSIFIER_FIELDS.map((f) => f.key)
+  );
+});
+test('explicit missing fields stay empty instead of taking heuristic values from other columns', async () => {
+  const c = await classify(
+    await parse('email\tother\n\ttwo@example.com', 'synthetic.tsv', { headers: true })
+  );
+  assert.equal(c.records[0].data.email, '');
+  assert.equal(c.records[0].unrecognized[0].value, 'two@example.com');
+  const schema = await classify(
+    await parse('Example Person\t0001\t\t\t\t\tGB\textra@example.com', 'synthetic.tsv', {
+      headers: false
+    }),
+    { schema: 'core7' }
+  );
+  assert.equal(schema.records[0].data.email, '');
+  assert.equal(schema.records[0].unrecognized[0].value, 'extra@example.com');
+});
+test('identical named header columns must not silently pick the first conflicting value', async () => {
+  const c = await classify(await parse('id\tid\n0001\t0002'));
+  assert.equal(c.records[0].data.accountId, '');
+  assert.equal(c.records[0].unrecognized.length, 2);
+});

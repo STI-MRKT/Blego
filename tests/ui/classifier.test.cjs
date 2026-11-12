@@ -50,6 +50,21 @@ test(
       'Куки'
     ]);
     assert.equal(await page.locator('.classifier-table tbody tr').count(), 50);
+    const geometry = await page.locator('[data-row="1"][data-field="accountId"]').evaluate((b) => {
+      const text = b.previousElementSibling.getBoundingClientRect(),
+        button = b.getBoundingClientRect();
+      return {
+        textRight: text.right,
+        textTop: text.top,
+        buttonLeft: button.left,
+        buttonTop: button.top
+      };
+    });
+    assert.ok(
+      geometry.buttonLeft >= geometry.textRight &&
+        Math.abs(geometry.textTop - geometry.buttonTop) < 10,
+      'copy icon belongs beside its value'
+    );
     await page.locator('[data-action="import-page"][data-offset="50"]').click();
     await page.locator('[data-row="51"][data-field="cookies"]').waitFor();
     assert.equal(await page.locator('.classifier-table tbody tr').count(), 1);
@@ -94,5 +109,13 @@ test(
     assert.ok((await page.locator('.classifier-table').innerText()).includes('FAKE_A'));
     await page.locator('[data-action="import-reset"]').click();
     assert.equal(await page.locator('.classifier-table').count(), 0);
+    if (process.env.BLEGO_CAPTURE_UX === '1') {
+      await page.locator('#classifier-headers').selectOption('');
+      await page.locator('[data-action="import-sample"]').click();
+      await page.locator('[data-classifier-status]').waitFor();
+      await page.evaluate(() => document.getElementById('toasts')?.replaceChildren());
+      fs.mkdirSync('release', { recursive: true });
+      await page.screenshot({ path: 'release/ux-classifier.png' });
+    }
   }
 );

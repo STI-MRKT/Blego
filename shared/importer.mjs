@@ -251,10 +251,15 @@ export function parseText(text, format, options = {}) {
   } else if (['csv', 'tsv', ...(options.classification ? ['txt'] : [])].includes(format)) {
     delimiter = format === 'tsv' ? '\t' : delimiterOf(text, options.classification) || ',';
     const rows = delimited(text, delimiter, options.classification);
+    const firstCells = (rows[0]?.cells || []).filter((v) => v !== '');
+    const namedCount = firstCells.filter(fieldForHeader).length;
+    const confidentHeaders =
+      firstCells.length === 1
+        ? namedCount === 1
+        : namedCount >= 2 && namedCount >= firstCells.length / 2;
     headerless =
       options.classification &&
-      (options.headers === false ||
-        (options.headers !== true && !rows[0]?.cells.some(fieldForHeader)));
+      (options.headers === false || (options.headers !== true && !confidentHeaders));
     const headers = headerless
       ? Array.from({ length: rows[0]?.cells.length || 0 }, (_, i) => `column_${i + 1}`)
       : rows.shift()?.cells || [];
@@ -283,7 +288,21 @@ export function parseText(text, format, options = {}) {
       }
       if (cells.length > headers.length) diagnostics.push(diagnostic('EXTRA_CELL', location, id));
       if (cells.length < headers.length) diagnostics.push(diagnostic('MISSING_CELL', location, id));
-      return { id, location, data, raw: cells };
+      return {
+        id,
+        location,
+        data,
+        raw: cells,
+        ...(options.classification
+          ? {
+              sourceEntries: columns.map((column, j) => ({
+                column,
+                header: headerless ? null : headers[j],
+                value: cells[j] ?? null
+              }))
+            }
+          : {})
+      };
     });
   } else throw failure('UNSUPPORTED_FORMAT', 'parse');
   const seen = new Map();
