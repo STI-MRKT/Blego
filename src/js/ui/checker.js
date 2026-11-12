@@ -16,7 +16,7 @@ const labels = {
 export function checkerHTML() {
   const { input, rows, checking } = state.checker;
   const count = (input || '').split(/\r?\n/).filter((x) => x.trim()).length;
-  const percent = checking?.total ? Math.round(100 * checking.done / checking.total) : 0;
+  const percent = checking?.total ? Math.round((100 * checking.done) / checking.total) : 0;
   return `<div class="page">
     <div class="page-head"><div><div class="eyebrow">ПРОВЕРКА</div>
       <h1>Facebook-чекер</h1><p class="sub">Вставьте ссылки или ID аккаунтов — по одному на строку.</p></div></div>
@@ -31,19 +31,29 @@ export function checkerHTML() {
           ${!input?.trim() || checking ? 'disabled' : ''}>${I.shield}Проверить</button>
       </div>
     </div>
-    ${checking ? `<div class="card pad">
+    ${
+      checking
+        ? `<div class="card pad">
       <div class="checker-progress-head"><span id="checker-progress-text">${checking.done} из ${checking.total}</span><b>${percent}%</b></div>
       <div class="checker-bar"><i id="checker-progress-fill" style="width:${percent}%"></i></div>
-    </div>` : ''}
-    ${rows ? `<div class="table-wrap checker-table"><table class="tbl">
+    </div>`
+        : ''
+    }
+    ${
+      rows
+        ? `<div class="table-wrap checker-table"><table class="tbl">
       <thead><tr><th>Аккаунт</th><th>Доступность страницы</th><th>Действие</th></tr></thead>
-      <tbody>${rows.map((row, index) => `<tr>
+      <tbody>${rows
+        .map(
+          (row, index) => `<tr>
         <td><span class="mono cell-val">${esc(row.id || String(row.inputIndex + 1))}</span>
           <button class="copy tiny" data-action="copy-model" data-source="checker" data-row="${index}" data-field="id" aria-label="Copy Facebook ID">${I.copy}</button></td>
         <td><span class="pill ${row.check?.availability === 'profile_visible' ? 'ok' : row.check?.availability === 'network_error' ? 'warn' : ''}">
           ${esc(labels[row.check?.availability] || (row.link ? 'Ожидает проверки' : 'Неверный ввод'))}</span>
           <div class="faint">${row.check ? 'Статус блокировки не установлен' : ''}</div></td>
-        <td>${row.link ? `<button class="btn btn-quiet" data-action="facebook-open" data-target="${esc(row.link)}">Открыть</button>
+        <td>${
+          row.link
+            ? `<button class="btn btn-quiet" data-action="facebook-open" data-target="${esc(row.link)}">Открыть</button>
           <details><summary>Заметка владельца</summary>
             <label class="fl">Моя проверка<select class="input" id="fb-note-status-${index}">
               <option value="not_checked">Не проверял</option><option value="blocked">Есть ограничение</option>
@@ -51,7 +61,13 @@ export function checkerHTML() {
             <input class="input" id="fb-note-comment-${index}" maxlength="2000" placeholder="Комментарий">
             <button class="btn" data-action="facebook-note" data-index="${index}">Сохранить</button>
             ${(row.notes || []).map((note) => `<p class="faint">${esc(note.reportedAt)} · ${esc(note.status)}</p>`).join('')}
-          </details>` : ''}</td>
-      </tr>`).join('')}</tbody></table></div>` : ''}
+          </details>`
+            : ''
+        }</td>
+      </tr>`
+        )
+        .join('')}</tbody></table></div>`
+        : ''
+    }
   </div>`;
 }

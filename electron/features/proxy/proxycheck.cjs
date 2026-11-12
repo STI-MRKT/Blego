@@ -39,8 +39,11 @@ function createProxycheckProvider({ fetchImpl = fetch } = {}) {
       }
       const data = JSON.parse(Buffer.concat(chunks).toString('utf8'));
       const entry = data?.[ip];
-      if (!['ok', 'warning'].includes(data?.status) || !entry ||
-          !['yes', 'no'].includes(entry.proxy))
+      if (
+        !['ok', 'warning'].includes(data?.status) ||
+        !entry ||
+        !['yes', 'no'].includes(entry.proxy)
+      )
         throw Error('PROVIDER_INVALID_RESPONSE');
       const risk = Number(entry.risk);
       return {
@@ -49,9 +52,10 @@ function createProxycheckProvider({ fetchImpl = fetch } = {}) {
         vpn: /vpn/i.test(String(entry.type || '')),
         tor: /tor/i.test(String(entry.type || '')),
         type: String(entry.type || 'unknown').slice(0, 60),
-        risk: Number.isFinite(risk) && risk >= 0 && risk <= 100 && entry.risk !== null
-          ? Math.round(risk)
-          : null,
+        risk:
+          Number.isFinite(risk) && risk >= 0 && risk <= 100 && entry.risk !== null
+            ? Math.round(risk)
+            : null,
         country: typeof entry.country === 'string' ? entry.country.slice(0, 120) : null,
         asn: typeof entry.asn === 'string' ? entry.asn.slice(0, 120) : null
       };

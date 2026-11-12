@@ -33,11 +33,14 @@ function itemHTML(item) {
 }
 
 function skeletonHTML() {
-  return Array.from({ length: 10 }, () => `<article class="news-item-card">
+  return Array.from(
+    { length: 10 },
+    () => `<article class="news-item-card">
     <div class="sk" style="height:13px;width:92%"></div>
     <div class="sk" style="height:13px;width:64%;margin-top:6px"></div>
     <div class="sk" style="height:9px;width:38%;margin-top:10px"></div>
-  </article>`).join('');
+  </article>`
+  ).join('');
 }
 
 export function newsBlockHTML() {

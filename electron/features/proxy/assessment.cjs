@@ -11,9 +11,12 @@ function assess(sources) {
       status: 'insufficient_data',
       factors: []
     };
-  const measured = good.find((source) =>
-    source.id === 'proxycheck.io' && Number.isInteger(source.risk) &&
-    source.risk >= 0 && source.risk <= 100
+  const measured = good.find(
+    (source) =>
+      source.id === 'proxycheck.io' &&
+      Number.isInteger(source.risk) &&
+      source.risk >= 0 &&
+      source.risk <= 100
   );
   const trust = measured ? 100 - measured.risk : null;
   const factors = Object.entries(formula.weights)

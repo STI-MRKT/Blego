@@ -7,13 +7,19 @@ import { initialsOf } from '../utils/random.js';
 import { LOCALES } from '../data/locales.js';
 import { newsBlockHTML } from './news.js';
 
-export function ttlText() { return 'Сохранено'; }
+export function ttlText() {
+  return 'Сохранено';
+}
 
 function fieldHTML(label, value, options = {}) {
-    const key = options.key || String(label);
-  const display = options.breakAt && String(value).includes(options.breakAt)
-    ? String(value).split(options.breakAt).map(esc).join(`<wbr>${esc(options.breakAt)}`)
-    : esc(value);
+  const key = options.key || String(label);
+  const display =
+    options.breakAt && String(value).includes(options.breakAt)
+      ? String(value)
+          .split(options.breakAt)
+          .map(esc)
+          .join(`<wbr>${esc(options.breakAt)}`)
+      : esc(value);
   return `<div class="field">
     <div class="field-main">
       <div class="field-label">${esc(label)}</div>
@@ -51,7 +57,14 @@ function demoAreaHTML() {
     </div>`;
   }
   const raw = state.demo;
-  const demo = { ...raw.fields, ...raw, locale: raw.country, postal: raw.fields.postalCode, categories: Array.isArray(raw.fields.categories) ? raw.fields.categories : [], hue: [...String(raw.fields.name || '')].reduce((n, c) => n + c.charCodeAt(0), 50) % 360 };
+  const demo = {
+    ...raw.fields,
+    ...raw,
+    locale: raw.country,
+    postal: raw.fields.postalCode,
+    categories: Array.isArray(raw.fields.categories) ? raw.fields.categories : [],
+    hue: [...String(raw.fields.name || '')].reduce((n, c) => n + c.charCodeAt(0), 50) % 360
+  };
   const locale = LOCALES[demo.locale] || { name: { en: demo.locale } };
   const primary = new Set(['name', 'phone', 'email', 'postalCode', 'address', 'city']);
   const more = demo.fieldOrder.filter((field) => !primary.has(field));

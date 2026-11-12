@@ -20,7 +20,8 @@ async function lookupProviders(ip, providers, signal) {
           status: 'ok',
           proxy: data.proxy,
           hosting: data.hosting,
-          risk: Number.isInteger(data.risk) && data.risk >= 0 && data.risk <= 100 ? data.risk : null,
+          risk:
+            Number.isInteger(data.risk) && data.risk >= 0 && data.risk <= 100 ? data.risk : null,
           vpn: data.vpn === true,
           tor: data.tor === true,
           type: typeof data.type === 'string' ? data.type : null,

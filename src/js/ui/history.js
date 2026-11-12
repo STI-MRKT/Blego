@@ -40,12 +40,20 @@ export function historyHTML() {
     </form>
     ${state.archives.recoveryReports?.some((r) => r.errors?.length) ? '<div class="banner warn">Некоторые архивы требуют восстановления.</div>' : ''}
     <div class="hlist">
-      ${items.length ? items.map((e) => `<div class="hrow">
+      ${
+        items.length
+          ? items
+              .map(
+                (e) => `<div class="hrow">
         <div class="fi">ZIP</div>
         <div><button class="btn btn-quiet nm" data-action="archive-open" data-id="${esc(e.archiveId)}">${esc(e.originalName)}</button>
           <div class="mt">${esc(e.processedAt)}</div></div>
         <span class="pill tiny">${esc(e.status)}</span>
-      </div>`).join('') : '<div class="card empty"><h3>Пока нет архивов</h3><p>Здесь появятся подтверждённые результаты обработки.</p></div>'}
+      </div>`
+              )
+              .join('')
+          : '<div class="card empty"><h3>Пока нет архивов</h3><p>Здесь появятся подтверждённые результаты обработки.</p></div>'
+      }
     </div>
     <div class="head-actions"><button class="btn" data-action="archive-page" data-offset="${Math.max(0, (state.archives.offset || 0) - 50)}" ${!state.archives.offset ? 'disabled' : ''}>Назад</button>
       <button class="btn" data-action="archive-page" data-offset="${(state.archives.offset || 0) + 50}" ${(state.archives.offset || 0) + 50 >= (state.archives.total || 0) ? 'disabled' : ''}>Далее</button></div>

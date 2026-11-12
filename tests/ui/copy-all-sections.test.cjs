@@ -150,7 +150,12 @@ test(
     await page.locator('[data-copy-action="close"]').click();
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.locator('[data-action="checker-run"]').click();
-    await page.locator('details').filter({ hasText: 'Заметка владельца' }).first().locator('summary').click();
+    await page
+      .locator('details')
+      .filter({ hasText: 'Заметка владельца' })
+      .first()
+      .locator('summary')
+      .click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[data-copy-action="open"]').click();
     const fb = JSON.parse(await preview())[0];

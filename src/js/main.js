@@ -187,15 +187,19 @@ function bindView() {
     ['photo-advanced-panel', 'photoAdvancedOpen']
   ]) {
     const details = document.getElementById(id);
-    if (details) details.ontoggle = () => { state[key] = details.open; };
+    if (details)
+      details.ontoggle = () => {
+        state[key] = details.open;
+      };
   }
   const newsTopic = document.getElementById('news-topic');
-  if (newsTopic) newsTopic.onchange = async (event) => {
-    state.news.topic = event.target.value;
-    await window.blego.updateSettings({ newsTopic: state.news.topic });
-    updateNews(true);
-    await refreshNews(true);
-  };
+  if (newsTopic)
+    newsTopic.onchange = async (event) => {
+      state.news.topic = event.target.value;
+      await window.blego.updateSettings({ newsTopic: state.news.topic });
+      updateNews(true);
+      await refreshNews(true);
+    };
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -480,8 +484,13 @@ async function importPage(offset) {
 
 function ensureNews() {
   // Never fetch in the background merely because the Generator is visible.
-  if (state.view === 'news' && state.settings.newsEnabled &&
-      !state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
+  if (
+    state.view === 'news' &&
+    state.settings.newsEnabled &&
+    !state.news.lastAttemptAt &&
+    !state.news.loading
+  )
+    refreshNews(false);
 }
 
 async function refreshNews(force) {
@@ -489,7 +498,10 @@ async function refreshNews(force) {
   // Opening News or pressing Refresh is explicit permission for the listed foreign RSS sources.
   if (!state.settings.newsEnabled || !state.settings.newsSources?.length) {
     try {
-      state.settings = await window.blego.updateSettings({ newsEnabled: true, newsSources: NEWS_SOURCES });
+      state.settings = await window.blego.updateSettings({
+        newsEnabled: true,
+        newsSources: NEWS_SOURCES
+      });
     } catch (error) {
       toast('Не удалось открыть ленту: ' + error.message, 'err');
       return;
@@ -524,8 +536,9 @@ function updateNews(force = false) {
   if (block) {
     const selection = window.getSelection();
     if (
-      !force && (block.contains(document.activeElement) ||
-      (selection?.toString() && block.contains(selection.anchorNode)))
+      !force &&
+      (block.contains(document.activeElement) ||
+        (selection?.toString() && block.contains(selection.anchorNode)))
     )
       return;
     const content = document.getElementById('view');
@@ -715,8 +728,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'set-view') {
     state.view = target.dataset.view;
-    if (state.view === 'news' && !state.news.loading)
-      refreshNews(false);
+    if (state.view === 'news' && !state.news.loading) refreshNews(false);
     if (state.view === 'history')
       window.blego
         .listArchives()
