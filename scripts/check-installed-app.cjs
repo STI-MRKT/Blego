@@ -20,7 +20,8 @@ const { createHash } = require('node:crypto');
     'tests/ui/app.test.cjs',
     'tests/ui/copy-all-sections.test.cjs',
     'tests/ui/image-groups.test.cjs',
-    'tests/ui/ux-restoration.test.cjs'
+    'tests/ui/ux-restoration.test.cjs',
+    'tests/ui/import-cookie.test.cjs'
   ];
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,
