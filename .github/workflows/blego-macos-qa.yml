@@ -58,7 +58,11 @@ jobs:
         run: |
           set -euo pipefail
           ditto "release/mac-${{ env.TARGET_ARCH }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
-          node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json
+          if ! node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
+            echo "::error::Packaged app validation failed; diagnostics:"
+            cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
+            exit 1
+          fi
       - name: Record checksums
         run: |
           shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
@@ -78,3 +82,15 @@ jobs:
             release/native-darwin-*.json
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-mac-${{ env.TARGET_ARCH }}-failure-logs
+          retention-days: 3
+          if-no-files-found: warn
+          path: |
+            release/installed-darwin-*.json
+            release/installed-darwin-*.json.log
+            release/native-darwin-*.json
