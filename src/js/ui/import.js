@@ -3,7 +3,7 @@ import { esc } from '../utils/dom.js';
 import { I } from '../icons.js';
 const value = (v) => (v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v));
 export const isCookieColumn = (name) =>
-  /^(?:cookies?(?:_?json)?|куки)$/i.test(String(name || '').trim().replace(/[\\s-]/g, '_'));
+  /^(?:cookies?(?:_?json)?|куки)$/i.test(String(name || '').trim().replace(/[\s-]/g, '_'));
 function importCellHTML(record, column) {
   const raw = value(record.data[column]);
   const cookie = isCookieColumn(column);
