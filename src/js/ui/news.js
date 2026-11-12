@@ -57,7 +57,7 @@ export function newsBlockHTML() {
       }
     </div>
     ${
-      !enabled
+      !enabled && !n.items.length
         ? '<div class="news-empty">Новостная лента выключена. Включите её и выберите источники в настройках.</div>'
         : `
       <div class="news-tabs">${[...topics, ...other].map((topic) => `<button class="news-tab ${n.topic === topic.key ? 'on' : ''}" data-action="news-topic" data-topic="${esc(topic.key)}">${esc(topic.label)}<b>${topic.key ? n.items.filter((item) => item.topic === topic.key).length : n.items.length}</b></button>`).join('')}</div>
