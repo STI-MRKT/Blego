@@ -18,10 +18,20 @@ async function writeZip(file, entries, signal) {
     await handle.close();
   }
 }
-function readZip(file, { maxBytes = 256 * 1024 * 1024, maxFiles = 2000 } = {}) {
+function readZip(
+  file,
+  {
+    maxBytes = 256 * 1024 * 1024,
+    maxFiles = 2000,
+    maxDepth = Infinity,
+    validateContents = validateManifest
+  } = {}
+) {
   return new Promise((resolve, reject) => {
-    if (!fs.lstatSync(file).isFile()) return reject(Error('INVALID_ARCHIVE_FILE'));
-    yauzl.open(
+    if (!Buffer.isBuffer(file) && !fs.lstatSync(file).isFile())
+      return reject(Error('INVALID_ARCHIVE_FILE'));
+    const open = Buffer.isBuffer(file) ? yauzl.fromBuffer : yauzl.open;
+    open(
       file,
       { lazyEntries: true, validateEntrySizes: true, strictFileNames: true },
       (error, z) => {
@@ -45,6 +55,7 @@ function readZip(file, { maxBytes = 256 * 1024 * 1024, maxFiles = 2000 } = {}) {
           if (
             ++count > maxFiles ||
             !validEntryName(name) ||
+            name.split('/').length > maxDepth + 1 ||
             names.has(normal) ||
             mode === 0xa000 ||
             e.generalPurposeBitFlag & 1 ||
@@ -81,7 +92,7 @@ function readZip(file, { maxBytes = 256 * 1024 * 1024, maxFiles = 2000 } = {}) {
           if (settled) return;
           try {
             const m = JSON.parse(entries['manifest.json']?.toString() || 'null');
-            validateManifest(m, entries);
+            validateContents(m, entries);
             settled = true;
             resolve({ manifest: m, entries });
           } catch {

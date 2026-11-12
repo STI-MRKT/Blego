@@ -111,6 +111,52 @@ test(
     await page.locator('[name="symbols"]').fill('★');
     await page.locator('#settings-form button[type="submit"]').click();
     await page.waitForFunction(async () => (await window.blego.getSettings()).symbols === '★');
+    // The dialog is the permission boundary; replace only the native chooser with a
+    // controlled fixture, exercising real preview, apply, settings and storage.
+    const poolFile = path.join(root, 'female-data.json');
+    const dataset = JSON.parse(fs.readFileSync('resources/generator/countries/GB.json', 'utf8'));
+    dataset.first = ['Olivia'];
+    dataset.datasetVersion = 'GUI-TEST-2';
+    delete dataset.checksum;
+    dataset.checksum = require('node:crypto')
+      .createHash('sha256')
+      .update(JSON.stringify(dataset))
+      .digest('hex');
+    fs.writeFileSync(poolFile, JSON.stringify(dataset));
+    async function choosePoolFixture() {
+      await app.evaluate(({ dialog }, file) => {
+        const original = dialog.showOpenDialog;
+        dialog.showOpenDialog = async () => {
+          dialog.showOpenDialog = original;
+          return { canceled: false, filePaths: [file] };
+        };
+      }, poolFile);
+      await page.locator('[data-action="pool-choose"]').click();
+      await page.locator('[data-action="pool-apply"]').waitFor();
+    }
+    await choosePoolFixture();
+    assert.equal(
+      (await page.evaluate(() => window.blego.getPoolStats({ country: 'GB', type: 'tech' }))).counts
+        .firstNames,
+      1563
+    );
+    await page.locator('[data-action="pool-cancel"]').click();
+    await page.locator('[data-action="pool-apply"]').waitFor({ state: 'detached' });
+    await choosePoolFixture();
+    await page.locator('[data-action="pool-apply"]').click();
+    await page.waitForFunction(
+      async () =>
+        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1
+    );
+    await page.locator('[name="bulkMode"]').check();
+    await page.locator('#settings-form button[type="submit"]').click();
+    await page.waitForFunction(async () => (await window.blego.getSettings()).bulkMode === true);
+    await page.locator('[data-action="pool-bundled"]').click();
+    await page.waitForFunction(
+      async () =>
+        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
+        1563
+    );
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'кириллица.txt',

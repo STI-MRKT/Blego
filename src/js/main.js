@@ -66,6 +66,12 @@ function animateSpeedValue() {
   requestAnimationFrame(tick);
 }
 
+async function refreshPoolStats() {
+  const country = state.locale,
+    type = state.type;
+  const stats = await window.blego.getPoolStats({ country, type });
+  if (state.locale === country && state.type === type) state.poolStats = stats;
+}
 function bindView() {
   const settingsForm = document.getElementById('settings-form');
   if (settingsForm)
@@ -75,6 +81,7 @@ function bindView() {
         state.settings = await window.blego.updateSettings(readSettingsForm(settingsForm));
         state.locale = state.settings.country;
         state.type = state.settings.type;
+        await refreshPoolStats();
         toast('Settings saved');
         renderView();
       } catch (e) {
@@ -86,12 +93,16 @@ function bindView() {
     select.onchange = async (event) => {
       state.locale = event.target.value;
       state.settings = await window.blego.updateSettings({ country: state.locale });
+      await refreshPoolStats();
+      renderView();
     };
   });
   document.querySelectorAll('[data-input="type"]').forEach((select) => {
     select.onchange = async (event) => {
       state.type = event.target.value;
       state.settings = await window.blego.updateSettings({ type: state.type });
+      await refreshPoolStats();
+      renderView();
     };
   });
   const archiveFilter = document.getElementById('archive-filter');
@@ -192,6 +203,11 @@ async function generate() {
     );
   } finally {
     state.demoBusy = false;
+    try {
+      await refreshPoolStats();
+    } catch {
+      state.poolStats = null;
+    }
     renderView();
   }
 }
@@ -385,7 +401,7 @@ function clearPhotos() {
   renderView();
 }
 
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
   const action = target.dataset.action;
@@ -464,6 +480,32 @@ document.addEventListener('click', (event) => {
         renderView();
       })
       .catch(() => toast('Folder unchanged', 'err'));
+    return;
+  }
+  if (action?.startsWith('pool-')) {
+    try {
+      if (action === 'pool-choose') {
+        if (state.poolImport) await window.blego.cancelPoolPackage(state.poolImport.fileToken);
+        state.poolImport = null;
+        const preview = await window.blego.choosePoolPackage();
+        if (preview.status === 'preview') state.poolImport = preview;
+      } else if (action === 'pool-apply') {
+        await window.blego.applyPoolPackage(state.poolImport.fileToken);
+        state.poolImport = null;
+      } else if (action === 'pool-cancel') {
+        await window.blego.cancelPoolPackage(state.poolImport.fileToken);
+        state.poolImport = null;
+      } else if (action === 'pool-bundled') await window.blego.useBundledPool(state.locale);
+      else if (action === 'pool-select')
+        await window.blego.selectPoolVersion({
+          country: state.locale,
+          key: document.getElementById('pool-version').value
+        });
+      await refreshPoolStats();
+      renderView();
+    } catch (error) {
+      toast(`Data package unchanged: ${error.message}`, 'err');
+    }
     return;
   }
   if (action === 'generate') {
@@ -634,6 +676,7 @@ if (window.blego) {
     state.settings = await window.blego.getSettings();
     state.locale = state.settings.country;
     state.type = state.settings.type;
+    await refreshPoolStats();
     state.demo = await window.blego.lastCard();
     state.news.topic = state.settings.newsTopic;
     const cached = await window.blego.newsSnapshot();

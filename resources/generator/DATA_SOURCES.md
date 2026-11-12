@@ -56,9 +56,31 @@ inherited from BLEGO at `6e57eab`, not presented as newly externally validated.
 Postal codes remain paired with their existing localities and are strings.
 No digit/case/whitespace variations were invented to inflate counts.
 
-Type resources still contain three biographies per language and three statuses;
-30/20 thematic targets, localization expansion, safe package import, display of
-remaining capacities and explicit bulk consent remain D2 work. Current strict
-finite-field limits are unchanged. Increasing names does not make full profiles
-or telephone numbers unlimited. Generated addresses are synthetic composites,
-and phone formats do not guarantee non-assignment to real subscribers.
+Type resources now contain 30 distinct authored biography structures and 20
+statuses for each type in English, Portuguese, French, Polish, German, Spanish and
+Italian. GB/US share English. Topics differ between fashion photography,
+open-source technology and blockchain research; no income promises are included.
+These are BLEGO-authored texts, not extracted Faker bios. Native-speaker review of
+the full set remains unperformed. Finite biographies/statuses/postal examples still
+exhaust under strict rules. Increasing names does not make profiles or telephone
+numbers unlimited. Generated addresses remain synthetic composites; phone formats
+do not guarantee non-assignment to real subscribers.
+
+## User data-package format
+
+Import a JSON country dataset with the same schema and checksum convention as a
+bundled country file, or a ZIP containing `dataset.json` and optional `LICENSE.txt`.
+Country, language and telephone numbering parameters must match the bundled
+country. Declare female-name provenance and redistribution conditions. Imports
+are data, never code or configuration scripts. Duplicate or unnormalized names
+and locality/postal pairs are rejected; no silent deduplication changes a supplied
+checksum. Package preview shows counts/license; apply verifies unchanged file
+bytes. Cancelling discards the token. Active and installed versions live in the
+existing SQLite key/value store, apart from shipped resources. Switching versions
+does not free issued values. A previous user version can be reselected in Settings.
+Source-declared geographic verification is not independent verification by BLEGO.
+
+Limits: 50 MiB file, 256 MiB expanded ZIP, 1024 entries, directory depth 8.
+The narrowly supported ZIP schema rejects additional unexpected files. This first
+package format imports country vocabularies; thematic arrays can be overridden
+through existing JSON settings. No importer executes scripts or downloads data.

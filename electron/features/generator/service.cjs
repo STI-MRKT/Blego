@@ -1,7 +1,8 @@
 const { randomUUID, randomInt } = require('node:crypto');
-const { resolvePreset } = require('./sources.cjs');
+const { resolvePreset, transliterate } = require('./sources.cjs');
 const { registry } = require('./registry.cjs');
 const { getSettings } = require('../../local/settings.cjs');
+const { loadDataset } = require('./catalog.cjs');
 function exhausted(field, p) {
   const e = Error(`POOL_EXHAUSTED: ${field} (${p.country}:${p.type})`);
   e.code = 'POOL_EXHAUSTED';
@@ -19,7 +20,12 @@ async function generateProfile(
     !request.requestId
   )
     throw Error('INVALID_REQUEST');
-  const p = resolvePreset(request.country, request.type, settings);
+  const p = resolvePreset(
+    request.country,
+    request.type,
+    settings,
+    loadDataset(store, request.country)
+  );
   return store.transaction(() => {
     const old = store.db
       .prepare('SELECT profile FROM requests WHERE request_id=?')
@@ -52,9 +58,15 @@ async function generateProfile(
       )
         throw Error('INVALID_POOL_CONTACT');
     } else {
-      values.name = `${pick(p.first)} ${pick(p.last)}`;
-      values.handle = `${p.type}.${id.replaceAll('-', '')}`;
-      values.email = `${values.handle}@example.com`;
+      const first = pick(p.first),
+        last = pick(p.last);
+      values.name = `${first} ${last}`;
+      const a = transliterate(first).slice(0, 12) || 'profile',
+        b = transliterate(last).slice(0, 12) || 'name';
+      const suffix = id.replaceAll('-', '');
+      values.handle = `${p.type}.${a}.${suffix}`;
+      const emailParts = [`${a}.${b}`, `${b}.${a}`, `${a[0]}-${b}`];
+      values.email = `${pick(emailParts)}.${suffix}@${pick(['example.com', 'example.net', 'example.org'])}`;
       let counter = store.get(`phone-sequence:${p.phonePrefix}`) || 0;
       // Shared dialing codes share a counter across countries/types. No probabilistic retry loop.
       if (counter >= 10 ** (p.phoneDigits - p.nationalPrefix.length)) exhausted('phone', p);
@@ -118,6 +130,7 @@ async function generateProfile(
       nameGender: p.nameGender,
       datasetId: p.datasetId,
       datasetVersion: p.datasetVersion,
+      transliterationVersion: 'latin-v1',
       fields: values,
       fieldOrder: p.fieldOrder,
       rulesVersion: p.rulesVersion,

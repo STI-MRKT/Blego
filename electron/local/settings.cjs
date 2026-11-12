@@ -5,6 +5,8 @@ const defaults = {
   fieldOrder: [],
   disabledFields: [],
   allowRepeats: [],
+  bulkMode: false,
+  bulkConsent: false,
   overrides: {},
   archiveRoot: null,
   includeOriginal: false,
@@ -23,13 +25,14 @@ function validateSettings(patch) {
     JSON.stringify(patch).length > 131072
   )
     throw Error('INVALID_SETTINGS');
+  if (patch.bulkMode === true && patch.bulkConsent !== true) throw Error('BULK_CONSENT_REQUIRED');
   for (const [key, value] of Object.entries(patch)) {
     if (!Object.hasOwn(defaults, key) || ['__proto__', 'constructor', 'prototype'].includes(key))
       throw Error('INVALID_SETTINGS');
     if (key === 'country' && !countries.includes(value)) throw Error('INVALID_COUNTRY');
     if (key === 'type' && !['model', 'tech', 'crypto'].includes(value)) throw Error('INVALID_TYPE');
     if (
-      ['newsEnabled', 'proxyEnabled', 'includeOriginal'].includes(key) &&
+      ['newsEnabled', 'proxyEnabled', 'includeOriginal', 'bulkMode', 'bulkConsent'].includes(key) &&
       typeof value !== 'boolean'
     )
       throw Error('INVALID_BOOLEAN');

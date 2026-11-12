@@ -15,6 +15,7 @@ test('unique_contacts_survive_restart: 10000 artificial-capacity requests', asyn
   let { root, store } = await setup(t);
   const ids = new Set(),
     phones = new Set(),
+    handles = new Set(),
     emails = new Set();
   for (let i = 0; i < 10000; i++) {
     if (i === 5000) {
@@ -28,10 +29,12 @@ test('unique_contacts_survive_restart: 10000 artificial-capacity requests', asyn
     ids.add(p.id);
     phones.add(p.fields.phone);
     emails.add(p.fields.email);
+    handles.add(p.fields.handle);
   }
   assert.equal(ids.size, 10000);
   assert.equal(phones.size, 10000);
   assert.equal(emails.size, 10000);
+  assert.equal(handles.size, 10000);
   store.close();
 });
 test('parallel requests, idempotent retry, clear and cached provenance', async (t) => {
@@ -81,7 +84,7 @@ test('every country/type actually issues mandatory contacts', async (t) => {
         { store, settings: relaxed }
       );
       assert.ok(p.fields.phone.startsWith('+'));
-      assert.match(p.fields.email, /@example.com$/);
+      assert.match(p.fields.email, /@example\.(com|net|org)$/);
       assert.equal(p.type, type);
     }
 });

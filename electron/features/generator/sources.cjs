@@ -17,6 +17,16 @@ const fields = [
   'symbols'
 ];
 const root = path.join(__dirname, '../../../resources/generator');
+function transliterate(text) {
+  const extras = { ł: 'l', ø: 'o', ß: 'ss', æ: 'ae', œ: 'oe', đ: 'd', ð: 'd', þ: 'th' };
+  return text
+    .toLowerCase()
+    .replace(/[łøßæœđðþ]/gu, (c) => extras[c])
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 function validateOverride(o) {
   if (!o || typeof o !== 'object' || Array.isArray(o)) throw Error('INVALID_RULES');
   for (const [k, v] of Object.entries(o)) {
@@ -52,11 +62,13 @@ function validateOverride(o) {
       throw Error('INVALID_RULES');
   }
 }
-function resolvePreset(country, type, settings = {}) {
+function resolvePreset(country, type, settings = {}, dataset = null) {
   validateSettings(settings);
   if (!countries.includes(country) || !['model', 'tech', 'crypto'].includes(type))
     throw Error('INVALID_PRESET');
-  const c = JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
+  const c =
+    dataset || JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
+  if (c.code !== country || c.nameGender !== 'female') throw Error('DATASET_INVALID');
   const t = JSON.parse(fs.readFileSync(path.join(root, `types/${type}.json`), 'utf8'));
   const o = settings.overrides || {};
   if (Object.keys(o).some((k) => !['common', 'types', 'pairs'].includes(k)))
@@ -67,6 +79,7 @@ function resolvePreset(country, type, settings = {}) {
     ...c,
     ...t,
     bios: t.bios[c.language],
+    statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],
     symbols: settings.symbols || '',
     ...o.common,
     ...o.types?.[type],
@@ -78,6 +91,10 @@ function resolvePreset(country, type, settings = {}) {
     (f) => !settings.disabledFields?.includes(f)
   );
   p.allowRepeats = settings.allowRepeats || [];
+  if (settings.bulkMode)
+    p.allowRepeats = [
+      ...new Set([...p.allowRepeats, 'bio', 'status', 'postalCode', 'address', 'number'])
+    ];
   p.country = country;
   p.type = type;
   p.rulesVersion =
@@ -91,4 +108,4 @@ function resolvePreset(country, type, settings = {}) {
   };
   return p;
 }
-module.exports = { resolvePreset, fields };
+module.exports = { resolvePreset, fields, transliterate };

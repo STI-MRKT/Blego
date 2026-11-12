@@ -11,16 +11,22 @@ const { getSettings, updateSettings } = require('./local/settings.cjs');
 const { registerIpc, externalUrl, copyText } = require('./local/ipc.cjs');
 const { generateProfile, clearCard } = require('./features/generator/service.cjs');
 const { resolvePreset } = require('./features/generator/sources.cjs');
+const {
+  createPoolCatalog,
+  getPoolStats,
+  loadDataset
+} = require('./features/generator/catalog.cjs');
 const { createClassificationService } = require('./features/classification/service.cjs');
 const classification = createClassificationService();
 const { createArchiveService } = require('./features/archive/service.cjs');
 const { checkProxy } = require('./features/proxy/service.cjs');
 let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
-let store, mainWindow, archives, news;
+let store, mainWindow, archives, news, poolCatalog;
 let recoveryReports = [];
 async function initialize() {
   store = await openStore(app.getPath('userData'));
+  poolCatalog = createPoolCatalog({ store });
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -129,13 +135,26 @@ async function initialize() {
       classificationConfirm: (arg) =>
         classification.confirmClassification(arg.operationId, arg.decision),
       generate: (request) => generateProfile(request, { store }),
+      poolStats: (request) => getPoolStats(request, { store }),
+      poolChoose: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'Data package', extensions: ['json', 'zip'] }]
+        });
+        return result.canceled ? { status: 'cancelled' } : poolCatalog.preview(result.filePaths[0]);
+      },
+      poolApply: (token) => poolCatalog.apply(token),
+      poolCancel: (token) => poolCatalog.cancel(token),
+      poolBundled: (country) => poolCatalog.useBundled(country),
+      poolSelect: ({ country, key }) => poolCatalog.select(country, key),
       lastCard: () => store.get('lastCard') || null,
       clearCard: () => clearCard(store),
       settingsUpdate: (patch) => {
         if (Object.hasOwn(patch || {}, 'archiveRoot')) throw Error('USE_DIRECTORY_DIALOG');
         const next = { ...getSettings(store), ...patch };
         for (const c of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB'])
-          for (const t of ['model', 'tech', 'crypto']) resolvePreset(c, t, next);
+          for (const t of ['model', 'tech', 'crypto'])
+            resolvePreset(c, t, next, loadDataset(store, c));
         const updated = updateSettings(store, patch);
         if (!updated.proxyEnabled) proxyController?.abort();
         news.configure();
