@@ -51,7 +51,7 @@ function profileHTML() {
     return `<div class="card empty">
     <div class="orb">BLEGO</div><h3>Профиль пока не создан</h3>
     <p>Выберите страну и тип профиля. Все данные формируются локально.</p>
-    <button class="btn btn-primary" data-action="generate">${I.spark} Создать профиль</button></div>`;
+    </div>`;
   const fields = p.fields || {},
     keys = p.fieldOrder || [];
   const primary = keys.filter((key) => QUICK_FIELDS.has(key));
