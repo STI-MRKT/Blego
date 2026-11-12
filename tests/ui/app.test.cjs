@@ -143,7 +143,7 @@ test(
       }, poolFile);
       await openAdvancedSettings();
       await page.locator('[data-action="pool-choose"]').click();
-      await page.locator('[data-action="pool-apply"]').waitFor();
+      await page.locator('[data-action="pool-apply"]').waitFor({ state: 'attached' });
       await openAdvancedSettings();
     }
     await choosePoolFixture();
