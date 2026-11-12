@@ -1,0 +1,68 @@
+{
+  "version": "1",
+  "code": "IT",
+  "language": "it",
+  "first": [
+    "Giulia",
+    "Marco",
+    "Sofia",
+    "Luca",
+    "Chiara",
+    "Matteo",
+    "Alice",
+    "Davide",
+    "Elena",
+    "Lorenzo"
+  ],
+  "last": [
+    "Rossi",
+    "Bianchi",
+    "Romano",
+    "Ferrari",
+    "Esposito",
+    "Ricci",
+    "Gallo",
+    "Conti",
+    "De Luca",
+    "Greco"
+  ],
+  "places": [
+    {
+      "city": "Milano",
+      "postal": "20121"
+    },
+    {
+      "city": "Roma",
+      "postal": "00184"
+    },
+    {
+      "city": "Torino",
+      "postal": "10121"
+    },
+    {
+      "city": "Firenze",
+      "postal": "50122"
+    },
+    {
+      "city": "Napoli",
+      "postal": "80121"
+    },
+    {
+      "city": "Bologna",
+      "postal": "40121"
+    }
+  ],
+  "streets": [
+    "Via Roma",
+    "Corso Buenos Aires",
+    "Via Dante",
+    "Lungarno Corsini",
+    "Via Toledo",
+    "Via Zamboni",
+    "Via Garibaldi",
+    "Corso Vittorio Emanuele"
+  ],
+  "phonePrefix": "39",
+  "phoneDigits": 10,
+  "nationalPrefix": "3"
+}

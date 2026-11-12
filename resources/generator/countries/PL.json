@@ -1,0 +1,54 @@
+{
+  "version": "1",
+  "code": "PL",
+  "language": "pl",
+  "first": [
+    "Zofia",
+    "Jakub",
+    "Maja",
+    "Szymon",
+    "Hanna",
+    "Antoni",
+    "Lena",
+    "Kacper"
+  ],
+  "last": [
+    "Kowalski",
+    "Nowak",
+    "Wiśniewski",
+    "Lewandowski",
+    "Zieliński",
+    "Kamiński",
+    "Szymański",
+    "Wójcik"
+  ],
+  "places": [
+    {
+      "city": "Warszawa",
+      "postal": "00-950"
+    },
+    {
+      "city": "Kraków",
+      "postal": "30-001"
+    },
+    {
+      "city": "Gdańsk",
+      "postal": "80-001"
+    },
+    {
+      "city": "Wrocław",
+      "postal": "50-001"
+    }
+  ],
+  "streets": [
+    "ul. Marszałkowska",
+    "ul. Długa",
+    "ul. Piotrkowska",
+    "ul. Floriańska",
+    "ul. Nowy Świat",
+    "ul. Piękna"
+  ],
+  "phonePrefix": "48",
+  "phoneDigits": 9,
+  "nationalPrefix": "5"
+}

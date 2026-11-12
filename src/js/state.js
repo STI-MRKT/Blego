@@ -4,6 +4,7 @@ export const state = {
   view: 'generator',
   settings: {newsEnabled:false,proxyEnabled:false},
   locale: 'BR',
+  type: 'model',
   demo: null,
   demoBusy: false,
   importStep: 'idle',

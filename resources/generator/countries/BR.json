@@ -1,0 +1,54 @@
+{
+  "version": "1",
+  "code": "BR",
+  "language": "pt",
+  "first": [
+    "Ana",
+    "Lucas",
+    "Beatriz",
+    "Gabriel",
+    "Camila",
+    "Rafael",
+    "Juliana",
+    "Thiago"
+  ],
+  "last": [
+    "Silva",
+    "Santos",
+    "Oliveira",
+    "Souza",
+    "Lima",
+    "Pereira",
+    "Costa",
+    "Almeida"
+  ],
+  "places": [
+    {
+      "city": "São Paulo",
+      "postal": "01310-100"
+    },
+    {
+      "city": "Rio de Janeiro",
+      "postal": "22041-011"
+    },
+    {
+      "city": "Curitiba",
+      "postal": "80010-010"
+    },
+    {
+      "city": "Belo Horizonte",
+      "postal": "30130-010"
+    }
+  ],
+  "streets": [
+    "Av. Paulista",
+    "Rua das Flores",
+    "Av. Atlântica",
+    "Rua Augusta",
+    "Av. Brasil",
+    "Rua Oscar Freire"
+  ],
+  "phonePrefix": "55",
+  "phoneDigits": 10,
+  "nationalPrefix": "119"
+}

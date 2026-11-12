@@ -1,0 +1,54 @@
+{
+  "version": "1",
+  "code": "US",
+  "language": "en",
+  "first": [
+    "Emily",
+    "Michael",
+    "Olivia",
+    "Ethan",
+    "Sophia",
+    "Daniel",
+    "Ava",
+    "Noah"
+  ],
+  "last": [
+    "Carter",
+    "Bennett",
+    "Reed",
+    "Hayes",
+    "Brooks",
+    "Foster",
+    "Morgan",
+    "Blake"
+  ],
+  "places": [
+    {
+      "city": "San Francisco",
+      "postal": "94103"
+    },
+    {
+      "city": "Austin",
+      "postal": "78701"
+    },
+    {
+      "city": "Seattle",
+      "postal": "98101"
+    },
+    {
+      "city": "Brooklyn",
+      "postal": "11201"
+    }
+  ],
+  "streets": [
+    "Market St",
+    "Oak Avenue",
+    "Cedar Lane",
+    "Sunset Blvd",
+    "Maple Street",
+    "Pine Court"
+  ],
+  "phonePrefix": "1",
+  "phoneDigits": 10,
+  "nationalPrefix": "202"
+}

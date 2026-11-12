@@ -9,6 +9,8 @@ let serverUrl = null;
 const {openStore} = require('./local/store.cjs');
 const {getSettings,updateSettings} = require('./local/settings.cjs');
 const {registerIpc,externalUrl,copyText} = require('./local/ipc.cjs');
+const {generateProfile,clearCard}=require('./features/generator/service.cjs');
+const {resolvePreset}=require('./features/generator/sources.cjs');
 let store, mainWindow;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
@@ -18,7 +20,10 @@ async function initialize() {
   }
   registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
     settingsGet:()=>getSettings(store),
-    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');return updateSettings(store,patch);},
+    generate:request=>generateProfile(request,{store}),
+    lastCard:()=>store.get('lastCard')||null,
+    clearCard:()=>clearCard(store),
+    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');const next={...getSettings(store),...patch};for(const c of ['BR','US','FR','PL','DE','ES','IT','GB'])for(const t of ['model','tech','crypto'])resolvePreset(c,t,next);return updateSettings(store,patch);},
     archiveDirectory:async()=>{const r=await dialog.showOpenDialog(mainWindow,{properties:['openDirectory','createDirectory']});return r.canceled?getSettings(store):updateSettings(store,{archiveRoot:r.filePaths[0]});},
     copy:text=>copyText(text,clipboard),
     tourSeen:()=>!!store.get('tourSeen'),

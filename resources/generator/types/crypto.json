@@ -1,0 +1,58 @@
+{
+  "version": "1",
+  "type": "crypto",
+  "bios": {
+    "en": [
+      "Exploring blockchain systems.",
+      "Researching distributed ledgers.",
+      "Learning about digital ownership."
+    ],
+    "pt": [
+      "Explorando sistemas blockchain.",
+      "Pesquisando registros distribuídos.",
+      "Estudando propriedade digital."
+    ],
+    "fr": [
+      "Explorer les systèmes blockchain.",
+      "Étudier les registres distribués.",
+      "Comprendre la propriété numérique."
+    ],
+    "pl": [
+      "Odkrywanie systemów blockchain.",
+      "Badanie rejestrów rozproszonych.",
+      "Nauka o własności cyfrowej."
+    ],
+    "de": [
+      "Blockchain-Systeme erkunden.",
+      "Verteilte Register erforschen.",
+      "Digitales Eigentum verstehen."
+    ],
+    "es": [
+      "Explorando sistemas blockchain.",
+      "Investigando registros distribuidos.",
+      "Aprendiendo sobre propiedad digital."
+    ],
+    "it": [
+      "Esplorare sistemi blockchain.",
+      "Studiare registri distribuiti.",
+      "Conoscere la proprietà digitale."
+    ]
+  },
+  "statuses": [
+    "Protocol research",
+    "Ledger study",
+    "Learning"
+  ],
+  "categories": [
+    "Blockchain",
+    "Distributed systems",
+    "Digital ownership"
+  ],
+  "fieldOrder": [
+    "handle",
+    "status",
+    "bio",
+    "email",
+    "phone"
+  ]
+}

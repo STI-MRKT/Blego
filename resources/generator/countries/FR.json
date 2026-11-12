@@ -1,0 +1,54 @@
+{
+  "version": "1",
+  "code": "FR",
+  "language": "fr",
+  "first": [
+    "Camille",
+    "Louis",
+    "Léa",
+    "Hugo",
+    "Manon",
+    "Nathan",
+    "Chloé",
+    "Théo"
+  ],
+  "last": [
+    "Moreau",
+    "Lefèvre",
+    "Bernard",
+    "Dubois",
+    "Laurent",
+    "Girard",
+    "Rousseau",
+    "Fontaine"
+  ],
+  "places": [
+    {
+      "city": "Paris",
+      "postal": "75011"
+    },
+    {
+      "city": "Lyon",
+      "postal": "69003"
+    },
+    {
+      "city": "Bordeaux",
+      "postal": "33000"
+    },
+    {
+      "city": "Marseille",
+      "postal": "13006"
+    }
+  ],
+  "streets": [
+    "Rue de Rivoli",
+    "Av. des Champs-Élysées",
+    "Rue Saint-Denis",
+    "Bd. Voltaire",
+    "Rue Oberkampf",
+    "Rue de Vaugirard"
+  ],
+  "phonePrefix": "33",
+  "phoneDigits": 9,
+  "nationalPrefix": "6"
+}

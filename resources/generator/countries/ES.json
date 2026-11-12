@@ -1,0 +1,68 @@
+{
+  "version": "1",
+  "code": "ES",
+  "language": "es",
+  "first": [
+    "Lucía",
+    "Mateo",
+    "Sofía",
+    "Hugo",
+    "Martina",
+    "Daniel",
+    "Paula",
+    "Pablo",
+    "Alba",
+    "Adrián"
+  ],
+  "last": [
+    "García",
+    "Fernández",
+    "López",
+    "Martínez",
+    "Sánchez",
+    "Pérez",
+    "Gómez",
+    "Martín",
+    "Jiménez",
+    "Ruiz"
+  ],
+  "places": [
+    {
+      "city": "Madrid",
+      "postal": "28001"
+    },
+    {
+      "city": "Barcelona",
+      "postal": "08001"
+    },
+    {
+      "city": "Valencia",
+      "postal": "46001"
+    },
+    {
+      "city": "Sevilla",
+      "postal": "41001"
+    },
+    {
+      "city": "Bilbao",
+      "postal": "48001"
+    },
+    {
+      "city": "Málaga",
+      "postal": "29001"
+    }
+  ],
+  "streets": [
+    "Calle de Alcalá",
+    "Gran Vía",
+    "Passeig de Gràcia",
+    "Calle Larios",
+    "Calle Betis",
+    "Calle Uría",
+    "Calle Colón",
+    "Avenida Diagonal"
+  ],
+  "phonePrefix": "34",
+  "phoneDigits": 9,
+  "nationalPrefix": "6"
+}

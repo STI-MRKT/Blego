@@ -1,0 +1,68 @@
+{
+  "version": "1",
+  "code": "DE",
+  "language": "de",
+  "first": [
+    "Lena",
+    "Lukas",
+    "Emilia",
+    "Felix",
+    "Hannah",
+    "Jonas",
+    "Mia",
+    "Leon",
+    "Clara",
+    "Paul"
+  ],
+  "last": [
+    "Müller",
+    "Schmidt",
+    "Schneider",
+    "Fischer",
+    "Weber",
+    "Meyer",
+    "Wagner",
+    "Becker",
+    "Hoffmann",
+    "Schäfer"
+  ],
+  "places": [
+    {
+      "city": "Berlin",
+      "postal": "10115"
+    },
+    {
+      "city": "München",
+      "postal": "80331"
+    },
+    {
+      "city": "Hamburg",
+      "postal": "20095"
+    },
+    {
+      "city": "Köln",
+      "postal": "50667"
+    },
+    {
+      "city": "Frankfurt",
+      "postal": "60311"
+    },
+    {
+      "city": "Stuttgart",
+      "postal": "70173"
+    }
+  ],
+  "streets": [
+    "Unter den Linden",
+    "Kurfürstendamm",
+    "Kastanienallee",
+    "Leopoldstraße",
+    "Schanzenstraße",
+    "Königstraße",
+    "Berger Straße",
+    "Rheinallee"
+  ],
+  "phonePrefix": "49",
+  "phoneDigits": 10,
+  "nationalPrefix": "151"
+}

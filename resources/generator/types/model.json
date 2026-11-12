@@ -1,0 +1,57 @@
+{
+  "version": "1",
+  "type": "model",
+  "bios": {
+    "en": [
+      "Fashion and visual storytelling.",
+      "Exploring studio portraits.",
+      "Independent fashion portfolio."
+    ],
+    "pt": [
+      "Moda e narrativas visuais.",
+      "Explorando retratos de estúdio.",
+      "Portfólio independente de moda."
+    ],
+    "fr": [
+      "Mode et récits visuels.",
+      "Portraits en studio.",
+      "Portfolio de mode indépendant."
+    ],
+    "pl": [
+      "Moda i opowieści wizualne.",
+      "Portrety studyjne.",
+      "Niezależne portfolio mody."
+    ],
+    "de": [
+      "Mode und visuelle Geschichten.",
+      "Studioporträts entdecken.",
+      "Unabhängiges Modeportfolio."
+    ],
+    "es": [
+      "Moda e historias visuales.",
+      "Retratos de estudio.",
+      "Portfolio de moda independiente."
+    ],
+    "it": [
+      "Moda e racconti visivi.",
+      "Ritratti in studio.",
+      "Portfolio di moda indipendente."
+    ]
+  },
+  "statuses": [
+    "Studio",
+    "Portfolio",
+    "Editorial"
+  ],
+  "categories": [
+    "Fashion",
+    "Portrait",
+    "Visual work"
+  ],
+  "fieldOrder": [
+    "name",
+    "bio",
+    "email",
+    "phone"
+  ]
+}

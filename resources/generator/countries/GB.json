@@ -1,0 +1,68 @@
+{
+  "version": "1",
+  "code": "GB",
+  "language": "en",
+  "first": [
+    "Olivia",
+    "Harry",
+    "Amelia",
+    "Jack",
+    "Isla",
+    "Oliver",
+    "Freya",
+    "George",
+    "Poppy",
+    "Charlie"
+  ],
+  "last": [
+    "Smith",
+    "Jones",
+    "Taylor",
+    "Brown",
+    "Wilson",
+    "Evans",
+    "Thomas",
+    "Roberts",
+    "Walker",
+    "Wright"
+  ],
+  "places": [
+    {
+      "city": "London",
+      "postal": "EC1A 1BB"
+    },
+    {
+      "city": "Manchester",
+      "postal": "M1 1AE"
+    },
+    {
+      "city": "Birmingham",
+      "postal": "B1 1AA"
+    },
+    {
+      "city": "Bristol",
+      "postal": "BS1 4DJ"
+    },
+    {
+      "city": "Edinburgh",
+      "postal": "EH1 1YZ"
+    },
+    {
+      "city": "Leeds",
+      "postal": "LS1 4AP"
+    }
+  ],
+  "streets": [
+    "High Street",
+    "Baker Street",
+    "Oxford Road",
+    "King's Road",
+    "Deansgate",
+    "Corn Street",
+    "Princes Street",
+    "Briggate"
+  ],
+  "phonePrefix": "44",
+  "phoneDigits": 10,
+  "nationalPrefix": "7700"
+}

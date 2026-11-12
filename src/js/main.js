@@ -1,7 +1,6 @@
 import {readSettingsForm} from './ui/settings.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
-import { pad2 } from './utils/random.js';
 import { toast } from './utils/toast.js';
 import { copyText } from './utils/clipboard.js';
 import { appHTML } from './ui/shell.js';
@@ -70,10 +69,13 @@ function animateSpeedValue() {
 
 function bindView() {
   const settingsForm=document.getElementById('settings-form');
-  if(settingsForm)settingsForm.onsubmit=async event=>{event.preventDefault();try{state.settings=await window.blego.updateSettings(readSettingsForm(settingsForm));state.locale=state.settings.country;toast('Settings saved');renderView();}catch(e){toast(`Settings were not saved: ${e.message}`,'err');}};
+  if(settingsForm)settingsForm.onsubmit=async event=>{event.preventDefault();try{state.settings=await window.blego.updateSettings(readSettingsForm(settingsForm));state.locale=state.settings.country;state.type=state.settings.type;toast('Settings saved');renderView();}catch(e){toast(`Settings were not saved: ${e.message}`,'err');}};
 
   document.querySelectorAll('[data-input="locale"]').forEach((select) => {
-    select.onchange = (event) => { state.locale = event.target.value; };
+    select.onchange = async (event) => { state.locale=event.target.value;state.settings=await window.blego.updateSettings({country:state.locale}); };
+  });
+  document.querySelectorAll('[data-input="type"]').forEach(select=>{
+    select.onchange=async event=>{state.type=event.target.value;state.settings=await window.blego.updateSettings({type:state.type});};
   });
   const search = document.getElementById('history-search');
   if (search) {
@@ -138,16 +140,12 @@ function bindDrop(id, onFiles) {
   });
 }
 
-function generate() {
-  if (state.demoBusy) return;
-  state.demoBusy = true;
-  renderView();
-  setTimeout(() => {
-    state.demo = makeDemo(state.locale);
-    state.demoBusy = false;
-    renderView();
-    toast('New demo set generated');
-  }, 780);
+async function generate() {
+  if(state.demoBusy)return;
+  state.demoBusy=true;renderView();
+  try{state.demo=await makeDemo(state.locale,state.type);toast('New set saved');}
+  catch(e){toast(e.message==='POOL_EXHAUSTED'?'Finite dictionary exhausted. Adjust optional repeat settings or extend the dictionary.':e.message,'err');}
+  finally{state.demoBusy=false;renderView();}
 }
 
 function handleFile(file) {
@@ -370,7 +368,7 @@ document.addEventListener('click', (event) => {
   if(action==='archive-directory'){window.blego.chooseArchiveDirectory().then(s=>{state.settings=s;renderView();}).catch(()=>toast('Folder unchanged','err'));return;}
   if (action === 'generate') { generate(); return; }
   if (action === 'clear-demo') {
-    state.demo = null;
+    window.blego.clearCard().then(()=>{state.demo=null;renderView();}).catch(()=>toast('Could not clear card','err'));
     renderView();
     toast('Set cleared');
     return;
@@ -476,24 +474,7 @@ async function runCheckerStatus() {
   renderView();
 }
 
-setInterval(() => {
-  if (!state.demo) return;
-  const left = state.demo.expiresAt - Date.now();
-  if (left <= 0) {
-    state.demo = null;
-    if (state.view === 'generator') renderView();
-    toast('Demo set expired and cleared');
-    return;
-  }
-  const seconds = Math.floor(left / 1000);
-  const text = `${pad2(Math.floor(seconds / 60))}:${pad2(seconds % 60)}`;
-  const card = document.getElementById('ttl');
-  const head = document.getElementById('ttl-top');
-  if (card) card.textContent = text;
-  if (head) head.textContent = text;
-}, 1000);
-
-if(window.blego){try{state.settings=await window.blego.getSettings();state.locale=state.settings.country;}catch{toast('Settings unavailable','err');}}
+if(window.blego){try{state.settings=await window.blego.getSettings();state.locale=state.settings.country;state.type=state.settings.type;state.demo=await window.blego.lastCard();}catch{toast('Settings unavailable','err');}}
 renderAll();
 setTimeout(() => {
   startTour({

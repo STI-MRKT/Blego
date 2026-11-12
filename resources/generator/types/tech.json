@@ -1,0 +1,57 @@
+{
+  "version": "1",
+  "type": "tech",
+  "bios": {
+    "en": [
+      "Building useful software.",
+      "Exploring open technology.",
+      "Learning through code."
+    ],
+    "pt": [
+      "Criando software útil.",
+      "Explorando tecnologia aberta.",
+      "Aprendendo com código."
+    ],
+    "fr": [
+      "Créer des logiciels utiles.",
+      "Explorer les technologies ouvertes.",
+      "Apprendre par le code."
+    ],
+    "pl": [
+      "Tworzenie przydatnego oprogramowania.",
+      "Odkrywanie otwartych technologii.",
+      "Nauka przez kod."
+    ],
+    "de": [
+      "Nützliche Software entwickeln.",
+      "Offene Technologie erkunden.",
+      "Durch Programmieren lernen."
+    ],
+    "es": [
+      "Creando software útil.",
+      "Explorando tecnología abierta.",
+      "Aprendiendo con código."
+    ],
+    "it": [
+      "Creare software utile.",
+      "Esplorare tecnologie aperte.",
+      "Imparare con il codice."
+    ]
+  },
+  "statuses": [
+    "Prototype",
+    "Development",
+    "Research"
+  ],
+  "categories": [
+    "Software",
+    "Development",
+    "Technology"
+  ],
+  "fieldOrder": [
+    "handle",
+    "bio",
+    "email",
+    "phone"
+  ]
+}
