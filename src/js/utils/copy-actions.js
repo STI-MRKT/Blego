@@ -1,3 +1,4 @@
+import { resolveFileOperations } from '../../../shared/image-workspace.mjs';
 import { state } from '../state.js';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
@@ -28,6 +29,12 @@ export async function resolveCopySource(id) {
       id,
       state.photos.map((p) => ({
         ...p,
+        groupName: state.imageWorkspace?.groups.find(
+          (g) => g.id === state.imageWorkspace.membership[p.fileId]
+        )?.name,
+        effectiveOperations: state.imageWorkspace?.membership[p.fileId]
+          ? resolveFileOperations(state.imageWorkspace, p.fileId)
+          : [],
         beforeAfter: state.metadataPlan?.files.find((f) => f.fileId === p.fileId)?.beforeAfter
       }))
     );

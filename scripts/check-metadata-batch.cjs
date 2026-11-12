@@ -2,7 +2,7 @@
 const fs = require('node:fs'),
   path = require('node:path'),
   os = require('node:os');
-const { imageFixture } = require('../tests/fixtures/images.cjs');
+const { imageFixture, distinctCopies } = require('../tests/fixtures/images.cjs');
 const { createImageService } = require('../electron/features/images/service.cjs');
 (async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-batch-'));
@@ -28,7 +28,7 @@ const { createImageService } = require('../electron/features/images/service.cjs'
     const output = path.join(root, 'out');
     fs.mkdirSync(output);
     const service = createImageService();
-    const items = await service.addFiles(Array(100).fill(file));
+    const items = await service.addFiles(distinctCopies(file, 100));
     await Promise.all(items.map((item) => service.readImageMetadata(item.fileId)));
     const plan = service.planMetadataChanges({
       fileIds: items.map((i) => i.fileId),

@@ -124,12 +124,44 @@ async function applyImageForm() {
       await workspaceChange('setFileOverrides', { fileId: photo.fileId, overrides: ops });
   stashImageDraft();
 }
+async function prepareImageExport(retry = {}) {
+  await state.imageInvalidation;
+  const fileIds = state.photos.filter((p) => p.selected).map((p) => p.fileId);
+  await workspaceChange('select', { fileIds });
+  const scope = document.getElementById('image-export-scope')?.value || 'selection';
+  const groupId = state.imageGroupId || 'ungrouped';
+  const workspace = state.imageWorkspace;
+  const ids =
+    scope === 'selection'
+      ? fileIds
+      : scope === 'group'
+        ? Object.keys(workspace.membership).filter((id) => workspace.membership[id] === groupId)
+        : Object.keys(workspace.membership);
+  const destinationByGroup = {};
+  for (const id of new Set(ids.map((id) => workspace.membership[id]))) {
+    toast('Choose export folder for ' + workspace.groups.find((g) => g.id === id).name);
+    const token = await window.blego.chooseImageDestination();
+    if (!token) return;
+    destinationByGroup[id] = token;
+  }
+  state.metadataPlan = await window.blego.prepareGroupExport({
+    scope,
+    groupId,
+    workspaceRevision: workspace.revision,
+    destinationByGroup,
+    ...retry,
+    acknowledgeMakerNotes: !!document.querySelector('[name="confirm-maker"]')?.checked
+  });
+}
 function bindView() {
   mountCopyActions();
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
       photo.selected = input.checked;
+      state.imageInvalidation = workspaceChange('select', {
+        fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId)
+      }).catch((e) => toast(e.message, 'err'));
       state.metadataPlan = null;
       stashImageDraft();
       restoreImageDraft();
@@ -168,18 +200,16 @@ function bindView() {
       state.metadataDraft['confirm-maker'] =
         metadataForm.elements.namedItem('confirm-maker').checked;
       state.metadataPlan = null;
+      state.imageInvalidation = workspaceChange('select', {
+        fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId)
+      }).catch((e) => toast(e.message, 'err'));
       document.querySelector('[data-metadata-plan]')?.remove();
     };
     metadataForm.onsubmit = async (event) => {
       event.preventDefault();
       try {
-        state.metadataPlan = await window.blego.planMetadataChanges({
-          fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId),
-          operations: readMetadataForm(metadataForm)
-            .filter((op) => op.action !== 'inherit')
-            .map(({ origin, ...op }) => op),
-          acknowledgeMakerNotes: new FormData(metadataForm).has('confirm-maker')
-        });
+        await applyImageForm();
+        await prepareImageExport();
         renderView();
       } catch (error) {
         toast(error.message, 'err');
@@ -858,9 +888,26 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if (action === 'metadata-retry') {
+    try {
+      const fileIds = [...document.querySelectorAll('[data-retry-file]:checked')].map(
+        (x) => x.dataset.retryFile
+      );
+      await prepareImageExport({ retryRunId: state.metadataExport.runId, fileIds });
+      renderView();
+    } catch (e) {
+      toast(e.message, 'err');
+    }
+    return;
+  }
+  if (action === 'metadata-cancel-group') {
+    await window.blego.cancelGroupExport({ runId: state.imageRunId, groupId: target.dataset.id });
+    return;
+  }
   if (action === 'metadata-cancel') {
     if (state.imagesReading) state.imagesReadCancelled = true;
-    await window.blego.cancelImageExport();
+    if (state.imagesReading) await window.blego.cancelImageExport();
+    else await window.blego.cancelGroupExport({ runId: state.imageRunId });
     return;
   }
   if (action === 'metadata-report') {
@@ -875,18 +922,43 @@ document.addEventListener('click', async (event) => {
     if (state.imagesBusy || !state.metadataPlan) return;
     let unsubscribe;
     try {
-      const planId = state.metadataPlan.planId,
-        destinationToken = await window.blego.chooseImageDestination();
-      if (!destinationToken) return;
+      const plan = state.metadataPlan;
+      const runId = crypto.randomUUID();
+      state.imageRunId = runId;
       state.imagesBusy = true;
       state.metadataExport = null;
       state.metadataProgress = {};
       renderView();
       unsubscribe = window.blego.onImageProgress((result) => {
+        if (result.runId && result.runId !== state.imageRunId) return;
         state.metadataProgress[result.fileId] = result;
-        if (state.view === 'photos') renderView();
+        if (state.view === 'photos') {
+          const box = document.querySelector('[data-metadata-progress]');
+          if (box) {
+            let row = box.querySelector(`[data-progress-id="${result.fileId}"]`);
+            if (!row) {
+              row = document.createElement('p');
+              row.dataset.progressId = result.fileId;
+              box.append(row);
+            }
+            row.textContent = [
+              result.groupName,
+              result.name,
+              result.status,
+              result.error,
+              result.outputName
+            ]
+              .filter(Boolean)
+              .join(' · ');
+          }
+        }
       });
-      state.metadataExport = await window.blego.applyMetadataPlan({ planId, destinationToken });
+      state.metadataExport = await window.blego.applyMetadataPlan({
+        planId: plan.planId,
+        workspaceRevision: plan.workspaceRevision,
+        runId
+      });
+      state.imageExportHistory = await window.blego.imageExportHistory();
       state.metadataPlan = null;
     } catch (error) {
       toast(error.message, 'err');
@@ -922,13 +994,30 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'metadata-preset-plan') {
     try {
-      state.metadataPlan = await window.blego.planMetadataChanges({
-        fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId),
-        presetId: document.getElementById('metadata-preset').value,
-        acknowledgeMakerNotes: new FormData(document.getElementById('metadata-form')).has(
-          'confirm-maker'
-        )
-      });
+      const preset = state.metadataPresets.find(
+        (p) => p.id === document.getElementById('metadata-preset').value
+      );
+      const loaded = draftFromOperations(
+        preset.operations.map((op) => ({
+          ...op,
+          ...(op.action === 'set'
+            ? {
+                origin: {
+                  kind: 'preset',
+                  id: preset.id,
+                  name: preset.name,
+                  version: preset.schemaVersion
+                }
+              }
+            : {})
+        }))
+      );
+      state.metadataDraft = loaded.draft;
+      state.metadataOrigins = loaded.origins;
+      stashImageDraft();
+      renderView();
+      await applyImageForm();
+      await prepareImageExport();
       renderView();
     } catch (error) {
       toast(error.message, 'err');

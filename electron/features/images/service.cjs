@@ -7,7 +7,20 @@ const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
 function createImageService({ engine = createEngine(), store, hooks = {} } = {}) {
-  const groups = require('./groups.cjs').createGroupStore({ store });
+  const groupStore = require('./groups.cjs').createGroupStore({ store });
+  const groups = Object.fromEntries(
+    Object.entries(groupStore).map(([name, fn]) => [
+      name,
+      (...args) => {
+        if (active && !['snapshot', 'effective'].includes(name)) throw Error('IMAGES_BUSY');
+        return fn(...args);
+      }
+    ])
+  );
+  const runs = new Map(),
+    history = new Map(),
+    planRuns = new Map();
+  let groupRun = null;
   const references = new Map();
   const destinations = new Map();
   const readers = new Set();
@@ -33,6 +46,29 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       else running--;
     }
   }
+  async function checkDestination(token, probe = false) {
+    const destination = destinations.get(token);
+    if (!destination) throw Error('INVALID_DESTINATION');
+    const stat = await fs.promises.lstat(destination.path);
+    if (
+      !stat.isDirectory() ||
+      stat.isSymbolicLink() ||
+      stat.dev !== destination.dev ||
+      stat.ino !== destination.ino
+    )
+      throw Error('INVALID_DESTINATION');
+    if (probe) {
+      const dir = await fs.promises.mkdtemp(path.join(destination.path, '.blego-check-'));
+      try {
+        await fs.promises.writeFile(path.join(dir, 'probe'), 'probe', { flag: 'wx', mode: 0o600 });
+        await fs.promises.link(path.join(dir, 'probe'), path.join(dir, 'link'));
+      } catch {
+        throw Error('DESTINATION_EXCLUSIVE_LINK_UNSUPPORTED');
+      } finally {
+        await fs.promises.rm(dir, { recursive: true, force: true });
+      }
+    }
+  }
   return {
     groups,
     async recover() {
@@ -41,6 +77,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
     async addDestination(directory) {
       const stat = await fs.promises.lstat(directory);
       if (!stat.isDirectory() || stat.isSymbolicLink()) throw Error('INVALID_DESTINATION');
+      if (destinations.size >= 100) destinations.delete(destinations.keys().next().value);
       const token = randomUUID();
       destinations.set(token, { path: path.resolve(directory), dev: stat.dev, ino: stat.ino });
       return token;
@@ -53,51 +90,288 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
     },
     async applyMetadataPlan({ planId, destinationToken }, onProgress) {
       if (active || running) throw Error('IMAGES_BUSY');
-      const plan = plans.get(planId),
-        destination = destinations.get(destinationToken);
+      const plan = plans.get(planId);
       if (!plan) throw Error('INVALID_PLAN_TOKEN');
-      if (!destination) throw Error('INVALID_DESTINATION');
-      const stat = await fs.promises.lstat(destination.path);
-      if (
-        !stat.isDirectory() ||
-        stat.isSymbolicLink() ||
-        stat.dev !== destination.dev ||
-        stat.ino !== destination.ino
-      )
-        throw Error('INVALID_DESTINATION');
+      // Acquire before the first await: IPC/UI double-clicks cannot race the destination check.
       const controller = new AbortController();
       active = controller;
+      const selectedDestinations =
+        plan.planVersion === 2 ? plan.destinationByGroup : { legacy: destinationToken };
+      let started = false;
       const results = new Array(plan.files.length);
       let next = 0;
-      const worker = async () => {
-        while (next < plan.files.length) {
-          const index = next++,
-            planned = plan.files[index],
-            item = files.get(planned.fileId);
-          results[index] = await require('./export.cjs').exportCopy({
-            item,
-            planned,
-            operations: plan.operations,
-            destination: destination.path,
-            engine,
-            signal: controller.signal,
-            onProgress,
-            store,
-            hooks
-          });
-          onProgress?.(results[index]);
-        }
-      };
       try {
+        if (plan.planVersion === 2) {
+          if (groups.snapshot().revision !== plan.workspaceRevision) throw Error('PLAN_STALE');
+          for (const planned of plan.files) {
+            const item = files.get(planned.fileId);
+            if (
+              !item ||
+              createHash('sha256')
+                .update(await readBounded(item.path))
+                .digest('hex') !== planned.sourceHash
+            )
+              throw Error('PLAN_STALE');
+            await this.verifyOrigins(planned.operations);
+          }
+        }
+        for (const token of new Set(Object.values(selectedDestinations)))
+          await checkDestination(token);
+        started = true;
+        const worker = async () => {
+          while (next < plan.files.length) {
+            const index = next++,
+              planned = plan.files[index],
+              item = files.get(planned.fileId);
+            const operations = planned.operations || plan.operations;
+            const destination = destinations.get(selectedDestinations[planned.groupId || 'legacy']);
+            const signal = groupRun
+              ? AbortSignal.any([
+                  controller.signal,
+                  groupRun.controllers.get(planned.groupId).signal
+                ])
+              : controller.signal;
+            const emit = (result) =>
+              onProgress?.({
+                ...result,
+                ...(groupRun
+                  ? {
+                      runId: groupRun.runId,
+                      groupId: planned.groupId,
+                      groupName: planned.groupName
+                    }
+                  : {})
+              });
+            const startedAt = new Date().toISOString();
+            const result = await require('./export.cjs').exportCopy({
+              item,
+              planned,
+              operations: require('../../../shared/image-workspace.mjs').engineOperations(
+                operations
+              ),
+              destination: destination.path,
+              engine,
+              signal,
+              onProgress: emit,
+              store,
+              hooks
+            });
+            results[index] = {
+              ...result,
+              ...(plan.planVersion === 2
+                ? {
+                    groupId: planned.groupId,
+                    groupName: planned.groupName,
+                    startedAt,
+                    finishedAt: new Date().toISOString(),
+                    changedFields: operations
+                      .filter((op) => op.action !== 'keep')
+                      .map((op) => op.field),
+                    verification:
+                      result.status === 'completed'
+                        ? 'readback_and_pixels'
+                        : result.status === 'no_changes'
+                          ? 'not_needed'
+                          : 'not_completed'
+                  }
+                : {})
+            };
+            emit(results[index]);
+          }
+        };
         await Promise.all(
           Array.from({ length: Math.min(IMAGE_LIMITS.parallel, plan.files.length) }, worker)
         );
-        return { planId, files: results, cancelled: controller.signal.aborted };
+        return {
+          planId,
+          ...(groupRun ? { runId: groupRun.runId } : {}),
+          files: results,
+          cancelled: controller.signal.aborted
+        };
       } finally {
         active = null;
-        plans.delete(planId);
-        destinations.delete(destinationToken);
+        if (started || plan.planVersion === 2) plans.delete(planId);
       }
+    },
+    async verifyOrigins(operations) {
+      for (const op of operations) {
+        if (op.origin?.kind === 'reference') {
+          let expected;
+          try {
+            expected = await this.referenceOperations({
+              referenceId: op.origin.id,
+              fields: [op.field]
+            });
+          } catch {
+            throw Error('PLAN_STALE');
+          }
+          if (!expected.length || !require('node:util').isDeepStrictEqual(expected[0], op))
+            throw Error('PLAN_STALE');
+        } else if (op.origin?.kind === 'preset') {
+          const preset = presets.get(op.origin.id);
+          if (
+            !preset ||
+            preset.name !== op.origin.name ||
+            !preset.operations.some(
+              (x) =>
+                x.field === op.field &&
+                x.action === op.action &&
+                require('node:util').isDeepStrictEqual(x.value, op.value)
+            )
+          )
+            throw Error('PLAN_STALE');
+        }
+      }
+    },
+    async prepareGroupExport({
+      scope,
+      groupId,
+      workspaceRevision,
+      destinationByGroup,
+      retryRunId,
+      fileIds,
+      acknowledgeMakerNotes = false
+    }) {
+      if (active || running) throw Error('IMAGES_BUSY');
+      const workspace = groups.snapshot();
+      if (workspaceRevision !== workspace.revision) throw Error('PLAN_STALE');
+      let ids =
+        scope === 'selection'
+          ? workspace.selection
+          : scope === 'group'
+            ? Object.keys(workspace.membership).filter((id) => workspace.membership[id] === groupId)
+            : scope === 'all'
+              ? Object.keys(workspace.membership)
+              : null;
+      if (!ids || !ids.length) throw Error('INVALID_EXPORT_SCOPE');
+      if (retryRunId !== undefined) {
+        const old = history.get(retryRunId);
+        if (
+          !old ||
+          !Array.isArray(fileIds) ||
+          !fileIds.length ||
+          new Set(fileIds).size !== fileIds.length ||
+          fileIds.some(
+            (id) =>
+              !ids.includes(id) ||
+              !old.files.some((f) => f.fileId === id && ['failed', 'cancelled'].includes(f.status))
+          )
+        )
+          throw Error('INVALID_RETRY');
+        ids = fileIds;
+        for (const id of ids) await this.readImageMetadata(id);
+      } else if (fileIds !== undefined) throw Error('INVALID_EXPORT_SCOPE');
+      if (
+        !destinationByGroup ||
+        typeof destinationByGroup !== 'object' ||
+        Array.isArray(destinationByGroup) ||
+        Object.keys(destinationByGroup).some((id) => !workspace.groups.some((g) => g.id === id))
+      )
+        throw Error('INVALID_DESTINATION');
+      const output = [];
+      const used = {};
+      for (const id of ids) {
+        const gid = workspace.membership[id],
+          token = destinationByGroup[gid];
+        if (!destinations.has(token)) throw Error('INVALID_DESTINATION');
+        used[gid] = token;
+        const operations = groups.effective(id);
+        await this.verifyOrigins(operations);
+        const legacy = this.planMetadataChanges({
+          fileIds: [id],
+          operations: require('../../../shared/image-workspace.mjs').engineOperations(operations),
+          acknowledgeMakerNotes
+        });
+        plans.delete(legacy.planId);
+        const item = files.get(id);
+        if (
+          createHash('sha256')
+            .update(await readBounded(item.path))
+            .digest('hex') !== item.view.sourceHash
+        )
+          throw Error('PLAN_STALE');
+        output.push({
+          ...legacy.files[0],
+          groupId: gid,
+          groupName: workspace.groups.find((g) => g.id === gid).name,
+          destinationName: path.basename(destinations.get(token).path),
+          operations
+        });
+      }
+      for (const token of new Set(Object.values(used))) await checkDestination(token, true);
+      if (groups.snapshot().revision !== workspaceRevision) throw Error('PLAN_STALE');
+      const plan = {
+        planId: randomUUID(),
+        planVersion: 2,
+        workspaceRevision,
+        scope,
+        destinationByGroup: used,
+        files: output,
+        warnings: [...new Set(output.flatMap((f) => f.warnings))],
+        ...(retryRunId ? { retryRunId } : {})
+      };
+      if (plans.size >= 20) plans.delete(plans.keys().next().value);
+      plans.set(plan.planId, plan);
+      return structuredClone(plan);
+    },
+    applyGroupExport({ planId, workspaceRevision, runId }, onProgress) {
+      if (!require('../../../shared/image-workspace.mjs').validId(runId))
+        return Promise.reject(Error('INVALID_RUN_ID'));
+      const existing = runs.get(runId);
+      if (existing)
+        return existing.planId === planId && existing.revision === workspaceRevision
+          ? existing.promise
+          : Promise.reject(Error('RUN_ID_REUSED'));
+      const previous = planRuns.get(planId);
+      if (previous)
+        return previous.revision === workspaceRevision
+          ? previous.promise
+          : Promise.reject(Error('PLAN_STALE'));
+      const plan = plans.get(planId);
+      if (
+        !plan ||
+        plan.planVersion !== 2 ||
+        plan.workspaceRevision !== workspaceRevision ||
+        groups.snapshot().revision !== workspaceRevision
+      )
+        return Promise.reject(Error('PLAN_STALE'));
+      if (active || running || groupRun) return Promise.reject(Error('IMAGES_BUSY'));
+      groupRun = {
+        runId,
+        controllers: new Map(plan.files.map((f) => [f.groupId, new AbortController()]))
+      };
+      const promise = this.applyMetadataPlan({ planId }, onProgress)
+        .then((report) => {
+          history.set(runId, structuredClone(report));
+          return report;
+        })
+        .finally(() => {
+          groupRun = null;
+        });
+      const entry = { planId, revision: workspaceRevision, promise };
+      runs.set(runId, entry);
+      planRuns.set(planId, entry);
+      if (runs.size > 100) {
+        const old = runs.keys().next().value;
+        const item = runs.get(old);
+        runs.delete(old);
+        planRuns.delete(item.planId);
+        history.delete(old);
+      }
+      return promise;
+    },
+    cancelGroupExport({ runId, groupId }) {
+      if (groupRun?.runId !== runId) return false;
+      if (groupId === undefined) active?.abort();
+      else {
+        const controller = groupRun.controllers.get(groupId);
+        if (!controller) return false;
+        controller.abort();
+      }
+      return true;
+    },
+    exportHistory() {
+      return [...history.values()].map((x) => structuredClone(x));
     },
     async addFiles(paths, { reference = false } = {}) {
       if (active) throw Error('IMAGES_BUSY');

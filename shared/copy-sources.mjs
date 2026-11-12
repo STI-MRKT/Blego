@@ -219,12 +219,18 @@ export function copySource(id, data) {
       'make',
       'model',
       'software',
+      'iso',
+      'fNumber',
+      'exposureTime',
+      'focalLength',
       'gps',
       'personalIdentifiers'
     ];
     return {
       fields: [
         field('name'),
+        field('groupName'),
+        field('effectiveOperations', 'personal'),
         ...keys.map((k) =>
           field(
             k,
@@ -240,6 +246,15 @@ export function copySource(id, data) {
         (data || []).filter((p) => p.view),
         (p) => ({
           name: p.name,
+          groupName: p.groupName || '',
+          effectiveOperations: scalar(
+            p.effectiveOperations?.map(({ field, action, value, origin }) => ({
+              field,
+              action,
+              ...(value === undefined ? {} : { value }),
+              origin: origin?.kind
+            }))
+          ),
           ...Object.fromEntries(
             keys.map((k) => [k, scalar(p.view.tags.find((t) => t.field === k)?.value)])
           ),
@@ -251,7 +266,19 @@ export function copySource(id, data) {
     };
   }
   if (id === 'image-report') {
-    const keys = ['name', 'status', 'outputName', 'error', 'sourceHash', 'outputHash'];
+    const keys = [
+      'groupName',
+      'name',
+      'startedAt',
+      'finishedAt',
+      'status',
+      'changedFields',
+      'verification',
+      'outputName',
+      'error',
+      'sourceHash',
+      'outputHash'
+    ];
     return {
       fields: fields(keys),
       rows: rows(

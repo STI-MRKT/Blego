@@ -4,7 +4,7 @@ const fs = require('node:fs'),
   path = require('node:path'),
   os = require('node:os');
 const { _electron } = require('playwright');
-const { imageFixture } = require('../tests/fixtures/images.cjs');
+const { imageFixture, distinctCopies } = require('../tests/fixtures/images.cjs');
 const { openStore } = require('../electron/local/store.cjs');
 (async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-ui-batch-')),
@@ -45,7 +45,7 @@ const { openStore } = require('../electron/local/store.cjs');
           return { canceled: false, filePaths: paths };
         };
       }, paths);
-    await choose(Array(100).fill(file));
+    await choose(distinctCopies(file, 100));
     await page.locator('[data-action="images-choose"]').click();
     await waitForAsync(
       page,
@@ -72,9 +72,9 @@ const { openStore } = require('../electron/local/store.cjs');
     console.log('100 files read');
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Synthetic GUI batch');
+    await choose([output]);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-action="metadata-export"]').waitFor();
-    await choose([output]);
     await page.locator('[data-action="metadata-export"]').click();
     await waitForAsync(
       page,

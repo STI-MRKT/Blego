@@ -78,22 +78,51 @@ export function photosHTML() {
            )
        ).join(
          ''
-       )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><button type="submit" class="btn btn-primary">Preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button><button type="button" class="btn" data-action="preset-rename">Rename</button><button type="button" class="btn" data-action="preset-duplicate">Duplicate</button><button type="button" class="btn" data-action="preset-delete">Delete preset</button><button type="button" class="btn" data-action="preset-export">Export preset JSON</button><p class="sub">Saved presets and group rules may contain personal metadata. They stay in the local database; exported JSON includes those values. File overrides are session-only. Original paths and access permissions are never saved.</p></fieldset></form>`
+       )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label><button type="submit" class="btn btn-primary">Choose folders and preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button><button type="button" class="btn" data-action="preset-rename">Rename</button><button type="button" class="btn" data-action="preset-duplicate">Duplicate</button><button type="button" class="btn" data-action="preset-delete">Delete preset</button><button type="button" class="btn" data-action="preset-export">Export preset JSON</button><p class="sub">Saved presets and group rules may contain personal metadata. They stay in the local database; exported JSON includes those values. File overrides are session-only. Original paths and access permissions are never saved.</p></fieldset></form>`
      : ''
  }
- ${plan ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files.map((file) => `<h4>${esc(file.name)}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th></tr></thead><tbody>${file.beforeAfter.map((row) => `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td></tr>`).join('')}</tbody></table></div>`).join('')}<button class="btn" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Export verified copies</button></div>` : ''}
- ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>` : ''}
  ${
-   Object.keys(state.metadataProgress || {}).length
-     ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress)
+   plan
+     ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files
          .map(
            (file) =>
-             `<p>${esc(file.name)}: ${esc(file.status)} ${esc(file.error || '')} ${esc(file.outputName || '')}</p>`
+             `<h4>${esc(file.groupName || '')} · ${esc(file.name)} → ${esc(file.destinationName || '')}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th></tr></thead><tbody>${file.beforeAfter
+               .filter((row) => row.operation !== 'keep')
+               .map(
+                 (row) =>
+                   `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td></tr>`
+               )
+               .join('')}</tbody></table></div>`
+         )
+         .join(
+           ''
+         )}<button class="btn" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Export verified copies</button></div>`
+     : ''
+ }
+ ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>${!state.imagesReading ? (state.imageWorkspace?.groups || []).map((g) => `<button class="btn" data-action="metadata-cancel-group" data-id="${g.id}">Cancel ${esc(g.name)}</button>`).join('') : ''}` : ''}
+ ${
+   state.imagesBusy || Object.keys(state.metadataProgress || {}).length
+     ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress || {})
+         .map(
+           (file) =>
+             `<p data-progress-id="${file.fileId}">${esc(file.name)}: ${esc(file.status)} ${esc(file.error || '')} ${esc(file.outputName || '')}</p>`
          )
          .join('')}</div>`
      : ''
  }
- ${state.metadataExport ? '<div class="card pad"><p>Export finished. Only files marked completed passed read-back and image checks. Originals were not edited. Reports omit tag values and full paths.</p><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button></div>' : ''}
+ ${
+   state.metadataExport
+     ? `<div class="card pad"><p>Export finished. Only completed files passed read-back and pixel checks. Reports omit tag values and full paths.</p><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button>${state.metadataExport.files
+         .filter((f) => ['failed', 'cancelled'].includes(f.status))
+         .map(
+           (f) =>
+             `<label class="fl"><input type="checkbox" data-retry-file="${f.fileId}"> ${esc(f.name)} — ${esc(f.status)}</label>`
+         )
+         .join(
+           ''
+         )}<button class="btn" data-action="metadata-retry">Prepare selected failed/cancelled files again</button><details><summary>Export history (${state.imageExportHistory?.length || 0})</summary>${(state.imageExportHistory || []).map((r) => `<p>${esc(r.runId)}: ${r.files.map((f) => `${esc(f.name)} — ${esc(f.status)}`).join('; ')}</p>`).join('')}</details></div>`
+     : ''
+ }
  </div>`;
 }
 

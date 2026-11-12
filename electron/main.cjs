@@ -142,9 +142,16 @@ async function initialize() {
         });
         return result.canceled ? null : images.addDestination(result.filePaths[0]);
       },
+      imageGroupPrepare: (request) => images.prepareGroupExport(request),
+      imageGroupCancel: (request) => images.cancelGroupExport(request),
+      imageExportHistory: () => images.exportHistory(),
       imagesApply: async (request) => {
         if (imageExportPromise) throw Error('IMAGES_BUSY');
-        imageExportPromise = images.applyMetadataPlan(request, (result) => {
+        imageExportPromise = (
+          request.runId
+            ? images.applyGroupExport.bind(images)
+            : images.applyMetadataPlan.bind(images)
+        )(request, (result) => {
           if (mainWindow && !mainWindow.isDestroyed())
             mainWindow.webContents.send('local:image-progress', result);
         });

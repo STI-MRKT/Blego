@@ -5,6 +5,9 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  prepareGroupExport: (request) => call('imageGroupPrepare', request),
+  cancelGroupExport: (request) => call('imageGroupCancel', request),
+  imageExportHistory: () => call('imageExportHistory'),
   imageWorkspace: () => call('imageWorkspace'),
   changeImageWorkspace: (request) => call('imageWorkspaceChange', request),
   chooseImageReference: () => call('imageReferenceChoose'),

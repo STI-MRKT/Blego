@@ -204,6 +204,13 @@ test(
     await page.locator('#metadata-form').waitFor();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Новый заголовок');
+    const imageOutput = path.join(root, 'image-output');
+    fs.mkdirSync(imageOutput);
+    await app.evaluate(({ dialog }, directory) => {
+      dialog.showOpenDialog = async () => {
+        return { canceled: false, filePaths: [directory] };
+      };
+    }, imageOutput);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-metadata-plan]').waitFor();
     assert.equal(await page.locator('[name="action-title"]').inputValue(), 'set');
@@ -211,15 +218,6 @@ test(
     await page.locator('[name="value-title"]').fill('Другой заголовок');
     assert.equal(await page.locator('[data-metadata-plan]').count(), 0);
     await page.locator('#metadata-form [type="submit"]').click();
-    const imageOutput = path.join(root, 'image-output');
-    fs.mkdirSync(imageOutput);
-    await app.evaluate(({ dialog }, directory) => {
-      const original = dialog.showOpenDialog;
-      dialog.showOpenDialog = async () => {
-        dialog.showOpenDialog = original;
-        return { canceled: false, filePaths: [directory] };
-      };
-    }, imageOutput);
     await page.locator('[data-action="metadata-export"]').click();
     await page.locator('[data-action="metadata-report"]').first().waitFor();
     assert.match(await page.locator('[data-metadata-progress]').textContent(), /completed/);
