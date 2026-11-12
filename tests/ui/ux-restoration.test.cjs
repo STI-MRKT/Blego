@@ -41,7 +41,7 @@ test(
     }
     assert.equal(await page.locator('.ux-generator .ux-copy-set').isVisible(), true);
     assert.equal(await page.locator('#news-block').count(), 0);
-    const profile = await app.evaluate(() => globalThis.blego.lastCard()).catch(() => null);
+    const profile = await page.evaluate(() => window.blego.lastCard());
     if (profile?.fields?.phone) {
       const shownPhone = await page
         .locator('.field')
