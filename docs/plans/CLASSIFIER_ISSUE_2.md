@@ -45,7 +45,7 @@ Base: 44b3fe63d25a2ca6626d69767b6e83e2cd51ed55 (remote HEAD checked 2026-11-12; 
 - [x] Whole-branch independent review, fix important findings with failing regression tests.
 - [x] Run complete suite, visual comparison; include classifier GUI in installed-app gate, mount DMG and run copied app outside checkout.
 - [x] Push feature branch, trigger existing Mac QA workflow; collect SHA, checksum, OS, artifacts and per-requirement status.
-- [ ] Create review PR against UX base, attach PR, do not merge.
+- [x] Create review PR against UX base; request chat attachment; do not merge.
 
 ## Progress / decisions
 - Existing cloud worktrees and untracked v13 reports untouched; isolated /workspace/BLEGO-classifier.
@@ -62,3 +62,5 @@ Base: 44b3fe63d25a2ca6626d69767b6e83e2cd51ed55 (remote HEAD checked 2026-11-12; 
 - Final copy review removed the obsolete Archive sentence saying classification rules were pending. No storage/UI structure change. Full rerun after this one-line correction: lint PASS, unit 56/56, integration 75/75, GUI 8/8. This final application SHA requires its own Mac QA, not automatic inheritance from 92210a3.
 
 - Native final gate complete: run 43318440049, source 62d6f6b, macOS 15.8.2 Apple M1 (Virtual) arm64; runtime/DMG/installed 8 GUI PASS. Artifact 13988729295 independently verified. Report-only follow-up does not change application bytes.
+
+- Review PR created: https://github.com/STI-MRKT/Blego/pull/3, target codex/blego-ux-restoration-20261112. No merge. Chat attachment tool was invoked but did not respond; PR URL is confirmed through GitHub.
