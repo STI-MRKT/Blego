@@ -16,10 +16,13 @@ const classification=createClassificationService();
 const {createArchiveService}=require('./features/archive/service.cjs');
 const {checkProxy}=require('./features/proxy/service.cjs');
 let proxyController=null;
-let store, mainWindow, archives;
+const {createNewsService}=require('./features/news/service.cjs');
+let store, mainWindow, archives, news;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
   archives=createArchiveService({store,classification});
+  news=createNewsService({store,onUpdate:snapshot=>{if(mainWindow&&!mainWindow.isDestroyed())mainWindow.webContents.send('local:news-updated',snapshot);}});
+  news.configure();
   const roots=new Set([getSettings(store).archiveRoot||path.join(store.root,'archives'),...store.db.prepare('SELECT metadata FROM archives').all().map(r=>JSON.parse(r.metadata).archiveRoot)]);
   for(const root of roots)await archives.recover(root);
   // Preserve the existing onboarding marker; no legacy user file is removed.
@@ -28,6 +31,7 @@ async function initialize() {
   }
   registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
     settingsGet:()=>getSettings(store),
+    newsSnapshot:()=>news.snapshot(),newsRefresh:options=>news.refreshNews(options||{}),newsCancel:()=>news.cancel(),
     proxyCheck:async request=>{if(!getSettings(store).proxyEnabled)throw Error('MODULE_DISABLED');if(proxyController)throw Error('CHECK_RUNNING');const c=new AbortController();proxyController=c;try{return await checkProxy(request,c.signal);}finally{if(proxyController===c)proxyController=null;}},
     proxyCancel:()=>{proxyController?.abort();return true;},
     archiveList:q=>archives.listArchives(q),
@@ -44,7 +48,7 @@ async function initialize() {
     generate:request=>generateProfile(request,{store}),
     lastCard:()=>store.get('lastCard')||null,
     clearCard:()=>clearCard(store),
-    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');const next={...getSettings(store),...patch};for(const c of ['BR','US','FR','PL','DE','ES','IT','GB'])for(const t of ['model','tech','crypto'])resolvePreset(c,t,next);const updated=updateSettings(store,patch);if(!updated.proxyEnabled)proxyController?.abort();return updated;},
+    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');const next={...getSettings(store),...patch};for(const c of ['BR','US','FR','PL','DE','ES','IT','GB'])for(const t of ['model','tech','crypto'])resolvePreset(c,t,next);const updated=updateSettings(store,patch);if(!updated.proxyEnabled)proxyController?.abort();news.configure();return updated;},
     archiveDirectory:async()=>{const r=await dialog.showOpenDialog(mainWindow,{properties:['openDirectory','createDirectory']});return r.canceled?getSettings(store):updateSettings(store,{archiveRoot:r.filePaths[0]});},
     copy:text=>copyText(text,clipboard),
     tourSeen:()=>!!store.get('tourSeen'),
@@ -118,6 +122,7 @@ if (!hasLock) {
   app.on('before-quit', () => {
     if (serverInstance) serverInstance.close();
     proxyController?.abort();
+    news?.close();
     classification.close();
     if(store) store.close();
   });

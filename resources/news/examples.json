@@ -1,0 +1,89 @@
+{
+  "note": "Legacy examples only. Not selected or agreed final sources.",
+  "sources": [
+    {
+      "id": "example-1",
+      "url": "https://www.theguardian.com/fashion/rss",
+      "name": "The Guardian",
+      "topic": "fashion"
+    },
+    {
+      "id": "example-2",
+      "url": "https://www.dazeddigital.com/rss",
+      "name": "Dazed",
+      "topic": "fashion"
+    },
+    {
+      "id": "example-3",
+      "url": "https://www.vogue.co.uk/feed/rss",
+      "name": "Vogue UK",
+      "topic": "fashion"
+    },
+    {
+      "id": "example-4",
+      "url": "https://i-d.co/feed",
+      "name": "i-D",
+      "topic": "fashion"
+    },
+    {
+      "id": "example-5",
+      "url": "https://thenextweb.com/feed",
+      "name": "TNW",
+      "topic": "ai"
+    },
+    {
+      "id": "example-6",
+      "url": "https://sifted.eu/feed",
+      "name": "Sifted",
+      "topic": "ai"
+    },
+    {
+      "id": "example-7",
+      "url": "https://tech.eu/feed/",
+      "name": "Tech.eu",
+      "topic": "ai"
+    },
+    {
+      "id": "example-8",
+      "url": "https://siliconcanals.com/feed/",
+      "name": "Silicon Canals",
+      "topic": "ai"
+    },
+    {
+      "id": "example-9",
+      "url": "https://www.artificialintelligence-news.com/feed/",
+      "name": "AI News",
+      "topic": "ai"
+    },
+    {
+      "id": "example-10",
+      "url": "https://www.theguardian.com/technology/rss",
+      "name": "The Guardian",
+      "topic": "tech"
+    },
+    {
+      "id": "example-11",
+      "url": "https://www.techradar.com/rss",
+      "name": "TechRadar",
+      "topic": "tech"
+    },
+    {
+      "id": "example-12",
+      "url": "https://www.wired.co.uk/feed",
+      "name": "Wired UK",
+      "topic": "tech"
+    },
+    {
+      "id": "example-13",
+      "url": "https://www.theguardian.com/uk/business/rss",
+      "name": "The Guardian",
+      "topic": "finance"
+    },
+    {
+      "id": "example-14",
+      "url": "https://feeds.skynews.com/feeds/rss/business.xml",
+      "name": "Sky News",
+      "topic": "finance"
+    }
+  ]
+}

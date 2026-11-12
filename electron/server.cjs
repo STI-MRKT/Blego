@@ -15,23 +15,6 @@ const MIME = {
   '.json': 'application/json; charset=utf-8'
 };
 
-const FEEDS = [
-  { url: 'https://www.theguardian.com/fashion/rss', source: 'The Guardian', topic: 'fashion' },
-  { url: 'https://www.dazeddigital.com/rss', source: 'Dazed', topic: 'fashion' },
-  { url: 'https://www.vogue.co.uk/feed/rss', source: 'Vogue UK', topic: 'fashion' },
-  { url: 'https://i-d.co/feed', source: 'i-D', topic: 'fashion' },
-  { url: 'https://thenextweb.com/feed', source: 'TNW', topic: 'ai' },
-  { url: 'https://sifted.eu/feed', source: 'Sifted', topic: 'ai' },
-  { url: 'https://tech.eu/feed/', source: 'Tech.eu', topic: 'ai' },
-  { url: 'https://siliconcanals.com/feed/', source: 'Silicon Canals', topic: 'ai' },
-  { url: 'https://www.artificialintelligence-news.com/feed/', source: 'AI News', topic: 'ai' },
-  { url: 'https://www.theguardian.com/technology/rss', source: 'The Guardian', topic: 'tech' },
-  { url: 'https://www.techradar.com/rss', source: 'TechRadar', topic: 'tech' },
-  { url: 'https://www.wired.co.uk/feed', source: 'Wired UK', topic: 'tech' },
-  { url: 'https://www.theguardian.com/uk/business/rss', source: 'The Guardian', topic: 'finance' },
-  { url: 'https://feeds.skynews.com/feeds/rss/business.xml', source: 'Sky News', topic: 'finance' }
-];
-
 const PING_TARGETS = [
   { label: 'Cloudflare', host: '1.1.1.1', port: 443 },
   { label: 'Google DNS', host: '8.8.8.8', port: 53 },
@@ -42,7 +25,6 @@ const PING_TARGETS = [
 const IP_FIELDS = 'status,message,country,countryCode,regionName,city,zip,lat,lon,timezone,isp,org,as,asname,mobile,proxy,hosting,query';
 const IP_API = `http://ip-api.com/json/?fields=${IP_FIELDS}`;
 
-const newsCache = { at: 0, items: [], counts: {} };
 
 function sendJson(response, data, status = 200) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
@@ -59,92 +41,6 @@ function decodeEntities(value) {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&');
-}
-
-function cleanText(raw) {
-  const stripped = String(raw)
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]+>/g, ' ');
-  return decodeEntities(stripped).replace(/\s+/g, ' ').trim();
-}
-
-function extractTag(block, tag) {
-  const match = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i').exec(block);
-  return match ? match[1] : '';
-}
-
-function isEnglish(text) {
-  return /[A-Za-z]{3}/.test(text) && !/[\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF]/.test(text);
-}
-
-function parseFeed(xml, feed) {
-  const blocks = [
-    ...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi),
-    ...xml.matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/gi)
-  ];
-  const items = [];
-  for (const match of blocks) {
-    const block = match[1];
-    const title = cleanText(extractTag(block, 'title')).slice(0, 180);
-    let link = cleanText(extractTag(block, 'link'));
-    if (!link) {
-      const href = /<link[^>]*href="([^"]+)"/i.exec(block);
-      if (href) link = decodeEntities(href[1]);
-    }
-    if (!title || !link || !/^https?:/i.test(link) || !isEnglish(title)) continue;
-    const dateRaw = extractTag(block, 'pubDate') || extractTag(block, 'published') || extractTag(block, 'updated') || extractTag(block, 'dc:date');
-    const parsed = dateRaw ? Date.parse(cleanText(dateRaw)) : NaN;
-    items.push({
-      title,
-      link: link.trim(),
-      source: feed.source,
-      topic: feed.topic,
-      publishedAt: Number.isFinite(parsed) ? parsed : 0
-    });
-  }
-  return items;
-}
-
-async function loadFeed(feed) {
-  const response = await fetch(feed.url, {
-    signal: AbortSignal.timeout(9000),
-    headers: { 'user-agent': 'Mozilla/5.0 (compatible; BLEGO/1.0)', accept: 'application/rss+xml, application/xml, text/xml' }
-  });
-  if (!response.ok) return [];
-  const xml = await response.text();
-  return parseFeed(xml, feed);
-}
-
-async function newsPayload(force) {
-  if (!force && Date.now() - newsCache.at < 90e3 && newsCache.items.length) {
-    return { items: newsCache.items, counts: newsCache.counts, updatedAt: newsCache.at };
-  }
-  const results = await Promise.allSettled(FEEDS.map(loadFeed));
-  const seen = new Set();
-  const byTopic = new Map();
-  for (const result of results) {
-    if (result.status !== 'fulfilled') continue;
-    for (const item of result.value) {
-      const key = item.link.split('#')[0];
-      if (seen.has(key)) continue;
-      seen.add(key);
-      if (!byTopic.has(item.topic)) byTopic.set(item.topic, []);
-      byTopic.get(item.topic).push(item);
-    }
-  }
-  const items = [];
-  const counts = {};
-  for (const [topic, list] of byTopic) {
-    list.sort((a, b) => b.publishedAt - a.publishedAt);
-    const slice = list.slice(0, 30);
-    counts[topic] = slice.length;
-    items.push(...slice);
-  }
-  if (!items.length) return { items: [], counts: {}, updatedAt: Date.now(), error: 'sources' };
-  newsCache.at = Date.now();
-  newsCache.items = items;
-  newsCache.counts = counts;
-  return { items, counts, updatedAt: newsCache.at };
 }
 
 function networkInfo() {
@@ -253,7 +149,6 @@ async function speedTest() {
 
 async function handleApi(request, response, url) {
   try {
-    if (url.pathname === '/api/news') return sendJson(response, await newsPayload(url.searchParams.get('force') === '1'));
     if (url.pathname === '/api/net/info') return sendJson(response, networkInfo());
     if (url.pathname === '/api/net/ip') return sendJson(response, await ipInfo());
     if (url.pathname === '/api/net/ping') return sendJson(response, await pingAll());

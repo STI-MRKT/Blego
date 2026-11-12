@@ -158,7 +158,7 @@ async function importPage(offset){try{state.importData=await window.blego.import
 
 function ensureNews() {
   if(!state.settings.newsEnabled) return;
-  if (!state.news.updatedAt && !state.news.loading) refreshNews(false);
+  if (!state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
 }
 
 async function refreshNews(force) {
@@ -170,8 +170,9 @@ async function refreshNews(force) {
     const data = await loadNews(force);
     state.news.items = data.items;
     state.news.counts = data.counts || {};
-    state.news.updatedAt = data.fetchedAt;
-    state.news.order = shuffle(data.items.map((item) => item.link));
+    state.news.updatedAt = data.lastSuccessfulAt?Date.parse(data.lastSuccessfulAt):0;
+    state.news.sourceStates=data.sourceStates;state.news.lastAttemptAt=data.lastAttemptAt;
+
     state.news.error = data.error || (data.items.length ? '' : 'News sources did not respond. Check the connection and try again.');
   } catch (error) {
     void error;
@@ -183,7 +184,7 @@ async function refreshNews(force) {
 
 function updateNews() {
   const block = document.getElementById('news-block');
-  if (block) block.outerHTML = newsBlockHTML();
+  if (block) {const content=document.getElementById('view');const top=content?.scrollTop;block.outerHTML=newsBlockHTML();if(content)content.scrollTop=top;}
 }
 
 function maybeAutoNetwork() {}
@@ -337,9 +338,11 @@ document.addEventListener('click', (event) => {
     }
     return;
   }
+  if(action==='news-cancel'){window.blego.cancelNews();return;}
   if (action === 'news-refresh') { refreshNews(true); return; }
   if (action === 'news-topic') {
     state.news.topic = target.dataset.topic || '';
+    window.blego.updateSettings({newsTopic:state.news.topic});
     if (!state.news.topic && !state.news.order.length) {
       state.news.order = shuffle(state.news.items.map((item) => item.link));
     }
@@ -393,7 +396,7 @@ async function runCheckerStatus() {
   renderView();
 }
 
-if(window.blego){try{state.settings=await window.blego.getSettings();state.locale=state.settings.country;state.type=state.settings.type;state.demo=await window.blego.lastCard();}catch{toast('Settings unavailable','err');}}
+if(window.blego){try{state.settings=await window.blego.getSettings();state.locale=state.settings.country;state.type=state.settings.type;state.demo=await window.blego.lastCard();state.news.topic=state.settings.newsTopic;const cached=await window.blego.newsSnapshot();Object.assign(state.news,cached);window.blego.onNews(data=>{Object.assign(state.news,data);state.news.updatedAt=data.lastSuccessfulAt?Date.parse(data.lastSuccessfulAt):0;updateNews();});}catch{toast('Settings unavailable','err');}}
 renderAll();
 setTimeout(() => {
   startTour({
