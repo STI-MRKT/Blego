@@ -6,9 +6,7 @@ const NAV = [
   { group: 'Workspace', items: [
     { view: 'generator', icon: I.spark, label: 'Generator' },
     { view: 'import', icon: I.upload, label: 'Import' },
-    { view: 'history', icon: I.clock, label: 'Archive' },
     { view: 'news', icon: I.globe, label: 'News' },
-    { view: 'settings', icon: I.shield, label: 'Settings' }
   ] },
   { group: 'Tools', items: [
     { view: 'network', icon: I.globe, label: 'Network' },
@@ -18,8 +16,13 @@ const NAV = [
   ] }
 ];
 
+const BOTTOM = [
+  { view: 'settings', icon: I.shield, label: 'Настройки' },
+  { view: 'history', icon: I.clock, label: 'Архив' }
+];
+
 export const titleOf = (view) => {
-  const item = NAV.flatMap((group) => group.items).find((entry) => entry.view === view);
+  const item = [...NAV.flatMap((group) => group.items), ...BOTTOM].find((entry) => entry.view === view);
   return item ? item.label : '';
 };
 
@@ -39,6 +42,7 @@ export function appHTML() {
         ${NAV.map((group) => `<div class="nav-label">${group.group}</div>${group.items.map(navItem).join('')}`).join('')}
       </nav>
       <div class="side-bottom">
+        <nav class="nav">${BOTTOM.map(navItem).join('')}</nav>
         <div class="side-note"><span class="dot ok"></span>Local workspace · no account</div>
         <div class="credit">powered by <span>blemish&amp;alterego</span></div>
       </div>
