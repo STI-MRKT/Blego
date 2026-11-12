@@ -7,6 +7,8 @@ const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
 function createImageService({ engine = createEngine(), store, hooks = {} } = {}) {
+  const groups = require('./groups.cjs').createGroupStore({ store });
+  const references = new Map();
   const destinations = new Map();
   const readers = new Set();
   let active = null;
@@ -32,6 +34,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
     }
   }
   return {
+    groups,
     async recover() {
       await require('./export.cjs').recoverExports(store);
     },
@@ -96,26 +99,35 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
         destinations.delete(destinationToken);
       }
     },
-    async addFiles(paths) {
+    async addFiles(paths, { reference = false } = {}) {
       if (active) throw Error('IMAGES_BUSY');
-      if (!Array.isArray(paths) || paths.length + files.size > IMAGE_LIMITS.files)
-        throw Error('IMAGE_QUEUE_LIMIT');
+      if (!Array.isArray(paths) || paths.length > 1000) throw Error('IMAGE_QUEUE_LIMIT');
       const pending = [];
       let added = 0;
+      const known = new Set([...files.values()].map((item) => item.path));
       for (const file of paths) {
+        const canonical = await fs.promises.realpath(file);
+        if (known.has(canonical)) continue;
+        known.add(canonical);
         const stat = await fs.promises.lstat(file);
         if (!stat.isFile() || stat.size > IMAGE_LIMITS.fileBytes) throw Error('IMAGE_TOO_LARGE');
         added += stat.size;
         pending.push({
           fileId: randomUUID(),
-          path: path.resolve(file),
+          path: canonical,
+          reference,
           name: path.basename(file),
           size: stat.size,
           status: 'queued'
         });
       }
-      if (totalBytes + added > IMAGE_LIMITS.totalBytes) throw Error('IMAGE_QUEUE_LIMIT');
+      if (
+        pending.length + files.size > IMAGE_LIMITS.files ||
+        totalBytes + added > IMAGE_LIMITS.totalBytes
+      )
+        throw Error('IMAGE_QUEUE_LIMIT');
       for (const item of pending) files.set(item.fileId, item);
+      if (!reference && pending.length) groups.addFiles(pending.map((x) => x.fileId));
       totalBytes += added;
       return pending.map(({ fileId, name, size, status }) => ({ fileId, name, size, status }));
     },
@@ -173,6 +185,8 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
     clear() {
       if (running || active) throw Error('IMAGES_BUSY');
       files.clear();
+      references.clear();
+      groups.clearFiles();
       plans.clear();
       totalBytes = 0;
     },
@@ -182,6 +196,8 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       if (!item) throw Error('INVALID_FILE_TOKEN');
       totalBytes -= item.size;
       files.delete(id);
+      references.delete(id);
+      if (!item.reference) groups.removeFile(id);
       plans.clear();
     },
     presets() {
@@ -212,6 +228,78 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
           Object.fromEntries([...presets].filter(([key]) => key !== 'privacy-v1'))
         );
       return { id, ...clean };
+    },
+    async addReference(file) {
+      const added = await this.addFiles([file], { reference: true });
+      const canonical = await fs.promises.realpath(file);
+      const id = added[0]?.fileId || [...files.values()].find((x) => x.path === canonical)?.fileId;
+      const view = await this.readImageMetadata(id);
+      references.set(id, structuredClone(view));
+      return {
+        referenceId: id,
+        name: view.name,
+        sourceHash: view.sourceHash,
+        tags: view.tags.filter((x) => x.field !== 'personalIdentifiers')
+      };
+    },
+    async referenceOperations({ referenceId, fields: chosen }) {
+      const reference = references.get(referenceId),
+        item = files.get(referenceId);
+      if (!reference || !item) throw Error('INVALID_REFERENCE_TOKEN');
+      if (
+        !Array.isArray(chosen) ||
+        new Set(chosen).size !== chosen.length ||
+        chosen.some(
+          (field) =>
+            !reference.tags.some((x) => x.field === field) || field === 'personalIdentifiers'
+        )
+      )
+        throw Error('INVALID_REFERENCE_FIELD');
+      if (
+        createHash('sha256')
+          .update(await readBounded(item.path))
+          .digest('hex') !== reference.sourceHash
+      )
+        throw Error('SOURCE_CHANGED');
+      return chosen.flatMap((field) => {
+        const value = reference.tags.find((x) => x.field === field).value;
+        return value == null
+          ? []
+          : [
+              {
+                field,
+                action: 'set',
+                value,
+                origin: {
+                  kind: 'reference',
+                  id: referenceId,
+                  name: reference.name,
+                  sourceHash: reference.sourceHash
+                }
+              }
+            ];
+      });
+    },
+    managePreset({ action, id, name, confirmed }) {
+      const preset = presets.get(id);
+      if (!preset) throw Error('METADATA_PRESET_UNSUPPORTED');
+      if (action === 'export') return structuredClone(preset);
+      if (action === 'duplicate') return this.importPreset({ ...preset, name });
+      if (id === 'privacy-v1') throw Error('PRESET_READ_ONLY');
+      if (action === 'rename') {
+        if (!require('../../../shared/image-workspace.mjs').validName(name))
+          throw Error('INVALID_PRESET_NAME');
+        presets.set(id, { ...preset, name });
+      } else if (action === 'delete') {
+        if (confirmed !== true) throw Error('PRESET_CONFIRMATION_REQUIRED');
+        presets.delete(id);
+      } else throw Error('INVALID_PRESET_ACTION');
+      store?.set(
+        'metadata:presets',
+        Object.fromEntries([...presets].filter(([key]) => key !== 'privacy-v1'))
+      );
+      plans.clear();
+      return action === 'delete' ? { deleted: true } : { id, ...presets.get(id) };
     },
     async clipboardPNG(fileId) {
       if (active) throw Error('IMAGES_BUSY');

@@ -21,7 +21,15 @@ export function validateOperations(operations) {
     }
     if (op.field === 'personalIdentifiers') throw Error('METADATA_INVALID_OPERATION');
     const value = op.value;
-    if (op.field === 'gps') {
+    if (['iso', 'fNumber', 'focalLength', 'exposureTime'].includes(op.field)) {
+      const numeric = cameraNumber(op.field, value);
+      if (
+        !Number.isFinite(numeric) ||
+        numeric <= 0 ||
+        (op.field === 'iso' && !Number.isSafeInteger(numeric))
+      )
+        throw Error('METADATA_INVALID_CAMERA_VALUE');
+    } else if (op.field === 'gps') {
       if (
         !value ||
         Object.keys(value).some((k) => !['latitude', 'longitude', 'altitude'].includes(k)) ||
@@ -67,5 +75,30 @@ function validText(value) {
     value.length > 0 &&
     value.length <= 4000 &&
     !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)
+  );
+}
+
+export function cameraNumber(field, value) {
+  if (
+    field === 'exposureTime' &&
+    typeof value === 'string' &&
+    /^\d+(?:\.\d+)?\/\d+(?:\.\d+)?$/.test(value)
+  ) {
+    const [a, b] = value.split('/').map(Number);
+    return b > 0 ? a / b : NaN;
+  }
+  return typeof value === 'number' ? value : NaN;
+}
+export function equivalentCamera(field, actual, expected) {
+  if (actual == null || expected == null) return actual === expected;
+  const a =
+    typeof actual === 'string' && !actual.includes('/')
+      ? Number(actual)
+      : cameraNumber(field, actual);
+  const b = cameraNumber(field, expected);
+  return (
+    Number.isFinite(a) &&
+    Number.isFinite(b) &&
+    Math.abs(a - b) <= Math.max(1e-9, Math.abs(b) * 1e-6)
   );
 }

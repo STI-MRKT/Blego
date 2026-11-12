@@ -1,3 +1,5 @@
+const { cameraNumber, equivalentCamera } = require('../../../shared/metadata-operations.mjs');
+const cameraFields = ['iso', 'fNumber', 'exposureTime', 'focalLength'];
 const { FIELD_TAGS, validateOperations, normalizedValue, fieldKeys } = require('./policy.cjs');
 const { isDeepStrictEqual } = require('node:util');
 function writeArgs(operations, format) {
@@ -51,7 +53,10 @@ function writeArgs(operations, format) {
         args.push(`-${tag}=`);
         if (op.action === 'set') {
           if (op.field === 'keywords') for (const value of op.value) args.push(`-${tag}+=${value}`);
-          else args.push(`-${tag}=${op.value}`);
+          else
+            args.push(
+              `-${tag}=${cameraFields.includes(op.field) ? cameraNumber(op.field, op.value) : op.value}`
+            );
         }
       }
     if (format === 'jpeg' && tags.some((tag) => tag.startsWith('IPTC:')) && op.action === 'set')
@@ -75,6 +80,8 @@ function verifyTags(operations, before, after) {
           (actual[k] == null || expected[k] == null || Math.abs(actual[k] - expected[k]) > 1e-6)
         )
           throw Error('METADATA_VERIFY_GPS');
+    } else if (cameraFields.includes(op.field)) {
+      if (!equivalentCamera(op.field, actual, expected)) throw Error('METADATA_VERIFY_CAMERA');
     } else if (!isDeepStrictEqual(actual, expected))
       throw Error(`METADATA_VERIFY_${op.field.toUpperCase()}`);
     if (op.field === 'gps' && op.action === 'set') {
@@ -126,7 +133,12 @@ function verifyTags(operations, before, after) {
             : Array.isArray(v)
               ? v.join(', ')
               : v;
-        if (!isDeepStrictEqual(value, expected)) throw Error('METADATA_VERIFY_DUPLICATES');
+        if (
+          cameraFields.includes(op.field)
+            ? !equivalentCamera(op.field, value, expected)
+            : !isDeepStrictEqual(value, expected)
+        )
+          throw Error('METADATA_VERIFY_DUPLICATES');
       }
   }
   for (const key of Object.keys(before).filter(

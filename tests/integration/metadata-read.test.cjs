@@ -1,3 +1,4 @@
+const { distinctCopies } = require('../fixtures/images.cjs');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -127,14 +128,14 @@ test('missing and mixed metadata remain distinct and file/queue/total limits rej
   assert.equal(plan.files[0].beforeAfter[0].before, null);
   assert.equal(plan.files[1].beforeAfter[0].before, 'Исходный заголовок');
   assert.equal(plan.files[0].beforeAfter[0].after, null);
-  await assert.rejects(service.addFiles(Array(101).fill(plain)), /IMAGE_QUEUE_LIMIT/);
+  await assert.rejects(service.addFiles(distinctCopies(plain, 101)), /IMAGE_QUEUE_LIMIT/);
   const huge = path.join(root, 'huge.jpg');
   fs.writeFileSync(huge, '');
   fs.truncateSync(huge, 50 * 1024 * 1024 + 1);
   await assert.rejects(service.addFiles([huge]), /IMAGE_TOO_LARGE/);
   fs.truncateSync(huge, 50 * 1024 * 1024);
-  await assert.rejects(service.addFiles(Array(11).fill(huge)), /IMAGE_QUEUE_LIMIT/);
-  const [next] = await service.addFiles([plain]);
+  await assert.rejects(service.addFiles(distinctCopies(huge, 11)), /IMAGE_QUEUE_LIMIT/);
+  const [next] = await service.addFiles(distinctCopies(plain, 1));
   assert.ok(next.fileId);
 });
 test(
@@ -158,7 +159,7 @@ test(
     };
     const service = createImageService({ engine });
     assert.equal(typeof service.cancelReads, 'function');
-    const items = await service.addFiles(Array(8).fill(file));
+    const items = await service.addFiles(distinctCopies(file, 8));
     const jobs = items.map((i) =>
       service.readImageMetadata(i.fileId).then(
         () => 'unexpected',

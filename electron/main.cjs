@@ -87,6 +87,45 @@ async function initialize() {
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      imageWorkspace: () => images.groups.snapshot(),
+      imageWorkspaceChange: ({ action, ...request }) => {
+        const allowed = [
+          'createGroup',
+          'renameGroup',
+          'removeGroup',
+          'moveFiles',
+          'setGroupOperations',
+          'setFileOverrides',
+          'select',
+          'save'
+        ];
+        if (!allowed.includes(action)) throw Error('INVALID_WORKSPACE_ACTION');
+        const result = images.groups[action](request);
+        return { result, workspace: images.groups.snapshot() };
+      },
+      imageReferenceChoose: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'Reference image', extensions: ['jpg', 'jpeg', 'png', 'webp'] }]
+        });
+        return result.canceled ? null : images.addReference(result.filePaths[0]);
+      },
+      imageReferenceOperations: (request) => images.referenceOperations(request),
+      metadataPresetManage: async (request) => {
+        const result = images.managePreset(request);
+        if (request.action === 'export') {
+          const output = await dialog.showSaveDialog(mainWindow, {
+            defaultPath: 'BLEGO-metadata-preset.json'
+          });
+          if (output.canceled) return false;
+          await fs.promises.writeFile(output.filePath, JSON.stringify(result, null, 2), {
+            flag: 'wx',
+            mode: 0o600
+          });
+          return true;
+        }
+        return result;
+      },
       imagesChoose: async () => {
         const result = await dialog.showOpenDialog(mainWindow, {
           properties: ['openFile', 'multiSelections'],

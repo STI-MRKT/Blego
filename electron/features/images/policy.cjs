@@ -12,6 +12,10 @@ const FIELD_TAGS = {
   copyright: ['XMP-dc:Rights', 'EXIF:Copyright', 'IPTC:CopyrightNotice', 'PNG:Copyright'],
   keywords: ['XMP-dc:Subject', 'IPTC:Keywords'],
   comment: ['XMP-exif:UserComment', 'EXIF:UserComment', 'File:Comment', 'PNG:Comment'],
+  iso: ['EXIF:ISO', 'XMP-exif:ISO'],
+  fNumber: ['EXIF:FNumber', 'XMP-exif:FNumber'],
+  exposureTime: ['EXIF:ExposureTime', 'XMP-exif:ExposureTime'],
+  focalLength: ['EXIF:FocalLength', 'XMP-exif:FocalLength'],
   make: ['EXIF:Make', 'XMP-tiff:Make'],
   model: ['EXIF:Model', 'XMP-tiff:Model'],
   software: ['EXIF:Software', 'XMP-tiff:Software', 'PNG:Software'],
@@ -62,6 +66,7 @@ function normalizedValue(field, raw) {
     };
   }
   const value = raw[keys[0]];
+  if (['iso', 'fNumber', 'exposureTime', 'focalLength'].includes(field)) return Number(value);
   if (field === 'keywords') return Array.isArray(value) ? value : [String(value)];
   return Array.isArray(value) ? value.join(', ') : value;
 }

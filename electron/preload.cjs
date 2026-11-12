@@ -5,6 +5,11 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  imageWorkspace: () => call('imageWorkspace'),
+  changeImageWorkspace: (request) => call('imageWorkspaceChange', request),
+  chooseImageReference: () => call('imageReferenceChoose'),
+  imageReferenceOperations: (request) => call('imageReferenceOperations', request),
+  manageMetadataPreset: (request) => call('metadataPresetManage', request),
   chooseImageDestination: () => call('imagesDestination'),
   applyMetadataPlan: (request) => call('imagesApply', request),
   cancelImageExport: () => call('imagesCancel'),

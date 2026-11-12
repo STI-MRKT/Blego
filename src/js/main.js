@@ -9,7 +9,7 @@ import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
-import { readMetadataForm } from './ui/photos.js';
+import { readMetadataForm, draftFromOperations } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
@@ -73,6 +73,57 @@ async function refreshPoolStats() {
   const stats = await window.blego.getPoolStats({ country, type });
   if (state.locale === country && state.type === type) state.poolStats = stats;
 }
+function imageDraftKey() {
+  return state.imageEditTarget === 'group'
+    ? 'group:' + (state.imageGroupId || 'ungrouped')
+    : 'files:' +
+        state.photos
+          .filter((p) => p.selected)
+          .map((p) => p.fileId)
+          .sort()
+          .join(',');
+}
+function stashImageDraft() {
+  if (state.imageDraftKey) {
+    state.imageDrafts ||= {};
+    state.imageDrafts[state.imageDraftKey] = {
+      draft: state.metadataDraft,
+      origins: state.metadataOrigins
+    };
+  }
+}
+function restoreImageDraft() {
+  state.imageDraftKey = imageDraftKey();
+  const saved = state.imageDrafts?.[state.imageDraftKey];
+  const ops =
+    state.imageEditTarget === 'group'
+      ? state.imageWorkspace?.groups.find((g) => g.id === (state.imageGroupId || 'ungrouped'))
+          ?.operations
+      : state.photos.filter((p) => p.selected).length === 1
+        ? state.imageWorkspace?.overrides[state.photos.find((p) => p.selected).fileId]
+        : [];
+  const loaded = saved || draftFromOperations(ops || []);
+  state.metadataDraft = loaded.draft;
+  state.metadataOrigins = loaded.origins || {};
+}
+async function workspaceChange(action, request = {}) {
+  const reply = await window.blego.changeImageWorkspace({ action, ...request });
+  state.imageWorkspace = reply.workspace;
+  state.metadataPlan = null;
+  return reply.result;
+}
+async function applyImageForm() {
+  const ops = readMetadataForm(document.getElementById('metadata-form'));
+  if (state.imageEditTarget === 'group')
+    await workspaceChange('setGroupOperations', {
+      groupId: state.imageGroupId || 'ungrouped',
+      operations: ops
+    });
+  else
+    for (const photo of state.photos.filter((p) => p.selected))
+      await workspaceChange('setFileOverrides', { fileId: photo.fileId, overrides: ops });
+  stashImageDraft();
+}
 function bindView() {
   mountCopyActions();
   document.querySelectorAll('[data-image-select]').forEach((input) => {
@@ -80,10 +131,25 @@ function bindView() {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
       photo.selected = input.checked;
       state.metadataPlan = null;
-      state.metadataDraft = null;
+      stashImageDraft();
+      restoreImageDraft();
       renderView();
     };
   });
+  for (const [id, key] of [
+    ['image-group', 'imageGroupId'],
+    ['image-edit-target', 'imageEditTarget']
+  ]) {
+    const input = document.getElementById(id);
+    if (input)
+      input.onchange = () => {
+        stashImageDraft();
+        state[key] = input.value;
+        restoreImageDraft();
+        state.metadataPlan = null;
+        renderView();
+      };
+  }
   const metadataForm = document.getElementById('metadata-form');
   if (metadataForm) {
     for (const [key, value] of Object.entries(state.metadataDraft || {})) {
@@ -93,7 +159,11 @@ function bindView() {
         else control.value = value;
       }
     }
-    metadataForm.oninput = () => {
+    metadataForm.oninput = (event) => {
+      if (event.target.name?.startsWith('value-'))
+        delete state.metadataOrigins?.[event.target.name.slice(6)];
+      if (event.target.name?.startsWith('gps-')) delete state.metadataOrigins?.gps;
+      if (event.target.name?.startsWith('date-')) delete state.metadataOrigins?.captureDate;
       state.metadataDraft = Object.fromEntries(new FormData(metadataForm));
       state.metadataDraft['confirm-maker'] =
         metadataForm.elements.namedItem('confirm-maker').checked;
@@ -105,7 +175,9 @@ function bindView() {
       try {
         state.metadataPlan = await window.blego.planMetadataChanges({
           fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId),
-          operations: readMetadataForm(metadataForm),
+          operations: readMetadataForm(metadataForm)
+            .filter((op) => op.action !== 'inherit')
+            .map(({ origin, ...op }) => op),
           acknowledgeMakerNotes: new FormData(metadataForm).has('confirm-maker')
         });
         renderView();
@@ -423,6 +495,7 @@ async function addPhotos() {
     const files = await window.blego.chooseImages();
     state.photos.push(...files);
     state.metadataPresets = await window.blego.metadataPresets();
+    state.imageWorkspace = await window.blego.imageWorkspace();
     for (const file of files) {
       if (state.imagesReadCancelled) {
         file.status = 'cancelled';
@@ -445,12 +518,14 @@ async function addPhotos() {
   } finally {
     state.imagesBusy = false;
     state.imagesReading = false;
+    restoreImageDraft();
     renderView();
   }
 }
 async function removePhoto(id) {
   try {
     await window.blego.removeImage(id);
+    state.imageWorkspace = await window.blego.imageWorkspace();
     state.photos = state.photos.filter((photo) => photo.fileId !== id);
     state.metadataPlan = null;
     state.imagePreview = null;
@@ -463,6 +538,7 @@ async function clearPhotos() {
   try {
     await window.blego.clearImages();
     state.photos = [];
+    state.imageWorkspace = await window.blego.imageWorkspace();
     state.metadataPlan = null;
     state.imagePreview = null;
     renderView();
@@ -701,6 +777,87 @@ document.addEventListener('click', async (event) => {
     runProxyCheck();
     return;
   }
+  if (
+    action.startsWith('group-') ||
+    action.startsWith('reference-') ||
+    action.startsWith('preset-')
+  ) {
+    try {
+      const groupId = state.imageGroupId || 'ungrouped',
+        fileIds = state.photos.filter((p) => p.selected).map((p) => p.fileId);
+      if (action === 'group-create') {
+        const g = await workspaceChange('createGroup', {
+          name: document.getElementById('image-group-name').value
+        });
+        stashImageDraft();
+        state.imageGroupId = g.id;
+        restoreImageDraft();
+      }
+      if (action === 'group-rename')
+        await workspaceChange('renameGroup', {
+          groupId,
+          name: document.getElementById('image-group-name').value
+        });
+      if (
+        action === 'group-delete' &&
+        confirm('Delete group and move its files to Без группы? Original files stay unchanged.')
+      ) {
+        await workspaceChange('removeGroup', { groupId, moveTo: 'ungrouped', confirmed: true });
+        state.imageGroupId = 'ungrouped';
+        restoreImageDraft();
+      }
+      if (action === 'group-move')
+        await workspaceChange('moveFiles', { fileIds, targetGroupId: groupId });
+      if (action === 'group-select') {
+        stashImageDraft();
+        for (const p of state.photos)
+          p.selected =
+            !!p.view?.capabilities.writable &&
+            state.imageWorkspace.membership[p.fileId] === groupId;
+        restoreImageDraft();
+      }
+      if (action === 'group-save') {
+        await workspaceChange('save');
+        toast('Group rules saved locally. File overrides remain session-only.');
+      }
+      if (action === 'group-operations') {
+        await applyImageForm();
+        toast('Rules applied in this session.');
+      }
+      if (action === 'reference-choose')
+        state.imageReference = await window.blego.chooseImageReference();
+      if (action === 'reference-use') {
+        const fields = [...document.querySelectorAll('[data-reference-field]:checked')].map(
+          (x) => x.dataset.referenceField
+        );
+        const ops = await window.blego.imageReferenceOperations({
+          referenceId: state.imageReference.referenceId,
+          fields
+        });
+        const loaded = draftFromOperations(ops);
+        state.metadataDraft = { ...state.metadataDraft, ...loaded.draft };
+        state.metadataOrigins = { ...state.metadataOrigins, ...loaded.origins };
+        state.metadataPlan = null;
+        stashImageDraft();
+      }
+      if (action.startsWith('preset-')) {
+        const command = action.slice(7);
+        if (command === 'delete' && !confirm('Delete this local preset?')) return;
+        await window.blego.manageMetadataPreset({
+          action: command,
+          id: document.getElementById('metadata-preset').value,
+          name: document.getElementById('metadata-preset-name').value,
+          confirmed: command === 'delete'
+        });
+        state.metadataPresets = await window.blego.metadataPresets();
+        state.metadataPlan = null;
+      }
+      renderView();
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
   if (action === 'metadata-cancel') {
     if (state.imagesReading) state.imagesReadCancelled = true;
     await window.blego.cancelImageExport();
@@ -785,6 +942,8 @@ document.addEventListener('click', async (event) => {
           schemaVersion: 1,
           name: document.getElementById('metadata-preset-name').value,
           operations: readMetadataForm(document.getElementById('metadata-form'))
+            .filter((op) => op.action !== 'inherit')
+            .map(({ origin, ...op }) => op)
         });
       else await window.blego.importMetadataPreset();
       state.metadataPresets = await window.blego.metadataPresets();
@@ -892,6 +1051,8 @@ async function runCheckerStatus() {
 if (window.blego) {
   try {
     state.settings = await window.blego.getSettings();
+    state.imageWorkspace = await window.blego.imageWorkspace();
+    state.metadataPresets = await window.blego.metadataPresets();
     await initCopyPreferences();
     state.locale = state.settings.country;
     state.type = state.settings.type;

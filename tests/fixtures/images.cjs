@@ -54,3 +54,13 @@ async function imageFixture(root, format = 'jpeg', { metadata = true, name } = {
   return file;
 }
 module.exports = { imageFixture };
+module.exports.distinctCopies = function distinctCopies(file, count) {
+  return Array.from({ length: count }, (_, index) => {
+    const target = path.join(
+      path.dirname(file),
+      `${path.basename(file, path.extname(file))}-${index}${path.extname(file)}`
+    );
+    fs.copyFileSync(file, target);
+    return target;
+  });
+};

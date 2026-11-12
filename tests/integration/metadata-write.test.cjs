@@ -1,3 +1,4 @@
+const { distinctCopies } = require('../fixtures/images.cjs');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -191,7 +192,7 @@ test('write failures, cancellation and restart cleanup preserve originals and un
     assert.deepEqual(fs.readdirSync(out), []);
   }
   const service = createImageService();
-  const items = await service.addFiles([file, file, file]);
+  const items = await service.addFiles(distinctCopies(file, 3));
   for (const item of items) await service.readImageMetadata(item.fileId);
   const plan = service.planMetadataChanges({
     fileIds: items.map((i) => i.fileId),

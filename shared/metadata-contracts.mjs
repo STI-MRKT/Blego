@@ -30,6 +30,10 @@ export const METADATA_FIELDS = [
   'make',
   'model',
   'software',
+  'iso',
+  'fNumber',
+  'exposureTime',
+  'focalLength',
   'gps',
   'personalIdentifiers'
 ];
