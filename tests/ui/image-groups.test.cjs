@@ -153,6 +153,7 @@ test(
         (ops) => ops.find((op) => op.field === 'title').value === 'A revised'
       )
     );
+    await page.locator('details.ux-preset-tools summary').click();
     await page.locator('#metadata-preset-name').fill('Does not create a metadata draft');
     await page.locator('[data-image-select]').nth(1).check();
     await page.locator('#metadata-form [type="submit"]').click();
