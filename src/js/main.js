@@ -849,8 +849,30 @@ document.addEventListener('click', async (event) => {
     updateNews();
     return;
   }
+  if (action === 'net-enable') {
+    try {
+      state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+      renderView();
+      await runNetwork(false);
+    } catch (error) {
+      toast('Не удалось включить проверку сети: ' + error.message, 'err');
+    }
+    return;
+  }
+  if (action === 'net-ping') {
+    runNetwork(false);
+    return;
+  }
   if (action === 'net-run') {
     runNetwork(true);
+    return;
+  }
+  if (action === 'proxy-reveal') {
+    const input = document.getElementById('proxy-input');
+    if (input) {
+      input.type = input.type === 'password' ? 'text' : 'password';
+      target.textContent = input.type === 'password' ? 'Показать' : 'Скрыть';
+    }
     return;
   }
   if (action === 'proxy-cancel') {
