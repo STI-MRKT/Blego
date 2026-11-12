@@ -2,7 +2,7 @@ import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 import { LOCALES } from '../data/locales.js';
-import { formatPhoneDisplay } from '../../../shared/phone-display.mjs';
+import { formatPhoneDisplay } from '../utils/phone.mjs';
 
 const LABELS = {
   name: 'Имя',
