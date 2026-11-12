@@ -14,7 +14,7 @@
     "dist:mac": "electron-builder --mac --publish never",
     "test:unit": "node --test tests/unit/*.test.cjs",
     "test:integration": "node --test tests/integration/*.test.cjs",
-    "test:ui": "node --test tests/ui/*.test.cjs",
+    "test:ui": "node --test --test-concurrency=1 tests/ui/*.test.cjs",
     "lint": "node scripts/check.cjs && npm run format:check",
     "verify": "npm run lint && npm run test:unit && npm run test:integration",
     "dist:linux": "npm run prepare:metadata && electron-builder --linux tar.gz --x64 --publish never",
