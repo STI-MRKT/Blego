@@ -1,0 +1,376 @@
+{
+  "label": "original",
+  "sourceSha": "6e57eabfb5b51af4475b90686fa580b5ce57e9b0",
+  "host": "linux-x64",
+  "os": "6.18.57",
+  "at": "2026-11-12T16:58:43.302Z",
+  "window": {
+    "width": 1280,
+    "height": 900
+  },
+  "errors": [],
+  "metrics": {
+    "firstUsableMs": 1124.47946,
+    "generateMs": 1251.6192879999994,
+    "networkNavigationMs": 177.52821099999983,
+    "networkFrameIntervalsMs": [
+      49.899999999999636,
+      33.400000000000546,
+      50,
+      50,
+      33.399999999999636,
+      50,
+      33.30000000000018,
+      50,
+      33.30000000000018,
+      50,
+      50,
+      33.399999999999636,
+      50,
+      33.30000000000018,
+      49.899999999999636,
+      33.400000000000546,
+      49.899999999999636,
+      50.100000000000364,
+      33.30000000000018,
+      50,
+      33.399999999999636,
+      49.899999999999636,
+      50.100000000000364,
+      33.30000000000018,
+      50,
+      33.30000000000018,
+      50,
+      33.399999999999636,
+      49.899999999999636,
+      50,
+      33.400000000000546,
+      49.899999999999636,
+      33.400000000000546,
+      50,
+      50,
+      33.399999999999636,
+      49.899999999999636,
+      33.30000000000018,
+      50.100000000000364,
+      33.19999999999982,
+      50.100000000000364,
+      33.29999999999927,
+      50,
+      50.100000000000364,
+      33.19999999999982,
+      50,
+      83.40000000000055,
+      50,
+      33.29999999999927,
+      50.100000000000364,
+      49.899999999999636,
+      33.30000000000018,
+      50.099999999999454,
+      49.900000000001455,
+      50.099999999998545,
+      33.30000000000109,
+      50,
+      50,
+      33.29999999999927,
+      50
+    ],
+    "checkerNavigationMs": 126.8517780000002,
+    "photosNavigationMs": 72.52856500000053,
+    "photoThumbnailMs": 30.710221999999703,
+    "historyNavigationMs": 62.161205999998856,
+    "importNavigationMs": 78.44054599999981
+  },
+  "screens": [
+    {
+      "name": "generator-empty",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "pulse",
+          "playState": "running",
+          "duration": 2000,
+          "target": ""
+        }
+      ]
+    },
+    {
+      "name": "generator-hover",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "pulse",
+          "playState": "running",
+          "duration": 2000,
+          "target": ""
+        }
+      ]
+    },
+    {
+      "name": "generator-loading",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "pulse",
+          "playState": "running",
+          "duration": 2000,
+          "target": ""
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        }
+      ]
+    },
+    {
+      "name": "generator-result",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "pulse",
+          "playState": "running",
+          "duration": 2000,
+          "target": ""
+        },
+        {
+          "name": "pulse",
+          "playState": "running",
+          "duration": 2000,
+          "target": ""
+        }
+      ]
+    },
+    {
+      "name": "network",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "opacity",
+          "playState": "running",
+          "duration": 240,
+          "target": "toast out"
+        },
+        {
+          "name": "transform",
+          "playState": "running",
+          "duration": 240,
+          "target": "toast out"
+        },
+        {
+          "name": "gauge",
+          "playState": "running",
+          "duration": 1600,
+          "target": {}
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 1200,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 840,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 1020,
+          "target": ""
+        }
+      ]
+    },
+    {
+      "name": "checker",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "photos",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "photos-loaded",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "history",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "import",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    }
+  ],
+  "scope": "Synthetic local rendering; external requests blocked for comparable visual audit. Timings include automation overhead; no statistical performance claim.",
+  "electron": "32.3.3",
+  "status": "PASS"
+}

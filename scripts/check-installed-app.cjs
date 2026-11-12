@@ -16,11 +16,12 @@ const { createHash } = require('node:crypto');
   fs.mkdirSync(path.dirname(report), { recursive: true });
   const log = report + '.log';
   const stream = fs.createWriteStream(log, { flags: 'w', mode: 0o600 });
-  const tests = [
-    'tests/ui/app.test.cjs',
-    'tests/ui/copy-all-sections.test.cjs',
-    'tests/ui/image-groups.test.cjs'
-  ];
+  const tests = fs
+    .readdirSync(path.join(project, 'tests/ui'))
+    .filter((name) => name.endsWith('.test.cjs'))
+    .sort()
+    .map((name) => 'tests/ui/' + name);
+  if (!tests.length) throw Error('NO_INSTALLED_GUI_TESTS');
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,
     env: {

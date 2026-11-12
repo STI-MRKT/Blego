@@ -1,0 +1,484 @@
+{
+  "label": "candidate",
+  "sourceSha": "e414641fc9b8bb853b2025799bbe98a40bb455bd",
+  "host": "linux-x64",
+  "os": "6.18.57",
+  "at": "2026-11-12T16:59:17.836Z",
+  "window": {
+    "width": 1280,
+    "height": 900
+  },
+  "errors": [],
+  "metrics": {
+    "firstUsableMs": 707.015602,
+    "generateMs": 432.6747409999998,
+    "networkNavigationMs": 78.00900899999942,
+    "networkFrameIntervalsMs": [
+      50,
+      33.30000000000018,
+      50.099999999999454,
+      49.900000000000546,
+      50,
+      33.29999999999927,
+      50.100000000000364,
+      50,
+      49.899999999999636,
+      33.30000000000018,
+      50.100000000000364,
+      49.899999999999636,
+      33.400000000000546,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      33.29999999999927,
+      50.100000000000364,
+      49.899999999999636,
+      50,
+      50,
+      50,
+      50,
+      83.40000000000055,
+      49.899999999999636,
+      50.100000000000364,
+      66.59999999999945,
+      50,
+      33.30000000000018,
+      50,
+      50,
+      66.69999999999982,
+      50,
+      50,
+      50,
+      33.30000000000018,
+      50,
+      50,
+      33.30000000000018,
+      50,
+      50.100000000000364,
+      50,
+      49.899999999999636,
+      33.399999999999636,
+      50,
+      50,
+      50,
+      33.30000000000018,
+      50,
+      50,
+      50,
+      33.30000000000018,
+      50,
+      50,
+      50
+    ],
+    "newsNavigationMs": 156.28347799999938,
+    "checkerNavigationMs": 145.92460700000083,
+    "photosNavigationMs": 79.45266599999923,
+    "photoThumbnailMs": 430.19307200000003,
+    "historyNavigationMs": 166.44581499999913,
+    "settingsNavigationMs": 77.31222100000014,
+    "importNavigationMs": 35.12229800000023
+  },
+  "screens": [
+    {
+      "name": "generator-empty",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "generator-hover",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "generator-loading",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "fade",
+          "playState": "running",
+          "duration": 280,
+          "target": "card demo-card lift"
+        }
+      ]
+    },
+    {
+      "name": "generator-result",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "network",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "opacity",
+          "playState": "running",
+          "duration": 240,
+          "target": "toast out"
+        },
+        {
+          "name": "transform",
+          "playState": "running",
+          "duration": 240,
+          "target": "toast out"
+        },
+        {
+          "name": "gauge",
+          "playState": "running",
+          "duration": 1600,
+          "target": {}
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "packet",
+          "playState": "running",
+          "duration": 2600,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 1200,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 840,
+          "target": ""
+        },
+        {
+          "name": "signal",
+          "playState": "running",
+          "duration": 1020,
+          "target": ""
+        }
+      ]
+    },
+    {
+      "name": "news",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": [
+        {
+          "name": "spin",
+          "playState": "running",
+          "duration": 1000,
+          "target": {}
+        },
+        {
+          "name": "news-slide",
+          "playState": "running",
+          "duration": 1100,
+          "target": ""
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        },
+        {
+          "name": "sk",
+          "playState": "running",
+          "duration": 1300,
+          "target": "sk"
+        }
+      ]
+    },
+    {
+      "name": "checker",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "photos",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "photos-loaded",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "history",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    },
+    {
+      "name": "import",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "animations": []
+    }
+  ],
+  "scope": "Synthetic local rendering; external requests blocked for comparable visual audit. Timings include automation overhead; no statistical performance claim.",
+  "electron": "45.3.1",
+  "status": "PASS"
+}

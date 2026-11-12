@@ -22,3 +22,5 @@ Task 6: in progress.
 
 Task 6: complete. lint PASS, unit 47/47, integration 84/84, GUI 8/8. Compact original archive rows and six generator fields, all individual copy controls, actual TXT/ZIP exports and confirmation paths tested. Protected CSS/assets/icons unchanged. Evidence stages/06.
 Task 7: in progress.
+
+Ruling: existing bounded standard GitHub Actions native QA is within the user's explicit Mac build authorization; no purchase/subscription/new paid service is enabled. Billing usage API returned 403 (integration lacks billing access), so remaining minutes/cost are unknown, not represented as free. The design's request to establish budget cannot be verified with this connection; continue the already-authorized existing build workflow, maximum 60 minutes, private short-lived artifacts. Cost if wrong: existing organization Actions usage may incur its configured charges. No account spending limit is changed.

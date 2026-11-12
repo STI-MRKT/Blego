@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - codex/macos-qa-bootstrap-20261112
+      - codex/blego-original-ux-v13
   workflow_dispatch:
     inputs:
       target:
@@ -71,23 +72,38 @@ jobs:
           mkdir -p release
           node scripts/check-metadata-native.cjs --target darwin-${{ env.TARGET_ARCH }} --root build/metadata-runtime/darwin-${{ env.TARGET_ARCH }} --report release/native-darwin-${{ env.TARGET_ARCH }}.json
       - name: Test
-        run: npm run verify
+        run: |
+          set -o pipefail
+          npm run verify 2>&1 | tee release/verify.txt
       - name: Build unsigned DMG
         run: npm run dist:mac -- --${{ env.TARGET_ARCH }}
       - name: Verify packaged executable (outside repo)
         run: |
           set -euo pipefail
-          ditto "release/mac-${{ env.TARGET_ARCH }}/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          mkdir -p "$RUNNER_TEMP/blego-dmg"
+          trap 'hdiutil detach "$RUNNER_TEMP/blego-dmg" || true' EXIT
+          hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/blego-dmg" release/BLEGO-*-${{ env.TARGET_ARCH }}.dmg
+          ditto "$RUNNER_TEMP/blego-dmg/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          hdiutil detach "$RUNNER_TEMP/blego-dmg"
+          trap - EXIT
           if ! node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
           fi
+      - name: Original and installed screenshots and measured UI timing
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/blego-original" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
+          (cd "$RUNNER_TEMP/blego-original" && npm ci && node node_modules/electron/install.js)
+          node scripts/capture-ux-candidate.cjs --root "$RUNNER_TEMP/blego-original" --label original --out release/visual
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/capture-ux-candidate.cjs --root "$PWD" --label candidate --out release/visual
       - name: Record checksums
         run: |
           shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
           sw_vers > release/macOS-env.txt
           uname -m >> release/macOS-env.txt
+          sysctl -n machdep.cpu.brand_string >> release/macOS-env.txt
+          git rev-parse HEAD >> release/macOS-env.txt
           echo 'QA only; not notarized or Developer ID signed' >> release/macOS-env.txt
       - name: Upload private QA packages
         uses: actions/upload-artifact@v4
@@ -96,10 +112,13 @@ jobs:
           retention-days: 5
           if-no-files-found: error
           path: |
+            release/visual/
+            release/verify.txt
             release/*.dmg
             release/SHA256SUMS-mac.txt
             release/macOS-env.txt
             release/native-darwin-*.json
+            release/native-runtime-*.json
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
 
@@ -114,3 +133,4 @@ jobs:
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
             release/native-darwin-*.json
+            release/native-runtime-*.json
