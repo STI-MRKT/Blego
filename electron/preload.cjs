@@ -5,6 +5,15 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  chooseImages: () => call('imagesChoose'),
+  readImageMetadata: (id) => call('imageRead', id),
+  previewImage: (id) => call('imagePreview', id),
+  planMetadataChanges: (request) => call('imagesPlan', request),
+  clearImages: () => call('imagesClear'),
+  removeImage: (id) => call('imageRemove', id),
+  metadataPresets: () => call('metadataPresets'),
+  saveMetadataPreset: (preset) => call('metadataPresetSave', preset),
+  importMetadataPreset: () => call('metadataPresetImport'),
   normalizeFacebook: (text) => call('facebookNormalize', text),
   checkFacebook: (request) => call('facebookCheck', request),
   cancelFacebook: () => call('facebookCancel'),

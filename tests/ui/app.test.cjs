@@ -186,6 +186,27 @@ test(
       }
     });
     assert.equal(disabled, true);
+    const imageFile = await require('../fixtures/images.cjs').imageFixture(root, 'png', {
+      name: '- тест.png'
+    });
+    await app.evaluate(({ dialog }, file) => {
+      const original = dialog.showOpenDialog;
+      dialog.showOpenDialog = async () => {
+        dialog.showOpenDialog = original;
+        return { canceled: false, filePaths: [file] };
+      };
+    }, imageFile);
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('[data-action="images-choose"]').click();
+    await page.locator('#metadata-form').waitFor();
+    await page.locator('[name="action-title"]').selectOption('set');
+    await page.locator('[name="value-title"]').fill('Новый заголовок');
+    await page.locator('#metadata-form [type="submit"]').click();
+    await page.locator('[data-metadata-plan]').waitFor();
+    assert.equal(await page.locator('[name="action-title"]').inputValue(), 'set');
+    assert.equal(await page.locator('[name="value-title"]').inputValue(), 'Новый заголовок');
+    await page.locator('[name="value-title"]').fill('Другой заголовок');
+    assert.equal(await page.locator('[data-metadata-plan]').count(), 0);
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'кириллица.txt',

@@ -24,12 +24,14 @@ let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook;
+const { createImageService } = require('./features/images/service.cjs');
+let store, mainWindow, archives, news, poolCatalog, facebook, images;
 let recoveryReports = [];
 async function initialize() {
   store = await openStore(app.getPath('userData'));
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
+  images = createImageService({ store });
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -72,6 +74,39 @@ async function initialize() {
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      imagesChoose: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile', 'multiSelections'],
+          filters: [
+            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'webp'] },
+            { name: 'All files', extensions: ['*'] }
+          ]
+        });
+        return result.canceled ? [] : images.addFiles(result.filePaths);
+      },
+      imageRead: (id) => images.readImageMetadata(id),
+      imagePreview: (id) => images.preview(id),
+      imagesPlan: (request) => images.planMetadataChanges(request),
+      imagesClear: () => {
+        images.clear();
+        return true;
+      },
+      imageRemove: (id) => {
+        images.remove(id);
+        return true;
+      },
+      metadataPresets: () => images.presets(),
+      metadataPresetSave: (preset) => images.importPreset(preset),
+      metadataPresetImport: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'Metadata preset', extensions: ['json'] }]
+        });
+        if (result.canceled) return null;
+        const file = result.filePaths[0];
+        if (fs.statSync(file).size > 128 * 1024) throw Error('METADATA_INVALID_PRESET');
+        return images.importPreset(JSON.parse(await fs.promises.readFile(file, 'utf8')));
+      },
       facebookNormalize: (text) => {
         const result = normalizeFacebookTargets(text);
         return {

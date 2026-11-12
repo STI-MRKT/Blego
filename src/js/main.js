@@ -8,7 +8,7 @@ import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
-import { PHOTO_LIMIT } from './ui/photos.js';
+import { readMetadataForm } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
@@ -73,6 +73,45 @@ async function refreshPoolStats() {
   if (state.locale === country && state.type === type) state.poolStats = stats;
 }
 function bindView() {
+  document.querySelectorAll('[data-image-select]').forEach((input) => {
+    input.onchange = () => {
+      const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
+      photo.selected = input.checked;
+      state.metadataPlan = null;
+      state.metadataDraft = null;
+      renderView();
+    };
+  });
+  const metadataForm = document.getElementById('metadata-form');
+  if (metadataForm) {
+    for (const [key, value] of Object.entries(state.metadataDraft || {})) {
+      const control = metadataForm.elements.namedItem(key);
+      if (control) {
+        if (control.type === 'checkbox') control.checked = value;
+        else control.value = value;
+      }
+    }
+    metadataForm.oninput = () => {
+      state.metadataDraft = Object.fromEntries(new FormData(metadataForm));
+      state.metadataDraft['confirm-maker'] =
+        metadataForm.elements.namedItem('confirm-maker').checked;
+      state.metadataPlan = null;
+      document.querySelector('[data-metadata-plan]')?.remove();
+    };
+    metadataForm.onsubmit = async (event) => {
+      event.preventDefault();
+      try {
+        state.metadataPlan = await window.blego.planMetadataChanges({
+          fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId),
+          operations: readMetadataForm(metadataForm),
+          acknowledgeMakerNotes: new FormData(metadataForm).has('confirm-maker')
+        });
+        renderView();
+      } catch (error) {
+        toast(error.message, 'err');
+      }
+    };
+  }
   const settingsForm = document.getElementById('settings-form');
   if (settingsForm)
     settingsForm.onsubmit = async (event) => {
@@ -366,41 +405,56 @@ async function runProxyCheck() {
   renderView();
 }
 
-function addPhotos(files) {
-  const list = [...files].filter((file) => file && file.type.startsWith('image/'));
-  if (!list.length) {
-    toast('Only image files are supported', 'err');
-    return;
+async function addPhotos() {
+  if (state.imagesBusy) return;
+  state.imagesBusy = true;
+  renderView();
+  try {
+    const files = await window.blego.chooseImages();
+    state.photos.push(...files);
+    state.metadataPresets = await window.blego.metadataPresets();
+    for (const file of files) {
+      file.status = 'reading';
+      renderView();
+      try {
+        file.view = await window.blego.readImageMetadata(file.fileId);
+        file.status = 'ready';
+        file.selected = file.view.capabilities.writable;
+      } catch (error) {
+        file.status = 'failed';
+        file.error = error.message;
+      }
+    }
+    state.metadataPlan = null;
+  } catch (error) {
+    toast(error.message, 'err');
+  } finally {
+    state.imagesBusy = false;
+    renderView();
   }
-  const room = PHOTO_LIMIT - state.photos.length;
-  const accepted = list.slice(0, room);
-  accepted.forEach((file) => {
-    state.photos.push({
-      id: `p${Date.now()}${Math.random().toString(36).slice(2, 7)}`,
-      name: file.name,
-      size: file.size,
-      url: URL.createObjectURL(file)
-    });
-  });
-  if (list.length > room)
-    toast(`Limit is ${PHOTO_LIMIT} photos — ${list.length - room} skipped`, 'err');
-  else toast(`${accepted.length} photo${accepted.length === 1 ? '' : 's'} added`);
-  renderView();
 }
-
-function removePhoto(id) {
-  const photo = state.photos.find((entry) => entry.id === id);
-  if (photo) URL.revokeObjectURL(photo.url);
-  state.photos = state.photos.filter((entry) => entry.id !== id);
-  renderView();
+async function removePhoto(id) {
+  try {
+    await window.blego.removeImage(id);
+    state.photos = state.photos.filter((photo) => photo.fileId !== id);
+    state.metadataPlan = null;
+    state.imagePreview = null;
+    renderView();
+  } catch (error) {
+    toast(error.message, 'err');
+  }
 }
-
-function clearPhotos() {
-  state.photos.forEach((photo) => URL.revokeObjectURL(photo.url));
-  state.photos = [];
-  renderView();
+async function clearPhotos() {
+  try {
+    await window.blego.clearImages();
+    state.photos = [];
+    state.metadataPlan = null;
+    state.imagePreview = null;
+    renderView();
+  } catch (error) {
+    toast(error.message, 'err');
+  }
 }
-
 document.addEventListener('click', async (event) => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
@@ -616,6 +670,50 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'proxy-check') {
     runProxyCheck();
+    return;
+  }
+  if (action === 'images-choose') {
+    await addPhotos();
+    return;
+  }
+  if (action === 'image-preview') {
+    try {
+      state.imagePreview = await window.blego.previewImage(target.dataset.id);
+      renderView();
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
+  if (action === 'metadata-preset-plan') {
+    try {
+      state.metadataPlan = await window.blego.planMetadataChanges({
+        fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId),
+        presetId: document.getElementById('metadata-preset').value,
+        acknowledgeMakerNotes: new FormData(document.getElementById('metadata-form')).has(
+          'confirm-maker'
+        )
+      });
+      renderView();
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
+  if (action === 'metadata-preset-save' || action === 'metadata-preset-import') {
+    try {
+      if (action === 'metadata-preset-save')
+        await window.blego.saveMetadataPreset({
+          schemaVersion: 1,
+          name: document.getElementById('metadata-preset-name').value,
+          operations: readMetadataForm(document.getElementById('metadata-form'))
+        });
+      else await window.blego.importMetadataPreset();
+      state.metadataPresets = await window.blego.metadataPresets();
+      renderView();
+    } catch (error) {
+      toast(error.message, 'err');
+    }
     return;
   }
   if (action === 'photo-remove') {

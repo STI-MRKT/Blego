@@ -17,9 +17,11 @@
     "test:ui": "node --test tests/ui/*.test.cjs",
     "lint": "node scripts/check.cjs && npm run format:check",
     "verify": "npm run lint && npm run test:unit && npm run test:integration",
-    "dist:linux": "electron-builder --linux tar.gz --x64 --publish never",
-    "pack:linux": "electron-builder --linux --dir --x64 --publish never",
-    "format:check": "prettier --check \"electron/**/*.cjs\" \"shared/*.mjs\" \"tests/**/*.cjs\" \"scripts/*.cjs\""
+    "dist:linux": "npm run prepare:metadata && electron-builder --linux tar.gz --x64 --publish never",
+    "pack:linux": "npm run prepare:metadata && electron-builder --linux --dir --x64 --publish never",
+    "format:check": "prettier --check \"electron/**/*.cjs\" \"shared/*.mjs\" \"tests/**/*.cjs\" \"scripts/*.cjs\"",
+    "prepare:metadata": "node scripts/prepare-metadata-runtime.cjs",
+    "pretest:integration": "npm run prepare:metadata"
   },
   "devDependencies": {
     "electron": "45.3.1",
@@ -89,15 +91,31 @@
         "tar.gz"
       ],
       "category": "Utility",
-      "artifactName": "${productName}-${version}-${arch}-linux.${ext}"
-    }
+      "artifactName": "${productName}-${version}-${arch}-linux.${ext}",
+      "extraResources": [
+        {
+          "from": "build/metadata-runtime/linux-x64",
+          "to": "metadata-runtime"
+        }
+      ]
+    },
+    "asarUnpack": [
+      "node_modules/exiftool-vendored.pl/**/*",
+      "node_modules/exiftool-vendored.exe/**/*",
+      "resources/metadata/perl-bootstrap.pl"
+    ]
   },
   "type": "module",
   "dependencies": {
     "fast-xml-parser": "5.12.0",
     "https-proxy-agent": "9.1.0",
+    "sharp": "0.35.5",
     "socks-proxy-agent": "10.1.0",
     "yauzl": "3.4.0",
     "yazl": "3.3.1"
+  },
+  "optionalDependencies": {
+    "exiftool-vendored.exe": "13.63.0",
+    "exiftool-vendored.pl": "13.63.0"
   }
 }
