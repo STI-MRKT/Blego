@@ -1,0 +1,19 @@
+name: BLEGO one-time test formatter
+
+on:
+  push:
+    branches:
+      - codex/macos-qa-bootstrap-20261112
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    if: ${{ contains(github.event.head_commit.message, '[format-only]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show exact Prettier 3.10 output for portable native gate test
+        run: npx --yes prettier@3.10.0 --config .prettierrc.json tests/unit/metadata-packaging.test.cjs
