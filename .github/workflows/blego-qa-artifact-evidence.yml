@@ -1,0 +1,42 @@
+name: BLEGO QA artifact evidence
+on:
+  push:
+    branches: [codex/blego-original-ux-v13]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  evidence:
+    if: contains(github.event.head_commit.message, '[qa-evidence]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: STI-MRKT/Blego
+          run-id: 43267402388
+          name: BLEGO-mac-arm64-QA
+          path: evidence
+      - name: Verify installer checksum and read candidate reports
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          root=pathlib.Path('evidence')
+          dmg=list(root.glob('*.dmg'))
+          assert len(dmg)==1, 'Expected exactly one DMG'
+          actual=hashlib.file_digest(dmg[0].open('rb'),'sha256').hexdigest()
+          declared=(root/'SHA256SUMS-mac.txt').read_text().split()[0]
+          assert actual==declared, 'DMG CHECKSUM MISMATCH'
+          print('DMG_SHA256',actual,dmg[0].name)
+          print('MAC_ENV', (root/'macOS-env.txt').read_text())
+          for pattern in ['native-darwin-*.json','native-runtime-*.json','installed-darwin-*.json','resources.txt','batch-*.txt']:
+              for p in sorted(root.glob(pattern)):
+                  print('REPORT',p.name)
+                  print(p.read_text())
+          for label in ['original','candidate']:
+              p=root/'visual'/f'{label}-audit.json'
+              data=json.loads(p.read_text())
+              print('VISUAL_METRICS',json.dumps({k:data[k] for k in ['label','sourceSha','host','os','status','metrics','errors','screens']}))
+          PY
