@@ -117,3 +117,24 @@ the preserved source and `codex/blego-local-v1` only if safe fast-forwards or ab
 Do not force-push or overwrite an independently initialized destination. Verify
 remote SHA equality after sending. Development continues on the same working
 branch; transfer must not be reported complete before that verification.
+
+### Destination correction from the user
+
+The user subsequently requested creating the repository in the connected
+organization STI-MRKT. The current intended origin is therefore
+`https://github.com/STI-MRKT/Blego.git`; upstream remains unchanged.
+Creation was actually attempted with `gh repo create STI-MRKT/Blego --private`
+and REST `POST /orgs/STI-MRKT/repos` with `private=true`. Both were rejected:
+`Resource not accessible by integration` (REST HTTP 403). The installation reports
+`contents: write`, no administration permission. No repository was created by
+these calls and no commits were uploaded. A GitHub organization member with the
+necessary rights must create an empty repository and expose it to the existing
+installation before a push can proceed. No additional verbal authorization or
+secret shared in chat can change these GitHub permission checks.
+
+D0 commit: `fa38d97`. This subsequent correction only changes the intended Git
+destination and handoff record; application code and the supplied documents are
+unchanged. All A-stage commits and D0 remain in the current branch. A new
+self-contained bundle is prepared at `/workspace/BLEGO-STI-MRKT-transfer.bundle`
+outside the repository; it includes `main` and the working branch, not ignored
+build outputs or user storage.
