@@ -107,3 +107,11 @@
 @media (max-width:760px) {
   .ux-copy-actions>#copy-panel:not(:empty) {width:min(580px,calc(100vw - 34px));}
 }
+
+.ux-photos .ux-group-controls {margin-bottom:16px}
+.ux-photos .ux-group-controls fieldset {display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px!important}
+.ux-photos .ux-group-controls fieldset>.input {flex:1 1 180px;width:auto;max-width:300px}
+.ux-photos .ux-group-controls fieldset>.fl {flex:1 1 230px;min-width:180px}
+.ux-photos .ux-group-controls fieldset>p {flex:1 1 100%;margin:5px 0}
+.ux-photos .ux-group-controls fieldset>.btn {flex:0 0 auto}
+.ux-photos .ux-group-controls fieldset>h4 {flex:1 1 100%;margin:10px 0 4px}
