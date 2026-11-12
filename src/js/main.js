@@ -11,6 +11,7 @@ import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
 import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
+import { isCookieColumn } from './ui/import.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
@@ -753,6 +754,22 @@ document.addEventListener('click', async (event) => {
       .catch(() => toast('Could not clear card', 'err'));
     renderView();
     toast('Set cleared');
+    return;
+  }
+  if (action === 'import-cookie-copy') {
+    const row = state.importData?.records?.find((entry) => entry.id === target.dataset.row);
+    const field = target.dataset.field;
+    if (!row || !isCookieColumn(field) || !Object.hasOwn(row.data, field)) {
+      toast('Не удалось найти cookie в выбранной строке', 'err');
+      return;
+    }
+    const raw = row.data[field];
+    const full = typeof raw === 'string' ? raw : raw == null ? '' : JSON.stringify(raw);
+    if (!full) {
+      toast('Значение cookie пустое', 'err');
+      return;
+    }
+    await copyText(full, target);
     return;
   }
   if (action === 'copy-model') {
