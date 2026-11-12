@@ -180,6 +180,8 @@ async function prepareImageExport(retry = {}) {
 }
 function bindView() {
   mountCopyActions();
+  const groupTools = document.querySelector('details.ux-group-controls');
+  if (groupTools) groupTools.ontoggle = () => { state.showGroupTools = groupTools.open; };
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
