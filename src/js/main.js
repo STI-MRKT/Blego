@@ -1169,6 +1169,15 @@ document.addEventListener('click', async (event) => {
       return;
     }
     renderView();
+    if (state.checker.rows?.some((row) => row.link)) {
+      try {
+        if (!state.settings.facebookEnabled)
+          state.settings = await window.blego.updateSettings({ facebookEnabled: true });
+        runCheckerStatus();
+      } catch {
+        toast('Не удалось выполнить проверку', 'err');
+      }
+    }
     return;
   }
   if (action === 'checker-status') {
