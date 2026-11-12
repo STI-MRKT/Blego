@@ -1,0 +1,14 @@
+3 files read
+{
+  "host": "linux-x64",
+  "executable": "/tmp/blego-v13-installed/blego",
+  "files": 3,
+  "reads": 3,
+  "completed": 3,
+  "outputFiles": 3,
+  "elapsedSeconds": 18.239,
+  "eventLoopTicks": 728,
+  "maxEventLoopGapMs": 47,
+  "progressRows": 3,
+  "fixture": "Mixed 12×8 RGBA, 40MP RGBA and 49MiB valid PNG with ancillary padding"
+}

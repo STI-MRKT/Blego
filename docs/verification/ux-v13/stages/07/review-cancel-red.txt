@@ -1,0 +1,28 @@
+✖ early Cancel prevents proxy/news startup and late topic snapshots after settings await (1335.596166ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1853.201251
+
+✖ failing tests:
+
+test at tests/ui/early-cancel.test.cjs:8:1
+✖ early Cancel prevents proxy/news startup and late topic snapshots after settings await (1335.596166ms)
+  AssertionError [ERR_ASSERTION]: no proxy request starts after early Cancel
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/early-cancel.test.cjs:64:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

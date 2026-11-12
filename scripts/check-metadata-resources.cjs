@@ -170,7 +170,11 @@ const { imageFixture } = require('../tests/fixtures/images.cjs');
           heavyCancelled: retryIds.length,
           cancelSettledMs,
           elapsedSeconds: (Date.now() - start) / 1000,
-          peakParentAndDirectChildRssMiB: Math.ceil(peak / 1048576),
+          rssScope:
+            process.platform === 'linux'
+              ? 'parent and direct child processes'
+              : 'parent process only; child RSS not sampled on this OS',
+          peakSampledRssMiB: Math.ceil(peak / 1048576),
           maxNodeEventLoopGapMs: Math.round(maxGap),
           limitations:
             '512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination.'

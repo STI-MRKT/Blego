@@ -1,0 +1,22 @@
+✖ original visual controls and individual values remain usable with advanced data folded (31056.231689ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31647.854495
+
+✖ failing tests:
+
+test at tests/ui/original-ux.test.cjs:8:1
+✖ original visual controls and individual values remain usable with advanced data folded (31056.231689ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('button', { name: 'Copy measured speed', exact: true })[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/original-ux.test.cjs:52:68) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByRole('button', { name: 'Copy measured speed', exact: true })" ]
+  }

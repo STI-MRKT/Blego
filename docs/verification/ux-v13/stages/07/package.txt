@@ -1,0 +1,2 @@
+PASS packaged resources and test/data exclusion (866 entries)
+PASS 116 packaged application files match the checkout byte-for-byte

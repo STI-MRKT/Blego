@@ -1,0 +1,33 @@
+✖ saved checkbox drafts preserve selected date namespaces without promoting unchecked fields (6.383358ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.599905
+
+✖ failing tests:
+
+test at tests/unit/image-form-scope.test.cjs:3:1
+✖ saved checkbox drafts preserve selected date namespaces without promoting unchecked fields (6.383358ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'exif',
+  +   'xmp'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/unit/image-form-scope.test.cjs:13:14)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'exif', 'xmp' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

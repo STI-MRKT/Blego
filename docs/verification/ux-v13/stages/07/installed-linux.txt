@@ -1,0 +1,16 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (10234.410194ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2196.079526ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (8481.985781ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (2601.919256ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (3610.587906ms)
+✔ News preserves topic, ignores late other-topic replies and copies each article value (2627.145505ms)
+✔ original visual controls and individual values remain usable with advanced data folded (2971.769131ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4489.876904ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40416.392018

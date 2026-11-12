@@ -22,7 +22,7 @@ export async function initCopyPreferences() {
 export async function resolveCopySource(id) {
   if (id === 'generator') return copySource(id, state.demo);
   if (id === 'checker') return copySource(id, state.checker.rows);
-  if (id === 'network') return copySource(id, state.network.proxy);
+  if (id === 'network') return copySource(id, state.network.proxy, { direct: state.network });
   if (id === 'news') return copySource(id, state.news);
   if (id === 'photos' || id === 'image-group')
     return copySource(

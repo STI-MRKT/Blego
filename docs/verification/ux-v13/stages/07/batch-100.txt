@@ -1,0 +1,14 @@
+100 files read
+{
+  "host": "linux-x64",
+  "executable": "/tmp/blego-v13-installed/blego",
+  "files": 100,
+  "reads": 100,
+  "completed": 100,
+  "outputFiles": 100,
+  "elapsedSeconds": 57.143,
+  "eventLoopTicks": 2150,
+  "maxEventLoopGapMs": 302,
+  "progressRows": 100,
+  "fixture": "12×8 RGBA PNG; not maximum-size stress"
+}

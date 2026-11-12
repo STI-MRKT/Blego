@@ -91,6 +91,12 @@ jobs:
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
           fi
+      - name: Boundary and installed batch measurements
+        run: |
+          set -o pipefail
+          node scripts/check-metadata-resources.cjs 2>&1 | tee release/resources.txt
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs 2>&1 | tee release/batch-100.txt
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs --mixed 2>&1 | tee release/batch-mixed.txt
       - name: Original and installed screenshots and measured UI timing
         run: |
           git worktree add --detach "$RUNNER_TEMP/blego-original" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
@@ -114,6 +120,8 @@ jobs:
           path: |
             release/visual/
             release/verify.txt
+            release/resources.txt
+            release/batch-*.txt
             release/*.dmg
             release/SHA256SUMS-mac.txt
             release/macOS-env.txt

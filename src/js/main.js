@@ -106,7 +106,10 @@ function restoreImageDraft() {
   state.metadataOrigins = loaded.origins || {};
   state.metadataTouched = loaded.touched || [];
 }
+let imagePreviewRequest=0;
+function invalidateImagePreview(){imagePreviewRequest++;state.imagePreview=null;state.imagePreviewName='';}
 async function workspaceChange(action, request = {}) {
+  if(['select','moveFiles','removeGroup'].includes(action))invalidateImagePreview();
   const reply = await window.blego.changeImageWorkspace({ action, ...request });
   state.imageWorkspace = reply.workspace;
   state.metadataPlan = null;
@@ -478,6 +481,7 @@ async function refreshNews(force) {
   state.news.loading=true;state.news.error='';updateNews();
   try {
     if (!state.settings.newsEnabled) state.settings=await window.blego.updateSettings({newsEnabled:true});
+    if(request!==newsRequest||state.news.topic!==topic)return;
     const data=await loadNews(force,topic);
     if(request!==newsRequest||state.news.topic!==topic)return;
     Object.assign(state.news,data);
@@ -492,15 +496,16 @@ async function refreshNews(force) {
 }
 document.addEventListener('change',async event=>{
   if(event.target.id!=='news-topic')return;
-  const topic=newsTopic(event.target.value);newsRequest++;
+  const topic=newsTopic(event.target.value), request=++newsRequest;
   state.news.topic=topic;state.news.items=[];state.news.lastAttemptAt=null;state.news.loading=true;state.news.error='';updateNews();
   try {
     await window.blego.updateSettings({newsTopic:topic});
+    if(request!==newsRequest||state.news.topic!==topic)return;
     const cached=await window.blego.newsSnapshot(topic);
-    if(state.news.topic!==topic)return;
+    if(request!==newsRequest||state.news.topic!==topic)return;
     Object.assign(state.news,cached);state.news.updatedAt=cached.lastSuccessfulAt?Date.parse(cached.lastSuccessfulAt):0;
     refreshNews(false);
-  }catch {state.news.loading=false;state.news.error='Could not load this topic.';updateNews();}
+  }catch {if(request!==newsRequest)return;state.news.loading=false;state.news.error='Could not load this topic.';updateNews();}
 });
 
 function updateNews() {
@@ -537,6 +542,7 @@ async function runNetwork(full) {
   renderView();
   try {
     state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+    controller.signal.throwIfAborted();
     if (full) n.speed = await getSpeed(controller.signal);
     else {
       const [info, ip, ping] = await Promise.allSettled([
@@ -563,17 +569,22 @@ async function runNetwork(full) {
   }
 }
 
+let proxyRequest=0;
 async function runProxyCheck() {
   if (state.network.proxyLoading || state.network.running) return;
-  const revision = state.network.inputRevision || 0;
+  const revision = state.network.inputRevision || 0, value=state.network.proxyInput.trim(), request=++proxyRequest;
   state.network.proxyLoading = true;
   state.network.proxyError = '';
   renderView();
   try {
     state.settings = await window.blego.updateSettings({ proxyEnabled: true });
-    state.network.proxy = await checkProxy(state.network.proxyInput.trim());
+    if(request!==proxyRequest)return;
+    const result=await checkProxy(value);
+    if(request!==proxyRequest)return;
+    state.network.proxy = result;
     state.network.checkedRevision = revision;
   } catch (error) {
+    if(request!==proxyRequest)return;
     state.network.proxy = null;
     state.network.proxyError = networkError(error.message);
   }
@@ -622,6 +633,7 @@ async function addPhotos() {
   }
 }
 async function removePhoto(id) {
+  invalidateImagePreview();
   stashImageDraft();
   try {
     await window.blego.removeImage(id);
@@ -636,6 +648,7 @@ async function removePhoto(id) {
   }
 }
 async function clearPhotos() {
+  invalidateImagePreview();
   stashImageDraft();
   try {
     await window.blego.clearImages();
@@ -713,6 +726,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'set-view') {
+    if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
     state.view = target.dataset.view;
     if (state.view === 'history')
       window.blego
@@ -858,7 +872,8 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'news-cancel') {
-    window.blego.cancelNews();
+    newsRequest++;state.news.loading=false;state.news.error='Update cancelled.';updateNews();
+    window.blego.cancelNews().catch(()=>toast('Cancellation could not be confirmed.','err'));
     return;
   }
   if (action === 'news-refresh') {
@@ -875,7 +890,8 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'proxy-cancel') {
-    window.blego.cancelProxy();
+    proxyRequest++;state.network.proxyLoading=false;state.network.proxyError='Check cancelled.';renderView();
+    window.blego.cancelProxy().catch(()=>toast('Cancellation could not be confirmed.','err'));
     return;
   }
   if (action === 'proxy-check') {
@@ -1082,13 +1098,17 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if(action==='metadata-copy-input'){await copyText(document.querySelector('#metadata-form')?.elements.namedItem(target.dataset.name)?.value||'',target);return;}
-  if(action==='image-preview-close'){stashImageDraft();state.imagePreview=null;renderView();return;}
+  if(action==='image-preview-close'){stashImageDraft();invalidateImagePreview();renderView();return;}
   if (action === 'image-preview') {
+    const request=++imagePreviewRequest, fileId=target.dataset.id;
     try {
-      state.imagePreview = await window.blego.previewImage(target.dataset.id);
+      const preview=await window.blego.previewImage(fileId);
+      const photo=state.photos.find(p=>p.fileId===fileId);
+      if(request!==imagePreviewRequest||!photo||state.view!=='photos')return;
+      stashImageDraft();state.imagePreview=preview;state.imagePreviewName=photo.name;
       renderView();
     } catch (error) {
-      toast(imageErrorMessage(error.message), 'err');
+      if(request===imagePreviewRequest)toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }

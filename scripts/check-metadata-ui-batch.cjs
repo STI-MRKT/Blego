@@ -42,7 +42,12 @@ const { openStore } = require('../electron/local/store.cjs');
   let app;
   try {
     app = await _electron.launch({
-      args: ['--ozone-platform=headless', '--disable-gpu', '.', `--user-data-dir=${data}`],
+      executablePath: process.env.BLEGO_EXECUTABLE || undefined,
+      args: [
+        ...(process.platform === 'linux' ? ['--ozone-platform=headless', '--disable-gpu'] : []),
+        ...(process.env.BLEGO_EXECUTABLE ? [] : ['.']),
+        `--user-data-dir=${data}`
+      ],
       env: {
         ...process.env,
         XDG_CONFIG_HOME: path.join(root, 'config'),
@@ -94,6 +99,7 @@ const { openStore } = require('../electron/local/store.cjs');
       );
     }
     console.log(`${expected} files read`);
+    await page.locator('#metadata-advanced > summary').click();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Synthetic GUI batch');
     await choose([output]);
@@ -125,6 +131,8 @@ const { openStore } = require('../electron/local/store.cjs');
     console.log(
       JSON.stringify(
         {
+          host: process.platform + '-' + process.arch,
+          executable: process.env.BLEGO_EXECUTABLE || 'development Electron',
           files: expected,
           reads,
           completed,

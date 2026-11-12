@@ -103,10 +103,21 @@ test(
     await page.waitForFunction(
       () => document.querySelector('[name="value-title"]').value === 'Исходный заголовок'
     );
+    await page.locator('[name="action-captureDate"]').selectOption('set');
+    await page.locator('[name="date-local"]').fill('2024-02-29T12:34:56');
+    await page.locator('#date-options > summary').click();
+    await page.locator('[name="date-scope-xmp"]').uncheck();
     await page.locator('[data-action="group-save"]').click();
     await page
       .getByText('Group rules saved locally. File overrides remain session-only.', { exact: true })
       .waitFor();
+    assert.deepEqual(
+      (await page.evaluate(() => window.blego.imageWorkspace())).groups
+        .find((g) => g.name === 'Explicit group')
+        .operations.find((op) => op.field === 'captureDate').scope,
+      ['exif'],
+      'Save preserves unchecked XMP scope'
+    );
     await page.evaluate(async () => {
       const ids = Object.keys((await window.blego.imageWorkspace()).membership);
       for (let i = 0; i < ids.length; i++)
@@ -216,6 +227,13 @@ test(
     );
     assert.equal(await page.locator('[data-image-select]').count(), 0);
     const saved = await page.evaluate(() => window.blego.imageWorkspace());
+    assert.deepEqual(
+      saved.groups
+        .find((g) => g.name === 'Explicit group')
+        .operations.find((op) => op.field === 'captureDate').scope,
+      ['exif'],
+      'Restart preserves date scope'
+    );
     assert.equal(
       saved.groups
         .find((g) => g.name === 'Explicit group')

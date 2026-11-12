@@ -58,7 +58,7 @@ const rows = (items, values, id) =>
   }));
 const fields = (keys) => keys.map((key) => field(key));
 const pick = (obj, keys) => Object.fromEntries(keys.map((key) => [key, scalar(obj?.[key])]));
-export function copySource(id, data) {
+export function copySource(id, data, options = {}) {
   if (id === 'generator') {
     const keys = data?.fieldOrder || [];
     return {
@@ -170,14 +170,34 @@ export function copySource(id, data) {
       'score',
       'scoreVersion',
       'sourceStatus',
-      'factors'
+      'factors',
+      'trustScore',
+      'trustSource',
+      'directMetric',
+      'directValue',
+      'directUnit'
     ];
+    const direct = options.direct;
+    const measurements = direct
+      ? [
+          ['Exit IP', direct.ip?.connection === 'ok' ? direct.ip.exitIp : null, ''],
+          ['Download speed', direct.speed?.mbps, 'Mbps'],
+          ['Downloaded', direct.speed?.bytes, 'bytes'],
+          ['TTFB', direct.speed?.ttfb, 'ms'],
+          ['Minimum TCP latency', direct.ping?.best, 'ms'],
+          ['Average TCP latency', direct.ping?.avg, 'ms'],
+          ['Latency spread', direct.ping?.jitter, 'ms'],
+          ...(direct.ping?.targets || []).map((t) => [t.label, t.ms, 'ms'])
+        ].filter(([, value]) => value != null)
+      : [];
     return {
       fields: fields(keys),
       rows: rows(
         data ? [data] : [],
         (r) => ({
           ...pick(r, keys.slice(0, 8)),
+          trustScore: scalar(r.assessment?.trustScore),
+          trustSource: scalar(r.assessment?.trustSource),
           score: scalar(r.assessment?.score),
           scoreVersion: r.assessment?.version || '',
           sourceStatus: scalar(
@@ -188,6 +208,17 @@ export function copySource(id, data) {
           factors: scalar((r.assessment?.factors || []).map((f) => pick(f, ['flag', 'weight'])))
         }),
         () => 'proxy'
+      ).concat(
+        rows(
+          measurements,
+          ([label, value, unit]) => ({
+            mode: 'direct',
+            directMetric: label,
+            directValue: scalar(value),
+            directUnit: unit
+          }),
+          (_, index) => 'direct-' + index
+        )
       )
     };
   }

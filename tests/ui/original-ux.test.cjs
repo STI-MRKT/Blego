@@ -31,7 +31,45 @@ test(
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
     );
+    await page.evaluate(async () => {
+      const { state } = await import('/js/state.js');
+      state.network.speed = { mbps: 12.5, bytes: 1048576, ttfb: 9 };
+      state.network.ping = {
+        best: 0,
+        avg: 0,
+        jitter: 0,
+        targets: [
+          { label: 'Test node', ms: 0 },
+          { label: 'Unavailable node', ms: null }
+        ]
+      };
+    });
     await page.locator('[data-view="network"]').click();
+    for (const [label, value] of [
+      ['Copy measured speed', '12.5 Mbps'],
+      ['Copy Test node latency', '0 ms']
+    ]) {
+      await page.getByRole('button', { name: label, exact: true }).click();
+      await page.waitForTimeout(30);
+      assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), value);
+    }
+    assert.equal(
+      await page
+        .getByRole('button', { name: 'Copy Unavailable node latency', exact: true })
+        .count(),
+      0
+    );
+    assert.ok(
+      (
+        await page.evaluate(async () => {
+          const { resolveCopySource } = await import('/js/utils/copy-actions.js');
+          return resolveCopySource('network');
+        })
+      ).rows.some(
+        (r) => r.values.directMetric === 'Download speed' && r.values.directValue === '12.5'
+      )
+    );
+
     assert.equal(await page.locator('.gauge').isVisible(), true);
     assert.equal(await page.locator('.packets').isVisible(), true);
     assert.equal(await page.locator('#proxy-input').getAttribute('type'), 'text');

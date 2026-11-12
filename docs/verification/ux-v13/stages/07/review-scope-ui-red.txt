@@ -1,0 +1,32 @@
+✖ group UI preserves drafts, explicit reference fields, save and restart (4179.129108ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4858.020787
+
+✖ failing tests:
+
+test at tests/ui/image-groups.test.cjs:9:1
+✖ group UI preserves drafts, explicit reference fields, save and restart (4179.129108ms)
+  AssertionError [ERR_ASSERTION]: Save preserves unchecked XMP scope
+  + actual - expected
+  
+    [
+      'exif',
+  +   'xmp'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-v13/tests/ui/image-groups.test.cjs:114:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ 'exif', 'xmp' ],
+    expected: [ 'exif' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
