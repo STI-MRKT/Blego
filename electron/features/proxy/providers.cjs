@@ -13,11 +13,35 @@ async function lookupProviders(ip, providers, signal) {
             if (stage.aborted) onAbort();
           })
         ]);
-        if (!data || typeof data.proxy !== 'boolean' || typeof data.hosting !== 'boolean')
+        if (
+          !data ||
+          typeof data.proxy !== 'boolean' ||
+          (typeof data.hosting !== 'boolean' && data.hosting !== null)
+        )
           return { id: p.id, status: 'invalid_response' };
         return {
           id: p.id,
           status: 'ok',
+          ip: data.ip === ip ? ip : null,
+          risk:
+            typeof data.risk === 'number' &&
+            Number.isFinite(data.risk) &&
+            data.risk >= 0 &&
+            data.risk <= 100
+              ? data.risk
+              : null,
+          scale:
+            Array.isArray(data.scale) && data.scale[0] === 0 && data.scale[1] === 100
+              ? [0, 100]
+              : null,
+          type: data.type,
+          asn: data.asn,
+          provider: data.provider,
+          country: data.country,
+          vpn: data.vpn,
+          tor: data.tor,
+          updatedAt: data.updatedAt,
+          warning: data.warning,
           proxy: data.proxy,
           hosting: data.hosting,
           checkedAt: new Date().toISOString()

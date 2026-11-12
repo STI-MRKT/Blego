@@ -36,6 +36,19 @@ test(
     assert.equal(await page.locator('.packets').isVisible(), true);
     assert.equal(await page.locator('#proxy-input').getAttribute('type'), 'text');
     assert.equal(await page.locator('main pre:visible').count(), 0);
+    await page.locator('#proxy-input').fill('http://demo:DO-NOT-REPORT@127.0.0.1:8080');
+    await page.locator('[data-action="proxy-check"]').click();
+    await page.getByText('This address is not allowed.', { exact: true }).waitFor();
+    assert.equal(
+      await page
+        .locator('.proxy-result')
+        .textContent()
+        .then((x) => x.includes('DO-NOT-REPORT')),
+      false
+    );
+    await page.locator('[data-action="net-ping"]').waitFor();
+    await page.locator('#proxy-input').fill('socks5h://8.8.8.8:1080');
+    assert.equal(await page.locator('[data-proxy-stale]').isVisible(), true);
     assert.equal(
       await page.locator('.nav [data-view]').last().getAttribute('data-view'),
       'history'

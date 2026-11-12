@@ -9,6 +9,7 @@ import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
+import { networkError } from './ui/network.js';
 import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
@@ -307,6 +308,9 @@ function bindView() {
   if (proxy) {
     proxy.oninput = (event) => {
       state.network.proxyInput = event.target.value;
+      state.network.inputRevision = (state.network.inputRevision || 0) + 1;
+      const stale = document.querySelector('[data-proxy-stale]');
+      if (stale) stale.hidden = false;
     };
   }
   const checker = document.getElementById('checker-input');
@@ -511,47 +515,62 @@ function updateNews() {
 
 function maybeAutoNetwork() {}
 
+let networkController = null;
 async function runNetwork(full) {
-  if (!state.settings.proxyEnabled || state.network.running) return;
-  state.network.running = true;
-  state.network.stage = 'Pinging';
-  state.network.error = '';
-  renderView();
-  const [infoResult, ipResult, pingResult] = await Promise.allSettled([
-    getNetworkInfo(),
-    getIpInfo(),
-    getPing()
-  ]);
-  state.network.info = infoResult.status === 'fulfilled' ? infoResult.value : null;
-  state.network.ip = ipResult.status === 'fulfilled' ? ipResult.value : null;
-  state.network.ping = pingResult.status === 'fulfilled' ? pingResult.value : null;
-  if (!state.network.ip)
-    state.network.error = 'IP lookup failed. Check the connection and run the test again.';
-  state.network.stage = full ? 'Measuring throughput' : '';
-  renderView();
-  if (full) {
-    const speedResult = await Promise.allSettled([getSpeed()]);
-    if (speedResult[0].status === 'fulfilled') {
-      state.network.speed = speedResult[0].value;
-    } else {
-      state.network.error = 'Speed test failed. Try again in a moment.';
-    }
+  if (state.network.running || state.network.proxyLoading) return;
+  const controller = new AbortController();
+  networkController = controller;
+  const n = state.network;
+  n.running = true;
+  n.stage = full ? 'Measuring speed' : 'Measuring TCP latency';
+  n.error = '';
+  if (full) n.speed = null;
+  else {
+    n.ping = null;
+    n.ip = null;
   }
-  state.network.running = false;
-  state.network.stage = '';
   renderView();
+  try {
+    state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+    if (full) n.speed = await getSpeed(controller.signal);
+    else {
+      const [info, ip, ping] = await Promise.allSettled([
+        getNetworkInfo(controller.signal),
+        getIpInfo(),
+        getPing(controller.signal)
+      ]);
+      controller.signal.throwIfAborted();
+      n.info = info.status === 'fulfilled' ? info.value : null;
+      n.ip = ip.status === 'fulfilled' ? ip.value : null;
+      n.ping = ping.status === 'fulfilled' ? ping.value : null;
+      if (!n.ping?.targets?.some((t) => Number.isFinite(t.ms)))
+        n.error = 'No TCP latency results. Check your connection.';
+      if (n.ip?.connection !== 'ok') n.error ||= 'External IP could not be checked.';
+    }
+    controller.signal.throwIfAborted();
+  } catch {
+    n.error = controller.signal.aborted ? 'Check cancelled.' : 'Connection test failed. Try again.';
+  } finally {
+    n.running = false;
+    n.stage = '';
+    if (networkController === controller) networkController = null;
+    renderView();
+  }
 }
 
 async function runProxyCheck() {
-  if (!state.settings.proxyEnabled || state.network.proxyLoading) return;
+  if (state.network.proxyLoading || state.network.running) return;
+  const revision = state.network.inputRevision || 0;
   state.network.proxyLoading = true;
   state.network.proxyError = '';
   renderView();
   try {
+    state.settings = await window.blego.updateSettings({ proxyEnabled: true });
     state.network.proxy = await checkProxy(state.network.proxyInput.trim());
+    state.network.checkedRevision = revision;
   } catch (error) {
     state.network.proxy = null;
-    state.network.proxyError = `Proxy check failed: ${error.message}`;
+    state.network.proxyError = networkError(error.message);
   }
   state.network.proxyLoading = false;
   renderView();
@@ -849,8 +868,13 @@ document.addEventListener('click', async (event) => {
     updateNews();
     return;
   }
-  if (action === 'net-run') {
-    runNetwork(true);
+  if (action === 'net-cancel') {
+    networkController?.abort();
+    await window.blego.cancelProxy();
+    return;
+  }
+  if (action === 'net-run' || action === 'net-ping') {
+    runNetwork(action === 'net-run').catch(() => toast('Connection test could not start.', 'err'));
     return;
   }
   if (action === 'proxy-cancel') {
@@ -858,7 +882,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'proxy-check') {
-    runProxyCheck();
+    runProxyCheck().catch(() => toast('Proxy check could not start.', 'err'));
     return;
   }
   if (

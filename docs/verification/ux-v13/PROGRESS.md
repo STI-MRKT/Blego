@@ -7,3 +7,6 @@ Ruling: use current isolated worktree and a versioned progress ledger; cloud ski
 Task 1: in progress.
 Task 1: complete. Target GUI RED (gauge missing) → GREEN. npm run verify: lint PASS, unit 42/42, integration 71/71. GUI 4/4 after updating selection test to the original news-title element (h3 wrapper intentionally removed). Original graphics/individual copying restored; screenshots stages/01. Protected CSS/assets/icons unchanged. No new backend readiness claimed in this stage.
 Task 2: in progress. Official proxycheck docs confirm v2 supported until 2035, optional key (100 unkeyed requests/day), risk=1 scale 0–100. Use HTTPS and strict numeric/IP-bound parsing; no paid activation.
+
+Task 2: complete implementation; lint PASS, unit/integration pass counts ['45', '77'], GUI 4/4. Controlled real HTTP/HTTPS/SOCKS5/SOCKS5h transports, strict provider/IP parsing, direct diagnostic bounds and cancellation verified. Live proxycheck adapter response PASS. External user-proxy egress and native Mac remain BLOCKED pending environment/credentials. Logs stages/02.
+Task 3: in progress.

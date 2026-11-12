@@ -6,31 +6,49 @@ for (const auth of [false, true])
   test(`controlled HTTPS via HTTP/HTTPS/SOCKS5 auth=${auth}`, async (t) => {
     const f = await fixtures(t, { auth });
     for (const value of f.proxies) {
-      const r = await checkProxy({ value }, null, { target: f.target, ca: f.ca });
+      const r = await checkProxy({ value }, null, {
+        target: f.target,
+        ca: f.ca,
+        resolveEndpoint: async (host) => host
+      });
       assert.equal(r.connection, 'ok');
       assert.equal(r.exitIp, '203.0.113.1');
       assert.equal(r.assessment.score, null);
       assert.ok(r.timings.ipRequestMs >= 0);
     }
-    assert.equal(f.remoteDns(), true);
+    assert.equal(f.remoteDns(), false);
   });
 for (const status of [503, 429])
   test(`HTTP ${status} with success body is not success`, async (t) => {
     const f = await fixtures(t, { status, body: '{"ip":"203.0.113.1","success":true}' });
-    const r = await checkProxy({ value: f.proxies[0] }, null, { target: f.target, ca: f.ca });
+    const r = await checkProxy({ value: f.proxies[0] }, null, {
+      target: f.target,
+      ca: f.ca,
+      resolveEndpoint: async (host) => host
+    });
     assert.equal(r.connection, 'failed');
     assert.equal(r.exitIp, null);
   });
 test('invalid JSON and cancellation are honest failures', async (t) => {
   const f = await fixtures(t, { body: 'not json' });
   assert.equal(
-    (await checkProxy({ value: f.proxies[0] }, null, { target: f.target, ca: f.ca })).connection,
+    (
+      await checkProxy({ value: f.proxies[0] }, null, {
+        target: f.target,
+        ca: f.ca,
+        resolveEndpoint: async (host) => host
+      })
+    ).connection,
     'failed'
   );
   const c = new AbortController();
   c.abort();
   await assert.rejects(
-    checkProxy({ value: f.proxies[0] }, c.signal, { target: f.target, ca: f.ca }),
+    checkProxy({ value: f.proxies[0] }, c.signal, {
+      target: f.target,
+      ca: f.ca,
+      resolveEndpoint: async (host) => host
+    }),
     /CANCELLED/
   );
 });
@@ -84,7 +102,8 @@ test('wrong proxy credentials fail for all controlled transports', async (t) => 
   for (const value of f.proxies) {
     const r = await checkProxy({ value: value.replace('user:pass@', 'user:wrong@') }, null, {
       target: f.target,
-      ca: f.ca
+      ca: f.ca,
+      resolveEndpoint: async (host) => host
     });
     assert.equal(r.connection, 'failed');
   }

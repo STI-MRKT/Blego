@@ -38,11 +38,11 @@ Consumes existing `state` and IPC results. Produces same render exports/handlers
 
 Files: existing proxy `transports.cjs`, `service.cjs`, `providers.cjs`, `assessment.cjs`; add provider `proxycheck.cjs`; existing server/network IPC/UI. Tests: `proxy-transports`, new `proxy-boundaries` and `network-diagnostics` integration, `proxy` unit, original-ux GUI.
 Interfaces: `checkProxy({value}, signal)` returns safe error code, route, IP, timings, independent sources and `assessment.trustScore`; diagnostics accepts abort and returns nullable measured values.
-- [ ] RED tests socks5h/local DNS distinction, bad auth/TLS/DNS/timeout/cancel/private endpoints, empty risk, missing/wrong IP evidence.
-- [ ] Implement bounded fixed-target transports, public endpoint guard, precise safe errors; `100-risk` only strict numeric 0–100 with matching IP/source.
-- [ ] Restore distinct direct latency/speed controls, route labels, cancellation and separate result state; speed explicit only, bounded stream.
-- [ ] Check official provider documentation and real endpoint response; record unavailable access honestly. Run real controlled sockets all four protocols, regression and GUI.
-- [ ] Commit, record tested commands and external/live limitations.
+- [x] RED tests socks5h/local DNS distinction, bad auth/TLS/DNS/timeout/cancel/private endpoints, empty risk, missing/wrong IP evidence.
+- [x] Implement bounded fixed-target transports, public endpoint guard, precise safe errors; `100-risk` only strict numeric 0–100 with matching IP/source.
+- [x] Restore distinct direct latency/speed controls, route labels, cancellation and separate result state; speed explicit only, bounded stream.
+- [x] Check official provider documentation and real endpoint response; record unavailable access honestly. Run real controlled sockets all four protocols, regression and GUI.
+- [x] Commit, record tested commands and external/live limitations.
 
 ## Task 3: News
 

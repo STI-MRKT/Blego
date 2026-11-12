@@ -1,11 +1,11 @@
-const { parseProxy, ipLookup: transport } = require('./transports.cjs');
+const { parseProxy, ipLookup: transport, safeTransportError } = require('./transports.cjs');
 const { lookupProviders } = require('./providers.cjs');
 const { assess } = require('./assessment.cjs');
 async function checkProxy(request, cancellation, deps = {}) {
   const proxy = parseProxy(request?.value);
   if (cancellation?.aborted) throw Error('CANCELLED');
   const total = AbortSignal.any([
-    AbortSignal.timeout(30000),
+    AbortSignal.timeout(deps.timeoutMs || 30000),
     ...(cancellation ? [cancellation] : [])
   ]);
   const start = performance.now();
@@ -14,16 +14,28 @@ async function checkProxy(request, cancellation, deps = {}) {
     result = await (deps.ipLookup || transport)(proxy, {
       target: deps.target,
       ca: deps.ca,
+      resolveEndpoint: deps.resolveEndpoint,
       signal: AbortSignal.any([total, AbortSignal.timeout(10000)])
     });
   } catch (e) {
-    if (total.aborted || cancellation?.aborted) throw Error('CANCELLED');
+    if (cancellation?.aborted) throw Error('CANCELLED');
     return {
       connection: 'failed',
       exitIp: null,
-      code: ['RATE_LIMITED', 'INVALID_RESPONSE', 'HTTP_ERROR'].includes(e.message)
+      code: [
+        'RATE_LIMITED',
+        'INVALID_RESPONSE',
+        'HTTP_ERROR',
+        'AUTH_FAILED',
+        'REQUEST_BLOCKED',
+        'TLS_FAILED',
+        'DNS_FAILED',
+        'CONNECTION_REFUSED',
+        'TIMEOUT',
+        'RESPONSE_TOO_LARGE'
+      ].includes(e.message)
         ? e.message
-        : 'TRANSPORT_FAILED',
+        : safeTransportError(e, total),
       timings: {
         connectionMs: null,
         ipRequestMs: null,
@@ -37,7 +49,8 @@ async function checkProxy(request, cancellation, deps = {}) {
   }
   const repStart = performance.now();
   const sources = await lookupProviders(result.ip, deps.providers || [], total);
-  if (total.aborted) throw Error('CANCELLED');
+  if (cancellation?.aborted) throw Error('CANCELLED');
+  if (total.aborted) throw Error('TIMEOUT');
   return {
     connection: 'ok',
     mode: proxy ? 'proxy' : 'direct',
@@ -50,7 +63,7 @@ async function checkProxy(request, cancellation, deps = {}) {
       totalMs: performance.now() - start
     },
     sources,
-    assessment: assess(sources),
+    assessment: assess(sources, result.ip),
     checkedAt: new Date().toISOString()
   };
 }

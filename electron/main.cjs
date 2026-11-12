@@ -30,6 +30,7 @@ const { createClassificationService } = require('./features/classification/servi
 const classification = createClassificationService();
 const { createArchiveService } = require('./features/archive/service.cjs');
 const { checkProxy } = require('./features/proxy/service.cjs');
+const { createProxycheckProvider } = require('./features/proxy/proxycheck.cjs');
 let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
@@ -251,7 +252,9 @@ async function initialize() {
         const c = new AbortController();
         proxyController = c;
         try {
-          return await checkProxy(request, c.signal);
+          return await checkProxy(request, c.signal, {
+            providers: request.reputation === true ? [createProxycheckProvider()] : []
+          });
         } finally {
           if (proxyController === c) proxyController = null;
         }

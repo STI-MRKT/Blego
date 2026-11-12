@@ -1,27 +1,29 @@
-const formula = require('./formula.json');
-function assess(sources) {
-  const good = sources.filter((s) => s.status === 'ok');
-  if (good.length < formula.minimumSuccessfulSources)
-    return {
-      name: formula.name,
-      version: formula.version,
-      score: null,
-      status: 'insufficient_data',
-      factors: []
-    };
-  const factors = Object.entries(formula.weights)
-    .filter(([flag]) => good.some((s) => s[flag] === true))
-    .map(([flag, weight]) => ({ flag, weight }));
+function assess(sources, expectedIp) {
+  const measured = sources.find(
+    (s) =>
+      s.status === 'ok' &&
+      s.id === 'proxycheck.io' &&
+      typeof expectedIp === 'string' &&
+      s.ip === expectedIp &&
+      typeof s.risk === 'number' &&
+      Number.isFinite(s.risk) &&
+      s.risk >= 0 &&
+      s.risk <= 100 &&
+      s.scale?.[0] === 0 &&
+      s.scale?.[1] === 100
+  );
+  const trust = {
+    trustScore: measured ? 100 - measured.risk : null,
+    trustSource: measured ? measured.id : null
+  };
   return {
-    name: formula.name,
-    version: formula.version,
-    score: Math.min(
-      100,
-      factors.reduce((n, f) => n + f.weight, 0)
-    ),
-    status: 'available',
-    factors,
-    description: formula.description
+    ...trust,
+    name: 'IP Trust',
+    version: 'proxycheck-v2-100-minus-risk',
+    score: trust.trustScore,
+    status: measured ? 'available' : 'insufficient_data',
+    factors: [],
+    description: '100 minus the reported provider risk; not a probability or latency rating.'
   };
 }
 module.exports = { assess };

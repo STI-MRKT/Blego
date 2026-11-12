@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-12T16:01:10.482Z",
+  "platform": "linux",
+  "arch": "x64",
+  "method": "Live unauthenticated HTTPS v2 provider lookup through inherited Cloud proxy; public DNS IP, not a user proxy exit test",
+  "ip": "8.8.8.8",
+  "sources": [
+    {
+      "id": "proxycheck.io",
+      "status": "ok",
+      "ip": "8.8.8.8",
+      "risk": 0,
+      "scale": [
+        0,
+        100
+      ],
+      "type": "Business",
+      "asn": "AS15169",
+      "provider": "Google LLC",
+      "country": "United States",
+      "vpn": false,
+      "tor": false,
+      "updatedAt": null,
+      "warning": null,
+      "proxy": false,
+      "hosting": false,
+      "checkedAt": "2026-11-12T16:01:10.482Z"
+    }
+  ],
+  "assessment": {
+    "trustScore": 100,
+    "trustSource": "proxycheck.io",
+    "name": "IP Trust",
+    "version": "proxycheck-v2-100-minus-risk",
+    "score": 100,
+    "status": "available",
+    "factors": [],
+    "description": "100 minus the reported provider risk; not a probability or latency rating."
+  }
+}
