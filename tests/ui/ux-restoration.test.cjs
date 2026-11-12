@@ -40,6 +40,21 @@ test(
       await page.screenshot({ path: 'release/ux-generator.png' });
     }
     assert.equal(await page.locator('.ux-generator .ux-copy-set').isVisible(), true);
+    assert.equal(await page.locator('#news-block').count(), 0);
+    const profile = await app.evaluate(() => globalThis.blego.lastCard()).catch(() => null);
+    if (profile?.fields?.phone) {
+      const shownPhone = await page
+        .locator('.field')
+        .filter({ has: page.locator('[aria-label="Copy phone"]') })
+        .locator('.field-value')
+        .innerText();
+      assert.notEqual(shownPhone, profile.fields.phone);
+      assert.equal(shownPhone.replace(/[^0-9]/g, ''), profile.fields.phone.replace(/[^0-9]/g, ''));
+    }
+    await page.locator('[data-view="news"]').click();
+    await page.locator('#news-block').waitFor();
+    await page.locator('[data-view="generator"]').click();
+
     const extra = page.locator('details.ux-extra-fields');
     if (await extra.count()) assert.equal(await extra.evaluate((element) => element.open), false);
 
