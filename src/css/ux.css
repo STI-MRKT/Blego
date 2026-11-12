@@ -93,8 +93,8 @@
 .ux-copy-actions {position:relative;display:inline-flex;align-items:center;flex:0 0 auto}
 .ux-copy-actions>#copy-panel:empty {display:none}
 .ux-copy-actions>#copy-panel:not(:empty) {
-  position:absolute;right:0;top:calc(100% + 10px);z-index:80;
-  width:min(690px,calc(100vw - 310px));max-height:min(72vh,660px);overflow:auto;
+  position:fixed;right:20px;top:94px;z-index:80;
+  width:min(690px,calc(100% - 288px));max-height:min(72vh,660px);overflow:auto;
   padding:16px;border-radius:15px;border:1px solid var(--border-2);
   background:var(--panel);box-shadow:var(--shadow-lg);color:var(--text);
 }
@@ -105,7 +105,10 @@
 .ux-copy-actions #copy-panel #copy-preview {margin-top:12px}
 .ux-copy-actions #copy-panel #copy-preview pre {max-height:170px;overflow:auto}
 @media (max-width:760px) {
-  .ux-copy-actions>#copy-panel:not(:empty) {width:min(580px,calc(100vw - 34px));}
+  .ux-copy-actions>#copy-panel:not(:empty) {width:min(580px,calc(100% - 110px));}
+}
+@media (max-width:900px) {
+  .ux-copy-actions>#copy-panel:not(:empty) {width:min(690px,calc(100% - 110px));}
 }
 
 .ux-photos .ux-group-controls {margin-bottom:16px}
