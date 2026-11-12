@@ -11,6 +11,8 @@ const {getSettings,updateSettings} = require('./local/settings.cjs');
 const {registerIpc,externalUrl,copyText} = require('./local/ipc.cjs');
 const {generateProfile,clearCard}=require('./features/generator/service.cjs');
 const {resolvePreset}=require('./features/generator/sources.cjs');
+const {createClassificationService}=require('./features/classification/service.cjs');
+const classification=createClassificationService();
 let store, mainWindow;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
@@ -20,6 +22,11 @@ async function initialize() {
   }
   registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
     settingsGet:()=>getSettings(store),
+    importRead:arg=>classification.read(arg,{encoding:arg.encoding||undefined}),
+    importPage:arg=>classification.page(arg.operationId,arg.offset),
+    importCancel:id=>classification.cancel(id),
+    importCopy:id=>copyText(classification.sourceText(id),clipboard),
+    classificationConfirm:arg=>classification.confirmClassification(arg.operationId,arg.decision),
     generate:request=>generateProfile(request,{store}),
     lastCard:()=>store.get('lastCard')||null,
     clearCard:()=>clearCard(store),
@@ -96,6 +103,7 @@ if (!hasLock) {
   });
   app.on('before-quit', () => {
     if (serverInstance) serverInstance.close();
+    classification.close();
     if(store) store.close();
   });
 }

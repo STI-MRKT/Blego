@@ -34,7 +34,9 @@
     "files": [
       "electron/**/*",
       "src/**/*",
-      "package.json"
+      "package.json",
+      "shared/**/*",
+      "resources/**/*"
     ],
     "win": {
       "target": [
@@ -77,5 +79,6 @@
     "dmg": {
       "title": "BLEGO"
     }
-  }
+  },
+  "type": "module"
 }

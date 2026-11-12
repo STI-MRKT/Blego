@@ -8,6 +8,7 @@ const path = require('node:path');
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
@@ -368,8 +369,10 @@ function startServer(rootDir, port = 0) {
         void error;
       }
       if (pathname === '/') pathname = '/index.html';
-      const filePath = path.join(root, path.normalize(pathname).replace(/^([/\\])+/, ''));
-      if (!filePath.startsWith(root + path.sep)) {
+      const selectedRoot=pathname.startsWith('/shared/')?path.join(root,'../shared'):root;
+      if(pathname.startsWith('/shared/'))pathname=pathname.slice('/shared'.length);
+      const filePath = path.resolve(selectedRoot, '.'+pathname);
+      if (!filePath.startsWith(path.resolve(selectedRoot) + path.sep)) {
         response.writeHead(403);
         response.end('forbidden');
         return;

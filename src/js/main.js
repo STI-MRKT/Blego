@@ -11,7 +11,7 @@ import { historyRowsHTML, historyFiltered } from './ui/history.js';
 import { newsBlockHTML } from './ui/news.js';
 import { PHOTO_LIMIT } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
-import { parseFile, importErrorMessage } from './services/importer.js';
+import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
@@ -102,6 +102,7 @@ function bindView() {
       if (button) button.disabled = !event.target.value.trim();
     };
   }
+  const encoding=document.getElementById('import-encoding');if(encoding)encoding.onchange=e=>{state.importEncoding=e.target.value;};
   const fileInput = document.getElementById('file-input');
   if (fileInput) {
     fileInput.onchange = (event) => {
@@ -148,98 +149,21 @@ async function generate() {
   finally{state.demoBusy=false;renderView();}
 }
 
-function handleFile(file) {
-  const extension = (file.name.split('.').pop() || '').toLowerCase();
-  if (!['csv', 'tsv', 'json'].includes(extension)) {
-    state.importStep = 'error';
-    state.importName = file.name;
-    state.importError = importErrorMessage('ext');
-    if (state.view !== 'import') state.view = 'import';
-    renderAll();
-    return;
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    state.importStep = 'error';
-    state.importName = file.name;
-    state.importError = importErrorMessage('size');
-    if (state.view !== 'import') state.view = 'import';
-    renderAll();
-    return;
-  }
-  state.importName = file.name;
-  state.importKind = extension.toUpperCase();
-  state.importStep = 'loading';
-  if (state.view !== 'import') state.view = 'import';
-  renderAll();
-  const reader = new FileReader();
-  reader.onload = () => {
-    setTimeout(() => {
-      const result = parseFile(String(reader.result || ''), extension);
-      if (result.error) {
-        state.importStep = 'error';
-        state.importError = importErrorMessage(result.error);
-      } else {
-        state.importData = result;
-        state.importStep = 'preview';
-      }
-      renderView();
-    }, 850);
-  };
-  reader.onerror = () => {
-    state.importStep = 'error';
-    state.importError = 'Couldn’t read the file.';
-    renderView();
-  };
-  reader.readAsText(file);
+async function handleFile(file) {
+  if(state.importRequest||state.importData?.operationId)await window.blego.cancelImport(state.importRequest||state.importData.operationId);
+  state.importName=file.name;state.importData=null;state.view='import';
+  if(file.size>50*1024*1024){state.importStep='error';state.importError='File exceeds 50 MiB';renderAll();return;}
+  const id=crypto.randomUUID();state.importRequest=id;state.importStep='loading';renderAll();
+  try{
+    const bytes=new Uint8Array(await file.arrayBuffer());if(state.importRequest!==id)return;
+    const result=await window.blego.readInput({requestId:id,originalName:file.name,bytes,encoding:state.importEncoding||undefined});
+    if(state.importRequest!==id){await window.blego.cancelImport(result.operationId);return;}
+    state.importData=await window.blego.importPage({operationId:result.operationId,offset:0});state.importStep='preview';
+  }catch(e){if(state.importRequest===id){state.importError=importErrorMessage(e.message);state.importStep='error';}}
+  finally{if(state.importRequest===id)state.importRequest=null;renderView();}
 }
-
-function loadSample() {
-  const sample = [
-    'project;owner;email;note;status',
-    'Q4 Launch;Camille Moreau;camille.moreau@example.com;Hero assets ready;active',
-    'Brand Refresh;Lucas Silva;lucas.silva@example.com;Awaiting copy;active',
-    'Creator Batch 12;;maya.chen@example.com;Needs owner;draft',
-    'Marketplace Test;Jakub Kowalski;jakub.kowalski[at]example.com;Typo in email;paused',
-    'Spring Campaign;Ana Souza;ana.souza@example.com;Rerun after review;draft',
-    'Portfolio Sync;Noah Bennett;noah.bennett@example.com;Waiting on legal;active',
-    'Local Pages;Zofia Nowak;zofia.nowak@example.com;;active'
-  ].join('\n');
-  state.importName = 'brand_pages_sample.csv';
-  state.importKind = 'CSV';
-  state.importStep = 'loading';
-  renderView();
-  setTimeout(() => {
-    const result = parseFile(sample, 'csv');
-    if (result.error) {
-      state.importStep = 'error';
-      state.importError = importErrorMessage(result.error);
-    } else {
-      state.importData = result;
-      state.importStep = 'preview';
-    }
-    renderView();
-  }, 800);
-}
-
-function saveImport() {
-  const data = state.importData;
-  if (!data) return;
-  const problems = data.rows.filter((row) => row.level !== 'ok').length;
-  const entry = {
-    id: `e${Date.now()}`,
-    name: state.importName,
-    kind: state.importKind || 'CSV',
-    date: Date.now(),
-    status: problems ? 'partial' : 'parsed',
-    columns: data.columns,
-    rows: data.rows.map((row) => ({ ...row.data }))
-  };
-  state.history.unshift(entry);
-  state.importSaved = { name: entry.name, rowCount: entry.rows.length, problems };
-  state.importStep = 'saved';
-  renderView();
-  toast('Saved to history');
-}
+function loadSample(){return handleFile(new File(['project,owner,note\nExample,Sample,"Кириллица"\nExample,Sample,"Кириллица"'], 'sample.csv',{type:'text/csv'}));}
+async function importPage(offset){try{state.importData=await window.blego.importPage({operationId:state.importData.operationId,offset});renderView();}catch(e){toast(e.message,'err');}}
 
 function ensureNews() {
   if(!state.settings.newsEnabled) return;
@@ -380,7 +304,10 @@ document.addEventListener('click', (event) => {
     return;
   }
   if (action === 'import-sample') { loadSample(); return; }
+  if(action==='import-page'){importPage(Number(target.dataset.offset));return;}
+  if(action==='import-copy'){window.blego.copySource(state.importData.operationId).then(r=>toast(r.ok?'Copied':'Copy failed; select text manually',r.ok?'':'err'));return;}
   if (action === 'import-reset') {
+    const id=state.importRequest||state.importData?.operationId;if(id)window.blego.cancelImport(id);state.importRequest=null;
     state.importStep = 'idle';
     state.importData = null;
     state.importName = '';
@@ -389,7 +316,7 @@ document.addEventListener('click', (event) => {
     renderView();
     return;
   }
-  if (action === 'import-save') { saveImport(); return; }
+
   if (action === 'open-entry') {
     state.modal = { type: 'entry', id: target.dataset.id };
     renderModal();
