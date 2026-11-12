@@ -858,8 +858,14 @@ document.addEventListener('click', async (event) => {
     refreshNews(true);
     return;
   }
-  if (action === 'net-run') {
-    runNetwork(true);
+  if (action === 'net-run' || action === 'net-ping') {
+    try {
+      if (!state.settings.proxyEnabled)
+        state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+      await runNetwork(action === 'net-run');
+    } catch (error) {
+      toast('Не удалось выполнить проверку сети', 'err');
+    }
     return;
   }
   if (action === 'proxy-cancel') {
@@ -867,7 +873,13 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'proxy-check') {
-    runProxyCheck();
+    try {
+      if (!state.settings.proxyEnabled)
+        state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+      await runProxyCheck();
+    } catch {
+      toast('Не удалось начать проверку прокси', 'err');
+    }
     return;
   }
   if (
