@@ -83,8 +83,10 @@ Files: generator/history/main/copy controls; tests existing registry/archive plu
 ## Task 7: candidate verification and native QA
 
 Files: verification scripts/tests/workflow/docs only as needed; add new UI suites to installed-app check, keep native runtime gate.
-- [ ] Review branch with fresh reviewer per executing-plans; regression tests for material findings before fixes.
-- [ ] Run lint/unit/integration/full GUI, original/new screenshots, existing data upgrade and protected asset hashes.
-- [ ] Native arm64 runtime then DMG then installed outside checkout tests on available authorized Mac environment; never weaken gate. Respect no paid services, no release/merge.
-- [ ] Record SHA/changed files/per-stage results/function map/E01–E60 evidence, real news/proxy/date/GPS, installer hash if actually produced; otherwise BLOCKED and exact remaining requirements.
-- [ ] Commit report and push working branch. Owner acceptance remains outstanding.
+- [x] Review branch with fresh reviewer per executing-plans; regression tests for material findings before fixes.
+- [x] Run lint/unit/integration/full GUI, original/new screenshots, existing data upgrade and protected asset hashes.
+- [x] Native arm64 runtime then DMG then installed outside checkout tests on available authorized Mac environment; never weaken gate. Respect no paid services, no release/merge.
+- [x] Record SHA/changed files/per-stage results/function map/E01–E60 evidence, real news/proxy/date/GPS, installer hash if actually produced; otherwise BLOCKED and exact remaining requirements.
+- [x] Commit report and push working branch. Owner acceptance remains outstanding.
+
+Automated stage7 evidence is complete for41efeec3; owner/native manual acceptance and external/data limitations are listed in docs/verification/ux-v13/FINAL_CLOUD_REPORT.md. No full product-readiness claim. Worktree retained after Cloud environment disconnection; no merge/release.
