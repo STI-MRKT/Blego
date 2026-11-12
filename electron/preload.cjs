@@ -5,6 +5,15 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  chooseImageDestination: () => call('imagesDestination'),
+  applyMetadataPlan: (request) => call('imagesApply', request),
+  cancelImageExport: () => call('imagesCancel'),
+  exportMetadataReport: (format) => call('imagesReport', format),
+  onImageProgress: (callback) => {
+    const listener = (_event, result) => callback(result);
+    ipcRenderer.on('local:image-progress', listener);
+    return () => ipcRenderer.removeListener('local:image-progress', listener);
+  },
   chooseImages: () => call('imagesChoose'),
   readImageMetadata: (id) => call('imageRead', id),
   previewImage: (id) => call('imagePreview', id),

@@ -6,7 +6,9 @@ const { createEngine } = require('./engine.cjs');
 const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
-function createImageService({ engine = createEngine(), store } = {}) {
+function createImageService({ engine = createEngine(), store, hooks = {} } = {}) {
+  const destinations = new Map();
+  let active = null;
   const files = new Map(),
     plans = new Map();
   let totalBytes = 0,
@@ -29,7 +31,69 @@ function createImageService({ engine = createEngine(), store } = {}) {
     }
   }
   return {
+    async recover() {
+      await require('./export.cjs').recoverExports(store);
+    },
+    async addDestination(directory) {
+      const stat = await fs.promises.lstat(directory);
+      if (!stat.isDirectory() || stat.isSymbolicLink()) throw Error('INVALID_DESTINATION');
+      const token = randomUUID();
+      destinations.set(token, { path: path.resolve(directory), dev: stat.dev, ino: stat.ino });
+      return token;
+    },
+    cancelExport() {
+      active?.abort();
+    },
+    async applyMetadataPlan({ planId, destinationToken }, onProgress) {
+      if (active || running) throw Error('IMAGES_BUSY');
+      const plan = plans.get(planId),
+        destination = destinations.get(destinationToken);
+      if (!plan) throw Error('INVALID_PLAN_TOKEN');
+      if (!destination) throw Error('INVALID_DESTINATION');
+      const stat = await fs.promises.lstat(destination.path);
+      if (
+        !stat.isDirectory() ||
+        stat.isSymbolicLink() ||
+        stat.dev !== destination.dev ||
+        stat.ino !== destination.ino
+      )
+        throw Error('INVALID_DESTINATION');
+      const controller = new AbortController();
+      active = controller;
+      const results = new Array(plan.files.length);
+      let next = 0;
+      const worker = async () => {
+        while (next < plan.files.length) {
+          const index = next++,
+            planned = plan.files[index],
+            item = files.get(planned.fileId);
+          results[index] = await require('./export.cjs').exportCopy({
+            item,
+            planned,
+            operations: plan.operations,
+            destination: destination.path,
+            engine,
+            signal: controller.signal,
+            onProgress,
+            store,
+            hooks
+          });
+          onProgress?.(results[index]);
+        }
+      };
+      try {
+        await Promise.all(
+          Array.from({ length: Math.min(IMAGE_LIMITS.parallel, plan.files.length) }, worker)
+        );
+        return { planId, files: results, cancelled: controller.signal.aborted };
+      } finally {
+        active = null;
+        plans.delete(planId);
+        destinations.delete(destinationToken);
+      }
+    },
     async addFiles(paths) {
+      if (active) throw Error('IMAGES_BUSY');
       if (!Array.isArray(paths) || paths.length + files.size > IMAGE_LIMITS.files)
         throw Error('IMAGE_QUEUE_LIMIT');
       const pending = [];
@@ -93,13 +157,13 @@ function createImageService({ engine = createEngine(), store } = {}) {
       });
     },
     clear() {
-      if (running) throw Error('IMAGES_BUSY');
+      if (running || active) throw Error('IMAGES_BUSY');
       files.clear();
       plans.clear();
       totalBytes = 0;
     },
     remove(id) {
-      if (running) throw Error('IMAGES_BUSY');
+      if (running || active) throw Error('IMAGES_BUSY');
       const item = files.get(id);
       if (!item) throw Error('INVALID_FILE_TOKEN');
       totalBytes -= item.size;

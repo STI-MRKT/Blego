@@ -207,6 +207,26 @@ test(
     assert.equal(await page.locator('[name="value-title"]').inputValue(), 'Новый заголовок');
     await page.locator('[name="value-title"]').fill('Другой заголовок');
     assert.equal(await page.locator('[data-metadata-plan]').count(), 0);
+    await page.locator('#metadata-form [type="submit"]').click();
+    const imageOutput = path.join(root, 'image-output');
+    fs.mkdirSync(imageOutput);
+    await app.evaluate(({ dialog }, directory) => {
+      const original = dialog.showOpenDialog;
+      dialog.showOpenDialog = async () => {
+        dialog.showOpenDialog = original;
+        return { canceled: false, filePaths: [directory] };
+      };
+    }, imageOutput);
+    await page.locator('[data-action="metadata-export"]').click();
+    await page.locator('[data-action="metadata-report"]').first().waitFor();
+    assert.match(await page.locator('[data-metadata-progress]').textContent(), /completed/);
+    assert.equal(fs.readdirSync(imageOutput).length, 1);
+    const copy = path.join(imageOutput, fs.readdirSync(imageOutput)[0]);
+    const readback = await require('../../electron/features/images/engine.cjs')
+      .createEngine()
+      .read(copy);
+    assert.equal(readback.tags['XMP-dc:Title'], 'Другой заголовок');
+
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'кириллица.txt',

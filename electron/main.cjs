@@ -27,11 +27,14 @@ const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
 let store, mainWindow, archives, news, poolCatalog, facebook, images;
 let recoveryReports = [];
+let imageExportPromise = null,
+  imageExportReport = null;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
   images = createImageService({ store });
+  await images.recover();
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -83,6 +86,48 @@ async function initialize() {
           ]
         });
         return result.canceled ? [] : images.addFiles(result.filePaths);
+      },
+      imagesDestination: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openDirectory', 'createDirectory']
+        });
+        return result.canceled ? null : images.addDestination(result.filePaths[0]);
+      },
+      imagesApply: async (request) => {
+        if (imageExportPromise) throw Error('IMAGES_BUSY');
+        imageExportPromise = images.applyMetadataPlan(request, (result) => {
+          if (mainWindow && !mainWindow.isDestroyed())
+            mainWindow.webContents.send('local:image-progress', result);
+        });
+        try {
+          imageExportReport = await imageExportPromise;
+          return imageExportReport;
+        } finally {
+          imageExportPromise = null;
+        }
+      },
+      imagesCancel: () => {
+        images.cancelExport();
+        return true;
+      },
+      imagesReport: async (format) => {
+        if (!imageExportReport || !['json', 'txt'].includes(format)) throw Error('INVALID_REPORT');
+        const result = await dialog.showSaveDialog(mainWindow, {
+          defaultPath: `BLEGO-metadata-report.${format}`
+        });
+        if (result.canceled) return false;
+        const text =
+          format === 'json'
+            ? JSON.stringify(imageExportReport, null, 2)
+            : imageExportReport.files
+                .map((f) =>
+                  [f.name, f.status, f.outputName || '', f.error || '', ...(f.warnings || [])].join(
+                    ' · '
+                  )
+                )
+                .join('\n');
+        await fs.promises.writeFile(result.filePath, text, { flag: 'wx', mode: 0o600 });
+        return true;
       },
       imageRead: (id) => images.readImageMetadata(id),
       imagePreview: (id) => images.preview(id),
@@ -323,7 +368,13 @@ if (!hasLock) {
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
   });
-  app.on('before-quit', () => {
+  app.on('before-quit', (event) => {
+    if (imageExportPromise) {
+      event.preventDefault();
+      images.cancelExport();
+      imageExportPromise.finally(() => app.quit()).catch(() => {});
+      return;
+    }
     if (serverInstance) serverInstance.close();
     proxyController?.abort();
     news?.close();

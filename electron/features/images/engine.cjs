@@ -97,6 +97,10 @@ function createEngine() {
     });
   }
   return {
+    async writeCopy(file, operations, format, { signal } = {}) {
+      const { writeArgs } = require('./write-policy.cjs');
+      return execute([...writeArgs(operations, format), '--', path.resolve(file)], { signal });
+    },
     async read(file, { signal } = {}) {
       const result = await execute(
         ['-j', '-G1:4', '-a', '-s', '-n', '-api', 'StructFormat=JSONQ', '--', path.resolve(file)],

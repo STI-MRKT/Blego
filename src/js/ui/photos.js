@@ -63,7 +63,7 @@ export function photosHTML() {
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Selected original image"><figcaption>Original visual preview; export will create a separate file.</figcaption></figure>` : ''}
  ${
    selected.length
-     ? `<form id="metadata-form" class="card pad"><h3>${selected.length} selected files</h3><p class="sub">Every field starts at Keep. Empty Set values are rejected; choose Remove explicitly. Orientation and color profiles are protected.</p><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.map(
+     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>${selected.length} selected files</h3><p class="sub">Every field starts at Keep. Empty Set values are rejected; choose Remove explicitly. Orientation and color profiles are protected.</p><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.map(
          (field) =>
            editor(
              field,
@@ -71,9 +71,21 @@ export function photosHTML() {
            )
        ).join(
          ''
-       )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="submit" class="btn btn-primary">Preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button></form>`
+       )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="submit" class="btn btn-primary">Preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button></fieldset></form>`
      : ''
  }
- ${plan ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files.map((file) => `<h4>${esc(file.name)}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th></tr></thead><tbody>${file.beforeAfter.map((row) => `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td></tr>`).join('')}</tbody></table></div>`).join('')}<button class="btn" data-action="metadata-export" disabled>Export copies unavailable</button></div>` : ''}
+ ${plan ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files.map((file) => `<h4>${esc(file.name)}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th></tr></thead><tbody>${file.beforeAfter.map((row) => `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td></tr>`).join('')}</tbody></table></div>`).join('')}<button class="btn" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Export verified copies</button></div>` : ''}
+ ${state.imagesBusy ? '<button class="btn" data-action="metadata-cancel">Cancel export</button>' : ''}
+ ${
+   Object.keys(state.metadataProgress || {}).length
+     ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress)
+         .map(
+           (file) =>
+             `<p>${esc(file.name)}: ${esc(file.status)} ${esc(file.error || '')} ${esc(file.outputName || '')}</p>`
+         )
+         .join('')}</div>`
+     : ''
+ }
+ ${state.metadataExport ? '<div class="card pad"><p>Export finished. Only files marked completed passed read-back and image checks. Originals were not edited. Reports omit tag values and full paths.</p><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button></div>' : ''}
  </div>`;
 }

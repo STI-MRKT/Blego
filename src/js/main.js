@@ -672,6 +672,44 @@ document.addEventListener('click', async (event) => {
     runProxyCheck();
     return;
   }
+  if (action === 'metadata-cancel') {
+    await window.blego.cancelImageExport();
+    return;
+  }
+  if (action === 'metadata-report') {
+    try {
+      await window.blego.exportMetadataReport(target.dataset.format);
+    } catch (error) {
+      toast(error.message, 'err');
+    }
+    return;
+  }
+  if (action === 'metadata-export') {
+    if (state.imagesBusy || !state.metadataPlan) return;
+    let unsubscribe;
+    try {
+      const planId = state.metadataPlan.planId,
+        destinationToken = await window.blego.chooseImageDestination();
+      if (!destinationToken) return;
+      state.imagesBusy = true;
+      state.metadataExport = null;
+      state.metadataProgress = {};
+      renderView();
+      unsubscribe = window.blego.onImageProgress((result) => {
+        state.metadataProgress[result.fileId] = result;
+        if (state.view === 'photos') renderView();
+      });
+      state.metadataExport = await window.blego.applyMetadataPlan({ planId, destinationToken });
+      state.metadataPlan = null;
+    } catch (error) {
+      toast(error.message, 'err');
+    } finally {
+      unsubscribe?.();
+      state.imagesBusy = false;
+      renderView();
+    }
+    return;
+  }
   if (action === 'images-choose') {
     await addPhotos();
     return;
