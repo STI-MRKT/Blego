@@ -1,0 +1,1 @@
+{"version":"BLEGO-heuristic-1","name":"BLEGO network flags","weights":{"proxy":40,"hosting":25},"minimumSuccessfulSources":1,"description":"Uncalibrated flag sum, not a fraud probability. Latency is not an input."}

@@ -14,6 +14,8 @@ const {resolvePreset}=require('./features/generator/sources.cjs');
 const {createClassificationService}=require('./features/classification/service.cjs');
 const classification=createClassificationService();
 const {createArchiveService}=require('./features/archive/service.cjs');
+const {checkProxy}=require('./features/proxy/service.cjs');
+let proxyController=null;
 let store, mainWindow, archives;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
@@ -26,6 +28,8 @@ async function initialize() {
   }
   registerIpc(ipcMain,()=>mainWindow,()=>serverUrl,{
     settingsGet:()=>getSettings(store),
+    proxyCheck:async request=>{if(!getSettings(store).proxyEnabled)throw Error('MODULE_DISABLED');if(proxyController)throw Error('CHECK_RUNNING');const c=new AbortController();proxyController=c;try{return await checkProxy(request,c.signal);}finally{if(proxyController===c)proxyController=null;}},
+    proxyCancel:()=>{proxyController?.abort();return true;},
     archiveList:q=>archives.listArchives(q),
     archiveOpen:async id=>{const r=await archives.openArchive(id);return {entry:r.entry,resultText:r.entries['result.txt'].toString(),unresolvedText:r.entries['unresolved.txt']?.toString()||'',diagnostics:r.entries['diagnostics.jsonl'].toString()};},
     archiveSave:id=>{const s=getSettings(store);return archives.saveArchive(id,{archiveRoot:s.archiveRoot,includeOriginal:s.includeOriginal});},
@@ -40,7 +44,7 @@ async function initialize() {
     generate:request=>generateProfile(request,{store}),
     lastCard:()=>store.get('lastCard')||null,
     clearCard:()=>clearCard(store),
-    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');const next={...getSettings(store),...patch};for(const c of ['BR','US','FR','PL','DE','ES','IT','GB'])for(const t of ['model','tech','crypto'])resolvePreset(c,t,next);return updateSettings(store,patch);},
+    settingsUpdate:patch=>{if(Object.hasOwn(patch||{},'archiveRoot'))throw Error('USE_DIRECTORY_DIALOG');const next={...getSettings(store),...patch};for(const c of ['BR','US','FR','PL','DE','ES','IT','GB'])for(const t of ['model','tech','crypto'])resolvePreset(c,t,next);const updated=updateSettings(store,patch);if(!updated.proxyEnabled)proxyController?.abort();return updated;},
     archiveDirectory:async()=>{const r=await dialog.showOpenDialog(mainWindow,{properties:['openDirectory','createDirectory']});return r.canceled?getSettings(store):updateSettings(store,{archiveRoot:r.filePaths[0]});},
     copy:text=>copyText(text,clipboard),
     tourSeen:()=>!!store.get('tourSeen'),
@@ -51,7 +55,7 @@ async function initialize() {
 
 async function ensureServer() {
   if (!serverUrl) {
-    const started = await startServer(path.join(__dirname, '..', 'src'));
+    const started = await startServer(path.join(__dirname, '..', 'src'),0,{networkEnabled:()=>getSettings(store).proxyEnabled});
     serverInstance = started.server;
     serverUrl = started.url;
   }
@@ -113,6 +117,7 @@ if (!hasLock) {
   });
   app.on('before-quit', () => {
     if (serverInstance) serverInstance.close();
+    proxyController?.abort();
     classification.close();
     if(store) store.close();
   });

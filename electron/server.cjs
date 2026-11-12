@@ -173,31 +173,6 @@ async function ipInfo() {
   return data;
 }
 
-const verificationCache = new Map();
-
-async function proxycheckLookup(ip) {
-  const cached = verificationCache.get(ip);
-  if (cached && Date.now() - cached.at < 5 * 60e3) return cached.data;
-  const response = await fetch(`https://proxycheck.io/v2/${encodeURIComponent(ip)}?vpn=1&asn=1`, {
-    signal: AbortSignal.timeout(7000),
-    headers: { 'user-agent': 'BLEGO' }
-  });
-  const json = await response.json();
-  const entry = json && json[ip];
-  if (!entry) return null;
-  const data = {
-    proxy: entry.proxy === 'yes',
-    type: entry.type || '',
-    provider: entry.provider || '',
-    organisation: entry.organisation || '',
-    asn: entry.asn || '',
-    country: entry.country || '',
-    city: entry.city || ''
-  };
-  verificationCache.set(ip, { at: Date.now(), data });
-  return data;
-}
-
 async function fbCheck(id) {
   const value = String(id || '').trim();
   if (!/^[a-z0-9._-]{3,50}$/i.test(value)) throw new Error('Invalid ID');
@@ -276,64 +251,6 @@ async function speedTest() {
   return { mbps: Number(mbps.toFixed(1)), ms: Math.round(total), ttfb, bytes: buffer.byteLength };
 }
 
-function proxyGet(proxy, target) {
-  return new Promise((resolve, reject) => {
-    const secure = proxy.protocol === 'https:';
-    const lib = secure ? https : http;
-    const headers = { host: new URL(target).host, 'user-agent': 'BLEGO' };
-    if (proxy.username) {
-      const credentials = `${decodeURIComponent(proxy.username)}:${decodeURIComponent(proxy.password)}`;
-      headers['proxy-authorization'] = `Basic ${Buffer.from(credentials).toString('base64')}`;
-    }
-    const request = lib.request({
-      host: proxy.hostname,
-      port: proxy.port || (secure ? 443 : 80),
-      method: 'GET',
-      path: target,
-      headers,
-      timeout: 8000
-    }, (response) => {
-      let body = '';
-      response.setEncoding('utf8');
-      response.on('data', (chunk) => { body += chunk; });
-      response.on('end', () => {
-        try {
-          resolve(JSON.parse(body));
-        } catch (error) {
-          void error;
-          reject(new Error('Proxy returned a non-JSON response'));
-        }
-      });
-    });
-    request.on('timeout', () => request.destroy(new Error('Proxy timed out')));
-    request.on('error', (error) => reject(error));
-    request.end();
-  });
-}
-
-async function proxyCheck(raw) {
-  const value = String(raw || '').trim();
-  if (!value) {
-    const started = performance.now();
-    const data = await ipInfo();
-    return { ...data, latency: Math.round(performance.now() - started) };
-  }
-  const normalized = /^[a-z]+:\/\//i.test(value) ? value : `http://${value}`;
-  let proxy;
-  try {
-    proxy = new URL(normalized);
-  } catch (error) {
-    void error;
-    throw new Error('Invalid proxy address');
-  }
-  if (!proxy.hostname) throw new Error('Invalid proxy address');
-  const started = performance.now();
-  const data = await proxyGet(proxy, IP_API);
-  if (!data || data.status !== 'success') throw new Error(data && data.message ? data.message : 'Proxy check failed');
-  const verification = await proxycheckLookup(data.query).catch(() => null);
-  return { ...data, latency: Math.round(performance.now() - started), verification };
-}
-
 async function handleApi(request, response, url) {
   try {
     if (url.pathname === '/api/news') return sendJson(response, await newsPayload(url.searchParams.get('force') === '1'));
@@ -341,7 +258,6 @@ async function handleApi(request, response, url) {
     if (url.pathname === '/api/net/ip') return sendJson(response, await ipInfo());
     if (url.pathname === '/api/net/ping') return sendJson(response, await pingAll());
     if (url.pathname === '/api/net/speed') return sendJson(response, await speedTest());
-    if (url.pathname === '/api/proxy/check') return sendJson(response, await proxyCheck(url.searchParams.get('proxy')));
     if (url.pathname === '/api/fb/check') return sendJson(response, await fbCheck(url.searchParams.get('id')));
     return sendJson(response, { error: 'Not found' }, 404);
   } catch (error) {
@@ -349,7 +265,7 @@ async function handleApi(request, response, url) {
   }
 }
 
-function startServer(rootDir, port = 0) {
+function startServer(rootDir, port = 0, options = {}) {
   const root = path.resolve(rootDir);
   return new Promise((resolve, reject) => {
     const server = http.createServer((request, response) => {
@@ -359,6 +275,7 @@ function startServer(rootDir, port = 0) {
       let url;
       try {url=new URL(request.url || '/', `http://${expected}`);decodeURIComponent(url.pathname);} catch {response.writeHead(400);response.end();return;}
       if (url.pathname.startsWith('/api/')) {
+        if(url.pathname.startsWith('/api/net/')&&!options.networkEnabled?.()){sendJson(response,{error:'MODULE_DISABLED'},403);return;}
         handleApi(request, response, url);
         return;
       }

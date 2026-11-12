@@ -186,16 +186,10 @@ function updateNews() {
   if (block) block.outerHTML = newsBlockHTML();
 }
 
-function maybeAutoNetwork() {
-  if(!state.settings.proxyEnabled) return;
-  if (state.view !== 'network') return;
-  if (document.getElementById('tour-root')) return;
-  if (state.network.ip || state.network.running || state.network.error) return;
-  runNetwork(false);
-}
+function maybeAutoNetwork() {}
 
 async function runNetwork(full) {
-  if (state.network.running) return;
+  if (!state.settings.proxyEnabled||state.network.running) return;
   state.network.running = true;
   state.network.stage = 'Pinging';
   state.network.error = '';
@@ -221,7 +215,7 @@ async function runNetwork(full) {
 }
 
 async function runProxyCheck() {
-  if (state.network.proxyLoading) return;
+  if (!state.settings.proxyEnabled||state.network.proxyLoading) return;
   state.network.proxyLoading = true;
   state.network.proxyError = '';
   renderView();
@@ -353,6 +347,7 @@ document.addEventListener('click', (event) => {
     return;
   }
   if (action === 'net-run') { runNetwork(true); return; }
+  if(action==='proxy-cancel'){window.blego.cancelProxy();return;}
   if (action === 'proxy-check') { runProxyCheck(); return; }
   if (action === 'photo-remove') { removePhoto(target.dataset.id); return; }
   if (action === 'photos-clear') { clearPhotos(); return; }
