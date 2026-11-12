@@ -118,3 +118,24 @@
 .ux-photos .ux-group-controls fieldset>p {flex:1 1 100%;margin:5px 0}
 .ux-photos .ux-group-controls fieldset>.btn {flex:0 0 auto}
 .ux-photos .ux-group-controls fieldset>h4 {flex:1 1 100%;margin:10px 0 4px}
+
+/* Generator display-only refinements. All copied values remain canonical. */
+.ux-generator .demo-left .handle {
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.ux-generator .field-phone .field-value {
+  font-size:11px;
+  letter-spacing:-.04em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-variant-numeric:tabular-nums;
+}
+.ux-generator .field-email .field-value {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
