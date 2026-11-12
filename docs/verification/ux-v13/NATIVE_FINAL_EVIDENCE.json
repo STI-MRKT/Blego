@@ -1,0 +1,1097 @@
+{
+  "candidateSha": "41efeec35efe2443e3f78d3dbd0f808f20778d70",
+  "nativeRun": "https://github.com/STI-MRKT/Blego/actions/runs/43267402388",
+  "checksumRun": "https://github.com/STI-MRKT/Blego/actions/runs/43269473103",
+  "artifact": {
+    "id": 13966903150,
+    "name": "BLEGO-mac-arm64-QA",
+    "url": "https://github.com/STI-MRKT/Blego/actions/runs/43267402388/artifacts/13966903150",
+    "expiresAt": "2026-11-17T17:24:32Z",
+    "zipSha256": "71b2a8c2bdef2c13d0d7cb1207125ea4d07dbd792a9e8f14aaef26e34463fe00",
+    "dmg": "BLEGO-1.3.0-arm64.dmg",
+    "dmgSha256": "4508b9c062c802c3fc4c4d22d03651b3336de226e8cc3bbb74265da55e583fac",
+    "dmgHashVerification": "Independently hashed downloaded artifact in evidence job and matched SHA256SUMS-mac.txt"
+  },
+  "environment": {
+    "os": "macOS15.8.2",
+    "build": "24H232",
+    "kernel": "24.6.0",
+    "arch": "arm64",
+    "hardware": "Apple M1 (Virtual)",
+    "physicalM1": false
+  },
+  "reports": {
+    "native-darwin-arm64.json": {
+      "status": "PASS",
+      "target": "darwin-arm64",
+      "osRelease": "24.6.0",
+      "node": "v24.22.1",
+      "sharp": {
+        "aom": "3.15.1",
+        "archive": "3.8.9",
+        "cairo": "1.18.6",
+        "cgif": "0.5.4",
+        "exif": "0.6.26",
+        "expat": "2.8.5",
+        "ffi": "3.8.0",
+        "fontconfig": "2.18.3",
+        "freetype": "2.14.3",
+        "fribidi": "1.0.17",
+        "glib": "2.90.0",
+        "harfbuzz": "14.5.0",
+        "heif": "1.23.5",
+        "highway": "1.4.0",
+        "imagequant": "2.4.1",
+        "lcms": "2.19.1",
+        "mozjpeg": "0826579",
+        "pango": "1.58.2",
+        "pixman": "0.46.4",
+        "png": "1.6.58",
+        "proxy-libintl": "0.5",
+        "rsvg": "2.63.2",
+        "tiff": "4.7.2",
+        "uhdr": "2.0.2",
+        "vips": "8.18.7",
+        "webp": "1.6.0",
+        "xml2": "2.15.4",
+        "zlib-ng": "2.3.3",
+        "sharp": "0.35.5"
+      },
+      "manifest": {
+        "root": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64",
+        "manifestSha256": "80d620131741910b8682a65a1c646186572ceaf17f13f6bc665c6d57b8e37f4c",
+        "files": 1799,
+        "perlVersion": "v5.40.1"
+      },
+      "dependencies": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64/bin/perl:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)\n",
+      "pathEmpty": true,
+      "formats": [
+        {
+          "format": "jpeg",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "2f43eaba0a65b71168cb0a65cd76f963838b3d559c8495e7330a46c2efc345fe"
+        },
+        {
+          "format": "png",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "bb22688dfb3013d70db39f4f36110381ff74bf5009a46cedff4ede8a52e60c39"
+        },
+        {
+          "format": "webp",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "0b96c9a29719601d00cb9209fa6fba1bf0fdd5df95d6176db5ebdf835d559fb8"
+        }
+      ],
+      "checkedAt": "2026-11-12T17:18:35.440Z",
+      "codeSha": "41efeec35efe2443e3f78d3dbd0f808f20778d70"
+    },
+    "native-runtime-darwin-arm64.json": {
+      "status": "PASS",
+      "target": "darwin-arm64",
+      "osRelease": "24.6.0",
+      "node": "v24.22.1",
+      "sharp": {
+        "aom": "3.15.1",
+        "archive": "3.8.9",
+        "cairo": "1.18.6",
+        "cgif": "0.5.4",
+        "exif": "0.6.26",
+        "expat": "2.8.5",
+        "ffi": "3.8.0",
+        "fontconfig": "2.18.3",
+        "freetype": "2.14.3",
+        "fribidi": "1.0.17",
+        "glib": "2.90.0",
+        "harfbuzz": "14.5.0",
+        "heif": "1.23.5",
+        "highway": "1.4.0",
+        "imagequant": "2.4.1",
+        "lcms": "2.19.1",
+        "mozjpeg": "0826579",
+        "pango": "1.58.2",
+        "pixman": "0.46.4",
+        "png": "1.6.58",
+        "proxy-libintl": "0.5",
+        "rsvg": "2.63.2",
+        "tiff": "4.7.2",
+        "uhdr": "2.0.2",
+        "vips": "8.18.7",
+        "webp": "1.6.0",
+        "xml2": "2.15.4",
+        "zlib-ng": "2.3.3",
+        "sharp": "0.35.5"
+      },
+      "manifest": {
+        "root": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64",
+        "manifestSha256": "80d620131741910b8682a65a1c646186572ceaf17f13f6bc665c6d57b8e37f4c",
+        "files": 1799,
+        "perlVersion": "v5.40.1"
+      },
+      "dependencies": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64/bin/perl:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)\n",
+      "pathEmpty": true,
+      "formats": [
+        {
+          "format": "jpeg",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "2f43eaba0a65b71168cb0a65cd76f963838b3d559c8495e7330a46c2efc345fe"
+        },
+        {
+          "format": "png",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "bb22688dfb3013d70db39f4f36110381ff74bf5009a46cedff4ede8a52e60c39"
+        },
+        {
+          "format": "webp",
+          "status": "PASS",
+          "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+          "outputSha256": "0b96c9a29719601d00cb9209fa6fba1bf0fdd5df95d6176db5ebdf835d559fb8"
+        }
+      ],
+      "checkedAt": "2026-11-12T17:19:12.473Z",
+      "codeSha": "41efeec35efe2443e3f78d3dbd0f808f20778d70"
+    },
+    "installed-darwin-arm64.json": {
+      "status": "PASS",
+      "code": 0,
+      "checkedAt": "2026-11-12T17:21:14.717Z",
+      "host": "darwin-arm64",
+      "osRelease": "24.6.0",
+      "executable": "/Users/runner/work/_temp/BLEGO-qa.app/Contents/MacOS/BLEGO",
+      "executableSha256": "36f9f7cc1366ca277e3be745efad10a19392a92c3f0fce4dd7e2b7b521c67a63",
+      "codeSha": "41efeec35efe2443e3f78d3dbd0f808f20778d70",
+      "tests": [
+        "tests/ui/app.test.cjs",
+        "tests/ui/archive-actions.test.cjs",
+        "tests/ui/copy-all-sections.test.cjs",
+        "tests/ui/early-cancel.test.cjs",
+        "tests/ui/facebook-flow.test.cjs",
+        "tests/ui/image-groups.test.cjs",
+        "tests/ui/image-preview-race.test.cjs",
+        "tests/ui/news-topics.test.cjs",
+        "tests/ui/original-ux.test.cjs",
+        "tests/ui/photos-quick-edit.test.cjs"
+      ],
+      "log": "/Users/runner/work/Blego/Blego/release/installed-darwin-arm64.json.log",
+      "dataIsolation": "Every test supplies its own temporary user-data directory; no default user store",
+      "scope": "Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates."
+    },
+    "resources.txt": {
+      "os": "darwin",
+      "arch": "arm64",
+      "checks": [
+        "40MP actual decode/write/readback PASS",
+        "40,005,000 pixels rejected PASS",
+        "50MiB actual bounded read/decode (PNG with valid private ancillary chunk) PASS",
+        "50MiB + 1 rejected PASS",
+        "512MiB registered exactly; over-limit rejected PASS (not whole-batch decode)",
+        "reference consumes shared byte limit PASS",
+        "512MiB actual whole-batch read; export/cancel/selective retry verified every file PASS"
+      ],
+      "heavyFiles": 11,
+      "heavyCancelled": 10,
+      "cancelSettledMs": 122,
+      "elapsedSeconds": 100.094,
+      "rssScope": "parent process only; child RSS not sampled on this OS",
+      "peakSampledRssMiB": 644,
+      "maxNodeEventLoopGapMs": 710,
+      "limitations": "512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination."
+    },
+    "batch-100.txt": {
+      "host": "darwin-arm64",
+      "executable": "/Users/runner/work/_temp/BLEGO-qa.app/Contents/MacOS/BLEGO",
+      "files": 100,
+      "reads": 100,
+      "completed": 100,
+      "outputFiles": 100,
+      "elapsedSeconds": 37.127,
+      "eventLoopTicks": 1251,
+      "maxEventLoopGapMs": 167,
+      "progressRows": 100,
+      "fixture": "12×8 RGBA PNG; not maximum-size stress"
+    },
+    "batch-mixed.txt": {
+      "host": "darwin-arm64",
+      "executable": "/Users/runner/work/_temp/BLEGO-qa.app/Contents/MacOS/BLEGO",
+      "files": 3,
+      "reads": 3,
+      "completed": 3,
+      "outputFiles": 3,
+      "elapsedSeconds": 11.185,
+      "eventLoopTicks": 291,
+      "maxEventLoopGapMs": 141,
+      "progressRows": 3,
+      "fixture": "Mixed 12×8 RGBA, 40MP RGBA and 49MiB valid PNG with ancillary padding"
+    }
+  },
+  "visual": [
+    {
+      "label": "original",
+      "sourceSha": "6e57eabfb5b51af4475b90686fa580b5ce57e9b0",
+      "host": "darwin-arm64",
+      "os": "24.6.0",
+      "status": "PASS",
+      "metrics": {
+        "firstUsableMs": 1672.108417,
+        "generateMs": 1119.365417,
+        "networkNavigationMs": 108.6964169999992,
+        "networkFrameIntervalsMs": [
+          16.099999999998545,
+          17.100000000000364,
+          16.600000000000364,
+          17.200000000000728,
+          14.5,
+          16.599999999998545,
+          16,
+          16.700000000000728,
+          18.600000000000364,
+          16.69999999999891,
+          16.600000000000364,
+          16.700000000000728,
+          16.600000000000364,
+          16.799999999999272,
+          16.600000000000364,
+          16.69999999999891,
+          16.600000000000364,
+          16.700000000000728,
+          16.69999999999891,
+          16.80000000000109,
+          14.5,
+          16.899999999999636,
+          18.399999999999636,
+          16.700000000000728,
+          14.899999999999636,
+          18.5,
+          16.899999999999636,
+          16.700000000000728,
+          16.69999999999891,
+          15.900000000001455,
+          17.19999999999891,
+          14.600000000000364,
+          19.100000000000364,
+          16.899999999999636,
+          16,
+          16.600000000000364,
+          16.69999999999891,
+          17.100000000000364,
+          16.200000000000728,
+          16.69999999999891,
+          16.900000000001455,
+          16.799999999999272,
+          16.299999999999272,
+          16.600000000000364,
+          16.80000000000109,
+          16.5,
+          16.69999999999891,
+          16.700000000000728,
+          16.69999999999891,
+          14.700000000000728,
+          17.899999999999636,
+          17.399999999999636,
+          16.600000000000364,
+          16.700000000000728,
+          15.899999999999636,
+          15.399999999999636,
+          16.700000000000728,
+          16.799999999999272,
+          18.700000000000728,
+          16.5
+        ],
+        "checkerNavigationMs": 149.0822079999998,
+        "photosNavigationMs": 46.501249999999345,
+        "photoThumbnailMs": 37.09229200000118,
+        "historyNavigationMs": 50.593291999999565,
+        "importNavigationMs": 59.39104199999929
+      },
+      "errors": [],
+      "screens": [
+        {
+          "name": "generator-empty",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "pulse",
+              "playState": "running",
+              "duration": 2000,
+              "target": ""
+            }
+          ]
+        },
+        {
+          "name": "generator-hover",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "pulse",
+              "playState": "running",
+              "duration": 2000,
+              "target": ""
+            }
+          ]
+        },
+        {
+          "name": "generator-loading",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "fade",
+              "playState": "running",
+              "duration": 250,
+              "target": "page"
+            },
+            {
+              "name": "pulse",
+              "playState": "running",
+              "duration": 2000,
+              "target": ""
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            }
+          ]
+        },
+        {
+          "name": "generator-result",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "pulse",
+              "playState": "running",
+              "duration": 2000,
+              "target": ""
+            },
+            {
+              "name": "pulse",
+              "playState": "running",
+              "duration": 2000,
+              "target": ""
+            }
+          ]
+        },
+        {
+          "name": "network",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "opacity",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            },
+            {
+              "name": "transform",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            },
+            {
+              "name": "gauge",
+              "playState": "running",
+              "duration": 1600,
+              "target": {}
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 1200,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 840,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 1020,
+              "target": ""
+            }
+          ]
+        },
+        {
+          "name": "checker",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "photos",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "photos-loaded",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "history",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "import",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "opacity",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            },
+            {
+              "name": "transform",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "candidate",
+      "sourceSha": "41efeec35efe2443e3f78d3dbd0f808f20778d70",
+      "host": "darwin-arm64",
+      "os": "24.6.0",
+      "status": "PASS",
+      "metrics": {
+        "firstUsableMs": 1030.0571249999998,
+        "generateMs": 665.5888749999999,
+        "networkNavigationMs": 48.58508299999994,
+        "networkFrameIntervalsMs": [
+          16.699999999999818,
+          15.5,
+          18.100000000000364,
+          16.399999999999636,
+          16.700000000000728,
+          16.5,
+          16.799999999999272,
+          16.600000000000364,
+          16.699999999999818,
+          16.699999999999818,
+          14.800000000000182,
+          18.600000000000364,
+          16.599999999999454,
+          16.800000000000182,
+          16.300000000000182,
+          14.800000000000182,
+          18.800000000000182,
+          16.599999999999454,
+          14.699999999999818,
+          16.700000000000728,
+          18.599999999999454,
+          16.600000000000364,
+          16.800000000000182,
+          16.599999999999454,
+          16.600000000000364,
+          16.800000000000182,
+          16.599999999999454,
+          14.699999999999818,
+          16.700000000000728,
+          16.599999999999454,
+          17.699999999999818,
+          17.700000000000728,
+          16.599999999999454,
+          16.699999999999818,
+          14.600000000000364,
+          18.800000000000182,
+          14.5,
+          18.699999999999818,
+          16.699999999999818,
+          16.699999999999818,
+          17.400000000000546,
+          16.800000000000182,
+          15.799999999999272,
+          15.100000000000364,
+          18.199999999999818,
+          16.699999999999818,
+          16.600000000000364,
+          16.800000000000182,
+          16.599999999999454,
+          14.700000000000728,
+          19.5,
+          15.799999999999272,
+          16.600000000000364,
+          14.600000000000364,
+          16.799999999999272,
+          16.600000000000364,
+          18.699999999999818,
+          16.699999999999818,
+          14.600000000000364,
+          18.699999999999818
+        ],
+        "newsNavigationMs": 110.67412499999955,
+        "checkerNavigationMs": 72.1387079999995,
+        "photosNavigationMs": 34.04016700000102,
+        "photoThumbnailMs": 354.2215840000008,
+        "historyNavigationMs": 80.80429200000071,
+        "settingsNavigationMs": 50.84791700000096,
+        "importNavigationMs": 51.944541999999274
+      },
+      "errors": [],
+      "screens": [
+        {
+          "name": "generator-empty",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "generator-hover",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "generator-loading",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "generator-result",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "network",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "opacity",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            },
+            {
+              "name": "transform",
+              "playState": "running",
+              "duration": 240,
+              "target": "toast out"
+            },
+            {
+              "name": "gauge",
+              "playState": "running",
+              "duration": 1600,
+              "target": {}
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "packet",
+              "playState": "running",
+              "duration": 2600,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 1200,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 840,
+              "target": ""
+            },
+            {
+              "name": "signal",
+              "playState": "running",
+              "duration": 1020,
+              "target": ""
+            }
+          ]
+        },
+        {
+          "name": "news",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": [
+            {
+              "name": "spin",
+              "playState": "running",
+              "duration": 1000,
+              "target": {}
+            },
+            {
+              "name": "news-slide",
+              "playState": "running",
+              "duration": 1100,
+              "target": ""
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            },
+            {
+              "name": "sk",
+              "playState": "running",
+              "duration": 1300,
+              "target": "sk"
+            }
+          ]
+        },
+        {
+          "name": "checker",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "photos",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "photos-loaded",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "history",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "settings",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        },
+        {
+          "name": "import",
+          "theme": "dark",
+          "viewport": {
+            "width": 1024,
+            "height": 656
+          },
+          "animations": []
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Unsigned / not notarized; Gatekeeper not accepted",
+    "Native dialog choices controlled by fixtures; actual Finder/system-denial mouse paths not verified",
+    "Single automation timing sample; not statistical performance benchmark",
+    "No official release or merge; repository visibility not changed"
+  ]
+}
