@@ -150,6 +150,7 @@ test(
     await page.locator('[data-copy-action="close"]').click();
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.locator('[data-action="checker-run"]').click();
+    await page.locator('details').filter({ hasText: 'Заметка владельца' }).first().locator('summary').click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[data-copy-action="open"]').click();
     const fb = JSON.parse(await preview())[0];
@@ -173,7 +174,7 @@ test(
           source: 'Local fixture',
           link: 'https://example.com/?token=DO-NOT-COPY',
           description: 'Provided summary',
-          topic: 'test'
+          topic: 'fashion'
         }
       ];
     });
@@ -229,6 +230,7 @@ test(
     await page.locator('[data-copy-control="personal"]').check();
     assert.ok((await preview()).includes('Synthetic confirmed fixture'));
     await page.locator('[data-action="archive-back"]').click();
+    await page.locator('#archive-filter details summary').click();
     await page.locator('#archive-filter [name="order"]').selectOption('oldest');
     await page.locator('#archive-filter button').click();
     await waitForAsync(page, async () => {
