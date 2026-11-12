@@ -10,6 +10,21 @@ parsed and shown as `rules_pending`. That state cannot be confirmed or archived
 as a classified result. A35/A8 is deferred. Archive functionality is verified
 with explicitly TEST-ONLY classification fixtures, never customer rules.
 
+## Addendum 01 / current Cloud branch
+
+Development now continues in [STI-MRKT/Blego](https://github.com/STI-MRKT/Blego),
+branch `codex/blego-local-v1`; Kinetic58/BLEGO remains the preserved upstream.
+D0–D7 extend the existing app with female-name datasets, honest Facebook availability,
+local image metadata copy export, and unified copying. See the
+[E01–E32 acceptance report](docs/verification/ADDENDUM_01_ACCEPTANCE.md),
+[review/fixes](docs/verification/ADDENDUM_01_REVIEW.md) and
+[copying guide](docs/guides/COPYING.md).
+
+Dataset minima are not fully met. Subject classification remains pending.
+Current native metadata packaging is gated to the tested Linux x64 environment;
+macOS/Windows installers, signing and notarization remain blocked/unverified.
+No application release has been published.
+
 ## Development and verification
 
 Use Node 24.22+ and the committed lockfile:
@@ -17,6 +32,7 @@ Use Node 24.22+ and the committed lockfile:
 ```sh
 npm ci
 node node_modules/electron/install.js
+npm run prepare:metadata  # reviewed Linux runtime; target restrictions apply
 npm start
 npm run verify
 npm run test:ui

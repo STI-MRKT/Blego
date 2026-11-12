@@ -101,7 +101,7 @@ export async function serializeCopy(request, context) {
   if (!Array.isArray(ids) || ids.some((id) => !rows.has(id))) fail('COPY_SELECTION_CHANGED');
   if (['value', 'card'].includes(scope) && ids.length !== 1) fail('INVALID_COPY_SELECTION');
   const selected = [...new Set(ids)].map((id) => rows.get(id));
-  const redactions = new Set();
+  const redactions = new Set(scope === 'value' ? [] : model.redactions || []);
   const warnings = new Set();
   const fields = keys
     .map((key) => fieldMap.get(key))
@@ -137,7 +137,8 @@ export async function serializeCopy(request, context) {
   for (let index = 0; index < selected.length; index++) {
     const row = selected[index];
     const values = fields.map((field) => {
-      const value = cellText(Object.hasOwn(row.values, field.key) ? row.values[field.key] : null);
+      const values = scope !== 'value' && row.massValues ? row.massValues : row.values;
+      const value = cellText(Object.hasOwn(values, field.key) ? values[field.key] : null);
       return scope !== 'value' && field.kind === 'url'
         ? cleanUrl(value, field.key, redactions)
         : value;

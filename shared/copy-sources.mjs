@@ -1,6 +1,55 @@
 // Explicit section allowlists. No DOM text, raw provider object or filesystem path is a source.
-const scalar = (value) =>
-  value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);
+function assertPrecision(value) {
+  if (
+    typeof value === 'number' &&
+    (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value)))
+  )
+    throw Error('COPY_PRECISION_LOST');
+  if (value && typeof value === 'object')
+    for (const child of Object.values(value)) assertPrecision(child);
+}
+const scalar = (value) => {
+  assertPrecision(value);
+  return value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);
+};
+const secretKey = /password|passwd|secret|token|authorization|api.?key|cookie|credential/i;
+function sanitizeStructured(value, mark) {
+  if (Array.isArray(value)) return value.map((child) => sanitizeStructured(child, mark));
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => {
+          if (secretKey.test(key)) {
+            mark();
+            return false;
+          }
+          return true;
+        })
+        .map(([key, child]) => [key, sanitizeStructured(child, mark)])
+    );
+  if (typeof value === 'string') {
+    try {
+      const url = new URL(value);
+      if (['http:', 'https:', 'socks:', 'socks5:'].includes(url.protocol)) {
+        let changed = Boolean(url.username || url.password);
+        url.username = '';
+        url.password = '';
+        for (const key of [...url.searchParams.keys()])
+          if (secretKey.test(key)) {
+            url.searchParams.delete(key);
+            changed = true;
+          }
+        if (changed) {
+          mark();
+          return url.href;
+        }
+      }
+    } catch {
+      /* A plain text cell is not interpreted as a URL. */
+    }
+  }
+  return value;
+}
 const field = (key, sensitivity = 'public', kind) => ({ key, label: key, sensitivity, kind });
 const rows = (items, values, id) =>
   items.map((item, index) => ({
@@ -32,17 +81,24 @@ export function copySource(id, data) {
     };
   }
   if (id === 'import') {
-    const keys = data?.columns || [];
-    return {
-      fields: keys.map((key) =>
-        field(key, /password|passwd|secret|token|authorization/i.test(key) ? 'secret' : 'public')
-      ),
-      rows: rows(
-        data?.records || [],
-        (r) => Object.fromEntries(keys.map((key) => [key, scalar(r.data[key])])),
-        (r) => r.id
-      )
+    const keys = data?.columns || [],
+      redactions = new Set();
+    const model = {
+      fields: keys.map((key) => field(key, secretKey.test(key) ? 'secret' : 'public')),
+      rows: []
     };
+    for (const record of data?.records || []) {
+      const values = Object.fromEntries(keys.map((key) => [key, scalar(record.data[key])]));
+      const massValues = Object.fromEntries(
+        keys.map((key) => [
+          key,
+          scalar(sanitizeStructured(record.data[key], () => redactions.add(key)))
+        ])
+      );
+      model.rows.push({ id: String(record.id), values, massValues });
+    }
+    model.redactions = [...redactions];
+    return model;
   }
   if (id === 'import-source')
     return {

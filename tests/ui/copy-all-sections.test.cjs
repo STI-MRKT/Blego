@@ -14,6 +14,34 @@ test(
       data = path.join(root, 'data');
     const store = await openStore(data);
     store.set('tourSeen', true);
+    let stamp = '2025-01-01T00:00:00Z';
+    const classifier =
+      require('../../electron/features/classification/service.cjs').createClassificationService({
+        allowTestRules: true,
+        clock: () => new Date(stamp)
+      });
+    const archiveService =
+      require('../../electron/features/archive/service.cjs').createArchiveService({
+        store,
+        classification: classifier
+      });
+    for (const name of ['old.txt', 'new.txt']) {
+      const { parseInput } = await import('../../shared/importer.mjs');
+      const parsed = await parseInput({
+        bytes: Buffer.from('Synthetic ' + name),
+        originalName: name
+      });
+      const operation = classifier.classifyDocument(parsed, {
+        testOnly: true,
+        version: 'TEST-ONLY-COPY-ORDER',
+        classify: (r) => r.data.text
+      });
+      classifier.confirmClassification(operation.operationId, 'accept_complete');
+      await archiveService.saveArchive(operation.operationId);
+      stamp = '2025-02-01T00:00:00Z';
+    }
+    classifier.close();
+
     store.close();
     const app = await _electron.launch({
       executablePath: process.env.BLEGO_EXECUTABLE || undefined,
@@ -67,6 +95,14 @@ test(
       'sequence-copy'
     );
     await page.locator('[data-copy-action="sequence-previous"]').click();
+    await page.locator('[data-copy-control="order"]').fill('["name"]');
+    const completeProfile = JSON.parse(await preview())[0];
+    assert.ok(completeProfile.phone && completeProfile.email, 'full profile must keep contacts');
+    await app.evaluate(async ({ clipboard }) => clipboard.writeText('shortcut sentinel'));
+    await page.locator('[data-copy-action="open"]').focus();
+    await page.keyboard.press('Control+Shift+C');
+    await page.waitForTimeout(150);
+    assert.ok((await clip()).includes(`phone: ${profile.phone}`));
     const pref = await page.evaluate(() => window.blego.copyPreferences());
     assert.ok(Object.keys(pref).some((k) => k.startsWith('generator-')));
     await page.locator('[data-view="import"]').click();
@@ -189,6 +225,20 @@ test(
     await open('history');
     await page.locator('[data-copy-control="personal"]').check();
     assert.ok((await preview()).includes('Synthetic confirmed fixture'));
+    await page.locator('[data-action="archive-back"]').click();
+    await page.locator('#archive-filter [name="order"]').selectOption('oldest');
+    await page.locator('#archive-filter button').click();
+    await page.waitForFunction(async () => {
+      const { state } = await import('/js/state.js');
+      return state.archives.items[0]?.originalName === 'old.txt';
+    });
+    await page.locator('[data-copy-action="open"]').click();
+    await page.locator('[data-copy-control="scope"]').selectOption('filter');
+    assert.deepEqual(
+      JSON.parse(await preview()).map((r) => r.originalName),
+      ['old.txt', 'new.txt']
+    );
+
     const file = await imageFixture(root, 'png');
     await page.locator('[data-view="photos"]').click();
     await app.evaluate(({ dialog }, file) => {

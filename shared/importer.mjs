@@ -84,7 +84,17 @@ export function parseText(text, format) {
   if (format === 'json') {
     let a;
     try {
-      a = JSON.parse(text);
+      a = JSON.parse(text, (_key, value, context) => {
+        if (
+          typeof value === 'number' &&
+          (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value)))
+        ) {
+          if (!context || typeof context.source !== 'string')
+            throw failure('JSON_NUMBER_PRECISION', 'parse');
+          return context.source;
+        }
+        return value;
+      });
     } catch {
       throw failure('INVALID_JSON', 'parse');
     }

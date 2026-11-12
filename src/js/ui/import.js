@@ -1,7 +1,7 @@
 import { state } from '../state.js';
 import { esc } from '../utils/dom.js';
 import { I } from '../icons.js';
-const value = (v) => (typeof v === 'object' ? JSON.stringify(v) : String(v ?? ''));
+const value = (v) => (v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v));
 export function importHTML() {
   const p = state.importData;
   return `<div class="page"><div class="page-head"><div><div class="eyebrow">Classification / Import</div><h1>${p ? 'Preview' : 'Data import'}</h1><p class="sub">${esc(state.importName || 'TXT · CSV · TSV · JSON — up to 50 MiB')}</p></div><div class="head-actions">${state.importStep !== 'idle' ? '<button class="btn" data-action="import-reset">Discard / cancel</button>' : ''}${p ? '<button class="btn" data-action="import-copy">Copy source text</button>' : ''}</div></div>

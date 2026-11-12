@@ -137,3 +137,38 @@ test('missing and mixed metadata remain distinct and file/queue/total limits rej
   const [next] = await service.addFiles([plain]);
   assert.ok(next.fileId);
 });
+test(
+  'cancel reading aborts active engines and prevents queued readers from starting',
+  { timeout: 3000 },
+  async (t) => {
+    const { createImageService } = require('../../electron/features/images/service.cjs');
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-read-cancel-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const file = await imageFixture(root, 'png', { metadata: false });
+    let started = 0,
+      ready;
+    const both = new Promise((resolve) => (ready = resolve));
+    const engine = {
+      read: (_file, { signal } = {}) =>
+        new Promise((_resolve, reject) => {
+          started++;
+          if (started === 2) ready();
+          signal?.addEventListener('abort', () => reject(Error('CANCELLED')), { once: true });
+        })
+    };
+    const service = createImageService({ engine });
+    assert.equal(typeof service.cancelReads, 'function');
+    const items = await service.addFiles(Array(8).fill(file));
+    const jobs = items.map((i) =>
+      service.readImageMetadata(i.fileId).then(
+        () => 'unexpected',
+        (e) => e.message
+      )
+    );
+    await both;
+    service.cancelReads();
+    assert.deepEqual(await Promise.all(jobs), Array(8).fill('CANCELLED'));
+    assert.equal(started, 2);
+    service.clear();
+  }
+);

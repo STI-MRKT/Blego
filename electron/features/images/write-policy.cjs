@@ -5,7 +5,12 @@ function writeArgs(operations, format) {
   for (const op of validateOperations(operations)) {
     if (op.action === 'keep') continue;
     if (op.field === 'gps') {
-      args.push('-GPS:all=', '-XMP-exif:GPS*=');
+      args.push(
+        '-GPS:all=',
+        '-XMP-exif:GPS*=',
+        '-XMP-iptcExt:LocationCreatedGPS*=',
+        '-XMP-iptcExt:LocationShownGPS*='
+      );
       if (op.action === 'set') {
         const v = op.value;
         args.push(
@@ -28,7 +33,7 @@ function writeArgs(operations, format) {
     }
     const tags = FIELD_TAGS[op.field].filter(
       (tag) =>
-        ((!tag.startsWith('IPTC:') && !tag.startsWith('JPEG:')) || format === 'jpeg') &&
+        ((!tag.startsWith('IPTC:') && !tag.startsWith('File:')) || format === 'jpeg') &&
         (!tag.startsWith('PNG:') || format === 'png')
     );
     if (op.field === 'captureDate') {
@@ -72,6 +77,41 @@ function verifyTags(operations, before, after) {
           throw Error('METADATA_VERIFY_GPS');
     } else if (!isDeepStrictEqual(actual, expected))
       throw Error(`METADATA_VERIFY_${op.field.toUpperCase()}`);
+    if (op.field === 'gps' && op.action === 'set') {
+      for (const key of fieldKeys('gps', after)) {
+        if (key.startsWith('Composite:')) continue; // Derived by ExifTool, not stored metadata.
+        const split = key.lastIndexOf(':'),
+          group = key.split(':')[0],
+          tag = key.slice(split + 1);
+        const dimension = {
+          GPSLatitude: 'latitude',
+          GPSLongitude: 'longitude',
+          GPSAltitude: 'altitude'
+        }[tag];
+        if (dimension) {
+          let value = Number(after[key]);
+          const ref = Object.entries(after).find(
+            ([other]) => other.split(':')[0] === group && other.endsWith(':' + tag + 'Ref')
+          )?.[1];
+          if (ref === 'S' || ref === 'W' || (dimension === 'altitude' && Number(ref) === 1))
+            value = -Math.abs(value);
+          if (
+            expected[dimension] == null ||
+            !Number.isFinite(value) ||
+            Math.abs(value - expected[dimension]) > 1e-6
+          )
+            throw Error('METADATA_VERIFY_GPS_DUPLICATES');
+        } else {
+          const refs = {
+            GPSLatitudeRef: expected.latitude < 0 ? 'S' : 'N',
+            GPSLongitudeRef: expected.longitude < 0 ? 'W' : 'E',
+            GPSAltitudeRef: expected.altitude == null ? null : String(expected.altitude < 0 ? 1 : 0)
+          };
+          if (!Object.hasOwn(refs, tag) || String(after[key]) !== refs[tag])
+            throw Error('METADATA_VERIFY_GPS_DUPLICATES');
+        }
+      }
+    }
     if (op.action === 'remove' && fieldKeys(op.field, after).length)
       throw Error('METADATA_VERIFY_DUPLICATES');
     // Every known scalar/list copy must agree, including alternate namespace instances.

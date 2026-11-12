@@ -88,7 +88,7 @@ export function mountCopyActions() {
   bar.className = 'card pad';
   bar.id = 'copy-actions';
   bar.innerHTML =
-    '<button class="btn" data-copy-action="open">Copy data…</button><span class="sub"> Choose fields, rows and format · Ctrl/⌘ Shift C opens this panel</span><div id="copy-panel"></div>';
+    '<button class="btn" data-copy-action="open">Copy data…</button><span class="sub"> Choose fields, rows and format · Ctrl/⌘ Shift C copies the current card</span><div id="copy-panel"></div>';
   host.prepend(bar);
   // A previously prepared panel is an explicit snapshot, not silently replaced by live updates.
   if (panel && panel.view === state.view) renderPanel();
@@ -99,17 +99,19 @@ function rowLabel(row) {
     .slice(0, 2);
   return (
     entries
-      .map((f) => row.values[f.key] || '')
+      .map((f) => (row.massValues || row.values)[f.key] || '')
       .join(' · ')
       .slice(0, 160) || row.id
   );
 }
 function filteredRows() {
-  const ids = panel.model.filteredIds ? new Set(panel.model.filteredIds) : null;
-  return panel.model.rows.filter(
-    (r) =>
-      (!ids || ids.has(r.id)) &&
-      (!panel.query || rowLabel(r).toLocaleLowerCase().includes(panel.query.toLocaleLowerCase()))
+  const byId = new Map(panel.model.rows.map((row) => [row.id, row]));
+  const ordered = panel.model.filteredIds
+    ? panel.model.filteredIds.map((id) => byId.get(id)).filter(Boolean)
+    : panel.model.rows;
+  return ordered.filter(
+    (row) =>
+      !panel.query || rowLabel(row).toLocaleLowerCase().includes(panel.query.toLocaleLowerCase())
   );
 }
 function renderPanel() {
@@ -203,10 +205,18 @@ async function payload(extra = {}) {
   return serializeCopy(
     {
       sourceIds: [panel.id],
-      scope: panel.scope,
+      scope:
+        panel.id === 'generator' &&
+        ['all', 'filter'].includes(panel.scope) &&
+        (panel.scope !== 'filter' || model.filteredIds.length)
+          ? 'card'
+          : panel.scope,
       format: panel.format,
       orderedFields: panel.order,
-      selection: [...(selections.get(panel.id) || [])],
+      selection:
+        panel.id === 'generator' && ['all', 'filter'].includes(panel.scope)
+          ? model.rows.map((r) => r.id)
+          : [...(selections.get(panel.id) || [])],
       includePersonal: panel.personal,
       safetyMode: panel.safety,
       ...extra
@@ -361,6 +371,13 @@ document.addEventListener('keydown', (event) => {
     document.getElementById('copy-actions')
   ) {
     event.preventDefault();
-    openPanel().catch((e) => toast(e.message, 'err'));
+    const id = sourceForView();
+    resolveCopySource(id)
+      .then((model) =>
+        model.rows.length === 1
+          ? copyModelValue(id, model.rows[0].id, null, null, { card: true })
+          : openPanel(id)
+      )
+      .catch((e) => toast(e.message, 'err'));
   }
 });

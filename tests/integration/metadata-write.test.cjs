@@ -230,3 +230,29 @@ test('write failures, cancellation and restart cleanup preserve originals and un
   assert.ok(!fs.existsSync(own));
   assert.ok(fs.existsSync(other));
 });
+test('export keeps heavy read and clipboard jobs out of its two-worker budget', async (t) => {
+  const root = fixture(t),
+    file = await imageFixture(root),
+    out = path.join(root, 'out');
+  fs.mkdirSync(out);
+  let item;
+  const service = createImageService({
+    hooks: {
+      beforeWrite: async () => {
+        await assert.rejects(service.readImageMetadata(item.fileId), /IMAGES_BUSY/);
+        await assert.rejects(service.clipboardPNG(item.fileId), /IMAGES_BUSY/);
+      }
+    }
+  });
+  [item] = await service.addFiles([file]);
+  await service.readImageMetadata(item.fileId);
+  const plan = service.planMetadataChanges({
+    fileIds: [item.fileId],
+    operations: [{ field: 'title', action: 'remove' }]
+  });
+  const result = await service.applyMetadataPlan({
+    planId: plan.planId,
+    destinationToken: await service.addDestination(out)
+  });
+  assert.equal(result.files[0].status, 'completed', JSON.stringify(result));
+});

@@ -118,6 +118,7 @@ async function initialize() {
       },
       imagesCancel: () => {
         images.cancelExport();
+        images.cancelReads();
         return true;
       },
       imagesReport: async (format) => {
@@ -438,6 +439,7 @@ if (!hasLock) {
     proxyController?.abort();
     news?.close();
     facebook?.cancel();
+    images?.cancelReads();
     classification.close();
     if (store) store.close();
   });

@@ -416,12 +416,18 @@ async function runProxyCheck() {
 async function addPhotos() {
   if (state.imagesBusy) return;
   state.imagesBusy = true;
+  state.imagesReading = true;
+  state.imagesReadCancelled = false;
   renderView();
   try {
     const files = await window.blego.chooseImages();
     state.photos.push(...files);
     state.metadataPresets = await window.blego.metadataPresets();
     for (const file of files) {
+      if (state.imagesReadCancelled) {
+        file.status = 'cancelled';
+        continue;
+      }
       file.status = 'reading';
       renderView();
       try {
@@ -429,7 +435,7 @@ async function addPhotos() {
         file.status = 'ready';
         file.selected = file.view.capabilities.writable;
       } catch (error) {
-        file.status = 'failed';
+        file.status = error.message === 'CANCELLED' ? 'cancelled' : 'failed';
         file.error = error.message;
       }
     }
@@ -438,6 +444,7 @@ async function addPhotos() {
     toast(error.message, 'err');
   } finally {
     state.imagesBusy = false;
+    state.imagesReading = false;
     renderView();
   }
 }
@@ -695,6 +702,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'metadata-cancel') {
+    if (state.imagesReading) state.imagesReadCancelled = true;
     await window.blego.cancelImageExport();
     return;
   }

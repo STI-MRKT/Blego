@@ -8,6 +8,7 @@ const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
 function createImageService({ engine = createEngine(), store, hooks = {} } = {}) {
   const destinations = new Map();
+  const readers = new Set();
   let active = null;
   const files = new Map(),
     plans = new Map();
@@ -40,6 +41,9 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       const token = randomUUID();
       destinations.set(token, { path: path.resolve(directory), dev: stat.dev, ino: stat.ino });
       return token;
+    },
+    cancelReads() {
+      for (const controller of readers) controller.abort();
     },
     cancelExport() {
       active?.abort();
@@ -116,7 +120,14 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       return pending.map(({ fileId, name, size, status }) => ({ fileId, name, size, status }));
     },
     async readImageMetadata(fileToken) {
+      if (active) throw Error('IMAGES_BUSY');
+      const controller = new AbortController();
+      readers.add(controller);
+      const check = () => {
+        if (controller.signal.aborted) throw Error('CANCELLED');
+      };
       return withSlot(async () => {
+        check();
         const item = files.get(fileToken);
         if (!item) throw Error('INVALID_FILE_TOKEN');
         const bytes = await readBounded(item.path);
@@ -124,7 +135,9 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
         const valid = { jpeg: ['.jpg', '.jpeg'], png: ['.png'], webp: ['.webp'] };
         if (!valid[structure.format].includes(path.extname(item.path).toLowerCase()))
           throw Error('FORMAT_EXTENSION_MISMATCH');
-        const raw = await engine.read(item.path);
+        check();
+        const raw = await engine.read(item.path, { signal: controller.signal });
+        check();
         const imageInfo = await decodeHash(item.path);
         const sourceHash = createHash('sha256').update(bytes).digest('hex');
         const after = createHash('sha256')
@@ -150,11 +163,12 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
           ],
           status: 'ready'
         };
+        check();
         item.view = view;
         item.raw = raw.tags;
         item.structure = structure;
         return structuredClone(view);
-      });
+      }).finally(() => readers.delete(controller));
     },
     clear() {
       if (running || active) throw Error('IMAGES_BUSY');
@@ -200,6 +214,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       return { id, ...clean };
     },
     async clipboardPNG(fileId) {
+      if (active) throw Error('IMAGES_BUSY');
       return withSlot(async () => {
         const item = files.get(fileId);
         if (!item?.view) throw Error('INVALID_FILE_TOKEN');
