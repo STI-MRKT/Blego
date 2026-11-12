@@ -1,0 +1,33 @@
+✖ actual date edits keep each source timezone across JPEG/PNG/WebP and preserve original GPS/author/pixels (892.641611ms)
+✖ selected XMP date set/remove leaves EXIF date/offset unchanged; explicit offset removal is verified (805.753095ms)
+✔ empty explicit timezone or empty scope is rejected; keep never accepts a hidden replacement offset (0.984342ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1824.774173
+
+✖ failing tests:
+
+test at tests/integration/image-date-scope.test.cjs:31:1
+✖ actual date edits keep each source timezone across JPEG/PNG/WebP and preserve original GPS/author/pixels (892.641611ms)
+  Error: METADATA_INVALID_OPERATION
+      at validateOperations (file:///workspace/BLEGO-v13/shared/metadata-operations.mjs:17:13)
+      at Object.planMetadataChanges (/workspace/BLEGO-v13/electron/features/images/service.cjs:639:21)
+      at exportCopy (/workspace/BLEGO-v13/tests/integration/image-date-scope.test.cjs:23:24)
+      at async TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/image-date-scope.test.cjs:41:32)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/integration/image-date-scope.test.cjs:66:1
+✖ selected XMP date set/remove leaves EXIF date/offset unchanged; explicit offset removal is verified (805.753095ms)
+  Error: METADATA_INVALID_OPERATION
+      at validateOperations (file:///workspace/BLEGO-v13/shared/metadata-operations.mjs:17:13)
+      at Object.planMetadataChanges (/workspace/BLEGO-v13/electron/features/images/service.cjs:639:21)
+      at exportCopy (/workspace/BLEGO-v13/tests/integration/image-date-scope.test.cjs:23:24)
+      at async TestContext.<anonymous> (/workspace/BLEGO-v13/tests/integration/image-date-scope.test.cjs:70:22)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

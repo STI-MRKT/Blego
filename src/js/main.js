@@ -10,7 +10,7 @@ import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
 import { newsBlockHTML } from './ui/news.js';
 import { networkError } from './ui/network.js';
-import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/photos.js';
+import { readMetadataForm, readMetadataData, draftFromOperations, imageErrorMessage } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
@@ -171,8 +171,14 @@ async function prepareImageExport(retry = {}) {
     acknowledgeMakerNotes: !!document.querySelector('[name="confirm-maker"]')?.checked
   });
 }
+function syncQuickMetadata() {
+ const form=document.getElementById('metadata-form');if(!form)return;
+ for(const field of ['captureDate','gps']){const wrap=form.querySelector(`[data-field-inputs="${field}"]`);if(wrap)wrap.hidden=form.elements.namedItem('action-'+field)?.value!=='set';}
+ const offset=form.querySelector('[data-offset-input]');if(offset)offset.hidden=form.elements.namedItem('date-offset-mode')?.value!=='set';
+}
 function bindView() {
   mountCopyActions();
+  for(const id of ['metadata-advanced','image-groups-advanced','date-options']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -212,7 +218,9 @@ function bindView() {
         else control.value = value;
       }
     }
+    syncQuickMetadata();
     metadataForm.oninput = (event) => {
+      syncQuickMetadata();
       const name = event.target.name || '';
       const field = name.startsWith('action-')
         ? name.slice(7)
@@ -232,6 +240,7 @@ function bindView() {
       if (event.target.name?.startsWith('gps-')) delete state.metadataOrigins?.gps;
       if (event.target.name?.startsWith('date-')) delete state.metadataOrigins?.captureDate;
       state.metadataDraft = Object.fromEntries(new FormData(metadataForm));
+      for(const k of ['exif','xmp'])state.metadataDraft['date-scope-'+k]=metadataForm.elements.namedItem('date-scope-'+k).checked;
       state.metadataDraft['confirm-maker'] =
         metadataForm.elements.namedItem('confirm-maker').checked;
       state.metadataPlan = null;
@@ -247,7 +256,7 @@ function bindView() {
         await prepareImageExport();
         renderView();
       } catch (error) {
-        toast(error.message, 'err');
+        toast(imageErrorMessage(error.message), 'err');
       }
     };
   }
@@ -599,6 +608,7 @@ async function addPhotos() {
         file.size = file.view.size;
         file.status = 'ready';
         file.selected = file.view.capabilities.writable;
+        try {file.thumbnail=await window.blego.previewImage(file.fileId,true);}catch {file.thumbnail=null;}
       } catch (error) {
         file.status = error.message === 'CANCELLED' ? 'cancelled' : 'failed';
         file.error = error.message;
@@ -606,7 +616,7 @@ async function addPhotos() {
     }
     state.metadataPlan = null;
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   } finally {
     state.imagesBusy = false;
     state.imagesReading = false;
@@ -625,7 +635,7 @@ async function removePhoto(id) {
     state.imagePreview = null;
     renderView();
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   }
 }
 async function clearPhotos() {
@@ -645,7 +655,7 @@ async function clearPhotos() {
     state.imagePreview = null;
     renderView();
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   }
 }
 document.addEventListener('click', async (event) => {
@@ -987,7 +997,7 @@ document.addEventListener('click', async (event) => {
       await prepareImageExport({ retryRunId: state.metadataExport.runId, fileIds });
       renderView();
     } catch (e) {
-      toast(e.message, 'err');
+      toast(imageErrorMessage(e.message), 'err');
     }
     return;
   }
@@ -1005,7 +1015,7 @@ document.addEventListener('click', async (event) => {
     try {
       await window.blego.exportMetadataReport(target.dataset.format);
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1036,7 +1046,7 @@ document.addEventListener('click', async (event) => {
               result.groupName,
               result.name,
               result.status,
-              result.error,
+              result.error ? imageErrorMessage(result.error) : null,
               result.outputName
             ]
               .filter(Boolean)
@@ -1052,7 +1062,7 @@ document.addEventListener('click', async (event) => {
       state.imageExportHistory = await window.blego.imageExportHistory();
       state.metadataPlan = null;
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     } finally {
       unsubscribe?.();
       state.imagesBusy = false;
@@ -1060,7 +1070,7 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
-  if (action === 'images-choose') {
+  if (action === 'images-choose' || action === 'images-browse') {
     await addPhotos();
     return;
   }
@@ -1074,12 +1084,14 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if(action==='metadata-copy-input'){await copyText(document.querySelector('#metadata-form')?.elements.namedItem(target.dataset.name)?.value||'',target);return;}
+  if(action==='image-preview-close'){stashImageDraft();state.imagePreview=null;renderView();return;}
   if (action === 'image-preview') {
     try {
       state.imagePreview = await window.blego.previewImage(target.dataset.id);
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1113,7 +1125,7 @@ document.addEventListener('click', async (event) => {
       await prepareImageExport();
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1131,7 +1143,7 @@ document.addEventListener('click', async (event) => {
       state.metadataPresets = await window.blego.metadataPresets();
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }

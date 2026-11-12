@@ -1,8 +1,9 @@
+const { dateWriteArgs, verifyDate } = require('./date-policy.cjs');
 const { cameraNumber, equivalentCamera } = require('../../../shared/metadata-operations.mjs');
 const cameraFields = ['iso', 'fNumber', 'exposureTime', 'focalLength'];
 const { FIELD_TAGS, validateOperations, normalizedValue, fieldKeys } = require('./policy.cjs');
 const { isDeepStrictEqual } = require('node:util');
-function writeArgs(operations, format) {
+function writeArgs(operations, format, before = {}) {
   const args = ['-overwrite_original', '-n', '-charset', 'IPTC=UTF8'];
   for (const op of validateOperations(operations)) {
     if (op.action === 'keep') continue;
@@ -39,15 +40,7 @@ function writeArgs(operations, format) {
         (!tag.startsWith('PNG:') || format === 'png')
     );
     if (op.field === 'captureDate') {
-      for (const tag of tags) args.push(`-${tag}=`);
-      if (op.action === 'set') {
-        const date = op.value.local.replace(/^(\d{4})-(\d{2})-(\d{2})T/, '$1:$2:$3 ');
-        args.push(
-          `-EXIF:DateTimeOriginal=${date}`,
-          `-XMP-exif:DateTimeOriginal=${date}${op.value.offset || ''}`
-        );
-        if (op.value.offset) args.push(`-EXIF:OffsetTimeOriginal=${op.value.offset}`);
-      }
+      args.push(...dateWriteArgs(op, before));
     } else
       for (const tag of tags) {
         args.push(`-${tag}=`);
@@ -66,6 +59,10 @@ function writeArgs(operations, format) {
 }
 function verifyTags(operations, before, after) {
   for (const op of operations) {
+    if (op.field === 'captureDate') {
+      verifyDate(op, before, after);
+      continue;
+    }
     if (op.action === 'keep' && cameraFields.includes(op.field)) {
       const values = (raw) =>
         Object.fromEntries(fieldKeys(op.field, raw).map((key) => [key, raw[key]]));

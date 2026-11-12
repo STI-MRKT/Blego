@@ -52,6 +52,12 @@ test(
     );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy;
+    });
+    await page.locator('#image-groups-advanced > summary').click();
+    await page.locator('#metadata-advanced > summary').click();
     await page.locator('#image-group-name').fill('Explicit group');
     await page.locator('[data-action="group-create"]').click();
     await page

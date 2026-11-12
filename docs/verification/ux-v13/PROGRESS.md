@@ -16,3 +16,6 @@ Task 4: in progress.
 
 Task 4: implementation complete. lint PASS, unit 47/47, integration 80/80, GUI 6/6. Single Check, batch mobile-URL normalization, individual native clipboard, folded owner notes, early cancellation and late-response exclusion verified. Real production Facebook probe returned network_error; underlying ECONNREFUSED, public availability remains BLOCKED. No sanctions verdict. Evidence stages/04.
 Task 5: in progress.
+
+Task 5: complete implementation. lint PASS, unit 47/47, integration 84/84, GUI 7/7; expanded real UI cancellation target PASS. JPEG/PNG/WebP actual date/GPS writes/readback, independent namespace scopes and per-file timezone Keep, originals/image invariants, group persistence/reselection verified. Original Photos grid restored; primary/preview/export screenshots stages/05. Existing permission/full-disk fault injection and recovery tests re-run; no physical full-disk or Mac claim.
+Task 6: in progress.

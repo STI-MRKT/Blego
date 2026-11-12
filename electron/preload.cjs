@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld('blego', {
   copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
   readImageMetadata: (id) => call('imageRead', id),
-  previewImage: (id) => call('imagePreview', id),
+  previewImage: (fileId, thumbnail = false) => call('imagePreview', { fileId, thumbnail }),
   planMetadataChanges: (request) => call('imagesPlan', request),
   clearImages: () => call('imagesClear'),
   removeImage: (id) => call('imageRemove', id),

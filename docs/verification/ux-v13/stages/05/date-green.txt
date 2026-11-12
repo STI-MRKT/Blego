@@ -1,0 +1,11 @@
+✔ actual date edits keep each source timezone across JPEG/PNG/WebP and preserve original GPS/author/pixels (8529.41194ms)
+✔ selected XMP date set/remove leaves EXIF date/offset unchanged; explicit offset removal is verified (3016.235133ms)
+✔ empty explicit timezone or empty scope is rejected; keep never accepts a hidden replacement offset (1.270996ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11661.992686

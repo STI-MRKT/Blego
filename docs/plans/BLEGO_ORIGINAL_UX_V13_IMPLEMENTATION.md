@@ -67,11 +67,11 @@ Interfaces unchanged `normalizeTargets`, `checkFacebook`, `cancelFacebook` with 
 
 Files: existing photos UI/main, metadata operation/contracts/policy/write-policy/group workspace; reuse image preview service. Tests metadata namespaces/timezone/selection + GUI date/GPS workflow.
 Interfaces extend existing captureDate operation with explicit date representation scope and timezone operation, backward-compatible presets. No new writer.
-- [ ] RED tests keep-existing offset per file, explicit remove/set offset, EXIF/XMP selection, GPS zero, untouched metadata, stale plan and selection changes.
-- [ ] Restore real thumbnail grid using authorized preview tokens; primary date/GPS fields, Preview and Save copies; advanced groups/presets/reference/tags disclosures.
-- [ ] Preserve dirty-only drafts and multi-selection untouched overrides; retain original/pixel/alpha/ICC/orientation and exclusive output safety.
-- [ ] Actual JPEG/PNG/WebP single/group writes/readback + cancellation/permission/full-disk/restart; full regression and GUI, screenshots.
-- [ ] Commit and ledger.
+- [x] RED tests keep-existing offset per file, explicit remove/set offset, EXIF/XMP selection, GPS zero, untouched metadata, stale plan and selection changes.
+- [x] Restore real thumbnail grid using authorized preview tokens; primary date/GPS fields, Preview and Save copies; advanced groups/presets/reference/tags disclosures.
+- [x] Preserve dirty-only drafts and multi-selection untouched overrides; retain original/pixel/alpha/ICC/orientation and exclusive output safety.
+- [x] Actual JPEG/PNG/WebP single/group writes/readback + cancellation/permission/full-disk/restart; full regression and GUI, screenshots.
+- [x] Commit and ledger.
 
 ## Task 6: Generator and Archive
 

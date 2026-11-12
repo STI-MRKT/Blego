@@ -1,6 +1,35 @@
+import { I } from '../icons.js';
 import { state } from '../state.js';
 import { esc } from '../utils/dom.js';
 import { METADATA_FIELDS, IMAGE_LIMITS } from '../../../shared/metadata-contracts.mjs';
+export function imageErrorMessage(code) {
+  const messages = {
+    CANCELLED: 'Cancelled.',
+    EACCES: 'Permission denied. Choose a writable folder.',
+    EPERM: 'Permission denied. Choose a writable folder.',
+    ENOSPC: 'The destination is full. Free space or choose another folder.',
+    METADATA_INVALID_DATE: 'Enter a valid date and an explicit offset when Set offset is selected.',
+    METADATA_INVALID_DATE_SCOPE: 'Select EXIF, XMP or both date fields.',
+    METADATA_CONFLICTING_DATE_OFFSETS:
+      'Existing time zones conflict. Choose an explicit offset or remove it.',
+    METADATA_INVALID_GPS: 'Enter latitude from −90 to 90 and longitude from −180 to 180.',
+    METADATA_INVALID_VALUE: 'Enter a value, or choose Keep or Remove.',
+    METADATA_INVALID_CAMERA_VALUE: 'Enter a valid positive camera value.',
+    PLAN_STALE: 'The selection or files changed. Preview the changes again.',
+    SOURCE_CHANGED: 'The original changed. Add it again before exporting.',
+    MAKER_NOTES_CONFIRMATION_REQUIRED:
+      'Review the camera warning in More metadata before continuing.',
+    METADATA_ENGINE_UNAVAILABLE: 'The metadata engine is unavailable.',
+    INVALID_DESTINATION: 'Choose a writable destination folder.',
+    INVALID_RETRY: 'Select failed or cancelled files to retry.'
+  };
+  return (
+    messages[code] ||
+    (String(code || '').includes('VERIFY')
+      ? 'The copy could not be verified. Nothing was saved.'
+      : 'Could not complete this operation. Check the files and destination.')
+  );
+}
 export const PHOTO_LIMIT = IMAGE_LIMITS.files;
 export function metadataText(value) {
   if (value == null) return '';
@@ -24,7 +53,7 @@ function editor(field, values) {
         : field === 'personalIdentifiers'
           ? 'Removal only'
           : `<textarea class="input" name="value-${field}" rows="2" ${field === 'keywords' ? 'placeholder="One keyword per line"' : ''}></textarea>`;
-  return `<tr><td>${esc(field)}</td><td>${esc(unique.length > 1 ? 'Different values' : metadataText(value) || '(empty)')}</td><td><select class="input" name="action-${field}">${state.imageEditTarget === 'group' ? '' : `${state.photos.filter((p) => p.selected).length > 1 ? '<option value="unchanged">Leave overrides unchanged</option>' : ''}<option value="inherit">Inherit group</option>`}<option value="keep">Keep</option>${field === 'personalIdentifiers' ? '' : '<option value="set">Set</option>'}<option value="remove">Remove</option></select></td><td>${input}</td></tr>`;
+  return `<tr><td>${esc(field)}</td><td>${esc(unique.length > 1 ? 'Different values' : metadataText(value) || '(empty)')}${unique.length === 1 && value != null ? `<button type="button" class="copy tiny always" data-action="copy" data-copy="${esc(metadataText(value))}" aria-label="Copy current ${field}">${I.copy}</button>` : ''}</td><td><select class="input" name="action-${field}">${state.imageEditTarget === 'group' ? '' : `${state.photos.filter((p) => p.selected).length > 1 ? '<option value="unchanged">Leave overrides unchanged</option>' : ''}<option value="inherit">Inherit group</option>`}<option value="keep">Keep</option>${field === 'personalIdentifiers' ? '' : '<option value="set">Set</option>'}<option value="remove">Remove</option></select></td><td>${input}${field !== 'personalIdentifiers' ? inputCopy('value-' + field, field) : ''}</td></tr>`;
 }
 export function readMetadataForm(form) {
   return readMetadataData(new FormData(form), state.metadataOrigins);
@@ -33,12 +62,17 @@ export function readMetadataData(data, origins = {}) {
   return METADATA_FIELDS.map((field) => {
     const action = data.get(`action-${field}`) || 'keep';
     const op = { field, action };
+    if (field === 'captureDate' && ['set', 'remove'].includes(action))
+      op.scope = ['exif', 'xmp'].filter((k) => data.has('date-scope-' + k));
     if (action !== 'set') return op;
     if (field === 'gps')
       op.value = {
         latitude: Number(data.get('gps-latitude') || NaN),
         longitude: Number(data.get('gps-longitude') || NaN),
-        altitude: data.get('gps-altitude') === '' ? null : Number(data.get('gps-altitude'))
+        altitude:
+          data.get('gps-altitude') == null || data.get('gps-altitude') === ''
+            ? null
+            : Number(data.get('gps-altitude'))
       };
     else if (field === 'captureDate')
       op.value = {
@@ -46,7 +80,8 @@ export function readMetadataData(data, origins = {}) {
           String(data.get('date-local')).length === 16
             ? `${data.get('date-local')}:00`
             : data.get('date-local'),
-        offset: data.get('date-offset') || null
+        offsetMode: data.get('date-offset-mode') || 'keep',
+        offset: data.get('date-offset-mode') === 'set' ? data.get('date-offset') || null : null
       };
     else if (field === 'keywords')
       op.value = String(data.get(`value-${field}`) || '')
@@ -62,43 +97,89 @@ export function readMetadataData(data, origins = {}) {
     return op;
   }).filter((op) => op.action !== 'unchanged');
 }
+function openDetails(id) {
+  return state.imageDisclosures?.[id] ? 'open' : '';
+}
+function actionOptions() {
+  return `${state.imageEditTarget === 'group' ? '' : `${state.photos.filter((p) => p.selected).length > 1 ? '<option value="unchanged">Keep individual choices</option>' : ''}<option value="inherit">Use group / keep</option>`}<option value="keep">Keep</option><option value="set">Set</option><option value="remove">Remove</option>`;
+}
+function copyValue(label, value) {
+  return value == null
+    ? ''
+    : `<span style="display:inline-flex;align-items:center">${esc(value)}<button type="button" class="copy tiny always" data-action="copy" data-copy="${esc(value)}" aria-label="Copy ${label}">${I.copy}</button></span>`;
+}
+function inputCopy(name, label) {
+  return `<button type="button" class="copy tiny always" data-action="metadata-copy-input" data-name="${name}" aria-label="Copy new ${label}">${I.copy}</button>`;
+}
+function quickEditor(field, selected) {
+  const values = selected.map((p) => p.view.tags.find((t) => t.field === field)?.value),
+    different = new Set(values.map((v) => JSON.stringify(v))).size > 1,
+    v = different ? null : values[0];
+  const current = different
+    ? 'Different values'
+    : field === 'gps' && v
+      ? `${copyValue('latitude', v.latitude)}, ${copyValue('longitude', v.longitude)}${v.altitude != null ? ` · ${copyValue('altitude', v.altitude)}` : ''}`
+      : field === 'captureDate' && v
+        ? `${copyValue('date', v.local)} ${copyValue('time zone', v.offset)}`
+        : 'No value';
+  return `<section class="card pad"><h3>${field === 'gps' ? 'GEO / GPS' : 'Date taken'}</h3><p class="sub">Current: ${current}</p><label class="fl">${field === 'gps' ? 'Location' : 'EXIF / XMP date'}<select class="input" name="action-${field}">${actionOptions()}</select></label>
+ <div data-field-inputs="${field}" hidden>${field === 'gps' ? `<label class="fl">Latitude<div class="cell-box"><input class="input" name="gps-latitude" type="number" step="any" min="-90" max="90" placeholder="−90…90">${inputCopy('gps-latitude', 'latitude')}</div></label><label class="fl">Longitude<div class="cell-box"><input class="input" name="gps-longitude" type="number" step="any" min="-180" max="180" placeholder="−180…180">${inputCopy('gps-longitude', 'longitude')}</div></label><label class="fl">Altitude (optional)<div class="cell-box"><input class="input" name="gps-altitude" type="number" step="any" placeholder="Metres">${inputCopy('gps-altitude', 'altitude')}</div></label>` : `<label class="fl">Date and time<div class="cell-box"><input class="input" name="date-local" type="datetime-local" step="1">${inputCopy('date-local', 'date')}</div></label>`}</div>
+ ${field === 'captureDate' ? `<details id="date-options" ${openDetails('date-options')}><summary>Date fields and time zone</summary><label class="fl"><input type="checkbox" name="date-scope-exif" checked> EXIF date taken</label><label class="fl"><input type="checkbox" name="date-scope-xmp" checked> XMP date taken</label><label class="fl">Time zone<select class="input" name="date-offset-mode"><option value="keep">Keep existing for each image</option><option value="set">Set offset</option><option value="remove">Remove offset</option></select></label><div data-offset-input hidden><label class="fl">UTC offset<div class="cell-box"><input class="input" name="date-offset" placeholder="+03:00 or −05:00">${inputCopy('date-offset', 'time zone')}</div></label></div><p class="sub">Other dates stay unchanged.</p></details>` : ''}</section>`;
+}
 export function photosHTML() {
-  const selected = state.photos.filter((photo) => photo.selected && photo.view);
-  const plan = state.metadataPlan;
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">ASSETS</div><h1>Images / Metadata</h1><p class="sub">Read metadata, preview changes and export copies. Original files and image content remain unchanged. Metadata entries do not prove authorship or camera provenance.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add images</button><button class="btn btn-quiet" data-action="photos-clear" ${state.imagesBusy ? 'disabled' : ''}>Clear list</button></div></div>
- <p class="sub">${state.photos.length}/100 files · up to 50 MiB each, 512 MiB total and 40 megapixels. Static JPEG, PNG and WebP. Processing stays local. Copy image transfers pixels only; use Export verified copies for a file with edited metadata.</p>
- ${groupControls()}
- ${state.photos.length ? `<div class="table-wrap"><table class="tbl"><thead><tr><th>Select</th><th>File</th><th>State</th><th>Preview</th></tr></thead><tbody>${state.photos.map((photo) => `<tr><td><input type="checkbox" data-image-select="${photo.fileId}" ${photo.selected ? 'checked' : ''} ${photo.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}></td><td>${esc(photo.name)} · ${(photo.size / 1048576).toFixed(2)} MiB</td><td>${esc(photo.status)} ${esc(photo.error || '')}${photo.view ? ` · ${photo.view.imageInfo.width}×${photo.view.imageInfo.height}<br>${esc(photo.view.warnings.join(', '))}` : ''}</td><td><button class="btn" data-action="image-preview" data-id="${photo.fileId}" ${photo.view ? '' : 'disabled'}>View image</button><button class="btn" data-action="image-copy" data-id="${photo.fileId}" ${photo.view && !state.imagesBusy ? '' : 'disabled'}>Copy image pixels</button><button class="btn btn-quiet" data-action="photo-remove" data-id="${photo.fileId}" ${state.imagesBusy ? 'disabled' : ''}>Remove</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="card empty"><h3>No images selected</h3><p>Use Add images to choose files for local editing.</p></div>'}
- ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Selected original image"><figcaption>Original visual preview; export will create a separate file.</figcaption></figure>` : ''}
+  const selected = state.photos.filter((p) => p.selected && p.view),
+    plan = state.metadataPlan;
+  return `<div class="page"><div class="page-head"><div><div class="eyebrow">ASSETS</div><h1>Photos</h1><p class="sub">Edit date or location, preview changes and save copies.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add photos</button><button class="btn btn-quiet" data-action="photos-clear" ${!state.photos.length || state.imagesBusy ? 'disabled' : ''}>Clear all</button></div></div>
+ <div class="photo-stats"><div><b>${state.photos.length}</b><span>photos</span></div><div><b>${selected.length}</b><span>selected</span></div><div class="photo-meter"><i style="width:${Math.min(100, state.photos.length)}%"></i></div></div>
+ ${state.photos.length ? `<div class="photo-grid">${state.photos.map((p) => `<figure class="ph"><button class="btn-quiet" data-action="image-preview" data-id="${p.fileId}" style="display:block;width:100%;padding:0;border:0" aria-label="View ${esc(p.name)}" ${p.view ? '' : 'disabled'}>${p.thumbnail ? `<img src="${p.thumbnail}" alt="${esc(p.name)}" loading="lazy">` : `<div class="photo-placeholder">${p.status === 'reading' ? 'Reading…' : 'Preview unavailable'}</div>`}</button><button class="ph-del" data-action="photo-remove" data-id="${p.fileId}" aria-label="Remove ${esc(p.name)}" ${state.imagesBusy ? 'disabled' : ''}>${I.x}</button><figcaption><label><input type="checkbox" data-image-select="${p.fileId}" ${p.selected ? 'checked' : ''} ${p.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}><b>${esc(p.name)}</b></label></figcaption><div class="news-actions"><button class="news-copy" data-action="copy" data-copy="${esc(p.name)}" aria-label="Copy filename">${I.copy}Name</button><button class="news-copy" data-action="image-copy" data-id="${p.fileId}" ${p.view && !state.imagesBusy ? '' : 'disabled'}>${I.copy}Image</button></div>${p.status === 'failed' || p.status === 'cancelled' ? `<p class="sub">${p.status === 'cancelled' ? 'Cancelled' : 'Could not read this image.'}</p>` : ''}</figure>`).join('')}</div>` : `<button class="drop photo-drop" style="width:100%" data-action="images-browse"><div class="di">${I.image}</div><h3>Add photos</h3><p>Choose JPEG, PNG or WebP images</p></button>`}
+ ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Original image"><figcaption>Original image</figcaption><button class="btn btn-quiet" data-action="image-preview-close">Close preview</button></figure>` : ''}
  ${
    selected.length
-     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>${selected.length} selected files</h3><p class="sub">Group rules start at Keep. For multiple files, untouched fields retain each file’s existing overrides. Choose Inherit explicitly to clear an override. Empty Set values are rejected; choose Remove explicitly. Orientation and color profiles are protected.</p><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.map(
-         (field) =>
-           editor(
-             field,
-             selected.map((photo) => photo.view.tags.find((tag) => tag.field === field)?.value)
-           )
-       ).join(
-         ''
-       )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label><button type="submit" class="btn btn-primary">Choose folders and preview changes</button><label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((preset) => `<option value="${esc(preset.id)}">${esc(preset.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes"><button type="button" class="btn" data-action="metadata-preset-save">Save current changes as preset</button><button type="button" class="btn" data-action="metadata-preset-import">Import preset</button><button type="button" class="btn" data-action="preset-rename">Rename</button><button type="button" class="btn" data-action="preset-duplicate">Duplicate</button><button type="button" class="btn" data-action="preset-delete">Delete preset</button><button type="button" class="btn" data-action="preset-export">Export preset JSON</button><p class="sub">Saved presets and group rules may contain personal metadata. They stay in the local database; exported JSON includes those values. File overrides are session-only. Original paths and access permissions are never saved.</p></fieldset></form>`
+     ? `<form id="metadata-form"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><div class="net-grid2">${quickEditor('captureDate', selected)}${quickEditor('gps', selected)}</div><button type="submit" class="btn btn-primary">Preview changes</button>
+ <details id="metadata-advanced" ${openDetails('metadata-advanced')}><summary>More metadata and presets</summary><div class="card pad"><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.filter(
+   (f) => !['captureDate', 'gps'].includes(f)
+ )
+   .map((field) =>
+     editor(
+       field,
+       selected.map((p) => p.view.tags.find((t) => t.field === field)?.value)
+     )
+   )
+   .join(
+     ''
+   )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label>
+ <label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes">${[
+   ['metadata-preset-save', 'Save current changes as preset'],
+   ['metadata-preset-import', 'Import preset'],
+   ['preset-rename', 'Rename'],
+   ['preset-duplicate', 'Duplicate'],
+   ['preset-delete', 'Delete preset'],
+   ['preset-export', 'Export preset JSON']
+ ]
+   .map(
+     ([action, label]) =>
+       `<button type="button" class="btn" data-action="${action}">${label}</button>`
+   )
+   .join('')}
+ <p class="sub">Originals are kept. Orientation and colour profiles stay unchanged. Saved groups and presets may contain personal metadata. File selection and per-file overrides are session-only.</p></div></details></fieldset></form>`
      : ''
  }
  ${
    plan
-     ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files
+     ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3>${plan.files
          .map(
            (file) =>
-             `<h4>${esc(file.groupName || '')} · ${esc(file.name)} → ${esc(file.destinationName || '')}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th><th>Value source / support</th></tr></thead><tbody>${file.beforeAfter
+             `<h4>${esc(file.name)}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th></tr></thead><tbody>${file.beforeAfter
                .filter((row) => row.operation !== 'keep')
                .map(
                  (row) =>
-                   `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td><td>${esc(metadataText(file.operations?.find((op) => op.field === row.field)?.origin || 'Existing metadata'))} · ${row.supported ? 'supported' : 'unsupported'}</td></tr>`
+                   `<tr><td>${esc(row.field === 'captureDate' ? 'Date taken' : row.field)} ${esc(row.representation || '')}</td><td>${copyValue('previous value', metadataText(row.before))}</td><td>${copyValue('new value', metadataText(row.after))}</td></tr>`
                )
                .join('')}</tbody></table></div>`
          )
          .join(
            ''
-         )}<button class="btn" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Export verified copies</button></div>`
+         )}<button class="btn btn-primary" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Save copies</button><details><summary>Details and warnings</summary><p>${esc(plan.warnings.join(', ') || 'No warnings')}</p><p>Personal-metadata removal does not anonymize pixels or unknown blocks.</p>${plan.files.map((file) => `<p>${esc(file.groupName || '')} · ${esc(file.destinationName || '')}</p>`).join('')}</details></div>`
      : ''
  }
  ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>${!state.imagesReading ? (state.imageWorkspace?.groups || []).map((g) => `<button class="btn" data-action="metadata-cancel-group" data-id="${g.id}">Cancel ${esc(g.name)}</button>`).join('') : ''}` : ''}
@@ -107,25 +188,26 @@ export function photosHTML() {
      ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress || {})
          .map(
            (file) =>
-             `<p data-progress-id="${file.fileId}">${esc(file.name)}: ${esc(file.status)} ${esc(file.error || '')} ${esc(file.outputName || '')}</p>`
+             `<p data-progress-id="${file.fileId}">${esc(file.name)}: ${esc(file.status)} ${file.error ? esc(imageErrorMessage(file.error)) : ''} ${file.outputName ? copyValue('output filename', file.outputName) : ''}</p>`
          )
          .join('')}</div>`
      : ''
  }
  ${
    state.metadataExport
-     ? `<div class="card pad"><p>Export finished. Only completed files passed read-back and pixel checks. Reports omit tag values and full paths.</p><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button>${state.metadataExport.files
+     ? `<div class="card pad"><p>${state.metadataExport.files.filter((f) => f.status === 'completed').length ? `Saved ${state.metadataExport.files.filter((f) => f.status === 'completed').length} copies.` : 'No copies saved.'}</p>${state.metadataExport.files
          .filter((f) => ['failed', 'cancelled'].includes(f.status))
          .map(
            (f) =>
-             `<label class="fl"><input type="checkbox" data-retry-file="${f.fileId}"> ${esc(f.name)} — ${esc(f.status)}</label>`
+             `<label class="fl"><input type="checkbox" data-retry-file="${f.fileId}">${esc(f.name)} — ${esc(f.status)}</label>`
          )
          .join(
            ''
-         )}<button class="btn" data-action="metadata-retry">Prepare selected failed/cancelled files again</button><details><summary>Export history (${state.imageExportHistory?.length || 0})</summary>${(state.imageExportHistory || []).map((r) => `<p>${esc(r.runId)}: ${r.files.map((f) => `${esc(f.name)} — ${esc(f.status)}`).join('; ')}</p>`).join('')}</details></div>`
+         )}<button class="btn" data-action="metadata-retry">Retry selected files</button><details><summary>Reports and export history</summary><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button>${(state.imageExportHistory || []).map((r) => `<p>${r.files.map((f) => `${esc(f.name)} — ${esc(f.status)}`).join('; ')}</p>`).join('')}</details></div>`
      : ''
  }
- </div>`;
+ <details id="image-groups-advanced" ${openDetails('image-groups-advanced')}><summary>Groups and reference image</summary>${groupControls()}</details>
+ <details><summary>File details</summary><p class="sub">Up to 100 images, 50 MiB each, 512 MiB total and 40 megapixels. Static JPEG, PNG and WebP. Metadata does not prove authorship or camera provenance.</p>${state.photos.map((p) => `<p>${esc(p.name)} · ${(p.size / 1048576).toFixed(2)} MiB · ${esc(p.status)} ${esc(p.error || '')} ${esc(p.view?.warnings?.join(', ') || '')}</p>`).join('')}</details></div>`;
 }
 
 function groupControls() {
@@ -152,12 +234,16 @@ export function draftFromOperations(operations) {
   for (const op of operations) {
     draft['action-' + op.field] = op.action;
     if (op.origin) origins[op.field] = op.origin;
+    if (op.field === 'captureDate' && op.scope) {
+      for (const k of ['exif', 'xmp']) draft['date-scope-' + k] = op.scope.includes(k);
+    }
     if (op.action !== 'set') continue;
     if (op.field === 'gps')
       for (const k of ['latitude', 'longitude', 'altitude']) draft['gps-' + k] = op.value[k] ?? '';
     else if (op.field === 'captureDate') {
       draft['date-local'] = op.value.local;
       draft['date-offset'] = op.value.offset || '';
+      draft['date-offset-mode'] = op.value.offsetMode || (op.value.offset ? 'set' : 'remove');
     } else draft['value-' + op.field] = Array.isArray(op.value) ? op.value.join('\n') : op.value;
   }
   return { draft, origins };

@@ -42,6 +42,7 @@ async function exportCopy({
     await hooks.beforeWrite?.(temporary);
     abort(signal);
     const written = await engine.writeCopy(temporary, operations, item.view.detectedFormat, {
+      before: item.raw,
       signal
     });
     abort(signal);
