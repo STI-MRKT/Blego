@@ -12,7 +12,8 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
     Object.entries(groupStore).map(([name, fn]) => [
       name,
       (...args) => {
-        if (active && !['snapshot', 'effective'].includes(name)) throw Error('IMAGES_BUSY');
+        if ((active || adding) && !['snapshot', 'effective'].includes(name))
+          throw Error('IMAGES_BUSY');
         return fn(...args);
       }
     ])
@@ -24,7 +25,8 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
   const references = new Map();
   const destinations = new Map();
   const readers = new Set();
-  let active = null;
+  let active = null,
+    adding = false;
   const files = new Map(),
     plans = new Map();
   let totalBytes = 0,
@@ -89,7 +91,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       active?.abort();
     },
     async applyMetadataPlan({ planId, destinationToken }, onProgress) {
-      if (active || running) throw Error('IMAGES_BUSY');
+      if (active || running || adding) throw Error('IMAGES_BUSY');
       const plan = plans.get(planId);
       if (!plan) throw Error('INVALID_PLAN_TOKEN');
       // Acquire before the first await: IPC/UI double-clicks cannot race the destination check.
@@ -101,22 +103,27 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       const results = new Array(plan.files.length);
       let next = 0;
       try {
-        if (plan.planVersion === 2) {
-          if (groups.snapshot().revision !== plan.workspaceRevision) throw Error('PLAN_STALE');
-          for (const planned of plan.files) {
-            const item = files.get(planned.fileId);
-            if (
-              !item ||
-              createHash('sha256')
-                .update(await readBounded(item.path))
-                .digest('hex') !== planned.sourceHash
-            )
-              throw Error('PLAN_STALE');
-            await this.verifyOrigins(planned.operations);
+        try {
+          if (plan.planVersion === 2) {
+            if (groups.snapshot().revision !== plan.workspaceRevision) throw Error('PLAN_STALE');
+            for (const planned of plan.files) {
+              const item = files.get(planned.fileId);
+              if (
+                !item ||
+                createHash('sha256')
+                  .update(await readBounded(item.path))
+                  .digest('hex') !== planned.sourceHash
+              )
+                throw Error('PLAN_STALE');
+              await this.verifyOrigins(planned.operations);
+            }
           }
+          for (const token of new Set(Object.values(selectedDestinations)))
+            await checkDestination(token);
+        } catch (error) {
+          if (plan.planVersion === 2) throw Error('PLAN_STALE');
+          throw error;
         }
-        for (const token of new Set(Object.values(selectedDestinations)))
-          await checkDestination(token);
         started = true;
         const worker = async () => {
           while (next < plan.files.length) {
@@ -199,28 +206,26 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
           let expected;
           try {
             expected = await this.referenceOperations({
-              referenceId: op.origin.id,
+              referenceId: references.has(op.origin.id)
+                ? op.origin.id
+                : [...references].find(
+                    ([, ref]) =>
+                      ref.sourceHash === op.origin.sourceHash && ref.name === op.origin.name
+                  )?.[0],
               fields: [op.field]
             });
           } catch {
             throw Error('PLAN_STALE');
           }
-          if (!expected.length || !require('node:util').isDeepStrictEqual(expected[0], op))
-            throw Error('PLAN_STALE');
-        } else if (op.origin?.kind === 'preset') {
-          const preset = presets.get(op.origin.id);
           if (
-            !preset ||
-            preset.name !== op.origin.name ||
-            !preset.operations.some(
-              (x) =>
-                x.field === op.field &&
-                x.action === op.action &&
-                require('node:util').isDeepStrictEqual(x.value, op.value)
+            !expected.length ||
+            !require('node:util').isDeepStrictEqual(
+              { ...expected[0], origin: { ...expected[0].origin, id: op.origin.id } },
+              op
             )
           )
             throw Error('PLAN_STALE');
-        }
+        } // Preset operations are immutable user-applied snapshots, independent of later library edits.
       }
     },
     async prepareGroupExport({
@@ -232,7 +237,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       fileIds,
       acknowledgeMakerNotes = false
     }) {
-      if (active || running) throw Error('IMAGES_BUSY');
+      if (active || running || adding) throw Error('IMAGES_BUSY');
       const workspace = groups.snapshot();
       if (workspaceRevision !== workspace.revision) throw Error('PLAN_STALE');
       let ids =
@@ -335,7 +340,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
         groups.snapshot().revision !== workspaceRevision
       )
         return Promise.reject(Error('PLAN_STALE'));
-      if (active || running || groupRun) return Promise.reject(Error('IMAGES_BUSY'));
+      if (active || running || adding || groupRun) return Promise.reject(Error('IMAGES_BUSY'));
       groupRun = {
         runId,
         controllers: new Map(plan.files.map((f) => [f.groupId, new AbortController()]))
@@ -374,36 +379,54 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       return [...history.values()].map((x) => structuredClone(x));
     },
     async addFiles(paths, { reference = false } = {}) {
-      if (active) throw Error('IMAGES_BUSY');
-      if (!Array.isArray(paths) || paths.length > 1000) throw Error('IMAGE_QUEUE_LIMIT');
-      const pending = [];
-      let added = 0;
-      const known = new Set([...files.values()].map((item) => item.path));
-      for (const file of paths) {
-        const canonical = await fs.promises.realpath(file);
-        if (known.has(canonical)) continue;
-        known.add(canonical);
-        const stat = await fs.promises.lstat(file);
-        if (!stat.isFile() || stat.size > IMAGE_LIMITS.fileBytes) throw Error('IMAGE_TOO_LARGE');
-        added += stat.size;
-        pending.push({
-          fileId: randomUUID(),
-          path: canonical,
-          reference,
-          name: path.basename(file),
-          size: stat.size,
-          status: 'queued'
-        });
+      if (active || adding) throw Error('IMAGES_BUSY');
+      adding = true;
+      try {
+        if (!Array.isArray(paths) || paths.length > 1000) throw Error('IMAGE_QUEUE_LIMIT');
+        const pending = [],
+          promoted = [];
+        let added = 0;
+        const known = new Set([...files.values()].map((item) => item.path));
+        for (const file of paths) {
+          const canonical = await fs.promises.realpath(file);
+          if (known.has(canonical)) {
+            const existing = [...files.values()].find((item) => item.path === canonical);
+            if (!reference && existing?.reference && !promoted.includes(existing))
+              promoted.push(existing);
+            continue;
+          }
+          known.add(canonical);
+          const stat = await fs.promises.lstat(file);
+          if (!stat.isFile() || stat.size > IMAGE_LIMITS.fileBytes) throw Error('IMAGE_TOO_LARGE');
+          added += stat.size;
+          pending.push({
+            fileId: randomUUID(),
+            path: canonical,
+            reference,
+            name: path.basename(file),
+            size: stat.size,
+            status: 'queued'
+          });
+        }
+        if (
+          pending.length + files.size > IMAGE_LIMITS.files ||
+          totalBytes + added > IMAGE_LIMITS.totalBytes
+        )
+          throw Error('IMAGE_QUEUE_LIMIT');
+        if (!reference && (pending.length || promoted.length))
+          groupStore.addFiles([...pending, ...promoted].map((x) => x.fileId));
+        for (const item of promoted) item.reference = false;
+        for (const item of pending) files.set(item.fileId, item);
+        totalBytes += added;
+        return [...pending, ...promoted].map(({ fileId, name, size, status }) => ({
+          fileId,
+          name,
+          size,
+          status
+        }));
+      } finally {
+        adding = false;
       }
-      if (
-        pending.length + files.size > IMAGE_LIMITS.files ||
-        totalBytes + added > IMAGE_LIMITS.totalBytes
-      )
-        throw Error('IMAGE_QUEUE_LIMIT');
-      for (const item of pending) files.set(item.fileId, item);
-      if (!reference && pending.length) groups.addFiles(pending.map((x) => x.fileId));
-      totalBytes += added;
-      return pending.map(({ fileId, name, size, status }) => ({ fileId, name, size, status }));
     },
     async readImageMetadata(fileToken) {
       if (active) throw Error('IMAGES_BUSY');
@@ -417,6 +440,10 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
         const item = files.get(fileToken);
         if (!item) throw Error('INVALID_FILE_TOKEN');
         const bytes = await readBounded(item.path);
+        const delta = bytes.length - item.size;
+        if (totalBytes + delta > IMAGE_LIMITS.totalBytes) throw Error('IMAGE_QUEUE_LIMIT');
+        totalBytes += delta;
+        item.size = bytes.length;
         const structure = inspectStructure(bytes);
         const valid = { jpeg: ['.jpg', '.jpeg'], png: ['.png'], webp: ['.webp'] };
         if (!valid[structure.format].includes(path.extname(item.path).toLowerCase()))
@@ -457,7 +484,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       }).finally(() => readers.delete(controller));
     },
     clear() {
-      if (running || active) throw Error('IMAGES_BUSY');
+      if (running || active || adding) throw Error('IMAGES_BUSY');
       files.clear();
       references.clear();
       groups.clearFiles();
@@ -465,7 +492,7 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       totalBytes = 0;
     },
     remove(id) {
-      if (running || active) throw Error('IMAGES_BUSY');
+      if (running || active || adding) throw Error('IMAGES_BUSY');
       const item = files.get(id);
       if (!item) throw Error('INVALID_FILE_TOKEN');
       totalBytes -= item.size;
@@ -536,7 +563,9 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
       )
         throw Error('SOURCE_CHANGED');
       return chosen.flatMap((field) => {
-        const value = reference.tags.find((x) => x.field === field).value;
+        const tag = reference.tags.find((x) => x.field === field);
+        if (tag.referenceSupported === false) throw Error('METADATA_REFERENCE_UNSUPPORTED');
+        const value = tag.value;
         return value == null
           ? []
           : [

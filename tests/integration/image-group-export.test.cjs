@@ -91,6 +91,19 @@ test('group plans freeze per-file rules, reject stale revisions, double click wr
     'failed'
   );
   assert.equal(fs.readdirSync(out).length, 2);
+  const movedDestination = await prepare();
+  fs.renameSync(out, out + '-original');
+  fs.mkdirSync(out);
+  await assert.rejects(
+    service.applyGroupExport({
+      planId: movedDestination.planId,
+      workspaceRevision: movedDestination.workspaceRevision,
+      runId: 'folder-replaced'
+    }),
+    /PLAN_STALE/
+  );
+  fs.rmdirSync(out);
+  fs.renameSync(out + '-original', out);
   const changed = await prepare();
   fs.appendFileSync(
     path.join(root, path.basename(source, path.extname(source)) + '-0.png'),

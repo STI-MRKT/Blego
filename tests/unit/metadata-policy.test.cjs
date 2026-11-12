@@ -23,3 +23,23 @@ test('metadata operations enforce keep/set/remove, fixed fields, real dates and 
     null
   );
 });
+test('Keep preserves multi-value or unknown camera metadata, which is not a writable scalar', () => {
+  const { verifyTags } = require('../../electron/features/images/write-policy.cjs');
+  const { viewTags } = require('../../electron/features/images/policy.cjs');
+  const raw = { 'ExifIFD:ISO': [100, 200], 'ExifIFD:FNumber': 'undef' };
+  assert.doesNotThrow(() =>
+    verifyTags(
+      [
+        { field: 'iso', action: 'keep' },
+        { field: 'fNumber', action: 'keep' }
+      ],
+      raw,
+      structuredClone(raw)
+    )
+  );
+  assert.throws(() =>
+    verifyTags([{ field: 'iso', action: 'keep' }], raw, { 'ExifIFD:ISO': [100, 300] })
+  );
+  assert.deepEqual(viewTags(raw).find((t) => t.field === 'iso').value, [100, 200]);
+  assert.equal(viewTags(raw).find((t) => t.field === 'iso').referenceSupported, false);
+});

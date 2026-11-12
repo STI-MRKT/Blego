@@ -99,17 +99,81 @@ const { imageFixture } = require('../tests/fixtures/images.cjs');
     assert.ok(ref.referenceId);
     await assert.rejects(service.addFiles(paths), /IMAGE_QUEUE_LIMIT/);
     checks.push('reference consumes shared byte limit PASS');
+    // A separate exact-total batch leaves per-file headroom for newly written metadata.
+    for (const file of paths.slice(0, 10)) padded(file, 49 * 1024 * 1024);
+    padded(tail, 22 * 1024 * 1024);
+    service = createImageService();
+    const heavy = await service.addFiles(paths);
+    assert.equal(
+      heavy.reduce((sum, f) => sum + f.size, 0),
+      512 * 1024 * 1024
+    );
+    await Promise.all(heavy.map((f) => service.readImageMetadata(f.fileId)));
+    service.groups.setGroupOperations({
+      groupId: 'ungrouped',
+      operations: [
+        { field: 'title', action: 'set', value: 'Explicit 512MiB QA', origin: { kind: 'manual' } }
+      ]
+    });
+    const destinationByGroup = { ungrouped: await service.addDestination(root) };
+    const prepare = (extra) =>
+      service.prepareGroupExport({
+        scope: 'all',
+        workspaceRevision: service.groups.snapshot().revision,
+        destinationByGroup,
+        ...extra
+      });
+    let groupPlan = await prepare();
+    let cancelAt;
+    const cancelled = await service.applyGroupExport(
+      {
+        planId: groupPlan.planId,
+        workspaceRevision: groupPlan.workspaceRevision,
+        runId: 'heavy-cancel'
+      },
+      (event) => {
+        if (event.status === 'completed' && !cancelAt) {
+          cancelAt = performance.now();
+          service.cancelGroupExport({ runId: 'heavy-cancel' });
+        }
+      }
+    );
+    const cancelSettledMs = Math.round(performance.now() - cancelAt);
+    assert.ok(cancelled.files.some((f) => f.status === 'completed'));
+    const retryIds = cancelled.files.filter((f) => f.status === 'cancelled').map((f) => f.fileId);
+    assert.ok(retryIds.length);
+    assert.equal(
+      cancelled.files.filter((f) => f.status === 'failed').length,
+      0,
+      JSON.stringify(cancelled)
+    );
+    groupPlan = await prepare({ retryRunId: 'heavy-cancel', fileIds: retryIds });
+    const retried = await service.applyGroupExport({
+      planId: groupPlan.planId,
+      workspaceRevision: groupPlan.workspaceRevision,
+      runId: 'heavy-retry'
+    });
+    assert.ok(
+      retried.files.every((f) => f.status === 'completed'),
+      JSON.stringify(retried)
+    );
+    checks.push(
+      '512MiB actual whole-batch read; export/cancel/selective retry verified every file PASS'
+    );
     console.log(
       JSON.stringify(
         {
           os: process.platform,
           arch: process.arch,
           checks,
+          heavyFiles: heavy.length,
+          heavyCancelled: retryIds.length,
+          cancelSettledMs,
           elapsedSeconds: (Date.now() - start) / 1000,
           peakParentAndDirectChildRssMiB: Math.ceil(peak / 1048576),
           maxNodeEventLoopGapMs: Math.round(maxGap),
           limitations:
-            '512MiB check covers registration, not simultaneous maximum-size processing; 50MiB uses valid tiny PNG plus ancillary padding; GUI responsiveness measured separately.'
+            '512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination.'
         },
         null,
         2

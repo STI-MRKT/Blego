@@ -33,9 +33,23 @@ test(
       return page;
     }
     let page = await launch();
-    await app.evaluate(({ dialog }, file) => {
-      dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] });
-    }, source);
+    const second = path.join(root, 'second.png');
+    fs.copyFileSync(source, second);
+    const output = path.join(root, 'copies');
+    fs.mkdirSync(output);
+    await app.evaluate(
+      ({ dialog }, { source, second, output }) => {
+        dialog.showOpenDialog = async (_window, options) => ({
+          canceled: false,
+          filePaths: options.properties.includes('openDirectory')
+            ? [output]
+            : options.properties.includes('multiSelections')
+              ? [source, second]
+              : [source]
+        });
+      },
+      { source, second, output }
+    );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
     await page.locator('#image-group-name').fill('Explicit group');
@@ -48,6 +62,24 @@ test(
     await page.locator('#image-edit-target').selectOption('group');
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('My title');
+    await app.evaluate(({ dialog }) => {
+      const previous = dialog.showOpenDialog;
+      dialog.showOpenDialog = async () => {
+        dialog.showOpenDialog = previous;
+        return { canceled: true, filePaths: [] };
+      };
+    });
+    await page.locator('[data-action="images-choose"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy;
+    });
+    assert.equal(
+      await page.locator('[name="value-title"]').inputValue(),
+      'My title',
+      'cancel Add preserves unsaved draft'
+    );
+
     await page.locator('#image-edit-target').selectOption('selection');
     await page.locator('#image-edit-target').selectOption('group');
     assert.equal(await page.locator('[name="value-title"]').inputValue(), 'My title');
@@ -69,6 +101,106 @@ test(
     await page
       .getByText('Group rules saved locally. File overrides remain session-only.', { exact: true })
       .waitFor();
+    await page.evaluate(async () => {
+      const ids = Object.keys((await window.blego.imageWorkspace()).membership);
+      for (let i = 0; i < ids.length; i++)
+        await window.blego.changeImageWorkspace({
+          action: 'setFileOverrides',
+          fileId: ids[i],
+          overrides: [
+            { field: 'title', action: 'set', value: 'Individual ' + i, origin: { kind: 'manual' } }
+          ]
+        });
+    });
+    await page.locator('#image-edit-target').selectOption('selection');
+    await page.locator('#metadata-form [type="submit"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !!state.metadataPlan;
+    });
+    const titles = await page.evaluate(async () => {
+      const { state } = await import('/js/state.js');
+      return state.metadataPlan.files.map(
+        (f) => f.operations.find((op) => op.field === 'title').value
+      );
+    });
+    assert.deepEqual(
+      titles,
+      ['Individual 0', 'Individual 1'],
+      'preview without edits preserves distinct overrides'
+    );
+
+    await page.locator('[data-metadata-plan]').waitFor();
+    await page.locator('[data-action="group-select"]').click();
+    assert.equal(
+      await page.locator('[data-metadata-plan]').count(),
+      0,
+      'group selection invalidates executable preview'
+    );
+    await page.locator('[name="action-title"]').selectOption('set');
+    await page.locator('[name="value-title"]').fill('Shared');
+    await page.locator('[data-action="group-operations"]').click();
+    await waitForAsync(page, async () =>
+      Object.values((await window.blego.imageWorkspace()).overrides).every(
+        (ops) => ops.find((op) => op.field === 'title').value === 'Shared'
+      )
+    );
+    await page.locator('[data-image-select]').nth(1).uncheck();
+    await page.locator('[name="value-title"]').fill('A revised');
+    await page.locator('[data-action="group-operations"]').click();
+    await waitForAsync(page, async () =>
+      Object.values((await window.blego.imageWorkspace()).overrides).some(
+        (ops) => ops.find((op) => op.field === 'title').value === 'A revised'
+      )
+    );
+    await page.locator('#metadata-preset-name').fill('Does not create a metadata draft');
+    await page.locator('[data-image-select]').nth(1).check();
+    await page.locator('#metadata-form [type="submit"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !!state.metadataPlan;
+    });
+    assert.deepEqual(
+      await page.evaluate(async () => {
+        const { state } = await import('/js/state.js');
+        return state.metadataPlan.files.map(
+          (f) => f.operations.find((op) => op.field === 'title').value
+        );
+      }),
+      ['A revised', 'Shared'],
+      'revisited applied multi draft cannot overwrite newer single edit'
+    );
+    await page.locator('[name="action-title"]').selectOption('set');
+    await page.locator('[name="value-title"]').fill('Latest');
+    await page.locator('[data-action="group-operations"]').click();
+    await waitForAsync(page, async () =>
+      Object.values((await window.blego.imageWorkspace()).overrides).every(
+        (ops) => ops.find((op) => op.field === 'title').value === 'Latest'
+      )
+    );
+    await page.locator('[data-image-select]').nth(1).uncheck();
+    assert.equal(
+      await page.locator('[name="value-title"]').inputValue(),
+      'Latest',
+      'old single cache cannot undo new multi edit'
+    );
+    await page.locator('[data-image-select]').nth(1).check();
+    await page.locator('[data-action="photo-remove"]').first().click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return state.photos.length === 1;
+    });
+    assert.equal(
+      await page.locator('[name="value-title"]').inputValue(),
+      'Latest',
+      'remove restores remaining file draft'
+    );
+    const groupCopy = await page.evaluate(async () => {
+      const { resolveCopySource } = await import('/js/utils/copy-actions.js');
+      return resolveCopySource('image-group');
+    });
+    assert.equal(groupCopy.rows.length, 1, 'group copy uses complete group model after removal');
+    assert.equal(groupCopy.rows[0].values.groupName, 'Explicit group');
     await app.close();
     app = null;
     page = await launch();
@@ -77,5 +209,13 @@ test(
       1
     );
     assert.equal(await page.locator('[data-image-select]').count(), 0);
+    const saved = await page.evaluate(() => window.blego.imageWorkspace());
+    assert.equal(
+      saved.groups
+        .find((g) => g.name === 'Explicit group')
+        .operations.find((op) => op.field === 'title').value,
+      'Исходный заголовок',
+      'Save includes current displayed reference draft'
+    );
   }
 );

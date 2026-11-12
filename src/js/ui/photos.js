@@ -24,10 +24,12 @@ function editor(field, values) {
         : field === 'personalIdentifiers'
           ? 'Removal only'
           : `<textarea class="input" name="value-${field}" rows="2" ${field === 'keywords' ? 'placeholder="One keyword per line"' : ''}></textarea>`;
-  return `<tr><td>${esc(field)}</td><td>${esc(unique.length > 1 ? 'Different values' : metadataText(value) || '(empty)')}</td><td><select class="input" name="action-${field}">${state.imageEditTarget === 'group' ? '' : '<option value="inherit">Inherit group</option>'}<option value="keep">Keep</option>${field === 'personalIdentifiers' ? '' : '<option value="set">Set</option>'}<option value="remove">Remove</option></select></td><td>${input}</td></tr>`;
+  return `<tr><td>${esc(field)}</td><td>${esc(unique.length > 1 ? 'Different values' : metadataText(value) || '(empty)')}</td><td><select class="input" name="action-${field}">${state.imageEditTarget === 'group' ? '' : `${state.photos.filter((p) => p.selected).length > 1 ? '<option value="unchanged">Leave overrides unchanged</option>' : ''}<option value="inherit">Inherit group</option>`}<option value="keep">Keep</option>${field === 'personalIdentifiers' ? '' : '<option value="set">Set</option>'}<option value="remove">Remove</option></select></td><td>${input}</td></tr>`;
 }
 export function readMetadataForm(form) {
-  const data = new FormData(form);
+  return readMetadataData(new FormData(form), state.metadataOrigins);
+}
+export function readMetadataData(data, origins = {}) {
   return METADATA_FIELDS.map((field) => {
     const action = data.get(`action-${field}`) || 'keep';
     const op = { field, action };
@@ -56,9 +58,9 @@ export function readMetadataForm(form) {
       const value = String(data.get(`value-${field}`) || '');
       op.value = value.includes('/') ? value : Number(value || NaN);
     } else op.value = data.get(`value-${field}`) || '';
-    op.origin = state.metadataOrigins?.[field] || { kind: 'manual' };
+    op.origin = origins?.[field] || { kind: 'manual' };
     return op;
-  });
+  }).filter((op) => op.action !== 'unchanged');
 }
 export function photosHTML() {
   const selected = state.photos.filter((photo) => photo.selected && photo.view);
@@ -66,11 +68,11 @@ export function photosHTML() {
   return `<div class="page"><div class="page-head"><div><div class="eyebrow">ASSETS</div><h1>Images / Metadata</h1><p class="sub">Read metadata, preview changes and export copies. Original files and image content remain unchanged. Metadata entries do not prove authorship or camera provenance.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add images</button><button class="btn btn-quiet" data-action="photos-clear" ${state.imagesBusy ? 'disabled' : ''}>Clear list</button></div></div>
  <p class="sub">${state.photos.length}/100 files · up to 50 MiB each, 512 MiB total and 40 megapixels. Static JPEG, PNG and WebP. Processing stays local. Copy image transfers pixels only; use Export verified copies for a file with edited metadata.</p>
  ${groupControls()}
- ${state.photos.length ? `<div class="table-wrap"><table class="tbl"><thead><tr><th>Select</th><th>File</th><th>State</th><th>Preview</th></tr></thead><tbody>${state.photos.map((photo) => `<tr><td><input type="checkbox" data-image-select="${photo.fileId}" ${photo.selected ? 'checked' : ''} ${photo.view?.capabilities.writable ? '' : 'disabled'}></td><td>${esc(photo.name)} · ${(photo.size / 1048576).toFixed(2)} MiB</td><td>${esc(photo.status)} ${esc(photo.error || '')}${photo.view ? ` · ${photo.view.imageInfo.width}×${photo.view.imageInfo.height}<br>${esc(photo.view.warnings.join(', '))}` : ''}</td><td><button class="btn" data-action="image-preview" data-id="${photo.fileId}" ${photo.view ? '' : 'disabled'}>View image</button><button class="btn" data-action="image-copy" data-id="${photo.fileId}" ${photo.view && !state.imagesBusy ? '' : 'disabled'}>Copy image pixels</button><button class="btn btn-quiet" data-action="photo-remove" data-id="${photo.fileId}" ${state.imagesBusy ? 'disabled' : ''}>Remove</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="card empty"><h3>No images selected</h3><p>Use Add images to choose files for local editing.</p></div>'}
+ ${state.photos.length ? `<div class="table-wrap"><table class="tbl"><thead><tr><th>Select</th><th>File</th><th>State</th><th>Preview</th></tr></thead><tbody>${state.photos.map((photo) => `<tr><td><input type="checkbox" data-image-select="${photo.fileId}" ${photo.selected ? 'checked' : ''} ${photo.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}></td><td>${esc(photo.name)} · ${(photo.size / 1048576).toFixed(2)} MiB</td><td>${esc(photo.status)} ${esc(photo.error || '')}${photo.view ? ` · ${photo.view.imageInfo.width}×${photo.view.imageInfo.height}<br>${esc(photo.view.warnings.join(', '))}` : ''}</td><td><button class="btn" data-action="image-preview" data-id="${photo.fileId}" ${photo.view ? '' : 'disabled'}>View image</button><button class="btn" data-action="image-copy" data-id="${photo.fileId}" ${photo.view && !state.imagesBusy ? '' : 'disabled'}>Copy image pixels</button><button class="btn btn-quiet" data-action="photo-remove" data-id="${photo.fileId}" ${state.imagesBusy ? 'disabled' : ''}>Remove</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="card empty"><h3>No images selected</h3><p>Use Add images to choose files for local editing.</p></div>'}
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Selected original image"><figcaption>Original visual preview; export will create a separate file.</figcaption></figure>` : ''}
  ${
    selected.length
-     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>${selected.length} selected files</h3><p class="sub">New fields inherit the group rule; group rules start at Keep. Empty Set values are rejected; choose Remove explicitly. Orientation and color profiles are protected.</p><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.map(
+     ? `<form id="metadata-form" class="card pad"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><h3>${selected.length} selected files</h3><p class="sub">Group rules start at Keep. For multiple files, untouched fields retain each file’s existing overrides. Choose Inherit explicitly to clear an override. Empty Set values are rejected; choose Remove explicitly. Orientation and color profiles are protected.</p><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.map(
          (field) =>
            editor(
              field,
@@ -86,11 +88,11 @@ export function photosHTML() {
      ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3><p class="sub">Review each change. Personal-metadata removal does not anonymize pixels or unknown blocks. ${esc(plan.warnings.join(', '))}</p>${plan.files
          .map(
            (file) =>
-             `<h4>${esc(file.groupName || '')} · ${esc(file.name)} → ${esc(file.destinationName || '')}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th></tr></thead><tbody>${file.beforeAfter
+             `<h4>${esc(file.groupName || '')} · ${esc(file.name)} → ${esc(file.destinationName || '')}</h4><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Before</th><th>After</th><th>Operation</th><th>Value source / support</th></tr></thead><tbody>${file.beforeAfter
                .filter((row) => row.operation !== 'keep')
                .map(
                  (row) =>
-                   `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td></tr>`
+                   `<tr><td>${esc(row.field)}</td><td>${esc(metadataText(row.before))}</td><td>${esc(metadataText(row.after))}</td><td>${esc(row.operation)}</td><td>${esc(metadataText(file.operations?.find((op) => op.field === row.field)?.origin || 'Existing metadata'))} · ${row.supported ? 'supported' : 'unsupported'}</td></tr>`
                )
                .join('')}</tbody></table></div>`
          )
@@ -136,7 +138,7 @@ function groupControls() {
           .filter((t) => t.value != null)
           .map(
             (t) =>
-              `<label class="fl"><input type="checkbox" data-reference-field="${t.field}"> ${esc(t.field)}: ${esc(metadataText(t.value))}</label>`
+              `<label class="fl"><input type="checkbox" data-reference-field="${t.field}" ${t.referenceSupported === false ? 'disabled' : ''}> ${esc(t.field)}: ${esc(metadataText(t.value))}${t.referenceSupported === false ? ' (not supported as a reference value)' : ''}</label>`
           )
           .join(
             ''

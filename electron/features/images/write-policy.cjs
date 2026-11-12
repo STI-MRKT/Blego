@@ -66,6 +66,12 @@ function writeArgs(operations, format) {
 }
 function verifyTags(operations, before, after) {
   for (const op of operations) {
+    if (op.action === 'keep' && cameraFields.includes(op.field)) {
+      const values = (raw) =>
+        Object.fromEntries(fieldKeys(op.field, raw).map((key) => [key, raw[key]]));
+      if (!isDeepStrictEqual(values(before), values(after))) throw Error('METADATA_VERIFY_CAMERA');
+      continue;
+    }
     const expected =
       op.action === 'keep'
         ? normalizedValue(op.field, before)

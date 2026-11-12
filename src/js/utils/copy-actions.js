@@ -24,19 +24,25 @@ export async function resolveCopySource(id) {
   if (id === 'checker') return copySource(id, state.checker.rows);
   if (id === 'network') return copySource(id, state.network.proxy);
   if (id === 'news') return copySource(id, state.news);
-  if (id === 'photos')
+  if (id === 'photos' || id === 'image-group')
     return copySource(
-      id,
-      state.photos.map((p) => ({
-        ...p,
-        groupName: state.imageWorkspace?.groups.find(
-          (g) => g.id === state.imageWorkspace.membership[p.fileId]
-        )?.name,
-        effectiveOperations: state.imageWorkspace?.membership[p.fileId]
-          ? resolveFileOperations(state.imageWorkspace, p.fileId)
-          : [],
-        beforeAfter: state.metadataPlan?.files.find((f) => f.fileId === p.fileId)?.beforeAfter
-      }))
+      'photos',
+      state.photos
+        .filter(
+          (p) =>
+            id !== 'image-group' ||
+            state.imageWorkspace?.membership[p.fileId] === (state.imageGroupId || 'ungrouped')
+        )
+        .map((p) => ({
+          ...p,
+          groupName: state.imageWorkspace?.groups.find(
+            (g) => g.id === state.imageWorkspace.membership[p.fileId]
+          )?.name,
+          effectiveOperations: state.imageWorkspace?.membership[p.fileId]
+            ? resolveFileOperations(state.imageWorkspace, p.fileId)
+            : [],
+          beforeAfter: state.metadataPlan?.files.find((f) => f.fileId === p.fileId)?.beforeAfter
+        }))
     );
   if (id === 'image-report') return copySource(id, state.metadataExport);
   if (id === 'archive-open') return copySource(id, state.archiveView);
@@ -81,7 +87,7 @@ function availableSources() {
   return id === 'import'
     ? ['import', 'import-source', 'import-diagnostics']
     : id === 'photos'
-      ? ['photos', 'image-report']
+      ? ['photos', 'image-group', 'image-report']
       : [id];
 }
 export function mountCopyActions() {

@@ -66,7 +66,8 @@ function normalizedValue(field, raw) {
     };
   }
   const value = raw[keys[0]];
-  if (['iso', 'fNumber', 'exposureTime', 'focalLength'].includes(field)) return Number(value);
+  if (['iso', 'fNumber', 'exposureTime', 'focalLength'].includes(field))
+    return !Array.isArray(value) && Number.isFinite(Number(value)) ? Number(value) : value;
   if (field === 'keywords') return Array.isArray(value) ? value : [String(value)];
   return Array.isArray(value) ? value.join(', ') : value;
 }
@@ -76,6 +77,16 @@ function viewTags(raw) {
     value: normalizedValue(field, raw),
     sources: fieldKeys(field, raw),
     writable: true,
+    referenceSupported: (() => {
+      const value = normalizedValue(field, raw);
+      if (value == null) return true;
+      try {
+        validateOperations([{ field, action: 'set', value }]);
+        return true;
+      } catch {
+        return false;
+      }
+    })(),
     personal: ['author', 'gps', 'captureDate', 'personalIdentifiers'].includes(field)
   }));
 }

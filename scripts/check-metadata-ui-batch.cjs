@@ -15,6 +15,30 @@ const { openStore } = require('../electron/local/store.cjs');
   store.set('tourSeen', true);
   store.close();
   const file = await imageFixture(root, 'png');
+  const mixed = process.argv.includes('--mixed');
+  let inputFiles;
+  if (mixed) {
+    const big = path.join(root, '40MP.png');
+    await require('sharp')({
+      create: {
+        width: 8000,
+        height: 5000,
+        channels: 4,
+        background: { r: 70, g: 110, b: 150, alpha: 0.6 }
+      }
+    })
+      .png()
+      .toFile(big);
+    const bytes = fs.readFileSync(file),
+      chunk = Buffer.alloc(49 * 1024 * 1024 - bytes.length);
+    chunk.writeUInt32BE(chunk.length - 12);
+    chunk.write('npAD', 4, 'ascii');
+    chunk.writeUInt32BE(require('node:zlib').crc32(chunk.subarray(4, -4)), chunk.length - 4);
+    const padded = path.join(root, '49MiB.png');
+    fs.writeFileSync(padded, Buffer.concat([bytes.subarray(0, -12), chunk, bytes.subarray(-12)]));
+    inputFiles = [file, big, padded];
+  } else inputFiles = distinctCopies(file, 100);
+  const expected = inputFiles.length;
   let app;
   try {
     app = await _electron.launch({
@@ -45,22 +69,22 @@ const { openStore } = require('../electron/local/store.cjs');
           return { canceled: false, filePaths: paths };
         };
       }, paths);
-    await choose(distinctCopies(file, 100));
+    await choose(inputFiles);
     await page.locator('[data-action="images-choose"]').click();
     await waitForAsync(
       page,
-      async () => {
+      async (expected) => {
         const { state } = await import('/js/state.js');
-        return state.photos.length === 100 && !state.imagesBusy;
+        return state.photos.length === expected && !state.imagesBusy;
       },
-      null,
+      expected,
       { timeout: 180000 }
     );
     const reads = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       return state.photos.filter((p) => p.status === 'ready').length;
     });
-    if (reads !== 100) {
+    if (reads !== expected) {
       const statuses = await page.evaluate(async () => {
         const { state } = await import('/js/state.js');
         return state.photos.slice(0, 3).map((p) => ({ status: p.status, error: p.error }));
@@ -69,7 +93,7 @@ const { openStore } = require('../electron/local/store.cjs');
         `Read count ${reads}: ${JSON.stringify(statuses)}; toasts=${await page.locator('.toasts').textContent()}`
       );
     }
-    console.log('100 files read');
+    console.log(`${expected} files read`);
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Synthetic GUI batch');
     await choose([output]);
@@ -96,11 +120,12 @@ const { openStore } = require('../electron/local/store.cjs');
       };
     });
     const completed = report.results.filter((s) => s === 'completed').length;
-    if (completed !== 100 || report.progressRows !== 100) throw Error(JSON.stringify(report));
+    if (completed !== expected || report.progressRows !== expected)
+      throw Error(JSON.stringify(report));
     console.log(
       JSON.stringify(
         {
-          files: 100,
+          files: expected,
           reads,
           completed,
           outputFiles: fs.readdirSync(output).length,
@@ -108,7 +133,9 @@ const { openStore } = require('../electron/local/store.cjs');
           eventLoopTicks: report.ticks,
           maxEventLoopGapMs: report.maxEventLoopGapMs,
           progressRows: report.progressRows,
-          fixture: '12×8 RGBA PNG; not maximum-size stress'
+          fixture: mixed
+            ? 'Mixed 12×8 RGBA, 40MP RGBA and 49MiB valid PNG with ancillary padding'
+            : '12×8 RGBA PNG; not maximum-size stress'
         },
         null,
         2
