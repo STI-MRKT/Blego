@@ -54,8 +54,10 @@ function cleanUrl(text, field, redactions) {
     return '';
   }
 }
-function quoteTsv(text) {
-  return /[\t\r\n"]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+function quoteTsv(text, format) {
+  return (format === 'csv' ? /[,\r\n"]/ : /[\t\r\n"]/).test(text)
+    ? `"${text.replaceAll('"', '""')}"`
+    : text;
 }
 function protectCell(text, field, warnings) {
   if (
@@ -78,9 +80,10 @@ export async function serializeCopy(request, context) {
     fail('INVALID_COPY_SOURCE');
   const { scope, format } = request;
   if (!['value', 'card', 'selected', 'filter', 'all'].includes(scope)) fail('INVALID_COPY_SCOPE');
-  if (!['text', 'values', 'labelled', 'json', 'tsv'].includes(format)) fail('INVALID_COPY_FORMAT');
+  if (!['text', 'values', 'labelled', 'json', 'tsv', 'csv'].includes(format))
+    fail('INVALID_COPY_FORMAT');
   if (scope === 'value' && format !== 'text') fail('INVALID_COPY_FORMAT');
-  if (format === 'tsv' && !['raw', 'spreadsheet'].includes(request.safetyMode))
+  if (['tsv', 'csv'].includes(format) && !['raw', 'spreadsheet'].includes(request.safetyMode))
     fail('COPY_SAFETY_REQUIRED');
   const source = await context.resolveSource(request.sourceIds[0]);
   if (!source || !Array.isArray(source.rows) || !Array.isArray(source.fields))
@@ -119,7 +122,8 @@ export async function serializeCopy(request, context) {
       } else if (sensitivity === 'personal') warnings.add('PERSONAL_DATA_INCLUDED');
       return allowed;
     });
-  if (format === 'tsv' && request.safetyMode === 'raw') warnings.add('RAW_SPREADSHEET_VALUES');
+  if (['tsv', 'csv'].includes(format) && request.safetyMode === 'raw')
+    warnings.add('RAW_SPREADSHEET_VALUES');
   let byteLength = 0;
   const chunks = [];
   function append(text) {
@@ -128,10 +132,17 @@ export async function serializeCopy(request, context) {
     chunks.push(text);
   }
   const tableCell = (value, field) =>
-    quoteTsv(request.safetyMode === 'spreadsheet' ? protectCell(value, field, warnings) : value);
+    quoteTsv(
+      request.safetyMode === 'spreadsheet' ? protectCell(value, field, warnings) : value,
+      format
+    );
   if (format === 'json') append('[');
-  if (format === 'tsv')
-    append(fields.map((field) => tableCell(field.label || field.key, field)).join('\t'));
+  if (['tsv', 'csv'].includes(format))
+    append(
+      fields
+        .map((field) => tableCell(field.label || field.key, field))
+        .join(format === 'csv' ? ',' : '\t')
+    );
   const yieldControl =
     context.yieldControl || (() => new Promise((resolve) => setTimeout(resolve, 0)));
   for (let index = 0; index < selected.length; index++) {
@@ -146,8 +157,11 @@ export async function serializeCopy(request, context) {
     if (format === 'json') {
       if (index) append(',');
       append(JSON.stringify(Object.fromEntries(fields.map((field, i) => [field.key, values[i]]))));
-    } else if (format === 'tsv') {
-      append('\n' + values.map((value, i) => tableCell(value, fields[i])).join('\t'));
+    } else if (['tsv', 'csv'].includes(format)) {
+      append(
+        '\n' +
+          values.map((value, i) => tableCell(value, fields[i])).join(format === 'csv' ? ',' : '\t')
+      );
     } else {
       if (index) append('\n\n');
       append(

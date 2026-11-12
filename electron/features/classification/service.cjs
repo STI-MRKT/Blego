@@ -245,6 +245,21 @@ function createClassificationService({ allowTestRules = false, clock = () => new
     getConfirmed,
     page,
     cell,
+    async exportText(id, options = {}) {
+      const o = get(id);
+      let records = o.records;
+      if (options.recordId) {
+        records = records.filter((r) => r.recordId === options.recordId);
+        if (!records.length) throw Error('UNKNOWN_RECORD');
+      }
+      const { classifierCopy } = require('../../../shared/classifier-copy.mjs');
+      const text = await classifierCopy(records, {
+        format: options.format || 'tsv',
+        authorized: true
+      });
+      if (operations.get(id) !== o || jobs.has(id)) throw Error('CANCELLED');
+      return text;
+    },
     reclassify,
     cancel,
     sourceText: (id) => get(id).parsed.text,

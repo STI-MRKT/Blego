@@ -339,6 +339,8 @@ function bindView() {
   document.querySelectorAll('[data-classifier-map]').forEach(el => {
     el.onchange = () => {state.classifierOptions ||= {}; state.classifierOptions.mapping ||= {}; if(el.value) state.classifierOptions.mapping[el.dataset.classifierMap]=el.value; else delete state.classifierOptions.mapping[el.dataset.classifierMap];};
   });
+  const extra = document.getElementById('classifier-extra');
+  if(extra) extra.ontoggle = () => {if(extra.isConnected) state.classifierExtraOpen=extra.open;};
   const sort = document.getElementById('classifier-sort');
   if (sort) sort.onchange = () => {state.classifierDescending=sort.value==='descending'; importPage(0);};
   const fileInput = document.getElementById('file-input');
@@ -781,6 +783,33 @@ document.addEventListener('click', async (event) => {
     toast('Set cleared');
     return;
   }
+  if (action === 'classifier-copy-row' || action === 'classifier-copy-table') {
+    const operationId=state.importData?.operationId, epoch=state.importEpoch;
+    try {
+      const text=await window.blego.classifierExportText({operationId,recordId:action==='classifier-copy-row'?target.dataset.row:undefined,format:'tsv'});
+      if(state.importEpoch===epoch && state.importData?.operationId===operationId) await copyText(text,target);
+    } catch {toast('Не удалось скопировать результат','err');}
+    return;
+  }
+  if (action === 'classifier-export') {
+    try {
+      const result=await window.blego.classifierExportFile({operationId:state.importData.operationId,format:target.dataset.format});
+      if(result.ok) toast('Файл сохранён');
+    } catch {toast('Не удалось сохранить файл. Выберите новое имя и проверьте доступ к папке.','err');}
+    return;
+  }
+  if (action === 'classifier-archive') {
+    const operationId=state.importData?.operationId, epoch=state.importEpoch;
+    target.disabled=true;
+    try {
+      await window.blego.confirmClassification({operationId,decision:state.importData.status==='preview_partial'?'accept_partial':'accept_complete'});
+      if(state.importEpoch!==epoch) return;
+      await window.blego.saveArchive(operationId);
+      if(state.importEpoch!==epoch) return;
+      state.importSaved=true;await importPage(state.importData.offset);toast('Сохранено');
+    } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
+    return;
+  }
   if (action === 'classifier-apply') {await reclassifyInput(); return;}
   if (action === 'classifier-filter') {state.classifierQuery=document.getElementById('classifier-query')?.value || '';await importPage(0);return;}
   if (action === 'import-cookie-copy' || action === 'classifier-copy-cell') {
@@ -831,7 +860,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'import-reset') {
     state.importEpoch = (state.importEpoch || 0) + 1;
-    state.classifierQuery=''; state.classifierDescending=false;
+    state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
     if(state.classifierOptions) state.classifierOptions.mapping={};
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);

@@ -62,6 +62,8 @@ contextBridge.exposeInMainWorld('blego', {
   importPage: (arg) => call('importPage', arg),
   reclassify: (arg) => call('importReclassify', arg),
   importCell: (arg) => call('importCell', arg),
+  classifierExportText: (arg) => call('importExportText', arg),
+  classifierExportFile: (arg) => call('importExportFile', arg),
   cancelImport: (id) => call('importCancel', id),
   importText: (id) => call('importText', id),
   copyPreferences: () => call('copyPreferences'),
