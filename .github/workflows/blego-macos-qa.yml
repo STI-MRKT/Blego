@@ -23,7 +23,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  lint:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[mac-qa-run]') || contains(github.event.head_commit.message, '[mac-qa-run-x64]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
   mac:
+    needs: lint
     # Private repository: a marked commit deliberately authorizes one compute-consuming job.
     if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[mac-qa-run]') || contains(github.event.head_commit.message, '[mac-qa-run-x64]') }}
     runs-on: ${{ (contains(github.event.head_commit.message, '[mac-qa-run-x64]') || inputs.target == 'x64') && 'macos-15-intel' || 'macos-15' }}
