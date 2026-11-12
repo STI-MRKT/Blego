@@ -3,26 +3,21 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { IMAGE_LIMITS } = require('../../../shared/metadata-contracts.mjs');
 const unpack = (file) => file.replace(/app\.asar([/\\])/, 'app.asar.unpacked$1');
-function invocation() {
-  if (process.platform === 'win32') {
-    try {
-      return {
-        command: unpack(require('exiftool-vendored.exe')),
-        prefix: [],
-        env: { ...process.env }
-      };
-    } catch {
-      throw Error('METADATA_ENGINE_UNAVAILABLE');
-    }
-  }
+function invocation(runtimeRoot) {
   const root =
-    process.resourcesPath && fs.existsSync(path.join(process.resourcesPath, 'metadata-runtime'))
+    runtimeRoot ||
+    (process.resourcesPath && fs.existsSync(path.join(process.resourcesPath, 'metadata-runtime'))
       ? path.join(process.resourcesPath, 'metadata-runtime')
       : path.resolve(
           __dirname,
           '../../../build/metadata-runtime',
           `${process.platform}-${process.arch}`
-        );
+        ));
+  if (process.platform === 'win32') {
+    const command = path.join(root, 'exiftool.exe');
+    if (!fs.existsSync(command)) throw Error('METADATA_ENGINE_UNAVAILABLE');
+    return { command, prefix: [], env: { ...process.env } };
+  }
   const command = path.join(root, 'bin/perl');
   if (!fs.existsSync(command)) throw Error('METADATA_ENGINE_UNAVAILABLE');
   const env = { ...process.env };
@@ -43,9 +38,9 @@ function invocation() {
     env
   };
 }
-function createEngine() {
+function createEngine({ runtimeRoot } = {}) {
   async function execute(args, { signal } = {}) {
-    const { command, prefix, env } = invocation();
+    const { command, prefix, env } = invocation(runtimeRoot);
     return new Promise((resolve, reject) => {
       let bytes = 0,
         failed = null;
