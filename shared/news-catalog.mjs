@@ -133,6 +133,36 @@ export const NEWS_SOURCES = Object.freeze([
     "name": "Financial Times",
     "topic": "finance",
     "url": "https://www.ft.com/rss/home/international"
+  },
+  {
+    "id": "international-fashion",
+    "name": "International fashion",
+    "topic": "fashion",
+    "url": "https://news.google.com/rss/search?q=fashion%20runway%20designer%20site%3Avogue.com%20OR%20site%3Awwd.com%20OR%20site%3Atheguardian.com&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+    "id": "international-ai",
+    "name": "International AI",
+    "topic": "ai",
+    "url": "https://news.google.com/rss/search?q=artificial%20intelligence%20AI%20site%3Atechcrunch.com%20OR%20site%3Awired.com%20OR%20site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+    "id": "international-tech",
+    "name": "International technology",
+    "topic": "tech",
+    "url": "https://news.google.com/rss/search?q=technology%20cybersecurity%20site%3Atheverge.com%20OR%20site%3Areuters.com%20OR%20site%3Aarstechnica.com&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+    "id": "international-crypto",
+    "name": "International crypto",
+    "topic": "crypto",
+    "url": "https://news.google.com/rss/search?q=bitcoin%20crypto%20site%3Acoindesk.com%20OR%20site%3Acointelegraph.com%20OR%20site%3Adecrypt.co&hl=en-US&gl=US&ceid=US%3Aen"
+  },
+  {
+    "id": "international-finance",
+    "name": "International finance",
+    "topic": "finance",
+    "url": "https://news.google.com/rss/search?q=stocks%20finance%20site%3Areuters.com%20OR%20site%3Aft.com%20OR%20site%3Acnbc.com&hl=en-US&gl=US&ceid=US%3Aen"
   }
 ]);
 export const sourcesForTopic = (topic) => NEWS_SOURCES.filter((source) => source.topic === topic).map((source) => source.id);
