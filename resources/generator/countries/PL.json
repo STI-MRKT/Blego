@@ -1,5 +1,5 @@
 {
-  "version": "2",
+  "version": "3",
   "code": "PL",
   "language": "pl",
   "first": [
@@ -881,20 +881,2004 @@
   ],
   "places": [
     {
-      "city": "Warszawa",
-      "postal": "00-950"
+      "city": "Abisynia",
+      "postal": "83-440"
     },
     {
-      "city": "Kraków",
-      "postal": "30-001"
+      "city": "Abisynia (Wiele)",
+      "postal": "83-441"
     },
     {
-      "city": "Gdańsk",
-      "postal": "80-001"
+      "city": "Abisynia Górska",
+      "postal": "83-440"
     },
     {
-      "city": "Wrocław",
-      "postal": "50-001"
+      "city": "Abramowice Kościelne",
+      "postal": "20-388"
+    },
+    {
+      "city": "Abramowice Prywatne",
+      "postal": "20-388"
+    },
+    {
+      "city": "Abramy",
+      "postal": "05-310"
+    },
+    {
+      "city": "Abramów",
+      "postal": "21-143"
+    },
+    {
+      "city": "Achrymowce",
+      "postal": "16-123"
+    },
+    {
+      "city": "Adamczowice",
+      "postal": "27-640"
+    },
+    {
+      "city": "Adamczycha",
+      "postal": "06-320"
+    },
+    {
+      "city": "Adamek",
+      "postal": "26-220"
+    },
+    {
+      "city": "Adamierz",
+      "postal": "33-210"
+    },
+    {
+      "city": "Adamin",
+      "postal": "62-641"
+    },
+    {
+      "city": "Adaminowo",
+      "postal": "87-815"
+    },
+    {
+      "city": "Adamka",
+      "postal": "99-232"
+    },
+    {
+      "city": "Adamki",
+      "postal": "22-200"
+    },
+    {
+      "city": "Adamkowo",
+      "postal": "89-506"
+    },
+    {
+      "city": "Adamowa Góra",
+      "postal": "96-512"
+    },
+    {
+      "city": "Adamowice",
+      "postal": "32-075"
+    },
+    {
+      "city": "Adamowizna",
+      "postal": "05-825"
+    },
+    {
+      "city": "Adamowo",
+      "postal": "06-232"
+    },
+    {
+      "city": "Adamowo-Osiedle",
+      "postal": "82-310"
+    },
+    {
+      "city": "Adamowo-Zastawa",
+      "postal": "17-307"
+    },
+    {
+      "city": "Adampol",
+      "postal": "05-280"
+    },
+    {
+      "city": "Adamusy",
+      "postal": "18-525"
+    },
+    {
+      "city": "Adamów",
+      "postal": "05-307"
+    },
+    {
+      "city": "Adamów Drwalewski",
+      "postal": "05-650"
+    },
+    {
+      "city": "Adamów Rososki",
+      "postal": "05-650"
+    },
+    {
+      "city": "Adamów-Parcel",
+      "postal": "96-325"
+    },
+    {
+      "city": "Adamów-Wieś",
+      "postal": "96-325"
+    },
+    {
+      "city": "Adamówek",
+      "postal": "05-152"
+    },
+    {
+      "city": "Adamówka",
+      "postal": "22-335"
+    },
+    {
+      "city": "Adelin",
+      "postal": "07-230"
+    },
+    {
+      "city": "Adelina",
+      "postal": "22-530"
+    },
+    {
+      "city": "Adelinów",
+      "postal": "26-260"
+    },
+    {
+      "city": "Adolfin",
+      "postal": "22-130"
+    },
+    {
+      "city": "Adolfinów",
+      "postal": "97-340"
+    },
+    {
+      "city": "Adolfowo",
+      "postal": "62-067"
+    },
+    {
+      "city": "Adolfów",
+      "postal": "08-322"
+    },
+    {
+      "city": "Afryka",
+      "postal": "26-330"
+    },
+    {
+      "city": "Agatówka",
+      "postal": "23-230"
+    },
+    {
+      "city": "Agnieszkowo",
+      "postal": "09-227"
+    },
+    {
+      "city": "Agnopol",
+      "postal": "97-212"
+    },
+    {
+      "city": "Agrafinówka",
+      "postal": "16-424"
+    },
+    {
+      "city": "Akacyjki",
+      "postal": "63-520"
+    },
+    {
+      "city": "Aksmanice",
+      "postal": "37-734"
+    },
+    {
+      "city": "Akwizgran",
+      "postal": "26-067"
+    },
+    {
+      "city": "Albertowo",
+      "postal": "82-520"
+    },
+    {
+      "city": "Albertowsko",
+      "postal": "62-065"
+    },
+    {
+      "city": "Albertów",
+      "postal": "21-013"
+    },
+    {
+      "city": "Albigowa",
+      "postal": "37-122"
+    },
+    {
+      "city": "Albinów",
+      "postal": "08-130"
+    },
+    {
+      "city": "Albinów Duży",
+      "postal": "23-450"
+    },
+    {
+      "city": "Albinów Mały",
+      "postal": "23-450"
+    },
+    {
+      "city": "Aleksandria",
+      "postal": "05-190"
+    },
+    {
+      "city": "Aleksandria Krzywowolska",
+      "postal": "22-360"
+    },
+    {
+      "city": "Aleksandria Niedziałowska",
+      "postal": "22-360"
+    },
+    {
+      "city": "Aleksandrowice",
+      "postal": "32-084"
+    },
+    {
+      "city": "Aleksandrowiec",
+      "postal": "86-022"
+    },
+    {
+      "city": "Aleksandrowo",
+      "postal": "06-330"
+    },
+    {
+      "city": "Aleksandrowo K. Pokrytek",
+      "postal": "06-445"
+    },
+    {
+      "city": "Aleksandrynów",
+      "postal": "09-500"
+    },
+    {
+      "city": "Aleksandrów",
+      "postal": "05-126"
+    },
+    {
+      "city": "Aleksandrów Duży",
+      "postal": "27-350"
+    },
+    {
+      "city": "Aleksandrów Kujawski",
+      "postal": "87-700"
+    },
+    {
+      "city": "Aleksandrów Łódzki",
+      "postal": "95-069"
+    },
+    {
+      "city": "Aleksandrówek",
+      "postal": "62-580"
+    },
+    {
+      "city": "Aleksandrówka",
+      "postal": "05-311"
+    },
+    {
+      "city": "Aleksicze",
+      "postal": "16-060"
+    },
+    {
+      "city": "Aleksiejówka",
+      "postal": "16-506"
+    },
+    {
+      "city": "Alfonsowo",
+      "postal": "05-604"
+    },
+    {
+      "city": "Alfonsów",
+      "postal": "09-533"
+    },
+    {
+      "city": "Alfredów",
+      "postal": "26-434"
+    },
+    {
+      "city": "Alfredówka",
+      "postal": "39-442"
+    },
+    {
+      "city": "Alinowo",
+      "postal": "62-540"
+    },
+    {
+      "city": "Alojzów",
+      "postal": "22-122"
+    },
+    {
+      "city": "Altana",
+      "postal": "88-210"
+    },
+    {
+      "city": "Altanka",
+      "postal": "96-500"
+    },
+    {
+      "city": "Alwernia",
+      "postal": "32-566"
+    },
+    {
+      "city": "Amalka",
+      "postal": "83-320"
+    },
+    {
+      "city": "Amandów",
+      "postal": "47-480"
+    },
+    {
+      "city": "Ambrożew",
+      "postal": "99-120"
+    },
+    {
+      "city": "Ambrożów",
+      "postal": "27-225"
+    },
+    {
+      "city": "Amelin",
+      "postal": "06-212"
+    },
+    {
+      "city": "Ameryczka",
+      "postal": "89-200"
+    },
+    {
+      "city": "Ameryka",
+      "postal": "11-015"
+    },
+    {
+      "city": "Anachów",
+      "postal": "48-250"
+    },
+    {
+      "city": "Anastazew",
+      "postal": "07-230"
+    },
+    {
+      "city": "Anastazewo",
+      "postal": "62-430"
+    },
+    {
+      "city": "Anastazów",
+      "postal": "97-400"
+    },
+    {
+      "city": "Anatolin",
+      "postal": "09-541"
+    },
+    {
+      "city": "Ancuty",
+      "postal": "17-210"
+    },
+    {
+      "city": "Andrespol",
+      "postal": "95-020"
+    },
+    {
+      "city": "Andruszkowice",
+      "postal": "27-650"
+    },
+    {
+      "city": "Andrychy",
+      "postal": "18-507"
+    },
+    {
+      "city": "Andrychów",
+      "postal": "34-120"
+    },
+    {
+      "city": "Andryjanki",
+      "postal": "17-111"
+    },
+    {
+      "city": "Andrzejewo",
+      "postal": "07-305"
+    },
+    {
+      "city": "Andrzejewo-Kolonie",
+      "postal": "07-305"
+    },
+    {
+      "city": "Andrzejewo-Zarzecze",
+      "postal": "07-305"
+    },
+    {
+      "city": "Andrzejki",
+      "postal": "18-400"
+    },
+    {
+      "city": "Andrzejki-Tyszki",
+      "postal": "07-407"
+    },
+    {
+      "city": "Andrzejów",
+      "postal": "05-088"
+    },
+    {
+      "city": "Andrzejów Duranowski",
+      "postal": "96-500"
+    },
+    {
+      "city": "Andrzejów-Osada",
+      "postal": "22-234"
+    },
+    {
+      "city": "Andrzejówka",
+      "postal": "22-530"
+    },
+    {
+      "city": "Andzin",
+      "postal": "05-192"
+    },
+    {
+      "city": "Anglity",
+      "postal": "14-400"
+    },
+    {
+      "city": "Angowice",
+      "postal": "89-620"
+    },
+    {
+      "city": "Anielew",
+      "postal": "05-300"
+    },
+    {
+      "city": "Anielewo",
+      "postal": "62-410"
+    },
+    {
+      "city": "Anielin",
+      "postal": "05-622"
+    },
+    {
+      "city": "Anielin Swędowski",
+      "postal": "95-010"
+    },
+    {
+      "city": "Anielinek",
+      "postal": "05-306"
+    },
+    {
+      "city": "Anielino",
+      "postal": "72-210"
+    },
+    {
+      "city": "Anieliny",
+      "postal": "89-110"
+    },
+    {
+      "city": "Anielpol",
+      "postal": "22-310"
+    },
+    {
+      "city": "Anielów",
+      "postal": "08-460"
+    },
+    {
+      "city": "Anielówka",
+      "postal": "21-140"
+    },
+    {
+      "city": "Anin",
+      "postal": "99-322"
+    },
+    {
+      "city": "Aniołka Druga",
+      "postal": "63-620"
+    },
+    {
+      "city": "Aniołka Pierwsza",
+      "postal": "63-620"
+    },
+    {
+      "city": "Aniołka-Parcele",
+      "postal": "63-620"
+    },
+    {
+      "city": "Aniołowo",
+      "postal": "14-400"
+    },
+    {
+      "city": "Ankamaty",
+      "postal": "82-440"
+    },
+    {
+      "city": "Annapol",
+      "postal": "63-200"
+    },
+    {
+      "city": "Annetów",
+      "postal": "99-311"
+    },
+    {
+      "city": "Annobór",
+      "postal": "21-100"
+    },
+    {
+      "city": "Annobór-Kolonia",
+      "postal": "21-100"
+    },
+    {
+      "city": "Annogóra",
+      "postal": "64-520"
+    },
+    {
+      "city": "Annolesie",
+      "postal": "42-100"
+    },
+    {
+      "city": "Annopol",
+      "postal": "05-282"
+    },
+    {
+      "city": "Annopol Duży",
+      "postal": "97-216"
+    },
+    {
+      "city": "Annopol Mały",
+      "postal": "97-216"
+    },
+    {
+      "city": "Annopole",
+      "postal": "63-000"
+    },
+    {
+      "city": "Annopole Nowe",
+      "postal": "98-220"
+    },
+    {
+      "city": "Annopole Stare",
+      "postal": "98-220"
+    },
+    {
+      "city": "Annosław",
+      "postal": "96-232"
+    },
+    {
+      "city": "Annowo",
+      "postal": "06-330"
+    },
+    {
+      "city": "Annów",
+      "postal": "23-155"
+    },
+    {
+      "city": "Annówka",
+      "postal": "21-150"
+    },
+    {
+      "city": "Anonin",
+      "postal": "21-421"
+    },
+    {
+      "city": "Anteczków",
+      "postal": "63-820"
+    },
+    {
+      "city": "Antolin",
+      "postal": "21-543"
+    },
+    {
+      "city": "Antolka",
+      "postal": "32-210"
+    },
+    {
+      "city": "Antomieszki",
+      "postal": "19-520"
+    },
+    {
+      "city": "Antonia",
+      "postal": "07-438"
+    },
+    {
+      "city": "Antonie",
+      "postal": "07-410"
+    },
+    {
+      "city": "Antonielów",
+      "postal": "26-070"
+    },
+    {
+      "city": "Antoniew",
+      "postal": "95-015"
+    },
+    {
+      "city": "Antoniew-Lubocha",
+      "postal": "99-205"
+    },
+    {
+      "city": "Antoniewice",
+      "postal": "74-510"
+    },
+    {
+      "city": "Antoniewko",
+      "postal": "73-234"
+    },
+    {
+      "city": "Antoniewo",
+      "postal": "07-310"
+    },
+    {
+      "city": "Antoniewo Górne",
+      "postal": "62-085"
+    },
+    {
+      "city": "Antoniewo Leśniczówka",
+      "postal": "62-085"
+    },
+    {
+      "city": "Antoniki",
+      "postal": "37-600"
+    },
+    {
+      "city": "Antonin",
+      "postal": "18-230"
+    },
+    {
+      "city": "Antonina",
+      "postal": "05-306"
+    },
+    {
+      "city": "Antoninek",
+      "postal": "05-340"
+    },
+    {
+      "city": "Antoniny",
+      "postal": "64-520"
+    },
+    {
+      "city": "Antoninów",
+      "postal": "05-503"
+    },
+    {
+      "city": "Antoniów",
+      "postal": "21-020"
+    },
+    {
+      "city": "Antoniów-Kolonia",
+      "postal": "21-020"
+    },
+    {
+      "city": "Antoniówka",
+      "postal": "21-102"
+    },
+    {
+      "city": "Antoniówka Wilczkowska",
+      "postal": "08-480"
+    },
+    {
+      "city": "Antoniówka Świerżowska",
+      "postal": "08-480"
+    },
+    {
+      "city": "Antonowo",
+      "postal": "11-500"
+    },
+    {
+      "city": "Antonów",
+      "postal": "42-141"
+    },
+    {
+      "city": "Antonówka",
+      "postal": "24-350"
+    },
+    {
+      "city": "Antopol",
+      "postal": "21-222"
+    },
+    {
+      "city": "Antosin",
+      "postal": "16-407"
+    },
+    {
+      "city": "Anusin",
+      "postal": "17-300"
+    },
+    {
+      "city": "Anuszewo",
+      "postal": "12-200"
+    },
+    {
+      "city": "Apolinów",
+      "postal": "97-400"
+    },
+    {
+      "city": "Apolonia",
+      "postal": "98-105"
+    },
+    {
+      "city": "Apolonka",
+      "postal": "42-253"
+    },
+    {
+      "city": "Aptynty",
+      "postal": "11-410"
+    },
+    {
+      "city": "Arbasy",
+      "postal": "17-312"
+    },
+    {
+      "city": "Arcelin",
+      "postal": "09-100"
+    },
+    {
+      "city": "Archutowo",
+      "postal": "09-470"
+    },
+    {
+      "city": "Archutówko",
+      "postal": "09-470"
+    },
+    {
+      "city": "Arciechów",
+      "postal": "05-255"
+    },
+    {
+      "city": "Arciechówek",
+      "postal": "96-520"
+    },
+    {
+      "city": "Arciszewo",
+      "postal": "83-010"
+    },
+    {
+      "city": "Arcugowo",
+      "postal": "62-220"
+    },
+    {
+      "city": "Ardapy",
+      "postal": "11-200"
+    },
+    {
+      "city": "Arentowo",
+      "postal": "89-350"
+    },
+    {
+      "city": "Argentyna",
+      "postal": "28-512"
+    },
+    {
+      "city": "Ariany",
+      "postal": "87-731"
+    },
+    {
+      "city": "Arkadia",
+      "postal": "99-416"
+    },
+    {
+      "city": "Arklity",
+      "postal": "11-410"
+    },
+    {
+      "city": "Arkuszewo",
+      "postal": "62-635"
+    },
+    {
+      "city": "Arturowo",
+      "postal": "88-150"
+    },
+    {
+      "city": "Arynów",
+      "postal": "05-300"
+    },
+    {
+      "city": "Arłamów",
+      "postal": "38-700"
+    },
+    {
+      "city": "Asmus",
+      "postal": "89-632"
+    },
+    {
+      "city": "Astachowice",
+      "postal": "95-001"
+    },
+    {
+      "city": "Asuny",
+      "postal": "11-410"
+    },
+    {
+      "city": "Atalin",
+      "postal": "26-700"
+    },
+    {
+      "city": "Atanazyn",
+      "postal": "64-820"
+    },
+    {
+      "city": "Ateny",
+      "postal": "16-304"
+    },
+    {
+      "city": "Audyniszki",
+      "postal": "19-520"
+    },
+    {
+      "city": "Augamy",
+      "postal": "11-220"
+    },
+    {
+      "city": "Augustopol",
+      "postal": "99-352"
+    },
+    {
+      "city": "Augustowo",
+      "postal": "06-445"
+    },
+    {
+      "city": "Augustynka",
+      "postal": "17-330"
+    },
+    {
+      "city": "Augustynowo",
+      "postal": "87-865"
+    },
+    {
+      "city": "Augustyny",
+      "postal": "11-130"
+    },
+    {
+      "city": "Augustynów",
+      "postal": "62-410"
+    },
+    {
+      "city": "Augustów",
+      "postal": "06-408"
+    },
+    {
+      "city": "Augustówek",
+      "postal": "05-152"
+    },
+    {
+      "city": "Augustówka",
+      "postal": "08-445"
+    },
+    {
+      "city": "Auguścin",
+      "postal": "89-300"
+    },
+    {
+      "city": "Aulakowszczyzna",
+      "postal": "16-140"
+    },
+    {
+      "city": "Aurelin",
+      "postal": "22-510"
+    },
+    {
+      "city": "Awajki",
+      "postal": "14-400"
+    },
+    {
+      "city": "Baba",
+      "postal": "07-436"
+    },
+    {
+      "city": "Babalice",
+      "postal": "13-340"
+    },
+    {
+      "city": "Babańce",
+      "postal": "16-500"
+    },
+    {
+      "city": "Babczyzna",
+      "postal": "21-102"
+    },
+    {
+      "city": "Babczów",
+      "postal": "97-524"
+    },
+    {
+      "city": "Babi Dwór",
+      "postal": "64-965"
+    },
+    {
+      "city": "Babi Dół",
+      "postal": "83-330"
+    },
+    {
+      "city": "Babia",
+      "postal": "62-586"
+    },
+    {
+      "city": "Babia Góra",
+      "postal": "17-220"
+    },
+    {
+      "city": "Babiak",
+      "postal": "11-100"
+    },
+    {
+      "city": "Babianka",
+      "postal": "21-200"
+    },
+    {
+      "city": "Babica",
+      "postal": "34-103"
+    },
+    {
+      "city": "Babice",
+      "postal": "08-455"
+    },
+    {
+      "city": "Babice Nowe",
+      "postal": "05-082"
+    },
+    {
+      "city": "Babicha",
+      "postal": "39-307"
+    },
+    {
+      "city": "Babichy",
+      "postal": "95-030"
+    },
+    {
+      "city": "Babiczki",
+      "postal": "95-083"
+    },
+    {
+      "city": "Babidół",
+      "postal": "83-050"
+    },
+    {
+      "city": "Babie Ławy",
+      "postal": "87-630"
+    },
+    {
+      "city": "Babiec Piaseczny",
+      "postal": "09-200"
+    },
+    {
+      "city": "Babiec Rżały",
+      "postal": "09-204"
+    },
+    {
+      "city": "Babiec-Więczanki",
+      "postal": "09-200"
+    },
+    {
+      "city": "Babienica",
+      "postal": "42-287"
+    },
+    {
+      "city": "Babieniec",
+      "postal": "11-430"
+    },
+    {
+      "city": "Babigoszcz",
+      "postal": "72-122"
+    },
+    {
+      "city": "Babiki",
+      "postal": "16-113"
+    },
+    {
+      "city": "Babilon",
+      "postal": "27-300"
+    },
+    {
+      "city": "Babimost",
+      "postal": "66-110"
+    },
+    {
+      "city": "Babin",
+      "postal": "24-200"
+    },
+    {
+      "city": "Babin-Olędry",
+      "postal": "62-420"
+    },
+    {
+      "city": "Babinek",
+      "postal": "74-111"
+    },
+    {
+      "city": "Babiniec",
+      "postal": "99-232"
+    },
+    {
+      "city": "Babino",
+      "postal": "16-080"
+    },
+    {
+      "city": "Babięta",
+      "postal": "11-710"
+    },
+    {
+      "city": "Babięty",
+      "postal": "12-120"
+    },
+    {
+      "city": "Babięty Małe",
+      "postal": "14-240"
+    },
+    {
+      "city": "Babięty Wielkie",
+      "postal": "14-240"
+    },
+    {
+      "city": "Babki",
+      "postal": "19-500"
+    },
+    {
+      "city": "Babki Gąseckie",
+      "postal": "19-400"
+    },
+    {
+      "city": "Babki Oleckie",
+      "postal": "19-400"
+    },
+    {
+      "city": "Babkowice",
+      "postal": "63-830"
+    },
+    {
+      "city": "Baborowo",
+      "postal": "64-514"
+    },
+    {
+      "city": "Baborów",
+      "postal": "48-120"
+    },
+    {
+      "city": "Baborówko",
+      "postal": "64-500"
+    },
+    {
+      "city": "Baboszewo",
+      "postal": "09-130"
+    },
+    {
+      "city": "Babrosty",
+      "postal": "12-200"
+    },
+    {
+      "city": "Babsk",
+      "postal": "22-234"
+    },
+    {
+      "city": "Babskie Budy",
+      "postal": "96-315"
+    },
+    {
+      "city": "Babule",
+      "postal": "39-340"
+    },
+    {
+      "city": "Baby",
+      "postal": "06-400"
+    },
+    {
+      "city": "Baby Dolne",
+      "postal": "09-500"
+    },
+    {
+      "city": "Baby Górne",
+      "postal": "09-500"
+    },
+    {
+      "city": "Bachanowo",
+      "postal": "16-404"
+    },
+    {
+      "city": "Bachlawa",
+      "postal": "38-600"
+    },
+    {
+      "city": "Bachmackie Kolonie",
+      "postal": "16-150"
+    },
+    {
+      "city": "Bachmatówka",
+      "postal": "16-100"
+    },
+    {
+      "city": "Bachorce",
+      "postal": "88-150"
+    },
+    {
+      "city": "Bachorza",
+      "postal": "08-206"
+    },
+    {
+      "city": "Bachorze",
+      "postal": "89-620"
+    },
+    {
+      "city": "Bachorzew",
+      "postal": "63-200"
+    },
+    {
+      "city": "Bachorzewo",
+      "postal": "87-610"
+    },
+    {
+      "city": "Bachorzyn",
+      "postal": "98-113"
+    },
+    {
+      "city": "Bachotek",
+      "postal": "87-312"
+    },
+    {
+      "city": "Bachowice",
+      "postal": "34-115"
+    },
+    {
+      "city": "Bachury",
+      "postal": "16-050"
+    },
+    {
+      "city": "Bachus",
+      "postal": "22-107"
+    },
+    {
+      "city": "Bachórz",
+      "postal": "36-065"
+    },
+    {
+      "city": "Bachórzec",
+      "postal": "37-752"
+    },
+    {
+      "city": "Bachów",
+      "postal": "37-754"
+    },
+    {
+      "city": "Baciki Bliższe",
+      "postal": "17-300"
+    },
+    {
+      "city": "Baciki Dalsze",
+      "postal": "17-300"
+    },
+    {
+      "city": "Baciki Średnie",
+      "postal": "17-300"
+    },
+    {
+      "city": "Baciuty",
+      "postal": "18-106"
+    },
+    {
+      "city": "Baciuty-Kolonia",
+      "postal": "18-106"
+    },
+    {
+      "city": "Bacze",
+      "postal": "06-406"
+    },
+    {
+      "city": "Bacze Mokre",
+      "postal": "18-300"
+    },
+    {
+      "city": "Bacze Suche",
+      "postal": "18-400"
+    },
+    {
+      "city": "Baczki",
+      "postal": "07-130"
+    },
+    {
+      "city": "Baczków",
+      "postal": "21-426"
+    },
+    {
+      "city": "Baczyn",
+      "postal": "32-084"
+    },
+    {
+      "city": "Baczyna",
+      "postal": "26-200"
+    },
+    {
+      "city": "Baczysław",
+      "postal": "72-410"
+    },
+    {
+      "city": "Badowo-Dańki",
+      "postal": "96-320"
+    },
+    {
+      "city": "Badowo-Mściska",
+      "postal": "96-320"
+    },
+    {
+      "city": "Badrzychowice",
+      "postal": "28-136"
+    },
+    {
+      "city": "Badulki",
+      "postal": "26-425"
+    },
+    {
+      "city": "Badów Górny",
+      "postal": "96-320"
+    },
+    {
+      "city": "Bagatela",
+      "postal": "63-410"
+    },
+    {
+      "city": "Bagatele",
+      "postal": "07-311"
+    },
+    {
+      "city": "Bagatelka",
+      "postal": "62-320"
+    },
+    {
+      "city": "Bagdad",
+      "postal": "89-300"
+    },
+    {
+      "city": "Bagicz",
+      "postal": "78-111"
+    },
+    {
+      "city": "Bagienica",
+      "postal": "89-520"
+    },
+    {
+      "city": "Bagienice",
+      "postal": "06-330"
+    },
+    {
+      "city": "Bagienice Duże",
+      "postal": "09-310"
+    },
+    {
+      "city": "Bagienice Małe",
+      "postal": "09-310"
+    },
+    {
+      "city": "Bagienice Nowe",
+      "postal": "09-310"
+    },
+    {
+      "city": "Bagienice Szlacheckie",
+      "postal": "06-212"
+    },
+    {
+      "city": "Bagienice-Folwark",
+      "postal": "06-212"
+    },
+    {
+      "city": "Bagieniec",
+      "postal": "58-140"
+    },
+    {
+      "city": "Bagienki",
+      "postal": "16-080"
+    },
+    {
+      "city": "Bagieńsko",
+      "postal": "14-140"
+    },
+    {
+      "city": "Bagińskie",
+      "postal": "18-507"
+    },
+    {
+      "city": "Bagna",
+      "postal": "42-141"
+    },
+    {
+      "city": "Bagnica",
+      "postal": "76-012"
+    },
+    {
+      "city": "Bagniewko",
+      "postal": "78-425"
+    },
+    {
+      "city": "Bagniewo",
+      "postal": "66-530"
+    },
+    {
+      "city": "Bagnity",
+      "postal": "14-330"
+    },
+    {
+      "city": "Bagniuki",
+      "postal": "16-050"
+    },
+    {
+      "city": "Bagno",
+      "postal": "13-332"
+    },
+    {
+      "city": "Bagny",
+      "postal": "16-200"
+    },
+    {
+      "city": "Bagrowo",
+      "postal": "63-012"
+    },
+    {
+      "city": "Bajdy",
+      "postal": "14-230"
+    },
+    {
+      "city": "Bajdyty",
+      "postal": "11-200"
+    },
+    {
+      "city": "Bajerze",
+      "postal": "86-253"
+    },
+    {
+      "city": "Bajki-Zalesie",
+      "postal": "19-111"
+    },
+    {
+      "city": "Bajorski Gaj",
+      "postal": "11-420"
+    },
+    {
+      "city": "Bajory Małe",
+      "postal": "11-420"
+    },
+    {
+      "city": "Bajory Wielkie",
+      "postal": "11-420"
+    },
+    {
+      "city": "Bajtkowo",
+      "postal": "19-300"
+    },
+    {
+      "city": "Bakaniuk",
+      "postal": "16-420"
+    },
+    {
+      "city": "Bakałarzewo",
+      "postal": "16-402"
+    },
+    {
+      "city": "Bakus-Wanda",
+      "postal": "22-150"
+    },
+    {
+      "city": "Bakuła",
+      "postal": "06-320"
+    },
+    {
+      "city": "Balbinów",
+      "postal": "27-500"
+    },
+    {
+      "city": "Balcarzowice",
+      "postal": "47-100"
+    },
+    {
+      "city": "Balcery",
+      "postal": "05-240"
+    },
+    {
+      "city": "Balcerów",
+      "postal": "96-100"
+    },
+    {
+      "city": "Balczewo",
+      "postal": "88-110"
+    },
+    {
+      "city": "Baldram",
+      "postal": "82-501"
+    },
+    {
+      "city": "Baldwinowice",
+      "postal": "46-142"
+    },
+    {
+      "city": "Bale",
+      "postal": "08-124"
+    },
+    {
+      "city": "Balewko",
+      "postal": "82-433"
+    },
+    {
+      "city": "Balewo",
+      "postal": "82-325"
+    },
+    {
+      "city": "Balice",
+      "postal": "26-020"
+    },
+    {
+      "city": "Baligród",
+      "postal": "38-604"
+    },
+    {
+      "city": "Baliki",
+      "postal": "18-414"
+    },
+    {
+      "city": "Balików",
+      "postal": "99-320"
+    },
+    {
+      "city": "Balin",
+      "postal": "32-500"
+    },
+    {
+      "city": "Balinka",
+      "postal": "16-310"
+    },
+    {
+      "city": "Balków",
+      "postal": "99-120"
+    },
+    {
+      "city": "Balnica",
+      "postal": "38-543"
+    },
+    {
+      "city": "Banachy",
+      "postal": "37-413"
+    },
+    {
+      "city": "Banasiówka",
+      "postal": "46-325"
+    },
+    {
+      "city": "Banaszki",
+      "postal": "11-400"
+    },
+    {
+      "city": "Bandlów",
+      "postal": "63-630"
+    },
+    {
+      "city": "Bandrów Narodowy",
+      "postal": "38-700"
+    },
+    {
+      "city": "Bandurowa",
+      "postal": "34-234"
+    },
+    {
+      "city": "Bandysie",
+      "postal": "07-431"
+    },
+    {
+      "city": "Bania",
+      "postal": "26-234"
+    },
+    {
+      "city": "Banica",
+      "postal": "38-315"
+    },
+    {
+      "city": "Banie",
+      "postal": "74-110"
+    },
+    {
+      "city": "Banie Mazurskie",
+      "postal": "19-520"
+    },
+    {
+      "city": "Baniewice",
+      "postal": "74-110"
+    },
+    {
+      "city": "Baniewo",
+      "postal": "76-142"
+    },
+    {
+      "city": "Banino",
+      "postal": "80-297"
+    },
+    {
+      "city": "Baniocha",
+      "postal": "05-532"
+    },
+    {
+      "city": "Bara",
+      "postal": "74-500"
+    },
+    {
+      "city": "Barabaszówka",
+      "postal": "28-210"
+    },
+    {
+      "city": "Barak",
+      "postal": "21-002"
+    },
+    {
+      "city": "Baraki",
+      "postal": "09-110"
+    },
+    {
+      "city": "Baraki Chotumskie",
+      "postal": "06-452"
+    },
+    {
+      "city": "Baran",
+      "postal": "21-136"
+    },
+    {
+      "city": "Baranek",
+      "postal": "06-445"
+    },
+    {
+      "city": "Baranica",
+      "postal": "22-315"
+    },
+    {
+      "city": "Baraniec",
+      "postal": "06-425"
+    },
+    {
+      "city": "Baranki",
+      "postal": "16-061"
+    },
+    {
+      "city": "Barankowo",
+      "postal": "77-430"
+    },
+    {
+      "city": "Baranowice",
+      "postal": "55-080"
+    },
+    {
+      "city": "Baranowiec",
+      "postal": "62-660"
+    },
+    {
+      "city": "Baranowizna",
+      "postal": "42-360"
+    },
+    {
+      "city": "Baranowo",
+      "postal": "06-320"
+    },
+    {
+      "city": "Barany",
+      "postal": "19-300"
+    },
+    {
+      "city": "Baranów",
+      "postal": "24-105"
+    },
+    {
+      "city": "Baranów Sandomierski",
+      "postal": "39-450"
+    },
+    {
+      "city": "Baranówek",
+      "postal": "27-552"
+    },
+    {
+      "city": "Baranówka",
+      "postal": "14-530"
+    },
+    {
+      "city": "Baranówka-Leśniczówka",
+      "postal": "14-530"
+    },
+    {
+      "city": "Baranówko",
+      "postal": "62-050"
+    },
+    {
+      "city": "Barańce",
+      "postal": "06-408"
+    },
+    {
+      "city": "Barbarka",
+      "postal": "32-046"
+    },
+    {
+      "city": "Barbarówka",
+      "postal": "22-175"
+    },
+    {
+      "city": "Barce",
+      "postal": "62-511"
+    },
+    {
+      "city": "Barchaczów",
+      "postal": "22-437"
+    },
+    {
+      "city": "Barchlin",
+      "postal": "64-234"
+    },
+    {
+      "city": "Barchnowy",
+      "postal": "83-211"
+    },
+    {
+      "city": "Barchów",
+      "postal": "07-130"
+    },
+    {
+      "city": "Barciany",
+      "postal": "11-410"
+    },
+    {
+      "city": "Barcice",
+      "postal": "07-203"
+    },
+    {
+      "city": "Barcice Dolne",
+      "postal": "33-340"
+    },
+    {
+      "city": "Barcice Drwalewskie",
+      "postal": "05-651"
+    },
+    {
+      "city": "Barcice Rososkie",
+      "postal": "05-650"
+    },
+    {
+      "city": "Barcie",
+      "postal": "19-504"
+    },
+    {
+      "city": "Barcikowo",
+      "postal": "09-472"
+    },
+    {
+      "city": "Barcin",
+      "postal": "88-190"
+    },
+    {
+      "city": "Barcin-Wieś",
+      "postal": "88-190"
+    },
+    {
+      "city": "Barcinek",
+      "postal": "58-512"
+    },
+    {
+      "city": "Barcino",
+      "postal": "77-230"
+    },
+    {
+      "city": "Barciszewo",
+      "postal": "11-200"
+    },
+    {
+      "city": "Barcza",
+      "postal": "26-001"
+    },
+    {
+      "city": "Barczew",
+      "postal": "98-275"
+    },
+    {
+      "city": "Barczewko",
+      "postal": "11-010"
+    },
+    {
+      "city": "Barczewo",
+      "postal": "11-010"
+    },
+    {
+      "city": "Barczewski Dwór",
+      "postal": "11-010"
+    },
+    {
+      "city": "Barczkowice",
+      "postal": "97-360"
+    },
+    {
+      "city": "Barczków",
+      "postal": "32-813"
+    },
+    {
+      "city": "Barczygłów",
+      "postal": "62-500"
+    },
+    {
+      "city": "Barczyzna",
+      "postal": "62-330"
+    },
+    {
+      "city": "Barcząca",
+      "postal": "05-300"
+    },
+    {
+      "city": "Bardno",
+      "postal": "48-315"
+    },
+    {
+      "city": "Bardo",
+      "postal": "26-035"
+    },
+    {
+      "city": "Barduń",
+      "postal": "11-036"
+    },
+    {
+      "city": "Bardy",
+      "postal": "78-113"
+    },
+    {
+      "city": "Bardyny",
+      "postal": "14-405"
+    },
+    {
+      "city": "Bardzice",
+      "postal": "26-624"
+    },
+    {
+      "city": "Bardzinek",
+      "postal": "99-340"
+    },
+    {
+      "city": "Bardzlino",
+      "postal": "76-024"
+    },
+    {
+      "city": "Bardzynin",
+      "postal": "99-205"
+    },
+    {
+      "city": "Bargów",
+      "postal": "66-235"
+    },
+    {
+      "city": "Bargędzino",
+      "postal": "84-352"
+    },
+    {
+      "city": "Bargły",
+      "postal": "42-262"
+    },
+    {
+      "city": "Bargłów Dworny",
+      "postal": "16-320"
+    },
+    {
+      "city": "Bargłów Kościelny",
+      "postal": "16-320"
+    },
+    {
+      "city": "Bargłówka",
+      "postal": "16-320"
+    },
+    {
+      "city": "Bark",
+      "postal": "11-010"
+    },
+    {
+      "city": "Barka",
+      "postal": "83-236"
+    },
+    {
+      "city": "Barki",
+      "postal": "21-070"
+    },
+    {
+      "city": "Barkocin",
+      "postal": "77-140"
+    },
+    {
+      "city": "Barkowice",
+      "postal": "97-330"
+    },
+    {
+      "city": "Barkowice Mokre",
+      "postal": "97-330"
+    },
+    {
+      "city": "Barkowo",
+      "postal": "19-500"
+    },
+    {
+      "city": "Barkweda",
+      "postal": "11-001"
+    },
+    {
+      "city": "Barkówko",
+      "postal": "55-140"
+    },
+    {
+      "city": "Barlewice",
+      "postal": "82-400"
+    },
+    {
+      "city": "Barlewiczki",
+      "postal": "82-400"
+    },
+    {
+      "city": "Barlinek",
+      "postal": "74-320"
+    },
+    {
+      "city": "Barniewice",
+      "postal": "80-297"
+    },
+    {
+      "city": "Barnim",
+      "postal": "74-201"
+    },
+    {
+      "city": "Barnimie",
+      "postal": "73-220"
+    },
+    {
+      "city": "Barnin",
+      "postal": "76-037"
+    },
+    {
+      "city": "Barninek",
+      "postal": "76-037"
+    },
+    {
+      "city": "Barnisław",
+      "postal": "72-001"
+    },
+    {
+      "city": "Barnisławice",
+      "postal": "72-410"
+    },
+    {
+      "city": "Barnkowo",
+      "postal": "74-500"
+    },
+    {
+      "city": "Barnowiec",
+      "postal": "33-336"
+    },
+    {
+      "city": "Barnowo",
+      "postal": "77-140"
+    },
+    {
+      "city": "Barnówko",
+      "postal": "74-311"
+    },
+    {
+      "city": "Barszcze",
+      "postal": "16-320"
+    },
+    {
+      "city": "Barszczewo",
+      "postal": "16-050"
+    },
+    {
+      "city": "Barszczowa Góra",
+      "postal": "16-304"
+    },
+    {
+      "city": "Barszczówka",
+      "postal": "18-106"
+    },
+    {
+      "city": "Bartel Mały",
+      "postal": "83-260"
+    },
+    {
+      "city": "Bartel Wielki",
+      "postal": "83-260"
+    },
+    {
+      "city": "Bartki",
+      "postal": "13-124"
+    },
+    {
+      "city": "Bartkowa Posadowa",
+      "postal": "33-318"
+    },
+    {
+      "city": "Bartkowa Stajnia",
+      "postal": "83-424"
+    },
+    {
+      "city": "Bartkowa-Posadowa",
+      "postal": "33-318"
+    },
+    {
+      "city": "Bartkowice",
+      "postal": "42-270"
+    },
+    {
+      "city": "Bartkowo",
+      "postal": "74-100"
+    },
+    {
+      "city": "Bartkowski Dwór",
+      "postal": "19-404"
+    },
+    {
+      "city": "Bartków",
+      "postal": "26-050"
+    },
+    {
+      "city": "Bartlewo",
+      "postal": "12-220"
+    },
+    {
+      "city": "Bartne",
+      "postal": "38-307"
+    },
+    {
+      "city": "Bartne Łąki",
+      "postal": "82-450"
+    },
+    {
+      "city": "Bartnia Góra",
+      "postal": "16-424"
+    },
+    {
+      "city": "Bartnica",
+      "postal": "57-450"
+    },
+    {
+      "city": "Bartniczka",
+      "postal": "87-321"
+    },
+    {
+      "city": "Bartniki",
+      "postal": "06-300"
+    },
+    {
+      "city": "Bartochów",
+      "postal": "98-290"
+    },
+    {
+      "city": "Bartodzieje",
+      "postal": "05-622"
+    },
+    {
+      "city": "Bartolin",
+      "postal": "95-010"
+    },
+    {
+      "city": "Bartolino",
+      "postal": "76-142"
+    },
+    {
+      "city": "Bartosy",
+      "postal": "07-311"
+    },
+    {
+      "city": "Bartosz",
+      "postal": "08-300"
+    },
+    {
+      "city": "Bartosze",
+      "postal": "19-300"
+    },
+    {
+      "city": "Bartoszewice",
+      "postal": "62-652"
+    },
+    {
+      "city": "Bartoszewo",
+      "postal": "72-004"
+    },
+    {
+      "city": "Bartoszki",
+      "postal": "13-100"
+    },
+    {
+      "city": "Bartoszkowo",
+      "postal": "77-416"
+    },
+    {
+      "city": "Bartoszowa",
+      "postal": "57-160"
+    },
+    {
+      "city": "Bartoszowiny",
+      "postal": "26-006"
+    },
+    {
+      "city": "Bartoszyce",
+      "postal": "11-200"
+    },
+    {
+      "city": "Bartoszylas",
+      "postal": "83-430"
     }
   ],
   "streets": [
@@ -910,7 +2894,7 @@
   "nationalPrefix": "5",
   "schemaVersion": 1,
   "datasetId": "blego-pl-female",
-  "datasetVersion": "2026-11-12.1",
+  "datasetVersion": "2026-11-12.2",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -926,10 +2910,14 @@
       "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
     },
     "geography": {
-      "source": "Inherited BLEGO country resources at 6e57eab",
+      "source": "https://download.geonames.org/export/zip/PL.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "487cf54457698a82a35158cae225fb0c2e2512e42cc8cefc54f7b5d203076dba",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
-      "notes": "Existing format examples retained; independent postal verification pending. Streets are synthetic profile components."
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
     }
   },
-  "checksum": "d09384e23aca8e30e43de2fe3c541fd51d0affa752bceb8da129461a21f92279"
+  "checksum": "ecf55818c96b1833f85650525ef41d810494b8a33970f420c9aca5dfdadb749b"
 }

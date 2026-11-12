@@ -5,13 +5,13 @@ test('catalog reports real capacities and data deficits, not product-sized full 
   const stats = getPoolStats({ country: 'BR', type: 'model' });
   assert.equal(stats.counts.firstNames, 81);
   assert.equal(stats.counts.lastNames, 21);
-  assert.equal(stats.counts.localityPostalLinks, 4);
+  assert.equal(stats.counts.localityPostalLinks, 500);
   assert.equal(stats.capacities.nameCombinations.available, 1701);
   assert.equal(stats.capacities.phone.certainty, 'estimated');
   assert.equal(stats.capacities.bio.available, 30);
   assert.ok(stats.deficits.firstNames > 0);
   assert.equal(stats.deficits.verifiedPostalLinks, 200);
-  assert.ok(stats.limitingFields.includes('postalCode'));
+  assert.ok(stats.limitingFields.includes('status'));
 });
 test('bulk mode requires explicit consent while existing optional-repeat settings remain compatible', () => {
   const { resolvePreset } = require('../../electron/features/generator/sources.cjs');

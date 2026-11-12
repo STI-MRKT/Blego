@@ -1,0 +1,147 @@
+{
+  "targets": {
+    "femaleNames": 500,
+    "surnames": 500,
+    "localities": 50,
+    "verifiedPostalLinks": 200,
+    "streetElements": 100
+  },
+  "rows": [
+    {
+      "country": "BR",
+      "counts": {
+        "femaleNames": 81,
+        "surnames": 21,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 6
+      },
+      "deficits": {
+        "femaleNames": 419,
+        "surnames": 479,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 94
+      }
+    },
+    {
+      "country": "US",
+      "counts": {
+        "femaleNames": 1563,
+        "surnames": 473,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 6
+      },
+      "deficits": {
+        "femaleNames": 0,
+        "surnames": 27,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 94
+      }
+    },
+    {
+      "country": "FR",
+      "counts": {
+        "femaleNames": 435,
+        "surnames": 150,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 6
+      },
+      "deficits": {
+        "femaleNames": 65,
+        "surnames": 350,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 94
+      }
+    },
+    {
+      "country": "PL",
+      "counts": {
+        "femaleNames": 163,
+        "surnames": 710,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 6
+      },
+      "deficits": {
+        "femaleNames": 337,
+        "surnames": 0,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 94
+      }
+    },
+    {
+      "country": "DE",
+      "counts": {
+        "femaleNames": 573,
+        "surnames": 1688,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 8
+      },
+      "deficits": {
+        "femaleNames": 0,
+        "surnames": 0,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 92
+      }
+    },
+    {
+      "country": "ES",
+      "counts": {
+        "femaleNames": 120,
+        "surnames": 625,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 8
+      },
+      "deficits": {
+        "femaleNames": 380,
+        "surnames": 0,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 92
+      }
+    },
+    {
+      "country": "IT",
+      "counts": {
+        "femaleNames": 617,
+        "surnames": 2170,
+        "localities": 500,
+        "verifiedPostalLinks": 0,
+        "streetElements": 8
+      },
+      "deficits": {
+        "femaleNames": 0,
+        "surnames": 0,
+        "localities": 0,
+        "verifiedPostalLinks": 200,
+        "streetElements": 92
+      }
+    },
+    {
+      "country": "GB",
+      "counts": {
+        "femaleNames": 1563,
+        "surnames": 473,
+        "localities": 6,
+        "verifiedPostalLinks": 0,
+        "streetElements": 8
+      },
+      "deficits": {
+        "femaleNames": 0,
+        "surnames": 27,
+        "localities": 44,
+        "verifiedPostalLinks": 200,
+        "streetElements": 92
+      }
+    }
+  ]
+}

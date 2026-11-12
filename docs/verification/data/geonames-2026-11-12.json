@@ -1,0 +1,50 @@
+[
+  {
+    "country": "BR",
+    "url": "https://download.geonames.org/export/zip/BR.zip",
+    "bytes": 134858,
+    "sha256": "01b9696638edca1dd927842b85eecfe98cb8225f863849b6f7958896e1546674"
+  },
+  {
+    "country": "US",
+    "url": "https://download.geonames.org/export/zip/US.zip",
+    "bytes": 634328,
+    "sha256": "8143066cdca36f13bf956692750e8d14797a3968c0c87d026e95fa7b0e080c26"
+  },
+  {
+    "country": "FR",
+    "url": "https://download.geonames.org/export/zip/FR.zip",
+    "bytes": 648236,
+    "sha256": "33e09c469b6f64bed5da83e21f3c9b670f85caeb8123b512a92407652fb81730"
+  },
+  {
+    "country": "PL",
+    "url": "https://download.geonames.org/export/zip/PL.zip",
+    "bytes": 987684,
+    "sha256": "487cf54457698a82a35158cae225fb0c2e2512e42cc8cefc54f7b5d203076dba"
+  },
+  {
+    "country": "DE",
+    "url": "https://download.geonames.org/export/zip/DE.zip",
+    "bytes": 388164,
+    "sha256": "f9e075e907de82c58c3a85026ee3f54f794b131fa34bf35c5e70fc36ba8676cf"
+  },
+  {
+    "country": "ES",
+    "url": "https://download.geonames.org/export/zip/ES.zip",
+    "bytes": 555917,
+    "sha256": "ff2cc67332910f51bc466db14b4e3dae8463dbafd4361e6b4d1cbdaf6d538f7b"
+  },
+  {
+    "country": "IT",
+    "url": "https://download.geonames.org/export/zip/IT.zip",
+    "bytes": 256858,
+    "sha256": "42e63805552362a2531a1e481f971d207bc6089266ac563877e50b7ee6db07a0"
+  },
+  {
+    "country": "GB",
+    "url": "https://download.geonames.org/export/zip/GB.zip",
+    "bytes": 330977,
+    "sha256": "50c6c34eecd5c7e09451402b66a140f558d4dcb90158cdce372fea909be0f13c"
+  }
+]

@@ -1,5 +1,5 @@
 {
-  "version": "2",
+  "version": "3",
   "code": "BR",
   "language": "pt",
   "first": [
@@ -110,20 +110,2004 @@
   ],
   "places": [
     {
-      "city": "São Paulo",
-      "postal": "01310-100"
+      "city": "Abadia de Goiás",
+      "postal": "75345-000"
     },
     {
-      "city": "Rio de Janeiro",
-      "postal": "22041-011"
+      "city": "Abadia dos Dourados",
+      "postal": "38540-000"
     },
     {
-      "city": "Curitiba",
-      "postal": "80010-010"
+      "city": "Abadiânia",
+      "postal": "72940-000"
     },
     {
-      "city": "Belo Horizonte",
-      "postal": "30130-010"
+      "city": "Abaetetuba",
+      "postal": "68440-000"
+    },
+    {
+      "city": "Abaeté",
+      "postal": "35620-000"
+    },
+    {
+      "city": "Abaiara",
+      "postal": "63240-000"
+    },
+    {
+      "city": "Abaré",
+      "postal": "48680-000"
+    },
+    {
+      "city": "Abatiá",
+      "postal": "86460-000"
+    },
+    {
+      "city": "Abaíra",
+      "postal": "46690-000"
+    },
+    {
+      "city": "Abdon Batista",
+      "postal": "89636-000"
+    },
+    {
+      "city": "Abel Figueiredo",
+      "postal": "68527-000"
+    },
+    {
+      "city": "Abelardo Luz",
+      "postal": "89830-000"
+    },
+    {
+      "city": "Abre Campo",
+      "postal": "35365-000"
+    },
+    {
+      "city": "Abreu e Lima",
+      "postal": "53500-000"
+    },
+    {
+      "city": "Abreulândia",
+      "postal": "77693-000"
+    },
+    {
+      "city": "Acaiaca",
+      "postal": "35438-000"
+    },
+    {
+      "city": "Acajutiba",
+      "postal": "48360-000"
+    },
+    {
+      "city": "Acarapé",
+      "postal": "62785-000"
+    },
+    {
+      "city": "Acaraú",
+      "postal": "62580-000"
+    },
+    {
+      "city": "Acari",
+      "postal": "59370-000"
+    },
+    {
+      "city": "Acará",
+      "postal": "68690-000"
+    },
+    {
+      "city": "Acauã",
+      "postal": "64748-000"
+    },
+    {
+      "city": "Acopiara",
+      "postal": "63560-000"
+    },
+    {
+      "city": "Acorizal",
+      "postal": "78480-000"
+    },
+    {
+      "city": "Acrelândia",
+      "postal": "69945-000"
+    },
+    {
+      "city": "Acreúna",
+      "postal": "75960-000"
+    },
+    {
+      "city": "Adamantina",
+      "postal": "17800-000"
+    },
+    {
+      "city": "Adelândia",
+      "postal": "76155-000"
+    },
+    {
+      "city": "Adolfo",
+      "postal": "15230-000"
+    },
+    {
+      "city": "Adrianópolis",
+      "postal": "83490-000"
+    },
+    {
+      "city": "Adustina",
+      "postal": "48435-000"
+    },
+    {
+      "city": "Afogados da Ingazeira",
+      "postal": "56800-000"
+    },
+    {
+      "city": "Afonso Bezerra",
+      "postal": "59510-000"
+    },
+    {
+      "city": "Afonso Cláudio",
+      "postal": "29600-000"
+    },
+    {
+      "city": "Afonso Cunha",
+      "postal": "65505-000"
+    },
+    {
+      "city": "Afrânio",
+      "postal": "56360-000"
+    },
+    {
+      "city": "Afuá",
+      "postal": "68890-000"
+    },
+    {
+      "city": "Agrestina",
+      "postal": "55495-000"
+    },
+    {
+      "city": "Agricolândia",
+      "postal": "64440-000"
+    },
+    {
+      "city": "Agrolândia",
+      "postal": "88420-000"
+    },
+    {
+      "city": "Agronômica",
+      "postal": "89188-000"
+    },
+    {
+      "city": "Aguanil",
+      "postal": "37273-000"
+    },
+    {
+      "city": "Aguaí",
+      "postal": "13860-000"
+    },
+    {
+      "city": "Agudo",
+      "postal": "96540-000"
+    },
+    {
+      "city": "Agudos",
+      "postal": "17120-000"
+    },
+    {
+      "city": "Agudos do Sul",
+      "postal": "83850-000"
+    },
+    {
+      "city": "Aguiar",
+      "postal": "58778-000"
+    },
+    {
+      "city": "Aguiarnópolis",
+      "postal": "77908-000"
+    },
+    {
+      "city": "Aimorés",
+      "postal": "35200-000"
+    },
+    {
+      "city": "Aiquara",
+      "postal": "45220-000"
+    },
+    {
+      "city": "Aiuaba",
+      "postal": "63575-000"
+    },
+    {
+      "city": "Aiuruoca",
+      "postal": "37450-000"
+    },
+    {
+      "city": "Ajuricaba",
+      "postal": "98750-000"
+    },
+    {
+      "city": "Alagoa",
+      "postal": "37458-000"
+    },
+    {
+      "city": "Alagoa Grande",
+      "postal": "58388-000"
+    },
+    {
+      "city": "Alagoa Nova",
+      "postal": "58125-000"
+    },
+    {
+      "city": "Alagoinha",
+      "postal": "55260-000"
+    },
+    {
+      "city": "Alagoinha do Piauí",
+      "postal": "64655-000"
+    },
+    {
+      "city": "Alagoinhas",
+      "postal": "48000-000"
+    },
+    {
+      "city": "Alambari",
+      "postal": "18220-000"
+    },
+    {
+      "city": "Albertina",
+      "postal": "37596-000"
+    },
+    {
+      "city": "Alcantil",
+      "postal": "58460-000"
+    },
+    {
+      "city": "Alcinópolis",
+      "postal": "79530-000"
+    },
+    {
+      "city": "Alcobaça",
+      "postal": "45990-000"
+    },
+    {
+      "city": "Alcântara",
+      "postal": "65250-000"
+    },
+    {
+      "city": "Alcântaras",
+      "postal": "62120-000"
+    },
+    {
+      "city": "Aldeias Altas",
+      "postal": "65610-000"
+    },
+    {
+      "city": "Alecrim",
+      "postal": "98950-000"
+    },
+    {
+      "city": "Alegre",
+      "postal": "29500-000"
+    },
+    {
+      "city": "Alegrete",
+      "postal": "97540-000"
+    },
+    {
+      "city": "Alegrete do Piauí",
+      "postal": "64675-000"
+    },
+    {
+      "city": "Alegria",
+      "postal": "98905-000"
+    },
+    {
+      "city": "Alenquer",
+      "postal": "68200-000"
+    },
+    {
+      "city": "Alexandria",
+      "postal": "59965-000"
+    },
+    {
+      "city": "Alexânia",
+      "postal": "72920-000"
+    },
+    {
+      "city": "Alfenas",
+      "postal": "37130-000"
+    },
+    {
+      "city": "Alfredo Chaves",
+      "postal": "29240-000"
+    },
+    {
+      "city": "Alfredo Marcondes",
+      "postal": "19180-000"
+    },
+    {
+      "city": "Alfredo Vasconcelos",
+      "postal": "36272-000"
+    },
+    {
+      "city": "Alfredo Wagner",
+      "postal": "88450-000"
+    },
+    {
+      "city": "Algodão de Jandaíra",
+      "postal": "58399-000"
+    },
+    {
+      "city": "Alhandra",
+      "postal": "58320-000"
+    },
+    {
+      "city": "Aliança",
+      "postal": "55890-000"
+    },
+    {
+      "city": "Aliança do Tocantins",
+      "postal": "77455-000"
+    },
+    {
+      "city": "Almadina",
+      "postal": "45640-000"
+    },
+    {
+      "city": "Almas",
+      "postal": "77310-000"
+    },
+    {
+      "city": "Almeirim",
+      "postal": "68230-000"
+    },
+    {
+      "city": "Almenara",
+      "postal": "39900-000"
+    },
+    {
+      "city": "Almino Afonso",
+      "postal": "59760-000"
+    },
+    {
+      "city": "Almirante Tamandaré",
+      "postal": "83500-000"
+    },
+    {
+      "city": "Aloândia",
+      "postal": "75615-000"
+    },
+    {
+      "city": "Alpercata",
+      "postal": "35138-000"
+    },
+    {
+      "city": "Alpestre",
+      "postal": "98480-000"
+    },
+    {
+      "city": "Alpinópolis",
+      "postal": "37940-000"
+    },
+    {
+      "city": "Alta Floresta",
+      "postal": "78580-000"
+    },
+    {
+      "city": "Alta Floresta d'Oeste",
+      "postal": "78994-000"
+    },
+    {
+      "city": "Altair",
+      "postal": "15430-000"
+    },
+    {
+      "city": "Altamira",
+      "postal": "68370-000"
+    },
+    {
+      "city": "Altamira do Maranhão",
+      "postal": "65310-000"
+    },
+    {
+      "city": "Altamira do Paraná",
+      "postal": "85280-000"
+    },
+    {
+      "city": "Altaneira",
+      "postal": "63195-000"
+    },
+    {
+      "city": "Alterosa",
+      "postal": "37145-000"
+    },
+    {
+      "city": "Altinho",
+      "postal": "55490-000"
+    },
+    {
+      "city": "Altinópolis",
+      "postal": "14350-000"
+    },
+    {
+      "city": "Alto Alegre",
+      "postal": "16310-000"
+    },
+    {
+      "city": "Alto Alegre do Maranhão",
+      "postal": "65413-000"
+    },
+    {
+      "city": "Alto Alegre do Pindaré",
+      "postal": "65398-000"
+    },
+    {
+      "city": "Alto Alegre dos Parecis",
+      "postal": "78994-800"
+    },
+    {
+      "city": "Alto Araguaia",
+      "postal": "78780-000"
+    },
+    {
+      "city": "Alto Bela Vista",
+      "postal": "89730-000"
+    },
+    {
+      "city": "Alto Boa Vista",
+      "postal": "78665-000"
+    },
+    {
+      "city": "Alto Caparaó",
+      "postal": "36836-000"
+    },
+    {
+      "city": "Alto Feliz",
+      "postal": "95773-000"
+    },
+    {
+      "city": "Alto Garças",
+      "postal": "78770-000"
+    },
+    {
+      "city": "Alto Horizonte",
+      "postal": "76560-000"
+    },
+    {
+      "city": "Alto Jequitibá",
+      "postal": "36976-000"
+    },
+    {
+      "city": "Alto Longá",
+      "postal": "64360-000"
+    },
+    {
+      "city": "Alto Paraguai",
+      "postal": "78410-000"
+    },
+    {
+      "city": "Alto Paraná",
+      "postal": "87750-000"
+    },
+    {
+      "city": "Alto Paraíso",
+      "postal": "78956-000"
+    },
+    {
+      "city": "Alto Paraíso de Goiás",
+      "postal": "73770-000"
+    },
+    {
+      "city": "Alto Parnaíba",
+      "postal": "65810-000"
+    },
+    {
+      "city": "Alto Piquiri",
+      "postal": "87580-000"
+    },
+    {
+      "city": "Alto Rio Doce",
+      "postal": "36260-000"
+    },
+    {
+      "city": "Alto Rio Novo",
+      "postal": "29760-000"
+    },
+    {
+      "city": "Alto Santo",
+      "postal": "62970-000"
+    },
+    {
+      "city": "Alto Taquari",
+      "postal": "78785-000"
+    },
+    {
+      "city": "Alto do Rodrigues",
+      "postal": "59507-000"
+    },
+    {
+      "city": "Altos",
+      "postal": "64290-000"
+    },
+    {
+      "city": "Altônia",
+      "postal": "87550-000"
+    },
+    {
+      "city": "Alumínio",
+      "postal": "18125-000"
+    },
+    {
+      "city": "Alvarenga",
+      "postal": "35249-000"
+    },
+    {
+      "city": "Alvarães",
+      "postal": "69475-000"
+    },
+    {
+      "city": "Alvinlândia",
+      "postal": "17430-000"
+    },
+    {
+      "city": "Alvinópolis",
+      "postal": "35950-000"
+    },
+    {
+      "city": "Alvorada",
+      "postal": "77480-000"
+    },
+    {
+      "city": "Alvorada d'Oeste",
+      "postal": "78969-000"
+    },
+    {
+      "city": "Alvorada de Minas",
+      "postal": "39140-000"
+    },
+    {
+      "city": "Alvorada do Gurguéia",
+      "postal": "64923-000"
+    },
+    {
+      "city": "Alvorada do Norte",
+      "postal": "73950-000"
+    },
+    {
+      "city": "Alvorada do Sul",
+      "postal": "86150-000"
+    },
+    {
+      "city": "Além Paraíba",
+      "postal": "36660-000"
+    },
+    {
+      "city": "Amajari",
+      "postal": "69343-000"
+    },
+    {
+      "city": "Amambaí",
+      "postal": "79990-000"
+    },
+    {
+      "city": "Amapari",
+      "postal": "68945-000"
+    },
+    {
+      "city": "Amaporã",
+      "postal": "87850-000"
+    },
+    {
+      "city": "Amapá",
+      "postal": "68950-000"
+    },
+    {
+      "city": "Amapá do Maranhão",
+      "postal": "65293-000"
+    },
+    {
+      "city": "Amaraji",
+      "postal": "55515-000"
+    },
+    {
+      "city": "Amaral Ferrador",
+      "postal": "96635-000"
+    },
+    {
+      "city": "Amaralina",
+      "postal": "76493-000"
+    },
+    {
+      "city": "Amarante",
+      "postal": "64400-000"
+    },
+    {
+      "city": "Amarante do Maranhão",
+      "postal": "65923-000"
+    },
+    {
+      "city": "Amargosa",
+      "postal": "45300-000"
+    },
+    {
+      "city": "Amaturá",
+      "postal": "69620-000"
+    },
+    {
+      "city": "Americana",
+      "postal": "13465-000"
+    },
+    {
+      "city": "Americano do Brasil",
+      "postal": "76165-000"
+    },
+    {
+      "city": "Ametista do Sul",
+      "postal": "98465-000"
+    },
+    {
+      "city": "Amontada",
+      "postal": "62540-000"
+    },
+    {
+      "city": "Amorinópolis",
+      "postal": "76140-000"
+    },
+    {
+      "city": "Amparo",
+      "postal": "13900-000"
+    },
+    {
+      "city": "Amparo de São Francisco",
+      "postal": "49920-000"
+    },
+    {
+      "city": "Amparo do Serra",
+      "postal": "35444-000"
+    },
+    {
+      "city": "Ampére",
+      "postal": "85640-000"
+    },
+    {
+      "city": "Amélia Rodrigues",
+      "postal": "44230-000"
+    },
+    {
+      "city": "América Dourada",
+      "postal": "44910-000"
+    },
+    {
+      "city": "Américo Brasiliense",
+      "postal": "14820-000"
+    },
+    {
+      "city": "Américo de Campos",
+      "postal": "15550-000"
+    },
+    {
+      "city": "Anadia",
+      "postal": "57660-000"
+    },
+    {
+      "city": "Anagé",
+      "postal": "45180-000"
+    },
+    {
+      "city": "Anahy",
+      "postal": "85425-000"
+    },
+    {
+      "city": "Anajatuba",
+      "postal": "65490-000"
+    },
+    {
+      "city": "Anajás",
+      "postal": "68810-000"
+    },
+    {
+      "city": "Analândia",
+      "postal": "13550-000"
+    },
+    {
+      "city": "Anamã",
+      "postal": "69445-000"
+    },
+    {
+      "city": "Ananindeua",
+      "postal": "67000-000"
+    },
+    {
+      "city": "Ananás",
+      "postal": "77890-000"
+    },
+    {
+      "city": "Anapu",
+      "postal": "68365-000"
+    },
+    {
+      "city": "Anapurus",
+      "postal": "65525-000"
+    },
+    {
+      "city": "Anastácio",
+      "postal": "79210-000"
+    },
+    {
+      "city": "Anaurilândia",
+      "postal": "79770-000"
+    },
+    {
+      "city": "Anchieta",
+      "postal": "29230-000"
+    },
+    {
+      "city": "Andaraí",
+      "postal": "46830-000"
+    },
+    {
+      "city": "Andirá",
+      "postal": "86380-000"
+    },
+    {
+      "city": "Andorinha",
+      "postal": "48990-000"
+    },
+    {
+      "city": "Andradas",
+      "postal": "37795-000"
+    },
+    {
+      "city": "Andradina",
+      "postal": "16900-000"
+    },
+    {
+      "city": "Andrelândia",
+      "postal": "37300-000"
+    },
+    {
+      "city": "André da Rocha",
+      "postal": "95310-000"
+    },
+    {
+      "city": "Angatuba",
+      "postal": "18240-000"
+    },
+    {
+      "city": "Angelim",
+      "postal": "55430-000"
+    },
+    {
+      "city": "Angelina",
+      "postal": "88460-000"
+    },
+    {
+      "city": "Angelândia",
+      "postal": "39685-000"
+    },
+    {
+      "city": "Angical",
+      "postal": "47960-000"
+    },
+    {
+      "city": "Angical do Piauí",
+      "postal": "64410-000"
+    },
+    {
+      "city": "Angico",
+      "postal": "77905-000"
+    },
+    {
+      "city": "Angicos",
+      "postal": "59515-000"
+    },
+    {
+      "city": "Angra dos Reis",
+      "postal": "23900-000"
+    },
+    {
+      "city": "Anguera",
+      "postal": "44670-000"
+    },
+    {
+      "city": "Angélica",
+      "postal": "79785-000"
+    },
+    {
+      "city": "Anhanguera",
+      "postal": "75770-000"
+    },
+    {
+      "city": "Anhembi",
+      "postal": "18620-000"
+    },
+    {
+      "city": "Anhumas",
+      "postal": "19580-000"
+    },
+    {
+      "city": "Anicuns",
+      "postal": "76170-000"
+    },
+    {
+      "city": "Anita Garibaldi",
+      "postal": "88590-000"
+    },
+    {
+      "city": "Anitápolis",
+      "postal": "88475-000"
+    },
+    {
+      "city": "Anori",
+      "postal": "69440-000"
+    },
+    {
+      "city": "Anta Gorda",
+      "postal": "95980-000"
+    },
+    {
+      "city": "Antas",
+      "postal": "48420-000"
+    },
+    {
+      "city": "Antonina",
+      "postal": "83370-000"
+    },
+    {
+      "city": "Antonina do Norte",
+      "postal": "63570-000"
+    },
+    {
+      "city": "Antônio Almeida",
+      "postal": "64855-000"
+    },
+    {
+      "city": "Antônio Cardoso",
+      "postal": "44180-000"
+    },
+    {
+      "city": "Antônio Carlos",
+      "postal": "36220-000"
+    },
+    {
+      "city": "Antônio Dias",
+      "postal": "35177-000"
+    },
+    {
+      "city": "Antônio Gonçalves",
+      "postal": "44780-000"
+    },
+    {
+      "city": "Antônio João",
+      "postal": "79910-000"
+    },
+    {
+      "city": "Antônio Martins",
+      "postal": "59870-000"
+    },
+    {
+      "city": "Antônio Olinto",
+      "postal": "83980-000"
+    },
+    {
+      "city": "Antônio Prado",
+      "postal": "95250-000"
+    },
+    {
+      "city": "Antônio Prado de Minas",
+      "postal": "36850-000"
+    },
+    {
+      "city": "Anápolis",
+      "postal": "75000-000"
+    },
+    {
+      "city": "Anísio de Abreu",
+      "postal": "64780-000"
+    },
+    {
+      "city": "Aparecida",
+      "postal": "12570-000"
+    },
+    {
+      "city": "Aparecida d'Oeste",
+      "postal": "15735-000"
+    },
+    {
+      "city": "Aparecida de Goiânia",
+      "postal": "74900-000"
+    },
+    {
+      "city": "Aparecida do Rio Doce",
+      "postal": "75827-000"
+    },
+    {
+      "city": "Aparecida do Rio Negro",
+      "postal": "77620-000"
+    },
+    {
+      "city": "Aparecida do Taboado",
+      "postal": "79570-000"
+    },
+    {
+      "city": "Aperibé",
+      "postal": "28495-000"
+    },
+    {
+      "city": "Apiacá",
+      "postal": "29450-000"
+    },
+    {
+      "city": "Apiacás",
+      "postal": "78595-000"
+    },
+    {
+      "city": "Apiaí",
+      "postal": "18320-000"
+    },
+    {
+      "city": "Apicum-Açu",
+      "postal": "65275-000"
+    },
+    {
+      "city": "Apiúna",
+      "postal": "89135-000"
+    },
+    {
+      "city": "Apodi",
+      "postal": "59700-000"
+    },
+    {
+      "city": "Aporá",
+      "postal": "48350-000"
+    },
+    {
+      "city": "Aporé",
+      "postal": "75825-000"
+    },
+    {
+      "city": "Apuarema",
+      "postal": "45355-000"
+    },
+    {
+      "city": "Apucarana",
+      "postal": "86800-000"
+    },
+    {
+      "city": "Apuiarés",
+      "postal": "62630-000"
+    },
+    {
+      "city": "Apuí",
+      "postal": "69265-000"
+    },
+    {
+      "city": "Aquidabã",
+      "postal": "49790-000"
+    },
+    {
+      "city": "Aquidauana",
+      "postal": "79200-000"
+    },
+    {
+      "city": "Aquiraz",
+      "postal": "61700-000"
+    },
+    {
+      "city": "Arabutã",
+      "postal": "89740-000"
+    },
+    {
+      "city": "Aracaju",
+      "postal": "49000-000"
+    },
+    {
+      "city": "Aracati",
+      "postal": "62800-000"
+    },
+    {
+      "city": "Aracatu",
+      "postal": "46130-000"
+    },
+    {
+      "city": "Araci",
+      "postal": "48760-000"
+    },
+    {
+      "city": "Aracitaba",
+      "postal": "36255-000"
+    },
+    {
+      "city": "Aracoiaba",
+      "postal": "62750-000"
+    },
+    {
+      "city": "Aracruz",
+      "postal": "29190-000"
+    },
+    {
+      "city": "Aragarças",
+      "postal": "76240-000"
+    },
+    {
+      "city": "Aragoiânia",
+      "postal": "75360-000"
+    },
+    {
+      "city": "Aragominas",
+      "postal": "77845-000"
+    },
+    {
+      "city": "Araguacema",
+      "postal": "77690-000"
+    },
+    {
+      "city": "Araguaiana",
+      "postal": "78685-000"
+    },
+    {
+      "city": "Araguainha",
+      "postal": "78615-000"
+    },
+    {
+      "city": "Araguanã",
+      "postal": "65368-000"
+    },
+    {
+      "city": "Araguapaz",
+      "postal": "76720-000"
+    },
+    {
+      "city": "Araguari",
+      "postal": "38440-000"
+    },
+    {
+      "city": "Araguatins",
+      "postal": "77950-000"
+    },
+    {
+      "city": "Araguaçu",
+      "postal": "77475-000"
+    },
+    {
+      "city": "Araguaína",
+      "postal": "77800-000"
+    },
+    {
+      "city": "Araioses",
+      "postal": "65570-000"
+    },
+    {
+      "city": "Aral Moreira",
+      "postal": "79930-000"
+    },
+    {
+      "city": "Aramari",
+      "postal": "48130-000"
+    },
+    {
+      "city": "Arambaré",
+      "postal": "96178-000"
+    },
+    {
+      "city": "Arame",
+      "postal": "65945-000"
+    },
+    {
+      "city": "Aramina",
+      "postal": "14550-000"
+    },
+    {
+      "city": "Arandu",
+      "postal": "18710-000"
+    },
+    {
+      "city": "Arantina",
+      "postal": "37360-000"
+    },
+    {
+      "city": "Arapeí",
+      "postal": "12870-000"
+    },
+    {
+      "city": "Arapiraca",
+      "postal": "57300-000"
+    },
+    {
+      "city": "Arapoema",
+      "postal": "77780-000"
+    },
+    {
+      "city": "Araponga",
+      "postal": "36594-000"
+    },
+    {
+      "city": "Arapongas",
+      "postal": "86700-000"
+    },
+    {
+      "city": "Araporã",
+      "postal": "38435-000"
+    },
+    {
+      "city": "Arapoti",
+      "postal": "84990-000"
+    },
+    {
+      "city": "Araputanga",
+      "postal": "78260-000"
+    },
+    {
+      "city": "Arapuá",
+      "postal": "38860-000"
+    },
+    {
+      "city": "Arapuã",
+      "postal": "86884-000"
+    },
+    {
+      "city": "Araquari",
+      "postal": "89245-000"
+    },
+    {
+      "city": "Arara",
+      "postal": "58396-000"
+    },
+    {
+      "city": "Araranguá",
+      "postal": "88900-000"
+    },
+    {
+      "city": "Araraquara",
+      "postal": "14800-000"
+    },
+    {
+      "city": "Araras",
+      "postal": "13600-000"
+    },
+    {
+      "city": "Ararendá",
+      "postal": "62210-000"
+    },
+    {
+      "city": "Arari",
+      "postal": "65480-000"
+    },
+    {
+      "city": "Araricá",
+      "postal": "93880-000"
+    },
+    {
+      "city": "Araripe",
+      "postal": "63170-000"
+    },
+    {
+      "city": "Araripina",
+      "postal": "56280-000"
+    },
+    {
+      "city": "Araruama",
+      "postal": "28970-000"
+    },
+    {
+      "city": "Araruna",
+      "postal": "58233-000"
+    },
+    {
+      "city": "Arataca",
+      "postal": "45695-000"
+    },
+    {
+      "city": "Aratiba",
+      "postal": "99770-000"
+    },
+    {
+      "city": "Aratuba",
+      "postal": "62762-000"
+    },
+    {
+      "city": "Aratuípe",
+      "postal": "44490-000"
+    },
+    {
+      "city": "Araucária",
+      "postal": "83700-000"
+    },
+    {
+      "city": "Arauá",
+      "postal": "49220-000"
+    },
+    {
+      "city": "Araxá",
+      "postal": "38180-000"
+    },
+    {
+      "city": "Araçagi",
+      "postal": "58270-000"
+    },
+    {
+      "city": "Araçariguama",
+      "postal": "18147-000"
+    },
+    {
+      "city": "Araças",
+      "postal": "48108-000"
+    },
+    {
+      "city": "Araçatuba",
+      "postal": "16000-000"
+    },
+    {
+      "city": "Araçaí",
+      "postal": "35777-000"
+    },
+    {
+      "city": "Araçoiaba",
+      "postal": "53690-000"
+    },
+    {
+      "city": "Araçoiaba da Serra",
+      "postal": "18190-000"
+    },
+    {
+      "city": "Araçu",
+      "postal": "75410-000"
+    },
+    {
+      "city": "Araçuaí",
+      "postal": "39600-000"
+    },
+    {
+      "city": "Araújos",
+      "postal": "35603-000"
+    },
+    {
+      "city": "Arceburgo",
+      "postal": "37820-000"
+    },
+    {
+      "city": "Arco-Íris",
+      "postal": "17630-000"
+    },
+    {
+      "city": "Arcos",
+      "postal": "35588-000"
+    },
+    {
+      "city": "Arcoverde",
+      "postal": "56500-000"
+    },
+    {
+      "city": "Areado",
+      "postal": "37140-000"
+    },
+    {
+      "city": "Areal",
+      "postal": "25845-000"
+    },
+    {
+      "city": "Arealva",
+      "postal": "17160-000"
+    },
+    {
+      "city": "Areia",
+      "postal": "58397-000"
+    },
+    {
+      "city": "Areia Branca",
+      "postal": "49580-000"
+    },
+    {
+      "city": "Areia de Baraúnas",
+      "postal": "58732-000"
+    },
+    {
+      "city": "Areial",
+      "postal": "58140-000"
+    },
+    {
+      "city": "Areias",
+      "postal": "12820-000"
+    },
+    {
+      "city": "Areiópolis",
+      "postal": "18670-000"
+    },
+    {
+      "city": "Arenápolis",
+      "postal": "78420-000"
+    },
+    {
+      "city": "Arenópolis",
+      "postal": "76235-000"
+    },
+    {
+      "city": "Argirita",
+      "postal": "36710-000"
+    },
+    {
+      "city": "Aricanduva",
+      "postal": "39678-000"
+    },
+    {
+      "city": "Arinos",
+      "postal": "38680-000"
+    },
+    {
+      "city": "Aripuanã",
+      "postal": "78325-000"
+    },
+    {
+      "city": "Ariquemes",
+      "postal": "78930-000"
+    },
+    {
+      "city": "Ariranha",
+      "postal": "15960-000"
+    },
+    {
+      "city": "Ariranha do Ivaí",
+      "postal": "86880-000"
+    },
+    {
+      "city": "Armazém",
+      "postal": "88740-000"
+    },
+    {
+      "city": "Armação dos Búzios",
+      "postal": "28950-000"
+    },
+    {
+      "city": "Arneiroz",
+      "postal": "63670-000"
+    },
+    {
+      "city": "Aroazes",
+      "postal": "64310-000"
+    },
+    {
+      "city": "Aroeiras",
+      "postal": "58400-000"
+    },
+    {
+      "city": "Arraial",
+      "postal": "64480-000"
+    },
+    {
+      "city": "Arraial do Cabo",
+      "postal": "28930-000"
+    },
+    {
+      "city": "Arraias",
+      "postal": "77330-000"
+    },
+    {
+      "city": "Arroio Grande",
+      "postal": "96330-000"
+    },
+    {
+      "city": "Arroio Trinta",
+      "postal": "89590-000"
+    },
+    {
+      "city": "Arroio do Meio",
+      "postal": "95940-000"
+    },
+    {
+      "city": "Arroio do Sal",
+      "postal": "95585-000"
+    },
+    {
+      "city": "Arroio do Tigre",
+      "postal": "96950-000"
+    },
+    {
+      "city": "Arroio dos Ratos",
+      "postal": "96740-000"
+    },
+    {
+      "city": "Artur Nogueira",
+      "postal": "13160-000"
+    },
+    {
+      "city": "Aruanã",
+      "postal": "76710-000"
+    },
+    {
+      "city": "Arujá",
+      "postal": "07400-000"
+    },
+    {
+      "city": "Arvoredo",
+      "postal": "89778-000"
+    },
+    {
+      "city": "Arvorezinha",
+      "postal": "95995-000"
+    },
+    {
+      "city": "Arês",
+      "postal": "59170-000"
+    },
+    {
+      "city": "Ascurra",
+      "postal": "89138-000"
+    },
+    {
+      "city": "Aspásia",
+      "postal": "15763-000"
+    },
+    {
+      "city": "Assaré",
+      "postal": "63140-000"
+    },
+    {
+      "city": "Assaí",
+      "postal": "86220-000"
+    },
+    {
+      "city": "Assis",
+      "postal": "19800-000"
+    },
+    {
+      "city": "Assis Brasil",
+      "postal": "69935-000"
+    },
+    {
+      "city": "Assis Chateaubriand",
+      "postal": "58382-000"
+    },
+    {
+      "city": "Assunção",
+      "postal": "58685-000"
+    },
+    {
+      "city": "Assunção do Piauí",
+      "postal": "64333-000"
+    },
+    {
+      "city": "Astolfo Dutra",
+      "postal": "36780-000"
+    },
+    {
+      "city": "Astorga",
+      "postal": "86730-000"
+    },
+    {
+      "city": "Atalaia",
+      "postal": "57690-000"
+    },
+    {
+      "city": "Atalaia do Norte",
+      "postal": "69650-000"
+    },
+    {
+      "city": "Atalanta",
+      "postal": "88410-000"
+    },
+    {
+      "city": "Ataléia",
+      "postal": "39850-000"
+    },
+    {
+      "city": "Atibaia",
+      "postal": "12940-000"
+    },
+    {
+      "city": "Atilio Vivacqua",
+      "postal": "29490-000"
+    },
+    {
+      "city": "Augustinópolis",
+      "postal": "77960-000"
+    },
+    {
+      "city": "Augusto Corrêa",
+      "postal": "68610-000"
+    },
+    {
+      "city": "Augusto Pestana",
+      "postal": "98740-000"
+    },
+    {
+      "city": "Augusto de Lima",
+      "postal": "39220-000"
+    },
+    {
+      "city": "Aurelino Leal",
+      "postal": "45675-000"
+    },
+    {
+      "city": "Auriflama",
+      "postal": "15350-000"
+    },
+    {
+      "city": "Aurilândia",
+      "postal": "76120-000"
+    },
+    {
+      "city": "Aurora",
+      "postal": "63360-000"
+    },
+    {
+      "city": "Aurora do Pará",
+      "postal": "68658-000"
+    },
+    {
+      "city": "Aurora do Tocantins",
+      "postal": "77325-000"
+    },
+    {
+      "city": "Autazes",
+      "postal": "69240-000"
+    },
+    {
+      "city": "Avanhandava",
+      "postal": "16360-000"
+    },
+    {
+      "city": "Avaré",
+      "postal": "18700-000"
+    },
+    {
+      "city": "Avaí",
+      "postal": "16680-000"
+    },
+    {
+      "city": "Aveiro",
+      "postal": "68150-000"
+    },
+    {
+      "city": "Avelino Lopes",
+      "postal": "64965-000"
+    },
+    {
+      "city": "Avelinópolis",
+      "postal": "75395-000"
+    },
+    {
+      "city": "Axixá",
+      "postal": "65108-000"
+    },
+    {
+      "city": "Axixá do Tocantins",
+      "postal": "77930-000"
+    },
+    {
+      "city": "Açailândia",
+      "postal": "65930-000"
+    },
+    {
+      "city": "Açu",
+      "postal": "59650-000"
+    },
+    {
+      "city": "Açucena",
+      "postal": "35150-000"
+    },
+    {
+      "city": "Babaçulândia",
+      "postal": "77870-000"
+    },
+    {
+      "city": "Bacabal",
+      "postal": "65700-000"
+    },
+    {
+      "city": "Bacabeira",
+      "postal": "65103-000"
+    },
+    {
+      "city": "Bacuri",
+      "postal": "65270-000"
+    },
+    {
+      "city": "Bacurituba",
+      "postal": "65233-000"
+    },
+    {
+      "city": "Bady Bassitt",
+      "postal": "15115-000"
+    },
+    {
+      "city": "Baependi",
+      "postal": "37443-000"
+    },
+    {
+      "city": "Bagre",
+      "postal": "68475-000"
+    },
+    {
+      "city": "Bagé",
+      "postal": "96400-000"
+    },
+    {
+      "city": "Baianópolis",
+      "postal": "47830-000"
+    },
+    {
+      "city": "Baixa Grande",
+      "postal": "44620-000"
+    },
+    {
+      "city": "Baixa Grande do Ribeiro",
+      "postal": "64868-000"
+    },
+    {
+      "city": "Baixio",
+      "postal": "63320-000"
+    },
+    {
+      "city": "Baixo Guandu",
+      "postal": "29730-000"
+    },
+    {
+      "city": "Baião",
+      "postal": "68465-000"
+    },
+    {
+      "city": "Balbinos",
+      "postal": "16640-000"
+    },
+    {
+      "city": "Baldim",
+      "postal": "35706-000"
+    },
+    {
+      "city": "Baliza",
+      "postal": "76250-000"
+    },
+    {
+      "city": "Balneário Arroio do Silva",
+      "postal": "88914-000"
+    },
+    {
+      "city": "Balneário Barra do Sul",
+      "postal": "89247-000"
+    },
+    {
+      "city": "Balneário Camboriú",
+      "postal": "88330-000"
+    },
+    {
+      "city": "Balneário Gaivota",
+      "postal": "88955-000"
+    },
+    {
+      "city": "Balneário Pinhal",
+      "postal": "95599-000"
+    },
+    {
+      "city": "Balsa Nova",
+      "postal": "83650-000"
+    },
+    {
+      "city": "Balsas",
+      "postal": "65800-000"
+    },
+    {
+      "city": "Bambuí",
+      "postal": "38900-000"
+    },
+    {
+      "city": "Banabuiú",
+      "postal": "63960-000"
+    },
+    {
+      "city": "Bananal",
+      "postal": "12850-000"
+    },
+    {
+      "city": "Bananeiras",
+      "postal": "58220-000"
+    },
+    {
+      "city": "Bandeira",
+      "postal": "39917-000"
+    },
+    {
+      "city": "Bandeira do Sul",
+      "postal": "37740-000"
+    },
+    {
+      "city": "Bandeirante",
+      "postal": "89905-000"
+    },
+    {
+      "city": "Bandeirantes",
+      "postal": "79430-000"
+    },
+    {
+      "city": "Bandeirantes do Tocantins",
+      "postal": "77783-000"
+    },
+    {
+      "city": "Bannach",
+      "postal": "68388-000"
+    },
+    {
+      "city": "Banzaê",
+      "postal": "48405-000"
+    },
+    {
+      "city": "Baraúna",
+      "postal": "58188-000"
+    },
+    {
+      "city": "Barbacena",
+      "postal": "36200-000"
+    },
+    {
+      "city": "Barbalha",
+      "postal": "63180-000"
+    },
+    {
+      "city": "Barbosa",
+      "postal": "16350-000"
+    },
+    {
+      "city": "Barbosa Ferraz",
+      "postal": "86960-000"
+    },
+    {
+      "city": "Barcarena",
+      "postal": "68445-000"
+    },
+    {
+      "city": "Barcelona",
+      "postal": "59410-000"
+    },
+    {
+      "city": "Barcelos",
+      "postal": "69700-000"
+    },
+    {
+      "city": "Bariri",
+      "postal": "17250-000"
+    },
+    {
+      "city": "Barra",
+      "postal": "47100-000"
+    },
+    {
+      "city": "Barra Bonita",
+      "postal": "17340-000"
+    },
+    {
+      "city": "Barra Funda",
+      "postal": "99585-000"
+    },
+    {
+      "city": "Barra Longa",
+      "postal": "35447-000"
+    },
+    {
+      "city": "Barra Mansa",
+      "postal": "27300-000"
+    },
+    {
+      "city": "Barra Velha",
+      "postal": "88390-000"
+    },
+    {
+      "city": "Barra d'Alcântara",
+      "postal": "64528-000"
+    },
+    {
+      "city": "Barra da Estiva",
+      "postal": "46650-000"
+    },
+    {
+      "city": "Barra de Guabiraba",
+      "postal": "55690-000"
+    },
+    {
+      "city": "Barra de Santa Rosa",
+      "postal": "58170-000"
+    },
+    {
+      "city": "Barra de Santana",
+      "postal": "58458-000"
+    },
+    {
+      "city": "Barra de Santo Antônio",
+      "postal": "57925-000"
+    },
+    {
+      "city": "Barra de São Francisco",
+      "postal": "29800-000"
+    },
+    {
+      "city": "Barra de São Miguel",
+      "postal": "57180-000"
+    },
+    {
+      "city": "Barra do Bugres",
+      "postal": "78390-000"
+    },
+    {
+      "city": "Barra do Chapéu",
+      "postal": "18325-000"
+    },
+    {
+      "city": "Barra do Choça",
+      "postal": "45120-000"
+    },
+    {
+      "city": "Barra do Corda",
+      "postal": "65950-000"
+    },
+    {
+      "city": "Barra do Garças",
+      "postal": "78600-000"
+    },
+    {
+      "city": "Barra do Guarita",
+      "postal": "98530-000"
+    },
+    {
+      "city": "Barra do Jacaré",
+      "postal": "86385-000"
+    },
+    {
+      "city": "Barra do Mendes",
+      "postal": "44990-000"
+    },
+    {
+      "city": "Barra do Ouro",
+      "postal": "77765-000"
+    },
+    {
+      "city": "Barra do Piraí",
+      "postal": "27000-000"
+    },
+    {
+      "city": "Barra do Quaraí",
+      "postal": "97538-000"
+    },
+    {
+      "city": "Barra do Ribeiro",
+      "postal": "96790-000"
+    },
+    {
+      "city": "Barra do Rio Azul",
+      "postal": "99795-000"
+    },
+    {
+      "city": "Barra do Rocha",
+      "postal": "45560-000"
+    },
+    {
+      "city": "Barra do Turvo",
+      "postal": "11955-000"
+    },
+    {
+      "city": "Barra dos Coqueiros",
+      "postal": "49140-000"
+    },
+    {
+      "city": "Barracão",
+      "postal": "85700-000"
+    },
+    {
+      "city": "Barras",
+      "postal": "64100-000"
+    },
+    {
+      "city": "Barreira",
+      "postal": "62795-000"
+    },
+    {
+      "city": "Barreiras",
+      "postal": "47800-000"
+    },
+    {
+      "city": "Barreiras do Piauí",
+      "postal": "64990-000"
+    },
+    {
+      "city": "Barreirinha",
+      "postal": "69160-000"
+    },
+    {
+      "city": "Barreirinhas",
+      "postal": "65590-000"
+    },
+    {
+      "city": "Barreiros",
+      "postal": "55560-000"
+    },
+    {
+      "city": "Barretos",
+      "postal": "14780-000"
+    },
+    {
+      "city": "Barrinha",
+      "postal": "14860-000"
+    },
+    {
+      "city": "Barro",
+      "postal": "63380-000"
+    },
+    {
+      "city": "Barro Alto",
+      "postal": "44895-000"
+    },
+    {
+      "city": "Barro Duro",
+      "postal": "64455-000"
+    },
+    {
+      "city": "Barro Preto",
+      "postal": "45625-000"
+    },
+    {
+      "city": "Barrolândia",
+      "postal": "77665-000"
+    },
+    {
+      "city": "Barroquinha",
+      "postal": "62410-000"
+    },
+    {
+      "city": "Barros Cassal",
+      "postal": "99360-000"
+    },
+    {
+      "city": "Barroso",
+      "postal": "36212-000"
+    },
+    {
+      "city": "Barueri",
+      "postal": "06400-000"
+    },
+    {
+      "city": "Barão",
+      "postal": "95730-000"
+    },
+    {
+      "city": "Barão de Antonina",
+      "postal": "18490-000"
+    },
+    {
+      "city": "Barão de Cocais",
+      "postal": "35970-000"
+    },
+    {
+      "city": "Barão de Cotegipe",
+      "postal": "99740-000"
+    },
+    {
+      "city": "Barão de Grajaú",
+      "postal": "65660-000"
+    },
+    {
+      "city": "Barão de Melgaço",
+      "postal": "78190-000"
+    },
+    {
+      "city": "Barão de Monte Alto",
+      "postal": "36870-000"
+    },
+    {
+      "city": "Barão do Triunfo",
+      "postal": "96735-000"
+    },
+    {
+      "city": "Bastos",
+      "postal": "17690-000"
+    },
+    {
+      "city": "Bataguassu",
+      "postal": "79780-000"
+    },
+    {
+      "city": "Batalha",
+      "postal": "57420-000"
+    },
+    {
+      "city": "Batatais",
+      "postal": "14300-000"
+    },
+    {
+      "city": "Batayporã",
+      "postal": "79760-000"
     }
   ],
   "streets": [
@@ -139,7 +2123,7 @@
   "nationalPrefix": "119",
   "schemaVersion": 1,
   "datasetId": "blego-br-female",
-  "datasetVersion": "2026-11-12.1",
+  "datasetVersion": "2026-11-12.2",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -155,10 +2139,14 @@
       "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
     },
     "geography": {
-      "source": "Inherited BLEGO country resources at 6e57eab",
+      "source": "https://download.geonames.org/export/zip/BR.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "01b9696638edca1dd927842b85eecfe98cb8225f863849b6f7958896e1546674",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
-      "notes": "Existing format examples retained; independent postal verification pending. Streets are synthetic profile components."
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
     }
   },
-  "checksum": "d146c55a843c95713b7010030b2b95d08f0775d87769ad7f2d5618f4f964aad7"
+  "checksum": "8ed2b22bd2262873b7ec7b1e301351637d478411eecab9c26d93641ef33814d7"
 }

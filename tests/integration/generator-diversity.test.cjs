@@ -31,7 +31,7 @@ test('transliteration preserves displayed accents and phone/postal exhaustion do
   });
   const settings = { allowRepeats: ['bio', 'status', 'address'] };
   const p = resolvePreset('PL', 'model', settings);
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < new Set(p.places.map((place) => place.postal)).size; i++) {
     const card = await generateProfile(
       { country: 'PL', type: 'model', requestId: String(i) },
       { store, settings }

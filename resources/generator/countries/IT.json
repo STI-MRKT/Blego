@@ -1,5 +1,5 @@
 {
-  "version": "2",
+  "version": "3",
   "code": "IT",
   "language": "it",
   "first": [
@@ -2795,28 +2795,2004 @@
   ],
   "places": [
     {
-      "city": "Milano",
-      "postal": "20121"
+      "city": "Abano Terme",
+      "postal": "35031"
     },
     {
-      "city": "Roma",
-      "postal": "00184"
+      "city": "Abatemarco",
+      "postal": "84060"
     },
     {
-      "city": "Torino",
-      "postal": "10121"
+      "city": "Abazia Di Sulmona",
+      "postal": "67039"
     },
     {
-      "city": "Firenze",
-      "postal": "50122"
+      "city": "Abbadia",
+      "postal": "53045"
     },
     {
-      "city": "Napoli",
-      "postal": "80121"
+      "city": "Abbadia Alpina",
+      "postal": "10064"
     },
     {
-      "city": "Bologna",
-      "postal": "40121"
+      "city": "Abbadia Cerreto",
+      "postal": "26834"
+    },
+    {
+      "city": "Abbadia Di Montepulciano",
+      "postal": "53045"
+    },
+    {
+      "city": "Abbadia Di Naro",
+      "postal": "61041"
+    },
+    {
+      "city": "Abbadia Lariana",
+      "postal": "23821"
+    },
+    {
+      "city": "Abbadia San Salvatore",
+      "postal": "53021"
+    },
+    {
+      "city": "Abbasanta",
+      "postal": "09071"
+    },
+    {
+      "city": "Abbateggio",
+      "postal": "65020"
+    },
+    {
+      "city": "Abbatesse",
+      "postal": "48012"
+    },
+    {
+      "city": "Abbazia",
+      "postal": "15024"
+    },
+    {
+      "city": "Abbazia Di Fossanova",
+      "postal": "04015"
+    },
+    {
+      "city": "Abbazia Pisani",
+      "postal": "35010"
+    },
+    {
+      "city": "Abbiate Guazzone",
+      "postal": "21049"
+    },
+    {
+      "city": "Abbiategrasso",
+      "postal": "20081"
+    },
+    {
+      "city": "Aberstückl",
+      "postal": "39058"
+    },
+    {
+      "city": "Abetina Vallesana",
+      "postal": "23035"
+    },
+    {
+      "city": "Abeto",
+      "postal": "06047"
+    },
+    {
+      "city": "Abetone",
+      "postal": "51021"
+    },
+    {
+      "city": "Abriola",
+      "postal": "85010"
+    },
+    {
+      "city": "Abtei/Badia",
+      "postal": "39036"
+    },
+    {
+      "city": "Acaia",
+      "postal": "73029"
+    },
+    {
+      "city": "Acate",
+      "postal": "97011"
+    },
+    {
+      "city": "Accadia",
+      "postal": "71021"
+    },
+    {
+      "city": "Accaria",
+      "postal": "88040"
+    },
+    {
+      "city": "Accaria Rosaria",
+      "postal": "88040"
+    },
+    {
+      "city": "Acceglio",
+      "postal": "12021"
+    },
+    {
+      "city": "Accettura",
+      "postal": "75011"
+    },
+    {
+      "city": "Acciano",
+      "postal": "67020"
+    },
+    {
+      "city": "Acciarello",
+      "postal": "89018"
+    },
+    {
+      "city": "Acciaroli",
+      "postal": "84068"
+    },
+    {
+      "city": "Acconia",
+      "postal": "88022"
+    },
+    {
+      "city": "Accorneri",
+      "postal": "14030"
+    },
+    {
+      "city": "Accumoli",
+      "postal": "02011"
+    },
+    {
+      "city": "Acerenza",
+      "postal": "85011"
+    },
+    {
+      "city": "Acereto",
+      "postal": "39032"
+    },
+    {
+      "city": "Acerno",
+      "postal": "84042"
+    },
+    {
+      "city": "Acerra",
+      "postal": "80011"
+    },
+    {
+      "city": "Aci Bonaccorsi",
+      "postal": "95020"
+    },
+    {
+      "city": "Aci Castello",
+      "postal": "95021"
+    },
+    {
+      "city": "Aci Catena",
+      "postal": "95022"
+    },
+    {
+      "city": "Aci Platani",
+      "postal": "95024"
+    },
+    {
+      "city": "Aci San Filippo",
+      "postal": "95022"
+    },
+    {
+      "city": "Aci Sant'Antonio",
+      "postal": "95025"
+    },
+    {
+      "city": "Aci Trezza",
+      "postal": "95021"
+    },
+    {
+      "city": "Acilia",
+      "postal": "00125"
+    },
+    {
+      "city": "Acireale",
+      "postal": "95024"
+    },
+    {
+      "city": "Acqua Dei Corsari",
+      "postal": "90121"
+    },
+    {
+      "city": "Acquabona",
+      "postal": "32043"
+    },
+    {
+      "city": "Acquacalda",
+      "postal": "89050"
+    },
+    {
+      "city": "Acquacanina",
+      "postal": "62035"
+    },
+    {
+      "city": "Acquaficara",
+      "postal": "98051"
+    },
+    {
+      "city": "Acquafondata",
+      "postal": "03040"
+    },
+    {
+      "city": "Acquaformosa",
+      "postal": "87010"
+    },
+    {
+      "city": "Acquafredda",
+      "postal": "25010"
+    },
+    {
+      "city": "Acqualagna",
+      "postal": "61041"
+    },
+    {
+      "city": "Acqualoreto",
+      "postal": "05023"
+    },
+    {
+      "city": "Acquamela",
+      "postal": "84081"
+    },
+    {
+      "city": "Acquanegra Cremonese",
+      "postal": "26020"
+    },
+    {
+      "city": "Acquanegra Sul Chiese",
+      "postal": "46011"
+    },
+    {
+      "city": "Acquapendente",
+      "postal": "01021"
+    },
+    {
+      "city": "Acquappesa",
+      "postal": "87020"
+    },
+    {
+      "city": "Acquappesa Marina",
+      "postal": "87020"
+    },
+    {
+      "city": "Acquaria",
+      "postal": "41025"
+    },
+    {
+      "city": "Acquarica Del Capo",
+      "postal": "73040"
+    },
+    {
+      "city": "Acquarica Di Lecce",
+      "postal": "73029"
+    },
+    {
+      "city": "Acquaro",
+      "postal": "89832"
+    },
+    {
+      "city": "Acquarola",
+      "postal": "84085"
+    },
+    {
+      "city": "Acquasanta",
+      "postal": "16010"
+    },
+    {
+      "city": "Acquasanta Terme",
+      "postal": "63095"
+    },
+    {
+      "city": "Acquaseria",
+      "postal": "22010"
+    },
+    {
+      "city": "Acquasparta",
+      "postal": "05021"
+    },
+    {
+      "city": "Acquatraversa Di Formia",
+      "postal": "04023"
+    },
+    {
+      "city": "Acquavella",
+      "postal": "84040"
+    },
+    {
+      "city": "Acquavena",
+      "postal": "84060"
+    },
+    {
+      "city": "Acquaviva",
+      "postal": "00017"
+    },
+    {
+      "city": "Acquaviva Collecroce",
+      "postal": "86030"
+    },
+    {
+      "city": "Acquaviva D'Isernia",
+      "postal": "86080"
+    },
+    {
+      "city": "Acquaviva Delle Fonti",
+      "postal": "70021"
+    },
+    {
+      "city": "Acquaviva Marche",
+      "postal": "61043"
+    },
+    {
+      "city": "Acquaviva Picena",
+      "postal": "63075"
+    },
+    {
+      "city": "Acquaviva Platani",
+      "postal": "93010"
+    },
+    {
+      "city": "Acquaviva Villa Musone",
+      "postal": "60022"
+    },
+    {
+      "city": "Acquedolci",
+      "postal": "98070"
+    },
+    {
+      "city": "Acqui Terme",
+      "postal": "15011"
+    },
+    {
+      "city": "Acquicella",
+      "postal": "95122"
+    },
+    {
+      "city": "Acri",
+      "postal": "87041"
+    },
+    {
+      "city": "Acuto",
+      "postal": "03010"
+    },
+    {
+      "city": "Adami",
+      "postal": "88041"
+    },
+    {
+      "city": "Adegliacco",
+      "postal": "33010"
+    },
+    {
+      "city": "Adelfia",
+      "postal": "70010"
+    },
+    {
+      "city": "Adelfia Canneto",
+      "postal": "70010"
+    },
+    {
+      "city": "Adelfia Montrone",
+      "postal": "70010"
+    },
+    {
+      "city": "Adrano",
+      "postal": "95031"
+    },
+    {
+      "city": "Adrara San Martino",
+      "postal": "24060"
+    },
+    {
+      "city": "Adrara San Rocco",
+      "postal": "24060"
+    },
+    {
+      "city": "Adria",
+      "postal": "45011"
+    },
+    {
+      "city": "Adro",
+      "postal": "25030"
+    },
+    {
+      "city": "Afer",
+      "postal": "39042"
+    },
+    {
+      "city": "Afers",
+      "postal": "39040"
+    },
+    {
+      "city": "Affi",
+      "postal": "37010"
+    },
+    {
+      "city": "Affile",
+      "postal": "00021"
+    },
+    {
+      "city": "Affori",
+      "postal": "20161"
+    },
+    {
+      "city": "Afing",
+      "postal": "39050"
+    },
+    {
+      "city": "Afragola",
+      "postal": "80021"
+    },
+    {
+      "city": "Africo",
+      "postal": "89030"
+    },
+    {
+      "city": "Agaggio Inferiore",
+      "postal": "18010"
+    },
+    {
+      "city": "Agazzano",
+      "postal": "29010"
+    },
+    {
+      "city": "Agelli",
+      "postal": "63093"
+    },
+    {
+      "city": "Agello",
+      "postal": "06063"
+    },
+    {
+      "city": "Agerola",
+      "postal": "80051"
+    },
+    {
+      "city": "Aggius",
+      "postal": "07020"
+    },
+    {
+      "city": "Agira",
+      "postal": "94011"
+    },
+    {
+      "city": "Agliana",
+      "postal": "51031"
+    },
+    {
+      "city": "Agliano",
+      "postal": "14041"
+    },
+    {
+      "city": "Agliano Terme",
+      "postal": "14041"
+    },
+    {
+      "city": "Agliate",
+      "postal": "20841"
+    },
+    {
+      "city": "Aglie'",
+      "postal": "10011"
+    },
+    {
+      "city": "Aglientu",
+      "postal": "07020"
+    },
+    {
+      "city": "Aglietti",
+      "postal": "13836"
+    },
+    {
+      "city": "Agna",
+      "postal": "35021"
+    },
+    {
+      "city": "Agnadello",
+      "postal": "26020"
+    },
+    {
+      "city": "Agnana Calabra",
+      "postal": "89040"
+    },
+    {
+      "city": "Agnano",
+      "postal": "56017"
+    },
+    {
+      "city": "Agnedo",
+      "postal": "38059"
+    },
+    {
+      "city": "Agnino",
+      "postal": "54013"
+    },
+    {
+      "city": "Agnone",
+      "postal": "86081"
+    },
+    {
+      "city": "Agnone Cilento",
+      "postal": "84060"
+    },
+    {
+      "city": "Agnosine",
+      "postal": "25071"
+    },
+    {
+      "city": "Agognate",
+      "postal": "28100"
+    },
+    {
+      "city": "Agoiolo",
+      "postal": "26041"
+    },
+    {
+      "city": "Agordo",
+      "postal": "32021"
+    },
+    {
+      "city": "Agosta",
+      "postal": "00020"
+    },
+    {
+      "city": "Agra",
+      "postal": "21010"
+    },
+    {
+      "city": "Agrano",
+      "postal": "28887"
+    },
+    {
+      "city": "Agrate Brianza",
+      "postal": "20864"
+    },
+    {
+      "city": "Agrate Conturbia",
+      "postal": "28010"
+    },
+    {
+      "city": "Agriano",
+      "postal": "06046"
+    },
+    {
+      "city": "Agrigento",
+      "postal": "92100"
+    },
+    {
+      "city": "Agromonte",
+      "postal": "85043"
+    },
+    {
+      "city": "Agropoli",
+      "postal": "84043"
+    },
+    {
+      "city": "Agropoli Stazione",
+      "postal": "84043"
+    },
+    {
+      "city": "Agrustos",
+      "postal": "08020"
+    },
+    {
+      "city": "Agugliano",
+      "postal": "60020"
+    },
+    {
+      "city": "Agugliaro",
+      "postal": "36020"
+    },
+    {
+      "city": "Agums",
+      "postal": "39026"
+    },
+    {
+      "city": "Ahornac",
+      "postal": "39032"
+    },
+    {
+      "city": "Ahornach",
+      "postal": "39030"
+    },
+    {
+      "city": "Ahrntal",
+      "postal": "39030"
+    },
+    {
+      "city": "Aica Di Fie'",
+      "postal": "39050"
+    },
+    {
+      "city": "Aicurzio",
+      "postal": "20886"
+    },
+    {
+      "city": "Aidomaggiore",
+      "postal": "09070"
+    },
+    {
+      "city": "Aidone",
+      "postal": "94010"
+    },
+    {
+      "city": "Aie",
+      "postal": "47023"
+    },
+    {
+      "city": "Aielli",
+      "postal": "67041"
+    },
+    {
+      "city": "Aielli Stazione",
+      "postal": "67041"
+    },
+    {
+      "city": "Aiello Calabro",
+      "postal": "87031"
+    },
+    {
+      "city": "Aiello Del Friuli",
+      "postal": "33041"
+    },
+    {
+      "city": "Aiello Del Sabato",
+      "postal": "83020"
+    },
+    {
+      "city": "Aieta",
+      "postal": "87020"
+    },
+    {
+      "city": "Ailano",
+      "postal": "81010"
+    },
+    {
+      "city": "Ailoche",
+      "postal": "13861"
+    },
+    {
+      "city": "Airali",
+      "postal": "10062"
+    },
+    {
+      "city": "Airasca",
+      "postal": "10060"
+    },
+    {
+      "city": "Airetta",
+      "postal": "28827"
+    },
+    {
+      "city": "Airola",
+      "postal": "82011"
+    },
+    {
+      "city": "Airole",
+      "postal": "18030"
+    },
+    {
+      "city": "Airuno",
+      "postal": "23881"
+    },
+    {
+      "city": "Aisone",
+      "postal": "12010"
+    },
+    {
+      "city": "Ala",
+      "postal": "38061"
+    },
+    {
+      "city": "Ala Di Stura",
+      "postal": "10070"
+    },
+    {
+      "city": "Ala' Dei Sardi",
+      "postal": "07020"
+    },
+    {
+      "city": "Alagna",
+      "postal": "27020"
+    },
+    {
+      "city": "Alagna Valsesia",
+      "postal": "13021"
+    },
+    {
+      "city": "Alanno",
+      "postal": "65020"
+    },
+    {
+      "city": "Alanno Scalo",
+      "postal": "65020"
+    },
+    {
+      "city": "Alanno Stazione",
+      "postal": "65020"
+    },
+    {
+      "city": "Alano Di Piave",
+      "postal": "32031"
+    },
+    {
+      "city": "Alassio",
+      "postal": "17021"
+    },
+    {
+      "city": "Alatri",
+      "postal": "03011"
+    },
+    {
+      "city": "Alba",
+      "postal": "12051"
+    },
+    {
+      "city": "Alba Adriatica",
+      "postal": "64011"
+    },
+    {
+      "city": "Alba Di Canazei",
+      "postal": "38032"
+    },
+    {
+      "city": "Albacina",
+      "postal": "60044"
+    },
+    {
+      "city": "Albagiara",
+      "postal": "09090"
+    },
+    {
+      "city": "Albairate",
+      "postal": "20080"
+    },
+    {
+      "city": "Albanella",
+      "postal": "84044"
+    },
+    {
+      "city": "Albanese",
+      "postal": "67039"
+    },
+    {
+      "city": "Albaneto",
+      "postal": "02016"
+    },
+    {
+      "city": "Albano Di Lucania",
+      "postal": "85010"
+    },
+    {
+      "city": "Albano Laziale",
+      "postal": "00041"
+    },
+    {
+      "city": "Albano Sant'Alessandro",
+      "postal": "24061"
+    },
+    {
+      "city": "Albano Vercellese",
+      "postal": "13030"
+    },
+    {
+      "city": "Albare'",
+      "postal": "37010"
+    },
+    {
+      "city": "Albare' Stazione",
+      "postal": "37010"
+    },
+    {
+      "city": "Albaredo",
+      "postal": "31050"
+    },
+    {
+      "city": "Albaredo Arnaboldi",
+      "postal": "27040"
+    },
+    {
+      "city": "Albaredo D'Adige",
+      "postal": "37041"
+    },
+    {
+      "city": "Albaredo Per San Marco",
+      "postal": "23010"
+    },
+    {
+      "city": "Albareto",
+      "postal": "41100"
+    },
+    {
+      "city": "Albaretto Della Torre",
+      "postal": "12050"
+    },
+    {
+      "city": "Albaro",
+      "postal": "37055"
+    },
+    {
+      "city": "Albate",
+      "postal": "22100"
+    },
+    {
+      "city": "Albavilla",
+      "postal": "22031"
+    },
+    {
+      "city": "Albe",
+      "postal": "67050"
+    },
+    {
+      "city": "Albeins",
+      "postal": "39042"
+    },
+    {
+      "city": "Albenga",
+      "postal": "17031"
+    },
+    {
+      "city": "Albera Ligure",
+      "postal": "15060"
+    },
+    {
+      "city": "Alberese",
+      "postal": "58100"
+    },
+    {
+      "city": "Alberi",
+      "postal": "43100"
+    },
+    {
+      "city": "Alberobello",
+      "postal": "70011"
+    },
+    {
+      "city": "Alberona",
+      "postal": "71031"
+    },
+    {
+      "city": "Alberone",
+      "postal": "44042"
+    },
+    {
+      "city": "Alberone Di Cento",
+      "postal": "44042"
+    },
+    {
+      "city": "Alberone Di Guarda",
+      "postal": "44030"
+    },
+    {
+      "city": "Alberone Di Ro",
+      "postal": "44030"
+    },
+    {
+      "city": "Alberoni",
+      "postal": "30126"
+    },
+    {
+      "city": "Alberoro",
+      "postal": "52048"
+    },
+    {
+      "city": "Albes",
+      "postal": "39042"
+    },
+    {
+      "city": "Albese Con Cassano",
+      "postal": "22032"
+    },
+    {
+      "city": "Albettone",
+      "postal": "36020"
+    },
+    {
+      "city": "Albi",
+      "postal": "88055"
+    },
+    {
+      "city": "Albiano",
+      "postal": "38041"
+    },
+    {
+      "city": "Albiano D'Ivrea",
+      "postal": "10010"
+    },
+    {
+      "city": "Albiano Magra",
+      "postal": "54011"
+    },
+    {
+      "city": "Albiate",
+      "postal": "20847"
+    },
+    {
+      "city": "Albidona",
+      "postal": "87070"
+    },
+    {
+      "city": "Albignano",
+      "postal": "20060"
+    },
+    {
+      "city": "Albignano D'Adda",
+      "postal": "20060"
+    },
+    {
+      "city": "Albignasego",
+      "postal": "35020"
+    },
+    {
+      "city": "Albina",
+      "postal": "31018"
+    },
+    {
+      "city": "Albinea",
+      "postal": "42020"
+    },
+    {
+      "city": "Albinia",
+      "postal": "58010"
+    },
+    {
+      "city": "Albino",
+      "postal": "24021"
+    },
+    {
+      "city": "Albiolo",
+      "postal": "22070"
+    },
+    {
+      "city": "Albions",
+      "postal": "39040"
+    },
+    {
+      "city": "Albisola Capo",
+      "postal": "17011"
+    },
+    {
+      "city": "Albisola Superiore",
+      "postal": "17011"
+    },
+    {
+      "city": "Albissola Marina",
+      "postal": "17012"
+    },
+    {
+      "city": "Albizzate",
+      "postal": "21041"
+    },
+    {
+      "city": "Albo",
+      "postal": "28802"
+    },
+    {
+      "city": "Albogasio",
+      "postal": "22010"
+    },
+    {
+      "city": "Albonese",
+      "postal": "27020"
+    },
+    {
+      "city": "Albosaggia",
+      "postal": "23010"
+    },
+    {
+      "city": "Albuccione",
+      "postal": "00012"
+    },
+    {
+      "city": "Albugnano",
+      "postal": "14022"
+    },
+    {
+      "city": "Albuzzano",
+      "postal": "27010"
+    },
+    {
+      "city": "Alcamo",
+      "postal": "91011"
+    },
+    {
+      "city": "Alcara Li Fusi",
+      "postal": "98070"
+    },
+    {
+      "city": "Aldein",
+      "postal": "39040"
+    },
+    {
+      "city": "Aldeno",
+      "postal": "38060"
+    },
+    {
+      "city": "Aldino",
+      "postal": "39040"
+    },
+    {
+      "city": "Ales",
+      "postal": "09091"
+    },
+    {
+      "city": "Alessandria",
+      "postal": "15100"
+    },
+    {
+      "city": "Alessandria Del Carretto",
+      "postal": "87070"
+    },
+    {
+      "city": "Alessandria Della Rocca",
+      "postal": "92010"
+    },
+    {
+      "city": "Alessano",
+      "postal": "73031"
+    },
+    {
+      "city": "Alessia",
+      "postal": "84013"
+    },
+    {
+      "city": "Alesso",
+      "postal": "33010"
+    },
+    {
+      "city": "Alezio",
+      "postal": "73011"
+    },
+    {
+      "city": "Alfano",
+      "postal": "84040"
+    },
+    {
+      "city": "Alfedena",
+      "postal": "67030"
+    },
+    {
+      "city": "Alfero",
+      "postal": "47028"
+    },
+    {
+      "city": "Alfianello",
+      "postal": "25020"
+    },
+    {
+      "city": "Alfiano Natta",
+      "postal": "15021"
+    },
+    {
+      "city": "Alfonsine",
+      "postal": "48011"
+    },
+    {
+      "city": "Alghero",
+      "postal": "07041"
+    },
+    {
+      "city": "Algua",
+      "postal": "24010"
+    },
+    {
+      "city": "Algund",
+      "postal": "39022"
+    },
+    {
+      "city": "Ali'",
+      "postal": "98020"
+    },
+    {
+      "city": "Ali' Terme",
+      "postal": "98021"
+    },
+    {
+      "city": "Alia",
+      "postal": "90021"
+    },
+    {
+      "city": "Aliano",
+      "postal": "75010"
+    },
+    {
+      "city": "Alica",
+      "postal": "56036"
+    },
+    {
+      "city": "Alice Bel Colle",
+      "postal": "15010"
+    },
+    {
+      "city": "Alice Castello",
+      "postal": "13040"
+    },
+    {
+      "city": "Alice Superiore",
+      "postal": "10039"
+    },
+    {
+      "city": "Alicudi",
+      "postal": "98050"
+    },
+    {
+      "city": "Alicudi Porto",
+      "postal": "98050"
+    },
+    {
+      "city": "Alife",
+      "postal": "81011"
+    },
+    {
+      "city": "Alimena",
+      "postal": "90020"
+    },
+    {
+      "city": "Aliminusa",
+      "postal": "90020"
+    },
+    {
+      "city": "Allai",
+      "postal": "09080"
+    },
+    {
+      "city": "Alleghe",
+      "postal": "32022"
+    },
+    {
+      "city": "Allegrezze",
+      "postal": "16049"
+    },
+    {
+      "city": "Allein",
+      "postal": "11010"
+    },
+    {
+      "city": "Allerona",
+      "postal": "05011"
+    },
+    {
+      "city": "Allerona Stazione",
+      "postal": "05011"
+    },
+    {
+      "city": "Alliste",
+      "postal": "73040"
+    },
+    {
+      "city": "Allitz",
+      "postal": "39023"
+    },
+    {
+      "city": "Allume",
+      "postal": "98027"
+    },
+    {
+      "city": "Allumiere",
+      "postal": "00051"
+    },
+    {
+      "city": "Alluvioni Cambio'",
+      "postal": "15040"
+    },
+    {
+      "city": "Alme'",
+      "postal": "24011"
+    },
+    {
+      "city": "Almenno San Bartolomeo",
+      "postal": "24030"
+    },
+    {
+      "city": "Almenno San Salvatore",
+      "postal": "24031"
+    },
+    {
+      "city": "Almese",
+      "postal": "10040"
+    },
+    {
+      "city": "Almisano",
+      "postal": "36045"
+    },
+    {
+      "city": "Alonte",
+      "postal": "36045"
+    },
+    {
+      "city": "Alpe Di Siusi",
+      "postal": "39040"
+    },
+    {
+      "city": "Alpepiana",
+      "postal": "16048"
+    },
+    {
+      "city": "Alpette",
+      "postal": "10080"
+    },
+    {
+      "city": "Alpicella",
+      "postal": "17019"
+    },
+    {
+      "city": "Alpignano",
+      "postal": "10091"
+    },
+    {
+      "city": "Alpo",
+      "postal": "37062"
+    },
+    {
+      "city": "Alseno",
+      "postal": "29010"
+    },
+    {
+      "city": "Alserio",
+      "postal": "22040"
+    },
+    {
+      "city": "Altagnana",
+      "postal": "54100"
+    },
+    {
+      "city": "Altamura",
+      "postal": "70022"
+    },
+    {
+      "city": "Altare",
+      "postal": "17041"
+    },
+    {
+      "city": "Altarello",
+      "postal": "95014"
+    },
+    {
+      "city": "Altavilla Irpina",
+      "postal": "83011"
+    },
+    {
+      "city": "Altavilla Milicia",
+      "postal": "90010"
+    },
+    {
+      "city": "Altavilla Monferrato",
+      "postal": "15041"
+    },
+    {
+      "city": "Altavilla Silentina",
+      "postal": "84045"
+    },
+    {
+      "city": "Altavilla Vicentina",
+      "postal": "36077"
+    },
+    {
+      "city": "Alte Ceccato",
+      "postal": "36075"
+    },
+    {
+      "city": "Alte Di Montecchio Maggiore",
+      "postal": "36075"
+    },
+    {
+      "city": "Altedo",
+      "postal": "40051"
+    },
+    {
+      "city": "Altenburg",
+      "postal": "39052"
+    },
+    {
+      "city": "Altessano",
+      "postal": "10078"
+    },
+    {
+      "city": "Alteta",
+      "postal": "63833"
+    },
+    {
+      "city": "Altidona",
+      "postal": "63824"
+    },
+    {
+      "city": "Altilia",
+      "postal": "87040"
+    },
+    {
+      "city": "Altino",
+      "postal": "66040"
+    },
+    {
+      "city": "Altipiani Di Arcinazzo",
+      "postal": "00020"
+    },
+    {
+      "city": "Altissimo",
+      "postal": "36070"
+    },
+    {
+      "city": "Altivole",
+      "postal": "31030"
+    },
+    {
+      "city": "Alto",
+      "postal": "12070"
+    },
+    {
+      "city": "Altofonte",
+      "postal": "90030"
+    },
+    {
+      "city": "Altolia",
+      "postal": "98143"
+    },
+    {
+      "city": "Altomonte",
+      "postal": "87042"
+    },
+    {
+      "city": "Altopascio",
+      "postal": "55011"
+    },
+    {
+      "city": "Altrei",
+      "postal": "39040"
+    },
+    {
+      "city": "Alvano",
+      "postal": "83040"
+    },
+    {
+      "city": "Alviano",
+      "postal": "05020"
+    },
+    {
+      "city": "Alvignanello",
+      "postal": "81010"
+    },
+    {
+      "city": "Alvignano",
+      "postal": "81012"
+    },
+    {
+      "city": "Alvito",
+      "postal": "03041"
+    },
+    {
+      "city": "Alzano Lombardo",
+      "postal": "24022"
+    },
+    {
+      "city": "Alzano Scrivia",
+      "postal": "15050"
+    },
+    {
+      "city": "Alzate Brianza",
+      "postal": "22040"
+    },
+    {
+      "city": "Alzo",
+      "postal": "28010"
+    },
+    {
+      "city": "Ama",
+      "postal": "53013"
+    },
+    {
+      "city": "Amalfi",
+      "postal": "84011"
+    },
+    {
+      "city": "Amandola",
+      "postal": "63857"
+    },
+    {
+      "city": "Amantea",
+      "postal": "87032"
+    },
+    {
+      "city": "Amantea Marina",
+      "postal": "87032"
+    },
+    {
+      "city": "Amaro",
+      "postal": "33020"
+    },
+    {
+      "city": "Amaroni",
+      "postal": "88050"
+    },
+    {
+      "city": "Amaseno",
+      "postal": "03021"
+    },
+    {
+      "city": "Amato",
+      "postal": "88040"
+    },
+    {
+      "city": "Amato Di Taurianova",
+      "postal": "89029"
+    },
+    {
+      "city": "Amatrice",
+      "postal": "02012"
+    },
+    {
+      "city": "Ambivere",
+      "postal": "24030"
+    },
+    {
+      "city": "Amblar",
+      "postal": "38011"
+    },
+    {
+      "city": "Amborzasco",
+      "postal": "16049"
+    },
+    {
+      "city": "Ambra",
+      "postal": "52021"
+    },
+    {
+      "city": "Ambria",
+      "postal": "24019"
+    },
+    {
+      "city": "Ambrogiana",
+      "postal": "50056"
+    },
+    {
+      "city": "Ambrogio",
+      "postal": "44034"
+    },
+    {
+      "city": "Ameglia",
+      "postal": "19031"
+    },
+    {
+      "city": "Ameglio",
+      "postal": "81035"
+    },
+    {
+      "city": "Amelia",
+      "postal": "05022"
+    },
+    {
+      "city": "Amendolara",
+      "postal": "87071"
+    },
+    {
+      "city": "Amendolara Marina",
+      "postal": "87071"
+    },
+    {
+      "city": "Ameno",
+      "postal": "28010"
+    },
+    {
+      "city": "Amica",
+      "postal": "87067"
+    },
+    {
+      "city": "Ammonite",
+      "postal": "48100"
+    },
+    {
+      "city": "Amola Di Piano",
+      "postal": "40017"
+    },
+    {
+      "city": "Amorosi",
+      "postal": "82031"
+    },
+    {
+      "city": "Ampezzo",
+      "postal": "33021"
+    },
+    {
+      "city": "Anacapri",
+      "postal": "80071"
+    },
+    {
+      "city": "Anagni",
+      "postal": "03012"
+    },
+    {
+      "city": "Ancarano",
+      "postal": "06046"
+    },
+    {
+      "city": "Ancarano Di Sopra",
+      "postal": "29029"
+    },
+    {
+      "city": "Anchiano",
+      "postal": "55023"
+    },
+    {
+      "city": "Anchione",
+      "postal": "51019"
+    },
+    {
+      "city": "Ancona",
+      "postal": "60100"
+    },
+    {
+      "city": "Anconetta",
+      "postal": "36100"
+    },
+    {
+      "city": "Andali",
+      "postal": "88050"
+    },
+    {
+      "city": "Andalo",
+      "postal": "38010"
+    },
+    {
+      "city": "Andalo Valtellino",
+      "postal": "23014"
+    },
+    {
+      "city": "Andezeno",
+      "postal": "10020"
+    },
+    {
+      "city": "Andonno",
+      "postal": "12010"
+    },
+    {
+      "city": "Andora",
+      "postal": "17051"
+    },
+    {
+      "city": "Andorno Micca",
+      "postal": "13811"
+    },
+    {
+      "city": "Andrano",
+      "postal": "73032"
+    },
+    {
+      "city": "Andrate",
+      "postal": "10010"
+    },
+    {
+      "city": "Andreis",
+      "postal": "33080"
+    },
+    {
+      "city": "Andreotta",
+      "postal": "87040"
+    },
+    {
+      "city": "Andreotta Di Castrolibero",
+      "postal": "87040"
+    },
+    {
+      "city": "Andretta",
+      "postal": "83040"
+    },
+    {
+      "city": "Andria",
+      "postal": "76123"
+    },
+    {
+      "city": "Andrian",
+      "postal": "39010"
+    },
+    {
+      "city": "Andriano",
+      "postal": "39010"
+    },
+    {
+      "city": "Anduins",
+      "postal": "33090"
+    },
+    {
+      "city": "Anela",
+      "postal": "07010"
+    },
+    {
+      "city": "Anfo",
+      "postal": "25070"
+    },
+    {
+      "city": "Angeli",
+      "postal": "60030"
+    },
+    {
+      "city": "Angeli Di Mergo",
+      "postal": "60030"
+    },
+    {
+      "city": "Angeli Di Rosora",
+      "postal": "60030"
+    },
+    {
+      "city": "Angelin",
+      "postal": "11010"
+    },
+    {
+      "city": "Angellara",
+      "postal": "84078"
+    },
+    {
+      "city": "Angera",
+      "postal": "21021"
+    },
+    {
+      "city": "Anghebeni",
+      "postal": "38060"
+    },
+    {
+      "city": "Anghebeni Di Vallarsa",
+      "postal": "38060"
+    },
+    {
+      "city": "Anghiari",
+      "postal": "52031"
+    },
+    {
+      "city": "Angiari",
+      "postal": "37050"
+    },
+    {
+      "city": "Angoli",
+      "postal": "88040"
+    },
+    {
+      "city": "Angolo Terme",
+      "postal": "25040"
+    },
+    {
+      "city": "Angri",
+      "postal": "84012"
+    },
+    {
+      "city": "Angrogna",
+      "postal": "10060"
+    },
+    {
+      "city": "Anguillara Sabazia",
+      "postal": "00061"
+    },
+    {
+      "city": "Anguillara Veneta",
+      "postal": "35022"
+    },
+    {
+      "city": "Anita",
+      "postal": "44011"
+    },
+    {
+      "city": "Anitrella",
+      "postal": "03025"
+    },
+    {
+      "city": "Anna'",
+      "postal": "89063"
+    },
+    {
+      "city": "Annicco",
+      "postal": "26021"
+    },
+    {
+      "city": "Annifo",
+      "postal": "06034"
+    },
+    {
+      "city": "Annone Di Brianza",
+      "postal": "23841"
+    },
+    {
+      "city": "Annone Veneto",
+      "postal": "30020"
+    },
+    {
+      "city": "Annunciata",
+      "postal": "25052"
+    },
+    {
+      "city": "Annunziata",
+      "postal": "81020"
+    },
+    {
+      "city": "Anoia",
+      "postal": "89020"
+    },
+    {
+      "city": "Anoia Inferiore",
+      "postal": "89020"
+    },
+    {
+      "city": "Anoia Superiore",
+      "postal": "89020"
+    },
+    {
+      "city": "Anqua",
+      "postal": "53030"
+    },
+    {
+      "city": "Antagnod",
+      "postal": "11020"
+    },
+    {
+      "city": "Antegnate",
+      "postal": "24051"
+    },
+    {
+      "city": "Antella",
+      "postal": "50012"
+    },
+    {
+      "city": "Anterivo",
+      "postal": "39040"
+    },
+    {
+      "city": "Anterselva Di Mezzo",
+      "postal": "39030"
+    },
+    {
+      "city": "Antessano",
+      "postal": "84081"
+    },
+    {
+      "city": "Antey Saint Andre'",
+      "postal": "11020"
+    },
+    {
+      "city": "Antholz",
+      "postal": "39030"
+    },
+    {
+      "city": "Antica Colle Piscioso",
+      "postal": "03022"
+    },
+    {
+      "city": "Anticoli Corrado",
+      "postal": "00022"
+    },
+    {
+      "city": "Antignano",
+      "postal": "14010"
+    },
+    {
+      "city": "Antillo",
+      "postal": "98030"
+    },
+    {
+      "city": "Antole",
+      "postal": "32100"
+    },
+    {
+      "city": "Antonelli",
+      "postal": "70043"
+    },
+    {
+      "city": "Antonimina",
+      "postal": "89040"
+    },
+    {
+      "city": "Antria",
+      "postal": "52100"
+    },
+    {
+      "city": "Antrodoco",
+      "postal": "02013"
+    },
+    {
+      "city": "Antrona Schieranco",
+      "postal": "28841"
+    },
+    {
+      "city": "Antronapiana",
+      "postal": "28841"
+    },
+    {
+      "city": "Antrosano",
+      "postal": "67051"
+    },
+    {
+      "city": "Anversa Degli Abruzzi",
+      "postal": "67030"
+    },
+    {
+      "city": "Anzano",
+      "postal": "31012"
+    },
+    {
+      "city": "Anzano Del Parco",
+      "postal": "22040"
+    },
+    {
+      "city": "Anzano Di Puglia",
+      "postal": "71020"
+    },
+    {
+      "city": "Anzi",
+      "postal": "85010"
+    },
+    {
+      "city": "Anzio",
+      "postal": "00042"
+    },
+    {
+      "city": "Anzola D'Ossola",
+      "postal": "28877"
+    },
+    {
+      "city": "Anzola Dell'Emilia",
+      "postal": "40011"
+    },
+    {
+      "city": "Anzu'",
+      "postal": "32032"
+    },
+    {
+      "city": "Aosta",
+      "postal": "11100"
+    },
+    {
+      "city": "Apecchio",
+      "postal": "61042"
+    },
+    {
+      "city": "Apice",
+      "postal": "82021"
+    },
+    {
+      "city": "Apice Nuovo",
+      "postal": "82021"
+    },
+    {
+      "city": "Apiro",
+      "postal": "62021"
+    },
+    {
+      "city": "Apollosa",
+      "postal": "82030"
+    },
+    {
+      "city": "Appalto",
+      "postal": "41019"
+    },
+    {
+      "city": "Apparizione",
+      "postal": "16133"
+    },
+    {
+      "city": "Appennino",
+      "postal": "62036"
+    },
+    {
+      "city": "Appiano Gentile",
+      "postal": "22070"
+    },
+    {
+      "city": "Appiano Sulla Strada Del Vino",
+      "postal": "39057"
+    },
+    {
+      "city": "Appignano",
+      "postal": "62010"
+    },
+    {
+      "city": "Appignano Del Tronto",
+      "postal": "63083"
+    },
+    {
+      "city": "Aprica",
+      "postal": "23031"
+    },
+    {
+      "city": "Apricale",
+      "postal": "18035"
+    },
+    {
+      "city": "Apricena",
+      "postal": "71011"
+    },
+    {
+      "city": "Aprigliano",
+      "postal": "87051"
+    },
+    {
+      "city": "Aprilia",
+      "postal": "04011"
+    },
+    {
+      "city": "Aquara",
+      "postal": "84020"
+    },
+    {
+      "city": "Aquila Di Arroscia",
+      "postal": "18020"
+    },
+    {
+      "city": "Aquileia",
+      "postal": "33051"
+    },
+    {
+      "city": "Aquilinia",
+      "postal": "34015"
+    },
+    {
+      "city": "Aquilonia",
+      "postal": "83041"
+    },
+    {
+      "city": "Aquino",
+      "postal": "03031"
+    },
+    {
+      "city": "Ara Nova",
+      "postal": "00054"
+    },
+    {
+      "city": "Arabba",
+      "postal": "32020"
+    },
+    {
+      "city": "Arabona",
+      "postal": "67039"
+    },
+    {
+      "city": "Aradeo",
+      "postal": "73040"
+    },
+    {
+      "city": "Aradolo La Bruna",
+      "postal": "12011"
+    },
+    {
+      "city": "Aragno",
+      "postal": "67100"
+    },
+    {
+      "city": "Aragona",
+      "postal": "92021"
+    },
+    {
+      "city": "Aramengo",
+      "postal": "14020"
+    },
+    {
+      "city": "Arasi'",
+      "postal": "89126"
+    },
+    {
+      "city": "Arba",
+      "postal": "33090"
+    },
+    {
+      "city": "Arbatax",
+      "postal": "08048"
+    },
+    {
+      "city": "Arbia",
+      "postal": "53041"
+    },
+    {
+      "city": "Arbizzano",
+      "postal": "37024"
+    },
+    {
+      "city": "Arbizzano Di Valpolicella",
+      "postal": "37024"
+    },
+    {
+      "city": "Arborea",
+      "postal": "09092"
+    },
+    {
+      "city": "Arborio",
+      "postal": "13031"
     }
   ],
   "streets": [
@@ -2834,7 +4810,7 @@
   "nationalPrefix": "3",
   "schemaVersion": 1,
   "datasetId": "blego-it-female",
-  "datasetVersion": "2026-11-12.1",
+  "datasetVersion": "2026-11-12.2",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -2850,10 +4826,14 @@
       "notes": "Language-specific synthetic vocabulary; not nationality or real-person records"
     },
     "geography": {
-      "source": "Inherited BLEGO country resources at 6e57eab",
+      "source": "https://download.geonames.org/export/zip/IT.zip",
+      "license": "CC-BY-4.0",
+      "archiveSha256": "42e63805552362a2531a1e481f971d207bc6089266ac563877e50b7ee6db07a0",
+      "retrievedAt": "2026-11-12",
+      "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
-      "notes": "Existing format examples retained; independent postal verification pending. Streets are synthetic profile components."
+      "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
     }
   },
-  "checksum": "b5709f72afd9b0e908cc9940a5583df4496754ec12667ee145196299cd6adab9"
+  "checksum": "397d58257721d5aa184e514dffe1e258de00e64c6461ae6badc2363e63f725bb"
 }
