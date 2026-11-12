@@ -98,11 +98,15 @@ export function mountCopyActions() {
   )
     return;
   const bar = document.createElement('div');
-  bar.className = 'card pad';
+  bar.className = 'ux-copy-actions';
   bar.id = 'copy-actions';
   bar.innerHTML =
-    '<button class="btn" data-copy-action="open">Copy data…</button><span class="sub"> Choose fields, rows and format · Ctrl/⌘ Shift C copies the current card</span><div id="copy-panel"></div>';
-  host.prepend(bar);
+    '<button class="btn btn-quiet" data-copy-action="open" title="Выбрать поля и формат копирования">Копировать</button><div id="copy-panel"></div>';
+  const head = host.querySelector('.page-head');
+  const headActions = head?.querySelector('.head-actions');
+  if (headActions) headActions.prepend(bar);
+  else if (head) head.append(bar);
+  else host.prepend(bar);
   // A previously prepared panel is an explicit snapshot, not silently replaced by live updates.
   if (panel && panel.view === state.view) renderPanel();
 }
