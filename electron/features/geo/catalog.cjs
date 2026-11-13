@@ -32,7 +32,7 @@ function validatePackage(data) {
         (key !== 'region' && !city[key].trim())
       )
         fail();
-    if (!/^[\w:.-]{1,120}$/.test(city.id) || !/^[A-Z]{2}$/.test(city.country) || ids.has(city.id))
+    if (!/^[\w:.-]{1,80}$/.test(city.id) || !/^[A-Z]{2}$/.test(city.country) || ids.has(city.id))
       fail();
     ids.add(city.id);
     let url;
@@ -42,6 +42,7 @@ function validatePackage(data) {
       fail();
     }
     if (url.protocol !== 'https:' || url.username || url.password) fail();
+    if (city.name.length > 100) fail();
     validateBoundary(city.geometry);
     const geometry = structuredClone(city.geometry);
     return {
@@ -65,6 +66,9 @@ function validatePackage(data) {
 function publicCity(city) {
   const { geometry, ...data } = city;
   void geometry;
-  return structuredClone(data);
+  return structuredClone({
+    ...data,
+    sha256: data.sha256 || createHash('sha256').update(JSON.stringify(geometry)).digest('hex')
+  });
 }
 module.exports = { validatePackage, publicCity };

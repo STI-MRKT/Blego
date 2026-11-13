@@ -96,7 +96,11 @@ function createEngine({ runtimeRoot } = {}) {
       const { writeArgs } = require('./write-policy.cjs');
       if (
         !before &&
-        operations.some((op) => op.field === 'captureDate' && op.value?.offsetMode === 'keep')
+        operations.some(
+          (op) =>
+            (op.field === 'captureDate' && op.value?.offsetMode === 'keep') ||
+            (op.field === 'gps' && op.value?.altitudeMode === 'keep')
+        )
       )
         before = (await this.read(file, { signal })).tags;
       return execute([...writeArgs(operations, format, before), '--', path.resolve(file)], {

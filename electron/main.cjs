@@ -39,7 +39,7 @@ const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook, images;
+let store, mainWindow, archives, news, poolCatalog, facebook, images, geo;
 let recoveryReports = [];
 let imageExportPromise = null,
   imageExportReport = null;
@@ -49,7 +49,8 @@ async function initialize() {
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
-  images = createImageService({ store });
+  geo = require('./features/geo/service.cjs').createGeoService({ store });
+  images = createImageService({ store, geo });
   await images.recover();
   archives = createArchiveService({ store, classification });
   news = createNewsService({
@@ -93,6 +94,20 @@ async function initialize() {
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      geoCatalog: (request) => geo.catalog(request),
+      imagesGenerateGeo: (request) => images.generateGeo(request),
+      geoCancel: (id) => geo.cancel(id),
+      geoImport: async () => {
+        const chosen = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'City boundaries', extensions: ['json'] }]
+        });
+        if (chosen.canceled) return null;
+        const bytes = await require('./features/images/files.cjs').readBounded(chosen.filePaths[0]);
+        return geo.previewImport(bytes);
+      },
+      geoImportConfirm: (token) => geo.confirmImport(token),
+      imagesAddDropped: (paths) => images.addFiles(paths),
       imageWorkspace: () => images.groups.snapshot(),
       imageWorkspaceChange: ({ action, ...request }) => {
         const allowed = [
@@ -526,6 +541,7 @@ if (!hasLock) {
     news?.close();
     facebook?.cancel();
     images?.cancelReads();
+    geo?.close();
     classification.close();
     if (store) store.close();
   });

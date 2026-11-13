@@ -125,12 +125,13 @@ async function workspaceChange(action, request = {}) {
   state.metadataPlan = null;
   return reply.result;
 }
-async function applyImageForm() {
-  const ops = readMetadataForm(document.getElementById('metadata-form'));
+async function applyImageForm({excludeGPS=false}={}) {
+  let ops = readMetadataForm(document.getElementById('metadata-form'));
+  if(excludeGPS)ops=ops.filter(o=>o.field!=='gps');
   if (state.imageEditTarget === 'group')
     await workspaceChange('setGroupOperations', {
       groupId: state.imageGroupId || 'ungrouped',
-      operations: ops
+      operations: excludeGPS ? [...(state.imageWorkspace.groups.find(g=>g.id===(state.imageGroupId||'ungrouped'))?.operations||[]).filter(o=>o.field==='gps'),...ops] : ops
     });
   else {
     const selected = state.photos.filter((p) => p.selected);
@@ -141,7 +142,7 @@ async function applyImageForm() {
           : ops;
       if (!updates.length) continue;
       const overrides =
-        selected.length > 1
+        selected.length > 1 || excludeGPS
           ? [
               ...(state.imageWorkspace.overrides[photo.fileId] || []).filter(
                 (op) => !updates.some((update) => update.field === op.field)
@@ -187,11 +188,12 @@ async function prepareImageExport(retry = {}) {
 function syncQuickMetadata() {
  const form=document.getElementById('metadata-form');if(!form)return;
  for(const field of ['captureDate','gps']){const wrap=form.querySelector(`[data-field-inputs="${field}"]`);if(wrap)wrap.hidden=form.elements.namedItem('action-'+field)?.value!=='set';}
+ const altitude=form.elements.namedItem('gps-altitude');if(altitude)altitude.disabled=form.elements.namedItem('gps-altitude-mode')?.value!=='set';
  const offset=form.querySelector('[data-offset-input]');if(offset)offset.hidden=form.elements.namedItem('date-offset-mode')?.value!=='set';
 }
 function bindView() {
   mountCopyActions();
-  for(const id of ['metadata-advanced','image-groups-advanced','date-options']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
+  for(const id of ['metadata-advanced','image-groups-advanced','date-options','gps-manual']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -222,6 +224,11 @@ function bindView() {
         renderView();
       };
   }
+  const geoCountry=document.getElementById('geo-country');
+  const updateCities=()=>{const select=document.getElementById('geo-city');if(!select)return;select.replaceChildren(new Option('Выберите город',''),...(state.geoCatalogue?.cities||[]).filter(c=>c.country===state.geoCountry&&(!state.geoQuery||`${c.name} ${c.region}`.toLowerCase().includes(state.geoQuery.toLowerCase()))).map(c=>new Option(`${c.name} — ${c.region}`,c.id)));select.value=state.geoCity||'';document.querySelector('[data-action="geo-generate"]').disabled=!select.value;};
+  if(geoCountry)geoCountry.onchange=()=>{const c=state.geoCatalogue.countries.find(c=>c.code===geoCountry.value.trim().toUpperCase()||c.name.toLowerCase()===geoCountry.value.trim().toLowerCase());state.geoCountry=c?.code||'';state.geoCity='';geoCountry.value=state.geoCountry;updateCities();};
+  const geoQuery=document.getElementById('geo-city-query');if(geoQuery)geoQuery.oninput=()=>{state.geoQuery=geoQuery.value;updateCities();};
+  const geoCity=document.getElementById('geo-city');if(geoCity)geoCity.onchange=()=>{state.geoCity=geoCity.value;document.querySelector('[data-action="geo-generate"]').disabled=!state.geoCity;};
   const metadataForm = document.getElementById('metadata-form');
   if (metadataForm) {
     for (const [key, value] of Object.entries(state.metadataDraft || {})) {
@@ -642,7 +649,7 @@ async function runProxyCheck(fullTest = false) {
   renderView();
 }
 
-async function addPhotos() {
+async function addPhotos(droppedFiles) {
   if (state.imagesBusy) return;
   stashImageDraft();
   state.imagesBusy = true;
@@ -650,7 +657,7 @@ async function addPhotos() {
   state.imagesReadCancelled = false;
   renderView();
   try {
-    const files = await window.blego.chooseImages();
+    const files = droppedFiles ? await window.blego.addDroppedImages(Array.from(droppedFiles)) : await window.blego.chooseImages();
     state.photos.push(...files);
     state.metadataPresets = await window.blego.metadataPresets();
     state.imageWorkspace = await window.blego.imageWorkspace();
@@ -1148,6 +1155,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'metadata-cancel') {
+    if(state.geoBusy){await window.blego.cancelGeo(state.geoBusy);return;}
     if (state.imagesReading) state.imagesReadCancelled = true;
     if (state.imagesReading) await window.blego.cancelImageExport();
     else await window.blego.cancelGroupExport({ runId: state.imageRunId });
@@ -1212,7 +1220,33 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
-  if (action === 'images-choose' || action === 'images-browse') {
+  if(action==='geo-generate'||action==='geo-regenerate-one'){
+    if(state.imagesBusy)return;
+    const ids=action==='geo-regenerate-one'?[target.dataset.id]:state.photos.filter(p=>p.selected&&p.view?.capabilities.writable).map(p=>p.fileId);
+    const old=state.imageWorkspace?.overrides[ids[0]]?.find(o=>o.origin?.kind==='geo');
+    const cityId=action==='geo-regenerate-one'?(state.geoCatalogue?.cities.find(c=>c.id.replace(/:/g,'_')===old?.origin.id)?.id):state.geoCity;
+    const requestId=crypto.randomUUID();
+    state.geoBusy=requestId;state.imagesBusy=true;
+    try{
+      await state.imageInvalidation;
+      await applyImageForm({excludeGPS:true});
+      renderView();
+      const result=await window.blego.generateImageGeo({cityId,fileIds:ids,requestId});
+      state.imageWorkspace=result.workspace;state.metadataPlan=null;
+      if(state.imageDrafts)delete state.imageDrafts[state.imageDraftKey];restoreImageDraft();
+      toast(`GEO создано для ${ids.length} фото`);
+    }catch(e){toast(imageErrorMessage(e.message),'err');}
+    finally{state.geoBusy=null;state.imagesBusy=false;renderView();}return;
+  }
+  if(action==='geo-import'||action==='geo-import-confirm'){
+    try{
+      stashImageDraft();
+      if(action==='geo-import')state.geoImportPreview=await window.blego.importGeo();
+      else{await window.blego.confirmGeoImport(state.geoImportPreview.token);state.geoImportPreview=null;state.geoCatalogue=await window.blego.geoCatalog();toast('Каталог сохранён');}
+      renderView();
+    }catch(e){toast(imageErrorMessage(e.message),'err');}return;
+  }
+  if (action === 'images-choose'  || action === 'images-browse') {
     await addPhotos();
     return;
   }
@@ -1395,6 +1429,7 @@ if (window.blego) {
     state.settings = await window.blego.getSettings();
     state.imageWorkspace = await window.blego.imageWorkspace();
     state.metadataPresets = await window.blego.metadataPresets();
+    state.geoCatalogue=await window.blego.geoCatalog();
     await initCopyPreferences();
     state.locale = state.settings.country;
     state.type = state.settings.type;

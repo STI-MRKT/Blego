@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 async function call(name, arg) {
   const r = await ipcRenderer.invoke(`local:${name}`, arg);
   if (!r.ok) throw Object.assign(Error(r.code), { details: r.details });
@@ -24,6 +24,16 @@ contextBridge.exposeInMainWorld('blego', {
   },
   copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
+  addDroppedImages: (files) =>
+    call(
+      'imagesAddDropped',
+      Array.from(files, (file) => webUtils.getPathForFile(file))
+    ),
+  geoCatalog: (request) => call('geoCatalog', request),
+  generateImageGeo: (request) => call('imagesGenerateGeo', request),
+  cancelGeo: (id) => call('geoCancel', id),
+  importGeo: () => call('geoImport'),
+  confirmGeoImport: (token) => call('geoImportConfirm', token),
   readImageMetadata: (id) => call('imageRead', id),
   previewImage: (fileId, thumbnail = false) => call('imagePreview', { fileId, thumbnail }),
   planMetadataChanges: (request) => call('imagesPlan', request),

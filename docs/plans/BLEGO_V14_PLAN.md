@@ -67,10 +67,10 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** existing images service/groups/write-policy, `shared/metadata-operations.mjs`, IPC/preload, `src/js/ui/photos.js`, `src/js/main.js`; tests `tests/integration/image-geo*.test.cjs`, `tests/ui/photos-geo*.test.cjs` and native batch script.
 **Interfaces:** generated per-file GPS operations use existing workspace overrides and immutable preview/export plans; `altitudeMode:'keep'|'set'|'remove'` extends existing GPS value semantics without changing old persisted operation behavior. Explicit regenerate replaces only selected targets; retry selects failed files only.
-- [ ] Write failing per-file unique/stable GEO and altitude Keep/export tests; integrate existing workspace, never a second export pipeline.
-- [ ] Country/city search, generate all/one, coordinates/provenance preview, manual advanced entry, multi-select/drop/remove/clear and failure retry.
-- [ ] Actual JPEG/PNG/WebP write/readback and protected data/pixels; 1/10/100 plus representative high-resolution fixtures; cancel and failure isolation.
-- [ ] Focused + full suites; record and commit.
+- [x] Write failing per-file unique/stable GEO and altitude Keep/export tests; integrate existing workspace, never a second export pipeline.
+- [x] Country/city search, generate all/one, coordinates/provenance preview, manual advanced entry, multi-select/drop/remove/clear and failure retry.
+- [x] Actual JPEG/PNG/WebP write/readback and protected data/pixels; 1/10/100 plus representative high-resolution fixtures; cancel and failure isolation.
+- [x] Focused + full suites; record and commit.
 
 ## Task 5: Facebook diagnostics and useful results
 
@@ -99,6 +99,15 @@ The user supplied a complete implementation order and authorized execution. Rout
 - [ ] Add ≥50 natural unique localized BIOs per category, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
 - [ ] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
 - [ ] GUI setting independence/restart plus all existing copy checks; full suites and commit.
+
+## Task 7b: responsive window and navigation (user supplement)
+
+**Spec:** docs/specs/BLEGO_V14_TZ05_RESPONSIVE_ADDENDUM.md. User explicitly authorizes responsive layout/minimum window changes while preserving original wide-screen aesthetics. Use a scoped responsive stylesheet and existing shell/navigation components; no framework or scaling.
+- [ ] Lower native window minimums appropriately for 360px tests and 1/3 macOS work-area width; respect window manager and retain saved bounds safely.
+- [ ] Automatic compact icon sidebar, accessible hover/focus labels, active state, explicit full-menu toggle and adaptive logo/status/developer footer.
+- [ ] All nine sections: local table scroll, single-column cards, reachable wrapping actions, min-width:0 and vertical main scroll. No form/operation reset on resize.
+- [ ] Real GUI tests at 360/390/427/480/504/576/768/980/1280; active state + copy/import/generation/batch preservation; return to original wide appearance.
+- [ ] Full verify/GUI and commit. Task 9 must test actual installed macOS window bounds at all widths, not claim browser viewport emulation as native resizing.
 
 ## Task 8: full regression
 

@@ -4,7 +4,13 @@ import { esc } from '../utils/dom.js';
 import { METADATA_FIELDS, IMAGE_LIMITS } from '../../../shared/metadata-contracts.mjs';
 export function imageErrorMessage(code) {
   const messages = {
-    CANCELLED: 'Cancelled.',
+    CANCELLED: 'Операция отменена.',
+    GEO_BOUNDARY_UNAVAILABLE:'Граница города недоступна. Выберите другой город или импортируйте каталог.',
+    GEO_INVALID_CATALOG:'Не удалось проверить каталог городов. Проверьте формат и источник.',
+    GEO_GENERATION_EXHAUSTED:'Не удалось выбрать точки внутри этой границы. Выберите другой город.',
+    GEO_INVALID_GEOMETRY:'Граница города повреждена или неоднозначна.',
+    GEO_DATELINE_UNSUPPORTED:'Границы через линию перемены дат пока не поддерживаются.',
+    GEO_GEOMETRY_TOO_COMPLEX:'Эта граница превышает допустимую сложность.',
     EACCES: 'Permission denied. Choose a writable folder.',
     EPERM: 'Permission denied. Choose a writable folder.',
     ENOSPC: 'The destination is full. Free space or choose another folder.',
@@ -69,8 +75,9 @@ export function readMetadataData(data, origins = {}) {
       op.value = {
         latitude: Number(data.get('gps-latitude') || NaN),
         longitude: Number(data.get('gps-longitude') || NaN),
+        altitudeMode: data.get('gps-altitude-mode') || 'keep',
         altitude:
-          data.get('gps-altitude') == null || data.get('gps-altitude') === ''
+          data.get('gps-altitude-mode') !== 'set' || data.get('gps-altitude') == null || data.get('gps-altitude') === ''
             ? null
             : Number(data.get('gps-altitude'))
       };
@@ -122,16 +129,29 @@ function quickEditor(field, selected) {
       : field === 'captureDate' && v
         ? `${copyValue('date', v.local)} ${copyValue('time zone', v.offset)}`
         : 'No value';
-  return `<section class="card pad"><h3>${field === 'gps' ? 'GEO / GPS' : 'Date taken'}</h3><p class="sub">Current: ${current}</p><label class="fl">${field === 'gps' ? 'Location' : 'EXIF / XMP date'}<select class="input" name="action-${field}">${actionOptions()}</select></label>
- <div data-field-inputs="${field}" hidden>${field === 'gps' ? `<label class="fl">Latitude<div class="cell-box"><input class="input" name="gps-latitude" type="number" step="any" min="-90" max="90" placeholder="−90…90">${inputCopy('gps-latitude', 'latitude')}</div></label><label class="fl">Longitude<div class="cell-box"><input class="input" name="gps-longitude" type="number" step="any" min="-180" max="180" placeholder="−180…180">${inputCopy('gps-longitude', 'longitude')}</div></label><label class="fl">Altitude (optional)<div class="cell-box"><input class="input" name="gps-altitude" type="number" step="any" placeholder="Metres">${inputCopy('gps-altitude', 'altitude')}</div></label>` : `<label class="fl">Date and time<div class="cell-box"><input class="input" name="date-local" type="datetime-local" step="1">${inputCopy('date-local', 'date')}</div></label>`}</div>
+  return `<section class="card pad"><h3>${field === 'gps' ? 'GEO / GPS' : 'Date taken'}</h3>${field==='gps'?geoControls():''}<p class="sub">Current: ${current}</p><label class="fl">${field === 'gps' ? 'Location' : 'EXIF / XMP date'}<select class="input" name="action-${field}">${actionOptions()}</select></label>
+ <div data-field-inputs="${field}" hidden>${field === 'gps' ? `<details id="gps-manual" ${openDetails('gps-manual')}><summary>Точные координаты и высота</summary><label class="fl">Latitude<div class="cell-box"><input class="input" name="gps-latitude" type="number" step="any" min="-90" max="90" placeholder="−90…90">${inputCopy('gps-latitude', 'latitude')}</div></label><label class="fl">Longitude<div class="cell-box"><input class="input" name="gps-longitude" type="number" step="any" min="-180" max="180" placeholder="−180…180">${inputCopy('gps-longitude', 'longitude')}</div></label><label class="fl">Высота<select class="input" name="gps-altitude-mode"><option value="keep">Сохранить исходную</option><option value="set">Указать</option><option value="remove">Удалить</option></select></label><label class="fl">Altitude (optional)<div class="cell-box"><input class="input" name="gps-altitude" type="number" step="any" placeholder="Metres">${inputCopy('gps-altitude', 'altitude')}</div></label></details>` : `<label class="fl">Date and time<div class="cell-box"><input class="input" name="date-local" type="datetime-local" step="1">${inputCopy('date-local', 'date')}</div></label>`}</div>
  ${field === 'captureDate' ? `<label class="fl">Time zone<select class="input" name="date-offset-mode"><option value="keep">Keep existing for each image</option><option value="set">Set offset</option><option value="remove">Remove offset</option></select></label><div data-offset-input hidden><label class="fl">UTC offset<div class="cell-box"><input class="input" name="date-offset" placeholder="+03:00 or −05:00">${inputCopy('date-offset', 'time zone')}</div></label></div><details id="date-options" ${openDetails('date-options')}><summary>Date fields</summary><label class="fl"><input type="checkbox" name="date-scope-exif" checked> EXIF date taken</label><label class="fl"><input type="checkbox" name="date-scope-xmp" checked> XMP date taken</label><p class="sub">Other dates stay unchanged.</p></details>` : ''}</section>`;
 }
+
+function geoControls(){
+ const catalogue=state.geoCatalogue||{countries:[],cities:[]};
+ const cities=catalogue.cities.filter(c=>c.country===state.geoCountry&&(!state.geoQuery||`${c.name} ${c.region}`.toLowerCase().includes(state.geoQuery.toLowerCase())));
+ return `<label class="fl">Страна<input class="input" id="geo-country" list="geo-countries" placeholder="Код или название страны" value="${esc(state.geoCountry||'')}"><datalist id="geo-countries">${catalogue.countries.map(c=>`<option value="${c.code}">${esc(c.name)}</option>`).join('')}</datalist></label><label class="fl">Поиск города<input class="input" id="geo-city-query" placeholder="Название или регион" value="${esc(state.geoQuery||'')}"></label><label class="fl">Город<select class="input" id="geo-city"><option value="">Выберите город</option>${cities.map(c=>`<option value="${esc(c.id)}" ${state.geoCity===c.id?'selected':''}>${esc(c.name)} — ${esc(c.region)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="geo-generate" ${!state.geoCity?'disabled':''}>Генерировать GEO для всех выбранных</button><p class="sub">Случайные точки внутри выбранной границы, не место съёмки. Высота сохраняется.</p><details ${state.geoImportPreview?'open':''}><summary>Каталог городов</summary><p class="sub">© OpenStreetMap contributors · ODbL-1.0. Доступны города локального каталога; City of London — только Сити.</p><button type="button" class="btn" data-action="geo-import">Импортировать каталог</button>${state.geoImportPreview?`<p>Добавить: ${state.geoImportPreview.added}. Уже есть: ${state.geoImportPreview.duplicates}.</p><p>${state.geoImportPreview.cities.map(c=>esc(c.name+' — '+c.country+' — '+c.source+' ('+c.license+')')).join('; ')}</p><button type="button" class="btn" data-action="geo-import-confirm">Подтвердить импорт</button>`:''}</details>`;
+}
+function geoFileHTML(photo){
+ const op=state.imageWorkspace?.overrides[photo.fileId]?.find(o=>o.field==='gps'&&o.action==='set'&&o.origin?.kind==='geo');
+ if(!op)return '';
+ const city=state.geoCatalogue?.cities.find(c=>c.id.replace(/:/g,'_')===op.origin.id);
+ return `<p class="sub" data-geo-file="${esc(photo.fileId)}">Сгенерировано · ${esc(op.origin.name)} · ${esc(city?.source||'Локальный каталог')}${city?.userSupplied?' (источник пользователя)':''}<br>${copyValue('latitude',op.value.latitude)}, ${copyValue('longitude',op.value.longitude)}</p><button type="button" class="btn btn-quiet" data-action="geo-regenerate-one" data-id="${esc(photo.fileId)}" ${state.imagesBusy?'disabled':''}>Повторить GEO</button>`;
+}
+
 export function photosHTML() {
   const selected = state.photos.filter((p) => p.selected && p.view),
     plan = state.metadataPlan;
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">ASSETS</div><h1>Photos</h1><p class="sub">Edit date or location, preview changes and save copies.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add photos</button><button class="btn btn-quiet" data-action="photos-clear" ${!state.photos.length || state.imagesBusy ? 'disabled' : ''}>Clear all</button></div></div>
+  return `<div class="page" id="photo-drop"><input type="file" id="photo-input" accept=".jpg,.jpeg,.png,.webp" multiple hidden><div class="page-head"><div><div class="eyebrow">ASSETS</div><h1>Photos</h1><p class="sub">Edit date or location, preview changes and save copies.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add photos</button><button class="btn btn-quiet" data-action="photos-clear" ${!state.photos.length || state.imagesBusy ? 'disabled' : ''}>Clear all</button></div></div>
  <div class="photo-stats"><div><b>${state.photos.length}</b><span>photos</span></div><div><b>${selected.length}</b><span>selected</span></div><div class="photo-meter"><i style="width:${Math.min(100, state.photos.length)}%"></i></div></div>
- ${state.photos.length ? `<div class="photo-grid">${state.photos.map((p) => `<figure class="ph"><button class="btn-quiet" data-action="image-preview" data-id="${p.fileId}" style="display:block;width:100%;padding:0;border:0" aria-label="View ${esc(p.name)}" ${p.view ? '' : 'disabled'}>${p.thumbnail ? `<img src="${p.thumbnail}" alt="${esc(p.name)}" loading="lazy">` : `<div class="photo-placeholder">${p.status === 'reading' ? 'Reading…' : 'Preview unavailable'}</div>`}</button><button class="ph-del" data-action="photo-remove" data-id="${p.fileId}" aria-label="Remove ${esc(p.name)}" ${state.imagesBusy ? 'disabled' : ''}>${I.x}</button><figcaption><label><input type="checkbox" data-image-select="${p.fileId}" ${p.selected ? 'checked' : ''} ${p.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}><b>${esc(p.name)}</b></label></figcaption><div class="news-actions"><button class="news-copy" data-action="copy" data-copy="${esc(p.name)}" aria-label="Copy filename">${I.copy}Name</button><button class="news-copy" data-action="image-copy" data-id="${p.fileId}" ${p.view && !state.imagesBusy ? '' : 'disabled'}>${I.copy}Image</button></div>${p.status === 'failed' || p.status === 'cancelled' ? `<p class="sub">${p.status === 'cancelled' ? 'Cancelled' : 'Could not read this image.'}</p>` : ''}</figure>`).join('')}</div>` : `<button class="drop photo-drop" style="width:100%" data-action="images-browse"><div class="di">${I.image}</div><h3>Add photos</h3><p>Choose JPEG, PNG or WebP images</p></button>`}
+ ${state.photos.length ? `<div class="photo-grid">${state.photos.map((p) => `<figure class="ph"><button class="btn-quiet" data-action="image-preview" data-id="${p.fileId}" style="display:block;width:100%;padding:0;border:0" aria-label="View ${esc(p.name)}" ${p.view ? '' : 'disabled'}>${p.thumbnail ? `<img src="${p.thumbnail}" alt="${esc(p.name)}" loading="lazy">` : `<div class="photo-placeholder">${p.status === 'reading' ? 'Reading…' : 'Preview unavailable'}</div>`}</button><button class="ph-del" data-action="photo-remove" data-id="${p.fileId}" aria-label="Remove ${esc(p.name)}" ${state.imagesBusy ? 'disabled' : ''}>${I.x}</button><figcaption><label><input type="checkbox" data-image-select="${p.fileId}" ${p.selected ? 'checked' : ''} ${p.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}><b>${esc(p.name)}</b></label></figcaption><div class="news-actions"><button class="news-copy" data-action="copy" data-copy="${esc(p.name)}" aria-label="Copy filename">${I.copy}Name</button><button class="news-copy" data-action="image-copy" data-id="${p.fileId}" ${p.view && !state.imagesBusy ? '' : 'disabled'}>${I.copy}Image</button></div>${geoFileHTML(p)}${p.status === 'failed' || p.status === 'cancelled' ? `<p class="sub">${p.status === 'cancelled' ? 'Cancelled' : 'Could not read this image.'}</p>` : ''}</figure>`).join('')}</div>` : `<button class="drop photo-drop" style="width:100%" data-action="images-browse"><div class="di">${I.image}</div><h3>Add photos</h3><p>Choose JPEG, PNG or WebP images</p></button>`}
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Original image"><figcaption>${esc(state.imagePreviewName || 'Original image')}</figcaption><button class="btn btn-quiet" data-action="image-preview-close">Close preview</button></figure>` : ''}
  ${
    selected.length
@@ -182,7 +202,7 @@ export function photosHTML() {
          )}<button class="btn btn-primary" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Save copies</button><details><summary>Details and warnings</summary><p>${esc(plan.warnings.join(', ') || 'No warnings')}</p><p>Personal-metadata removal does not anonymize pixels or unknown blocks.</p>${plan.files.map((file) => `<p>${esc(file.groupName || '')} · ${esc(file.destinationName || '')}</p>`).join('')}</details></div>`
      : ''
  }
- ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>${!state.imagesReading ? (state.imageWorkspace?.groups || []).map((g) => `<button class="btn" data-action="metadata-cancel-group" data-id="${g.id}">Cancel ${esc(g.name)}</button>`).join('') : ''}` : ''}
+ ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.geoBusy ? 'Отменить генерацию GEO' : state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>${!state.imagesReading ? (state.imageWorkspace?.groups || []).map((g) => `<button class="btn" data-action="metadata-cancel-group" data-id="${g.id}">Cancel ${esc(g.name)}</button>`).join('') : ''}` : ''}
  ${
    state.imagesBusy || Object.keys(state.metadataProgress || {}).length
      ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress || {})
@@ -238,9 +258,10 @@ export function draftFromOperations(operations) {
       for (const k of ['exif', 'xmp']) draft['date-scope-' + k] = op.scope.includes(k);
     }
     if (op.action !== 'set') continue;
-    if (op.field === 'gps')
+    if (op.field === 'gps') {
+      draft['gps-altitude-mode']=op.value.altitudeMode || (op.value.altitude==null?'remove':'set');
       for (const k of ['latitude', 'longitude', 'altitude']) draft['gps-' + k] = op.value[k] ?? '';
-    else if (op.field === 'captureDate') {
+    } else if (op.field === 'captureDate') {
       draft['date-local'] = op.value.local;
       draft['date-offset'] = op.value.offset || '';
       draft['date-offset-mode'] = op.value.offsetMode || (op.value.offset ? 'set' : 'remove');

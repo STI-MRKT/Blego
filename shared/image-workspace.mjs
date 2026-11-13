@@ -45,12 +45,16 @@ export function validateWorkspaceOperations(operations, { allowInherit = false }
     if (origin) {
       if (
         !keys(origin, ['kind', 'id', 'name', 'sourceHash', 'version']) ||
-        !['manual', 'preset', 'reference'].includes(origin.kind)
+        !['manual', 'preset', 'reference', 'geo'].includes(origin.kind)
       )
         fail();
       if (origin.kind === 'manual' && Object.keys(origin).length !== 1) fail();
       if (origin.kind !== 'manual' && (!validId(origin.id) || !validName(origin.name))) fail();
-      if (origin.kind === 'reference' && !/^[a-f0-9]{64}$/.test(origin.sourceHash || '')) fail();
+      if (
+        ['reference', 'geo'].includes(origin.kind) &&
+        !/^[a-f0-9]{64}$/.test(origin.sourceHash || '')
+      )
+        fail();
       if (
         origin.version !== undefined &&
         (!Number.isSafeInteger(origin.version) || origin.version < 1)

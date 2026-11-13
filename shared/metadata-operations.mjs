@@ -42,13 +42,23 @@ export function validateOperations(operations) {
     } else if (op.field === 'gps') {
       if (
         !value ||
-        Object.keys(value).some((k) => !['latitude', 'longitude', 'altitude'].includes(k)) ||
+        Object.keys(value).some(
+          (k) => !['latitude', 'longitude', 'altitude', 'altitudeMode'].includes(k)
+        ) ||
         !Number.isFinite(value.latitude) ||
         Math.abs(value.latitude) > 90 ||
         !Number.isFinite(value.longitude) ||
         Math.abs(value.longitude) > 180 ||
         (value.altitude != null &&
           (!Number.isFinite(value.altitude) || Math.abs(value.altitude) > 100000))
+      )
+        throw Error('METADATA_INVALID_GPS');
+      if (
+        value.altitudeMode !== undefined &&
+        (!['keep', 'set', 'remove'].includes(value.altitudeMode) ||
+          (value.altitudeMode === 'set'
+            ? !Number.isFinite(value.altitude)
+            : value.altitude != null))
       )
         throw Error('METADATA_INVALID_GPS');
     } else if (op.field === 'captureDate') {

@@ -6,7 +6,7 @@ const { createEngine } = require('./engine.cjs');
 const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
-function createImageService({ engine = createEngine(), store, hooks = {} } = {}) {
+function createImageService({ engine = createEngine(), store, geo, hooks = {} } = {}) {
   const groupStore = require('./groups.cjs').createGroupStore({ store });
   const groups = Object.fromEntries(
     Object.entries(groupStore).map(([name, fn]) => [
@@ -73,6 +73,53 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
   }
   return {
     groups,
+    async generateGeo({ cityId, fileIds, requestId }) {
+      if (!geo) throw Error('GEO_BOUNDARY_UNAVAILABLE');
+      if (active || adding) throw Error('IMAGES_BUSY');
+      const workspace = groups.snapshot();
+      if (
+        !Array.isArray(fileIds) ||
+        !fileIds.length ||
+        fileIds.length > IMAGE_LIMITS.files ||
+        new Set(fileIds).size !== fileIds.length ||
+        fileIds.some(
+          (id) =>
+            !files.get(id)?.view?.capabilities.writable || !Object.hasOwn(workspace.membership, id)
+        )
+      )
+        throw Error('INVALID_FILE_TOKEN');
+      const exclude = Object.keys(workspace.membership)
+        .map((id) => groups.effective(id).find((o) => o.field === 'gps'))
+        .filter((o) => o?.action === 'set')
+        .map((o) => o.value);
+      const generated = await geo.generate({ cityId, count: fileIds.length, exclude, requestId });
+      if (active || adding || groups.snapshot().revision !== workspace.revision)
+        throw Error('PLAN_STALE');
+      const origin = {
+        kind: 'geo',
+        id: generated.city.id.replace(/:/g, '_'),
+        name: generated.city.name,
+        sourceHash: generated.city.sha256,
+        version: 1
+      };
+      groups.setGeneratedGPS({
+        updates: fileIds.map((fileId, i) => ({
+          fileId,
+          operation: {
+            field: 'gps',
+            action: 'set',
+            value: { ...generated.points[i], altitudeMode: 'keep', altitude: null },
+            origin
+          }
+        }))
+      });
+      plans.clear();
+      return {
+        workspace: groups.snapshot(),
+        city: generated.city,
+        points: fileIds.map((fileId, i) => ({ fileId, ...generated.points[i] }))
+      };
+    },
     async recover() {
       await require('./export.cjs').recoverExports(store);
     },
@@ -673,7 +720,9 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
                       ? item.view.tags.find((tag) => tag.field === op.field).value
                       : op.action === 'remove'
                         ? null
-                        : op.value,
+                        : op.field === 'gps'
+                          ? require('./gps-policy.cjs').expectedGPS(op, item.raw)
+                          : op.value,
                   supported: true
                 }
           )
