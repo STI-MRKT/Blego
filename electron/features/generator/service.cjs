@@ -144,6 +144,7 @@ async function generateProfile(
       nameGender: p.nameGender,
       namingStrategy: p.namingStrategy,
       namingDatasetId: p.namingDatasetId,
+      bioDatasetId: p.bioDatasetId,
       datasetId: p.datasetId,
       datasetVersion: p.datasetVersion,
       transliterationVersion: 'latin-v1',

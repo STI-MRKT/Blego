@@ -66,3 +66,23 @@ test('authored pools supplement each person category by 256 new female country-s
     }
   }
 });
+
+test('every localized category gains 50 distinct BIOs while original texts and explicit overrides remain intact', () => {
+  for (const country of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB']) {
+    for (const type of ['model', 'tech', 'crypto']) {
+      const p = resolvePreset(country, type);
+      const old = JSON.parse(fs.readFileSync(`resources/generator/types/${type}.json`, 'utf8'))
+        .bios[p.language];
+      assert.equal(p.bios.length, old.length + 50, `${country}:${type}`);
+      assert.equal(new Set(p.bios.map(normalized)).size, p.bios.length);
+      assert.deepEqual(p.bios.slice(0, old.length), old);
+      assert.ok(p.bioDatasetId);
+      assert.deepEqual(
+        resolvePreset(country, type, {
+          overrides: { types: { [type]: { bios: ['Explicit local biography.'] } } }
+        }).bios,
+        ['Explicit local biography.']
+      );
+    }
+  }
+});

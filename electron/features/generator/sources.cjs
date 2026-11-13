@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
+const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
 const { namingPreset, nameCount } = require('./naming.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
@@ -80,7 +81,8 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...c,
     ...t,
     ...namingPreset(country, type, c),
-    bios: t.bios[c.language],
+    bios: [...t.bios[c.language], ...bioSupplement.bios[type][c.language]],
+    bioDatasetId: bioSupplement.id,
     statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],
     symbols: settings.symbols || '',
     ...o.common,

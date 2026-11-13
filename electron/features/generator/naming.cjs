@@ -1,5 +1,6 @@
 const { randomInt, randomUUID } = require('node:crypto');
 const path = require('node:path');
+const { DatabaseSync } = require('node:sqlite');
 const { normalize } = require('./registry.cjs');
 const supplement = require('../../../resources/generator/supplements/names-v14.json');
 const initializing = new WeakMap();
@@ -48,8 +49,20 @@ async function ensureNameRegistry(store) {
   if (store.get('generator:names-index-v1')) return;
   if (initializing.has(store)) return initializing.get(store);
   const task = (async () => {
-    if (store.db.prepare('SELECT 1 FROM requests LIMIT 1').get())
-      await store.backup(path.join(store.root, `generator-names-${randomUUID()}.backup`));
+    if (store.db.prepare('SELECT 1 FROM requests LIMIT 1').get()) {
+      const destination = path.join(store.root, `generator-names-${randomUUID()}.backup`);
+      let copy;
+      try {
+        await store.backup(destination);
+        copy = new DatabaseSync(destination, { readOnly: true });
+        if (copy.prepare('PRAGMA integrity_check').get().integrity_check !== 'ok')
+          throw Error('BACKUP_INVALID');
+      } catch {
+        throw Error('GENERATOR_BACKUP_INVALID');
+      } finally {
+        copy?.close();
+      }
+    }
     store.transaction(() => {
       const insert = store.db.prepare('INSERT OR IGNORE INTO issued VALUES(?,?,?,?)');
       for (const row of store.db.prepare('SELECT profile FROM requests').iterate()) {

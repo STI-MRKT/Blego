@@ -8,3 +8,5 @@
 - Automatically generated email local parts are normalized from display names, with a persistent numeric collision suffix. `dayrep.com` is user-specified configuration; no claim about mailbox ownership or delivery, no mail or availability request.
 
 Naming selection indexes the existing Cartesian pool without materializing millions of combinations. Exhaustion fails before spending contacts. Old explicit local pool records retain their supplied email.
+
+`bios-v14.json` adds 50 authored biographies for each of MODEL/TECH/CRYPTO in each supported language (en/pt/fr/pl/de/es/it): 1,050 added strings, 80 choices per localized category including the unchanged original 30. US and GB share English. These are localized authored texts, not claims about real users. Existing explicit user BIO overrides take precedence. Automated checks cover counts, normalized duplicates, retention, exhaustion and exact clipboard/history; they are not a substitute for native-speaker editorial review.

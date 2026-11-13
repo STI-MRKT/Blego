@@ -128,3 +128,62 @@ test('historical and explicitly imported emails remain unchanged; old names ente
   assert.equal(imported.fields.email, 'explicit@example.net');
   assert.equal(imported.fields.name, 'Custom Robotics Journal');
 });
+
+test('localized BIOs exhaust without spending contacts and persist exactly across restart', async (t) => {
+  const env = await setup(t);
+  const settings = { allowRepeats: ['name', 'status', 'postalCode', 'address', 'number'] };
+  const preset = resolvePreset('FR', 'model', settings),
+    texts = new Set();
+  assert.ok(preset.bios.length >= 80);
+  for (let i = 0; i < preset.bios.length; i++) {
+    if (i === 40) await env.reopen();
+    const card = await generateProfile(
+      { country: 'FR', type: 'model', requestId: `bio-${i}` },
+      { store: env.store, settings }
+    );
+    texts.add(card.fields.bio);
+    assert.equal(card.bioDatasetId, preset.bioDatasetId);
+  }
+  assert.equal(texts.size, preset.bios.length);
+  const count = env.store.db.prepare('SELECT COUNT(*) n FROM issued').get().n;
+  await assert.rejects(
+    generateProfile(
+      { country: 'FR', type: 'model', requestId: 'no-bio' },
+      { store: env.store, settings }
+    ),
+    (e) => e.code === 'POOL_EXHAUSTED' && e.details.field === 'bio'
+  );
+  assert.equal(env.store.db.prepare('SELECT COUNT(*) n FROM issued').get().n, count);
+  const original = JSON.parse(
+    env.store.db.prepare("SELECT profile FROM requests WHERE request_id='bio-0'").get().profile
+  );
+  assert.deepEqual(
+    await generateProfile(
+      { country: 'FR', type: 'model', requestId: 'bio-0' },
+      {
+        store: env.store,
+        settings: { ...settings, overrides: { common: { bios: ['Changed later'] } } }
+      }
+    ),
+    original
+  );
+});
+test('unusable backup aborts historical name indexing without altering the original store', async (t) => {
+  const env = await setup(t),
+    store = env.store;
+  const old = {
+    id: 'legacy',
+    country: 'US',
+    type: 'model',
+    fields: { name: 'Alice Example', email: 'old@example.org' }
+  };
+  store.db.prepare('INSERT INTO requests VALUES(?,?,?)').run('legacy', old.id, JSON.stringify(old));
+  store.backup = async (destination) => fs.writeFileSync(destination, 'not a database');
+  await assert.rejects(
+    generateProfile({ country: 'US', type: 'model', requestId: 'new' }, { store }),
+    /GENERATOR_BACKUP_INVALID/
+  );
+  assert.equal(store.get('generator:names-index-v1'), undefined);
+  assert.equal(store.db.prepare('SELECT COUNT(*) n FROM issued').get().n, 0);
+  assert.equal(store.db.prepare('SELECT COUNT(*) n FROM requests').get().n, 1);
+});

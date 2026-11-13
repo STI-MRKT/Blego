@@ -99,11 +99,11 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** existing generator/settings UI and main/copy model; GUI tests.
 
-- [ ] Failing exact Name/BIO copy tests (Unicode/truncation/empty BIO/native clipboard/keyboard); add accessible per-field buttons next to left-card text and truthful Russian toast.
-- [ ] Remove generator “Additional fields” disclosure only; retain full model, Copy full set and prior history.
-- [ ] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
-- [ ] New generated emails use only `@dayrep.com`, normalized from display name and reserved uniquely through existing registry; never rewrite old/imported emails or probe/send mail.
-- [ ] Add ≥50 natural unique BIOs per category **for each supported language**, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
+- [x] Failing exact Name/BIO copy tests (Unicode/truncation/empty BIO/native clipboard/keyboard); add accessible per-field buttons next to left-card text and truthful Russian toast.
+- [x] Remove generator “Additional fields” disclosure only; retain full model, Copy full set and prior history.
+- [x] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
+- [x] New generated emails use only `@dayrep.com`, normalized from display name and reserved uniquely through existing registry; never rewrite old/imported emails or probe/send mail.
+- [x] Add ≥50 natural unique BIOs per category **for each supported language**, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
 - [ ] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
 - [ ] GUI setting independence/restart plus all existing copy checks; full suites and commit.
 
