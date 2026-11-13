@@ -407,7 +407,7 @@ document.addEventListener('keydown', (event) => {
   if (
     (event.ctrlKey || event.metaKey) &&
     event.shiftKey &&
-    event.key.toLowerCase() === 'c' &&
+    (event.code === 'KeyC' || event.key.toLowerCase() === 'c') &&
     !event.target.closest('input,textarea,[contenteditable="true"]') &&
     !window.getSelection()?.toString() &&
     document.getElementById('copy-actions')
