@@ -1,0 +1,19 @@
+✖ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (32902.413241ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33554.223876
+
+✖ failing tests:
+
+test at tests/ui/photo-map.test.cjs:9:1
+✖ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (32902.413241ms)
+  page.waitForFunction: Timeout 30000ms exceeded.
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/photo-map.test.cjs:86:16) {
+    name: 'TimeoutError',
+    log: []
+  }

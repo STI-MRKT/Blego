@@ -80,10 +80,56 @@ test(
       .toBuffer();
     for (const tile of tiles)
       fs.writeFileSync(path.join(cache, `${tile.z}-${tile.x}-${tile.y}.png`), raster);
+    // Fit/resize/zoom may change the viewport after initial cache preparation.
+    // Seed requested fixture tiles before the real IPC handler reads its cache;
+    // keep sender/argument validation, cache decoding and Canvas rendering intact.
+    await app.evaluate(
+      ({ ipcMain }, fixture) => {
+        const channel = 'local:mapTile';
+        const original = ipcMain._invokeHandlers.get(channel);
+        if (typeof original !== 'function') throw Error('MAP_IPC_HANDLER_REQUIRED');
+        globalThis.mapFixtureRequests = [];
+        ipcMain.removeHandler(channel);
+        ipcMain.handle(channel, async (event, arg) => {
+          if (
+            arg &&
+            [arg.z, arg.x, arg.y].every(Number.isInteger) &&
+            arg.z >= 0 &&
+            arg.z <= 19 &&
+            arg.x >= 0 &&
+            arg.y >= 0 &&
+            arg.x < 2 ** arg.z &&
+            arg.y < 2 ** arg.z
+          ) {
+            const name = `${arg.z}-${arg.x}-${arg.y}.png`;
+            globalThis.mapFixtureRequests.push(name);
+            process.getBuiltinModule('node:fs').writeFileSync(
+              process.getBuiltinModule('node:path').join(fixture.cache, name),
+              Buffer.from(fixture.raster, 'base64')
+            );
+          }
+          return original(event, arg);
+        });
+      },
+      { cache, raster: raster.toString('base64') }
+    );
+    // Zoom out to request new tiles while retaining uncovered raster pixels
+    // outside the translucent city polygon for the exact-color assertion.
+    for (let i = 0; i < 3; i++) await page.locator('[data-map-action="zoom-out"]').click();
     await page.locator('[data-map-action="background"]').click();
     await page.waitForFunction(
       () => Number(document.getElementById('photo-map-canvas').dataset.tiles) > 0
     );
+    // A first decoded tile can intersect only a tiny edge of the viewport.
+    // Wait for the same actual-pixel condition that acceptance asserts below.
+    await page.waitForFunction(() => {
+      const c = document.getElementById('photo-map-canvas');
+      const values = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let green = 0;
+      for (let i = 0; i < values.length; i += 4)
+        if (values[i] === 52 && values[i + 1] === 148 && values[i + 2] === 90) green++;
+      return green > 1000;
+    });
     const painted = await canvas.evaluate((c) => {
       const ctx = c.getContext('2d');
       const values = ctx.getImageData(0, 0, c.width, c.height).data;
@@ -93,7 +139,15 @@ test(
       return green;
     });
     assert.ok(painted > 1000, 'synthetic background pixels actually rendered');
+    const initiallySeeded = new Set(tiles.map((tile) => `${tile.z}-${tile.x}-${tile.y}.png`));
+    assert.ok(
+      (await app.evaluate(() => globalThis.mapFixtureRequests)).some(
+        (name) => !initiallySeeded.has(name)
+      ),
+      'the renderer requested a changed viewport, beyond the initial fixture cache'
+    );
     await page.locator('[data-map-action="background"]').click();
+    for (let i = 0; i < 3; i++) await page.locator('[data-map-action="zoom-in"]').click();
     const id = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       const id = state.photos[0].fileId;
