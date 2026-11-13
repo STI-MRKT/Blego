@@ -400,6 +400,8 @@ function bindView() {
       if (button) button.disabled = !event.target.value.trim();
     };
   }
+  document.querySelectorAll('[data-bio-field]').forEach(el=>{el.oninput=()=>{if(state.bioEditor?.profileId!==state.demo?.id)return;state.bioEditor.values[el.dataset.bioField]=el.value;state.bioEditor.dirty=true;const status=document.querySelector('.biography [role=status]');if(status)status.textContent='Есть несохранённые изменения';};});
+  document.querySelectorAll('[data-bio-institution]').forEach(el=>{el.onchange=()=>{if(!el.value)return;state.bioEditor.values[el.dataset.bioInstitution]=el.value;state.bioEditor.dirty=true;renderView();};});
   const encoding = document.getElementById('import-encoding');
   if (encoding)
     encoding.onchange = (e) => {
@@ -467,6 +469,7 @@ async function generate() {
   renderView();
   try {
     state.demo = await makeDemo(state.locale, state.type);
+    state.generatorTab='profile';state.bioEditor=null;
     toast('New set saved');
   } catch (e) {
     toast(
@@ -891,6 +894,26 @@ document.addEventListener('click', async (event) => {
       toast(`Data package unchanged: ${error.message}`, 'err');
     }
     return;
+  }
+  if(action==='generator-tab'){
+    state.generatorTab=target.dataset.tab;
+    if(state.generatorTab==='bio'&&state.demo&&state.bioEditor?.profileId!==state.demo.id){
+      const id=state.demo.id;
+      try{const result=await window.blego.biography({action:'read',profileId:id});if(state.demo?.id===id)state.bioEditor={profileId:id,revision:state.demo.biographyRevision||0,...result,dirty:false};}catch{toast('Не удалось открыть BIO','err');state.generatorTab='profile';}
+    }
+    renderView();return;
+  }
+  if(action==='bio-copy'){await copyText(state.bioEditor?.values[target.dataset.field]||'',target);return;}
+  if(action==='bio-save'||action==='bio-generate'||action==='bio-work'){
+    const editor=state.bioEditor;if(!editor||editor.saving)return;
+    editor.saving=true;target.disabled=true;
+    try{
+      const result=await window.blego.biography({action:action==='bio-save'?'save':'suggest',profileId:editor.profileId,revision:editor.revision,values:{...editor.values}});
+      if(state.demo?.id!==editor.profileId)return;
+      if(action==='bio-save'){state.demo=result;editor.revision=result.biographyRevision;editor.dirty=false;toast('BIO сохранено');}
+      else{if(action==='bio-generate')editor.values.mainBio=result.mainBio;else{editor.values.employer=result.employer;editor.values.position=result.position;}editor.dirty=true;}
+    }catch{toast('Не удалось изменить BIO. Проверьте данные и повторите.','err');}
+    finally{editor.saving=false;renderView();}return;
   }
   if (action === 'generate') {
     generate();

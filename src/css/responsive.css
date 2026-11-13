@@ -100,3 +100,9 @@
   .hrow .cell-box{max-width:100%}
   .hrow .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
 }
+
+/* TZ06 BIO uses existing form tokens; zero minimum widths preserve compact view. */
+.biography .bio-field { min-width: 0; }
+.biography .head-actions .input { flex: 1; min-width: 0; }
+.biography textarea { width: 100%; resize: vertical; }
+.biography .bio-field:last-child { grid-column: 1 / -1; }

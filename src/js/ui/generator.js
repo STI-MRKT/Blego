@@ -1,3 +1,4 @@
+import { biographyHTML } from './biography.js';
 import { state } from '../state.js';
 import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
@@ -145,7 +146,8 @@ export function generatorHTML() {
         <button class="btn btn-primary" data-action="generate" ${state.demoBusy ? 'disabled' : ''}>${I.spark}<span class="lbl">${state.demoBusy ? 'Создаём…' : 'Сгенерировать'}</span></button>
       </div>
     </div>
-    ${profileHTML()}
+    ${state.demo?`<div class="head-actions"><button class="btn" data-action="generator-tab" data-tab="profile" aria-pressed="${state.generatorTab!=='bio'}">Профиль</button><button class="btn" data-action="generator-tab" data-tab="bio" aria-pressed="${state.generatorTab==='bio'}">BIO</button></div>`:''}
+    ${state.demo&&state.generatorTab==='bio'?biographyHTML():profileHTML()}
 
   </div>`;
 }

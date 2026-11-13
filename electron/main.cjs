@@ -473,6 +473,18 @@ async function initialize() {
       classificationConfirm: (arg) =>
         classification.confirmClassification(arg.operationId, arg.decision),
       generate: (request) => generateProfile(request, { store }),
+      biography: (request) => {
+        const service = require('./features/generator/biography.cjs');
+        const p = store.get('lastCard');
+        if (!p || p.id !== request?.profileId) throw Error('STALE_PROFILE');
+        if (request.action === 'save') return service.saveBiography(request, { store });
+        if (request.action === 'suggest') return service.bioSuggestions(p, { store });
+        if (request.action !== 'read') throw Error('INVALID_BIO');
+        const institutions = require('../resources/generator/institutions.json').filter(
+          (i) => i.country === p.country
+        );
+        return { values: service.bioDefaults(p), institutions };
+      },
       poolStats: (request) => getPoolStats(request, { store }),
       poolChoose: async () => {
         const result = await dialog.showOpenDialog(mainWindow, {

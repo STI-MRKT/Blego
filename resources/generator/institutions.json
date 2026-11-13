@@ -1,0 +1,130 @@
+[
+  {
+    "country": "BR",
+    "kind": "university",
+    "name": "Universidade de São Paulo",
+    "city": "São Paulo",
+    "url": "https://www5.usp.br/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "US",
+    "kind": "university",
+    "name": "Columbia University",
+    "city": "New York",
+    "url": "https://www.columbia.edu/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "US",
+    "kind": "school",
+    "name": "Stuyvesant High School",
+    "city": "New York",
+    "url": "https://stuy.enschool.org/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "FR",
+    "kind": "university",
+    "name": "Sorbonne Université",
+    "city": "Paris",
+    "url": "https://www.sorbonne-universite.fr/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "FR",
+    "kind": "school",
+    "name": "Lycée Louis-le-Grand",
+    "city": "Paris",
+    "url": "https://www.louislegrand.fr/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "PL",
+    "kind": "university",
+    "name": "Uniwersytet Warszawski",
+    "city": "Warszawa",
+    "url": "https://www.uw.edu.pl/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "PL",
+    "kind": "school",
+    "name": "XIV LO im. Stanisława Staszica",
+    "city": "Warszawa",
+    "url": "https://staszic.waw.pl/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "DE",
+    "kind": "school",
+    "name": "John-Lennon-Gymnasium",
+    "city": "Berlin",
+    "url": "https://www.jlgym-berlin.de/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "ES",
+    "kind": "university",
+    "name": "Universidad Complutense de Madrid",
+    "city": "Madrid",
+    "url": "https://www.ucm.es/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "ES",
+    "kind": "school",
+    "name": "IES San Isidro",
+    "city": "Madrid",
+    "url": "https://site.educa.madrid.org/ies.sanisidro.madrid/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "GB",
+    "kind": "university",
+    "name": "University College London",
+    "city": "London",
+    "url": "https://www.ucl.ac.uk/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "IT",
+    "kind": "university",
+    "name": "Politecnico di Milano",
+    "city": "Milan",
+    "url": "https://www.polimi.it/en/contacts",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "IT",
+    "kind": "school",
+    "name": "Liceo Classico Cesare Beccaria",
+    "city": "Milan",
+    "url": "https://www.liceobeccaria.edu.it/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "BR",
+    "kind": "school",
+    "name": "Escola de Aplicação da FEUSP",
+    "city": "São Paulo",
+    "url": "https://www.ea.fe.usp.br/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "DE",
+    "kind": "university",
+    "name": "Freie Universität Berlin",
+    "city": "Berlin",
+    "url": "https://www.fu-berlin.de/en/index.html",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "GB",
+    "kind": "school",
+    "name": "Camden School for Girls",
+    "city": "London",
+    "url": "https://www.camdengirls.camden.sch.uk/",
+    "checkedAt": "2026-11-13"
+  }
+]

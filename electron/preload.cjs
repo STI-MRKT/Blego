@@ -104,6 +104,7 @@ contextBridge.exposeInMainWorld('blego', {
   useBundledPool: (country) => call('poolBundled', country),
   selectPoolVersion: (request) => call('poolSelect', request),
   lastCard: () => call('lastCard'),
+  biography: (request) => call('biography', request),
   clearCard: () => call('clearCard'),
   tourSeen: () => call('tourSeen'),
   markTour: () => call('tourMark'),

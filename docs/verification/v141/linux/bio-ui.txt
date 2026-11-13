@@ -1,0 +1,11 @@
+✔ TZ06 BIO edits and individual copies survive navigation, 360px and restart (2287.563245ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9914.723028ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1195.198116ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14749.789493
