@@ -7,6 +7,7 @@ on:
       - codex/blego-classifier-next
       - codex/blego-final-hardening
       - codex/blego-v1-4-improvements
+      - codex/blego-v1-4-1-fixes
   workflow_dispatch:
     inputs:
       target:
@@ -79,20 +80,26 @@ jobs:
         run: |
           set -o pipefail
           npm run verify | tee release/verification-native.log
-      - name: Prepare identical BLEGO 1.3 performance reference
+      - name: Prepare identical BLEGO 1.4 performance reference
         run: |
-          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 782c1b2c1b61703f81542eafb8d97a33fc3264ec
+          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 95b80ff302fafef8c395169d4fe5e23019d37f31
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-baseline-reference/node_modules"
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
+      - name: Package baseline14 in the same environment
+        run: |
+          (cd "$RUNNER_TEMP/blego-baseline-reference" && npm run dist:mac -- --${{ env.TARGET_ARCH }} --dir)
+          baseline_dir="mac-$TARGET_ARCH"
+          if [ "$TARGET_ARCH" = x64 ]; then baseline_dir=mac; fi
+          ditto "$RUNNER_TEMP/blego-baseline-reference/release/$baseline_dir/BLEGO.app" "$RUNNER_TEMP/BLEGO-baseline14.app"
       - name: Comparable manual metadata baseline and candidate
         run: |
-          BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline13.json
+          BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline14.json
           node scripts/check-metadata-load.cjs release/metadata-load-candidate-manual.json
       - name: Licensed real high-resolution photograph comparison
         run: |
           curl --fail --location --retry 2 --max-time 90 --max-filesize 20971520 --output "$RUNNER_TEMP/Fronalpstock-original.jpg" https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg
-          node scripts/check-real-photo.cjs "$RUNNER_TEMP/blego-baseline-reference" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-baseline13.json
+          node scripts/check-real-photo.cjs "$RUNNER_TEMP/blego-baseline-reference" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-baseline14.json
           node scripts/check-real-photo.cjs "$GITHUB_WORKSPACE" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-candidate.json
       - name: Date and GEO native load acceptance
         run: BLEGO_FOLDER_LOAD=1 node scripts/check-metadata-load.cjs release/metadata-load-darwin.json
@@ -117,7 +124,7 @@ jobs:
           BLEGO_GUI_FOLDER_COUNT=20 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder20-darwin.log
           git worktree add --detach "$RUNNER_TEMP/blego-original-reference" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
-          node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
+          node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --baseline-executable "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
       - name: Record checksums
         run: |
           (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS-mac.txt
@@ -131,9 +138,9 @@ jobs:
       - name: Prepare install ZIP after installed-app acceptance
         run: |
           install_arch="$(printf '%s' "$TARGET_ARCH" | tr '[:lower:]' '[:upper:]')"
-          cp docs/verification/v14/INSTALL-RU.txt release/INSTALL-RU.txt
-          zip -j "release/BLEGO-1.4.0-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS-mac.txt release/INSTALL-RU.txt
-          unzip -t "release/BLEGO-1.4.0-macOS-$install_arch-install.zip"
+          cp docs/verification/v141/INSTALL-RU.txt release/INSTALL-RU.txt
+          zip -j "release/BLEGO-1.4.1-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS-mac.txt release/INSTALL-RU.txt
+          unzip -t "release/BLEGO-1.4.1-macOS-$install_arch-install.zip"
           (cd release && shasum -a 256 *-install.zip) > release/SHA256SUMS-zip.txt
       - name: Upload QA packages after all gates
         uses: actions/upload-artifact@v4

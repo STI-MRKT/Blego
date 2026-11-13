@@ -17,12 +17,20 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
     arch: process.arch,
     release: os.release(),
     method:
-      'Three isolated launches per version; baseline13 and candidate additionally import identical 1000-row synthetic CSV;  visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.',
+      'Three isolated launches per version; baseline14 and candidate are packaged binaries when baseline-executable is supplied, same current-host runtime and fixtures; baseline14 and candidate additionally import identical 1000-row synthetic CSV;  visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.',
     versions: []
   };
   for (const [label, project, binary] of [
     ['original', original, undefined],
-    ...(args.includes('--baseline') ? [['baseline13', get('--baseline'), undefined]] : []),
+    ...(args.includes('--baseline')
+      ? [
+          [
+            'baseline14',
+            get('--baseline'),
+            args.includes('--baseline-executable') ? get('--baseline-executable') : undefined
+          ]
+        ]
+      : []),
     ['candidate', process.cwd(), executable]
   ]) {
     const samples = [];
@@ -71,7 +79,9 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
             })
         );
         frames.sort((a, b) => a - b);
-        let import1000Ms = null;
+        let import1000Ms = null,
+          archiveMs = null,
+          mapMs = null;
         if (label !== 'original') {
           await page.locator('[data-view="import"]').first().click();
           const csv =
@@ -93,10 +103,37 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
             return state.importData.counts.total;
           });
           if (count !== 1000) throw Error('PERFORMANCE_IMPORT_COUNT');
+          const archiveStart = performance.now();
+          await page.locator('#classifier-extra summary').click();
+          await page.locator('[data-action="classifier-archive"]').click();
+          await page.waitForFunction(
+            async () => (await import('/js/state.js')).state.importSaved === true
+          );
+          await page.locator('[data-view="history"]').click();
+          await page.locator('.hrow .nm').first().click();
+          await page.locator('pre').first().waitFor();
+          archiveMs = Math.round(performance.now() - archiveStart);
+          await page.locator('[data-view="photos"]').click();
+          const photo = await require('../tests/fixtures/images.cjs').imageFixture(root, 'png');
+          const mapStart = performance.now();
+          await page.locator('#photo-input').setInputFiles(photo);
+          await page.waitForFunction(
+            () => Number(document.getElementById('photo-map-canvas')?.dataset.points) > 0
+          );
+          mapMs = Math.round(performance.now() - mapStart);
           await page.locator('[data-view="generator"]').first().click();
         }
         samples.push({
           import1000Ms,
+          archiveMs,
+          mapMs,
+          memory: await app.evaluate(({ app }) =>
+            app.getAppMetrics().map((m) => ({
+              type: m.type,
+              workingSetSizeKB: m.memory.workingSetSize,
+              peakWorkingSetSizeKB: m.memory.peakWorkingSetSize
+            }))
+          ),
           launchMs: Math.round(launchMs),
           generationMs: Math.round(generationMs),
           frameMedianMs: frames[Math.floor(frames.length / 2)],

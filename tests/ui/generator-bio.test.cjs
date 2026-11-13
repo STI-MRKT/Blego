@@ -53,6 +53,10 @@ test(
     await page.locator('[data-view="news"]').click();
     await page.locator('[data-view="generator"]').click();
     assert.equal(await page.locator('#bio-birthplace').inputValue(), 'Manual birthplace');
+    if (process.env.BLEGO_CAPTURE) {
+      fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+      await page.screenshot({ path: path.join(process.env.BLEGO_CAPTURE, 'bio-wide.png') });
+    }
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].setBounds({ width: 360, height: 720 })
     );
