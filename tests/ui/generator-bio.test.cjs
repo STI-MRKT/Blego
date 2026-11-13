@@ -507,7 +507,8 @@ test(
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent BIO before FP');
     const next = await generateBio(page, 'IT', 'Milano', 'model');
     assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
-    await page.locator('[data-copy-action="open"]').click();
+    await page.evaluate(() => document.activeElement?.blur?.());
+    await page.keyboard.press('Control+Alt+Shift+C');
     assert.equal(await page.locator('[data-copy-control="source"]').inputValue(), 'biography');
     await page.locator('[data-tab="profile"]').click();
     assert.equal(await page.locator('[data-copy-control="source"]').count(), 0);
