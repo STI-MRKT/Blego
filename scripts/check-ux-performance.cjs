@@ -57,13 +57,17 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           w.focus();
         });
         const skip = page.locator('[data-tour-action="skip"]');
-        if (await skip.isVisible()) await skip.click();
+        // Every sample has fresh user data. The first-run tour starts asynchronously
+        // after 700ms; an instantaneous visibility check races its blocking overlay.
+        // Dismiss it through the real UI before timing ordinary interactions.
+        await skip.waitFor({ state: 'visible' });
+        await skip.click();
+        await page.locator('#tour-root').waitFor({ state: 'detached' });
         const generationStart = performance.now();
         await page.locator('[data-action="generate"]').first().click();
         await page.locator('.demo-card').waitFor();
         const generationMs = performance.now() - generationStart;
         await page.waitForTimeout(900);
-        if (await skip.isVisible()) await skip.click();
         const frames = await page.evaluate(
           () =>
             new Promise((resolve) => {

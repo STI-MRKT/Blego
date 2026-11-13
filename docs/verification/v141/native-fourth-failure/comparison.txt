@@ -1,0 +1,43 @@
+mac	Installed photo batch and original UX comparison	﻿2026-11-13T14:06:31.1318950Z ##[group]Run BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1326880Z [36;1mBLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log[0m
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1327840Z [36;1mBLEGO_GUI_FOLDER_COUNT=20 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder20-darwin.log[0m
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1328690Z [36;1mgit worktree add --detach "$RUNNER_TEMP/blego-original-reference" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0[0m
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1329290Z [36;1mln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"[0m
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1330510Z [36;1mnode scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --baseline-executable "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json[0m
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1505770Z shell: /bin/bash -e {0}
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506000Z env:
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506170Z   CSC_IDENTITY_AUTO_DISCOVERY: false
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506380Z   BLEGO_CAPTURE_UX: 1
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506550Z   BLEGO_CAPTURE: release
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506710Z   TARGET_ARCH: arm64
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:31.1506870Z ##[endgroup]
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:49.5165390Z Preparing worktree (detached HEAD 6e57eab)
+mac	Installed photo batch and original UX comparison	2026-11-13T14:06:49.5436700Z HEAD is now at 6e57eab BLEGO 1.1.0
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7053590Z locator.click: Timeout 30000ms exceeded.
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7060790Z Call log:
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7062400Z   - waiting for locator('[data-action="generate"]').first()
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7069260Z     - locator resolved to <button data-action="generate" class="btn btn-primary">…</button>
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7071220Z   - attempting click action
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7077870Z     2 × waiting for element to be visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7079680Z       - element is visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7081610Z       - scrolling into view if needed
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7082750Z       - done scrolling
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7085120Z       - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7086980Z     - retrying click action
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7088200Z     - waiting 20ms
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7089600Z     2 × waiting for element to be visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7091240Z       - element is visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7092620Z       - scrolling into view if needed
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7093780Z       - done scrolling
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7095860Z       - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7176490Z     - retrying click action
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7177280Z       - waiting 100ms
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7178400Z     48 × waiting for element to be visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7179200Z        - element is visible, enabled and stable
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7179790Z        - scrolling into view if needed
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7180390Z        - done scrolling
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7181380Z        - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7182050Z      - retrying click action
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7182670Z        - waiting 500ms
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7183040Z 
+mac	Installed photo batch and original UX comparison	2026-11-13T14:07:56.7304480Z ##[error]Process completed with exit code 1.
