@@ -1,4 +1,4 @@
-# TZ06 BIO addendum — acceptance candidate
+# TZ06 BIO addendum — verified candidate 32a8265
 
 Repository: STI-MRKT/Blego. Branch: `codex/blego-v1-4-1-fixes`. Existing draft PR7 is continued; PR6 and main are unchanged. Starting SHA: `1e7e22423dd358d5bebec4e48c6a1cf1190a6474`.
 
@@ -21,7 +21,7 @@ Initial residence and personal birthplace use profile city/country. Initial main
 | No Save BIO or persistent unsaved banner | PASS: rendered UI and real Electron checks |
 | Debounce, concurrent typing, retry | PASS: coordinator and actual IPC GUI tests; no success before persistence |
 | Tab and section switching preserve draft | PASS: BIO/Profile/News navigation |
-| Normal close, native quit and restart | Linux Electron PASS, including immediately after input, failed close and pending regeneration; native Mac candidate pending below |
+| Normal close, native quit and restart | Linux Electron PASS, including immediately after input, failed close and pending regeneration; native Mac ARM64 PASS below |
 | Individual copies/regeneration | PASS: all seven copy controls checked against native clipboard; all seven regenerate controls exercised |
 | Existing fields, history, registry and archive | PASS: profile fields unchanged; old request BIO updated atomically; full regression checks |
 | Original visual resources | Protected six CSS files, assets and animations unchanged; existing components retained, one scoped display override hides retry until failure |
@@ -36,7 +36,7 @@ npm run verify
 BLEGO_HEADLESS=1 BLEGO_CAPTURE=/tmp/blego-bio-captures npm run test:ui
 ```
 
-Final Linux candidate: lint PASS, 121/121 unit, 120/120 integration, 34/34 GUI, zero skipped. GUI elapsed 164.227 seconds. Raw outputs: [linux-verify.txt](linux-verify.txt), [linux-gui.txt](linux-gui.txt). Native build identifiers/results follow after actual completion; earlier native PASS results are not reused.
+Final Linux candidate: lint PASS, 121/121 unit, 120/120 integration, 34/34 GUI, zero skipped. GUI elapsed 164.227 seconds. Raw outputs: [linux-verify.txt](linux-verify.txt), [linux-gui.txt](linux-gui.txt). Native results below are for this exact candidate; earlier native PASS results were not reused.
 
 ## Review and regressions
 
@@ -64,3 +64,55 @@ Major-city coverage also supports explicit/imported profiles in the eight source
 Normal orderly close/quit is tested. Process kill, OS crash or power loss before the debounce commits cannot be promised to preserve an in-memory draft. SQLite committed values remain transactional.
 
 Existing limitations remain: Facebook positive live-account acceptance is not established; old dictionary breadth/quality deficits and historical 1000-photo GUI failure are not renamed PASS. This addendum does not alter the requested 20-photo acceptance target. Official release, merge, Developer ID signing, notarization and owner-device acceptance are not performed. No system protection is disabled.
+
+
+## Verified native build and delivery
+
+Code SHA: **32a8265b1e1b93d390b08f6ffafd63cc6e5956ea**. [Successful run 43474420977](https://github.com/STI-MRKT/Blego/actions/runs/43474420977), Mac job `132054665281`. [QA artifact 14062952151](https://github.com/STI-MRKT/Blego/actions/runs/43474420977/artifacts/14062952151), expires 2026-11-18 17:47 UTC. Subsequent commits only record documentation/screenshots and correct the ZIP installation instructions.
+
+Actual environment: **macOS 15.8.2 (24H232), Darwin 24.6.0, ARM64, Apple M1 (Virtual), VirtualMac2,1**. Node24.22.1 / Electron45.3.1. This is cloud-native QA, not access to the owner's Mac.
+
+| Gate | Actual result |
+| --- | --- |
+| CI lint / unit / integration | PASS: 121 unit, 120 integration, zero skipped; [summary](native/ci-test-summary.txt) |
+| Bundled Perl/ExifTool before packaging | PASS: actual JPEG/PNG/WebP write/readback, protected pixels/payload/originals, empty PATH; [report](native/native-darwin-arm64.json) |
+| ARM64 DMG | PASS: `npm run dist:mac -- --arm64`, publishing disabled |
+| Installed app outside checkout | PASS: read-only DMG mount, `ditto` to runner temp, dependency probe, 34/34 real GUI tests, zero skipped, 256.212s; [report](native/installed-darwin-arm64.json), [log](native/installed-darwin-arm64.json.txt) |
+| BIO native acceptance | PASS: all five new scenarios, including immediate quit, pending suggestion, failed close/retry, real clipboard, bundled towns, sparse towns and restart |
+| 20 individual / 20 nested-folder photos | PASS: 9.129s / 8.825s, 20 outputs each; [individual](native/metadata-ui-batch-darwin.txt), [folder](native/metadata-ui-folder20-darwin.txt). Small synthetic RGBA fixtures, not maximum-size stress |
+| Actual panorama JPEG/PNG/WebP | PASS: explicit date/GPS, native readback; [report](native/real-photo-candidate.json) |
+| Real OSM / Facebook observation | OSM fetch and installed rendering PASS. Facebook remains BLOCKED: UNKNOWN / INSUFFICIENT_EVIDENCE; [report](native/public-services-native.json) |
+| Download and archive integrity | PASS: outer artifact SHA256, CRC/path validation, original CI ZIP/DMG checksums, delivery ZIP CRC and embedded DMG hash |
+| Developer ID, notarization, downloaded Gatekeeper / owner acceptance | Not performed / BLOCKED; no system protection disabled |
+
+Native commands are in [.github/workflows/blego-macos-qa.yml](../../../../.github/workflows/blego-macos-qa.yml): `prepare-metadata-darwin.sh`, `check-metadata-native.cjs`, `npm run verify`, `npm run dist:mac -- --arm64`, `hdiutil attach ... -readonly -nobrowse`, `ditto`, `check-packaged-dependencies.cjs`, `check-installed-app.cjs`, both 20-photo GUI checks, UX comparison and bounded public-service checks.
+
+| File | SHA-256 |
+| --- | --- |
+| QA artifact ZIP | `2823157dfadaf06a7725ea259bcd3ea81d3fba2d95fc279d0f577089215da836` |
+| Verified DMG | `2444bc640fb322b13d0836d4bc00f4ec890d6b9053b344c77df1f8bbeffc6c34` |
+| Original CI installation ZIP | `808196d26792147c8e08bf8bb185430cd9f4eca8a262737ec16ae792ed03835d` |
+| Chat delivery ZIP `BLEGO-1.4.1-arm64-32a8265.zip` | `606c733b6edfecd24ab2b32459ee666a7319cd98c08d6e3911eaaa68b9aa73ec` |
+
+The chat ZIP was repacked in Linux solely to replace the old instruction “save BIO” with the actual automatic-saving workflow. It contains the **byte-identical verified DMG**, its original checksum file and corrected `INSTALL-RU.txt`; the inner DMG digest and ZIP CRC were checked afterward. The original CI artifact is retained unchanged. The canonical workspace installation ZIP points to this verified delivery copy. Updated [installation instructions](../INSTALL-RU.txt) require no new user data, credentials or disabled system protections.
+
+Actual Mac screenshots: [wide BIO](bio-wide.png), [360px BIO](bio-360.png). The host display constrains native window height, so lower controls require the tested vertical scroll. The QA artifact also retains comparative original/1.4/candidate screenshots. [Changed files](CHANGED_FILES.txt).
+
+Three same-host samples, medians in milliseconds (not a cold-cache or universal-speed claim):
+
+| Metric | Original | Packaged1.4 baseline | Candidate |
+| --- | ---: | ---: | ---: |
+| Launch | 1044 | 863 | 862 |
+| Generation | 928 | 256 | 207 |
+| Frame P95 | 18.8 | 21.8 | 18.6 |
+| Import1000 synthetic rows | — | 270 | 233 |
+| Archive | — | 597 | 407 |
+| Map | — | 407 | 214 |
+
+Raw measurements: [ux-performance-darwin.json](native/ux-performance-darwin.json). No overall performance improvement is inferred beyond these observations.
+
+## Explicit decisions
+
+- Schools stay city-local; employer/university regional fallback requires verified geography. Brand/project pages do not receive invented personal credentials. Cost: fewer automatically populated fields, intentionally favoring empty values over unsupported claims.
+- Source coverage is an expandable starter set, explicitly measured above; the generator's city distribution is unchanged. Cost: many ordinary generated towns still have empty organization fields until data is added.
+- Execution evidence uses the checked-in plan ledger because the cloud skill scripts were not local executables. Cost: bookkeeping is maintained explicitly rather than by the skill's helper scripts; tests and commits remain independently inspectable.

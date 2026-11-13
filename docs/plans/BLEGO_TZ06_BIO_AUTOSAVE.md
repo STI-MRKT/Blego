@@ -26,7 +26,7 @@ Base: 1e7e22423dd358d5bebec4e48c6a1cf1190a6474, codex/blego-v1-4-1-fixes (clean)
 - [x] 1. Catalog and generation: failing selection/generation/atomicity tests, verified expandable catalog, geographic/category selection, automatic initial BIO in existing transaction. Targeted + npm run verify; logical commit.
 - [x] 2. Autosave: failing coordinator/race tests, renderer debounce/flush/error handling, native close/quit handshake, individual regenerate/copy, remove Save/unsaved text. Targeted + npm run verify; logical commit.
 - [x] 3. GUI acceptance: automatic initial population, all copies, individual regenerate, edit while saving, failure/retry, tabs/navigation, 360px, close/quit/relaunch; actual screenshots. Run complete GUI regression sequentially, review changes independently, fix important findings with RED/GREEN. Logical commit.
-- [ ] 4. Native candidate: push [mac-qa-run] on existing working branch, real ARM64 installed-app QA, download/check artifact hashes, update draft PR7 and evidence. Never merge/publish. Report coverage gaps and blocked checks separately.
+- [x] 4. Native candidate: push [mac-qa-run] on existing working branch, real ARM64 installed-app QA, download/check artifact hashes, update draft PR7 and evidence. Never merge/publish. Report coverage gaps and blocked checks separately.
 
 ## Execution ledger
 Pre-flight: catalog produces same schema consumed by generator and BIO read API; renderer receives values/institutions/revision; close handshake consumes coordinator.flush before storage cleanup. Existing transactions stay authoritative.
@@ -43,3 +43,5 @@ Task 3 in progress: real bundled-city coverage audit found 0 matching cities in 
 
 Task 3 complete: 55 source-verified catalog records; actual bundled-city/postcode full-BIO coverage in all eight countries. Initial zero-coverage regression RED→GREEN, ambiguous direct-city and postcode-mismatch regressions RED→GREEN. Final Linux npm run verify PASS (121 unit, 120 integration, lint); complete GUI 34/34 PASS, zero skips, 164.227s. Eight hubs, eight sparse towns and seven additional bundled localities exercised through real generator IPC. Reference metadata and exact geographic coverage documented. Protected CSS/assets diff empty. Source work used the Firecrawl research skill plus bounded public official-page retrieval; no purchases.
 Task 4 in progress: native ARM64 candidate queued by [mac-qa-run]; no native result claimed yet.
+
+Task 4 complete: native code32a8265, run43474420977, job132054665281, artifact14062952151 SUCCESS. macOS15.8.2 M1(Virtual) ARM64: lint/121unit/120integration/34installedGUI PASS, no skips. Native runtime actual write/readback PASS;20individual/20folder PASS; DMG outsidecheckout PASS. OuterZIP, CIinstallerZIP and DMG SHA256/CRC checked after download. DeliveryZIP changes installation prose only; identical verifiedDMG hash rechecked. DraftPR7 updated without merge/release. Native evidence/screenshots and limitations in REPORT.md.
