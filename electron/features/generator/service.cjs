@@ -161,6 +161,8 @@ async function generateProfile(
         syntheticPhone: true
       }
     };
+    result.biography = require('./biography.cjs').generateBiography(result, { bios: p.bios });
+    result.biographyRevision = 0;
     store.db
       .prepare('INSERT OR IGNORE INTO rule_versions VALUES(?,?)')
       .run(p.rulesVersion, JSON.stringify(p));

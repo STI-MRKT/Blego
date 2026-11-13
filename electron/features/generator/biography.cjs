@@ -44,33 +44,88 @@ function bioDefaults(profile) {
     ...profile.biography
   };
 }
-function bioSuggestions(profile, { store }) {
+const catalog = require('../../../resources/generator/institutions.json');
+const cityKey = (value) =>
+  String(value || '')
+    .normalize('NFKC')
+    .trim()
+    .toLocaleLowerCase('en');
+const choose = (rows) => (rows.length ? rows[randomInt(rows.length)] : null);
+const organizationLabel = (row) => (row ? `${row.name} — ${row.city}` : '');
+function organizationOptions(profile, rows = catalog) {
+  if (profile.namingStrategy === 'brand_name') return [];
+  const city = cityKey(profile.fields.city);
+  if (!city) return [];
+  // No country-wide or guessed postal-code fallback. Regions must be substantiated
+  // by catalog records for this exact city (including explicitly sourced aliases).
+  const domestic = rows.filter(
+    (row) => row.country === profile.country && row.id && row.region && row.source?.url
+  );
+  const isLocal = (row) =>
+    [row.city, ...(row.aliases || [])].some((name) => cityKey(name) === city);
+  const local = domestic.filter(isLocal);
+  const regions = new Set(local.map((row) => row.region));
+  const region = regions.size === 1 ? [...regions][0] : null;
+  const result = [];
+  for (const kind of ['company', 'university', 'school']) {
+    const compatible = (row) =>
+      row.kind === kind && (kind !== 'company' || row.roles?.[profile.type]?.length);
+    const sameCity = local.filter(compatible);
+    result.push(
+      ...(sameCity.length
+        ? sameCity
+        : kind !== 'school' && region
+          ? domestic.filter((row) => row.region === region && compatible(row))
+          : [])
+    );
+  }
+  return result;
+}
+function generateBiography(profile, { catalog: rows = catalog, bios = [] } = {}) {
+  const personal = profile.namingStrategy !== 'brand_name';
+  const place = [profile.fields.city, COUNTRIES[profile.country]].filter(Boolean).join(', ');
+  const options = organizationOptions(profile, rows);
+  const company = choose(options.filter((row) => row.kind === 'company'));
+  return {
+    residence: place,
+    birthplace: personal ? place : '',
+    employer: organizationLabel(company),
+    position: company ? choose(company.roles[profile.type]) : '',
+    university: organizationLabel(choose(options.filter((row) => row.kind === 'university'))),
+    school: organizationLabel(choose(options.filter((row) => row.kind === 'school'))),
+    mainBio: profile.fields.bio || choose(bios) || ''
+  };
+}
+function suggestBiographyField(
+  profile,
+  field,
+  { catalog: rows = catalog, bios = [], values = {} } = {}
+) {
+  if (!FIELDS.includes(field)) throw Error('INVALID_BIO');
+  if (field === 'mainBio') return { mainBio: choose(bios) || '' };
+  const options = organizationOptions(profile, rows);
+  if (field === 'position') {
+    const company = options.find(
+      (row) => row.kind === 'company' && organizationLabel(row) === values.employer
+    );
+    return { position: company ? choose(company.roles[profile.type]) : '' };
+  }
+  const generated = generateBiography(profile, { catalog: rows, bios });
+  // Replacing the employer also replaces its dependent role, never an unrelated field.
+  return field === 'employer'
+    ? { employer: generated.employer, position: generated.position }
+    : { [field]: generated[field] };
+}
+function bioSuggestions(profile, { store, field, values }) {
   const p = resolvePreset(
     profile.country,
     profile.type,
     getSettings(store),
     loadDataset(store, profile.country)
   );
-  const work = {
-    model: [
-      ['Independent creative studio', 'Photographer'],
-      ['Independent fashion studio', 'Stylist']
-    ],
-    tech: [
-      ['Independent software studio', 'Software Developer'],
-      ['Independent data consultancy', 'Data Analyst']
-    ],
-    crypto: [
-      ['Independent blockchain studio', 'Blockchain Developer'],
-      ['Independent digital research studio', 'Research Analyst']
-    ]
-  }[profile.type];
-  const [employer, position] = work[randomInt(work.length)];
-  return {
-    employer: `${employer} · ${COUNTRIES[profile.country]}`,
-    position,
-    mainBio: p.bios[randomInt(p.bios.length)]
-  };
+  return field
+    ? suggestBiographyField(profile, field, { values, bios: p.bios })
+    : generateBiography(profile, { bios: p.bios });
 }
 function saveBiography(request, { store }) {
   const { profileId, revision, values } = request || {};
@@ -102,4 +157,13 @@ function saveBiography(request, { store }) {
     return updated;
   });
 }
-module.exports = { FIELDS, bioDefaults, bioSuggestions, saveBiography, pageBio };
+module.exports = {
+  FIELDS,
+  bioDefaults,
+  bioSuggestions,
+  saveBiography,
+  pageBio,
+  organizationOptions,
+  generateBiography,
+  suggestBiographyField
+};

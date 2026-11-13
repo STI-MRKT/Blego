@@ -1,186 +1,897 @@
 [
   {
+    "id": "official:br:usp",
     "country": "BR",
     "kind": "university",
     "name": "Universidade de São Paulo",
     "city": "São Paulo",
+    "region": "São Paulo",
+    "aliases": [
+      "Sao Paulo"
+    ],
+    "sector": "higher education",
     "url": "https://www5.usp.br/",
+    "source": {
+      "name": "Universidade de São Paulo official website",
+      "id": "https://www5.usp.br/",
+      "url": "https://www5.usp.br/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:us:columbia",
     "country": "US",
     "kind": "university",
     "name": "Columbia University",
     "city": "New York",
+    "region": "New York",
+    "aliases": [
+      "New York City"
+    ],
+    "sector": "higher education",
     "url": "https://www.columbia.edu/",
+    "source": {
+      "name": "Columbia University official website",
+      "id": "https://www.columbia.edu/",
+      "url": "https://www.columbia.edu/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:us:stuyvesant",
     "country": "US",
     "kind": "school",
     "name": "Stuyvesant High School",
     "city": "New York",
+    "region": "New York",
+    "aliases": [
+      "New York City"
+    ],
+    "sector": "secondary education",
     "url": "https://stuy.enschool.org/",
+    "source": {
+      "name": "Stuyvesant High School official website",
+      "id": "https://stuy.enschool.org/",
+      "url": "https://stuy.enschool.org/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:fr:sorbonne",
     "country": "FR",
     "kind": "university",
     "name": "Sorbonne Université",
     "city": "Paris",
+    "region": "Île-de-France",
+    "sector": "higher education",
     "url": "https://www.sorbonne-universite.fr/",
+    "source": {
+      "name": "Sorbonne Université official website",
+      "id": "https://www.sorbonne-universite.fr/",
+      "url": "https://www.sorbonne-universite.fr/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:fr:louis-le-grand",
     "country": "FR",
     "kind": "school",
     "name": "Lycée Louis-le-Grand",
     "city": "Paris",
+    "region": "Île-de-France",
+    "sector": "secondary education",
     "url": "https://www.louislegrand.fr/",
+    "source": {
+      "name": "Lycée Louis-le-Grand official website",
+      "id": "https://www.louislegrand.fr/",
+      "url": "https://www.louislegrand.fr/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:pl:uw",
     "country": "PL",
     "kind": "university",
     "name": "Uniwersytet Warszawski",
     "city": "Warszawa",
+    "region": "województwo mazowieckie",
+    "aliases": [
+      "Warsaw"
+    ],
+    "sector": "higher education",
     "url": "https://www.uw.edu.pl/",
+    "source": {
+      "name": "Uniwersytet Warszawski official website",
+      "id": "https://www.uw.edu.pl/",
+      "url": "https://www.uw.edu.pl/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:pl:staszic",
     "country": "PL",
     "kind": "school",
     "name": "XIV LO im. Stanisława Staszica",
     "city": "Warszawa",
+    "region": "województwo mazowieckie",
+    "aliases": [
+      "Warsaw"
+    ],
+    "sector": "secondary education",
     "url": "https://staszic.waw.pl/",
+    "source": {
+      "name": "XIV LO im. Stanisława Staszica official website",
+      "id": "https://staszic.waw.pl/",
+      "url": "https://staszic.waw.pl/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:de:john-lennon",
     "country": "DE",
     "kind": "school",
     "name": "John-Lennon-Gymnasium",
     "city": "Berlin",
+    "region": "Berlin",
+    "sector": "secondary education",
     "url": "https://www.jlgym-berlin.de/",
+    "source": {
+      "name": "John-Lennon-Gymnasium official website",
+      "id": "https://www.jlgym-berlin.de/",
+      "url": "https://www.jlgym-berlin.de/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:es:ucm",
     "country": "ES",
     "kind": "university",
     "name": "Universidad Complutense de Madrid",
     "city": "Madrid",
+    "region": "Comunidad de Madrid",
+    "sector": "higher education",
     "url": "https://www.ucm.es/",
+    "source": {
+      "name": "Universidad Complutense de Madrid official website",
+      "id": "https://www.ucm.es/",
+      "url": "https://www.ucm.es/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:es:san-isidro",
     "country": "ES",
     "kind": "school",
     "name": "IES San Isidro",
     "city": "Madrid",
+    "region": "Comunidad de Madrid",
+    "sector": "secondary education",
     "url": "https://site.educa.madrid.org/ies.sanisidro.madrid/",
+    "source": {
+      "name": "IES San Isidro official website",
+      "id": "https://site.educa.madrid.org/ies.sanisidro.madrid/",
+      "url": "https://site.educa.madrid.org/ies.sanisidro.madrid/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:gb:ucl",
     "country": "GB",
     "kind": "university",
     "name": "University College London",
     "city": "London",
+    "region": "Greater London",
+    "sector": "higher education",
     "url": "https://www.ucl.ac.uk/",
+    "source": {
+      "name": "University College London official website",
+      "id": "https://www.ucl.ac.uk/",
+      "url": "https://www.ucl.ac.uk/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:it:polimi",
     "country": "IT",
     "kind": "university",
     "name": "Politecnico di Milano",
     "city": "Milan",
+    "region": "Lombardia",
+    "aliases": [
+      "Milano"
+    ],
+    "sector": "higher education",
     "url": "https://www.polimi.it/en/contacts",
+    "source": {
+      "name": "Politecnico di Milano official website",
+      "id": "https://www.polimi.it/en/contacts",
+      "url": "https://www.polimi.it/en/contacts",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:it:beccaria",
     "country": "IT",
     "kind": "school",
     "name": "Liceo Classico Cesare Beccaria",
     "city": "Milan",
+    "region": "Lombardia",
+    "aliases": [
+      "Milano"
+    ],
+    "sector": "secondary education",
     "url": "https://www.liceobeccaria.edu.it/",
+    "source": {
+      "name": "Liceo Classico Cesare Beccaria official website",
+      "id": "https://www.liceobeccaria.edu.it/",
+      "url": "https://www.liceobeccaria.edu.it/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:br:ea-feusp",
     "country": "BR",
     "kind": "school",
     "name": "Escola de Aplicação da FEUSP",
     "city": "São Paulo",
-    "url": "https://www.ea.fe.usp.br/",
+    "region": "São Paulo",
+    "aliases": [
+      "Sao Paulo"
+    ],
+    "sector": "secondary education",
+    "url": "https://www3.ea.fe.usp.br/",
+    "source": {
+      "name": "Escola de Aplicação da FEUSP official website",
+      "id": "https://www3.ea.fe.usp.br/",
+      "url": "https://www3.ea.fe.usp.br/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:de:fu-berlin",
     "country": "DE",
     "kind": "university",
     "name": "Freie Universität Berlin",
     "city": "Berlin",
-    "url": "https://www.fu-berlin.de/en/index.html",
+    "region": "Berlin",
+    "sector": "higher education",
+    "url": "https://www.fu-berlin.de/en/redaktion/impressum/index.html",
+    "source": {
+      "name": "Freie Universität Berlin official website",
+      "id": "https://www.fu-berlin.de/en/redaktion/impressum/index.html",
+      "url": "https://www.fu-berlin.de/en/redaktion/impressum/index.html",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:gb:camden-girls",
     "country": "GB",
     "kind": "school",
     "name": "Camden School for Girls",
     "city": "London",
-    "url": "https://www.camdengirls.camden.sch.uk/",
+    "region": "Greater London",
+    "sector": "secondary education",
+    "url": "https://www.camdengirls.camden.sch.uk/page/?title=Contact+Us&pid=147",
+    "source": {
+      "name": "Camden School for Girls official website",
+      "id": "https://www.camdengirls.camden.sch.uk/page/?title=Contact+Us&pid=147",
+      "url": "https://www.camdengirls.camden.sch.uk/page/?title=Contact+Us&pid=147",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:br:ufrj",
     "country": "BR",
     "kind": "university",
     "name": "Universidade Federal do Rio de Janeiro",
     "city": "Rio de Janeiro",
+    "region": "Rio de Janeiro",
+    "sector": "higher education",
     "url": "https://ufrj.br/",
+    "source": {
+      "name": "Universidade Federal do Rio de Janeiro official website",
+      "id": "https://ufrj.br/",
+      "url": "https://ufrj.br/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:fr:paris-cite",
     "country": "FR",
     "kind": "university",
     "name": "Université Paris Cité",
     "city": "Paris",
+    "region": "Île-de-France",
+    "sector": "higher education",
     "url": "https://u-paris.fr/",
+    "source": {
+      "name": "Université Paris Cité official website",
+      "id": "https://u-paris.fr/",
+      "url": "https://u-paris.fr/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:pl:jagiellonian",
     "country": "PL",
     "kind": "university",
     "name": "Uniwersytet Jagielloński",
     "city": "Kraków",
+    "region": "województwo małopolskie",
+    "aliases": [
+      "Krakow",
+      "Cracow"
+    ],
+    "sector": "higher education",
     "url": "https://www.uj.edu.pl/",
+    "source": {
+      "name": "Uniwersytet Jagielloński official website",
+      "id": "https://www.uj.edu.pl/",
+      "url": "https://www.uj.edu.pl/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:de:tu-berlin",
     "country": "DE",
     "kind": "university",
     "name": "Technische Universität Berlin",
     "city": "Berlin",
-    "url": "https://www.tu.berlin/",
+    "region": "Berlin",
+    "sector": "higher education",
+    "url": "https://www.tu.berlin/kontakt",
+    "source": {
+      "name": "Technische Universität Berlin official website",
+      "id": "https://www.tu.berlin/kontakt",
+      "url": "https://www.tu.berlin/kontakt",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:es:uam",
     "country": "ES",
     "kind": "university",
     "name": "Universidad Autónoma de Madrid",
     "city": "Madrid",
-    "url": "https://www.uam.es/",
+    "region": "Comunidad de Madrid",
+    "sector": "higher education",
+    "url": "https://www.uam.es/uam/contacto",
+    "source": {
+      "name": "Universidad Autónoma de Madrid official website",
+      "id": "https://www.uam.es/uam/contacto",
+      "url": "https://www.uam.es/uam/contacto",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:it:bologna",
     "country": "IT",
     "kind": "university",
     "name": "Università di Bologna",
     "city": "Bologna",
+    "region": "Emilia-Romagna",
+    "sector": "higher education",
     "url": "https://www.unibo.it/",
+    "source": {
+      "name": "Università di Bologna official website",
+      "id": "https://www.unibo.it/",
+      "url": "https://www.unibo.it/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
   },
   {
+    "id": "official:gb:oxford",
     "country": "GB",
     "kind": "university",
     "name": "University of Oxford",
     "city": "Oxford",
-    "url": "https://www.ox.ac.uk/",
+    "region": "Oxfordshire",
+    "sector": "higher education",
+    "url": "https://www.ox.ac.uk/about/contact-us",
+    "source": {
+      "name": "University of Oxford official website",
+      "id": "https://www.ox.ac.uk/about/contact-us",
+      "url": "https://www.ox.ac.uk/about/contact-us",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
     "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:br:amaro",
+    "country": "BR",
+    "kind": "company",
+    "name": "AMARO",
+    "city": "São Paulo",
+    "region": "São Paulo",
+    "aliases": [
+      "Sao Paulo"
+    ],
+    "sector": "fashion retail",
+    "url": "https://amaro.com/politica-de-privacidade/",
+    "source": {
+      "name": "AMARO official website",
+      "id": "https://amaro.com/politica-de-privacidade/",
+      "url": "https://amaro.com/politica-de-privacidade/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:br:nubank",
+    "country": "BR",
+    "kind": "company",
+    "name": "Nubank",
+    "city": "São Paulo",
+    "region": "São Paulo",
+    "aliases": [
+      "Sao Paulo"
+    ],
+    "sector": "financial technology and digital banking",
+    "url": "https://nubank.com.br/",
+    "source": {
+      "name": "Nubank official website",
+      "id": "https://nubank.com.br/",
+      "url": "https://nubank.com.br/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Payments operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:us:ralph-lauren",
+    "country": "US",
+    "kind": "company",
+    "name": "Ralph Lauren Corporation",
+    "city": "New York",
+    "region": "New York",
+    "aliases": [
+      "New York City"
+    ],
+    "sector": "fashion and apparel",
+    "url": "https://corporate.ralphlauren.com/contact",
+    "source": {
+      "name": "Ralph Lauren Corporation official website",
+      "id": "https://corporate.ralphlauren.com/contact",
+      "url": "https://corporate.ralphlauren.com/contact",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:us:gemini",
+    "country": "US",
+    "kind": "company",
+    "name": "Gemini",
+    "city": "New York",
+    "region": "New York",
+    "aliases": [
+      "New York City"
+    ],
+    "sector": "cryptocurrency exchange and financial technology",
+    "url": "https://support.gemini.com/hc/en-us/articles/204732835-Customer-Support",
+    "source": {
+      "name": "Gemini official website",
+      "id": "https://support.gemini.com/hc/en-us/articles/204732835-Customer-Support",
+      "url": "https://support.gemini.com/hc/en-us/articles/204732835-Customer-Support",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital asset operations analyst",
+        "Digital asset product specialist"
+      ]
+    }
+  },
+  {
+    "id": "official:fr:dior",
+    "country": "FR",
+    "kind": "company",
+    "name": "Christian Dior Couture",
+    "city": "Paris",
+    "region": "Île-de-France",
+    "sector": "fashion and luxury apparel",
+    "url": "https://www.dior.com/en_us/fashion/legal-terms",
+    "source": {
+      "name": "Christian Dior Couture official website",
+      "id": "https://www.dior.com/en_us/fashion/legal-terms",
+      "url": "https://www.dior.com/en_us/fashion/legal-terms",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:fr:ledger",
+    "country": "FR",
+    "kind": "company",
+    "name": "Ledger",
+    "city": "Paris",
+    "region": "Île-de-France",
+    "sector": "digital asset security technology",
+    "url": "https://www.ledger.com/legal-center",
+    "source": {
+      "name": "Ledger official website",
+      "id": "https://www.ledger.com/legal-center",
+      "url": "https://www.ledger.com/legal-center",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital asset operations analyst",
+        "Digital asset product specialist"
+      ]
+    }
+  },
+  {
+    "id": "official:pl:agora",
+    "country": "PL",
+    "kind": "company",
+    "name": "Agora S.A.",
+    "city": "Warszawa",
+    "region": "województwo mazowieckie",
+    "aliases": [
+      "Warsaw"
+    ],
+    "sector": "media and publishing",
+    "url": "https://www.agora.pl/kontakt",
+    "source": {
+      "name": "Agora S.A. official website",
+      "id": "https://www.agora.pl/kontakt",
+      "url": "https://www.agora.pl/kontakt",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Editorial photographer",
+        "Graphic designer"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:pl:lpp",
+    "country": "PL",
+    "kind": "company",
+    "name": "LPP S.A.",
+    "city": "Gdańsk",
+    "region": "województwo pomorskie",
+    "aliases": [
+      "Gdansk"
+    ],
+    "sector": "fashion and apparel",
+    "url": "https://www.lpp.com/en/contact/",
+    "source": {
+      "name": "LPP S.A. official website",
+      "id": "https://www.lpp.com/en/contact/",
+      "url": "https://www.lpp.com/en/contact/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:pl:xtb",
+    "country": "PL",
+    "kind": "company",
+    "name": "XTB S.A.",
+    "city": "Warszawa",
+    "region": "województwo mazowieckie",
+    "aliases": [
+      "Warsaw"
+    ],
+    "sector": "financial technology and online investing",
+    "url": "https://www.xtb.com/pl/kontakt",
+    "source": {
+      "name": "XTB S.A. official website",
+      "id": "https://www.xtb.com/pl/kontakt",
+      "url": "https://www.xtb.com/pl/kontakt",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Investment platform analyst",
+        "Digital finance analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:de:zalando",
+    "country": "DE",
+    "kind": "company",
+    "name": "Zalando SE",
+    "city": "Berlin",
+    "region": "Berlin",
+    "sector": "fashion retail",
+    "url": "https://partner.zalando.com/imprint",
+    "source": {
+      "name": "Zalando SE official website",
+      "id": "https://partner.zalando.com/imprint",
+      "url": "https://partner.zalando.com/imprint",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:de:n26",
+    "country": "DE",
+    "kind": "company",
+    "name": "N26 SE",
+    "city": "Berlin",
+    "region": "Berlin",
+    "sector": "financial technology and digital banking",
+    "url": "https://n26.com/en-eu/imprint",
+    "source": {
+      "name": "N26 SE official website",
+      "id": "https://n26.com/en-eu/imprint",
+      "url": "https://n26.com/en-eu/imprint",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Payments operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:es:loewe",
+    "country": "ES",
+    "kind": "company",
+    "name": "LOEWE S.A.",
+    "city": "Madrid",
+    "region": "Comunidad de Madrid",
+    "sector": "fashion and luxury apparel",
+    "url": "https://www.loewe.com/eur/en/welcome_loewe",
+    "source": {
+      "name": "LOEWE S.A. official website",
+      "id": "https://www.loewe.com/eur/en/welcome_loewe",
+      "url": "https://www.loewe.com/eur/en/welcome_loewe",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:es:xtb",
+    "country": "ES",
+    "kind": "company",
+    "name": "XTB S.A., Sucursal en España",
+    "city": "Madrid",
+    "region": "Comunidad de Madrid",
+    "sector": "financial technology and online investing",
+    "url": "https://www.xtb.com/es/contacto",
+    "source": {
+      "name": "XTB S.A., Sucursal en España official website",
+      "id": "https://www.xtb.com/es/contacto",
+      "url": "https://www.xtb.com/es/contacto",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Investment platform analyst",
+        "Digital finance analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:it:giorgio-armani",
+    "country": "IT",
+    "kind": "company",
+    "name": "Giorgio Armani Milano",
+    "city": "Milan",
+    "region": "Lombardia",
+    "aliases": [
+      "Milano"
+    ],
+    "sector": "fashion retail",
+    "url": "https://locations.armani.com/en/giorgio-armani/italy/giorgio-armani-milano",
+    "source": {
+      "name": "Giorgio Armani Milano official website",
+      "id": "https://locations.armani.com/en/giorgio-armani/italy/giorgio-armani-milano",
+      "url": "https://locations.armani.com/en/giorgio-armani/italy/giorgio-armani-milano",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:it:nexi",
+    "country": "IT",
+    "kind": "company",
+    "name": "Nexi S.p.A.",
+    "city": "Milan",
+    "region": "Lombardia",
+    "aliases": [
+      "Milano"
+    ],
+    "sector": "financial technology and digital payments",
+    "url": "https://www.nexigroup.com/en/contacts/",
+    "source": {
+      "name": "Nexi S.p.A. official website",
+      "id": "https://www.nexigroup.com/en/contacts/",
+      "url": "https://www.nexigroup.com/en/contacts/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Payments operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:gb:burberry",
+    "country": "GB",
+    "kind": "company",
+    "name": "Burberry Group plc",
+    "city": "London",
+    "region": "Greater London",
+    "sector": "fashion and luxury apparel",
+    "url": "https://www.burberryplc.com/contacts",
+    "source": {
+      "name": "Burberry Group plc official website",
+      "id": "https://www.burberryplc.com/contacts",
+      "url": "https://www.burberryplc.com/contacts",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:gb:revolut",
+    "country": "GB",
+    "kind": "company",
+    "name": "Revolut Ltd",
+    "city": "London",
+    "region": "Greater London",
+    "sector": "financial technology and digital payments",
+    "url": "https://www.revolut.com/legal/terms/",
+    "source": {
+      "name": "Revolut Ltd official website",
+      "id": "https://www.revolut.com/legal/terms/",
+      "url": "https://www.revolut.com/legal/terms/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Payments operations analyst"
+      ]
+    }
   }
 ]
