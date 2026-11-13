@@ -1,5 +1,6 @@
 import { MAX_INPUT_BYTES, failure } from './contracts.mjs';
 import { fieldForHeader } from './classifier.mjs';
+import { wantsStructuredText, structuredRecords } from './classifier-lexer.mjs';
 function diagnostic(code, location = {}, recordId = null, level = 'warning') {
   return { code, location, recordId, level };
 }
@@ -11,6 +12,7 @@ function delimited(text, delimiter, structured = false) {
     closed = false,
     line = 1,
     start = 1,
+    rowStart = 0,
     depth = [],
     jsonString = false,
     escaped = false;
@@ -19,9 +21,13 @@ function delimited(text, delimiter, structured = false) {
     value = '';
     closed = false;
   }
-  function row() {
+  function row(end) {
     cell();
-    rows.push({ cells, location: { startLine: start, endLine: line } });
+    rows.push({
+      cells,
+      location: { startLine: start, endLine: line },
+      range: { start: rowStart, end }
+    });
     cells = [];
   }
   for (let i = 0; i < text.length; i++) {
@@ -71,8 +77,9 @@ function delimited(text, delimiter, structured = false) {
       continue;
     }
     if (c === '\n' || c === '\r') {
+      row(i);
       if (c === '\r' && text[i + 1] === '\n') i++;
-      row();
+      rowStart = i + 1;
       line++;
       start = line;
       continue;
@@ -82,7 +89,7 @@ function delimited(text, delimiter, structured = false) {
   }
   if (depth.length) throw failure('INVALID_JSON_CELL', 'parse', { line });
   if (quoted) throw failure('UNCLOSED_QUOTE', 'parse', { line });
-  if (value || cells.length || closed) row();
+  if (value || cells.length || closed) row(text.length);
   return rows;
 }
 function delimiterOf(text, structured = false) {
@@ -162,6 +169,7 @@ function jsonEntries(text) {
   while (i < text.length && text[i] !== ']') {
     const entries = [];
     ws();
+    const recordStart = i;
     if (text[i] === '{') {
       i++;
       ws();
@@ -189,7 +197,7 @@ function jsonEntries(text) {
       }
       i++;
     } else skip();
-    rows.push(entries);
+    rows.push({ entries, range: { start: recordStart, end: i } });
     ws();
     if (text[i] === ',') {
       i++;
@@ -205,7 +213,18 @@ export function parseText(text, format, options = {}) {
     columns = [],
     delimiter = null,
     headerless = false;
-  if (format === 'json') {
+  let structured = false;
+  if (
+    format === 'txt' &&
+    options.classification &&
+    !options.schema &&
+    options.headers !== true &&
+    wantsStructuredText(text, fieldForHeader)
+  ) {
+    const result = structuredRecords(text);
+    ({ records, columns, delimiter, headerless, structured } = result);
+    diagnostics.push(...result.diagnostics);
+  } else if (format === 'json') {
     let a;
     try {
       a = JSON.parse(text, (_key, value, context) => {
@@ -237,7 +256,9 @@ export function parseText(text, format, options = {}) {
     if (options.classification) {
       const entries = jsonEntries(text);
       records.forEach((r, i) => {
-        if (entries[i].length) r.sourceEntries = entries[i];
+        if (entries[i].entries.length) r.sourceEntries = entries[i].entries;
+        r.range = entries[i].range;
+        r.sourceRecord = text.slice(r.range.start, r.range.end);
       });
     }
   } else if (format === 'txt' && !(options.classification && delimiterOf(text, true))) {
@@ -274,7 +295,7 @@ export function parseText(text, format, options = {}) {
       seen.add(key);
       return key;
     });
-    records = rows.map(({ cells, location }, i) => {
+    records = rows.map(({ cells, location, range }, i) => {
       const id = String(i + 1),
         data = Object.create(null);
       for (let j = 0; j < Math.max(cells.length, headers.length); j++) {
@@ -295,6 +316,8 @@ export function parseText(text, format, options = {}) {
         raw: cells,
         ...(options.classification
           ? {
+              range,
+              sourceRecord: text.slice(range.start, range.end),
               sourceEntries: columns.map((column, j) => ({
                 column,
                 header: headerless ? null : headers[j],
@@ -321,6 +344,7 @@ export function parseText(text, format, options = {}) {
     columns,
     delimiter,
     headerless,
+    structured,
     diagnostics,
     counts: {
       total: records.length,

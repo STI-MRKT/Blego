@@ -11,3 +11,13 @@ Ruling: only structural A/B descriptions are supplied; use synthetic fixtures an
 Ruling: runtime GEO works offline with curated genuine boundaries plus explicit local dataset import; avoids dependence on unrestricted public geocoding/autocomplete. Actual initial city coverage/provenance will be recorded after retrieval.
 
 Task 2 in progress: extend immutable token/record parsing and conservative recognition without changing the 11-key data / 7-field export contract.
+
+Task 2 complete (Linux x64, Node 24.22.1, Electron 45.3.1): deterministic mixed TXT lexer, exact source spans, conservative explicit/context recognition, extended metadata, identity warnings, per-record mappings, warning filter, masked values and explicit reveal/copy. Existing 11 fields, seven-field export and exact row cookie retained. No classifier network request added.
+
+RED evidence: initial eight parser cases failed before implementation; edge regression exposed quoted-label splitting, duplicate profile ID selection, missing legacy source spans and service warning/mapping gaps; GUI first failed on visible password. All corrected at source. Ambiguous values remain unknown.
+
+Commands: node --test tests/unit/classifier*.test.cjs tests/integration/classifier*.test.cjs PASS; BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/classifier*.test.cjs tests/ui/import-cookie.test.cjs 5/5 PASS; npm run verify PASS (lint, 73 unit, 93 integration); BLEGO_HEADLESS=1 npm run test:ui 16/16 PASS, zero skips. Logs /tmp/blego-v14-task2-{verify,ui}.log. One formatter-only failure was corrected and the complete verify repeated. Existing UI assertion requiring a plaintext password was replaced with masked display AND actual native clipboard equality, retaining the assignment behavior test.
+
+Limit: A/B fixtures represent the supplied structures using synthetic values; exact comparison with the two confidential original TXT files is unavailable. Native ARM64 reacceptance remains pending for this candidate.
+
+Task 3 in progress: fetched eight real OSM administrative city/municipal geometries via a single cached, rate-limited developer lookup after reviewing current Nominatim policy. No public autocomplete/API dependency is being added to the application. Dataset provenance and geometry validation follow.

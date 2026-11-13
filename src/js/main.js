@@ -359,6 +359,9 @@ function bindView() {
   document.querySelectorAll('[data-classifier-map]').forEach(el => {
     el.onchange = () => {state.classifierOptions ||= {}; state.classifierOptions.mapping ||= {}; if(el.value) state.classifierOptions.mapping[el.dataset.classifierMap]=el.value; else delete state.classifierOptions.mapping[el.dataset.classifierMap];};
   });
+  document.querySelectorAll('[data-classifier-row-map]').forEach(el=>{el.onchange=()=>{state.classifierOptions ||= {}; const maps=state.classifierOptions.recordMapping ||= {}; const row=maps[el.dataset.row] ||= {}; if(el.value)row[el.dataset.column]=el.value;else delete row[el.dataset.column];};});
+  const warningsOnly=document.getElementById('classifier-warnings-only');
+  if(warningsOnly)warningsOnly.onchange=()=>{state.classifierWarningsOnly=warningsOnly.checked;state.classifierDetailRow=null;state.classifierRevealed={};importPage(0);};
   const extra = document.getElementById('classifier-extra');
   if(extra) extra.ontoggle = () => {if(extra.isConnected) state.classifierExtraOpen=extra.open;};
   const sort = document.getElementById('classifier-sort');
@@ -432,7 +435,7 @@ async function generate() {
 
 function classificationOptions() {
   const o = state.classifierOptions || {};
-  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, encoding:state.importEncoding || undefined};
+  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, encoding:state.importEncoding || undefined};
 }
 async function handleFile(file) {
   invalidateImportCopies();
@@ -441,6 +444,8 @@ async function handleFile(file) {
     await window.blego.cancelImport(state.importRequest || state.importData.operationId);
   if (state.importEpoch !== epoch) return;
   state.classifierQuery = ''; state.classifierDescending = false; state.importSaved = null;
+  state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
+  if(state.classifierOptions)state.classifierOptions.recordMapping={};
   state.importName = file.name;
   state.importData = null;
   state.view = 'import';
@@ -495,7 +500,7 @@ async function importPage(offset) {
   const operationId = state.importData?.operationId, epoch = state.importEpoch;
   const request = state.importPageRequest = (state.importPageRequest || 0) + 1;
   try {
-    const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending}});
+    const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending,warningsOnly:!!state.classifierWarningsOnly}});
     if (state.importData?.operationId !== operationId || state.importEpoch !== epoch || state.importPageRequest !== request) return;
     state.importData = data; renderView();
   } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
@@ -504,6 +509,7 @@ async function reclassifyInput() {
   invalidateImportCopies();
   const operationId = state.importData?.operationId, epoch = state.importEpoch;
   if(!operationId) return;
+  state.classifierDetailRow=null;state.classifierRevealed={};
   state.importStep='loading'; state.importRequest=operationId; renderView();
   try {
     await window.blego.reclassify({operationId,options:classificationOptions()});
@@ -863,6 +869,16 @@ document.addEventListener('click', async (event) => {
     } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
+  if(action==='classifier-details'){state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
+  if(action==='classifier-close-details'){state.classifierDetailRow=null;state.classifierRevealed={};renderView();return;}
+  if(action==='classifier-reveal'){
+    if(target.dataset.row!==state.classifierDetailRow)return;
+    state.classifierRevealed ||= {};
+    const key=target.dataset.field; state.classifierRevealed[key]=!state.classifierRevealed[key];
+    const open=[...document.querySelectorAll('#classifier-record-details details')].map(d=>d.open);
+    renderView();document.querySelectorAll('#classifier-record-details details').forEach((d,i)=>{d.open=open[i];});return;
+  }
+  if(action==='classifier-apply-record'){await reclassifyInput();return;}
   if (action === 'classifier-apply') {await reclassifyInput(); return;}
   if (action === 'classifier-filter') {state.classifierQuery=document.getElementById('classifier-query')?.value || '';await importPage(0);return;}
   if (action === 'import-cookie-copy' || action === 'classifier-copy-cell') {
@@ -915,6 +931,8 @@ document.addEventListener('click', async (event) => {
     invalidateImportCopies();
     state.importEpoch = (state.importEpoch || 0) + 1;
     state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
+    state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
+    if(state.classifierOptions)state.classifierOptions.recordMapping={};
     if(state.classifierOptions) state.classifierOptions.mapping={};
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);

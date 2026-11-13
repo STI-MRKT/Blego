@@ -48,11 +48,11 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** create `shared/classifier-lexer.mjs`, `shared/classifier-recognition.mjs`; extend `shared/importer.mjs`, `shared/classifier.mjs`, `electron/features/classification/{service,worker}.cjs`, existing IPC/preload and `src/js/ui/import.js`, `src/js/main.js`.
 **Interfaces:** lexer produces logical records with exact `sourceRecord`, `range`, `sourceEntries` and diagnostics; classifier retains `data`'s 11 keys and adds `extended`, `extraFields`, `warnings`, `confidence`; `options.recordMapping[recordId][column]` assigns a specific source entry. Existing `reclassify`, `page`, `cell`, `exportText` stay the entry points.
-- [ ] Add failing unit tests for A/B, mixed formats, multiline and same-line records, holes in fields, exact JSON, malformed recovery, Unicode, conflicts and unsupported guesses.
-- [ ] Implement lexer and recognition in existing worker pipeline; retain raw source and 7-field export.
-- [ ] Add failing worker tests for 1/10/100/1000 records, per-record manual mapping, warning filters, cancellation and input limit; implement missing service/IPC behavior.
-- [ ] Add real GUI test for detail/confidence, masked secrets, explicit reveal/copy, row assignment and pagination; implement with existing card/table/clipboard components.
-- [ ] Run focused suites, full verify and GUI; record commands/results and commit.
+- [x] Add failing unit tests for A/B, mixed formats, multiline and same-line records, holes in fields, exact JSON, malformed recovery, Unicode, conflicts and unsupported guesses.
+- [x] Implement lexer and recognition in existing worker pipeline; retain raw source and 7-field export.
+- [x] Add failing worker tests for 1/10/100/1000 records, per-record manual mapping, warning filters, cancellation and input limit; implement missing service/IPC behavior.
+- [x] Add real GUI test for detail/confidence, masked secrets, explicit reveal/copy, row assignment and pagination; implement with existing card/table/clipboard components.
+- [x] Run focused suites, full verify and GUI; record commands/results and commit.
 
 ## Task 3: GEO catalogue and geometry
 

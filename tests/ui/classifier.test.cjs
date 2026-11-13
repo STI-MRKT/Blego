@@ -106,7 +106,12 @@ test(
         document.querySelector('[data-classifier-status]')?.dataset.classifierStatus ===
         'preview_complete'
     );
-    assert.ok((await page.locator('.classifier-table').innerText()).includes('FAKE_A'));
+    assert.ok(!(await page.locator('.classifier-table').innerText()).includes('FAKE_A'));
+    await page
+      .locator('.classifier-table [data-action="classifier-copy-cell"][data-field="password"]')
+      .click();
+    await page.waitForTimeout(100);
+    assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'FAKE_A');
     await page.locator('[data-action="import-reset"]').click();
     assert.equal(await page.locator('.classifier-table').count(), 0);
     if (process.env.BLEGO_CAPTURE_UX === '1') {
