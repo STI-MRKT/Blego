@@ -1,0 +1,14 @@
+✔ TZ06 map tile placement uses Mercator and only the bounded visible viewport (6.881758ms)
+✔ TZ06 tile service is explicit, bounded and caches without collecting photo data (82.23762ms)
+✔ map GPS draft rebasing preserves unrelated date edits and leaves multi-selection coordinates individual (14.349918ms)
+✔ map distinguishes missing GPS from zero, resolves effective operations and never mutates plans (11.888997ms)
+✔ 1000 point clusters preserve identities, expand with zoom and keep selected marker independently reachable (5.803436ms)
+✔ one validated workspace resolver serves a batch without leaking mutable operations (1.334153ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.492449

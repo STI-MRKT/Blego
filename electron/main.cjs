@@ -39,7 +39,7 @@ const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends;
+let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends, mapTiles;
 let recoveryReports = [];
 let imageExportPromise = null,
   imageExportReport = null;
@@ -53,6 +53,7 @@ async function initialize() {
   geo = require('./features/geo/service.cjs').createGeoService({ store });
   images = createImageService({ store, geo });
   await images.recover();
+  mapTiles = require('./features/geo/tiles.cjs').createTileService({ root: store.root });
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -125,6 +126,7 @@ async function initialize() {
       friendsOpen: (id) => shell.openExternal(friends.openUrl(id)),
       geoCatalog: (request) => geo.catalog(request),
       geoBoundary: (request) => geo.boundary(request),
+      mapTile: (request) => mapTiles.tile(request),
       imagesMoveGeo: (request) => images.moveGeo(request),
       imagesGenerateGeo: (request) => images.generateGeo(request),
       geoCancel: (id) => geo.cancel(id),

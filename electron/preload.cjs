@@ -42,6 +42,7 @@ contextBridge.exposeInMainWorld('blego', {
     ),
   geoCatalog: (request) => call('geoCatalog', request),
   geoBoundary: (request) => call('geoBoundary', request),
+  mapTile: (request) => call('mapTile', request),
   moveImageGeo: (request) => call('imagesMoveGeo', request),
   generateImageGeo: (request) => call('imagesGenerateGeo', request),
   cancelGeo: (id) => call('geoCancel', id),

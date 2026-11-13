@@ -5,14 +5,14 @@ import {
   fitMap,
   project,
   unproject,
-  clusterPoints
+  clusterPoints, visibleTiles
 } from '../../../shared/photo-map.mjs';
 let dispose = () => {};
 const boundaries = new Map();
 export function photoMapHTML() {
   if (!state.photos.length) return '';
   const mode = state.photoMap?.mode || 'before';
-  return `<section class="card photo-map" aria-label="Карта фотографий"><div class="head-actions"><h3>Местоположение</h3><button class="btn" data-map-action="before" aria-pressed="${mode === 'before'}">До</button><button class="btn" data-map-action="after" aria-pressed="${mode === 'after'}">После</button><button class="btn" data-map-action="zoom-in" aria-label="Приблизить карту">+</button><button class="btn" data-map-action="zoom-out" aria-label="Отдалить карту">−</button><button class="btn" data-map-action="fit">Показать все</button></div><p class="sub">Локальные контуры · без уличной подложки · © OpenStreetMap contributors</p><canvas id="photo-map-canvas" tabindex="0" aria-label="Карта GPS. Стрелки перемещают карту, плюс и минус меняют масштаб."></canvas><p class="sub" id="photo-map-status" role="status"></p><label class="fl">Фотография<select class="input" id="photo-map-select"><option value="">Выберите фотографию</option></select></label><div id="photo-map-inspector"></div><p class="sub">Выбранную точку в режиме «После» можно перетащить внутри выбранного города. Точные координаты — в дополнительных полях GEO.</p></section>`;
+  return `<section class="card photo-map" aria-label="Карта фотографий"><div class="head-actions"><h3>Местоположение</h3><button class="btn" data-map-action="before" aria-pressed="${mode === 'before'}">До</button><button class="btn" data-map-action="after" aria-pressed="${mode === 'after'}">После</button><button class="btn" data-map-action="zoom-in" aria-label="Приблизить карту">+</button><button class="btn" data-map-action="zoom-out" aria-label="Отдалить карту">−</button><button class="btn" data-map-action="fit">Показать все</button></div><div class="head-actions"><button class="btn" data-map-action="background" aria-pressed="false">Загрузить подложку</button><span class="sub" id="map-background-status">Подложка не загружена · локальные границы доступны без сети</span></div><p class="sub">При загрузке OpenStreetMap получает область карты. Фотографии и метаданные не передаются.</p><canvas id="photo-map-canvas" tabindex="0" aria-label="Карта GPS. Стрелки перемещают карту, плюс и минус меняют масштаб."></canvas><p class="sub"><a href="https://www.openstreetmap.org/copyright" data-action="open-external" data-url="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></p><p class="sub" id="photo-map-status" role="status"></p><label class="fl">Фотография<select class="input" id="photo-map-select"><option value="">Выберите фотографию</option></select></label><div id="photo-map-inspector"></div><p class="sub">Выбранную точку в режиме «После» можно перетащить внутри выбранного города. Точные координаты — в дополнительных полях GEO.</p></section>`;
 }
 export function mountPhotoMap({ onMove, onError } = {}) {
   dispose();
@@ -34,6 +34,22 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     clusters = [],
     drag = null,
     geometryRequest = null;
+  const tiles = new Map(), loading = new Set();
+  let background = false, tileError = false, tileTimer = null;
+  function fetchVisibleTiles() {
+    if(closed || !background || !model.view || tileError) return;
+    const wanted=visibleTiles(model.view,width,height);
+    for(const tile of wanted) {
+      const key=`${tile.z}/${tile.x}/${tile.y}`;
+      if(tiles.has(key)||loading.has(key)||loading.size>=4)continue;
+      loading.add(key);
+      window.blego.mapTile({z:tile.z,x:tile.x,y:tile.y}).then(async data=>{
+        const img=new Image(); img.src=data; await img.decode();
+        if(closed)return;
+        tiles.set(key,img); if(tiles.size>128)tiles.delete(tiles.keys().next().value);
+      }).catch(()=>{tileError=true;}).finally(()=>{loading.delete(key);if(!closed){schedule();fetchVisibleTiles();}});
+    }
+  }
   const context = canvas.getContext('2d');
   const color = getComputedStyle(document.documentElement);
   const palette = {
@@ -99,6 +115,16 @@ export function mountPhotoMap({ onMove, onError } = {}) {
       point = (p) => project(p, view, width, height);
     context.fillStyle = palette.panel;
     context.fillRect(0, 0, width, height);
+    let renderedTiles=0;
+    if(background) {
+      for(const tile of visibleTiles(view,width,height)) {
+        const img=tiles.get(`${tile.z}/${tile.x}/${tile.y}`);
+        if(img){context.drawImage(img,tile.left,tile.top,tile.width+.5,tile.height+.5);renderedTiles++;}
+      }
+      clearTimeout(tileTimer);tileTimer=setTimeout(fetchVisibleTiles,180);
+    }
+    canvas.dataset.tiles=String(renderedTiles);
+    document.getElementById('map-background-status').textContent=tileError?'Подложка недоступна · локальные границы и экспорт работают':background?(renderedTiles?'OpenStreetMap':'Загрузка подложки…'):'Подложка не загружена · локальные границы доступны без сети';
     context.strokeStyle = palette.border;
     context.lineWidth = 1;
     const step = 10 ** Math.floor(Math.log10(100 / view.scale));
@@ -200,10 +226,11 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     (button) =>
       (button.onclick = () => {
         const action = button.dataset.mapAction;
+        if(action==='background'){background=!background;tileError=false;button.setAttribute('aria-pressed',String(background));button.textContent=background?'Скрыть подложку':'Загрузить подложку';schedule();return;}
         if (action === 'before' || action === 'after') {
           model.mode = action;
           fit();
-          for (const b of panel.querySelectorAll('[aria-pressed]'))
+          for (const b of panel.querySelectorAll('[data-map-action=before], [data-map-action=after]'))
             b.setAttribute('aria-pressed', String(b.dataset.mapAction === action));
           selectPhoto(model.selected);
         } else if (action === 'fit') fit();
@@ -222,8 +249,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
         const d = 40 / model.view.scale;
         model.view.center.longitude +=
           event.key === 'ArrowLeft' ? -d : event.key === 'ArrowRight' ? d : 0;
-        model.view.center.latitude +=
-          event.key === 'ArrowUp' ? d : event.key === 'ArrowDown' ? -d : 0;
+        model.view.center = unproject({x:width/2,y:height/2+(event.key==='ArrowUp'?-40:event.key==='ArrowDown'?40:0)},model.view,width,height);
         schedule();
       }
     }
@@ -254,10 +280,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     drag.current = local(event);
     drag.moved ||= Math.hypot(drag.current.x - drag.start.x, drag.current.y - drag.start.y) > 4;
     if (drag.kind === 'pan' && drag.moved) {
-      model.view.center = {
-        longitude: drag.center.longitude - (drag.current.x - drag.start.x) / model.view.scale,
-        latitude: drag.center.latitude + (drag.current.y - drag.start.y) / model.view.scale
-      };
+      model.view.center = unproject({x:width/2-(drag.current.x-drag.start.x),y:height/2-(drag.current.y-drag.start.y)}, {...model.view,center:drag.center},width,height);
     }
     schedule();
   };
@@ -310,6 +333,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
   }
   dispose = () => {
     closed = true;
+    clearTimeout(tileTimer);
     observer.disconnect();
     cancelAnimationFrame(frame);
     if (geometryRequest) window.blego.cancelGeo(geometryRequest).catch(() => {});

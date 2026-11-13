@@ -63,6 +63,37 @@ test(
     await page.waitForFunction(
       () => document.querySelector('#photo-map-canvas').dataset.points === '3'
     );
+    // Synthetic raster fixtures exercise actual Canvas rendering without automated
+    // traffic to community tile servers. Real-provider acceptance is separate.
+    const tiles = await page.evaluate(async () => {
+      const { state } = await import('/js/state.js');
+      const { visibleTiles } = await import('/shared/photo-map.mjs');
+      const r = document.getElementById('photo-map-canvas').getBoundingClientRect();
+      return visibleTiles(state.photoMap.view, r.width, r.height);
+    });
+    const cache = path.join(root, 'data', 'map-tiles');
+    fs.mkdirSync(cache, { recursive: true });
+    const raster = await require('sharp')({
+      create: { width: 256, height: 256, channels: 3, background: '#34945a' }
+    })
+      .png()
+      .toBuffer();
+    for (const tile of tiles)
+      fs.writeFileSync(path.join(cache, `${tile.z}-${tile.x}-${tile.y}.png`), raster);
+    await page.locator('[data-map-action="background"]').click();
+    await page.waitForFunction(
+      () => Number(document.getElementById('photo-map-canvas').dataset.tiles) > 0
+    );
+    const painted = await canvas.evaluate((c) => {
+      const ctx = c.getContext('2d');
+      const values = ctx.getImageData(0, 0, c.width, c.height).data;
+      let green = 0;
+      for (let i = 0; i < values.length; i += 4)
+        if (values[i] === 52 && values[i + 1] === 148 && values[i + 2] === 90) green++;
+      return green;
+    });
+    assert.ok(painted > 1000, 'synthetic background pixels actually rendered');
+    await page.locator('[data-map-action="background"]').click();
     const id = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       const id = state.photos[0].fileId;
