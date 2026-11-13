@@ -288,7 +288,7 @@ export async function copyModelValue(
     { resolveSource: async () => model, revealedFields: personal ? [key] : [] }
   );
   if(id.startsWith('import') && generation !== loading) throw Error('COPY_SELECTION_CHANGED');
-  return copyText(result.text, button);
+  return copyText(result.text, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
 }
 document.addEventListener('change', async (event) => {
   try {

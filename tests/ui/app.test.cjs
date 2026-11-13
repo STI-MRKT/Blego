@@ -91,9 +91,16 @@ test(
       assert.equal(actual, expected);
     }
     const extraFields = page.locator('details.ux-extra-fields');
-    if (await extraFields.count()) await extraFields.locator('summary').click();
+    assert.equal(await extraFields.count(), 0);
     for (const field of card.fieldOrder) {
-      await page.locator(`[aria-label="Copy ${field}"]`).click();
+      const direct = page.locator(`[aria-label="Copy ${field}"]`);
+      if (await direct.count()) await direct.click();
+      else {
+        await page.locator('.page-head [data-copy-action="open"]').click();
+        await page.locator('[data-row-field]').selectOption(field);
+        await page.locator('[data-copy-action="field"]').click();
+        await page.locator('[data-copy-action="close"]').click();
+      }
       await checkClipboard(
         Array.isArray(card.fields[field])
           ? card.fields[field].join(', ')

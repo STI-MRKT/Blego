@@ -85,7 +85,7 @@ test(
     await page.locator('[data-view="generator"]').click();
 
     const extra = page.locator('details.ux-extra-fields');
-    if (await extra.count()) assert.equal(await extra.evaluate((element) => element.open), false);
+    assert.equal(await extra.count(), 0);
 
     await page.locator('[data-view="network"]').click();
     await page.locator('.gauge-wrap').waitFor();

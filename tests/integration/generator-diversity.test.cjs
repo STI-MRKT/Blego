@@ -42,7 +42,7 @@ test('transliteration preserves displayed accents and phone/postal exhaustion do
         (place) => place.city === card.fields.city && place.postal === card.fields.postalCode
       )
     );
-    assert.match(card.fields.email, /^[a-z0-9.\-]+@example\.(com|net|org)$/);
+    assert.match(card.fields.email, /^[a-z0-9.]+@dayrep\.com$/);
     assert.ok(card.fields.handle.length <= 64);
   }
   const count = store.db.prepare('SELECT count(*) n FROM issued').get().n;

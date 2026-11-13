@@ -7,7 +7,7 @@ const { openStore } = require('../../electron/local/store.cjs');
 const { generateProfile } = require('../../electron/features/generator/service.cjs');
 const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
 
-test('female-only generation covers 24 presets, preserves old cards and rejects incompatible custom pools', async (t) => {
+test('female personal / brand strategies cover 24 presets, preserves old cards and rejects incompatible custom pools', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-female-'));
   const store = await openStore(root);
   t.after(() => {
@@ -35,8 +35,9 @@ test('female-only generation covers 24 presets, preserves old cards and rejects 
         { country, type, requestId: `${country}-${type}` },
         { store }
       );
-      assert.equal(card.nameGender, 'female');
-      assert.ok(preset.first.some((name) => card.fields.name.startsWith(name + ' ')));
+      assert.equal(card.nameGender, type === 'tech' ? null : 'female');
+      if (type === 'tech') assert.ok(preset.brandNames.includes(card.fields.name));
+      else assert.ok(preset.first.some((name) => card.fields.name.startsWith(name + ' ')));
       assert.equal(card.datasetVersion, preset.datasetVersion);
       assert.ok(card.fields.email && card.fields.phone);
     }

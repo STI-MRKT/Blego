@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
+const { namingPreset, nameCount } = require('./naming.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
   'name',
@@ -78,6 +79,7 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
   const p = {
     ...c,
     ...t,
+    ...namingPreset(country, type, c),
     bios: t.bios[c.language],
     statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],
     symbols: settings.symbols || '',
@@ -100,6 +102,7 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
   p.rulesVersion =
     'v1-' + createHash('sha256').update(JSON.stringify(p)).digest('hex').slice(0, 20);
   p.capacity = {
+    name: nameCount(p),
     bio: p.bios.length,
     status: p.statuses.length,
     postalCode: new Set(p.places.map((x) => x.postal)).size,

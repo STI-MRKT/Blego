@@ -147,3 +147,8 @@
 .classifier-page>.head-actions .input{width:auto;max-width:260px}
 .classifier-page .card{margin-top:12px}
 .classifier-table .copy{display:inline-flex;margin-left:6px;vertical-align:middle}
+
+/* Name/BIO copy stays adjacent without changing original card typography. */
+.ux-generator .ux-profile-copy {display:flex;align-items:flex-start;gap:6px;min-width:0;width:100%}
+.ux-generator .ux-profile-copy>.name,.ux-generator .ux-profile-copy>.bio {min-width:0;flex:1;overflow-wrap:anywhere;margin:0}
+.ux-generator .ux-profile-copy>.copy {position:static;flex:0 0 auto}

@@ -1,12 +1,12 @@
 function normalize(field, value) {
   let v = String(value).normalize('NFKC').trim().replace(/\s+/gu, ' ');
   if (field === 'phone') v = '+' + v.replace(/\D/g, '');
-  if (['email', 'handle', 'bio', 'status', 'address'].includes(field))
+  if (['name', 'email', 'handle', 'bio', 'status', 'address'].includes(field))
     v = v.toLocaleLowerCase('en-US');
   return v;
 }
 function scopeFor(field, p) {
-  if (['id', 'phone', 'email', 'handle'].includes(field)) return 'installation';
+  if (['id', 'name', 'phone', 'email', 'handle'].includes(field)) return 'installation';
   return ['bio', 'status'].includes(field) ? `${p.country}:${p.type}` : p.country;
 }
 function registry(store, p) {
