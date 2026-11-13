@@ -1,0 +1,23 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (14860.842875ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2791.022208ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (2996.458916ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (2155.858084ms)
+✔ classifier UI has eleven compact columns, explicit schema/mapping and stable navigation (3157.36025ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (9636.745041ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3998.091666ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (5689.375417ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (3361.410958ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (1916.532459ms)
+✔ News preserves topic, ignores late other-topic replies and copies each article value (4945.924791ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4797.303917ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (3082.718291ms)
+✔ first-run tour never steals navigation after the user starts working (2966.338833ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (8390.775709ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78554.650666

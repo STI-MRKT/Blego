@@ -18,8 +18,10 @@ docs/verification/final-issue-4/native/SHA256SUMS-mac.txt
 docs/verification/final-issue-4/native/TEST_SUMMARY.txt
 docs/verification/final-issue-4/native/archive.png
 docs/verification/final-issue-4/native/installed-darwin-arm64.json
+docs/verification/final-issue-4/native/installed-darwin-arm64.json.log
 docs/verification/final-issue-4/native/macOS-env.txt
 docs/verification/final-issue-4/native/metadata-load-darwin.json
+docs/verification/final-issue-4/native/metadata-ui-batch-darwin.log
 docs/verification/final-issue-4/native/native-darwin-arm64.json
 docs/verification/final-issue-4/native/photos-export.png
 docs/verification/final-issue-4/native/photos-preview.png
