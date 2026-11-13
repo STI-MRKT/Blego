@@ -42,6 +42,10 @@ test(
       );
       await page.locator('#file-input').setInputFiles(source);
       await page.locator('[data-classifier-status]').waitFor();
+      // Earlier successful saves may still have visible notifications. Observe this save only.
+      await page.locator('#toasts .toast').evaluateAll((items) => {
+        for (const item of items) item.dataset.beforeArchiveSave = 'true';
+      });
       if (i) {
         await page.locator('[data-action="classifier-details"][data-row="1"]').click();
         await page.locator('[data-action="classifier-archive-record"]').click();
@@ -49,7 +53,10 @@ test(
         await page.locator('#classifier-extra summary').click();
         await page.locator('[data-action="classifier-archive"]').click();
       }
-      await page.getByText('Сохранено', { exact: true }).waitFor();
+      await page
+        .locator('#toasts .toast:not([data-before-archive-save])')
+        .getByText('Сохранено', { exact: true })
+        .waitFor();
       assert.ok(fs.existsSync(source));
       await page.locator('[data-view="history"]').click();
       await page.locator('.hrow .nm').filter({ hasText: name }).waitFor({ timeout: 5000 });

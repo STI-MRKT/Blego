@@ -22,3 +22,5 @@ Stage1 final common verify: lint PASS,123 unit/127 integration PASS, no skips. A
 Stage2: fresh whole-change reviewer found one important photo-group identity gap and one minor sequential-copy completion race; both reproduced RED in real Electron, then fixed in the existing module. Focused6/6 PASS13.418s; latest verify lint PASS,123/123 unit,127/127 integration (53.106s), zero skips. Full GUI final pass pending.
 
 Final Linux regression after review fixes:44/44 GUI PASS185.584s, zero skipped/cancelled; npm run verify PASS123 unit/127 integration. Product correction committed separately. Candidate native QA remains pending.
+
+Native attempt1 d14929d: runtime/readback, verify, metadata batches, real photograph and DMG PASS. Installed GUI43/44 PASS, archive-v141 test FAIL due two overlapping legitimate save notifications matching one strict locator; all6 new copy tests PASS. Installer withheld. Scope test notification to the current save, keep all content/restart checks. Targeted archive GREEN1/1; fresh verify123/127 PASS, full Linux GUI repeat running while new native candidate starts. Application code unchanged since7173a1e.
