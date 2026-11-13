@@ -201,6 +201,7 @@ async function fixture(t) {
   });
   return {
     launch,
+    root,
     get app() {
       return app;
     }
@@ -413,6 +414,110 @@ test(
       await page.locator('[data-copy-control="format"]').count(),
       0,
       'late request must be invalidated by navigation'
+    );
+  }
+);
+
+test(
+  'changing the active photo group invalidates the prepared group snapshot',
+  { timeout: 45000 },
+  async (t) => {
+    const f = await fixture(t),
+      page = await f.launch();
+    const { imageFixture } = require('../fixtures/images.cjs');
+    const file = await imageFixture(f.root, 'png');
+    await page.locator('[data-view="photos"]').click();
+    await f.app.evaluate(({ dialog }, file) => {
+      const original = dialog.showOpenDialog;
+      dialog.showOpenDialog = async () => {
+        dialog.showOpenDialog = original;
+        return { canceled: false, filePaths: [file] };
+      };
+    }, file);
+    await page.locator('[data-action="images-choose"]').click();
+    await page.locator('#metadata-form').waitFor();
+    await page.locator('#image-groups-advanced > summary').click();
+    await page.locator('#image-group-name').fill('Group A');
+    await page.locator('[data-action="group-create"]').click();
+    await page.waitForFunction(() =>
+      document.querySelector('#image-group option:checked').textContent.includes('Group A')
+    );
+    const groupA = await page.locator('#image-group').inputValue();
+    await page.locator('[data-action="group-move"]').click();
+    await page.waitForFunction(() =>
+      document.querySelector('#image-group option:checked').textContent.includes('(1)')
+    );
+    await page.locator('#image-group-name').fill('Group B');
+    await page.locator('[data-action="group-create"]').click();
+    await page.waitForFunction(() =>
+      document.querySelector('#image-group option:checked').textContent.includes('Group B')
+    );
+    const groupB = await page.locator('#image-group').inputValue();
+    await page.locator('#image-group').selectOption(groupA);
+    await shortcut(page);
+    await page.locator('[data-copy-control="source"]').selectOption('image-group');
+    await page.locator('[data-copy-action="preview"]').click();
+    await page.locator('[data-copy-action="commit"]').waitFor();
+    assert.match(await page.locator('#copy-preview').innerText(), /1 rows/);
+    await page.locator('#image-group').selectOption(groupB);
+    assert.equal(await page.locator('#copy-actions').count(), 0, 'old group snapshot must close');
+    await shortcut(page);
+    await page.locator('[data-copy-control="source"]').selectOption('image-group');
+    await page.locator('[data-copy-action="preview"]').click();
+    await page.locator('[data-copy-action="commit"]').waitFor();
+    assert.match(await page.locator('#copy-preview').innerText(), /0 rows/);
+  }
+);
+test(
+  'sequential copy completion after navigation cannot advance or reopen a closed panel',
+  { timeout: 45000 },
+  async (t) => {
+    const f = await fixture(t),
+      page = await f.launch();
+    await generate(page);
+    await shortcut(page);
+    await page.locator('[data-copy-action="sequence-copy"]').waitFor();
+    await page.evaluate(() => {
+      window.copyToastMessages = [];
+      new MutationObserver((records) => {
+        for (const r of records)
+          for (const node of r.addedNodes) window.copyToastMessages.push(node.textContent);
+      }).observe(document.querySelector('#toasts'), { childList: true });
+    });
+    await f.app.evaluate(({ ipcMain }) => {
+      globalThis.copyClipboardOriginal = ipcMain._invokeHandlers.get('local:copy');
+      ipcMain._invokeHandlers.set('local:copy', async (e, arg) => {
+        await new Promise((resolve) => {
+          globalThis.releaseCopyClipboard = resolve;
+        });
+        return globalThis.copyClipboardOriginal(e, arg);
+      });
+    });
+    t.after(async () => {
+      await f.app
+        .evaluate(({ ipcMain }) => {
+          ipcMain._invokeHandlers.set('local:copy', globalThis.copyClipboardOriginal);
+          globalThis.releaseCopyClipboard?.();
+        })
+        .catch(() => {});
+    });
+    await page.locator('[data-copy-action="sequence-copy"]').click();
+    for (let i = 0; !(await f.app.evaluate(() => Boolean(globalThis.releaseCopyClipboard))); i++) {
+      assert.ok(i < 100);
+      await page.waitForTimeout(10);
+    }
+    await page.locator('[data-view="news"]').click();
+    await f.app.evaluate(() => globalThis.releaseCopyClipboard());
+    await page.waitForFunction(() =>
+      window.copyToastMessages.some((x) => /Скопировано|Copied/.test(x))
+    );
+    await page.waitForTimeout(100);
+    assert.equal(await page.locator('#copy-actions').count(), 0);
+    assert.deepEqual(
+      await page.evaluate(() =>
+        window.copyToastMessages.filter((x) => !/Скопировано|Copied/.test(x))
+      ),
+      []
     );
   }
 );

@@ -25,7 +25,7 @@ function copyContext() {
     : source==='import' ? `${state.importEpoch}:${state.importData?.operationId}`
     : source==='checker' ? state.checker.rows
     : source==='photos' ? state.photos.map(row=>row.fileId).join(',') : null;
-  return [state.view,source,record];
+  return [state.view,source,record,source==='photos' ? (state.imageGroupId || 'ungrouped') : null];
 }
 const sameContext=(a,b)=>Boolean(a&&b&&a.every((value,index)=>value===b[index]));
 function closePanel() {
@@ -398,8 +398,9 @@ document.addEventListener('click', async (event) => {
           selection: [panel.model.rows[0].id],
           orderedFields: [panel.order[index]]
         });
+        if(panel !== snapshot || generation !== loading) return;
         const copied = await copyText(result.text);
-        if (!copied.ok) return;
+        if (!copied.ok || panel !== snapshot || generation !== loading) return;
       }
       sequence.set(
         key,
