@@ -104,8 +104,8 @@ The user supplied a complete implementation order and authorized execution. Rout
 - [x] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
 - [x] New generated emails use only `@dayrep.com`, normalized from display name and reserved uniquely through existing registry; never rewrite old/imported emails or probe/send mail.
 - [x] Add ≥50 natural unique BIOs per category **for each supported language**, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
-- [ ] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
-- [ ] GUI setting independence/restart plus all existing copy checks; full suites and commit.
+- [x] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
+- [x] GUI setting independence/restart plus all existing copy checks; full suites and commit.
 
 ## Task 7b: responsive window and navigation (user supplement)
 

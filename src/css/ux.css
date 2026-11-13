@@ -167,3 +167,5 @@
 #photo-map-inspector img {width:80px;height:80px;object-fit:contain;border-radius:8px}
 .ph.map-selected {outline:2px solid var(--accent)}
 @media(max-width:600px){.photo-map{padding:10px}#photo-map-canvas{height:240px}}
+/* Short primary-setting explanations remain secondary to the original controls. */
+.ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}

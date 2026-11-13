@@ -319,10 +319,10 @@ function bindView() {
         state.locale = state.settings.country;
         state.type = state.settings.type;
         await refreshPoolStats();
-        toast('Settings saved');
+        toast('Настройки сохранены');
         renderView();
       } catch (e) {
-        toast(`Settings were not saved: ${e.message}`, 'err');
+        toast('Не удалось сохранить настройки. Проверьте введённые значения.', 'err');
       }
     };
 
