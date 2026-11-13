@@ -30,8 +30,8 @@ test(
     const rows = Array.from({ length: 51 }, (_, i) => ({
       fullName: 'Example ' + i,
       accountId: '00' + i,
-      password: 'FAKE_LOGIN',
-      emailPassword: 'FAKE_MAIL',
+      password: i === 0 ? '<b>FAKE_LOGIN&000</b>' : i === 1 ? '' : 'FAKE_LOGIN',
+      emailPassword: i === 0 ? 'FAKE_MAIL_🔐000' : i === 1 ? '' : 'FAKE_MAIL',
       email: 'person' + i + '@example.com',
       birthDate: '01.01.2000',
       geo: 'GB',
@@ -64,6 +64,34 @@ test(
       await b.click();
       await clip(expected);
       assert.equal(await page.locator('[data-copy-control="format"]').count(), 0);
+    }
+    for (const [field, value] of [
+      ['password', rows[0].password],
+      ['emailPassword', rows[0].emailPassword]
+    ]) {
+      const button = page.locator(`.classifier-table [data-row="1"][data-field="${field}"]`);
+      assert.equal(await button.evaluate((b) => b.previousElementSibling.textContent), value);
+      assert.equal(await button.evaluate((b) => b.previousElementSibling.children.length), 0);
+      await button.click();
+      await clip(value);
+      const empty = page.locator(`.classifier-table [data-row="2"][data-field="${field}"]`);
+      assert.equal(await empty.evaluate((b) => b.previousElementSibling.textContent), '');
+      assert.equal(await empty.isDisabled(), true);
+    }
+    if (process.env.BLEGO_CAPTURE) {
+      await app.evaluate(({ BrowserWindow }) =>
+        BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
+      );
+      await page.waitForFunction(() => innerWidth === 1280);
+      await page.waitForFunction(() => document.querySelectorAll('#toasts > *').length === 0);
+      await page.evaluate(() => {
+        document.querySelector('.table-wrap').scrollTo(0, 0);
+        document.querySelector('.content').scrollTo(0, 0);
+      });
+      fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+      await page.screenshot({
+        path: path.join(process.env.BLEGO_CAPTURE, 'classifier-passwords.png')
+      });
     }
     await copyRow('1', cookies[0]);
     await copyRow('2', cookies[1]);

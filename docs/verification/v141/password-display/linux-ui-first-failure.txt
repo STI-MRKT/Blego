@@ -1,0 +1,52 @@
+
+> blego@1.4.1 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (10811.328843ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2147.811799ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (2186.622066ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (2343.366231ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (1094.434761ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1480.309067ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (2115.543944ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1224.655473ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (9176.477742ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3183.107655ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2174.566268ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (2026.981975ms)
+✔ TZ06 BIO edits and individual copies survive navigation, 360px and restart (1967.100615ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9734.379686ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1283.34967ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4400.460101ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2625.559743ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (957.084375ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (2375.710117ms)
+✔ map drag retains dirty date through actual preview and export (4581.081966ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4713.705832ms)
+✖ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (33056.644923ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3826.422792ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3990.779056ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (5092.569775ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1802.250644ms)
+✔ first-run tour never steals navigation after the user starts working (1802.397486ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (18051.146557ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2461.392826ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (6077.59952ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 29
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159229.812381
+
+✖ failing tests:
+
+test at tests/ui/photo-map.test.cjs:9:1
+✖ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (33056.644923ms)
+  page.waitForFunction: Timeout 30000ms exceeded.
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/photo-map.test.cjs:84:16) {
+    name: 'TimeoutError',
+    log: []
+  }

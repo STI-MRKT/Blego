@@ -103,10 +103,12 @@ test(
           ) {
             const name = `${arg.z}-${arg.x}-${arg.y}.png`;
             globalThis.mapFixtureRequests.push(name);
-            process.getBuiltinModule('node:fs').writeFileSync(
-              process.getBuiltinModule('node:path').join(fixture.cache, name),
-              Buffer.from(fixture.raster, 'base64')
-            );
+            process
+              .getBuiltinModule('node:fs')
+              .writeFileSync(
+                process.getBuiltinModule('node:path').join(fixture.cache, name),
+                Buffer.from(fixture.raster, 'base64')
+              );
           }
           return original(event, arg);
         });

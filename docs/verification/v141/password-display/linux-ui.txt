@@ -1,0 +1,42 @@
+
+> blego@1.4.1 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (11125.308855ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2265.371694ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (2184.975993ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (2397.823604ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (1092.962229ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1491.017833ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (2079.095304ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1248.554193ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (9594.572851ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3118.936841ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2085.211264ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (2232.239221ms)
+✔ TZ06 BIO edits and individual copies survive navigation, 360px and restart (2419.682255ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (11179.759817ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1267.285641ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4095.431499ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2618.757376ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (877.633968ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (2327.203912ms)
+✔ map drag retains dirty date through actual preview and export (4249.646797ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4389.911474ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (4190.686373ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3433.921931ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3810.076642ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4805.621833ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1812.552523ms)
+✔ first-run tour never steals navigation after the user starts working (1725.554844ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (18019.239995ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2474.085526ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (5418.283783ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 130418.693609
