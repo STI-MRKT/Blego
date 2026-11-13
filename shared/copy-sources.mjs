@@ -59,6 +59,28 @@ const rows = (items, values, id) =>
 const fields = (keys) => keys.map((key) => field(key));
 const pick = (obj, keys) => Object.fromEntries(keys.map((key) => [key, scalar(obj?.[key])]));
 export function copySource(id, data) {
+  if (id === 'biography') {
+    const keys = [
+      'residence',
+      'birthplace',
+      'employer',
+      'position',
+      'university',
+      'school',
+      'mainBio'
+    ];
+    return {
+      fields: fields(keys),
+      fieldOrder: keys,
+      rows: data
+        ? rows(
+            [data],
+            (r) => pick(r.values, keys),
+            (r) => r.id
+          )
+        : []
+    };
+  }
   if (id === 'generator') {
     const keys = data?.fieldOrder || [];
     return {

@@ -9,7 +9,7 @@ const catalog = require('../../../resources/generator/institutions.json');
 const { countries } = require('../../local/settings.cjs');
 const { loadDataset } = require('./catalog.cjs');
 const KEY = 'bio:workspace';
-function parameters(input) {
+function parameters(input, draft = false) {
   if (
     !input ||
     typeof input !== 'object' ||
@@ -18,7 +18,7 @@ function parameters(input) {
     !countries.includes(input.country) ||
     !['model', 'tech', 'crypto'].includes(input.type) ||
     typeof input.city !== 'string' ||
-    !input.city.trim() ||
+    (!draft && !input.city.trim()) ||
     input.city.length > 120 ||
     (input.postalCode !== undefined &&
       (typeof input.postalCode !== 'string' || input.postalCode.length > 20)) ||
@@ -104,7 +104,7 @@ function createBiographyWorkspace({ store }) {
   return {
     read,
     configure({ revision, parameters: input }) {
-      const p = parameters(input);
+      const p = parameters(input, true);
       return store.transaction(() => {
         const config = store.get(KEY);
         if (!Number.isSafeInteger(revision) || revision !== config.parametersRevision)

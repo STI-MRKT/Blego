@@ -13,7 +13,7 @@ let preferences = {},
 const selections = new Map(),
   sequence = new Map();
 const sourceForView = () =>
-  state.view === 'history' && state.archiveView ? 'archive-open' : state.view;
+  state.view === 'history' && state.archiveView ? 'archive-open' : state.view === 'generator' && state.generatorTab === 'bio' ? 'biography' : state.view;
 const prefKey = (id) =>
   id === 'generator'
     ? `generator-${state.demo?.country || state.locale}-${state.demo?.type || state.type}`
@@ -23,6 +23,7 @@ export async function initCopyPreferences() {
 }
 export async function resolveCopySource(id) {
   if (id === 'generator') return copySource(id, state.demo);
+  if (id === 'biography') return copySource(id, state.bioEditor ? {id:state.bioEditor.recordId,values:state.bioEditor.values} : null);
   if (id === 'checker') return copySource(id, state.checker.rows);
   if (id === 'network') return copySource(id, state.network.proxy);
   if (id === 'news') return copySource(id, state.news);
@@ -111,7 +112,7 @@ export function mountCopyActions() {
     return;
   // A copy menu belongs to its current view; an archive detail is a distinct source.
   // Never leave its panel covering navigation or the selected document's actions.
-  if (panel && (panel.view !== state.view || (state.view === 'history' && panel.id !== sourceForView())))
+  if (panel && (panel.view !== state.view || (['history','generator'].includes(state.view) && panel.id !== sourceForView())))
     panel = null;
   const bar = document.createElement('div');
   bar.className = 'ux-copy-actions';
@@ -200,9 +201,9 @@ function renderPanel() {
 }
 async function openPanel(id = sourceForView()) {
   const run = ++loading,
-    view = state.view,
+    view = state.view, source = sourceForView(),
     model = await resolveCopySource(id);
-  if (run !== loading || view !== state.view) return;
+  if (run !== loading || view !== state.view || source !== sourceForView()) return;
   const pref = preferences[prefKey(id)],
     keys = model.fields.map((f) => f.key),
     saved = pref?.order.filter((k) => keys.includes(k));

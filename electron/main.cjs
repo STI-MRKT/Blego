@@ -17,6 +17,7 @@ const { startServer } = require('./server.cjs');
 let serverInstance = null;
 let serverUrl = null;
 let biographyCloseGate = null;
+let biographyWorkspace;
 
 const { openStore } = require('./local/store.cjs');
 const { getSettings, updateSettings } = require('./local/settings.cjs');
@@ -46,6 +47,8 @@ let imageExportPromise = null,
   imageExportReport = null;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
+  biographyWorkspace =
+    require('./features/generator/biography-workspace.cjs').createBiographyWorkspace({ store });
   vault = secretVault(store, safeStorage);
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
@@ -477,18 +480,28 @@ async function initialize() {
       closeGuardReady: () => biographyCloseGate?.ready(),
       finishClose: (result) => biographyCloseGate?.acknowledge(result),
       biography: (request) => {
-        const service = require('./features/generator/biography.cjs');
-        const p = store.get('lastCard');
-        if (!p || p.id !== request?.profileId) throw Error('STALE_PROFILE');
-        if (request.action === 'save') return service.saveBiography(request, { store });
-        if (request.action === 'suggest')
-          return service.bioSuggestions(p, { store, field: request.field, values: request.values });
-        if (request.action !== 'read') throw Error('INVALID_BIO');
-        return {
-          values: service.bioDefaults(p),
-          institutions: service.organizationOptions(p),
-          revision: p.biographyRevision || 0
-        };
+        if (
+          !request ||
+          ![
+            'read',
+            'configure',
+            'generate',
+            'save',
+            'suggest',
+            'clear',
+            'open',
+            'history',
+            'cities'
+          ].includes(request.action)
+        )
+          throw Error('INVALID_BIO');
+        return biographyWorkspace[request.action](
+          request.action === 'open'
+            ? request.recordId
+            : request.action === 'cities'
+              ? request.country
+              : request
+        );
       },
       poolStats: (request) => getPoolStats(request, { store }),
       poolChoose: async () => {

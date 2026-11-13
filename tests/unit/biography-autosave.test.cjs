@@ -12,7 +12,7 @@ async function editor(save, extra = {}) {
   const { createBiographyEditor } = await import('../../src/js/services/biography.js');
   return createBiographyEditor(
     {
-      profileId: 'p',
+      recordId: 'p',
       revision: 0,
       values: { employer: 'Company', position: 'Role', mainBio: 'before' },
       institutions: []
@@ -29,7 +29,7 @@ test('autosave debounces edits, announces saved only after persistence, and pres
       calls.push(r);
       return calls.length === 1
         ? first.promise
-        : Promise.resolve({ id: 'p', biographyRevision: 2, biography: r.values });
+        : Promise.resolve({ id: 'p', revision: 2, values: r.values });
     },
     { onSaved: (p) => saved.push(p) }
   );
@@ -42,7 +42,7 @@ test('autosave debounces edits, announces saved only after persistence, and pres
   assert.equal(saved.length, 0);
   assert.equal(e.saving, true);
   e.update({ mainBio: 'three' });
-  first.resolve({ id: 'p', biographyRevision: 1, biography: calls[0].values });
+  first.resolve({ id: 'p', revision: 1, values: calls[0].values });
   await e.flush();
   assert.equal(calls.length, 2);
   assert.equal(calls[1].revision, 1);
@@ -58,7 +58,7 @@ test('write failure retains draft and revision, flush rejects, retry commits onc
   const e = await editor(async (r) => {
     count++;
     if (fail) throw Error('SQLITE_FULL');
-    return { id: 'p', biographyRevision: 1, biography: r.values };
+    return { id: 'p', revision: 1, values: r.values };
   });
   e.update({ mainBio: 'retained' });
   await assert.rejects(e.flush(), /SQLITE_FULL/);
@@ -77,7 +77,7 @@ test('flush before debounce persists latest draft and no-change flush does not w
   const calls = [];
   const e = await editor(async (r) => {
     calls.push(r);
-    return { id: 'p', biographyRevision: 1 };
+    return { id: 'p', revision: 1 };
   });
   await e.flush();
   assert.equal(calls.length, 0);
@@ -88,7 +88,7 @@ test('flush before debounce persists latest draft and no-change flush does not w
   e.dispose();
 });
 test('late suggestions never overwrite manual input or a disposed profile', async () => {
-  const e = await editor(async () => ({ id: 'p', biographyRevision: 1 }));
+  const e = await editor(async () => ({ id: 'p', revision: 1 }));
   const response = deferred();
   const pending = e.suggest('employer', () => response.promise);
   e.update({ position: 'Manual role' });
@@ -107,7 +107,7 @@ test('transition freeze blocks new edits and suggestions, but flush waits for an
   const calls = [];
   const e = await editor(async (r) => {
     calls.push(r);
-    return { id: 'p', biographyRevision: calls.length, biography: r.values };
+    return { id: 'p', revision: calls.length, values: r.values };
   });
   const response = deferred();
   const suggesting = e.suggest('mainBio', () => response.promise);
