@@ -10,9 +10,9 @@ export const getNetworkInfo = () => getJson('/api/net/info');
 export const getIpInfo = () => window.blego.checkProxy({ value: '' });
 export const getPing = () => getJson('/api/net/ping');
 export const getSpeed = () => getJson('/api/net/speed');
-export const checkProxy = (value) => window.blego.checkProxy({ value });
+export const checkProxy = (value, options = {}) => window.blego.checkProxy({ value, ...options });
 export function riskBreakdown(ip) {
   return ip?.assessment || { score: null, factors: [], status: 'insufficient_data' };
 }
 export const riskLabel = (score) =>
-  score === null ? 'Insufficient data' : `BLEGO heuristic: ${score}`;
+  score === null ? 'Insufficient data' : `IP Trust: ${score}`;

@@ -574,16 +574,19 @@ async function runNetwork(full) {
   renderView();
 }
 
-async function runProxyCheck() {
+async function runProxyCheck(fullTest = false) {
   if (!state.settings.proxyEnabled || state.network.proxyLoading) return;
+  const reputation = document.getElementById('proxy-reputation')?.checked === true;
+  state.network.reputation = reputation;
   state.network.proxyLoading = true;
+  state.network.proxy = null;
   state.network.proxyError = '';
   renderView();
   try {
-    state.network.proxy = await checkProxy(state.network.proxyInput.trim());
+    state.network.proxy = await checkProxy(state.network.proxyInput.trim(), { reputation, fullTest });
   } catch (error) {
     state.network.proxy = null;
-    state.network.proxyError = `Proxy check failed: ${error.message}`;
+    state.network.proxyError = error.message === 'CANCELLED' ? 'Проверка отменена' : `Не удалось проверить прокси: ${error.message}`;
   }
   state.network.proxyLoading = false;
   renderView();
@@ -953,6 +956,14 @@ document.addEventListener('click', async (event) => {
     window.blego.cancelProxy();
     return;
   }
+  if (action === 'proxy-key-save' || action === 'proxy-key-clear') {
+    const input = document.getElementById('proxy-api-key');
+    const value = action === 'proxy-key-clear' ? '' : input?.value;
+    if (input) input.value = '';
+    try { await window.blego.saveProxyKey(value); toast(action === 'proxy-key-clear' ? 'Ключ удалён' : 'Ключ сохранён'); } catch (e) { toast(e.message === 'SECURE_STORAGE_UNAVAILABLE' ? 'Защищённое хранилище недоступно. Проверка без ключа доступна.' : 'Не удалось сохранить ключ', 'err'); }
+    return;
+  }
+  if (action === 'proxy-speed') { runProxyCheck(true); return; }
   if (action === 'proxy-check') {
     runProxyCheck();
     return;

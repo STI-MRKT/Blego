@@ -52,6 +52,7 @@ contextBridge.exposeInMainWorld('blego', {
   },
   checkProxy: (request) => call('proxyCheck', request),
   cancelProxy: () => call('proxyCancel'),
+  saveProxyKey: (value) => call('proxyKey', value),
   listArchives: (q) => call('archiveList', q),
   openArchive: (id) => call('archiveOpen', id),
   saveArchive: (id) => call('archiveSave', id),

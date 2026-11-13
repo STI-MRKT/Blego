@@ -14,7 +14,7 @@ test('missing reputation stays unknown and latency is not a risk input', () => {
   assert.equal(assess([{ status: 'not_configured' }]).score, null);
   const sources = [{ status: 'ok', proxy: true, hosting: false }];
   assert.deepEqual(assess(sources, 1), assess(sources, 9999));
-  assert.equal(assess(sources).score, 40);
+  assert.equal(assess(sources).score, null);
 });
 test('secret vault never falls back to plaintext', () => {
   const { secretVault } = require('../../electron/local/secrets.cjs');

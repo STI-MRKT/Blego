@@ -111,7 +111,7 @@ async function pingAll() {
     best,
     worst,
     avg: good.length ? Math.round(good.reduce((sum, value) => sum + value, 0) / good.length) : null,
-    jitter: good.length > 1 ? worst - best : 0
+    jitter: good.length > 1 ? worst - best : null
   };
 }
 
@@ -124,11 +124,23 @@ async function speedTest() {
   });
   if (!response.ok) throw new Error('Speed test failed');
   const ttfb = Math.round(performance.now() - started);
-  const buffer = await response.arrayBuffer();
+  const reader = response.body.getReader();
+  let bytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.length;
+      if (bytes > 10000000) throw Error('SPEED_RESPONSE_TOO_LARGE');
+    }
+  } finally {
+    await reader.cancel();
+  }
+  if (!bytes) throw Error('EMPTY_SPEED_RESPONSE');
   const total = performance.now() - started;
   const transfer = Math.max(1, total - ttfb);
-  const mbps = (buffer.byteLength * 8) / (transfer / 1000) / 1e6;
-  return { mbps: Number(mbps.toFixed(1)), ms: Math.round(total), ttfb, bytes: buffer.byteLength };
+  const mbps = (bytes * 8) / (transfer / 1000) / 1e6;
+  return { mbps: Number(mbps.toFixed(1)), ms: Math.round(total), ttfb, bytes: bytes };
 }
 
 async function handleApi(request, response, url) {

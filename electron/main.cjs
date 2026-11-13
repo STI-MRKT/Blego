@@ -7,7 +7,8 @@ const {
   ipcMain,
   clipboard,
   dialog,
-  nativeImage
+  nativeImage,
+  safeStorage
 } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -30,6 +31,9 @@ const { createClassificationService } = require('./features/classification/servi
 const classification = createClassificationService();
 const { createArchiveService } = require('./features/archive/service.cjs');
 const { checkProxy } = require('./features/proxy/service.cjs');
+const { secretVault } = require('./local/secrets.cjs');
+const { createProxycheckProvider } = require('./features/proxy/proxycheck.cjs');
+let vault, reputationProvider;
 let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
@@ -41,6 +45,8 @@ let imageExportPromise = null,
   imageExportReport = null;
 async function initialize() {
   store = await openStore(app.getPath('userData'));
+  vault = secretVault(store, safeStorage);
+  reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
   images = createImageService({ store });
@@ -251,10 +257,22 @@ async function initialize() {
         const c = new AbortController();
         proxyController = c;
         try {
-          return await checkProxy(request, c.signal);
+          return await checkProxy(request, c.signal, {
+            providers: request?.reputation === true ? [reputationProvider] : []
+          });
         } finally {
           if (proxyController === c) proxyController = null;
         }
+      },
+      proxyKey: (value) => {
+        if (
+          typeof value !== 'string' ||
+          (value && !/^[a-zA-Z0-9]{6}(?:-[a-zA-Z0-9]{6}){3}$/.test(value))
+        )
+          throw Error('INVALID_KEY');
+        vault.set('proxycheck', value);
+        reputationProvider.clear();
+        return true;
       },
       proxyCancel: () => {
         proxyController?.abort();
