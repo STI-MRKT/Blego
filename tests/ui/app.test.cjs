@@ -96,7 +96,8 @@ test(
       const direct = page.locator(`[aria-label="Copy ${field}"]`);
       if (await direct.count()) await direct.click();
       else {
-        await page.locator('.page-head [data-copy-action="open"]').click();
+        await page.evaluate(() => document.activeElement?.blur?.());
+        await page.keyboard.press('Control+Alt+Shift+C');
         await page.locator('[data-row-field]').selectOption(field);
         await page.locator('[data-copy-action="field"]').click();
         await page.locator('[data-copy-action="close"]').click();
