@@ -89,8 +89,8 @@
   .ux-generator .sk {animation:none!important}
 }
 
-/* Global copying stays one click away without pushing the main workspace below the fold. */
-.ux-copy-actions {position:relative;display:inline-flex;align-items:center;flex:0 0 auto}
+/* Keyboard-only copy panel: a zero-size fixed mount never changes page layout. */
+.ux-copy-actions {position:fixed;right:0;top:0;width:0;height:0;z-index:80}
 .ux-copy-actions>#copy-panel:empty {display:none}
 .ux-copy-actions>#copy-panel:not(:empty) {
   position:fixed;right:20px;top:164px;z-index:80;

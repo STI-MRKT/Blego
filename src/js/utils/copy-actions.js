@@ -14,6 +14,24 @@ const selections = new Map(),
   sequence = new Map();
 const sourceForView = () =>
   state.view === 'history' && state.archiveView ? 'archive-open' : state.view === 'generator' && state.generatorTab === 'bio' ? 'biography' : state.view;
+const supportsCopy = () => ['generator','import','history','checker','photos'].includes(state.view);
+let mountedContext = null;
+function copyContext() {
+  const source=sourceForView();
+  const record = source==='generator' ? state.demo?.id
+    : source==='biography' ? state.bioEditor?.recordId
+    : source==='archive-open' ? state.archiveView?.entry.archiveId
+    : source==='history' ? state.archives?.items?.map(row=>row.archiveId).join(',')
+    : source==='import' ? `${state.importEpoch}:${state.importData?.operationId}`
+    : source==='checker' ? state.checker.rows
+    : source==='photos' ? state.photos.map(row=>row.fileId).join(',') : null;
+  return [state.view,source,record];
+}
+const sameContext=(a,b)=>Boolean(a&&b&&a.every((value,index)=>value===b[index]));
+function closePanel() {
+  panel=null;
+  document.getElementById('copy-actions')?.remove();
+}
 const prefKey = (id) =>
   id === 'generator'
     ? `generator-${state.demo?.country || state.locale}-${state.demo?.type || state.type}`
@@ -99,33 +117,21 @@ export function invalidateImportCopies() {
   loading++;
   for (const id of ['import','import-source','import-diagnostics']) selections.delete(id);
   if (panel?.view === 'import') {
-    panel = null;
-    document.getElementById('copy-panel')?.replaceChildren();
+    closePanel();
   }
 }
 export function mountCopyActions() {
-  // The global copy menu is keyboard-only. Do not insert an extra "Копировать"
-  // button into page headers: direct field copying remains visible in each view.
-  document.getElementById('copy-actions')?.remove();
-  const host = document.getElementById('view');
-  if (
-    !host ||
-    !['generator', 'import', 'history', 'checker', 'photos'].includes(state.view)
-  )
-    return;
-  // A copy menu belongs to its current view; an archive detail is a distinct source.
-  // Never leave its panel covering navigation or the selected document's actions.
-  if (panel && (panel.view !== state.view || (['history','generator'].includes(state.view) && panel.id !== sourceForView())))
-    panel = null;
-  const bar = document.createElement('div');
-  bar.className = 'ux-copy-actions';
-  bar.id = 'copy-actions';
-  bar.innerHTML = '<div id="copy-panel"></div>';
-  // The advanced panel is still available through Ctrl+Alt+Shift+C.
-  // Keep the empty mount outside the page header so it cannot shift the layout.
-  document.body.append(bar);
-  // A previously prepared panel is an explicit snapshot, not silently replaced by live updates.
-  if (panel && panel.view === state.view) renderPanel();
+  const context=copyContext();
+  // Invalidate pending requests too, including navigation away and back while
+  // an asynchronous archive/import read is still running.
+  if(!sameContext(context,mountedContext)) {
+    loading++;
+    closePanel();
+    mountedContext=context;
+  }
+  if(!supportsCopy())closePanel();
+  // No button or empty mount is inserted. The existing menu is created only
+  // by an explicit shortcut, and survives same-record repaint without remounting.
 }
 function rowLabel(row) {
   const entries = panel.model.fields
@@ -149,8 +155,15 @@ function filteredRows() {
   );
 }
 function renderPanel() {
-  const node = document.getElementById('copy-panel');
-  if (!node || !panel) return;
+  if (!panel) return;
+  let node = document.getElementById('copy-panel');
+  if (!node) {
+    const host=document.createElement('div');
+    host.id='copy-actions';host.className='ux-copy-actions';
+    node=document.createElement('div');node.id='copy-panel';
+    node.setAttribute('role','region');node.setAttribute('aria-label','Расширенное копирование');
+    host.append(node);document.body.append(host);
+  }
   const active = document.activeElement;
   const focusKey =
     active && node.contains(active)
@@ -186,7 +199,7 @@ function renderPanel() {
    )
    .join(
      ''
-   )}</tbody></table></div><button class="btn" data-copy-action="previous" ${offset ? '' : 'disabled'}>Previous rows</button><span>${offset + 1}–${Math.min(offset + 50, rows.length)} / ${rows.length}</span><button class="btn" data-copy-action="next" ${offset + 50 < rows.length ? '' : 'disabled'}>Next rows</button>
+   )}</tbody></table></div><button class="btn" data-copy-action="previous" ${offset ? '' : 'disabled'}>Previous rows</button><span>${rows.length ? offset + 1 : 0}–${Math.min(offset + 50, rows.length)} / ${rows.length}</span><button class="btn" data-copy-action="next" ${offset + 50 < rows.length ? '' : 'disabled'}>Next rows</button>
  ${panel.id === 'generator' && panel.model.rows.length ? `<div class="card pad"><p>Sequential field: ${esc(panel.order[sequence.get(prefKey(panel.id)) || 0] || '')}</p><button class="btn" data-copy-action="sequence-previous">Previous field</button><button class="btn" data-copy-action="sequence-copy">Copy field and advance</button><button class="btn" data-copy-action="sequence-next">Next field</button></div>` : ''}
  <div id="copy-preview"></div>`;
   if (focusKey)
@@ -200,10 +213,12 @@ function renderPanel() {
       ?.focus({ preventScroll: true });
 }
 async function openPanel(id = sourceForView()) {
+  if(!supportsCopy())return;
+  const context=copyContext();
   const run = ++loading,
     view = state.view, source = sourceForView(),
     model = await resolveCopySource(id);
-  if (run !== loading || view !== state.view || source !== sourceForView()) return;
+  if (run !== loading || view !== state.view || source !== sourceForView() || !sameContext(context,copyContext())) return;
   const pref = preferences[prefKey(id)],
     keys = model.fields.map((f) => f.key),
     saved = pref?.order.filter((k) => keys.includes(k));
@@ -240,7 +255,7 @@ async function payload(extra = {}) {
     {
       sourceIds: [panel.id],
       scope:
-        panel.id === 'generator' &&
+        panel.id === 'generator' && model.rows.length === 1 &&
         ['all', 'filter'].includes(panel.scope) &&
         (panel.scope !== 'filter' || model.filteredIds.length)
           ? 'card'
@@ -270,7 +285,7 @@ export async function copyModelValue(
   button,
   { card = false, personal = false, nationalPhone = false } = {}
 ) {
-  const generation = loading;
+  const generation = loading, context=copyContext();
   const profileCountry = id === 'generator' ? state.demo?.country : null;
   const model = await resolveCopySource(id),
     row = model.rows.find((r) => r.id === String(rowId)) || (!rowId ? model.rows[0] : null);
@@ -290,7 +305,7 @@ export async function copyModelValue(
     },
     { resolveSource: async () => model, revealedFields: personal ? [key] : [] }
   );
-  if(id.startsWith('import') && generation !== loading) throw Error('COPY_SELECTION_CHANGED');
+  if(generation !== loading || !sameContext(context,copyContext())) throw Error('COPY_SELECTION_CHANGED');
   if(nationalPhone && !card && id === 'generator' && key === 'phone')
     return copyText(nationalPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');
   return copyText(result.text, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
@@ -320,8 +335,7 @@ document.addEventListener('click', async (event) => {
     const snapshot = panel, generation = loading;
     if (action === 'open') return await openPanel();
     if (action === 'close') {
-      panel = null;
-      document.getElementById('copy-panel').replaceChildren();
+      loading++;closePanel();
       return;
     }
     if (action === 'refresh') return await openPanel(panel.id);
@@ -350,8 +364,10 @@ document.addEventListener('click', async (event) => {
       panel.prepared = result;
       document.getElementById('copy-preview').innerHTML =
         `<p>${result.rowCount} rows · ${result.byteLength} bytes. Excluded: ${esc(result.redactions.join(', ') || 'none')}. ${esc(result.warnings.join(', '))}</p><p>${result.text.length > 5000 ? 'Preview shows the first 5,000 characters; copying includes the full prepared payload.' : 'Full preview below.'}</p><pre style="white-space:pre-wrap;max-height:240px;overflow:auto">${esc(result.text.slice(0, 5000))}</pre><button class="btn btn-primary" data-copy-action="commit">Copy prepared snapshot</button>`;
-      preferences[prefKey(panel.id)] = { format: panel.format, order: panel.order };
-      await window.blego.saveCopyPreferences(preferences);
+      if(result.rowCount > 0) {
+        preferences[prefKey(panel.id)] = { format: panel.format, order: panel.order };
+        await window.blego.saveCopyPreferences(preferences);
+      }
       return;
     }
     if (action === 'commit') {
@@ -404,26 +420,28 @@ document.addEventListener('click', async (event) => {
   }
 });
 document.addEventListener('keydown', (event) => {
+  const target=event.target;
   if (
-    (event.ctrlKey || event.metaKey) &&
-    event.shiftKey &&
+    !event.defaultPrevented && !event.repeat && !event.isComposing &&
+    (event.ctrlKey || event.metaKey) && event.shiftKey &&
     (event.code === 'KeyC' || event.key.toLowerCase() === 'c') &&
-    !event.target.closest('input,textarea,[contenteditable="true"]') &&
-    !window.getSelection()?.toString() &&
-    document.getElementById('copy-actions')
+    !target.closest('input,textarea,select') && !target.isContentEditable &&
+    !window.getSelection()?.toString() && supportsCopy()
   ) {
     event.preventDefault();
-    const id = sourceForView();
-    if (event.altKey) {
-      openPanel(id).catch((e) => toast(e.message, 'err'));
+    const id=sourceForView(), context=copyContext(), generation=loading;
+    if(event.altKey) {
+      // A second shortcut focuses the existing panel rather than resetting its form.
+      if(panel && panel.view===state.view) {document.querySelector('[data-copy-action="close"]')?.focus();return;}
+      openPanel(id).catch(e=>toast(e.message,'err'));
       return;
     }
-    resolveCopySource(id)
-      .then((model) =>
-        model.rows.length === 1
-          ? copyModelValue(id, model.rows[0].id, null, null, { card: true })
-          : openPanel(id)
-      )
-      .catch((e) => toast(e.message, 'err'));
+    resolveCopySource(id).then(model=>{
+      if(generation!==loading || !sameContext(context,copyContext()))return;
+      if(!model.rows.length){toast('Нет данных для копирования.');return;}
+      return model.rows.length===1
+        ? copyModelValue(id,model.rows[0].id,null,null,{card:true})
+        : openPanel(id);
+    }).catch(e=>toast(e.message,'err'));
   }
 });
