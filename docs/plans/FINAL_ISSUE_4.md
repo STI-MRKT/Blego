@@ -9,7 +9,7 @@ Preserve classifier, storage and existing native metadata engine. PR #1/#3 and o
 - [x] 1. Proxy: reuse transports, real local measurements, documented quality formula, opt-in proxycheck v3 reputation, bounded/error-safe requests, tests.
 - [x] 2. News: verified foreign catalogue, five topics, dedup/cache/consent, real-source evidence and GUI tests.
 - [x] 3. Facebook: compact public-availability workflow, cancellation/rate/error tests.
-- [ ] 4. Photos: explicit date/GEO keep/set/remove, zero coordinates, previews/readback/batch/cancel/preservation tests.
+- [x] 4. Photos: explicit date/GEO keep/set/remove, zero coordinates, previews/readback/batch/cancel/preservation tests.
 - [ ] 5. Archive/generator/navigation: original components, per-element copying, preserved classifier/storage, compact secondary details.
 - [ ] 6. Full regression and fresh review; native ARM64 engine, DMG and installed-app tests; PR without merge.
 

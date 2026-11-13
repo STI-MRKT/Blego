@@ -198,7 +198,10 @@ async function initialize() {
           clipboard
         ),
       imageRead: (id) => images.readImageMetadata(id),
-      imagePreview: (id) => images.preview(id),
+      imagePreview: (request) =>
+        typeof request === 'string'
+          ? images.preview(request)
+          : images.preview(request?.fileId, { thumbnail: request?.thumbnail === true }),
       imagesPlan: (request) => images.planMetadataChanges(request),
       imagesClear: () => {
         images.clear();

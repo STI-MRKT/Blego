@@ -619,12 +619,20 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
           .toBuffer();
       });
     },
-    async preview(fileId) {
+    async preview(fileId, { thumbnail = false } = {}) {
       const item = files.get(fileId);
       if (!item?.view) throw Error('INVALID_FILE_TOKEN');
       const bytes = await readBounded(item.path);
       if (createHash('sha256').update(bytes).digest('hex') !== item.view.sourceHash)
         throw Error('SOURCE_CHANGED');
+      if (thumbnail) {
+        const preview = await require('sharp')(bytes, { limitInputPixels: IMAGE_LIMITS.pixels })
+          .rotate()
+          .resize({ width: 300, height: 260, fit: 'inside', withoutEnlargement: true })
+          .png()
+          .toBuffer();
+        return `data:image/png;base64,${preview.toString('base64')}`;
+      }
       return `data:image/${item.view.detectedFormat};base64,${bytes.toString('base64')}`;
     },
     planMetadataChanges({ fileIds, operations, presetId, acknowledgeMakerNotes = false }) {
@@ -653,18 +661,22 @@ function createImageService({ engine = createEngine(), store, hooks = {} } = {})
           name: item.name,
           sourceHash: item.view.sourceHash,
           warnings: item.view.warnings,
-          beforeAfter: clean.map((op) => ({
-            field: op.field,
-            operation: op.action,
-            before: item.view.tags.find((tag) => tag.field === op.field).value,
-            after:
-              op.action === 'keep'
-                ? item.view.tags.find((tag) => tag.field === op.field).value
-                : op.action === 'remove'
-                  ? null
-                  : op.value,
-            supported: true
-          }))
+          beforeAfter: clean.flatMap((op) =>
+            op.field === 'captureDate'
+              ? require('./date-policy.cjs').previewDates(op, item.raw)
+              : {
+                  field: op.field,
+                  operation: op.action,
+                  before: item.view.tags.find((tag) => tag.field === op.field).value,
+                  after:
+                    op.action === 'keep'
+                      ? item.view.tags.find((tag) => tag.field === op.field).value
+                      : op.action === 'remove'
+                        ? null
+                        : op.value,
+                  supported: true
+                }
+          )
         });
       }
       const plan = {

@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-13T04:34:55.320Z",
+  "os": "linux",
+  "arch": "x64",
+  "fixture": "Synthetic 12×8 RGBA/oriented images, not worst-case 40 MP stress",
+  "batches": [
+    {
+      "count": 1,
+      "completed": 1,
+      "readMs": 147,
+      "exportMs": 581,
+      "totalMs": 895,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      }
+    },
+    {
+      "count": 10,
+      "completed": 10,
+      "readMs": 1605,
+      "exportMs": 2643,
+      "totalMs": 5679,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      }
+    },
+    {
+      "count": 100,
+      "completed": 100,
+      "readMs": 14199,
+      "exportMs": 21268,
+      "totalMs": 50629,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      }
+    }
+  ]
+}

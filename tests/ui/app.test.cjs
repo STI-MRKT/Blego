@@ -222,6 +222,7 @@ test(
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('#metadata-advanced > summary').click();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Новый заголовок');
     const imageOutput = path.join(root, 'image-output');
@@ -239,6 +240,11 @@ test(
     assert.equal(await page.locator('[data-metadata-plan]').count(), 0);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-action="metadata-export"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !!state.metadataExport;
+    });
+    await page.getByText('Reports and export history', { exact: true }).click();
     await page.locator('[data-action="metadata-report"]').first().waitFor();
     assert.match(await page.locator('[data-metadata-progress]').textContent(), /completed/);
     assert.equal(fs.readdirSync(imageOutput).length, 1);
