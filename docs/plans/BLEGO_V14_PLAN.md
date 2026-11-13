@@ -5,7 +5,8 @@
 **Goal:** Implement specification #5 on top of BLEGO 1.3, preserving original graphics, data contracts and all existing functions.
 **Architecture:** Extend existing classifier worker/parser, image workspace/export engine, public Facebook queue, SQLite store and native clipboard. GEO uses licensed, provenance-bearing local city polygons and explicit CSPRNG generation; Friends uses an import/preview/confirm flow in the existing store.
 **Tech stack:** Electron/Node, existing JavaScript renderer, SQLite, ExifTool, Playwright; no new frontend framework or external AI classifier.
-**Spec:** `docs/specs/BLEGO_V14_TZ05.md`; generator supplement `docs/specs/BLEGO_V14_TZ05_GENERATOR_ADDENDUM.md` received during Task 3.
+**Current controlling spec:** `docs/specs/BLEGO_V14_TZ05_CONSOLIDATED.md` (received after Task 5). Previous completed commits remain intact; correspondence and remaining work are in `docs/verification/v14/CONSOLIDATED_RECONCILIATION.md`.
+**Historical spec:** `docs/specs/BLEGO_V14_TZ05.md`; generator supplement `docs/specs/BLEGO_V14_TZ05_GENERATOR_ADDENDUM.md` received during Task 3.
 **Base:** `782c1b2c1b61703f81542eafb8d97a33fc3264ec`; branch `codex/blego-v1-4-improvements` in existing isolated `/workspace/BLEGO-final`.
 
 ## Global constraints
@@ -102,7 +103,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 - [ ] Remove generator “Additional fields” disclosure only; retain full model, Copy full set and prior history.
 - [ ] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
 - [ ] New generated emails use only `@dayrep.com`, normalized from display name and reserved uniquely through existing registry; never rewrite old/imported emails or probe/send mail.
-- [ ] Add ≥50 natural unique localized BIOs per category, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
+- [ ] Add ≥50 natural unique BIOs per category **for each supported language**, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
 - [ ] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
 - [ ] GUI setting independence/restart plus all existing copy checks; full suites and commit.
 
@@ -132,3 +133,19 @@ The user supplied a complete implementation order and authorized execution. Rout
 - [ ] Fresh whole-branch reviewer against this spec/base; reproduce and fix important findings with tests and repeat affected/full/native checks.
 - [ ] New PR to base final-hardening, no merge; attach PR to task.
 - [ ] Commit acceptance matrix, Linux/Mac evidence, synthetic A/B results, GPS readbacks, screenshots, changed files, limitations and final installer link/checksum.
+
+## Consolidated execution order (supersedes remaining order above)
+
+Completed work is not replayed or reset. Current tasks 2–5 are partial evidence for the expanded specification, never automatic final acceptance.
+
+1. Generator (old Task 7 without Settings): naming, names, dayrep, per-language BIO, copy/disclosure; focused tests + full regression, logical commits.
+2. GEO follow-up: confirm current engine against §§7.1–7.8; map-safe boundary/point validation API. Check coverage and serialized EXIF uniqueness in 1000-image tests.
+3. Photos folders: extend existing ingestion/export with bounded cancellable recursive scanning, canonical physical-file dedup (symlinks/hardlinks), relative paths, root aliases and collision-safe contained directory export. No second workspace/export pipeline. Tests traversal/symlink escape/cancel/permissions/duplicate names/restart, actual JPEG/PNG/WebP readback.
+4. Interactive map: offline-first local GeoJSON contours/points, open rendering library or documented alternative; no remote tiles without explicit opt-in. Before/after, missing-GPS group, selection/thumbnail, clusters/zoom/pan, city-constrained marker drag through existing revisioned operations, manual coordinates separate. Test no implicit network/state reset, 10/100/500/1000 markers, keyboard/accessibility and narrow layout. Files below map on narrow widths; export always reachable.
+5. Facebook final reconciliation: current Task 5 plus missing approved facts fields/diagnostics; revalidate candidate. Real external limits remain explicit.
+6. Friends (Task 6).
+7. Responsive (Task 7b), including map and folder queue state.
+8. Settings (remaining Task 7), independent switches/restart.
+9. Full regression (Task 8), expanded performance baseline comparison on identical fixtures; 1/10/100/500/1000 images, memory/latency, representative real high-resolution photos separately from synthetic data.
+10. Native ARM64 QA (Task 9): installed resize, map, folder/export, native ExifTool, source/installed parity; DMG+checksum+Russian instructions ZIP. No signing credentials -> signed distribution BLOCKED.
+11. Independent whole-branch review and PR/handoff (Task 10). No merge.
