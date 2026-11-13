@@ -71,4 +71,4 @@ Files existing Friends service/UI/main and corresponding tests.
 Files package*.json, .github/workflows/blego-macos-qa.yml, QA scripts/docs.
 - [x] Version1.4.1, fixed-SHA build, embedded runtime gate before DMG; install outside repo; native GUI/classifier/archive/BIO/map/20 individual/folder checks.
 - [x] Download/verify installer ZIP/DMG checksums; retain unsigned/notarization BLOCKED and historical failures.
-- [ ] New PR against base branch, attach, no merge. Final reports actual commands/OS/evidence/screens/remaining failures.
+- [x] Draft PR #7 created against codex/blego-v1-4-improvements, no merge. Final reports actual commands/OS/evidence/screens/remaining failures. Task attachment was requested; the host tool did not return confirmation and its stalled wait was stopped. PR remains accessible by URL.
