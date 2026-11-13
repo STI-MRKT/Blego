@@ -33,7 +33,8 @@ test(
       buffer: Buffer.from('id\tcookies\n0001\tFAKE_COOKIE_DISCARDED')
     });
     await page.locator('[data-classifier-status]').waitFor();
-    await page.locator('[data-copy-action="open"]').click();
+    await page.evaluate(() => document.activeElement?.blur?.());
+    await page.keyboard.press('Control+Alt+Shift+C');
     await page.locator('[data-copy-control="source"]').selectOption('import-source');
     await page.locator('[data-copy-control="personal"]').check();
     await page.locator('[data-copy-action="preview"]').click();
@@ -44,7 +45,8 @@ test(
     await page.locator('[data-action="import-reset"]').click();
     assert.equal(await page.locator('[data-copy-control="format"]').count(), 0);
     assert.ok(!(await page.locator('body').textContent()).includes('FAKE_COOKIE_DISCARDED'));
-    await page.locator('[data-copy-action="open"]').click();
+    await page.evaluate(() => document.activeElement?.blur?.());
+    await page.keyboard.press('Control+Alt+Shift+C');
     await page.locator('[data-copy-control="source"]').selectOption('import-source');
     await page.locator('[data-copy-control="personal"]').check();
     await page.locator('[data-copy-action="preview"]').click();
