@@ -1,0 +1,21 @@
+✔ queue is sequential, rate-limited, pauses at 429 and never overwrites owner notes (27.126184ms)
+✔ deadline and cancellation settle even when an injected transport ignores abort; old run cannot leak (2.204312ms)
+✔ transport guards redirects, private addresses and decoded body size (20.682167ms)
+✔ Retry-After pauses queue and explicit retries across calls and persisted restart (3.247704ms)
+✔ network diagnostics retain timing/source without secrets; cancel settles remaining rows (1.183245ms)
+✔ explicitly linked local profile facts stay unverified and never flow to transport (2.769264ms)
+✔ long IDs retain exact digits; canonical duplicates preserve input mappings (3.344579ms)
+✔ spoofed hosts, credentials, reserved paths, invalid IDs and overlarge batches reject locally (1.722176ms)
+✔ public responses never establish account sanctions and one og:title proves nothing (6.294709ms)
+✔ Facebook facts require identity-bound public evidence and explicit eight-state vocabulary (2.931586ms)
+✔ network failures have sanitized differentiated diagnostics, never raw messages (0.711029ms)
+✔ TZ06 login.php and checkpoint root cannot become unknown or visible (1.653378ms)
+✔ TZ06 bounded JSON-LD graph recognizes matching public Person but no unrelated entity (2.257145ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 229.083631
