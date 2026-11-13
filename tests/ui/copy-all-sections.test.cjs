@@ -231,6 +231,7 @@ test(
     await page.locator('[data-copy-control="personal"]').check();
     assert.ok((await preview()).includes('Synthetic confirmed fixture'));
     await page.locator('[data-action="archive-back"]').click();
+    await page.locator('#archive-filter details > summary').click();
     await page.locator('#archive-filter [name="order"]').selectOption('oldest');
     await page.locator('#archive-filter button').click();
     await waitForAsync(page, async () => {
