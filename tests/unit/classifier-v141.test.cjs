@@ -80,3 +80,25 @@ test('TZ06 repeats only explicitly anchored file structure and never guesses adj
     .records[3];
   assert.equal(shifted.data.password, '');
 });
+
+test('TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without accepting arbitrary corrupt bytes', async () => {
+  const { parseInput } = await import('../../shared/importer.mjs');
+  const cp = Buffer.concat([
+    Buffer.from('id:0001|name:'),
+    Buffer.from([0xc0, 0xed, 0xed, 0xe0, 0x20, 0xcf, 0xe5, 0xf2, 0xf0, 0xee, 0xe2, 0xe0]),
+    Buffer.from('|geo:RU')
+  ]);
+  const p = await parseInput({ bytes: cp, originalName: 'input.txt' }, { classification: true });
+  assert.equal(p.encoding, 'windows-1251');
+  assert.ok(p.text.includes('Анна Петрова'));
+  for (const big of [false, true]) {
+    const bytes = Buffer.from('id:0002|name:Анна Петрова|geo:RU', 'utf16le');
+    if (big) bytes.swap16();
+    const r = await parseInput({ bytes, originalName: 'input.txt' }, { classification: true });
+    assert.equal(r.encoding, big ? 'utf-16be' : 'utf-16le');
+    assert.ok(r.text.includes('Анна Петрова'));
+  }
+  await assert.rejects(
+    parseInput({ bytes: Buffer.from([255]), originalName: 'input.txt' }, { classification: true })
+  );
+});

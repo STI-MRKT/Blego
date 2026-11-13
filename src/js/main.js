@@ -501,7 +501,7 @@ async function handleFile(file) {
   if (state.importEpoch !== epoch) return;
   state.classifierQuery = ''; state.classifierDescending = false; state.importSaved = null;
   state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
-  if(state.classifierOptions)state.classifierOptions.recordMapping={};
+  state.classifierOptions={};state.importEncoding='';state.cookieRow=null;
   state.importName = file.name;
   state.importData = null;
   state.view = 'import';
@@ -558,6 +558,7 @@ async function importPage(offset) {
   try {
     const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending,warningsOnly:!!state.classifierWarningsOnly}});
     if (state.importData?.operationId !== operationId || state.importEpoch !== epoch || state.importPageRequest !== request) return;
+    state.cookieRow=null;state.classifierRevealed={};state.classifierDetailRow=null;
     state.importData = data; renderView();
   } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
 }
@@ -689,10 +690,10 @@ async function runProxyCheck(fullTest = false) {
   try {
     const result = await checkProxy(value, { reputation, fullTest });
     if(value === state.network.proxyInput.trim()){state.network.proxy=result;if(fullTest)state.network.speed=result.speed;}
-    else state.network.proxyError='Адрес изменился. Повторите проверку.';
+    else state.network.proxyError='Proxy address changed. Check again.';
   } catch (error) {
     state.network.proxy = null;
-    state.network.proxyError = error.message === 'CANCELLED' ? 'Проверка отменена' : `Не удалось проверить прокси: ${error.message}`;
+    state.network.proxyError = error.message === 'CANCELLED' ? 'Check cancelled.' : 'Network Error. Check the proxy address and try again.';
   }
   state.network.proxyLoading = false;
   renderView();
@@ -846,6 +847,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'set-view') {
     if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
+    state.cookieRow=null;state.classifierRevealed={};
     state.view = target.dataset.view;
     if (state.view === 'history')
       window.blego
@@ -962,7 +964,8 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}
-  if(action==='classifier-details'){state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
+  if(action==='classifier-cookie-toggle'){state.cookieRow=state.cookieRow===target.dataset.row?null:target.dataset.row;state.classifierRevealed={};renderView();return;}
+  if(action==='classifier-details'){state.cookieRow=null;state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
   if(action==='classifier-close-details'){state.classifierDetailRow=null;state.classifierRevealed={};renderView();return;}
   if(action==='classifier-reveal'){
     if(target.dataset.row!==state.classifierDetailRow)return;
@@ -979,7 +982,7 @@ document.addEventListener('click', async (event) => {
     try {
       const full = await window.blego.importCell({operationId, recordId:target.dataset.row, field:target.dataset.field});
       if (state.importEpoch!==epoch || state.importData?.operationId!==operationId) return;
-      if(full) await copyText(full,target);
+      if(full){const result=await copyText(full,target);if(result.ok&&target.dataset.field==='cookies'&&state.importEpoch===epoch&&state.view==='import'){state.cookieRow=null;state.classifierRevealed={};renderView();}}
     } catch {toast('Не удалось скопировать выбранное поле','err');}
     return;
   }
@@ -1025,8 +1028,7 @@ document.addEventListener('click', async (event) => {
     state.importEpoch = (state.importEpoch || 0) + 1;
     state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
     state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
-    if(state.classifierOptions)state.classifierOptions.recordMapping={};
-    if(state.classifierOptions) state.classifierOptions.mapping={};
+    state.classifierOptions={};state.importEncoding='';state.cookieRow=null;
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);
     state.importRequest = null;
@@ -1081,9 +1083,9 @@ document.addEventListener('click', async (event) => {
     try {
       state.settings = await window.blego.updateSettings({ proxyEnabled: true });
       renderView();
-      await runNetwork(false);
+
     } catch (error) {
-      toast('Не удалось включить проверку сети: ' + error.message, 'err');
+      toast('Could not enable network checks.', 'err');
     }
     return;
   }

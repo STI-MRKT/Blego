@@ -93,7 +93,7 @@ test(
     await page.locator('.gauge-wrap').waitFor();
     assert.equal(await page.locator('.gauge').isVisible(), true);
     assert.equal(await page.locator('.packets').isVisible(), true);
-    assert.equal(await page.locator('[data-action="net-ping"]').isVisible(), true);
+    assert.equal(await page.locator('[data-action="net-ping"]').count(), 0);
     assert.equal(await page.locator('[data-action="net-enable"]').isVisible(), true);
     assert.equal(await page.locator('[data-action="net-run"]').isDisabled(), true);
 
@@ -111,11 +111,12 @@ test(
     });
     await page.locator('[data-view="generator"]').click();
     await page.locator('[data-view="network"]').click();
-    assert.equal(await page.locator('.ping-row').count(), 2);
+    assert.equal(await page.locator('.ping-row').count(), 0);
     if (process.env.BLEGO_CAPTURE_UX === '1')
       await page.screenshot({ path: 'release/ux-network.png' });
     assert.equal(await page.locator('#speed-value').getAttribute('data-value'), '96.5');
-    assert.equal((await page.getByText('18 ms').count()) > 0, true);
+    assert.equal(await page.getByText('Connection Quality', { exact: true }).count(), 1);
+    assert.equal(await page.getByText('IP Trust', { exact: true }).count(), 1);
 
     await page.locator('[data-view="settings"]').click();
     await page.locator('details.ux-settings-advanced').waitFor();

@@ -53,7 +53,7 @@ export function friendsHTML() {
     page = Math.max(0, Math.min(state.friendsPage || 0, pages - 1));
   return `<div class="page">
     <div class="page-head">
-      <div><div class="eyebrow">PEOPLE</div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>
+      <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>
       <div class="head-actions"><span class="pill">${list.length} / ${all.length} profiles</span><button class="btn" data-action="friends-import" ${state.friendsBusy ? 'disabled' : ''}>Импортировать Friends</button></div>
     </div>
     <form id="friends-search" class="controls"><label class="fl">Поиск<input class="input" id="friends-query" value="${esc(state.friendsQuery || '')}"></label><label class="fl">Площадка<select class="input" id="friends-platform"><option value="">Все</option>${platforms.map((platform) => `<option ${state.friendsPlatform === platform ? 'selected' : ''}>${esc(platform)}</option>`).join('')}</select></label><button class="btn" type="submit">Найти</button></form>

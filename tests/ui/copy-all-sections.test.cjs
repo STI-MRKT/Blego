@@ -181,15 +181,11 @@ test(
         }
       ];
     });
-    await open('network');
-    const proxy = await preview();
-    assert.ok(proxy.includes('203.0.113.2'));
-    assert.ok(!proxy.includes('DO-NOT-COPY'));
-    await open('news');
-    const news = await preview();
-    assert.ok(news.includes('Provided summary'));
-    assert.ok(!news.includes('DO-NOT-COPY'));
-    assert.ok(!news.includes('body'));
+    await page.locator('[data-view="network"]').click();
+    assert.equal(await page.locator('#copy-actions, [data-action="copy"]').count(), 0);
+    await page.locator('[data-view="news"]').click();
+    assert.equal(await page.locator('#copy-actions, [data-action="copy"]').count(), 0);
+    // Serialization privacy remains unit-tested; these screens no longer offer copy.
     await page.evaluate(() => {
       const node = document.querySelector('.news-title').firstChild;
       const range = document.createRange();

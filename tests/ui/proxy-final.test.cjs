@@ -37,14 +37,14 @@ test(
     await page.locator('[data-view="network"]').click();
     await page.locator('#proxy-input').fill('http://user:synthetic-password@127.0.0.1:80');
     await page.locator('[data-action="proxy-check"]').click();
-    await page.getByText('Ошибка подключения', { exact: true }).waitFor();
-    assert.match(await page.locator('.proxy-result').innerText(), /REQUEST_BLOCKED/);
+    await page.getByText('Network Error', { exact: true }).waitFor();
+    assert.match(await page.locator('.proxy-result').innerText(), /Request blocked/);
     assert.doesNotMatch(await page.locator('.proxy-result').innerText(), /synthetic-password/);
     assert.equal(
       await page
         .locator('.risk-score')
         .allTextContents()
-        .then((x) => x.every((v) => v === 'Нет данных')),
+        .then((x) => x.every((v) => v === 'N/A')),
       true
     );
     await page.locator('#proxy-input').fill('http://new.example:8080');
@@ -68,7 +68,7 @@ test(
     await page.waitForFunction(
       () => document.querySelector('#speed-value')?.dataset.value === '10.5'
     );
-    assert.equal(await page.getByText('Скорость через прокси', { exact: true }).isVisible(), true);
+    assert.equal(await page.getByText('Proxy Speed', { exact: true }).isVisible(), true);
     let resolveStarted;
     const started = new Promise((resolve) => {
       resolveStarted = resolve;

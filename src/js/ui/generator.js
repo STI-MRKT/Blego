@@ -115,7 +115,7 @@ function profileHTML() {
     <div class="demo-right">
       <div class="mini-head"><span class="t">Основные поля</span><span class="ttl"><i></i>Сохранено локально</span></div>
       <div class="fields">${primary.map((key) => fieldHTML(key, fields[key])).join('')}</div>
-      <div class="demo-note">${I.alert}<span>Синтетический профиль. Сохранён на этом устройстве.</span></div>
+
     </div>
   </article>`;
 }
@@ -125,9 +125,9 @@ export function ttlText() {
 export function generatorHTML() {
   return `<div class="page ux-generator">
     <div class="page-head">
-      <div><div class="eyebrow">BLEGO · LOCAL STUDIO</div><h1>Генератор профилей</h1>
+      <div><h1>Генератор профилей</h1>
         <p class="sub">Выберите страну, тип и создайте синтетический профиль. Основное — на одном экране.</p></div>
-      <div class="head-actions"><span class="pill tiny">Локально · без учётной записи</span></div>
+
     </div>
     <div class="card controls ux-primary-controls">
       <div class="ctl ctl-sm"><label class="fl">Страна</label><select class="input" data-input="locale">

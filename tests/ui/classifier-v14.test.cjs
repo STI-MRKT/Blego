@@ -44,7 +44,9 @@ test(
     assert.equal(await details.count(), 1);
     await details.click();
     assert.ok(
-      (await page.locator('#classifier-record-details').innerText()).includes('Требует проверки')
+      (await page.locator('#classifier-record-details').innerText()).includes(
+        'Остались нераспознанные значения'
+      )
     );
     await page.locator('#classifier-record-details details summary').first().click();
     const select = page.locator('[data-classifier-row-map][data-row="2"][data-column="column_2"]');

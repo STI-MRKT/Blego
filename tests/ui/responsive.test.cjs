@@ -96,7 +96,7 @@ test(
         'settings',
         'history'
       ]) {
-        await page.locator(`.nav-item[data-view="${view}"]`).click();
+        await page.locator(`[data-view="${view}"]`).click();
         await page.waitForTimeout(120);
         if (width === 360)
           await page.locator('.content details').evaluateAll((elements) =>
@@ -144,7 +144,7 @@ test(
         assert.deepEqual(layout.clipped, [], `${width}/${view}: clipped controls`);
         assert.ok(layout.icons.every(Boolean), `${width}/${view}: clipped icons`);
         assert.equal(
-          await page.locator(`.nav-item[data-view="${view}"]`).getAttribute('aria-current'),
+          await page.locator(`[data-view="${view}"]`).getAttribute('aria-current'),
           'page'
         );
         sections.push(view);

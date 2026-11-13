@@ -6,7 +6,7 @@ const fs = require('node:fs'),
 const { _electron } = require('playwright');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 test(
-  'News preserves topic, ignores late other-topic replies and copies each article value',
+  'News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-ui-'));
@@ -67,20 +67,13 @@ test(
     await page.getByText('finance headline', { exact: true }).waitFor();
     await page.waitForTimeout(800);
     assert.equal(await page.locator('.news-title').textContent(), 'finance headline');
-    for (const [label, value] of [
-      ['Copy news title', 'finance headline'],
-      ['Copy news link', 'https://example.com/finance'],
-      ['Copy news source', 'Test publication'],
-      ['Copy article author', 'Test author'],
-      ['Copy publication date', new Date(1700000000000).toISOString()]
-    ]) {
-      await page.getByRole('button', { name: label, exact: true }).click();
-      for (let i = 0; i < 50; i++) {
-        if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === value) break;
-        await page.waitForTimeout(20);
-      }
-      assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), value);
-    }
+    assert.equal(await page.locator('#news-block [data-action="copy"], #copy-actions').count(), 0);
+    assert.equal(
+      await page.locator('.news-title').getAttribute('href'),
+      'https://example.com/finance'
+    );
+    assert.match(await page.locator('.news-meta').textContent(), /Test publication/);
+    assert.match(await page.locator('.news-meta').textContent(), /Test author/);
     await page.locator('[data-view="settings"]').click();
     assert.equal(await page.locator('[name="newsSources"]').count(), 0);
     await app.close();

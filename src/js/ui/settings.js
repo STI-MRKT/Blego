@@ -3,7 +3,7 @@ import { esc } from '../utils/dom.js';
 import { LOCALES } from '../data/locales.js';
 export function settingsHTML() {
   const s = state.settings;
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">Локальные настройки</div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
+  return `<div class="page"><div class="page-head"><div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
 <form id="settings-form" class="card pad ux-settings"><div class="ux-settings-basics">
 <label class="fl">Страна по умолчанию<select class="input" name="country">${Object.keys(LOCALES)
     .map((k) => `<option ${s.country === k ? 'selected' : ''}>${k}</option>`)
