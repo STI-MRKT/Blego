@@ -88,6 +88,13 @@ async function initialize() {
       /* absent legacy marker */
     }
   }
+  let lastImageScanProgress = 0;
+  const imageScanProgress = (progress) => {
+    const now = Date.now();
+    if (progress.phase !== 'complete' && now - lastImageScanProgress < 80) return;
+    lastImageScanProgress = now;
+    mainWindow?.webContents.send('local:image-scan', progress);
+  };
   registerIpc(
     ipcMain,
     () => mainWindow,
@@ -107,7 +114,7 @@ async function initialize() {
         return geo.previewImport(bytes);
       },
       geoImportConfirm: (token) => geo.confirmImport(token),
-      imagesAddDropped: (paths) => images.addFiles(paths),
+      imagesAddDropped: (paths) => images.addFiles(paths, { onProgress: imageScanProgress }),
       imageWorkspace: () => images.groups.snapshot(),
       imageWorkspaceChange: ({ action, ...request }) => {
         const allowed = [
@@ -155,7 +162,17 @@ async function initialize() {
             { name: 'All files', extensions: ['*'] }
           ]
         });
-        return result.canceled ? [] : images.addFiles(result.filePaths);
+        return result.canceled
+          ? []
+          : images.addFiles(result.filePaths, { onProgress: imageScanProgress });
+      },
+      imagesFolders: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openDirectory', 'multiSelections']
+        });
+        return result.canceled
+          ? []
+          : images.addFiles(result.filePaths, { onProgress: imageScanProgress });
       },
       imagesDestination: async () => {
         const result = await dialog.showOpenDialog(mainWindow, {

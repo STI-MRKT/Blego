@@ -24,6 +24,12 @@ contextBridge.exposeInMainWorld('blego', {
   },
   copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
+  chooseImageFolders: () => call('imagesFolders'),
+  onImageScan: (callback) => {
+    const listener = (_event, result) => callback(result);
+    ipcRenderer.on('local:image-scan', listener);
+    return () => ipcRenderer.removeListener('local:image-scan', listener);
+  },
   addDroppedImages: (files) =>
     call(
       'imagesAddDropped',

@@ -650,15 +650,22 @@ async function runProxyCheck(fullTest = false) {
   renderView();
 }
 
-async function addPhotos(droppedFiles) {
+async function addPhotos(droppedFiles, folders = false) {
   if (state.imagesBusy) return;
   stashImageDraft();
   state.imagesBusy = true;
   state.imagesReading = true;
   state.imagesReadCancelled = false;
+  state.imageScan = null;
   renderView();
+  const stopScan = window.blego.onImageScan((progress) => {
+    state.imageScan = progress;
+    const element=document.getElementById('image-scan-status');
+    if(element) element.textContent=`Найдено: ${progress.found} · Пропущено: ${progress.skipped} · Повторов: ${progress.duplicates}`;
+  });
+  let lastReadRender = 0;
   try {
-    const files = droppedFiles ? await window.blego.addDroppedImages(Array.from(droppedFiles)) : await window.blego.chooseImages();
+    const files = droppedFiles ? await window.blego.addDroppedImages(Array.from(droppedFiles)) : folders ? await window.blego.chooseImageFolders() : await window.blego.chooseImages();
     state.photos.push(...files);
     state.metadataPresets = await window.blego.metadataPresets();
     state.imageWorkspace = await window.blego.imageWorkspace();
@@ -668,7 +675,7 @@ async function addPhotos(droppedFiles) {
         continue;
       }
       file.status = 'reading';
-      renderView();
+      if(Date.now()-lastReadRender>=150){renderView();lastReadRender=Date.now();}
       try {
         file.view = await window.blego.readImageMetadata(file.fileId);
         file.size = file.view.size;
@@ -686,6 +693,7 @@ async function addPhotos(droppedFiles) {
   } finally {
     state.imagesBusy = false;
     state.imagesReading = false;
+    stopScan();
     restoreImageDraft();
     renderView();
   }
@@ -1248,6 +1256,8 @@ document.addEventListener('click', async (event) => {
       renderView();
     }catch(e){toast(imageErrorMessage(e.message),'err');}return;
   }
+  if (action === 'images-folder') { await addPhotos(null, true); return; }
+  if (action === 'photo-page') { stashImageDraft(); state.photoPage=Number(target.dataset.page)||0; renderView(); return; }
   if (action === 'images-choose'  || action === 'images-browse') {
     await addPhotos();
     return;

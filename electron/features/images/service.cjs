@@ -6,6 +6,7 @@ const { createEngine } = require('./engine.cjs');
 const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { validateOperations, viewTags, warnings } = require('./policy.cjs');
 const { readBounded } = require('./files.cjs');
+const { scanInputs } = require('./folders.cjs');
 function createImageService({ engine = createEngine(), store, geo, hooks = {} } = {}) {
   const groupStore = require('./groups.cjs').createGroupStore({ store });
   const groups = Object.fromEntries(
@@ -26,9 +27,11 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
   const destinations = new Map();
   const readers = new Set();
   let active = null,
-    adding = false;
+    adding = false,
+    scanning = null;
   const files = new Map(),
     plans = new Map();
+  let retainedMetadataBytes = 0;
   let totalBytes = 0,
     running = 0;
   const waiting = [];
@@ -128,10 +131,15 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
       if (!stat.isDirectory() || stat.isSymbolicLink()) throw Error('INVALID_DESTINATION');
       if (destinations.size >= 100) destinations.delete(destinations.keys().next().value);
       const token = randomUUID();
-      destinations.set(token, { path: path.resolve(directory), dev: stat.dev, ino: stat.ino });
+      destinations.set(token, {
+        path: await fs.promises.realpath(directory),
+        dev: stat.dev,
+        ino: stat.ino
+      });
       return token;
     },
     cancelReads() {
+      scanning?.abort();
       for (const controller of readers) controller.abort();
     },
     cancelExport() {
@@ -425,35 +433,31 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
     exportHistory() {
       return [...history.values()].map((x) => structuredClone(x));
     },
-    async addFiles(paths, { reference = false } = {}) {
+    async addFiles(paths, { reference = false, onProgress } = {}) {
       if (active || adding) throw Error('IMAGES_BUSY');
       adding = true;
+      const controller = new AbortController();
+      scanning = controller;
       try {
-        if (!Array.isArray(paths) || paths.length > 1000) throw Error('IMAGE_QUEUE_LIMIT');
+        const scanned = await scanInputs(paths, {
+          reference,
+          signal: controller.signal,
+          onProgress
+        });
         const pending = [],
           promoted = [];
         let added = 0;
-        const known = new Set([...files.values()].map((item) => item.path));
-        for (const file of paths) {
-          const canonical = await fs.promises.realpath(file);
-          if (known.has(canonical)) {
-            const existing = [...files.values()].find((item) => item.path === canonical);
-            if (!reference && existing?.reference && !promoted.includes(existing))
+        const known = new Map([...files.values()].map((item) => [item.physicalKey, item]));
+        for (const source of scanned.files) {
+          if (controller.signal.aborted) throw Error('CANCELLED');
+          const existing = known.get(source.physicalKey);
+          if (existing) {
+            if (!reference && existing.reference && !promoted.includes(existing))
               promoted.push(existing);
             continue;
           }
-          known.add(canonical);
-          const stat = await fs.promises.lstat(file);
-          if (!stat.isFile() || stat.size > IMAGE_LIMITS.fileBytes) throw Error('IMAGE_TOO_LARGE');
-          added += stat.size;
-          pending.push({
-            fileId: randomUUID(),
-            path: canonical,
-            reference,
-            name: path.basename(file),
-            size: stat.size,
-            status: 'queued'
-          });
+          added += source.size;
+          pending.push({ ...source, fileId: randomUUID(), reference, status: 'queued' });
         }
         if (
           pending.length + files.size > IMAGE_LIMITS.files ||
@@ -465,14 +469,20 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
         for (const item of promoted) item.reference = false;
         for (const item of pending) files.set(item.fileId, item);
         totalBytes += added;
-        return [...pending, ...promoted].map(({ fileId, name, size, status }) => ({
-          fileId,
-          name,
-          size,
-          status
-        }));
+        plans.clear();
+        return [...pending, ...promoted].map(
+          ({ fileId, name, size, status, relativePath, sourceFolder }) => ({
+            fileId,
+            name,
+            size,
+            status,
+            relativePath,
+            sourceFolder
+          })
+        );
       } finally {
         adding = false;
+        scanning = null;
       }
     },
     async readImageMetadata(fileToken) {
@@ -510,6 +520,8 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
         const view = {
           fileId: item.fileId,
           name: item.name,
+          relativePath: item.relativePath,
+          sourceFolder: item.sourceFolder,
           size: bytes.length,
           sourceHash,
           detectedFormat: structure.format,
@@ -524,6 +536,12 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
           status: 'ready'
         };
         check();
+        const metadataBytes =
+          Buffer.byteLength(JSON.stringify(raw.tags)) + Buffer.byteLength(JSON.stringify(view));
+        const retainedNext = retainedMetadataBytes - (item.metadataBytes || 0) + metadataBytes;
+        if (retainedNext > IMAGE_LIMITS.retainedMetadataBytes) throw Error('IMAGE_METADATA_LIMIT');
+        retainedMetadataBytes = retainedNext;
+        item.metadataBytes = metadataBytes;
         item.view = view;
         item.raw = raw.tags;
         item.structure = structure;
@@ -537,12 +555,14 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
       groups.clearFiles();
       plans.clear();
       totalBytes = 0;
+      retainedMetadataBytes = 0;
     },
     remove(id) {
       if (running || active || adding) throw Error('IMAGES_BUSY');
       const item = files.get(id);
       if (!item) throw Error('INVALID_FILE_TOKEN');
       totalBytes -= item.size;
+      retainedMetadataBytes -= item.metadataBytes || 0;
       files.delete(id);
       references.delete(id);
       if (!item.reference) groups.removeFile(id);

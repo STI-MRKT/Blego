@@ -152,3 +152,6 @@
 .ux-generator .ux-profile-copy {display:flex;align-items:flex-start;gap:6px;min-width:0;width:100%}
 .ux-generator .ux-profile-copy>.name,.ux-generator .ux-profile-copy>.bio {min-width:0;flex:1;overflow-wrap:anywhere;margin:0}
 .ux-generator .ux-profile-copy>.copy {position:static;flex:0 0 auto}
+
+/* Relative folder names must not widen the original photo cards. */
+.photo-source {min-width:0;overflow-wrap:anywhere;max-height:3em;overflow:hidden}
