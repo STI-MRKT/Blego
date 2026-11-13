@@ -98,6 +98,7 @@ async function fixture(t, settings = {}) {
               globalThis.bioTransitionOriginal
             );
           globalThis.bioRelease?.();
+          globalThis.bioCityRelease?.();
           globalThis.bioTransitionRelease?.();
           globalThis.bioSuggestionRelease?.();
         })
@@ -568,7 +569,7 @@ test(
   'TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON',
   { timeout: 45000 },
   async (t) => {
-    const f = await fixture(t, { country: 'GB', type: 'model' });
+    const f = await fixture(t, { country: 'GB', type: 'model', disabledFields: ['city'] });
     const store = await openStore(f.data);
     const fp = await generateProfile(
       { requestId: 'old-fp', country: 'GB', type: 'model' },
@@ -591,6 +592,7 @@ test(
     const page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Old attached BIO');
+    assert.equal(await page.locator('#bio-city').inputValue(), '');
     const readCounts = () => {
       const { DatabaseSync } = require('node:sqlite');
       const db = new DatabaseSync(path.join(f.data, 'local.sqlite'), { readOnly: true });
@@ -623,5 +625,94 @@ test(
     await page.locator('#bio-mainBio').waitFor();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'New independent legacy edit');
     assert.deepEqual(readCounts(), { count: 1, original: json });
+  }
+);
+test(
+  'cross-country BIO history never offers stale city/postal suggestions while loading',
+  { timeout: 30000 },
+  async (t) => {
+    const f = await fixture(t);
+    const page = await f.launch();
+    const gb = await generateBio(page, 'GB', 'London', 'model');
+    await generateBio(page, 'DE', 'Berlin', 'tech');
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('#bio-cities option')].some((o) => o.value === 'Berlin')
+    );
+    await f.app.evaluate(({ ipcMain }) => {
+      globalThis.bioOriginal = ipcMain._invokeHandlers.get('local:biography');
+      ipcMain._invokeHandlers.set('local:biography', async (event, arg) => {
+        if (arg.action === 'cities' && arg.country === 'GB')
+          await new Promise((resolve) => {
+            globalThis.bioCityRelease = resolve;
+          });
+        return globalThis.bioOriginal(event, arg);
+      });
+    });
+    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
+    await page.locator('[data-action="bio-history"]').click();
+    await page.locator('#bio-history-record').selectOption(gb.id);
+    await page.locator('[data-action="bio-open"]').click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('#bio-country').value === 'GB' &&
+        !document.querySelector('[data-action="bio-generate"]').disabled
+    );
+    assert.equal(await page.locator('#bio-cities option').count(), 0);
+    await f.app.evaluate(() => globalThis.bioCityRelease());
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('#bio-cities option')].some((o) => o.value === 'London')
+    );
+  }
+);
+test(
+  'native quit waits for standalone BIO generation and parameter saves without losing either generator',
+  { timeout: 45000 },
+  async (t) => {
+    const f = await fixture(t, { country: 'GB', type: 'model' });
+    let page = await f.launch();
+    await page.locator('[data-action="generate"]').click();
+    await page.locator('.demo-card').waitFor();
+    const fp = await page.evaluate(() => window.blego.lastCard());
+    await page.locator('[data-tab="bio"]').click();
+    await page.locator('#bio-country').selectOption('GB');
+    await page.locator('#bio-city').fill('London');
+    await page.locator('#bio-type').selectOption('tech');
+    await f.app.evaluate(({ ipcMain }) => {
+      globalThis.bioOriginal = ipcMain._invokeHandlers.get('local:biography');
+      ipcMain._invokeHandlers.set('local:biography', async (event, arg) => {
+        if (arg.action === 'generate')
+          await new Promise((resolve) => {
+            globalThis.bioRelease = resolve;
+          });
+        return globalThis.bioOriginal(event, arg);
+      });
+    });
+    await page.locator('[data-action="bio-generate"]').click();
+    await page.waitForFunction(
+      () => document.querySelector('[data-action="bio-generate"]').disabled
+    );
+    // Observe actual IPC arrival before asking native Quit.
+    for (let i = 0; !(await f.app.evaluate(() => Boolean(globalThis.bioRelease))); i++) {
+      assert.ok(i < 100);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    await f.app.evaluate(({ app }) => app.quit());
+    await page.waitForFunction(() => document.body.inert);
+    assert.equal(
+      await f.app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length),
+      1
+    );
+    const closed = f.app.waitForEvent('close');
+    await f.app.evaluate(() => globalThis.bioRelease());
+    await closed;
+    f.forget();
+    page = await f.launch();
+    await page.locator('[data-tab="bio"]').click();
+    await page.locator('#bio-mainBio').waitFor();
+    assert.equal(await page.locator('#bio-residence').inputValue(), 'London, United Kingdom');
+    assert.equal(await page.locator('#bio-type').inputValue(), 'tech');
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
+    const history = await page.evaluate(() => window.blego.biography({ action: 'history' }));
+    assert.equal(history.total, 1);
   }
 );

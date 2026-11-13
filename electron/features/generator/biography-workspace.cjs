@@ -49,12 +49,17 @@ function createBiographyWorkspace({ store }) {
     if (!p.biography) return null;
     return {
       id,
-      parameters: parameters({
-        country: p.country,
-        type: p.type,
-        city: p.fields.city,
-        postalCode: p.fields.postalCode
-      }),
+      // Historical FP allowed city to be disabled. Reading an old BIO must not
+      // impose new generation requirements or rewrite its original profile.
+      parameters: parameters(
+        {
+          country: p.country,
+          type: p.type,
+          city: p.fields.city || '',
+          postalCode: p.fields.postalCode
+        },
+        true
+      ),
       values: bioDefaults(p),
       revision: p.biographyRevision || 0,
       createdAt: p.createdAt || '',

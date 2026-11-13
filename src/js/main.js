@@ -90,6 +90,7 @@ async function loadBioCities(country) {
 function setBiographyWorkspace(snapshot) {
   state.bioEditor?.dispose();state.bioParamsEditor?.dispose();
   state.bio=snapshot;
+  state.bioCities=[];
   state.bioEditor=snapshot.record?biographyEditor({recordId:snapshot.record.id,revision:snapshot.record.revision,values:snapshot.record.values,institutions:snapshot.institutions}):null;
   state.bioParamsEditor=createBiographyEditor({recordId:'parameters',revision:snapshot.parametersRevision,values:snapshot.parameters},{
     save:async request=>{

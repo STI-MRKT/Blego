@@ -220,3 +220,43 @@ test('BIO history pagination and suggestions use saved geography despite new con
   for (const country of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB'])
     assert.ok(bio.cities(country).length);
 });
+test('legacy profiles with disabled optional city remain readable/editable without changing original JSON', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-legacy-no-city-'));
+  let store = await openStore(root);
+  t.after(() => {
+    store.close();
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+  require('../../electron/local/settings.cjs').updateSettings(store, { disabledFields: ['city'] });
+  const fp = await generateProfile(
+    { requestId: 'no-city', country: 'GB', type: 'model' },
+    { store }
+  );
+  assert.equal(fp.fields.city, undefined);
+  fp.biography = require('../../electron/features/generator/biography.cjs').generateBiography(fp);
+  fp.biographyRevision = 0;
+  const original = JSON.stringify(fp);
+  store.db.prepare('UPDATE requests SET profile=? WHERE profile_id=?').run(original, fp.id);
+  store.set('lastCard', fp);
+  let bio = createBiographyWorkspace({ store });
+  const id = 'legacy:' + fp.id;
+  assert.equal(bio.read().parameters.city, '');
+  assert.equal(bio.history().total, 1);
+  assert.deepEqual(bio.open(id).record.values, fp.biography);
+  bio.save({
+    recordId: id,
+    revision: 0,
+    values: { ...fp.biography, mainBio: 'Saved without a city' }
+  });
+  assert.equal(
+    store.db.prepare('SELECT profile FROM requests WHERE profile_id=?').get(fp.id).profile,
+    original
+  );
+  store.close();
+  store = await openStore(root);
+  bio = createBiographyWorkspace({ store });
+  assert.equal(bio.read().record.values.mainBio, 'Saved without a city');
+  bio.clear();
+  assert.equal(bio.read().record, null);
+  assert.equal(bio.open(id).record.values.mainBio, 'Saved without a city');
+});
