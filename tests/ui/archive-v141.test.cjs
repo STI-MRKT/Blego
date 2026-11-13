@@ -37,13 +37,19 @@ test(
       const source = path.join(root, name);
       fs.writeFileSync(
         source,
-        `id:000${i + 1}|name:Synthetic Person|email:person${i}@example.test|password:FAKE|GEO IT`
+        `id:000${i + 1}|name:Synthetic Person|email:person${i}@example.test|password:FAKE|GEO IT` +
+          (i ? '\nid:999|name:Other Person|email:excluded@example.test|password:FAKE|GEO US' : '')
       );
       await page.locator('#file-input').setInputFiles(source);
       await page.locator('[data-classifier-status]').waitFor();
-      await page.locator('#classifier-extra summary').click();
-      await page.locator('[data-action="classifier-archive"]').click();
-      await page.getByText('Сохранено в архиве', { exact: true }).waitFor();
+      if (i) {
+        await page.locator('[data-action="classifier-details"][data-row="1"]').click();
+        await page.locator('[data-action="classifier-archive-record"]').click();
+      } else {
+        await page.locator('#classifier-extra summary').click();
+        await page.locator('[data-action="classifier-archive"]').click();
+      }
+      await page.getByText('Сохранено', { exact: true }).waitFor();
       assert.ok(fs.existsSync(source));
       await page.locator('[data-view="history"]').click();
       await page.locator('.hrow .nm').filter({ hasText: name }).waitFor({ timeout: 5000 });
@@ -58,6 +64,7 @@ test(
     await page.locator('[data-view="history"]').click();
     await page.locator('.hrow .nm').filter({ hasText: 'New.txt' }).click();
     assert.ok((await page.locator('pre').first().textContent()).includes('person1@example.test'));
+    assert.ok(!(await page.locator('pre').first().textContent()).includes('excluded@example.test'));
     assert.equal((await page.evaluate(() => window.blego.listArchives())).total, 2);
   }
 );

@@ -16,6 +16,7 @@ export function settingsHTML() {
 <label class="fl"><input type="checkbox" name="newsEnabled" ${s.newsEnabled ? 'checked' : ''}> Разрешить загрузку новостей<span class="sub" data-setting-help>Новости выбранной темы из встроенного каталога при открытии ленты или обновлении.</span></label>
 </div></div>
 <details class="ux-details ux-settings-advanced"><summary>Дополнительные настройки, словари, форматы и архив</summary>
+<p class="sub">Профили и предложенные BIO — синтетические. Названия учебных заведений взяты с официальных сайтов; выбор не подтверждает обучение. Работу, образование и биографию можно указать вручную.</p>
 <label class="fl">Field order (comma separated)<input class="input" name="fieldOrder" value="${esc((s.fieldOrder || []).join(','))}"></label>
 <label class="fl">Disabled optional fields<input class="input" name="disabledFields" value="${esc((s.disabledFields || []).join(','))}"></label>
 <label class="fl">Allow repeats for finite optional fields<input class="input" name="allowRepeats" value="${esc((s.allowRepeats || []).join(','))}"></label>

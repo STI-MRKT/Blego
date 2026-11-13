@@ -27,3 +27,13 @@ Rejected/blocked initial candidates:
 - Freie Universität Berlin: HTTP404 / FEHLER 404: Seite nicht gefunden / ERROR 404: Page Not Found
 - City of London School for Girls: HTTP202 / 
 - John-Lennon-Gymnasium: HTTP404 / Seite wurde nicht gefunden | John-Lennon-Gymnasium
+
+## Additional university choices
+- BR: Universidade Federal do Rio de Janeiro — Rio de Janeiro. https://ufrj.br/ HTTP200, official title: Universidade Federal do Rio de Janeiro &#8211; Universidade Federal do Rio de Janeiro.
+- Not included: New York University — HTTP403; manual entry remains.
+- FR: Université Paris Cité — Paris. https://u-paris.fr/ HTTP200, official title: Université Paris Cité | Bienvenue à Université Paris Cité.
+- PL: Uniwersytet Jagielloński — Kraków. https://www.uj.edu.pl/ HTTP200, official title: Strona główna - Uniwersytet Jagielloński.
+- DE: Technische Universität Berlin — Berlin. https://www.tu.berlin/ HTTP200, official title: Technische Universität Berlin - TU Berlin.
+- ES: Universidad Autónoma de Madrid — Madrid. https://www.uam.es/ HTTP200, official title: Universidad Autónoma de Madrid | UAM.
+- IT: Università di Bologna — Bologna. https://www.unibo.it/ HTTP200, official title: Università di Bologna.
+- GB: University of Oxford — Oxford. https://www.ox.ac.uk/ HTTP200, official title: University of Oxford.

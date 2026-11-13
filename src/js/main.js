@@ -908,7 +908,7 @@ document.addEventListener('click', async (event) => {
   if(action==='bio-copy'){await copyText(state.bioEditor?.values[target.dataset.field]||'',target);return;}
   if(action==='bio-save'||action==='bio-generate'||action==='bio-work'){
     const editor=state.bioEditor;if(!editor||editor.saving)return;
-    editor.saving=true;target.disabled=true;
+    editor.saving=true;renderView();
     try{
       const result=await window.blego.biography({action:action==='bio-save'?'save':'suggest',profileId:editor.profileId,revision:editor.revision,values:{...editor.values}});
       if(state.demo?.id!==editor.profileId)return;

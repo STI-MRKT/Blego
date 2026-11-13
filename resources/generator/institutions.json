@@ -126,5 +126,61 @@
     "city": "London",
     "url": "https://www.camdengirls.camden.sch.uk/",
     "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "BR",
+    "kind": "university",
+    "name": "Universidade Federal do Rio de Janeiro",
+    "city": "Rio de Janeiro",
+    "url": "https://ufrj.br/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "FR",
+    "kind": "university",
+    "name": "Université Paris Cité",
+    "city": "Paris",
+    "url": "https://u-paris.fr/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "PL",
+    "kind": "university",
+    "name": "Uniwersytet Jagielloński",
+    "city": "Kraków",
+    "url": "https://www.uj.edu.pl/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "DE",
+    "kind": "university",
+    "name": "Technische Universität Berlin",
+    "city": "Berlin",
+    "url": "https://www.tu.berlin/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "ES",
+    "kind": "university",
+    "name": "Universidad Autónoma de Madrid",
+    "city": "Madrid",
+    "url": "https://www.uam.es/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "IT",
+    "kind": "university",
+    "name": "Università di Bologna",
+    "city": "Bologna",
+    "url": "https://www.unibo.it/",
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "country": "GB",
+    "kind": "university",
+    "name": "University of Oxford",
+    "city": "Oxford",
+    "url": "https://www.ox.ac.uk/",
+    "checkedAt": "2026-11-13"
   }
 ]
