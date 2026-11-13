@@ -35,14 +35,14 @@ Files src/js/main.js, src/js/ui/import.js, electron/features/importer/service.cj
 ## A3 Map
 Files src/js/ui/photo-map.js, shared/photo-map.mjs, electron existing geo service/IPC if needed, map-specific local styles.
 - [x] Reproduce current lack of geographic context; test container hidden/resize and markers.
-- [ ] Add licensed geographic background with explicit loading action and honest offline grid/boundaries, no metadata/photo transport. Keep existing point editing and GEO engine.
-- [ ] Real rendered screenshots, 20-photo export/readback, focused tests and npm run verify; commit.
+- [x] Add licensed geographic background with explicit loading action and honest offline grid/boundaries, no metadata/photo transport. Keep existing point editing and GEO engine.
+- [x] Real rendered screenshots, 20-photo export/readback, focused tests and npm run verify; commit. Native OSM fetch and installed rendering PASS; live Facebook remains BLOCKED.
 
 ## A4 Facebook
 Files electron/features/facebook existing service/parser, tests unit/integration/GUI.
 - [x] Audit matching-profile evidence, redirects and login/challenge handling; RED for discovered false verdicts/missed valid evidence.
-- [ ] Preserve anonymous bounded requests, truthful 8 statuses, 100 targets/retry/cancel. Investigate isolated browser only if HTTP evidence warrants it; no auth/session use.
-- [ ] Controlled cases and separate real public request report, verify and commit.
+- [x] Preserve anonymous bounded requests, truthful 8 statuses, 100 targets/retry/cancel. Investigate isolated browser only if HTTP evidence warrants it; no auth/session use.
+- [x] Controlled cases and separate real public request report, verify and commit. Live-provider acceptance remains explicitly BLOCKED where the external service refuses the request.
 
 ## B Generator BIO
 Files existing generator service/contracts/storage/UI/main, new small BIO catalogue with official provenance.
@@ -64,11 +64,11 @@ Files existing Friends service/UI/main and corresponding tests.
 
 ## E Regression and review
 - [x] npm run verify; BLEGO_HEADLESS=1 npm run test:ui; no skips/disabled old coverage (expectations update only for explicitly changed UI).
-- [ ] Compare 1.4 / 1.4.1 under same conditions: launch/generation/import/archive/map/20 photos/UI gaps/RSS; screenshots.
+- [x] Compare 1.4 / 1.4.1 under same conditions: launch/generation/import/archive/map/20 photos/UI gaps/RSS; screenshots.
 - [x] Fresh whole-branch review; fix important findings with RED/GREEN and full regression.
 
 ## F ARM64 delivery
 Files package*.json, .github/workflows/blego-macos-qa.yml, QA scripts/docs.
-- [ ] Version1.4.1, fixed-SHA build, embedded runtime gate before DMG; install outside repo; native GUI/classifier/archive/BIO/map/20 individual/folder checks.
-- [ ] Download/verify installer ZIP/DMG checksums; retain unsigned/notarization BLOCKED and historical failures.
+- [x] Version1.4.1, fixed-SHA build, embedded runtime gate before DMG; install outside repo; native GUI/classifier/archive/BIO/map/20 individual/folder checks.
+- [x] Download/verify installer ZIP/DMG checksums; retain unsigned/notarization BLOCKED and historical failures.
 - [ ] New PR against base branch, attach, no merge. Final reports actual commands/OS/evidence/screens/remaining failures.

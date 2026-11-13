@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-13T14:31:50.311Z",
+  "host": "linux-x64",
+  "target": "https://www.facebook.com/Meta",
+  "isolation": "Ephemeral Electron session, no imported cookies/authentication, nodeIntegration false, sandbox true, no permissions/downloads/popups; only Facebook and fbcdn HTTPS resources",
+  "observation": {
+    "url": "https://www.facebook.com/Meta",
+    "title": "Meta | Facebook",
+    "canonical": "https://www.facebook.com/Meta/",
+    "ogType": "video.other",
+    "loginForm": true,
+    "jsonLdScripts": 0
+  },
+  "inspection": {
+    "status": "LOGIN_REQUIRED",
+    "source": "public_page",
+    "profileName": null,
+    "avatarUrl": null,
+    "objectType": null,
+    "target": "meta",
+    "canonicalUrl": "https://www.facebook.com/meta",
+    "availability": "login_required",
+    "reasonCode": "LOGIN_REQUIRED",
+    "httpStatus": 200,
+    "banAssessment": "unknown",
+    "evidenceSummary": "LOGIN_REQUIRED",
+    "parserVersion": "public-evidence-v3"
+  },
+  "status": "BLOCKED"
+}
