@@ -1,3 +1,5 @@
+import { createBiographyEditor } from './services/biography.js';
+import { biographyStatus } from './ui/biography.js';
 import { mountCopyActions, initCopyPreferences, copyModelValue, invalidateImportCopies } from './utils/copy-actions.js';
 import { readSettingsForm } from './ui/settings.js';
 import { mountPhotoMap } from './ui/photo-map.js';
@@ -45,6 +47,40 @@ document.addEventListener('keydown', event => {
   }
 });
 matchMedia('(max-width:980px)').addEventListener('change', () => setMenuExpanded(false));
+
+function updateBiographyStatus(editor) {
+  if (state.bioEditor !== editor) return;
+  if (editor.error && !editor.errorNotified) toast('Не удалось сохранить BIO. Введённые данные сохранены на экране; повторите попытку.', 'err');
+  editor.errorNotified = editor.error;
+  document.querySelectorAll('[data-bio-field], [data-bio-institution]').forEach(input => { input.disabled = editor.frozen; });
+  const status = document.querySelector('.biography [role=status]');
+  if (status) status.textContent = biographyStatus(editor);
+  const retry = document.querySelector('[data-action="bio-retry"]');
+  if (retry) { retry.hidden = !editor.error; retry.style.display = editor.error ? '' : 'none'; }
+  document.querySelectorAll('[data-action="bio-regenerate"]').forEach(button => { button.disabled = editor.suggesting || editor.frozen; });
+}
+function biographyEditor(data) {
+  return createBiographyEditor(data, {
+    save: request => window.blego.biography(request),
+    onSaved: profile => { if (state.demo?.id === profile.id) state.demo = profile; },
+    onChange: updateBiographyStatus
+  });
+}
+async function flushBiography() { await state.bioEditor?.flush(); }
+window.blego?.onBeforeClose?.(async token => {
+  document.body.inert = true;
+  state.bioEditor?.freeze();
+  try {
+    await flushBiography();
+    await window.blego.finishClose({token, saved:true});
+  } catch {
+    state.bioEditor?.release();
+    document.body.inert = false;
+    toast('BIO не сохранено. Закрытие отменено; повторите сохранение.', 'err');
+    await window.blego.finishClose({token, saved:false});
+  }
+});
+window.blego?.closeGuardReady?.();
 
 function renderAll() {
   document.documentElement.lang = 'en';
@@ -400,8 +436,13 @@ function bindView() {
       if (button) button.disabled = !event.target.value.trim();
     };
   }
-  document.querySelectorAll('[data-bio-field]').forEach(el=>{el.oninput=()=>{if(state.bioEditor?.profileId!==state.demo?.id)return;state.bioEditor.values[el.dataset.bioField]=el.value;state.bioEditor.dirty=true;const status=document.querySelector('.biography [role=status]');if(status)status.textContent='Есть несохранённые изменения';};});
-  document.querySelectorAll('[data-bio-institution]').forEach(el=>{el.onchange=()=>{if(!el.value)return;state.bioEditor.values[el.dataset.bioInstitution]=el.value;state.bioEditor.dirty=true;renderView();};});
+  document.querySelectorAll('[data-bio-field]').forEach(el => { el.oninput = () => {
+    if(state.bioEditor?.profileId === state.demo?.id) state.bioEditor.update({[el.dataset.bioField]:el.value});
+  }; });
+  document.querySelectorAll('[data-bio-institution]').forEach(el => { el.onchange = () => {
+    if(!el.value || state.bioEditor?.profileId !== state.demo?.id) return;
+    state.bioEditor.update({[el.dataset.bioInstitution]:el.value}); renderView();
+  }; });
   const encoding = document.getElementById('import-encoding');
   if (encoding)
     encoding.onchange = (e) => {
@@ -465,10 +506,15 @@ function bindDrop(id, onFiles) {
 
 async function generate() {
   if (state.demoBusy) return;
+  const editor = state.bioEditor;
+  editor?.freeze();
   state.demoBusy = true;
   renderView();
   try {
-    state.demo = await makeDemo(state.locale, state.type);
+    await flushBiography();
+    const profile = await makeDemo(state.locale, state.type);
+    state.bioEditor?.dispose();
+    state.demo = profile;
     state.generatorTab='profile';state.bioEditor=null;
     toast('New set saved');
   } catch (e) {
@@ -479,6 +525,7 @@ async function generate() {
       'err'
     );
   } finally {
+    editor?.release();
     state.demoBusy = false;
     try {
       await refreshPoolStats();
@@ -901,36 +948,46 @@ document.addEventListener('click', async (event) => {
     state.generatorTab=target.dataset.tab;
     if(state.generatorTab==='bio'&&state.demo&&state.bioEditor?.profileId!==state.demo.id){
       const id=state.demo.id;
-      try{const result=await window.blego.biography({action:'read',profileId:id});if(state.demo?.id===id)state.bioEditor={profileId:id,revision:state.demo.biographyRevision||0,...result,dirty:false};}catch{toast('Не удалось открыть BIO','err');state.generatorTab='profile';}
+      try{
+        const result=await window.blego.biography({action:'read',profileId:id});
+        if(state.demo?.id===id && state.bioEditor?.profileId!==id) state.bioEditor=biographyEditor({profileId:id,...result});
+      }catch{toast('Не удалось открыть BIO','err');state.generatorTab='profile';}
     }
     renderView();return;
   }
   if(action==='bio-copy'){await copyText(state.bioEditor?.values[target.dataset.field]||'',target);return;}
-  if(action==='bio-save'||action==='bio-generate'||action==='bio-work'){
-    const editor=state.bioEditor;if(!editor||editor.saving)return;
-    editor.saving=true;renderView();
+  if(action==='bio-retry'){
+    try{await flushBiography();}catch{toast('Не удалось сохранить BIO. Повторите попытку.','err');}return;
+  }
+  if(action==='bio-regenerate'){
+    const editor=state.bioEditor;if(!editor)return;
     try{
-      const result=await window.blego.biography({action:action==='bio-save'?'save':'suggest',profileId:editor.profileId,revision:editor.revision,values:{...editor.values}});
-      if(state.demo?.id!==editor.profileId)return;
-      if(action==='bio-save'){state.demo=result;editor.revision=result.biographyRevision;editor.dirty=false;toast('BIO сохранено');}
-      else{if(action==='bio-generate')editor.values.mainBio=result.mainBio;else{editor.values.employer=result.employer;editor.values.position=result.position;}editor.dirty=true;}
-    }catch{toast('Не удалось изменить BIO. Проверьте данные и повторите.','err');}
-    finally{editor.saving=false;renderView();}return;
+      const changed=await editor.suggest(target.dataset.field, request=>window.blego.biography(request));
+      if(state.bioEditor===editor && changed){
+        // Update values only, preserving focus/caret in any other edited field.
+        for(const [key,value] of Object.entries(editor.values)){
+          const input=document.querySelector(`[data-bio-field="${key}"]`);
+          if(input && input.value!==value)input.value=value;
+        }
+        if(!editor.values[target.dataset.field])toast('Нет подходящих данных. Поле можно заполнить вручную.');
+      }
+    }catch{toast('Не удалось подобрать значение BIO. Повторите попытку.','err');}
+    return;
   }
   if (action === 'generate') {
     generate();
     return;
   }
   if (action === 'clear-demo') {
-    window.blego
-      .clearCard()
-      .then(() => {
-        state.demo = null;
-        renderView();
-      })
-      .catch(() => toast('Could not clear card', 'err'));
-    renderView();
-    toast('Set cleared');
+    if(state.demoBusy)return;
+    const editor=state.bioEditor; editor?.freeze(); state.demoBusy=true; renderView();
+    try {
+      await flushBiography();
+      await window.blego.clearCard();
+      editor?.dispose(); state.bioEditor=null; state.demo=null;
+      toast('Set cleared');
+    } catch { toast('Не удалось сохранить BIO или очистить карточку. Данные оставлены на экране.', 'err'); }
+    finally { editor?.release();state.demoBusy=false;renderView(); }
     return;
   }
   if (action === 'classifier-copy-row' || action === 'classifier-copy-table') {

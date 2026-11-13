@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-test('BIO fields cannot be changed while an asynchronous save or suggestion is pending', async () => {
+test('BIO autosave keeps inputs editable, removes Save/unsaved banner and offers each field regeneration', async () => {
   const { state } = await import('../../src/js/state.js');
   const { biographyHTML } = await import('../../src/js/ui/biography.js');
   state.demo = { id: 'test' };
@@ -22,7 +22,9 @@ test('BIO fields cannot be changed while an asynchronous save or suggestion is p
   const html = biographyHTML();
   const controls = html.match(/<(?:input|textarea|select)\b[^>]*>/g);
   assert.equal(controls.length, 9);
-  for (const control of controls) assert.match(control, /\bdisabled\b/);
-  for (const control of html.match(/<button[^>]*data-action="bio-(?:work|generate)"[^>]*>/g))
-    assert.match(control, /\bdisabled\b/);
+  for (const control of controls) assert.doesNotMatch(control, /\bdisabled\b/);
+  assert.doesNotMatch(html, /bio-save|Сохранить BIO|Есть несохранённые изменения/);
+  assert.equal((html.match(/data-action="bio-regenerate"/g) || []).length, 7);
+  assert.equal((html.match(/data-action="bio-copy"/g) || []).length, 7);
+  assert.match(html, /Сохраняем/);
 });

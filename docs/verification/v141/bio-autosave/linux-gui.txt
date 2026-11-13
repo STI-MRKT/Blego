@@ -1,0 +1,46 @@
+
+> blego@1.4.1 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (16164.498294ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (4076.98597ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (3180.926337ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (6665.332437ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (1318.926118ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1672.26162ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (2270.898788ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1373.195793ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (9469.725016ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3247.540787ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2168.342949ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (1942.831928ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (5126.994542ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (2178.283578ms)
+✔ BIO real catalog fills all eight country hubs and leaves sparse towns empty through real generator IPC (4487.04307ms)
+✔ BIO replacement and clear freeze inputs while IPC is pending and retain the last saved history (898.247001ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (1774.474558ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9176.516017ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1154.637269ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4160.568957ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2577.593277ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (869.910205ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (2422.424184ms)
+✔ map drag retains dirty date through actual preview and export (4185.965422ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4297.599041ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (4288.829027ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3539.881664ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3655.940596ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (5120.647372ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1838.754359ms)
+✔ first-run tour never steals navigation after the user starts working (1723.102186ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (20981.275373ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2485.83631ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (5625.6087ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157245.730804

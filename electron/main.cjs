@@ -16,6 +16,7 @@ const { startServer } = require('./server.cjs');
 
 let serverInstance = null;
 let serverUrl = null;
+let biographyCloseGate = null;
 
 const { openStore } = require('./local/store.cjs');
 const { getSettings, updateSettings } = require('./local/settings.cjs');
@@ -473,17 +474,21 @@ async function initialize() {
       classificationConfirm: (arg) =>
         classification.confirmClassification(arg.operationId, arg.decision),
       generate: (request) => generateProfile(request, { store }),
+      closeGuardReady: () => biographyCloseGate?.ready(),
+      finishClose: (result) => biographyCloseGate?.acknowledge(result),
       biography: (request) => {
         const service = require('./features/generator/biography.cjs');
         const p = store.get('lastCard');
         if (!p || p.id !== request?.profileId) throw Error('STALE_PROFILE');
         if (request.action === 'save') return service.saveBiography(request, { store });
-        if (request.action === 'suggest') return service.bioSuggestions(p, { store });
+        if (request.action === 'suggest')
+          return service.bioSuggestions(p, { store, field: request.field, values: request.values });
         if (request.action !== 'read') throw Error('INVALID_BIO');
-        const institutions = require('../resources/generator/institutions.json').filter(
-          (i) => i.country === p.country
-        );
-        return { values: service.bioDefaults(p), institutions };
+        return {
+          values: service.bioDefaults(p),
+          institutions: service.organizationOptions(p),
+          revision: p.biographyRevision || 0
+        };
       },
       poolStats: (request) => getPoolStats(request, { store }),
       poolChoose: async () => {
@@ -565,6 +570,17 @@ async function createWindow() {
     }
   });
   mainWindow = window;
+  biographyCloseGate = require('./features/generator/biography-close.cjs').createBiographyCloseGate(
+    {
+      send: (token) => window.webContents.send('local:before-close', token),
+      close: () => window.close(),
+      quit: () => app.quit()
+    }
+  );
+  window.on('close', (event) => biographyCloseGate?.onClose(event));
+  window.on('closed', () => {
+    biographyCloseGate = null;
+  });
   window.webContents.on('will-navigate', (event, target) => {
     if (target !== url) event.preventDefault();
   });
@@ -616,6 +632,11 @@ if (!hasLock) {
       imageExportPromise.finally(() => app.quit()).catch(() => {});
       return;
     }
+    biographyCloseGate?.beforeQuit(event);
+  });
+  // before-quit may be cancelled while BIO writes finish. Never close SQLite
+  // until Electron has accepted shutdown and all windows have actually closed.
+  app.on('will-quit', () => {
     if (serverInstance) serverInstance.close();
     proxyController?.abort();
     news?.close();
