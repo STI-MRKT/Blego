@@ -109,13 +109,19 @@ export async function startTour({ navigate, shouldStart = () => true } = {}) {
 
   let index = 0;
   let current = null;
+  let active = true;
+  let revision = 0;
 
   const finish = () => {
+    active = false;
+    revision++;
     markTourSeen();
     root.remove();
     window.removeEventListener('resize', reposition);
     window.removeEventListener('scroll', reposition, true);
     document.removeEventListener('keydown', onKey);
+    document.removeEventListener('pointerdown', onNavigation, true);
+    document.removeEventListener('click', onNavigation, true);
   };
 
   const setBlocks = (rect, full = false) => {
@@ -178,6 +184,8 @@ export async function startTour({ navigate, shouldStart = () => true } = {}) {
   };
 
   const show = async (next) => {
+    if (!active) return;
+    const request = ++revision;
     index = clamp(next, 0, STEPS.length - 1);
     const step = STEPS[index];
     current = step;
@@ -193,6 +201,7 @@ export async function startTour({ navigate, shouldStart = () => true } = {}) {
     if (step.view) navigate?.(step.view);
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     await new Promise((resolve) => setTimeout(resolve, 180));
+    if (!active || request !== revision) return;
     const target = document.querySelector(step.selector);
     if (!target) {
       show(next + 1);
@@ -200,13 +209,14 @@ export async function startTour({ navigate, shouldStart = () => true } = {}) {
     }
     target.scrollIntoView({ block: 'center', behavior: 'smooth' });
     await new Promise((resolve) => setTimeout(resolve, 260));
+    if (!active || request !== revision) return;
     root.classList.remove('is-finish');
     blocks.forEach((block) => { block.style.display = 'block'; });
     place(target, step);
   };
 
   const reposition = () => {
-    if (!current || current.finish) return;
+    if (!active || !current || current.finish) return;
     const target = document.querySelector(current.selector);
     if (target) place(target, current);
   };
@@ -234,6 +244,11 @@ export async function startTour({ navigate, shouldStart = () => true } = {}) {
     if (event.key === 'ArrowLeft') show(index - 1);
   };
   document.addEventListener('keydown', onKey, { once: false });
+  const onNavigation = (event) => {
+    if (event.target.closest('.nav-item[data-view]')) finish();
+  };
+  document.addEventListener('pointerdown', onNavigation, true);
+  document.addEventListener('click', onNavigation, true);
 
   show(0);
   return true;
