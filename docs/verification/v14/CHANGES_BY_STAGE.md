@@ -1,6 +1,6 @@
 # BLEGO1.4: изменения по этапам
 
-База782c1b2 сохранена. Ветка: [codex/blego-v1-4-improvements](https://github.com/STI-MRKT/Blego/tree/codex/blego-v1-4-improvements). Все существующие PR1/3/5 остаются без изменений; слияния и официального релиза нет.
+[PR #6](https://github.com/STI-MRKT/Blego/pull/6) создан для проверки, без слияния. База782c1b2 сохранена. Ветка: [codex/blego-v1-4-improvements](https://github.com/STI-MRKT/Blego/tree/codex/blego-v1-4-improvements). Все существующие PR1/3/5 остаются без изменений; слияния и официального релиза нет.
 
 | Коммит | Этап и результат |
 |---|---|

@@ -131,7 +131,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 ## Task 10: independent review and handoff
 
 - [x] Fresh whole-branch reviewer against this spec/base; reproduce and fix important findings with tests and repeat affected/full/native checks.
-- [ ] New PR to base final-hardening, no merge; attach PR to task.
+- [x] New PR #6 to base final-hardening, no merge; attached to task.
 - [x] Commit acceptance matrix, Linux/Mac evidence, synthetic A/B results, GPS readbacks, screenshots, changed files, limitations and final installer link/checksum.
 
 ## Consolidated execution order (supersedes remaining order above)
