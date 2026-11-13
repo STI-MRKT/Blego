@@ -5,9 +5,12 @@ const fs = require('node:fs'),
   assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { imageFixture } = require('../tests/fixtures/images.cjs');
-const { createImageService } = require('../electron/features/images/service.cjs');
-const { createEngine } = require('../electron/features/images/engine.cjs');
-const { normalizedValue } = require('../electron/features/images/policy.cjs');
+const project = path.resolve(process.env.BLEGO_QA_PROJECT || path.join(__dirname, '..'));
+const { createImageService } = require(path.join(project, 'electron/features/images/service.cjs'));
+const { createEngine } = require(path.join(project, 'electron/features/images/engine.cjs'));
+const { normalizedValue } = require(path.join(project, 'electron/features/images/policy.cjs'));
+const maxCount = Number(process.env.BLEGO_PHOTO_QA_COUNT || 20);
+if (![20, 100, 500, 1000].includes(maxCount)) throw Error('INVALID_PHOTO_QA_COUNT');
 const sharp = require('sharp');
 const folderLoad = process.env.BLEGO_FOLDER_LOAD === '1';
 const generatedGeo = process.env.BLEGO_GEO_LOAD === '1' || folderLoad;
@@ -27,6 +30,8 @@ const sha = (file) => createHash('sha256').update(fs.readFileSync(file)).digest(
       at: new Date().toISOString(),
       os: process.platform,
       arch: process.arch,
+      maxPhotoCount: maxCount,
+      project,
       fixture: generatedGeo
         ? 'Synthetic 12×8 batches plus 4000×3000 RGBA/oriented JPEG/PNG/WebP; not worst-case 40 MP stress'
         : 'Synthetic 12×8 RGBA/oriented images, not worst-case 40 MP stress',
@@ -38,8 +43,7 @@ const sha = (file) => createHash('sha256').update(fs.readFileSync(file)).digest(
     for (const count of [
       1,
       10,
-      100,
-      ...(folderLoad ? [500, 1000] : []),
+      ...[20, 100, 500, 1000].filter((n) => n <= maxCount && (folderLoad || n <= 100)),
       ...(generatedGeo ? [3] : [])
     ]) {
       const highResolution = generatedGeo && count === 3;

@@ -1,0 +1,35 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (33352.275792ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (6506.598792ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (8087.741709ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (5422.160292ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (6206.391583ms)
+✔ classifier UI has eleven compact columns, explicit schema/mapping and stable navigation (7572.1735ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (22420.352792ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (7671.039125ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (6326.68725ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (10427.94025ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (34540.256834ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (4879.308834ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (14488.420917ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (7709.344416ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (5225.549167ms)
+✔ News preserves topic, ignores late other-topic replies and copies each article value (9948.580417ms)
+✔ map drag retains dirty date through actual preview and export (9606.046083ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (12323.895333ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (10085.881792ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (9266.411792ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (9316.816584ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (9689.722416ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (5423.320625ms)
+✔ first-run tour never steals navigation after the user starts working (2888.83375ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (35953.179375ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (9921.654667ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (11116.14675ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 337688.152167

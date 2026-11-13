@@ -37,9 +37,9 @@ const { openStore } = require('../electron/local/store.cjs');
     const padded = path.join(root, '49MiB.png');
     fs.writeFileSync(padded, Buffer.concat([bytes.subarray(0, -12), chunk, bytes.subarray(-12)]));
     inputFiles = [file, big, padded];
-  } else inputFiles = distinctCopies(file, 100);
+  } else inputFiles = distinctCopies(file, 20);
   const folderCount = Number(process.env.BLEGO_GUI_FOLDER_COUNT || 0);
-  if (![0, 100, 500, 1000].includes(folderCount)) throw Error('INVALID_GUI_FOLDER_COUNT');
+  if (![0, 20, 100, 500, 1000].includes(folderCount)) throw Error('INVALID_GUI_FOLDER_COUNT');
   const folder = path.join(root, 'input-folder');
   if (folderCount) {
     inputFiles = Array.from({ length: folderCount }, (_, i) => {

@@ -87,7 +87,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
       - name: Comparable manual metadata baseline and candidate
         run: |
-          node "$RUNNER_TEMP/blego-baseline-reference/scripts/check-metadata-load.cjs" release/metadata-load-baseline13.json
+          BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline13.json
           node scripts/check-metadata-load.cjs release/metadata-load-candidate-manual.json
       - name: Licensed real high-resolution photograph comparison
         run: |
@@ -114,7 +114,7 @@ jobs:
       - name: Installed photo batch and original UX comparison
         run: |
           BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log
-          BLEGO_GUI_FOLDER_COUNT=1000 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder1000-darwin.log
+          BLEGO_GUI_FOLDER_COUNT=20 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder20-darwin.log
           git worktree add --detach "$RUNNER_TEMP/blego-original-reference" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
           node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
@@ -149,7 +149,7 @@ jobs:
             release/real-photo-*.json
             release/responsive-native.json
             release/verification-native.log
-            release/metadata-ui-folder1000-*.log
+            release/metadata-ui-folder20-*.log
             release/*.png
             release/ux-performance-*.json
             release/metadata-load-*.json
@@ -173,7 +173,7 @@ jobs:
             release/native-darwin-*.json
             release/metadata-load-*.json
             release/metadata-ui-batch-*.log
-            release/metadata-ui-folder1000-*.log
+            release/metadata-ui-folder20-*.log
             release/real-photo-*.json
             release/responsive-native.json
             release/verification-native.log

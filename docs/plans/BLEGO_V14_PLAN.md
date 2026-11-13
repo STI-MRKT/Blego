@@ -119,9 +119,9 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 ## Task 8: full regression
 
-- [ ] `npm ci`, lint, unit, integration, GUI, verify; baseline scenarios retained, no skipped tests for green status.
-- [ ] Verify protected resources, classifier export/row-cookie, Proxy/Trust/News, storage/restart and all new modules at both viewport sizes.
-- [ ] Candidate version 1.4.0; record new acceptance matrix and source limits.
+- [x] `npm ci`, lint, unit, integration, GUI, verify; baseline scenarios retained, no skipped tests for green status.
+- [x] Verify protected resources, classifier export/row-cookie, Proxy/Trust/News, storage/restart and all new modules at both viewport sizes.
+- [x] Candidate version 1.4.0; record new acceptance matrix and source limits.
 
 ## Task 9: native ARM64 QA
 
@@ -153,3 +153,7 @@ Completed work is not replayed or reset. Current tasks 2–5 are partial evidenc
 ## Steering: phone copy and address order
 
 After responsive stage, before Settings: implement owner's `BLEGO_V14_GENERATOR_PHONE_ADDRESS_ADDENDUM.md` in a separate commit. National-number transformation only for the adjacent Generator phone button, using the displayed saved profile country (not a subsequently changed selector); keep zeros and full-set/persistence. Address display order address/city/postalCode for 24 presets. Focused unit/GUI tests, update superseded full-phone adjacent-button assertions while retaining full-set tests; full regression.
+
+## Owner steering: Photos acceptance20
+
+Owner reduced the discussed1000-photo workload to20. Mandatory source/native GUI batches now20; engine1/10/20 plus3high-resolution formats; same current harness targets baseline13 and candidate for comparable20-file measurements. Existing capacity remains, optional larger stress runs explicit. Current96b81f4 native run started before steering finishes as supplemental evidence. A fresh native run must exercise the new20-file QA profile; no production application changes are required. See BLEGO_V14_PHOTOS_20_ACCEPTANCE_ADDENDUM.md.
