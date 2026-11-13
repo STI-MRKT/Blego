@@ -198,3 +198,25 @@ test('group date rules retain per-file offsets and survive store reopen without 
   assert.deepEqual(restored.groups[0].operations, operations);
   assert.deepEqual(restored.membership, {});
 });
+
+test('XMP subseconds are distinct from the timezone when keeping its offset', () => {
+  const {
+    dateWriteArgs,
+    previewDates,
+    verifyDate
+  } = require('../../electron/features/images/date-policy.cjs');
+  for (const offset of ['+03:00', '-05:00', 'Z', '']) {
+    const before = { 'XMP-exif:DateTimeOriginal': `2020:01:02 03:04:05.123${offset}` };
+    const op = {
+      field: 'captureDate',
+      action: 'set',
+      scope: ['xmp'],
+      value: { local: '2025-06-07T08:09:10', offsetMode: 'keep' }
+    };
+    assert.ok(
+      dateWriteArgs(op, before).includes(`-XMP-exif:DateTimeOriginal=2025:06:07 08:09:10${offset}`)
+    );
+    assert.equal(previewDates(op, before)[0].before.offset, offset || null);
+    verifyDate(op, before, { 'XMP-exif:DateTimeOriginal': `2025:06:07 08:09:10${offset}` });
+  }
+});

@@ -16,7 +16,7 @@ for (const auth of [false, true])
       assert.equal(r.assessment.score, null);
       assert.ok(r.timings.ipRequestMs >= 0);
     }
-    assert.equal(f.remoteDns(), false);
+    assert.equal(f.remoteDns(), true);
   });
 for (const status of [503, 429])
   test(`HTTP ${status} with success body is not success`, async (t) => {
@@ -108,34 +108,35 @@ test('wrong proxy credentials fail for all controlled transports', async (t) => 
     assert.equal(r.connection, 'failed');
   }
 });
-test('SOCKS5h uses remote DNS, explicit speed goes through the selected route, and no API opt-in sends no reputation request', async (t) => {
-  const f = await fixtures(t);
-  let called = 0;
-  const r = await checkProxy(
-    { value: f.proxies[2].replace('socks5:', 'socks5h:'), fullTest: true },
-    null,
-    {
-      target: f.target,
-      speedTarget: f.target,
-      ca: f.ca,
-      resolveEndpoint: async (host) => host,
-      providers: [
-        {
-          id: 'spy',
-          lookup() {
-            called++;
+for (const protocol of ['socks5:', 'socks5h:'])
+  test(`${protocol} uses remote DNS, explicit speed goes through the selected route, and no API opt-in sends no reputation request`, async (t) => {
+    const f = await fixtures(t);
+    let called = 0;
+    const r = await checkProxy(
+      { value: f.proxies[2].replace('socks5:', protocol), fullTest: true },
+      null,
+      {
+        target: f.target,
+        speedTarget: f.target,
+        ca: f.ca,
+        resolveEndpoint: async (host) => host,
+        providers: [
+          {
+            id: 'spy',
+            lookup() {
+              called++;
+            }
           }
-        }
-      ]
-    }
-  );
-  assert.equal(r.connection, 'ok');
-  assert.equal(f.remoteDns(), true);
-  assert.ok(r.speed.bytes > 0);
-  assert.equal(r.quality.attempts, 3);
-  assert.equal(called, 0);
-  assert.ok(r.timings.tcpMs >= 0);
-});
+        ]
+      }
+    );
+    assert.equal(r.connection, 'ok');
+    assert.equal(f.remoteDns(), true);
+    assert.ok(r.speed.bytes > 0);
+    assert.equal(r.quality.attempts, 3);
+    assert.equal(called, 0);
+    assert.ok(r.timings.tcpMs >= 0);
+  });
 test('local service addresses are blocked and credentials never appear in result', async () => {
   const r = await checkProxy({ value: 'http://user:synthetic-password@127.0.0.1:80' });
   assert.equal(r.code, 'REQUEST_BLOCKED');

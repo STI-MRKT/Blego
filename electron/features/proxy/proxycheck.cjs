@@ -104,7 +104,8 @@ function createProxycheckProvider({
         return data;
       } catch (e) {
         if (signal?.aborted) throw Error('CANCELLED');
-        if (timed.aborted) throw Error('PROVIDER_TIMEOUT');
+        if (timed.aborted)
+          throw Object.assign(Error('PROVIDER_TIMEOUT'), { code: 'PROVIDER_TIMEOUT' });
         const code = [
           'PROVIDER_AUTH',
           'PROVIDER_DENIED',

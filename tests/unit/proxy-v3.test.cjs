@@ -105,7 +105,9 @@ test('provider TTL, cancellation and errors cannot leak a key or invent stale tr
   });
   const keep = setInterval(() => {}, 20);
   try {
-    await assert.rejects(timeout.lookup(ip, new AbortController().signal), /PROVIDER_TIMEOUT/);
+    const { lookupProviders } = require('../../electron/features/proxy/providers.cjs');
+    const result = await lookupProviders(ip, [timeout], new AbortController().signal);
+    assert.equal(result[0].status, 'timeout');
   } finally {
     clearInterval(keep);
   }

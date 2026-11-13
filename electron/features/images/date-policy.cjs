@@ -2,6 +2,11 @@
 const { isDeepStrictEqual } = require('node:util');
 const namespaces = ['exif', 'xmp'];
 const scope = (op) => op.scope || namespaces;
+// XMP timestamps can contain fractional seconds before an optional timezone.
+const xmpOffset = (value) =>
+  String(value)
+    .slice(19)
+    .replace(/^\.\d+/, '') || null;
 function dateKeys(raw, namespace) {
   return Object.keys(raw).filter(
     (key) =>
@@ -19,7 +24,7 @@ function representation(raw, namespace) {
     offset:
       namespace === 'exif'
         ? raw[keys.find((k) => k.endsWith(':OffsetTimeOriginal'))] || null
-        : value.slice(19) || null
+        : xmpOffset(value)
   };
 }
 function expectedDate(op, before, namespace) {
@@ -30,7 +35,7 @@ function expectedDate(op, before, namespace) {
   if (mode === 'keep') {
     const values = dateKeys(before, namespace)
       .filter((k) => k.endsWith(namespace === 'exif' ? ':OffsetTimeOriginal' : ':DateTimeOriginal'))
-      .map((k) => (namespace === 'exif' ? String(before[k]) : String(before[k]).slice(19) || null));
+      .map((k) => (namespace === 'exif' ? String(before[k]) : xmpOffset(before[k])));
     if (new Set(values).size > 1) throw Error('METADATA_CONFLICTING_DATE_OFFSETS');
     offset = values[0] || null;
     if (offset !== null && !/^(?:Z|[+-](?:0\d|1[0-4]):[0-5]\d)$/.test(offset))

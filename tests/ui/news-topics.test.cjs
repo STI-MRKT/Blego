@@ -85,6 +85,36 @@ test(
     assert.equal(await page.locator('[name="newsSources"]').count(), 0);
     await app.close();
     app = null;
+    // Real persisted snapshot, reopened through the existing SQLite service.
+    const { openStore } = require('../../electron/local/store.cjs');
+    const { NEWS_SOURCES } = require('../../shared/news-catalog.mjs');
+    const source = NEWS_SOURCES.find((s) => s.topic === 'finance');
+    const savedAt = '2026-11-01T12:34:56.000Z';
+    const store = await openStore(root);
+    store.db
+      .prepare(
+        'INSERT INTO news VALUES(?,?) ON CONFLICT(source_id) DO UPDATE SET snapshot=excluded.snapshot'
+      )
+      .run(
+        source.id,
+        JSON.stringify({
+          sourceUrl: source.url,
+          status: 'ok',
+          lastSuccessfulAt: savedAt,
+          lastAttemptAt: savedAt,
+          items: [
+            {
+              id: 'saved-finance',
+              title: 'Saved finance headline',
+              source: source.name,
+              topic: 'finance',
+              link: 'https://example.com/saved-finance',
+              publishedAt: Date.parse(savedAt)
+            }
+          ]
+        })
+      );
+    store.close();
     page = await launch();
     await page.locator('[data-view="news"]').waitFor();
     await waitForAsync(page, async () => {
@@ -98,5 +128,9 @@ test(
       }),
       'finance'
     );
+    await page.locator('[data-view="news"]').click();
+    await page.getByText('Saved finance headline', { exact: true }).waitFor();
+    const expectedDate = await page.evaluate((at) => new Date(at).toLocaleString(), savedAt);
+    assert.equal(await page.locator('.news-sub').textContent(), `Updated ${expectedDate}`);
   }
 );

@@ -64,6 +64,9 @@ async function ipLookup(
     const host = proxy.hostname.replace(/^\[|\]$/g, '');
     const address = await withAbort(resolveEndpoint(host, signal), signal);
     pinned.hostname = net.isIPv6(address) ? `[${address}]` : address;
+    // Both supported SOCKS5 spellings resolve the destination on the proxy.
+    // Only the proxy endpoint itself is resolved and pinned locally.
+    if (pinned.protocol === 'socks5:') pinned.protocol = 'socks5h:';
     agent = proxy.protocol.startsWith('socks5')
       ? new SocksProxyAgent(pinned, { timeout: 10000 })
       : new HttpsProxyAgent(pinned, {

@@ -9,3 +9,7 @@ Native QA workflow gates: verified embedded ARM64 Perl/ExifTool → lint/unit/in
 Linux original/candidate performance harness was executed successfully; headless frame cadence is not treated as Mac animation acceptance. Main acceptance measurements must come from the native Mac job. Samples are three isolated launches per version, not cold filesystem-cache lab measurements. Native runner hardware/OS are recorded separately; performance variability is reported rather than hidden behind arbitrary thresholds.
 
 Linux checks: `npm run verify` passed lint, 61 unit and 88 integration tests. `BLEGO_HEADLESS=1 npm run test:ui` passed all 15 tests, zero skipped. Installed-style GUI batch exported 100/100 copies in 53.13 seconds (100 progress rows, maximum sampled event-loop gap 229 ms); these are small 12×8 RGBA fixtures, not a maximum-size image stress claim.
+
+Fresh whole-branch read-only review found and reproduced three P2 issues and one minor diagnostic issue. Fixes: both SOCKS5 URL spellings use remote destination DNS; fractional XMP seconds do not corrupt preserved timezone parsing; restored News snapshots display their saved freshness timestamp; provider timeout retains its specific status. New assertions failed before the fixes. The reviewer checked the incremental fixes and reported no further important concern.
+
+After review fixes: `npm run verify` PASS (lint, 61 unit, 90 integration), full Electron GUI 15/15 PASS, zero skipped. The revised native candidate must complete a new Mac run.

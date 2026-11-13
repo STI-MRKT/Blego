@@ -1385,6 +1385,7 @@ if (window.blego) {
     state.news.topic = newsTopic(state.settings.newsTopic);
     const cached = await window.blego.newsSnapshot(state.news.topic);
     Object.assign(state.news, cached);
+    state.news.updatedAt = cached.lastSuccessfulAt ? Date.parse(cached.lastSuccessfulAt) : 0;
     window.blego.onNews((data) => {
       if(data.topic !== state.news.topic) return;
       Object.assign(state.news, data);
