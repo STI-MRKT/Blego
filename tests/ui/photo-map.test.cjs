@@ -143,10 +143,18 @@ test(
     await page.waitForFunction(
       () => document.querySelector('#photo-map-canvas').dataset.points === '2'
     );
+    if (process.env.BLEGO_CAPTURE) {
+      await canvas.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(process.env.BLEGO_CAPTURE, 'v14-map-before.png') });
+    }
     await page.locator('[data-map-action="after"]').click();
     await page.waitForFunction(
       () => document.querySelector('#photo-map-canvas').dataset.points === '3'
     );
+    if (process.env.BLEGO_CAPTURE) {
+      await canvas.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(process.env.BLEGO_CAPTURE, 'v14-map-after.png') });
+    }
     await canvas.focus();
     const scale = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');

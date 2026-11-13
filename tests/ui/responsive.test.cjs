@@ -224,6 +224,7 @@ test(
       fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
       for (const w of [360, 480, 980, 1280]) {
         await resize(w);
+        await page.evaluate(() => document.querySelector('.toasts')?.replaceChildren());
         await page.waitForTimeout(650);
         await page.screenshot({
           path: path.join(process.env.BLEGO_CAPTURE, `responsive-${w}.png`)

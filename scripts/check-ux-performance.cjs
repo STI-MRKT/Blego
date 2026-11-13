@@ -17,11 +17,12 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
     arch: process.arch,
     release: os.release(),
     method:
-      'Three isolated launches per version; visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.',
+      'Three isolated launches per version; baseline13 and candidate additionally import identical 1000-row synthetic CSV;  visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.',
     versions: []
   };
   for (const [label, project, binary] of [
     ['original', original, undefined],
+    ...(args.includes('--baseline') ? [['baseline13', get('--baseline'), undefined]] : []),
     ['candidate', process.cwd(), executable]
   ]) {
     const samples = [];
@@ -70,7 +71,32 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
             })
         );
         frames.sort((a, b) => a - b);
+        let import1000Ms = null;
+        if (label !== 'original') {
+          await page.locator('[data-view="import"]').first().click();
+          const csv =
+            'fullName,accountId,email,geo\n' +
+            Array.from(
+              { length: 1000 },
+              (_, i) => `Synthetic ${i},${100000000000000 + i},person${i}@example.test,US`
+            ).join('\n');
+          const begin = performance.now();
+          await page.locator('#file-input').setInputFiles({
+            name: 'synthetic-performance.csv',
+            mimeType: 'text/csv',
+            buffer: Buffer.from(csv)
+          });
+          await page.locator('[data-classifier-status]').waitFor();
+          import1000Ms = Math.round(performance.now() - begin);
+          const count = await page.evaluate(async () => {
+            const { state } = await import('/js/state.js');
+            return state.importData.counts.total;
+          });
+          if (count !== 1000) throw Error('PERFORMANCE_IMPORT_COUNT');
+          await page.locator('[data-view="generator"]').first().click();
+        }
         samples.push({
+          import1000Ms,
           launchMs: Math.round(launchMs),
           generationMs: Math.round(generationMs),
           frameMedianMs: frames[Math.floor(frames.length / 2)],

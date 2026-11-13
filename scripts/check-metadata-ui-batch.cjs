@@ -1,5 +1,5 @@
 const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
-// Explicit synthetic 100-file GUI load check, not part of each quick regression run.
+// Explicit synthetic GUI workload, separate from the quick regression suite.
 const fs = require('node:fs'),
   path = require('node:path'),
   os = require('node:os');
@@ -38,6 +38,17 @@ const { openStore } = require('../electron/local/store.cjs');
     fs.writeFileSync(padded, Buffer.concat([bytes.subarray(0, -12), chunk, bytes.subarray(-12)]));
     inputFiles = [file, big, padded];
   } else inputFiles = distinctCopies(file, 100);
+  const folderCount = Number(process.env.BLEGO_GUI_FOLDER_COUNT || 0);
+  if (![0, 100, 500, 1000].includes(folderCount)) throw Error('INVALID_GUI_FOLDER_COUNT');
+  const folder = path.join(root, 'input-folder');
+  if (folderCount) {
+    inputFiles = Array.from({ length: folderCount }, (_, i) => {
+      const p = path.join(folder, `album-${i % 5}`, `photo-${i}.png`);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.copyFileSync(file, p);
+      return p;
+    });
+  }
   const expected = inputFiles.length;
   let app;
   try {
@@ -74,8 +85,10 @@ const { openStore } = require('../electron/local/store.cjs');
           return { canceled: false, filePaths: paths };
         };
       }, paths);
-    await choose(inputFiles);
-    await page.locator('[data-action="images-choose"]').click();
+    await choose(folderCount ? [folder] : inputFiles);
+    await page
+      .locator(folderCount ? '[data-action="images-folder"]' : '[data-action="images-choose"]')
+      .click();
     await waitForAsync(
       page,
       async (expected) => {
@@ -83,7 +96,7 @@ const { openStore } = require('../electron/local/store.cjs');
         return state.photos.length === expected && !state.imagesBusy;
       },
       expected,
-      { timeout: 180000 }
+      { timeout: folderCount ? 600000 : 180000 }
     );
     const reads = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
@@ -98,10 +111,25 @@ const { openStore } = require('../electron/local/store.cjs');
         `Read count ${reads}: ${JSON.stringify(statuses)}; toasts=${await page.locator('.toasts').textContent()}`
       );
     }
+    const readMs = Date.now() - started;
     console.log(`${expected} files read`);
-    await page.locator('[name="action-gps"]').selectOption('set');
-    await page.locator('[name="gps-latitude"]').fill('0');
-    await page.locator('[name="gps-longitude"]').fill('-73.987654');
+    if (folderCount) {
+      await page.locator('#geo-country').fill('FR');
+      await page.locator('#geo-country').press('Tab');
+      await page.locator('#geo-city').selectOption('osm:relation:71525');
+      await page.locator('[data-action="geo-generate"]').click();
+      await waitForAsync(page, async () => {
+        const { state } = await import('/js/state.js');
+        return !state.geoBusy && !state.imagesBusy;
+      });
+    } else {
+      await page.locator('[name="action-gps"]').selectOption('set');
+      const manual = page.locator('#gps-manual');
+      if ((await manual.count()) && !(await manual.evaluate((el) => el.open)))
+        await manual.locator('summary').click();
+      await page.locator('[name="gps-latitude"]').fill('0');
+      await page.locator('[name="gps-longitude"]').fill('-73.987654');
+    }
     await page.locator('[name="action-captureDate"]').selectOption('set');
     await page.locator('[name="date-local"]').fill('2024-02-29T12:34:56');
     await page.locator('[name="date-offset-mode"]').selectOption('set');
@@ -117,7 +145,7 @@ const { openStore } = require('../electron/local/store.cjs');
         return Boolean(state.metadataExport) && !state.imagesBusy;
       },
       null,
-      { timeout: 180000 }
+      { timeout: folderCount ? 600000 : 180000 }
     );
     const report = await page.evaluate(async () => {
       clearInterval(__batchTimer);
@@ -126,21 +154,26 @@ const { openStore } = require('../electron/local/store.cjs');
         ticks: __batch.ticks,
         maxEventLoopGapMs: Math.round(__batch.maxGapMs),
         results: state.metadataExport.files.map((f) => f.status),
-        progressRows: Object.keys(state.metadataProgress).length
+        progressRows: Object.keys(state.metadataProgress).length,
+        outputNames: state.metadataExport.files.map((f) => f.outputName || f.name)
       };
     });
     const completed = report.results.filter((s) => s === 'completed').length;
     if (completed !== expected || report.progressRows !== expected)
       throw Error(JSON.stringify(report));
+    if (report.outputNames.some((name) => !fs.existsSync(path.join(output, name))))
+      throw Error('GUI_OUTPUT_MISSING');
     console.log(
       JSON.stringify(
         {
           host: process.platform + '-' + process.arch,
           executable: process.env.BLEGO_EXECUTABLE || 'development Electron',
           files: expected,
+          folderCount,
+          readMs,
           reads,
           completed,
-          outputFiles: fs.readdirSync(output).length,
+          outputFiles: report.outputNames.length,
           elapsedSeconds: (Date.now() - started) / 1000,
           eventLoopTicks: report.ticks,
           maxEventLoopGapMs: report.maxEventLoopGapMs,
