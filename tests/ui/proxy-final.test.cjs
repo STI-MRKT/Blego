@@ -9,6 +9,7 @@ test(
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-proxy-ui-'));
+    let releaseResponse = () => {};
     const store = await require('../../electron/local/store.cjs').openStore(root);
     store.set('tourSeen', true);
     store.close();
@@ -21,6 +22,7 @@ test(
       ]
     });
     t.after(async () => {
+      releaseResponse();
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
@@ -73,15 +75,28 @@ test(
     const started = new Promise((resolve) => {
       resolveStarted = resolve;
     });
+    const response = new Promise((resolve) => {
+      releaseResponse = resolve;
+    });
+    let resolveFinished;
+    const finished = new Promise((resolve) => {
+      resolveFinished = resolve;
+    });
     await page.route('**/api/net/speed', async (route) => {
       resolveStarted();
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      await route.fulfill({ json: { mbps: 999, bytes: 1, ttfb: 1 } }).catch(() => {});
+      await response;
+      await route
+        .fulfill({ json: { mbps: 999, bytes: 1, ttfb: 1 } })
+        .catch(() => {})
+        .finally(resolveFinished);
     });
     await page.locator('[data-action="net-run"]').click();
     await started;
+    await page.waitForTimeout(650); // Deliberately slower than the old 400ms fixture.
     await page.locator('[data-action="net-cancel"]').click();
-    await page.waitForTimeout(500);
+    releaseResponse();
+    await finished;
+    await page.waitForFunction(async () => !(await import('/js/state.js')).state.network.running);
     const state = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       return {

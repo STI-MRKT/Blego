@@ -1,0 +1,62 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (22953.851333ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (4804.734958ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (6338.120958ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (4624.853125ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (2967.240417ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (3558.816542ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (4342.802917ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (3151.965792ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (11504.327875ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (5542.786625ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (4870.290791ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (5696.574167ms)
+✔ TZ06 BIO edits and individual copies survive navigation, 360px and restart (6544.123042ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (17619.604416ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (3570.457ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (7595.301167ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (4179.730959ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (2598.656417ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (5970.640083ms)
+✔ map drag retains dirty date through actual preview and export (7285.59225ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (8163.277708ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (7078.439667ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (5224.362125ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (4973.208417ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (6246.182ms)
+✖ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (33533.601708ms)
+✔ first-run tour never steals navigation after the user starts working (3928.492084ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (25469.95825ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (7429.298708ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (7577.462584ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 29
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 254874.81375
+
+✖ failing tests:
+
+test at tests/ui/proxy-final.test.cjs:7:1
+✖ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (33533.601708ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+    - waiting for locator('[data-action="net-cancel"]')
+      - locator resolved to <button class="btn" data-action="net-cancel">Cancel</button>
+    - attempting click action
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - performing click action
+      - <html lang="en" data-theme="dark">…</html> intercepts pointer events
+    - retrying click action
+      - waiting for element to be visible, enabled and stable
+    - element was detached from the DOM, retrying
+  
+      at TestContext.<anonymous> (/Users/runner/work/Blego/Blego/tests/ui/proxy-final.test.cjs:83:54) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('[data-action="net-cancel"]')`, '    - locator resolved to <button class="btn" data-action="net-cancel">Cancel</button>', '  - attempting click action', '    - waiting for element to be visible, enabled and stable', '    - element is visible, enabled and stable', '    - scrolling into view if needed', '    - done scrolling', '    - performing click action', '    - <html lang="en" data-theme="dark">…</html> intercepts pointer events', '  - retrying click action', '    - waiting for element to be visible, enabled and stable', '  - element was detached from the DOM, retrying' ]
+  }
