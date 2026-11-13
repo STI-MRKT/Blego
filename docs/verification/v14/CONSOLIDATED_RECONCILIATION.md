@@ -1,5 +1,7 @@
 # Consolidated specification #5 reconciliation
 
+Historical interim audit below. Current candidate results and remaining limitations: [ACCEPTANCE.md](ACCEPTANCE.md), [E01-E60.md](E01-E60.md), [REVIEW.md](REVIEW.md). Do not interpret the old “remaining work” column as current status.
+
 Reconciled 2026-11-13 against local branch `codex/blego-v1-4-improvements`, HEAD `39ed4bb` (base `782c1b2`). Uploaded consolidated text is preserved verbatim at `docs/specs/BLEGO_V14_TZ05_CONSOLIDATED.md`; earlier specifications/evidence remain historical. This is an interim audit, not final candidate acceptance.
 
 | Requirement                          | Existing implementation / evidence                                                                                                                                                             | Remaining verification or work                                                                                                                                                                                                                       |

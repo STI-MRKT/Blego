@@ -1,0 +1,16 @@
+20 files read
+{
+  "host": "darwin-arm64",
+  "executable": "/Users/runner/work/_temp/BLEGO-qa.app/Contents/MacOS/BLEGO",
+  "files": 20,
+  "folderCount": 20,
+  "readMs": 5330,
+  "reads": 20,
+  "completed": 20,
+  "outputFiles": 20,
+  "elapsedSeconds": 10.969,
+  "eventLoopTicks": 344,
+  "maxEventLoopGapMs": 161,
+  "progressRows": 20,
+  "fixture": "12×8 RGBA PNG; not maximum-size stress"
+}

@@ -125,14 +125,14 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 ## Task 9: native ARM64 QA
 
-- [ ] Extend existing QA workflow to this branch; verified embedded runtime before packaging, actual installed app outside checkout, new GEO/high-resolution batch, before/after screenshots and measured performance.
-- [ ] Download successful artifact, check ZIP CRC, DMG hash and reports; include Russian installation instructions. Unsigned QA is distinct from signed distribution (BLOCKED without owner credentials).
+- [x] Extend existing QA workflow to this branch; verified embedded runtime before packaging, actual installed app outside checkout, new GEO/high-resolution batch, before/after screenshots and measured performance.
+- [x] Download successful artifact, check ZIP CRC, DMG hash and reports; include Russian installation instructions. Unsigned QA is distinct from signed distribution (BLOCKED without owner credentials).
 
 ## Task 10: independent review and handoff
 
-- [ ] Fresh whole-branch reviewer against this spec/base; reproduce and fix important findings with tests and repeat affected/full/native checks.
+- [x] Fresh whole-branch reviewer against this spec/base; reproduce and fix important findings with tests and repeat affected/full/native checks.
 - [ ] New PR to base final-hardening, no merge; attach PR to task.
-- [ ] Commit acceptance matrix, Linux/Mac evidence, synthetic A/B results, GPS readbacks, screenshots, changed files, limitations and final installer link/checksum.
+- [x] Commit acceptance matrix, Linux/Mac evidence, synthetic A/B results, GPS readbacks, screenshots, changed files, limitations and final installer link/checksum.
 
 ## Consolidated execution order (supersedes remaining order above)
 
