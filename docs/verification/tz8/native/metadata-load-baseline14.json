@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-13T22:45:00.407Z",
+  "os": "darwin",
+  "arch": "arm64",
+  "maxPhotoCount": 20,
+  "project": "/Users/runner/work/_temp/blego-baseline-reference",
+  "fixture": "Synthetic 12×8 RGBA/oriented images, not worst-case 40 MP stress",
+  "batches": [
+    {
+      "folderLoad": false,
+      "scanMs": 2.938625000000002,
+      "peakRssBytes": 86884352,
+      "eventLoopP95Ms": 22.986751,
+      "count": 1,
+      "completed": 1,
+      "readMs": 96,
+      "exportMs": 318,
+      "totalMs": 519,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    },
+    {
+      "folderLoad": false,
+      "scanMs": 2.0301660000000084,
+      "peakRssBytes": 98779136,
+      "eventLoopP95Ms": 24.444927,
+      "count": 10,
+      "completed": 10,
+      "readMs": 873,
+      "exportMs": 1463,
+      "totalMs": 3168,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    },
+    {
+      "folderLoad": false,
+      "scanMs": 2.0422920000000886,
+      "peakRssBytes": 102875136,
+      "eventLoopP95Ms": 23.920639,
+      "count": 20,
+      "completed": 20,
+      "readMs": 1784,
+      "exportMs": 2778,
+      "totalMs": 6242,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    }
+  ]
+}

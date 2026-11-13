@@ -9,7 +9,7 @@ Binding requirements: remove injected general copy buttons from all10 named view
 
 - [x] 1. Audit existing change; npm ci. Extend existing regression test and add focused failing cases for panel lifecycle/keyboard races before product edits. Fix within copy-actions.js and only necessary local panel styles. Preserve tests' copying assertions.
 - [x] 2. Required commands: npm run lint, test:unit, test:integration, test:ui, verify. Sequential GUI. Fresh whole-change review; reproduce/fix important findings RED→GREEN; final regression. Separate logical commits and actual outcomes.
-- [ ] 3. Enable this branch in existing gated ARM64 workflow. Push checked candidate [mac-qa-run], mount/install outside checkout, full GUI plus FP/BIO screenshots, exact artifact and inner DMG verification, update existing PR9. No release/merge.
+- [x] 3. Enable this branch in existing gated ARM64 workflow. Push checked candidate [mac-qa-run], mount/install outside checkout, full GUI plus FP/BIO screenshots, exact artifact and inner DMG verification, update existing PR9. No release/merge.
 
 Review focus: source identity changes while a menu/shortcut is pending; navigation to an unsupported section and back; empty sources; text/select/contenteditable keyboard targets including macOS physical KeyC; multiple mounts, repeated events and tiny windows; no full-set or direct-copy format changes.
 
@@ -24,3 +24,5 @@ Stage2: fresh whole-change reviewer found one important photo-group identity gap
 Final Linux regression after review fixes:44/44 GUI PASS185.584s, zero skipped/cancelled; npm run verify PASS123 unit/127 integration. Product correction committed separately. Candidate native QA remains pending.
 
 Native attempt1 d14929d: runtime/readback, verify, metadata batches, real photograph and DMG PASS. Installed GUI43/44 PASS, archive-v141 test FAIL due two overlapping legitimate save notifications matching one strict locator; all6 new copy tests PASS. Installer withheld. Scope test notification to the current save, keep all content/restart checks. Targeted archive GREEN1/1; fresh verify123/127 PASS, full Linux GUI repeat running while new native candidate starts. Application code unchanged since7173a1e.
+
+Final acceptance: cd82fc500637740e360f178c03c4676e5a19d84f, native run43521493403 PASS. Linux44/44 GUI194.624s; native44/44 GUI314.085s,123unit/127integration,0skips. DMG mounted and app copied outside checkout; runtime/metadata/batch/UX gates passed. Artifact14082869903 downloaded, all outer/inner hashes and CRC checked, FP/BIO360/1280 screenshots inspected. ZIP150749177bytes delivered, Developer ID/notarization absent, owner acceptance pending. PR9 remains draft/open; no release or merge. See docs/verification/tz8/REPORT.md.

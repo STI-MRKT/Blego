@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-13T22:54:35.859Z",
+  "host": "darwin-arm64",
+  "facebook": {
+    "status": "BLOCKED",
+    "target": "https://www.facebook.com/meta",
+    "result": "UNKNOWN",
+    "reason": "INSUFFICIENT_EVIDENCE",
+    "durationMs": 787,
+    "scope": "One anonymous public profile; not a complete real-target acceptance matrix"
+  },
+  "map": {
+    "status": "PASS",
+    "source": "https://tile.openstreetmap.org/0/0/0.png",
+    "scope": "One visible world tile through production transport and validated disk cache; no public pan/zoom automation",
+    "installedRender": "PASS"
+  }
+}
