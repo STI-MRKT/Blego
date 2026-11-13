@@ -1,0 +1,20 @@
+node:internal/modules/esm/resolve:1035
+    throw error;
+    ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'debug' imported from /tmp/blego-baseline141-probe/resources/app.asar/node_modules/https-proxy-agent/dist/index.js
+Did you mean to import "debug/src/index.js"?
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:331:9)
+    at packageResolve (node:internal/modules/esm/resolve:797:25)
+    at moduleResolve (node:internal/modules/esm/resolve:886:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1019:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:604:27)
+    at ModuleJobSync.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJobSync.link (node:internal/modules/esm/module_job:611:17) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v24.22.2

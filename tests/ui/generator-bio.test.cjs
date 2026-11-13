@@ -55,6 +55,11 @@ test(
     assert.equal(await page.locator('#bio-birthplace').inputValue(), 'Manual birthplace');
     if (process.env.BLEGO_CAPTURE) {
       fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+      await app.evaluate(({ BrowserWindow }) =>
+        BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
+      );
+      await page.waitForFunction(() => innerWidth === 1280);
+      await page.waitForTimeout(450);
       await page.screenshot({ path: path.join(process.env.BLEGO_CAPTURE, 'bio-wide.png') });
     }
     await app.evaluate(({ BrowserWindow }) =>

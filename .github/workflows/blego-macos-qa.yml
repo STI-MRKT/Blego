@@ -83,7 +83,7 @@ jobs:
       - name: Prepare identical BLEGO 1.4 performance reference
         run: |
           git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 95b80ff302fafef8c395169d4fe5e23019d37f31
-          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-baseline-reference/node_modules"
+          (cd "$RUNNER_TEMP/blego-baseline-reference" && npm ci && node node_modules/electron/install.js)
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
       - name: Package baseline14 in the same environment
@@ -92,6 +92,7 @@ jobs:
           baseline_dir="mac-$TARGET_ARCH"
           if [ "$TARGET_ARCH" = x64 ]; then baseline_dir=mac; fi
           ditto "$RUNNER_TEMP/blego-baseline-reference/release/$baseline_dir/BLEGO.app" "$RUNNER_TEMP/BLEGO-baseline14.app"
+          ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/Resources/app.asar"
       - name: Comparable manual metadata baseline and candidate
         run: |
           BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline14.json
@@ -113,6 +114,7 @@ jobs:
           hdiutil attach release/*-${{ env.TARGET_ARCH }}.dmg -readonly -nobrowse -mountpoint "$mountpoint"
           trap 'hdiutil detach "$mountpoint"' EXIT
           ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
           if ! node scripts/check-installed-app.cjs --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true

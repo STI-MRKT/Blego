@@ -75,7 +75,7 @@ const fs = require('node:fs'),
         let n = 0;
         for (let i = 0; i < a.length; i += 4)
           if (a[i] !== __worldBefore[i] || a[i + 1] !== __worldBefore[i + 1]) n++;
-        return n > 1000;
+        return Number(c.dataset.tiles) > 0 && n > 1000;
       });
       await page
         .locator('.photo-map')
