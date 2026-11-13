@@ -1,0 +1,46 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (24021.728125ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (5022.260583ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (7673.937834ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (8490.868042ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (4105.875917ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (4458.322167ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (4922.01025ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (3995.763625ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (11718.538417ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (5907.431834ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (4707.993666ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (7984.957584ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (11271.7215ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (6865.062125ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (9666.378209ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (3445.373958ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (6573.590833ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (9997.89125ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (4060.602834ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (3434.446458ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (6135.596709ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (19167.80525ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (4672.407ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (10021.54675ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (5283.125666ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (3346.54925ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (7224.133958ms)
+✔ map drag retains dirty date through actual preview and export (7269.881042ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (7619.84ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (8120.373959ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (6448.107708ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (6709.30825ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (7676.018958ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (4763.134625ms)
+✔ first-run tour never steals navigation after the user starts working (2758.550875ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (27536.335458ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (7394.9055ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (7774.769709ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 310642.154958

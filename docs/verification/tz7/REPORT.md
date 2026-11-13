@@ -54,7 +54,7 @@ Both regressions were observed failing before fixes and passing afterward. Norma
 
 [Successful workflow 43501437897](https://github.com/STI-MRKT/Blego/actions/runs/43501437897), Mac job `132148181378`, artifact `14074603411` (expires 2026-11-18 20:40:53 UTC). Downloaded artifact SHA-256 and ZIP CRC/path checks verified. Installer ZIP's own DMG, checksum and instruction bytes independently matched the verified extracted files.
 
-Environment: macOS **15.8.2 (24H232)**, Darwin24.6.0, **arm64 / Apple M1 (Virtual) / VirtualMac2,1**, Node24.22.1. Evidence: [host](native/macOS-env.txt), [native runtime](native/native-darwin-arm64.json), [installed app](native/installed-darwin-arm64.json), [38-test GUI log](native/installed-darwin-arm64.json.log), [unit/integration log](native/verification-native.log).
+Environment: macOS **15.8.2 (24H232)**, Darwin24.6.0, **arm64 / Apple M1 (Virtual) / VirtualMac2,1**, Node24.22.1. Evidence: [host](native/macOS-env.txt), [native runtime](native/native-darwin-arm64.json), [installed app](native/installed-darwin-arm64.json), [38-test GUI log](native/installed-darwin-arm64.json.log.txt), [unit/integration log](native/verification-native.log.txt).
 
 Actual commands/gates in `.github/workflows/blego-macos-qa.yml`:
 ```sh
@@ -125,10 +125,13 @@ docs/verification/tz7/native/artifact.json
 docs/verification/tz7/native/bio-360.png
 docs/verification/tz7/native/bio-wide.png
 docs/verification/tz7/native/installed-darwin-arm64.json
+docs/verification/tz7/native/installed-darwin-arm64.json.log.txt
 docs/verification/tz7/native/macOS-env.txt
 docs/verification/tz7/native/metadata-load-baseline14.json
 docs/verification/tz7/native/metadata-load-candidate-manual.json
 docs/verification/tz7/native/metadata-load-darwin.json
+docs/verification/tz7/native/metadata-ui-batch-darwin.log.txt
+docs/verification/tz7/native/metadata-ui-folder20-darwin.log.txt
 docs/verification/tz7/native/native-darwin-arm64.json
 docs/verification/tz7/native/public-services-native.json
 docs/verification/tz7/native/real-photo-baseline14.json
@@ -138,6 +141,7 @@ docs/verification/tz7/native/ux-baseline14-generator-1280.png
 docs/verification/tz7/native/ux-candidate-generator-1280.png
 docs/verification/tz7/native/ux-original-generator-1280.png
 docs/verification/tz7/native/ux-performance-darwin.json
+docs/verification/tz7/native/verification-native.log.txt
 docs/verification/v141/INSTALL-RU.txt
 electron/features/generator/biography-workspace.cjs
 electron/features/generator/biography.cjs
