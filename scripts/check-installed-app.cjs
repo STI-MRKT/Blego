@@ -16,16 +16,11 @@ const { createHash } = require('node:crypto');
   fs.mkdirSync(path.dirname(report), { recursive: true });
   const log = report + '.log';
   const stream = fs.createWriteStream(log, { flags: 'w', mode: 0o600 });
-  const tests = [
-    'tests/ui/app.test.cjs',
-    'tests/ui/copy-all-sections.test.cjs',
-    'tests/ui/image-groups.test.cjs',
-    'tests/ui/ux-restoration.test.cjs',
-    'tests/ui/import-cookie.test.cjs',
-    'tests/ui/classifier.test.cjs',
-    'tests/ui/classifier-copy.test.cjs',
-    'tests/ui/classifier-reset.test.cjs'
-  ];
+  const tests = fs
+    .readdirSync(path.join(project, 'tests/ui'))
+    .filter((name) => name.endsWith('.test.cjs'))
+    .sort()
+    .map((name) => 'tests/ui/' + name);
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,
     env: {

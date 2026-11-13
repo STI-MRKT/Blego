@@ -1,0 +1,13 @@
+Native run: https://github.com/STI-MRKT/Blego/actions/runs/43371554153
+Build SHA: 09b2b504c4a448b4d7a28c651da0452dc489e15b
+Linux: npm run verify; BLEGO_HEADLESS=1 npm run test:ui — lint, 61 unit, 90 integration, 15 GUI PASS; zero skips.
+Mac installed GUI: see installed-darwin-arm64.json.log — 15/15 PASS; zero skips.
+Mac job log extracts:
+2026-11-13T05:22:57.0408460Z ℹ tests 61
+2026-11-13T05:22:57.0409070Z ℹ pass 61
+2026-11-13T05:22:57.0409240Z ℹ fail 0
+2026-11-13T05:22:57.0409630Z ℹ skipped 0
+2026-11-13T05:23:18.6435290Z ℹ tests 90
+2026-11-13T05:23:18.6435990Z ℹ pass 90
+2026-11-13T05:23:18.6436310Z ℹ fail 0
+2026-11-13T05:23:18.6437120Z ℹ skipped 0

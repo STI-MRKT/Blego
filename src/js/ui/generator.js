@@ -107,7 +107,7 @@ function profileHTML() {
       <div class="name">${esc(name)}</div><div class="handle" title="${esc(textValue(fields.handle))}">@${esc(conciseHandle(fields.handle, 26))}</div>
       <div class="row-chips">${categories
         .slice(0, 4)
-        .map((c) => `<span class="pill accent">${esc(c)}</span>`)
+        .map((c) => `<button class="pill accent" data-action="copy" data-copy="${esc(c)}" aria-label="Copy category ${esc(c)}">${esc(c)}</button>`)
         .join('')}</div>
       <p class="bio">${esc(textValue(fields.bio) || textValue(fields.status) || 'Локальный синтетический профиль')}</p>
       <div class="demo-meta">${esc(LOCALES[p.country]?.name?.en || p.country)} · ${esc(p.type)}<br>${esc(date)} · сохранено локально</div>
@@ -124,7 +124,7 @@ function profileHTML() {
       </details>`
           : ''
       }
-      <div class="demo-note">${I.alert}<span>Синтетические данные. Контакты уникальны в рамках истории этой установки, а не во всём мире. Ничего автоматически не отправляется.</span></div>
+      <div class="demo-note">${I.alert}<span>Синтетический профиль. Сохранён на этом устройстве.</span></div>
     </div>
   </article>`;
 }
@@ -132,7 +132,6 @@ export function ttlText() {
   return 'Сохранено локально';
 }
 export function generatorHTML() {
-  const stats = state.poolStats;
   return `<div class="page ux-generator">
     <div class="page-head">
       <div><div class="eyebrow">BLEGO · LOCAL STUDIO</div><h1>Генератор профилей</h1>
@@ -157,10 +156,6 @@ export function generatorHTML() {
       </div>
     </div>
     ${profileHTML()}
-    <details class="card pad ux-details ux-diagnostics">
-      <summary>Словари и ограничения</summary>
-      <p class="sub">${stats ? `${stats.counts.firstNames} имён · ${stats.counts.lastNames} фамилий · набор ${esc(stats.datasetVersions?.country || '')}` : 'Словари загружаются'}</p>
-      <p class="sub">У некоторых стран ограниченные источники имён, улиц и географии. При исчерпании программа сообщит, какого поля не хватает. Подробные настройки — в разделе «Настройки».</p>
-    </details>
+
   </div>`;
 }

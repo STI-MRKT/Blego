@@ -1,0 +1,11 @@
+# Photos / Date / GEO stage
+
+Extends the existing engine, file tokens, group workspace, native ExifTool and export/readback pipeline. No duplicate editor backend, database, ZIP or copy system. Main controls: thumbnails/selection, keep/set/remove date and GPS, date/time/offset and latitude/longitude/optional altitude, preview, save copies. Camera fields, groups/presets and reports stay available through disclosures. Original photo-grid/drop components are reused; thumbnail generation changes only in-memory previews, not source pixels.
+
+Date operations explicitly select EXIF and/or XMP DateTimeOriginal; other dates stay unchanged. Keep timezone preserves each source representation, Set requires an explicit offset, Remove clears only the selected date representation. Empty values are never replaced by the current date. GPS accepts numeric/string zero, negative coordinates and optional altitude; empty/out-of-range values fail validation. No inferred/random camera, location or time values.
+
+Actual write/readback tests cover JPEG/PNG/WebP, selected date scope, timezone preservation/removal, group persistence, originals, other metadata and existing pixel/alpha/profile/orientation safety gates. GUI tests exercise actual saved copies, zero GPS, date preview, advanced-field preservation, and delayed preview responses after selection/close/removal. Failure findings during integration were missing thumbnail IPC wiring and a now-secondary report button selector; both were corrected without weakening readback assertions.
+
+`node scripts/check-metadata-load.cjs docs/verification/final-issue-4/metadata-load-linux.json`: actual native Linux engine completed 1/1, 10/10 and 100/100 mixed JPEG/PNG/WebP synthetic files, zero latitude/altitude and negative longitude, leap-day date with -05:00 offset. Independently re-read outputs, compared original SHA-256 and decoded pixels/alpha, preserved author. Measured total times approximately 0.90 s / 5.68 s / 50.63 s. These tiny 12×8 fixtures do not establish maximum-resolution performance; Mac measurements are a separate gate.
+
+Stage checks: `npm run verify` PASS (lint, 61 unit, 85 integration); 13/13 Electron GUI PASS; final lint PASS. No checks skipped. CaptureDate/GPS quick-edit and preview-race focused GUI tests both PASS.

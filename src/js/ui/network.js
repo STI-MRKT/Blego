@@ -11,7 +11,7 @@ function gaugeHTML() {
   const scale = Math.max(50, Math.ceil(mbps / 50) * 50);
   const percent = Math.max(0, Math.min(100, (mbps / scale) * 100));
   const dash = 100 - percent;
-  const testing = state.network.running;
+  const testing = state.network.running || (state.network.proxyLoading && state.network.proxyFullTest);
   return `<div class="gauge-wrap ${testing ? 'is-testing' : ''}">
     <svg class="gauge" viewBox="0 0 240 140" aria-hidden="true">
       <defs><linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b5bd6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
@@ -62,18 +62,14 @@ function ipBlockHTML() {
       <div><span>Запрос IP</span><b>${msText(ip.timings?.ipRequestMs)}</b></div></div>`;
 }
 
+function scoreHTML(label, score, description) {
+  return `<div class="risk"><div class="risk-head"><span>${esc(label)}</span><b class="risk-score">${Number.isFinite(score) ? `${score}<small>/100</small>` : 'Нет данных'}</b></div>${Number.isFinite(score) ? `<div class="risk-bar"><i style="width:${score}%"></i></div>` : ''}<p class="hint">${esc(description)}</p></div>`;
+}
 function riskHTML(result) {
-  const a = result?.assessment;
-  if (!a || !Number.isFinite(a.score)) {
-    return `<div class="risk"><div class="risk-head"><span>Репутация IP</span><b>Нет данных</b></div>
-      <p class="hint">Отсутствие ответа не означает низкий риск.</p></div>`;
-  }
-  const score = Math.max(0, Math.min(100, a.score));
-  return `<div class="risk"><div class="risk-head"><span>Оценка по доступным признакам</span>
-    <b class="risk-score warn">${score}<small>/100</small></b></div>
-    <div class="risk-bar"><i class="warn" style="width:${score}%"></i></div>
-    <p class="hint">Эвристика, не вероятность мошенничества. Пинг не влияет на оценку.</p>
-    <div class="risk-factors">${(a.factors || []).map((f) => `<span class="risk-chip">${esc(String(f.flag || f.label || 'Признак'))}</span>`).join('')}</div></div>`;
+  const source=result.sources?.find(s=>s.id==='proxycheck.io');
+  return scoreHTML('Качество соединения', result.quality?.score, `${result.quality?.successes||0}/${result.quality?.attempts||0} успешных HTTPS-запросов · среднее ${msText(result.quality?.meanMs)} · разброс ${msText(result.quality?.jitterMs)}`)
+    + scoreHTML('IP Trust', result.assessment?.score, source?.status === 'ok' ? `proxycheck.io · ${new Date(source.checkedAt).toLocaleString()} · 100 − риск провайдера; не гарантия безопасности` : source ? `proxycheck.io: ${({rate_limited:'лимит запросов',auth_failed:'ключ не принят',denied:'запрос ограничен',timeout:'время ожидания истекло',invalid_response:'неполный ответ'})[source.status]||'нет ответа'}` : 'Репутация не запрашивалась')
+    + (result.assessment?.factors?.length ? `<div class="risk-factors">${result.assessment.factors.map(f=>`<span class="risk-chip">${esc(f.flag)}</span>`).join('')}</div>` : '');
 }
 
 function proxyHTML() {
@@ -82,13 +78,14 @@ function proxyHTML() {
   return `<section class="card pad proxy-card">
     <div class="mini-head"><span class="t">Проверка прокси</span><span class="pill tiny">HTTP / HTTPS / SOCKS5</span></div>
     <div class="proxy-form">
-      <input class="input mono" id="proxy-input" data-input="proxy" type="password" autocomplete="off"
+      <input class="input mono" id="proxy-input" data-input="proxy" type="text" autocomplete="off" ${n.proxyLoading ? 'disabled' : ''}
         aria-label="Адрес прокси" placeholder="host:port или socks5://user:pass@host:port" value="${esc(n.proxyInput || '')}">
-      <button class="btn btn-quiet" data-action="proxy-reveal" aria-label="Показать или скрыть адрес прокси" title="Показать / скрыть">Показать</button>
-      <button class="btn btn-primary" data-action="proxy-check" ${n.proxyLoading || !state.settings.proxyEnabled ? 'disabled' : ''}>
+      <button class="btn btn-primary" data-action="proxy-check" ${n.proxyLoading || n.running || !state.settings.proxyEnabled ? 'disabled' : ''}>
         ${n.proxyLoading ? '<span class="spinner"></span> Проверяем…' : I.shield + ' Проверить'}</button>
     </div>
-    <p class="hint">Пустое поле — прямое соединение. Пароли не включаются в отчёт.</p>
+    <label class="hint"><input type="checkbox" id="proxy-reputation" ${n.reputation ? 'checked' : ''} ${n.proxyLoading ? 'disabled' : ''}> Проверить репутацию: отправить внешний IP в proxycheck.io</label>
+    <div class="head-actions"><button class="btn btn-quiet" data-action="proxy-speed" ${n.proxyLoading || n.running || !state.settings.proxyEnabled ? 'disabled' : ''}>Проверить со скоростью · 3 MB</button>${n.proxyLoading ? '<button class="btn btn-quiet" data-action="proxy-cancel">Отмена</button>' : ''}</div>
+    <details class="ux-details"><summary>Ключ API · необязательно</summary><p class="hint">Без ключа: 100 запросов в день. Бесплатный личный ключ: 1000. Ключ хранится защищённо на этом устройстве.</p><input class="input" type="password" id="proxy-api-key" autocomplete="off" aria-label="Ключ proxycheck.io"><button class="btn" data-action="proxy-key-save">Сохранить ключ</button><button class="btn btn-quiet" data-action="proxy-key-clear">Удалить ключ</button></details>
     ${n.proxyLoading ? '<div class="proxy-loading"><div class="sk" style="height:45px"></div><div class="sk" style="width:60%;height:12px"></div></div>' : ''}
     ${n.proxyError ? `<div class="banner err">${I.alert}<div>${esc(n.proxyError)}</div></div>` : ''}
     ${
@@ -96,13 +93,15 @@ function proxyHTML() {
         ? `<div class="proxy-result">
       <div class="net-loc"><span class="cc">${r.connection === 'ok' ? 'OK' : '!'}</span>
         <div><b>${r.connection === 'ok' ? 'Соединение установлено' : 'Ошибка подключения'}</b>
-          <span class="mono">${valueText(r.exitIp)} ${r.code ? '· ' + valueText(r.code) : ''}</span></div></div>
+          <span class="mono">${valueText(r.exitIp)} ${r.exitIp ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(r.exitIp)}" aria-label="Copy exit IP">${I.copy}</button>` : ''} ${r.code ? '· ' + valueText(r.code) : ''}</span></div></div>
       <div class="proxy-grid">
-        <div><span>Соединение</span><b>${msText(r.timings?.connectionMs)}</b></div>
+        <div><span>TCP</span><b>${msText(r.timings?.tcpMs)}</b></div>
         <div><span>IP-запрос</span><b>${msText(r.timings?.ipRequestMs)}</b></div>
         <div><span>Репутация</span><b>${msText(r.timings?.reputationMs)}</b></div>
         <div><span>Всего</span><b>${msText(r.timings?.totalMs)}</b></div>
       </div>
+      ${r.speed ? `<p>Скорость через прокси: ${r.speed.mbps.toFixed(2)} Mbps · TTFB ${msText(r.speed.ttfb)}</p>` : r.speedError ? `<p>Скорость не измерена: ${esc(r.speedError)}</p>` : ''}
+      ${r.rotatingIp ? '<p class="hint">Внешний IP менялся между запросами. Trust относится к последнему показанному адресу.</p>' : ''}
       ${riskHTML(r)}
       <details class="ux-details"><summary>Источники и технические сведения</summary>
         <p class="hint">${valueText(r.protocol)} · ${valueText(r.mode)} · ${valueText(r.checkedAt)}</p>
@@ -147,22 +146,23 @@ export function networkHTML() {
   return `<div class="page">
     <div class="page-head">
       <div><div class="eyebrow">NETWORK</div><h1>Сеть и прокси</h1>
-        <p class="sub">Пинг, скорость, внешний IP и прокси. Важное видно сразу, технические детали — по запросу.</p></div>
+        <p class="sub">Пинг, скорость и проверка прокси.</p></div>
       <div class="head-actions">
+        ${network.running ? '<button class="btn btn-quiet" data-action="net-cancel">Отмена</button>' : ''}
         <button class="btn btn-quiet" data-action="net-ping" ${network.running || !state.settings.proxyEnabled ? 'disabled' : ''}>${I.bolt}Пинг</button>
-        <button class="btn btn-primary" data-action="net-run" ${network.running || !state.settings.proxyEnabled ? 'disabled' : ''}>${I.bolt}${network.running ? 'Testing…' : 'Проверить сеть'}</button>
+        <button class="btn btn-primary" data-action="net-run" ${network.running || !state.settings.proxyEnabled ? 'disabled' : ''}>${I.bolt}${network.running ? 'Testing…' : 'Измерить скорость'}</button>
       </div>
     </div>
     ${!state.settings.proxyEnabled ? `<div class="banner info ux-permission">${I.shield}<div><b>Проверки сети выключены</b><p>Внешние запросы будут выполнены только после вашего нажатия.</p></div><button class="btn btn-primary" data-action="net-enable">Включить и измерить пинг</button></div>` : ''}
     <div class="net-grid">
       <section class="card net-hero lift">
-        <div class="net-head"><span class="t">Скорость загрузки</span>${status}</div>
+        <div class="net-head"><span class="t">${network.speedRoute === 'proxy' ? 'Скорость через прокси' : 'Скорость загрузки'}</span>${status}</div>
         ${gaugeHTML()}
         ${packetsHTML()}
         ${network.running ? '<div class="speed-progress"><i></i></div>' : ''}
         <div class="net-facts">
           <div><span>Пинг TCP</span><b>${ping && ping.best !== null ? `${ping.best} ms` : '—'}</b></div>
-          <div><span>Разброс</span><b>${ping ? `${ping.jitter} ms` : '—'}</b></div>
+          <div><span>Разброс</span><b>${msText(ping?.jitter)}</b></div>
           <div><span>Downloaded</span><b>${speed ? `${(speed.bytes / 1048576).toFixed(1)} MB` : '—'}</b></div>
           <div><span>TTFB</span><b>${speed ? `${speed.ttfb} ms` : '—'}</b></div>
         </div>

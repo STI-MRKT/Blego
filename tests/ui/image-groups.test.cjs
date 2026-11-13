@@ -52,7 +52,12 @@ test(
     );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
-    await page.locator('details.ux-group-controls summary').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy;
+    });
+    await page.locator('#image-groups-advanced > summary').click();
+    await page.locator('#metadata-advanced > summary').click();
     await page.locator('#image-group-name').fill('Explicit group');
     await page.locator('[data-action="group-create"]').click();
     await page
@@ -98,10 +103,21 @@ test(
     await page.waitForFunction(
       () => document.querySelector('[name="value-title"]').value === 'Исходный заголовок'
     );
+    await page.locator('[name="action-captureDate"]').selectOption('set');
+    await page.locator('[name="date-local"]').fill('2024-02-29T12:34:56');
+    await page.locator('#date-options > summary').click();
+    await page.locator('[name="date-scope-xmp"]').uncheck();
     await page.locator('[data-action="group-save"]').click();
     await page
       .getByText('Group rules saved locally. File overrides remain session-only.', { exact: true })
       .waitFor();
+    assert.deepEqual(
+      (await page.evaluate(() => window.blego.imageWorkspace())).groups
+        .find((g) => g.name === 'Explicit group')
+        .operations.find((op) => op.field === 'captureDate').scope,
+      ['exif'],
+      'Save preserves unchecked XMP scope'
+    );
     await page.evaluate(async () => {
       const ids = Object.keys((await window.blego.imageWorkspace()).membership);
       for (let i = 0; i < ids.length; i++)
@@ -154,7 +170,6 @@ test(
         (ops) => ops.find((op) => op.field === 'title').value === 'A revised'
       )
     );
-    await page.locator('details.ux-preset-tools summary').click();
     await page.locator('#metadata-preset-name').fill('Does not create a metadata draft');
     await page.locator('[data-image-select]').nth(1).check();
     await page.locator('#metadata-form [type="submit"]').click();
@@ -207,12 +222,18 @@ test(
     app = null;
     page = await launch();
     assert.equal(
-      await page.locator('#image-group').count(),
-      0,
-      'group tools stay collapsed when no images are present after restart'
+      await page.locator('#image-group option').filter({ hasText: 'Explicit group' }).count(),
+      1
     );
     assert.equal(await page.locator('[data-image-select]').count(), 0);
     const saved = await page.evaluate(() => window.blego.imageWorkspace());
+    assert.deepEqual(
+      saved.groups
+        .find((g) => g.name === 'Explicit group')
+        .operations.find((op) => op.field === 'captureDate').scope,
+      ['exif'],
+      'Restart preserves date scope'
+    );
     assert.equal(
       saved.groups
         .find((g) => g.name === 'Explicit group')

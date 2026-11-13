@@ -1,0 +1,29 @@
+{
+  "at": "2026-11-13T04:21:53.826Z",
+  "os": "linux",
+  "method": "Node fetch with cloud egress proxy; no key; public control IP, not proxy-route acceptance",
+  "result": {
+    "ip": "1.1.1.1",
+    "risk": 33,
+    "scale": [
+      0,
+      100
+    ],
+    "confidence": 100,
+    "proxy": false,
+    "vpn": false,
+    "hosting": true,
+    "tor": false,
+    "anonymous": false,
+    "compromised": false,
+    "scraper": false,
+    "type": "Hosting",
+    "asn": "AS13335",
+    "provider": "Cloudflare, Inc.",
+    "country": "Australia",
+    "updatedAt": "2026-11-12T21:01:01Z",
+    "checkedAt": "2026-11-13T04:21:53.826Z",
+    "warning": null,
+    "expiresAt": "2026-11-13T04:31:53.826Z"
+  }
+}

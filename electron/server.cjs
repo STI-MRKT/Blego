@@ -76,67 +76,117 @@ async function ipInfo() {
   return data;
 }
 
-function pingHost(host, port, timeoutMs = 2500) {
-  return new Promise((resolve) => {
+function pingHost(host, port, timeoutMs = 2500, signal) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(signal.reason);
     const started = performance.now();
     const socket = net.connect({ host, port });
     let settled = false;
+    const abort = () => {
+      finish(null);
+      reject(signal.reason);
+    };
     const finish = (value) => {
       if (settled) return;
       settled = true;
       socket.destroy();
-      resolve(value);
+      signal?.removeEventListener('abort', abort);
+      if (signal?.aborted) reject(signal.reason);
+      else resolve(value);
     };
+    signal?.addEventListener('abort', abort, { once: true });
     socket.setTimeout(timeoutMs);
     socket.once('connect', () => finish(Math.round(performance.now() - started)));
     socket.once('timeout', () => finish(null));
     socket.once('error', () => finish(null));
   });
 }
-
-async function pingAll() {
-  const values = await Promise.all(
-    PING_TARGETS.map((target) => pingHost(target.host, target.port))
-  );
-  const targets = PING_TARGETS.map((target, index) => ({
-    label: target.label,
-    host: target.host,
-    ms: values[index]
-  }));
-  const good = targets.map((target) => target.ms).filter((value) => value !== null);
+function latencySummary(values) {
+  const good = values.filter(Number.isFinite);
   const best = good.length ? Math.min(...good) : null;
   const worst = good.length ? Math.max(...good) : null;
   return {
-    targets,
     best,
     worst,
-    avg: good.length ? Math.round(good.reduce((sum, value) => sum + value, 0) / good.length) : null,
-    jitter: good.length > 1 ? worst - best : 0
+    avg: good.length ? Math.round(good.reduce((a, b) => a + b, 0) / good.length) : null,
+    jitter: good.length > 1 ? worst - best : null
+  };
+}
+async function pingAll(signal) {
+  const values = await Promise.all(PING_TARGETS.map((t) => pingHost(t.host, t.port, 2500, signal)));
+  return {
+    targets: PING_TARGETS.map((t, i) => ({ ...t, ms: values[i] })),
+    ...latencySummary(values),
+    method: 'TCP connection latency',
+    route: 'direct',
+    checkedAt: new Date().toISOString()
+  };
+}
+async function speedTest({ signal, fetchImpl = fetch } = {}) {
+  const combined = AbortSignal.any([AbortSignal.timeout(25000), ...(signal ? [signal] : [])]);
+  combined.throwIfAborted();
+  const started = performance.now(),
+    maxBytes = 10000000;
+  const response = await fetchImpl('https://speed.cloudflare.com/__down?bytes=10000000', {
+    signal: combined,
+    redirect: 'error',
+    headers: { 'user-agent': 'BLEGO/1.3' },
+    cache: 'no-store'
+  });
+  if (!response.ok) {
+    await response.body?.cancel();
+    throw Error('SPEED_REQUEST_FAILED');
+  }
+  if (Number(response.headers.get('content-length')) > maxBytes) {
+    await response.body?.cancel();
+    throw Error('RESPONSE_TOO_LARGE');
+  }
+  let firstByte = null,
+    bytes = 0;
+  const reader = response.body.getReader();
+  try {
+    while (true) {
+      combined.throwIfAborted();
+      const { done, value } = await require('./features/facebook/transport.cjs').withAbort(
+        reader.read(),
+        combined
+      );
+      if (done) break;
+      if (firstByte === null) firstByte = performance.now();
+      bytes += value.length;
+      if (bytes > maxBytes) throw Error('RESPONSE_TOO_LARGE');
+    }
+  } finally {
+    await reader.cancel().catch(() => {});
+  }
+  combined.throwIfAborted();
+  if (!bytes || firstByte === null) throw Error('EMPTY_RESPONSE');
+  const ended = performance.now(),
+    ttfb = firstByte - started,
+    total = ended - started;
+  return {
+    mbps: Number(((bytes * 8) / Math.max(1, total) / 1000).toFixed(1)),
+    ms: Math.round(total),
+    ttfb: Math.round(ttfb),
+    bytes,
+    route: 'direct',
+    method: 'HTTPS download including connection and first byte',
+    checkedAt: new Date().toISOString()
   };
 }
 
-async function speedTest() {
-  const started = performance.now();
-  const response = await fetch('https://speed.cloudflare.com/__down?bytes=10000000', {
-    signal: AbortSignal.timeout(25000),
-    headers: { 'user-agent': 'BLEGO' },
-    cache: 'no-store'
-  });
-  if (!response.ok) throw new Error('Speed test failed');
-  const ttfb = Math.round(performance.now() - started);
-  const buffer = await response.arrayBuffer();
-  const total = performance.now() - started;
-  const transfer = Math.max(1, total - ttfb);
-  const mbps = (buffer.byteLength * 8) / (transfer / 1000) / 1e6;
-  return { mbps: Number(mbps.toFixed(1)), ms: Math.round(total), ttfb, bytes: buffer.byteLength };
-}
-
 async function handleApi(request, response, url) {
+  const controller = new AbortController();
+  response.once('close', () => {
+    if (!response.writableEnded) controller.abort();
+  });
   try {
     if (url.pathname === '/api/net/info') return sendJson(response, networkInfo());
     if (url.pathname === '/api/net/ip') return sendJson(response, await ipInfo());
-    if (url.pathname === '/api/net/ping') return sendJson(response, await pingAll());
-    if (url.pathname === '/api/net/speed') return sendJson(response, await speedTest());
+    if (url.pathname === '/api/net/ping')
+      return sendJson(response, await pingAll(controller.signal));
+    if (url.pathname === '/api/net/speed')
+      return sendJson(response, await speedTest({ signal: controller.signal }));
     if (url.pathname === '/api/fb/check')
       return sendJson(response, { error: 'USE_DESKTOP_PROFILE_DIAGNOSTICS' }, 410);
     return sendJson(response, { error: 'Not found' }, 404);
@@ -216,7 +266,7 @@ function startServer(rootDir, port = 0, options = {}) {
   });
 }
 
-module.exports = { startServer };
+module.exports = { startServer, speedTest, latencySummary, pingAll };
 
 if (require.main === module) {
   const root = process.argv[2] || path.join(__dirname, '..', 'src');

@@ -5,6 +5,7 @@ on:
     branches:
       - codex/blego-ux-restoration-20261112
       - codex/blego-classifier-next
+      - codex/blego-final-hardening
   workflow_dispatch:
     inputs:
       target:
@@ -47,6 +48,7 @@ jobs:
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
+      BLEGO_CAPTURE: release
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +76,8 @@ jobs:
           node scripts/check-metadata-native.cjs --target darwin-${{ env.TARGET_ARCH }} --root build/metadata-runtime/darwin-${{ env.TARGET_ARCH }} --report release/native-darwin-${{ env.TARGET_ARCH }}.json
       - name: Test
         run: npm run verify
+      - name: Date and GEO native load acceptance
+        run: node scripts/check-metadata-load.cjs release/metadata-load-darwin.json
       - name: Build unsigned DMG
         run: npm run dist:mac -- --${{ env.TARGET_ARCH }}
       - name: Verify packaged executable (outside repo)
@@ -89,6 +93,12 @@ jobs:
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
           fi
+      - name: Installed photo batch and original UX comparison
+        run: |
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log
+          git worktree add --detach "$RUNNER_TEMP/blego-original-reference" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
+          node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
       - name: Record checksums
         run: |
           shasum -a 256 release/*.dmg > release/SHA256SUMS-mac.txt
@@ -107,7 +117,10 @@ jobs:
           if-no-files-found: error
           path: |
             release/*.dmg
-            release/ux-*.png
+            release/*.png
+            release/ux-performance-*.json
+            release/metadata-load-*.json
+            release/metadata-ui-batch-*.log
             release/SHA256SUMS-mac.txt
             release/macOS-env.txt
             release/native-darwin-*.json
@@ -125,3 +138,7 @@ jobs:
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
             release/native-darwin-*.json
+            release/metadata-load-*.json
+            release/metadata-ui-batch-*.log
+            release/ux-performance-*.json
+            release/*.png

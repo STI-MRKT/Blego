@@ -92,9 +92,16 @@ function createEngine({ runtimeRoot } = {}) {
     });
   }
   return {
-    async writeCopy(file, operations, format, { signal } = {}) {
+    async writeCopy(file, operations, format, { signal, before } = {}) {
       const { writeArgs } = require('./write-policy.cjs');
-      return execute([...writeArgs(operations, format), '--', path.resolve(file)], { signal });
+      if (
+        !before &&
+        operations.some((op) => op.field === 'captureDate' && op.value?.offsetMode === 'keep')
+      )
+        before = (await this.read(file, { signal })).tags;
+      return execute([...writeArgs(operations, format, before), '--', path.resolve(file)], {
+        signal
+      });
     },
     async read(file, { signal } = {}) {
       const result = await execute(

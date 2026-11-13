@@ -173,23 +173,6 @@ test(
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
         1563
     );
-    await page.locator('[data-view="checker"]').click();
-    await page
-      .locator('#checker-input')
-      .fill('0012345678901234567890123\nhttps://facebook.com/groups');
-    await page.locator('[data-action="checker-run"]').click();
-    await page.locator('#fb-note-status-0').waitFor();
-    assert.equal(await page.locator('[data-action="checker-status"]').isDisabled(), true);
-    await page.locator('[aria-label="Copy Facebook ID"]').first().click();
-    await checkClipboard('0012345678901234567890123');
-    await page.locator('#fb-note-status-0').selectOption('blocked');
-    await page.locator('#fb-note-comment-0').fill('Synthetic owner report');
-    await page.locator('[data-action="facebook-note"]').click();
-    await page.getByText('1 owner reports', { exact: true }).waitFor();
-    assert.equal(
-      await page.getByText('Unknown — public check cannot confirm a ban', { exact: true }).count(),
-      2
-    );
     const disabled = await page.evaluate(async () => {
       try {
         await window.blego.checkFacebook({
@@ -202,6 +185,30 @@ test(
       }
     });
     assert.equal(disabled, true);
+    await require('../fixtures/facebook-ui.cjs').installFacebookFixture(app);
+    await page.locator('[data-view="checker"]').click();
+    await page
+      .locator('#checker-input')
+      .fill('0012345678901234567890123\nhttps://facebook.com/groups');
+    await page.locator('[data-action="checker-run"]').click();
+    await page.getByText('Login required', { exact: true }).waitFor();
+    await page.locator('#facebook-details > summary').click();
+    await page.locator('#fb-note-status-0').waitFor();
+    await page.locator('[aria-label="Copy Facebook ID"]').first().click();
+    await checkClipboard('0012345678901234567890123');
+    await page.locator('#fb-note-status-0').selectOption('blocked');
+    await page.locator('#fb-note-comment-0').fill('Synthetic owner report');
+    await page.locator('[data-action="facebook-note"]').click();
+    await page.getByText('1 owner reports', { exact: true }).waitFor();
+    assert.equal(
+      await page
+        .getByText(
+          'Account restrictions remain unknown. Owner reports are separate from public checks.',
+          { exact: true }
+        )
+        .count(),
+      1
+    );
     const imageFile = await require('../fixtures/images.cjs').imageFixture(root, 'png', {
       name: '- тест.png'
     });
@@ -215,6 +222,7 @@ test(
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('#metadata-advanced > summary').click();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Новый заголовок');
     const imageOutput = path.join(root, 'image-output');
@@ -232,6 +240,11 @@ test(
     assert.equal(await page.locator('[data-metadata-plan]').count(), 0);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-action="metadata-export"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !!state.metadataExport;
+    });
+    await page.getByText('Reports and export history', { exact: true }).click();
     await page.locator('[data-action="metadata-report"]').first().waitFor();
     assert.match(await page.locator('[data-metadata-progress]').textContent(), /completed/);
     assert.equal(fs.readdirSync(imageOutput).length, 1);

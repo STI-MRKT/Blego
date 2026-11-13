@@ -21,10 +21,12 @@ test('success → partial failure → total failure → reopen retains per-sourc
     store.close();
     fs.rmSync(root, { recursive: true, force: true });
   });
-  updateSettings(store, { newsEnabled: true, newsSources: sources });
+  updateSettings(store, { newsEnabled: true, newsTopic: 'tech', newsSources: sources });
   let failed = [];
   const news = createNewsService({
     store,
+    catalog: sources,
+    minRefreshMs: 0,
     fetcher: async (url) => {
       const id = url.split('/').pop();
       if (failed.includes(id)) throw Error('UNAVAILABLE');
@@ -43,50 +45,39 @@ test('success → partial failure → total failure → reopen retains per-sourc
   news.close();
   store.close();
   store = await openStore(root);
-  const restored = createNewsService({ store });
+  const restored = createNewsService({ store, catalog: sources });
   assert.equal(restored.snapshot().items.length, 2);
   restored.close();
 });
-test('disabled module makes no fetch, timer uses configured interval, disabling aborts', async (t) => {
+test('disabled module makes no fetch; configure never starts background downloads', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-'));
   const store = await openStore(root);
   t.after(() => {
     store.close();
     fs.rmSync(root, { recursive: true, force: true });
   });
-  let calls = 0,
-    delay = null,
-    cleared = false,
-    signal;
+  let calls = 0;
   const news = createNewsService({
     store,
-    fetcher: async (_url, s) => {
+    catalog: sources,
+    fetcher: async () => {
       calls++;
-      signal = s;
       return xml('one');
-    },
-    setTimer: (_fn, ms) => {
-      delay = ms;
-      return 1;
-    },
-    clearTimer: () => {
-      cleared = true;
     }
   });
+  t.after(() => news.close());
   news.configure();
   await news.refreshNews();
   assert.equal(calls, 0);
-  updateSettings(store, { newsEnabled: true, newsSources: [sources[0]], newsInterval: 15 });
+  updateSettings(store, { newsEnabled: true, newsTopic: 'tech' });
   news.configure();
-  assert.equal(delay, 900000);
+  assert.equal(calls, 0);
   await news.refreshNews();
-  assert.equal(calls, 1);
+  assert.equal(calls, 2);
   updateSettings(store, { newsEnabled: false });
   news.configure();
-  assert.equal(cleared, true);
   await news.refreshNews();
-  assert.equal(calls, 1);
-  news.close();
+  assert.equal(calls, 2);
 });
 test('four-worker limit and cancellation prevent late cache writes', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-'));
@@ -98,13 +89,16 @@ test('four-worker limit and cancellation prevent late cache writes', async (t) =
   const many = Array.from({ length: 9 }, (_, i) => ({
     id: `s${i}`,
     name: `s${i}`,
+    topic: 'tech',
     url: `https://example.com/${i}`
   }));
-  updateSettings(store, { newsEnabled: true, newsSources: many });
+  updateSettings(store, { newsEnabled: true, newsTopic: 'tech', newsSources: many });
   let concurrent = 0,
     max = 0;
   const news = createNewsService({
     store,
+    catalog: many,
+    minRefreshMs: 0,
     fetcher: async () => {
       concurrent++;
       max = Math.max(max, concurrent);

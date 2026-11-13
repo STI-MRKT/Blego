@@ -42,7 +42,12 @@ const { openStore } = require('../electron/local/store.cjs');
   let app;
   try {
     app = await _electron.launch({
-      args: ['--ozone-platform=headless', '--disable-gpu', '.', `--user-data-dir=${data}`],
+      executablePath: process.env.BLEGO_EXECUTABLE || undefined,
+      args: [
+        ...(process.platform === 'linux' ? ['--ozone-platform=headless', '--disable-gpu'] : []),
+        ...(process.env.BLEGO_EXECUTABLE ? [] : ['.']),
+        `--user-data-dir=${data}`
+      ],
       env: {
         ...process.env,
         XDG_CONFIG_HOME: path.join(root, 'config'),
@@ -94,8 +99,13 @@ const { openStore } = require('../electron/local/store.cjs');
       );
     }
     console.log(`${expected} files read`);
-    await page.locator('[name="action-title"]').selectOption('set');
-    await page.locator('[name="value-title"]').fill('Synthetic GUI batch');
+    await page.locator('[name="action-gps"]').selectOption('set');
+    await page.locator('[name="gps-latitude"]').fill('0');
+    await page.locator('[name="gps-longitude"]').fill('-73.987654');
+    await page.locator('[name="action-captureDate"]').selectOption('set');
+    await page.locator('[name="date-local"]').fill('2024-02-29T12:34:56');
+    await page.locator('[name="date-offset-mode"]').selectOption('set');
+    await page.locator('[name="date-offset"]').fill('-05:00');
     await choose([output]);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-action="metadata-export"]').waitFor();
@@ -125,6 +135,8 @@ const { openStore } = require('../electron/local/store.cjs');
     console.log(
       JSON.stringify(
         {
+          host: process.platform + '-' + process.arch,
+          executable: process.env.BLEGO_EXECUTABLE || 'development Electron',
           files: expected,
           reads,
           completed,

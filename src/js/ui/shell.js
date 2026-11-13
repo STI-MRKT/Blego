@@ -6,15 +6,15 @@ const NAV = [
   { group: 'Workspace', items: [
     { view: 'generator', icon: I.spark, label: 'Generator' },
     { view: 'import', icon: I.upload, label: 'Import' },
-    { view: 'history', icon: I.clock, label: 'Archive' },
     { view: 'news', icon: I.globe, label: 'News' },
-    { view: 'settings', icon: I.shield, label: 'Settings' }
   ] },
   { group: 'Tools', items: [
     { view: 'network', icon: I.globe, label: 'Network' },
     { view: 'photos', icon: I.image, label: 'Photos' },
     { view: 'friends', icon: I.users, label: 'Friends' },
-    { view: 'checker', icon: I.shield, label: 'Checker' }
+    { view: 'checker', icon: I.shield, label: 'Checker' },
+    { view: 'settings', icon: I.shield, label: 'Settings' },
+    { view: 'history', icon: I.clock, label: 'Archive' }
   ] }
 ];
 

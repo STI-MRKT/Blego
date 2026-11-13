@@ -33,7 +33,7 @@ export function validateWorkspaceOperations(operations, { allowInherit = false }
   )
     fail();
   return operations.map((op) => {
-    if (!keys(op, ['field', 'action', 'value', 'origin'])) fail();
+    if (!keys(op, ['field', 'action', 'value', 'scope', 'origin'])) fail();
     if (op.action === 'inherit') {
       if (!allowInherit || !METADATA_FIELDS.includes(op.field) || Object.keys(op).length !== 2)
         fail();

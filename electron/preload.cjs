@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld('blego', {
   copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
   readImageMetadata: (id) => call('imageRead', id),
-  previewImage: (id) => call('imagePreview', id),
+  previewImage: (fileId, thumbnail = false) => call('imagePreview', { fileId, thumbnail }),
   planMetadataChanges: (request) => call('imagesPlan', request),
   clearImages: () => call('imagesClear'),
   removeImage: (id) => call('imageRemove', id),
@@ -42,7 +42,7 @@ contextBridge.exposeInMainWorld('blego', {
     ipcRenderer.on('local:facebook-result', listener);
     return () => ipcRenderer.removeListener('local:facebook-result', listener);
   },
-  newsSnapshot: () => call('newsSnapshot'),
+  newsSnapshot: (topic) => call('newsSnapshot', topic),
   refreshNews: (options) => call('newsRefresh', options),
   cancelNews: () => call('newsCancel'),
   onNews: (callback) => {
@@ -52,6 +52,7 @@ contextBridge.exposeInMainWorld('blego', {
   },
   checkProxy: (request) => call('proxyCheck', request),
   cancelProxy: () => call('proxyCancel'),
+  saveProxyKey: (value) => call('proxyKey', value),
   listArchives: (q) => call('archiveList', q),
   openArchive: (id) => call('archiveOpen', id),
   saveArchive: (id) => call('archiveSave', id),

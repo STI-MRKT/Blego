@@ -1,0 +1,290 @@
+{
+  "at": "2026-11-13T04:27:18.679Z",
+  "os": "linux",
+  "arch": "x64",
+  "mode": "real Electron app and production pinned-DNS transport; no fixture feeds",
+  "topics": [
+    {
+      "topic": "fashion",
+      "configured": 3,
+      "successful": 3,
+      "received": 73,
+      "validUnique": 24,
+      "displayed": 24,
+      "uniqueDisplayed": 24,
+      "lastSuccessfulAt": "2026-11-13T04:27:20.190Z",
+      "sourceStates": {
+        "vogue-us": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:20.188Z",
+          "lastAttemptAt": "2026-11-13T04:27:20.188Z",
+          "code": null,
+          "received": 30
+        },
+        "wwd": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:20.190Z",
+          "lastAttemptAt": "2026-11-13T04:27:20.190Z",
+          "code": null,
+          "received": 10
+        },
+        "guardian-fashion": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:20.190Z",
+          "lastAttemptAt": "2026-11-13T04:27:20.190Z",
+          "code": null,
+          "received": 33
+        }
+      },
+      "examples": [
+        {
+          "title": "Liu Jo Fall 2027 Ready-to-Wear",
+          "link": "https://www.vogue.com/fashion-shows/fall-2027-ready-to-wear/liu-jo",
+          "publishedAt": 1794544020000
+        },
+        {
+          "title": "Will Fashion Brands Back Higher Wages in Bangladesh?",
+          "link": "https://wwd.com/sourcing-journal/sustainability/bangladesh-wage-protest-fashion-brands-clean-clothes-campaign-1239414418/",
+          "publishedAt": 1794527226000
+        },
+        {
+          "title": "The Minimalist ’90s-Style Coat Will Be Everywhere This Winter",
+          "link": "https://www.vogue.com/article/90s-coat-trend",
+          "publishedAt": 1794523797000
+        }
+      ]
+    },
+    {
+      "topic": "ai",
+      "configured": 3,
+      "successful": 2,
+      "received": 40,
+      "validUnique": 20,
+      "displayed": 20,
+      "uniqueDisplayed": 20,
+      "lastSuccessfulAt": "2026-11-13T04:27:26.689Z",
+      "sourceStates": {
+        "techcrunch-ai": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:26.689Z",
+          "lastAttemptAt": "2026-11-13T04:27:26.689Z",
+          "code": null,
+          "received": 20
+        },
+        "wired-ai": {
+          "status": "unavailable",
+          "stale": true,
+          "lastSuccessfulAt": null,
+          "lastAttemptAt": "2026-11-13T04:27:26.689Z",
+          "code": "EMPTY_FEED",
+          "received": 0
+        },
+        "guardian-ai": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:26.689Z",
+          "lastAttemptAt": "2026-11-13T04:27:26.689Z",
+          "code": null,
+          "received": 20
+        }
+      },
+      "examples": [
+        {
+          "title": "Nectar launches an AI agent to automate creator discovery and outreach for brands",
+          "link": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands/",
+          "publishedAt": 1794510660000
+        },
+        {
+          "title": "Jensen Huang built an AI kingdom. Now he’s gone, will Nvidia’s ramparts be breached?",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/jensen-huang-built-an-ai-kingdom-now-hes-gone-will-nvidias-ramparts-be-breached",
+          "publishedAt": 1794505835000
+        },
+        {
+          "title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+          "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+          "publishedAt": 1794505000000
+        }
+      ]
+    },
+    {
+      "topic": "crypto",
+      "configured": 3,
+      "successful": 3,
+      "received": 93,
+      "validUnique": 58,
+      "displayed": 40,
+      "uniqueDisplayed": 40,
+      "lastSuccessfulAt": "2026-11-13T04:27:32.336Z",
+      "sourceStates": {
+        "coindesk": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:32.335Z",
+          "lastAttemptAt": "2026-11-13T04:27:32.335Z",
+          "code": null,
+          "received": 25
+        },
+        "cointelegraph": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:32.335Z",
+          "lastAttemptAt": "2026-11-13T04:27:32.335Z",
+          "code": null,
+          "received": 30
+        },
+        "decrypt": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:32.336Z",
+          "lastAttemptAt": "2026-11-13T04:27:32.336Z",
+          "code": null,
+          "received": 38
+        }
+      },
+      "examples": [
+        {
+          "title": "Bitcoin dips below $70,000 as Dollar Index hits 19-month high",
+          "link": "https://www.coindesk.com/markets/2026/11/13/bitcoin-dips-below-usd70-000-as-selloff-gathers-pace",
+          "publishedAt": 1794541020000
+        },
+        {
+          "title": "North Korea's Binance hack faces U.S. crackdown as DOJ targets $1.2 billion in stolen crypto",
+          "link": "https://www.coindesk.com/policy/2026/11/12/north-korea-s-binance-hack-faces-u-s-crackdown-as-doj-targets-usd1-2-billion-in-stolen-crypto",
+          "publishedAt": 1794524152000
+        },
+        {
+          "title": "Here’s what happened in crypto today",
+          "link": "https://cointelegraph.com/news/what-happened-in-crypto-today",
+          "publishedAt": 1794521501000
+        }
+      ]
+    },
+    {
+      "topic": "finance",
+      "configured": 3,
+      "successful": 3,
+      "received": 107,
+      "validUnique": 37,
+      "displayed": 37,
+      "uniqueDisplayed": 37,
+      "lastSuccessfulAt": "2026-11-13T04:27:33.444Z",
+      "sourceStates": {
+        "bbc-business": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:33.444Z",
+          "lastAttemptAt": "2026-11-13T04:27:33.444Z",
+          "code": null,
+          "received": 57
+        },
+        "marketwatch": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:33.444Z",
+          "lastAttemptAt": "2026-11-13T04:27:33.444Z",
+          "code": null,
+          "received": 10
+        },
+        "guardian-business": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:33.444Z",
+          "lastAttemptAt": "2026-11-13T04:27:33.444Z",
+          "code": null,
+          "received": 40
+        }
+      },
+      "examples": [
+        {
+          "title": "Opening trading-card packs has become a $2 billion market",
+          "link": "https://www.marketwatch.com/story/opening-trading-card-packs-has-become-a-2-billion-market-new-apps-are-trying-to-cash-in-b7ba11f5?mod=mw_rss_topstories",
+          "publishedAt": 1794523080000
+        },
+        {
+          "title": "The 10 best stocks for a year-end momentum trade",
+          "link": "https://www.marketwatch.com/story/the-10-best-stocks-for-a-year-end-momentum-trade-8d4cf8f7?mod=mw_rss_topstories",
+          "publishedAt": 1794520200000
+        },
+        {
+          "title": "Nvidia turmoil continues as Jensen Huang resigns over affairs scandal and company appoints interim CEO – as it happened",
+          "link": "https://www.theguardian.com/technology/live/2026/nov/12/nvidia-ceo-jensen-huang-affairs-share-price-plunges-live-latest",
+          "publishedAt": 1794519188000
+        }
+      ]
+    },
+    {
+      "topic": "tech",
+      "configured": 5,
+      "successful": 5,
+      "received": 120,
+      "validUnique": 66,
+      "displayed": 40,
+      "uniqueDisplayed": 40,
+      "lastSuccessfulAt": "2026-11-13T04:27:39.679Z",
+      "sourceStates": {
+        "techcrunch": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:39.360Z",
+          "lastAttemptAt": "2026-11-13T04:27:39.360Z",
+          "code": null,
+          "received": 20
+        },
+        "ars": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:39.360Z",
+          "lastAttemptAt": "2026-11-13T04:27:39.360Z",
+          "code": null,
+          "received": 20
+        },
+        "verge": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:39.360Z",
+          "lastAttemptAt": "2026-11-13T04:27:39.360Z",
+          "code": null,
+          "received": 10
+        },
+        "engadget": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:39.360Z",
+          "lastAttemptAt": "2026-11-13T04:27:39.360Z",
+          "code": null,
+          "received": 20
+        },
+        "wired": {
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:39.679Z",
+          "lastAttemptAt": "2026-11-13T04:27:39.679Z",
+          "code": null,
+          "received": 50
+        }
+      },
+      "examples": [
+        {
+          "title": "‘Bring Back THE Boss’: Nvidia Employees Petition for Jensen Huang’s Return",
+          "link": "https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/",
+          "publishedAt": 1794532669000
+        },
+        {
+          "title": "Donald Trump really wants Tim Cook to run Nvidia",
+          "link": "https://www.theverge.com/tech/1032774/president-donald-trump-tim-cook-nvidia-jensen-huang",
+          "publishedAt": 1794530767000
+        },
+        {
+          "title": "Roborock Robot Vacuum Early Black Friday Deals (2026)",
+          "link": "https://www.wired.com/story/best-early-black-friday-robot-vacuum-deals-roborock-2026/",
+          "publishedAt": 1794527698000
+        }
+      ]
+    }
+  ],
+  "completed": true
+}

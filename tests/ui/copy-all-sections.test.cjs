@@ -146,11 +146,12 @@ test(
         .evaluate((el) => el.value.slice(el.selectionStart, el.selectionEnd)),
       'local text'
     );
+    await require('../fixtures/facebook-ui.cjs').installFacebookFixture(app);
     await open('checker');
     await page.locator('[data-copy-action="close"]').click();
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.locator('[data-action="checker-run"]').click();
-    await page.locator('#fb-note-status-0').waitFor();
+    await page.getByText('Login required', { exact: true }).waitFor();
     await page.locator('[data-copy-action="open"]').click();
     const fb = JSON.parse(await preview())[0];
     assert.equal(fb.id, '001234567890123456789');
@@ -173,7 +174,7 @@ test(
           source: 'Local fixture',
           link: 'https://example.com/?token=DO-NOT-COPY',
           description: 'Provided summary',
-          topic: 'test'
+          topic: 'fashion'
         }
       ];
     });
@@ -187,7 +188,7 @@ test(
     assert.ok(!news.includes('DO-NOT-COPY'));
     assert.ok(!news.includes('body'));
     await page.evaluate(() => {
-      const node = document.querySelector('.news-title h3').firstChild;
+      const node = document.querySelector('.news-title').firstChild;
       const range = document.createRange();
       range.selectNodeContents(node);
       const selection = window.getSelection();
@@ -196,6 +197,7 @@ test(
     });
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].webContents.send('local:news-updated', {
+        topic: 'fashion',
         items: [
           {
             id: 'news-next',
@@ -208,7 +210,7 @@ test(
     );
     await page.waitForTimeout(100);
     assert.equal(await page.evaluate(() => window.getSelection().toString()), 'Synthetic article');
-    assert.equal(await page.locator('.news-title h3').textContent(), 'Synthetic article');
+    assert.equal(await page.locator('.news-title').textContent(), 'Synthetic article');
     await page.evaluate(() => window.getSelection().removeAllRanges());
 
     await page.evaluate(async () => {
@@ -229,6 +231,7 @@ test(
     await page.locator('[data-copy-control="personal"]').check();
     assert.ok((await preview()).includes('Synthetic confirmed fixture'));
     await page.locator('[data-action="archive-back"]').click();
+    await page.locator('#archive-filter details > summary').click();
     await page.locator('#archive-filter [name="order"]').selectOption('oldest');
     await page.locator('#archive-filter button').click();
     await waitForAsync(page, async () => {

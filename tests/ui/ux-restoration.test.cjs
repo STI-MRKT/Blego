@@ -23,6 +23,9 @@ test(
       fs.rmSync(root, { recursive: true, force: true });
     });
     const page = await app.firstWindow();
+    await app.evaluate(({ BrowserWindow }) =>
+      BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
+    );
     await page.locator('[data-action="generate"]').first().waitFor();
     await page.evaluate(() => window.blego.markTour()).catch(() => {});
     await page.locator('[data-action="generate"]').first().click();
@@ -51,6 +54,32 @@ test(
       assert.notEqual(shownPhone, profile.fields.phone);
       assert.equal(shownPhone.replace(/[^0-9]/g, ''), profile.fields.phone.replace(/[^0-9]/g, ''));
     }
+    for (const country of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB']) {
+      await page.locator('[data-input="locale"]').selectOption(country);
+      await page.locator('[data-action="generate"]').first().click();
+      await page.waitForFunction(
+        () =>
+          !!document.querySelector('.demo-card') &&
+          !document.querySelector('[data-action="generate"]').disabled
+      );
+      const saved = await page.evaluate(() => window.blego.lastCard());
+      assert.equal(saved.country, country);
+      await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
+      for (let i = 0; i < 40; i++) {
+        if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === saved.fields.phone)
+          break;
+        await page.waitForTimeout(25);
+      }
+      assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), saved.fields.phone);
+    }
+    const category = page.locator('.row-chips button').first();
+    const categoryText = await category.innerText();
+    await category.click();
+    for (let i = 0; i < 40; i++) {
+      if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === categoryText) break;
+      await page.waitForTimeout(25);
+    }
+    assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), categoryText);
     await page.locator('[data-view="news"]').click();
     await page.locator('#news-block').waitFor();
     await page.locator('[data-view="generator"]').click();

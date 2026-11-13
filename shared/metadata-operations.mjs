@@ -10,11 +10,21 @@ export function validateOperations(operations) {
   for (const op of clean) {
     if (
       !op ||
-      Object.keys(op).some((key) => !['field', 'action', 'value'].includes(key)) ||
+      Object.keys(op).some((key) => !['field', 'action', 'value', 'scope'].includes(key)) ||
       !METADATA_FIELDS.includes(op.field) ||
       !['keep', 'set', 'remove'].includes(op.action)
     )
       throw Error('METADATA_INVALID_OPERATION');
+    if (
+      op.scope !== undefined &&
+      (op.field !== 'captureDate' ||
+        !Array.isArray(op.scope) ||
+        !op.scope.length ||
+        op.scope.length > 2 ||
+        new Set(op.scope).size !== op.scope.length ||
+        op.scope.some((s) => !['exif', 'xmp'].includes(s)))
+    )
+      throw Error('METADATA_INVALID_DATE_SCOPE');
     if (op.action !== 'set') {
       if (Object.hasOwn(op, 'value')) throw Error('METADATA_INVALID_OPERATION');
       continue;
@@ -44,9 +54,15 @@ export function validateOperations(operations) {
     } else if (op.field === 'captureDate') {
       if (
         !value ||
-        Object.keys(value).some((k) => !['local', 'offset'].includes(k)) ||
+        Object.keys(value).some((k) => !['local', 'offset', 'offsetMode'].includes(k)) ||
         !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(value.local) ||
         !(value.offset == null || /^[+-](?:0\d|1[0-4]):[0-5]\d$/.test(value.offset))
+      )
+        throw Error('METADATA_INVALID_DATE');
+      if (
+        value.offsetMode !== undefined &&
+        (!['keep', 'set', 'remove'].includes(value.offsetMode) ||
+          (value.offsetMode === 'set' ? !value.offset : value.offset != null))
       )
         throw Error('METADATA_INVALID_DATE');
       const date = new Date(`${value.local}Z`);

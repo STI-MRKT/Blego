@@ -8,11 +8,14 @@ import { appHTML } from './ui/shell.js';
 import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
 import { startTour } from './ui/tour.js';
+let workspaceInteracted = false;
+for (const event of ['pointerdown', 'keydown']) document.addEventListener(event, () => { workspaceInteracted = true; }, { once: true, capture: true });
 import { newsBlockHTML } from './ui/news.js';
-import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/photos.js';
+import { readMetadataForm, readMetadataData, draftFromOperations, imageErrorMessage } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
+import { newsTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
 
@@ -113,7 +116,10 @@ function restoreImageDraft() {
   state.metadataOrigins = loaded.origins || {};
   state.metadataTouched = loaded.touched || [];
 }
+let imagePreviewRequest=0;
+function invalidateImagePreview(){imagePreviewRequest++;state.imagePreview=null;state.imagePreviewName='';}
 async function workspaceChange(action, request = {}) {
+  if(['select','moveFiles','removeGroup'].includes(action))invalidateImagePreview();
   const reply = await window.blego.changeImageWorkspace({ action, ...request });
   state.imageWorkspace = reply.workspace;
   state.metadataPlan = null;
@@ -178,10 +184,14 @@ async function prepareImageExport(retry = {}) {
     acknowledgeMakerNotes: !!document.querySelector('[name="confirm-maker"]')?.checked
   });
 }
+function syncQuickMetadata() {
+ const form=document.getElementById('metadata-form');if(!form)return;
+ for(const field of ['captureDate','gps']){const wrap=form.querySelector(`[data-field-inputs="${field}"]`);if(wrap)wrap.hidden=form.elements.namedItem('action-'+field)?.value!=='set';}
+ const offset=form.querySelector('[data-offset-input]');if(offset)offset.hidden=form.elements.namedItem('date-offset-mode')?.value!=='set';
+}
 function bindView() {
   mountCopyActions();
-  const groupTools = document.querySelector('details.ux-group-controls');
-  if (groupTools) groupTools.ontoggle = () => { state.showGroupTools = groupTools.open; };
+  for(const id of ['metadata-advanced','image-groups-advanced','date-options']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
@@ -221,7 +231,9 @@ function bindView() {
         else control.value = value;
       }
     }
+    syncQuickMetadata();
     metadataForm.oninput = (event) => {
+      syncQuickMetadata();
       const name = event.target.name || '';
       const field = name.startsWith('action-')
         ? name.slice(7)
@@ -241,6 +253,7 @@ function bindView() {
       if (event.target.name?.startsWith('gps-')) delete state.metadataOrigins?.gps;
       if (event.target.name?.startsWith('date-')) delete state.metadataOrigins?.captureDate;
       state.metadataDraft = Object.fromEntries(new FormData(metadataForm));
+      for(const k of ['exif','xmp'])state.metadataDraft['date-scope-'+k]=metadataForm.elements.namedItem('date-scope-'+k).checked;
       state.metadataDraft['confirm-maker'] =
         metadataForm.elements.namedItem('confirm-maker').checked;
       state.metadataPlan = null;
@@ -256,7 +269,7 @@ function bindView() {
         await prepareImageExport();
         renderView();
       } catch (error) {
-        toast(error.message, 'err');
+        toast(imageErrorMessage(error.message), 'err');
       }
     };
   }
@@ -309,12 +322,19 @@ function bindView() {
   if (proxy) {
     proxy.oninput = (event) => {
       state.network.proxyInput = event.target.value;
+      state.network.proxy=null;state.network.proxyError='';
+      document.querySelector('.proxy-result')?.remove();
+      document.querySelector('.proxy-card .banner.err')?.remove();
     };
   }
+  const facebookDetails=document.getElementById('facebook-details');
+  if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
   const checker = document.getElementById('checker-input');
   if (checker) {
     checker.oninput = (event) => {
       state.checker.input = event.target.value;
+      const stale=document.querySelector('[data-checker-stale]');
+      if(stale)stale.hidden=state.checker.checkedInput===event.target.value;
       const count = event.target.value.trim()
         ? event.target.value
             .trim()
@@ -494,43 +514,48 @@ async function reclassifyInput() {
   finally {if(state.importEpoch===epoch) {state.importRequest=null;renderView();}}
 }
 
+let newsRequest = 0;
 function ensureNews() {
-  if (!state.settings.newsEnabled) return;
+  if (state.view !== 'news' || !state.settings.newsEnabled) return;
   if (!state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
 }
-
 async function refreshNews(force) {
-  if (state.news.loading) return;
-  state.news.loading = true;
-  state.news.error = '';
-  updateNews();
+  const topic=state.news.topic, request=++newsRequest;
+  state.news.loading=true;state.news.error='';updateNews();
   try {
-    const data = await loadNews(force);
-    state.news.items = data.items;
-    state.news.counts = data.counts || {};
-    state.news.updatedAt = data.lastSuccessfulAt ? Date.parse(data.lastSuccessfulAt) : 0;
-    state.news.sourceStates = data.sourceStates;
-    state.news.lastAttemptAt = data.lastAttemptAt;
-
-    state.news.error =
-      data.error ||
-      (data.items.length
-        ? ''
-        : 'News sources did not respond. Check the connection and try again.');
-  } catch (error) {
-    void error;
-    state.news.error = 'News is unavailable. Check the connection and try again.';
+    if (!state.settings.newsEnabled) state.settings=await window.blego.updateSettings({newsEnabled:true});
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    const data=await loadNews(force,topic);
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    Object.assign(state.news,data);
+    state.news.updatedAt=data.lastSuccessfulAt?Date.parse(data.lastSuccessfulAt):0;
+    const failed=Object.values(data.sourceStates||{}).some(s=>s.stale);
+    state.news.error=data.cancelled?'Update cancelled.':failed?(data.items.length?'Some sources are unavailable. Saved articles remain available.':'News sources did not respond. Try again later.'):'';
+  } catch {
+    if(request!==newsRequest)return;
+    state.news.error='News is unavailable. Saved articles remain available.';
   }
-  state.news.loading = false;
-  updateNews();
+  state.news.loading=false;updateNews();
 }
+document.addEventListener('change',async event=>{
+  if(event.target.id!=='news-topic')return;
+  const topic=newsTopic(event.target.value), request=++newsRequest;
+  state.news.topic=topic;state.news.items=[];state.news.lastAttemptAt=null;state.news.loading=true;state.news.error='';updateNews();
+  try {
+    await window.blego.updateSettings({newsTopic:topic});
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    const cached=await window.blego.newsSnapshot(topic);
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    Object.assign(state.news,cached);state.news.updatedAt=cached.lastSuccessfulAt?Date.parse(cached.lastSuccessfulAt):0;
+    if(state.settings.newsEnabled) refreshNews(false); else {state.news.loading=false;updateNews();}
+  }catch {if(request!==newsRequest)return;state.news.loading=false;state.news.error='Could not load this topic.';updateNews();}
+});
 
 function updateNews() {
   const block = document.getElementById('news-block');
   if (block) {
     const selection = window.getSelection();
     if (
-      block.contains(document.activeElement) ||
       (selection?.toString() && block.contains(selection.anchorNode))
     )
       return;
@@ -543,47 +568,69 @@ function updateNews() {
 
 function maybeAutoNetwork() {}
 
+let networkController = null;
 async function runNetwork(full) {
-  if (!state.settings.proxyEnabled || state.network.running) return;
-  state.network.running = true;
-  state.network.stage = 'Pinging';
-  state.network.error = '';
-  renderView();
-  const [infoResult, ipResult, pingResult] = await Promise.allSettled([
-    getNetworkInfo(),
-    getIpInfo(),
-    getPing()
-  ]);
-  state.network.info = infoResult.status === 'fulfilled' ? infoResult.value : null;
-  state.network.ip = ipResult.status === 'fulfilled' ? ipResult.value : null;
-  state.network.ping = pingResult.status === 'fulfilled' ? pingResult.value : null;
-  if (!state.network.ip)
-    state.network.error = 'IP lookup failed. Check the connection and run the test again.';
-  state.network.stage = full ? 'Measuring throughput' : '';
-  renderView();
-  if (full) {
-    const speedResult = await Promise.allSettled([getSpeed()]);
-    if (speedResult[0].status === 'fulfilled') {
-      state.network.speed = speedResult[0].value;
-    } else {
-      state.network.error = 'Speed test failed. Try again in a moment.';
-    }
+  if (state.network.running || state.network.proxyLoading) return;
+  const controller = new AbortController();
+  networkController = controller;
+  const n = state.network;
+  n.running = true;
+  n.stage = full ? 'Measuring speed' : 'Measuring TCP latency';
+  n.error = '';
+  if (full) {n.speed = null;n.speedRoute='direct';}
+  else {
+    n.ping = null;
+    n.ip = null;
   }
-  state.network.running = false;
-  state.network.stage = '';
   renderView();
+  try {
+    state.settings = await window.blego.updateSettings({ proxyEnabled: true });
+    controller.signal.throwIfAborted();
+    if (full) n.speed = await getSpeed(controller.signal);
+    else {
+      const [info, ip, ping] = await Promise.allSettled([
+        getNetworkInfo(controller.signal),
+        getIpInfo(),
+        getPing(controller.signal)
+      ]);
+      controller.signal.throwIfAborted();
+      n.info = info.status === 'fulfilled' ? info.value : null;
+      n.ip = ip.status === 'fulfilled' ? ip.value : null;
+      n.ping = ping.status === 'fulfilled' ? ping.value : null;
+      if (!n.ping?.targets?.some((t) => Number.isFinite(t.ms)))
+        n.error = 'No TCP latency results. Check your connection.';
+      if (n.ip?.connection !== 'ok') n.error ||= 'External IP could not be checked.';
+    }
+    controller.signal.throwIfAborted();
+  } catch {
+    if(controller.signal.aborted&&full)n.speed=null;
+    n.error = controller.signal.aborted ? 'Check cancelled.' : 'Connection test failed. Try again.';
+  } finally {
+    n.running = false;
+    n.stage = '';
+    if (networkController === controller) networkController = null;
+    renderView();
+  }
 }
 
-async function runProxyCheck() {
-  if (!state.settings.proxyEnabled || state.network.proxyLoading) return;
+async function runProxyCheck(fullTest = false) {
+  if (!state.settings.proxyEnabled || state.network.proxyLoading || state.network.running) return;
+  const value = state.network.proxyInput.trim();
+  state.network.proxyFullTest = fullTest;
+  if(fullTest){state.network.speed=null;state.network.speedRoute=value?'proxy':'direct';}
+  const reputation = document.getElementById('proxy-reputation')?.checked === true;
+  state.network.reputation = reputation;
   state.network.proxyLoading = true;
+  state.network.proxy = null;
   state.network.proxyError = '';
   renderView();
   try {
-    state.network.proxy = await checkProxy(state.network.proxyInput.trim());
+    const result = await checkProxy(value, { reputation, fullTest });
+    if(value === state.network.proxyInput.trim()){state.network.proxy=result;if(fullTest)state.network.speed=result.speed;}
+    else state.network.proxyError='Адрес изменился. Повторите проверку.';
   } catch (error) {
     state.network.proxy = null;
-    state.network.proxyError = `Proxy check failed: ${error.message}`;
+    state.network.proxyError = error.message === 'CANCELLED' ? 'Проверка отменена' : `Не удалось проверить прокси: ${error.message}`;
   }
   state.network.proxyLoading = false;
   renderView();
@@ -613,6 +660,7 @@ async function addPhotos() {
         file.size = file.view.size;
         file.status = 'ready';
         file.selected = file.view.capabilities.writable;
+        try {file.thumbnail=await window.blego.previewImage(file.fileId,true);}catch {file.thumbnail=null;}
       } catch (error) {
         file.status = error.message === 'CANCELLED' ? 'cancelled' : 'failed';
         file.error = error.message;
@@ -620,7 +668,7 @@ async function addPhotos() {
     }
     state.metadataPlan = null;
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   } finally {
     state.imagesBusy = false;
     state.imagesReading = false;
@@ -629,6 +677,7 @@ async function addPhotos() {
   }
 }
 async function removePhoto(id) {
+  invalidateImagePreview();
   stashImageDraft();
   try {
     await window.blego.removeImage(id);
@@ -639,10 +688,11 @@ async function removePhoto(id) {
     state.imagePreview = null;
     renderView();
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   }
 }
 async function clearPhotos() {
+  invalidateImagePreview();
   stashImageDraft();
   try {
     await window.blego.clearImages();
@@ -659,7 +709,7 @@ async function clearPhotos() {
     state.imagePreview = null;
     renderView();
   } catch (error) {
-    toast(error.message, 'err');
+    toast(imageErrorMessage(error.message), 'err');
   }
 }
 document.addEventListener('click', async (event) => {
@@ -720,6 +770,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'set-view') {
+    if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
     state.view = target.dataset.view;
     if (state.view === 'history')
       window.blego
@@ -907,20 +958,12 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'news-cancel') {
-    window.blego.cancelNews();
+    newsRequest++;state.news.loading=false;state.news.error='Update cancelled.';updateNews();
+    window.blego.cancelNews().catch(()=>toast('Cancellation could not be confirmed.','err'));
     return;
   }
   if (action === 'news-refresh') {
     refreshNews(true);
-    return;
-  }
-  if (action === 'news-topic') {
-    state.news.topic = target.dataset.topic || '';
-    window.blego.updateSettings({ newsTopic: state.news.topic });
-    if (!state.news.topic && !state.news.order.length) {
-      state.news.order = shuffle(state.news.items.map((item) => item.link));
-    }
-    updateNews();
     return;
   }
   if (action === 'net-enable') {
@@ -933,6 +976,7 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if(action==='net-cancel'){networkController?.abort();await window.blego.cancelProxy();return;}
   if (action === 'net-ping') {
     runNetwork(false);
     return;
@@ -953,6 +997,14 @@ document.addEventListener('click', async (event) => {
     window.blego.cancelProxy();
     return;
   }
+  if (action === 'proxy-key-save' || action === 'proxy-key-clear') {
+    const input = document.getElementById('proxy-api-key');
+    const value = action === 'proxy-key-clear' ? '' : input?.value;
+    if (input) input.value = '';
+    try { await window.blego.saveProxyKey(value); toast(action === 'proxy-key-clear' ? 'Ключ удалён' : 'Ключ сохранён'); } catch (e) { toast(e.message === 'SECURE_STORAGE_UNAVAILABLE' ? 'Защищённое хранилище недоступно. Проверка без ключа доступна.' : 'Не удалось сохранить ключ', 'err'); }
+    return;
+  }
+  if (action === 'proxy-speed') { runProxyCheck(true); return; }
   if (action === 'proxy-check') {
     runProxyCheck();
     return;
@@ -1057,7 +1109,7 @@ document.addEventListener('click', async (event) => {
       }
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1069,7 +1121,7 @@ document.addEventListener('click', async (event) => {
       await prepareImageExport({ retryRunId: state.metadataExport.runId, fileIds });
       renderView();
     } catch (e) {
-      toast(e.message, 'err');
+      toast(imageErrorMessage(e.message), 'err');
     }
     return;
   }
@@ -1087,7 +1139,7 @@ document.addEventListener('click', async (event) => {
     try {
       await window.blego.exportMetadataReport(target.dataset.format);
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1134,7 +1186,7 @@ document.addEventListener('click', async (event) => {
       state.imageExportHistory = await window.blego.imageExportHistory();
       state.metadataPlan = null;
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     } finally {
       unsubscribe?.();
       state.imagesBusy = false;
@@ -1142,7 +1194,7 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
-  if (action === 'images-choose') {
+  if (action === 'images-choose' || action === 'images-browse') {
     await addPhotos();
     return;
   }
@@ -1156,12 +1208,18 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if(action==='metadata-copy-input'){await copyText(document.querySelector('#metadata-form')?.elements.namedItem(target.dataset.name)?.value||'',target);return;}
+  if(action==='image-preview-close'){stashImageDraft();invalidateImagePreview();renderView();return;}
   if (action === 'image-preview') {
+    const request=++imagePreviewRequest, fileId=target.dataset.id;
     try {
-      state.imagePreview = await window.blego.previewImage(target.dataset.id);
+      const preview=await window.blego.previewImage(fileId);
+      const photo=state.photos.find(p=>p.fileId===fileId);
+      if(request!==imagePreviewRequest||!photo||state.view!=='photos')return;
+      stashImageDraft();state.imagePreview=preview;state.imagePreviewName=photo.name;
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      if(request===imagePreviewRequest)toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1195,7 +1253,7 @@ document.addEventListener('click', async (event) => {
       await prepareImageExport();
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1213,7 +1271,7 @@ document.addEventListener('click', async (event) => {
       state.metadataPresets = await window.blego.metadataPresets();
       renderView();
     } catch (error) {
-      toast(error.message, 'err');
+      toast(imageErrorMessage(error.message), 'err');
     }
     return;
   }
@@ -1231,28 +1289,30 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-run') {
-    await window.blego.cancelFacebook();
-    const runId = crypto.randomUUID();
-    state.checker.runId = runId;
+    if(state.checker.checking)return;
+    const runId=crypto.randomUUID(),input=state.checker.input;
+    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;
+    state.checker.checking={done:0,total:0};renderView();
     try {
-      const rows = await parseIds(state.checker.input);
-      if (state.checker.runId !== runId) return;
-      state.checker.rows = rows;
-      state.checker.checking = null;
-    } catch (error) {
-      toast(error.message, 'err');
-      return;
+      await window.blego.cancelFacebook();
+      const rows=await parseIds(input);
+      if(state.checker.runId!==runId)return;
+      state.checker.rows=rows;state.checker.checkedInput=input;
+      if(rows.some(row=>row.link)) {
+        if(!state.settings.facebookEnabled)state.settings=await window.blego.updateSettings({facebookEnabled:true});
+        if(state.checker.runId!==runId)return;
+        state.checker.checking=null;await runCheckerStatus(runId);
+      } else {state.checker.checking=null;renderView();}
+    }catch {
+      if(state.checker.runId!==runId)return;
+      state.checker.checking=null;renderView();toast('Could not start this check. Use up to 100 profile IDs or direct links.','err');
     }
-    renderView();
-    return;
-  }
-  if (action === 'checker-status') {
-    runCheckerStatus();
     return;
   }
   if (action === 'checker-cancel') {
-    await window.blego.cancelFacebook();
-    return;
+    state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={availability:'cancelled',reasonCode:'CANCELLED'};
+    renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
     await window.blego.openFacebook(target.dataset.target);
@@ -1276,23 +1336,23 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-clear') {
-    await window.blego.cancelFacebook();
     state.checker = { input: '', rows: null };
     renderView();
+    await window.blego.cancelFacebook();
   }
 });
 
-async function runCheckerStatus() {
+async function runCheckerStatus(runId = crypto.randomUUID()) {
   const rows = state.checker.rows;
   if (!rows || state.checker.checking) return;
   const targets = rows.filter((row) => row.link);
-  const runId = crypto.randomUUID();
   state.checker.runId = runId;
   state.checker.checking = { done: 0, total: new Set(targets.map((row) => row.link)).size };
   renderView();
   try {
-    const result = await checkProfiles(targets, runId, (done, total) => {
+    const result = await checkProfiles(targets, runId, (done, total, result) => {
       if (state.checker.runId !== runId) return;
+      for(const row of rows)if(row.link===result.canonicalUrl)row.check=result;
       state.checker.checking = { done, total };
       const label = document.getElementById('checker-progress-text');
       if (label) label.textContent = `Checking ${done} of ${total}`;
@@ -1303,7 +1363,7 @@ async function runCheckerStatus() {
     for (const row of state.checker.rows || [])
       row.check = result.results.find((value) => value.canonicalUrl === row.link);
   } catch (error) {
-    if (state.checker.runId === runId) toast(error.message, 'err');
+    if (state.checker.runId === runId) toast('Could not complete this check. Try again.', 'err');
   } finally {
     if (state.checker.runId === runId) {
       state.checker.checking = null;
@@ -1322,10 +1382,12 @@ if (window.blego) {
     state.type = state.settings.type;
     await refreshPoolStats();
     state.demo = await window.blego.lastCard();
-    state.news.topic = state.settings.newsTopic;
-    const cached = await window.blego.newsSnapshot();
+    state.news.topic = newsTopic(state.settings.newsTopic);
+    const cached = await window.blego.newsSnapshot(state.news.topic);
     Object.assign(state.news, cached);
+    state.news.updatedAt = cached.lastSuccessfulAt ? Date.parse(cached.lastSuccessfulAt) : 0;
     window.blego.onNews((data) => {
+      if(data.topic !== state.news.topic) return;
       Object.assign(state.news, data);
       state.news.updatedAt = data.lastSuccessfulAt ? Date.parse(data.lastSuccessfulAt) : 0;
       updateNews();
@@ -1337,6 +1399,7 @@ if (window.blego) {
 renderAll();
 setTimeout(() => {
   startTour({
+    shouldStart: () => !workspaceInteracted,
     navigate: (view) => {
       state.view = view;
       renderView();
