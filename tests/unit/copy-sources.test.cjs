@@ -154,7 +154,7 @@ test('JSON unsafe numeric ID keeps its source lexeme and adapters reject already
     /COPY_PRECISION_LOST/
   );
 });
-test('missing CSV fields render empty in structural preview rather than the word null', async () => {
+test('missing CSV fields render empty in classified preview with disabled copy', async () => {
   const { parseInput } = await import('../../shared/importer.mjs');
   const { state } = await import('../../src/js/state.js');
   const { importHTML } = await import('../../src/js/ui/import.js');
@@ -162,15 +162,20 @@ test('missing CSV fields render empty in structural preview rather than the word
     bytes: Buffer.from('name,email\nAlice\n'),
     originalName: 'missing.csv'
   });
+  const { classifyRecords } = await import('../../shared/classifier.mjs');
   state.importData = {
     ...parsed,
+    ...classifyRecords(parsed),
+    sourceColumns: parsed.columns,
+    filteredTotal: parsed.records.length,
     offset: 0,
     counts: { ...parsed.counts, processed: 0, unresolved: 1 }
   };
   try {
     const html = importHTML();
     assert.ok(!html.includes('<span>null</span>'));
-    assert.ok(html.includes('<span></span>'));
+    assert.ok(html.includes('<span class="classifier-value"></span>'));
+    assert.match(html, /data-field="email"[^>]*disabled/);
   } finally {
     state.importData = null;
   }

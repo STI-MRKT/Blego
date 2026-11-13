@@ -274,7 +274,10 @@ async function initialize() {
         const s = getSettings(store);
         return archives.saveArchive(id, {
           archiveRoot: s.archiveRoot,
-          includeOriginal: s.includeOriginal
+          includeOriginal:
+            classification.getConfirmed(id).rulesVersion === 'synthetic-records-1'
+              ? false
+              : s.includeOriginal
         });
       },
       archiveExport: async (arg) => {
@@ -301,8 +304,24 @@ async function initialize() {
         shell.showItemInFolder(path.join(e.archiveRoot, e.fileName));
         return true;
       },
-      importRead: (arg) => classification.read(arg, { encoding: arg.encoding || undefined }),
-      importPage: (arg) => classification.page(arg.operationId, arg.offset),
+      importRead: (arg) =>
+        classification.read(arg, { ...arg.options, encoding: arg.encoding || undefined }),
+      importPage: (arg) => classification.page(arg.operationId, arg.offset, arg.options),
+      importReclassify: (arg) => classification.reclassify(arg.operationId, arg.options),
+      importCell: (arg) => classification.cell(arg.operationId, arg.recordId, arg.field),
+      importExportText: (arg) =>
+        classification.exportText(arg.operationId, { recordId: arg.recordId, format: arg.format }),
+      importExportFile: async (arg) => {
+        if (!['tsv', 'csv'].includes(arg.format)) throw Error('INVALID_FORMAT');
+        const choice = await dialog.showSaveDialog(mainWindow, {
+          defaultPath: `BLEGO-result.${arg.format}`,
+          filters: [{ name: arg.format.toUpperCase(), extensions: [arg.format] }]
+        });
+        if (choice.canceled) return { ok: false, code: 'CANCELLED' };
+        const text = await classification.exportText(arg.operationId, { format: arg.format });
+        await fs.promises.writeFile(choice.filePath, text, { flag: 'wx', mode: 0o600 });
+        return { ok: true };
+      },
       importCancel: (id) => classification.cancel(id),
       importText: (id) => classification.sourceText(id),
       copyPreferences: () => store.get('copy:preferences') || {},

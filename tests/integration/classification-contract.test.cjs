@@ -3,14 +3,16 @@ const assert = require('node:assert/strict');
 const {
   createClassificationService
 } = require('../../electron/features/classification/service.cjs');
-test('rules_pending cannot be confirmed or forged and production refuses fixtures', async () => {
+test('unrecognized production input requires partial confirmation and refuses forged fixtures', async () => {
   const svc = createClassificationService();
   const p = await svc.read({
     requestId: 'one',
     bytes: Buffer.from('один\nдва'),
     originalName: 'x.txt'
   });
-  assert.equal(p.status, 'rules_pending');
+  assert.equal(p.status, 'preview_partial');
+  assert.equal(p.counts.processed, 0);
+  assert.equal(p.counts.unresolved, 2);
   assert.equal(p.counts.total, 2);
   assert.throws(() => svc.confirmClassification(p.operationId, 'accept_complete'));
   assert.throws(() => svc.getConfirmed('forged'));

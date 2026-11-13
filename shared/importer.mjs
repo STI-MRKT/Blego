@@ -1,15 +1,19 @@
 import { MAX_INPUT_BYTES, failure } from './contracts.mjs';
+import { fieldForHeader } from './classifier.mjs';
 function diagnostic(code, location = {}, recordId = null, level = 'warning') {
   return { code, location, recordId, level };
 }
-function delimited(text, delimiter) {
+function delimited(text, delimiter, structured = false) {
   const rows = [];
   let cells = [],
     value = '',
     quoted = false,
     closed = false,
     line = 1,
-    start = 1;
+    start = 1,
+    depth = [],
+    jsonString = false,
+    escaped = false;
   function cell() {
     cells.push(value);
     value = '';
@@ -22,6 +26,26 @@ function delimited(text, delimiter) {
   }
   for (let i = 0; i < text.length; i++) {
     let c = text[i];
+    if (structured && depth.length) {
+      value += c;
+      if (c === '\n') line++;
+      if (jsonString) {
+        if (escaped) escaped = false;
+        else if (c === '\\') escaped = true;
+        else if (c === '"') jsonString = false;
+      } else if (c === '"') jsonString = true;
+      else if (c === '{' || c === '[') depth.push(c);
+      else if (c === '}' || c === ']') {
+        if (depth.pop() !== (c === '}' ? '{' : '['))
+          throw failure('INVALID_JSON_CELL', 'parse', { line });
+      }
+      continue;
+    }
+    if (structured && !quoted && !value.trim() && (c === '{' || c === '[')) {
+      depth.push(c);
+      value += c;
+      continue;
+    }
     if (quoted) {
       if (c === '"') {
         if (text[i + 1] === '"') {
@@ -56,31 +80,131 @@ function delimited(text, delimiter) {
     if (closed) throw failure('TEXT_AFTER_QUOTE', 'parse', { line });
     value += c;
   }
+  if (depth.length) throw failure('INVALID_JSON_CELL', 'parse', { line });
   if (quoted) throw failure('UNCLOSED_QUOTE', 'parse', { line });
   if (value || cells.length || closed) row();
   return rows;
 }
-function delimiterOf(text) {
-  let line = '',
-    q = false;
+function delimiterOf(text, structured = false) {
+  let q = false,
+    escaped = false,
+    depth = 0;
+  const counts = new Map([',', ';', '\t', ...(structured ? ['|'] : [])].map((d) => [d, 0]));
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
-    if (c === '"') q = !q;
-    if (!q && /[\r\n]/.test(c)) break;
-    if (!q) line += c;
+    if (q) {
+      if (escaped) escaped = false;
+      else if (c === '\\' && depth) escaped = true;
+      else if (c === '"') {
+        if (!depth && text[i + 1] === '"') i++;
+        else q = false;
+      }
+      continue;
+    }
+    if (c === '"') {
+      q = true;
+      continue;
+    }
+    if (structured && (c === '[' || c === '{')) {
+      depth++;
+      continue;
+    }
+    if (structured && (c === ']' || c === '}')) {
+      depth--;
+      continue;
+    }
+    if (depth) continue;
+    if (/[\r\n]/.test(c)) break;
+    if (counts.has(c)) counts.set(c, counts.get(c) + 1);
   }
-  const counts = [',', ';', '\t']
-    .map((d) => [d, line.split(d).length - 1])
-    .sort((a, b) => b[1] - a[1]);
-  if (counts[0][1] && counts[0][1] === counts[1][1]) throw failure('AMBIGUOUS_DELIMITER', 'parse');
-  return counts[0][1] ? counts[0][0] : ',';
+  const ranked = [...counts].sort((a, b) => b[1] - a[1]);
+  if (ranked[0][1] && ranked[0][1] === ranked[1][1]) throw failure('AMBIGUOUS_DELIMITER', 'parse');
+  return ranked[0][1] ? ranked[0][0] : structured ? null : ',';
 }
-export function parseText(text, format) {
+// JSON has already been validated. Walk source tokens to retain top-level member
+// spans, including repeated keys and exact nested cookie representations.
+function jsonEntries(text) {
+  let i = 0;
+  const ws = () => {
+    while (/\s/.test(text[i] || '') && i < text.length) i++;
+  };
+  function string() {
+    const start = i++;
+    while (i < text.length) {
+      if (text[i] === '\\') i += 2;
+      else if (text[i++] === '"') break;
+    }
+    return JSON.parse(text.slice(start, i));
+  }
+  function skip() {
+    ws();
+    if (text[i] === '"') {
+      string();
+      return;
+    }
+    if ('[{'.includes(text[i])) {
+      const close = text[i++] === '[' ? ']' : '}';
+      while (text[i] !== close) {
+        ws();
+        if (text[i] === close) break;
+        if (text[i] === ',' || text[i] === ':') i++;
+        else skip();
+      }
+      i++;
+      return;
+    }
+    while (i < text.length && !/[\s,\]}:]/.test(text[i])) i++;
+  }
+  const rows = [];
+  ws();
+  i++;
+  ws();
+  while (i < text.length && text[i] !== ']') {
+    const entries = [];
+    ws();
+    if (text[i] === '{') {
+      i++;
+      ws();
+      while (text[i] !== '}') {
+        const column = string();
+        ws();
+        i++;
+        ws();
+        const start = i;
+        skip();
+        const end = i;
+        const rawText = text.slice(start, end),
+          value = JSON.parse(rawText);
+        entries.push({
+          column,
+          value: typeof value === 'number' ? rawText : value,
+          rawText,
+          range: { start, end }
+        });
+        ws();
+        if (text[i] === ',') {
+          i++;
+          ws();
+        }
+      }
+      i++;
+    } else skip();
+    rows.push(entries);
+    ws();
+    if (text[i] === ',') {
+      i++;
+      ws();
+    }
+  }
+  return rows;
+}
+export function parseText(text, format, options = {}) {
   text = text.replace(/^\uFEFF/, '');
   const diagnostics = [];
   let records = [],
     columns = [],
-    delimiter = null;
+    delimiter = null,
+    headerless = false;
   if (format === 'json') {
     let a;
     try {
@@ -110,7 +234,13 @@ export function parseText(text, format) {
       return { id, location, data, raw: data };
     });
     if (records.some((r) => r.data !== r.raw) && !columns.includes('value')) columns.push('value');
-  } else if (format === 'txt') {
+    if (options.classification) {
+      const entries = jsonEntries(text);
+      records.forEach((r, i) => {
+        if (entries[i].length) r.sourceEntries = entries[i];
+      });
+    }
+  } else if (format === 'txt' && !(options.classification && delimiterOf(text, true))) {
     columns = ['text'];
     records = (text === '' ? [] : text.split(/\r\n|\n|\r/)).map((value, i) => ({
       id: String(i + 1),
@@ -118,10 +248,21 @@ export function parseText(text, format) {
       data: { text: value },
       raw: value
     }));
-  } else if (['csv', 'tsv'].includes(format)) {
-    delimiter = format === 'tsv' ? '\t' : delimiterOf(text);
-    const rows = delimited(text, delimiter);
-    const headers = rows.shift()?.cells || [];
+  } else if (['csv', 'tsv', ...(options.classification ? ['txt'] : [])].includes(format)) {
+    delimiter = format === 'tsv' ? '\t' : delimiterOf(text, options.classification) || ',';
+    const rows = delimited(text, delimiter, options.classification);
+    const firstCells = (rows[0]?.cells || []).filter((v) => v !== '');
+    const namedCount = firstCells.filter(fieldForHeader).length;
+    const confidentHeaders =
+      firstCells.length === 1
+        ? namedCount === 1
+        : namedCount >= 2 && namedCount >= firstCells.length / 2;
+    headerless =
+      options.classification &&
+      (options.headers === false || (options.headers !== true && !confidentHeaders));
+    const headers = headerless
+      ? Array.from({ length: rows[0]?.cells.length || 0 }, (_, i) => `column_${i + 1}`)
+      : rows.shift()?.cells || [];
     const seen = new Set();
     columns = headers.map((h, i) => {
       let key = h || `column_${i + 1}`;
@@ -147,7 +288,21 @@ export function parseText(text, format) {
       }
       if (cells.length > headers.length) diagnostics.push(diagnostic('EXTRA_CELL', location, id));
       if (cells.length < headers.length) diagnostics.push(diagnostic('MISSING_CELL', location, id));
-      return { id, location, data, raw: cells };
+      return {
+        id,
+        location,
+        data,
+        raw: cells,
+        ...(options.classification
+          ? {
+              sourceEntries: columns.map((column, j) => ({
+                column,
+                header: headerless ? null : headers[j],
+                value: cells[j] ?? null
+              }))
+            }
+          : {})
+      };
     });
   } else throw failure('UNSUPPORTED_FORMAT', 'parse');
   const seen = new Map();
@@ -165,6 +320,7 @@ export function parseText(text, format) {
     records,
     columns,
     delimiter,
+    headerless,
     diagnostics,
     counts: {
       total: records.length,
@@ -202,7 +358,7 @@ export async function parseInput(input, options = {}) {
     throw failure('INVALID_ENCODING', 'read');
   }
   const format = options.format || (input.originalName || '').split('.').pop().toLowerCase();
-  const parsed = parseText(text, format);
+  const parsed = parseText(text, format, options);
   if (assumed) {
     parsed.diagnostics.unshift(diagnostic('ENCODING_ASSUMED'));
     parsed.counts.warnings++;

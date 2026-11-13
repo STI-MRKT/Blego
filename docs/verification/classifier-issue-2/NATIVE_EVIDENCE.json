@@ -1,0 +1,120 @@
+{
+  "sourceSha": "62d6f6b95290981bb176cb9dc8f4e1635c77dff4",
+  "workflowRun": 43318440049,
+  "artifactId": 13988729295,
+  "artifactExpires": "2026-11-17T22:20:19Z",
+  "artifactZipSha256": "aaaee02a3570dab983970977d6f563ab7a27a644534e4d302181e6967e794111",
+  "dmgName": "BLEGO-1.2.0-arm64.dmg",
+  "dmgSha256": "4bad19a26f6e8545fbdde41d634d7fb03008bcc000f9aa29cc2e051ddfb6f2ea",
+  "cloudDownloadVerified": true,
+  "macEnvironment": [
+    "ProductName:\t\tmacOS",
+    "ProductVersion:\t\t15.8.2",
+    "BuildVersion:\t\t24H232",
+    "arm64",
+    "VirtualMac2,1",
+    "Apple M1 (Virtual)",
+    "62d6f6b95290981bb176cb9dc8f4e1635c77dff4",
+    "QA only; not notarized or Developer ID signed"
+  ],
+  "native": {
+    "status": "PASS",
+    "target": "darwin-arm64",
+    "osRelease": "24.6.0",
+    "node": "v24.22.1",
+    "sharp": {
+      "aom": "3.15.1",
+      "archive": "3.8.9",
+      "cairo": "1.18.6",
+      "cgif": "0.5.4",
+      "exif": "0.6.26",
+      "expat": "2.8.5",
+      "ffi": "3.8.0",
+      "fontconfig": "2.18.3",
+      "freetype": "2.14.3",
+      "fribidi": "1.0.17",
+      "glib": "2.90.0",
+      "harfbuzz": "14.5.0",
+      "heif": "1.23.5",
+      "highway": "1.4.0",
+      "imagequant": "2.4.1",
+      "lcms": "2.19.1",
+      "mozjpeg": "0826579",
+      "pango": "1.58.2",
+      "pixman": "0.46.4",
+      "png": "1.6.58",
+      "proxy-libintl": "0.5",
+      "rsvg": "2.63.2",
+      "tiff": "4.7.2",
+      "uhdr": "2.0.2",
+      "vips": "8.18.7",
+      "webp": "1.6.0",
+      "xml2": "2.15.4",
+      "zlib-ng": "2.3.3",
+      "sharp": "0.35.5"
+    },
+    "manifest": {
+      "root": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64",
+      "manifestSha256": "6c4f3daebe71a53a612bda14c875b6e4f8262cb934d04787fe6ee12ffacd84d6",
+      "files": 1799,
+      "perlVersion": "v5.40.1"
+    },
+    "dependencies": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64/bin/perl:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)\n",
+    "pathEmpty": true,
+    "formats": [
+      {
+        "format": "jpeg",
+        "status": "PASS",
+        "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+        "outputSha256": "2f43eaba0a65b71168cb0a65cd76f963838b3d559c8495e7330a46c2efc345fe"
+      },
+      {
+        "format": "png",
+        "status": "PASS",
+        "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+        "outputSha256": "bb22688dfb3013d70db39f4f36110381ff74bf5009a46cedff4ede8a52e60c39"
+      },
+      {
+        "format": "webp",
+        "status": "PASS",
+        "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+        "outputSha256": "0b96c9a29719601d00cb9209fa6fba1bf0fdd5df95d6176db5ebdf835d559fb8"
+      }
+    ],
+    "checkedAt": "2026-11-12T22:18:07.036Z",
+    "codeSha": "62d6f6b95290981bb176cb9dc8f4e1635c77dff4"
+  },
+  "installed": {
+    "status": "PASS",
+    "code": 0,
+    "checkedAt": "2026-11-12T22:20:17.874Z",
+    "host": "darwin-arm64",
+    "osRelease": "24.6.0",
+    "executable": "/Users/runner/work/_temp/BLEGO-qa.app/Contents/MacOS/BLEGO",
+    "executableSha256": "36f9f7cc1366ca277e3be745efad10a19392a92c3f0fce4dd7e2b7b521c67a63",
+    "codeSha": "62d6f6b95290981bb176cb9dc8f4e1635c77dff4",
+    "tests": [
+      "tests/ui/app.test.cjs",
+      "tests/ui/copy-all-sections.test.cjs",
+      "tests/ui/image-groups.test.cjs",
+      "tests/ui/ux-restoration.test.cjs",
+      "tests/ui/import-cookie.test.cjs",
+      "tests/ui/classifier.test.cjs",
+      "tests/ui/classifier-copy.test.cjs",
+      "tests/ui/classifier-reset.test.cjs"
+    ],
+    "log": "/Users/runner/work/Blego/Blego/release/installed-darwin-arm64.json.log",
+    "dataIsolation": "Every test supplies its own temporary user-data directory; no default user store",
+    "scope": "Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates."
+  },
+  "guiSummary": [
+    "ℹ tests 8",
+    "ℹ suites 0",
+    "ℹ pass 8",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 0",
+    "ℹ todo 0",
+    "ℹ duration_ms 51999.732167"
+  ]
+}

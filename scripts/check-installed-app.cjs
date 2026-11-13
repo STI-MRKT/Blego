@@ -21,7 +21,10 @@ const { createHash } = require('node:crypto');
     'tests/ui/copy-all-sections.test.cjs',
     'tests/ui/image-groups.test.cjs',
     'tests/ui/ux-restoration.test.cjs',
-    'tests/ui/import-cookie.test.cjs'
+    'tests/ui/import-cookie.test.cjs',
+    'tests/ui/classifier.test.cjs',
+    'tests/ui/classifier-copy.test.cjs',
+    'tests/ui/classifier-reset.test.cjs'
   ];
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,

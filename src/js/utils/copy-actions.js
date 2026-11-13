@@ -3,6 +3,7 @@ import { state } from '../state.js';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
 import { copyText } from './clipboard.js';
+import { CORE_FIELDS } from '../../../shared/classifier.mjs';
 import { copySource } from '../../../shared/copy-sources.mjs';
 import { serializeCopy } from '../../../shared/copy-format.mjs';
 let preferences = {},
@@ -60,10 +61,12 @@ export async function resolveCopySource(id) {
       filtered = await list(state.archiveQuery || {});
     return copySource(id, { items, filteredIds: filtered.map((r) => r.archiveId) });
   }
-  if (id === 'import-source')
-    return copySource(id, {
-      text: state.importData ? await window.blego.importText(state.importData.operationId) : ''
-    });
+  if (id === 'import-source') {
+    const operationId=state.importData?.operationId, epoch=state.importEpoch;
+    const text=operationId?await window.blego.importText(operationId):'';
+    if(state.importEpoch!==epoch || state.importData?.operationId!==operationId) throw Error('COPY_SELECTION_CHANGED');
+    return copySource(id,{text});
+  }
   if (id === 'import' || id === 'import-diagnostics') {
     if (!state.importData) return copySource(id, { columns: [], records: [], diagnostics: [] });
     const operationId = state.importData.operationId,
@@ -72,7 +75,7 @@ export async function resolveCopySource(id) {
     let columns = [];
     for (let offset = 0; ; offset += 50) {
       const page = await window.blego.importPage({ operationId, offset });
-      columns = page.columns;
+      columns = page.rulesVersion === 'synthetic-records-1' ? CORE_FIELDS : page.columns;
       records.push(...page.records);
       for (const d of page.diagnostics) diagnostics.set(JSON.stringify(d), d);
       if (records.length >= page.counts.total) break;
@@ -89,6 +92,14 @@ function availableSources() {
     : id === 'photos'
       ? ['photos', 'image-group', 'image-report']
       : [id];
+}
+export function invalidateImportCopies() {
+  loading++;
+  for (const id of ['import','import-source','import-diagnostics']) selections.delete(id);
+  if (panel?.view === 'import') {
+    panel = null;
+    document.getElementById('copy-panel')?.replaceChildren();
+  }
 }
 export function mountCopyActions() {
   const host = document.getElementById('view');
@@ -257,6 +268,7 @@ export async function copyModelValue(
   button,
   { card = false, personal = false } = {}
 ) {
+  const generation = loading;
   const model = await resolveCopySource(id),
     row = model.rows.find((r) => r.id === String(rowId)) || (!rowId ? model.rows[0] : null);
   if (!row) throw Error('COPY_SELECTION_CHANGED');
@@ -275,6 +287,7 @@ export async function copyModelValue(
     },
     { resolveSource: async () => model, revealedFields: personal ? [key] : [] }
   );
+  if(id.startsWith('import') && generation !== loading) throw Error('COPY_SELECTION_CHANGED');
   return copyText(result.text, button);
 }
 document.addEventListener('change', async (event) => {
@@ -299,6 +312,7 @@ document.addEventListener('click', async (event) => {
   if (!button) return;
   try {
     const action = button.dataset.copyAction;
+    const snapshot = panel, generation = loading;
     if (action === 'open') return await openPanel();
     if (action === 'close') {
       panel = null;
@@ -327,6 +341,7 @@ document.addEventListener('click', async (event) => {
     }
     if (action === 'preview') {
       const result = await payload();
+      if(panel !== snapshot || generation !== loading) return;
       panel.prepared = result;
       document.getElementById('copy-preview').innerHTML =
         `<p>${result.rowCount} rows · ${result.byteLength} bytes. Excluded: ${esc(result.redactions.join(', ') || 'none')}. ${esc(result.warnings.join(', '))}</p><p>${result.text.length > 5000 ? 'Preview shows the first 5,000 characters; copying includes the full prepared payload.' : 'Full preview below.'}</p><pre style="white-space:pre-wrap;max-height:240px;overflow:auto">${esc(result.text.slice(0, 5000))}</pre><button class="btn btn-primary" data-copy-action="commit">Copy prepared snapshot</button>`;
@@ -348,6 +363,7 @@ document.addEventListener('click', async (event) => {
         selection: [button.dataset.row],
         ...(action === 'field' ? { orderedFields: [key] } : {})
       });
+      if(panel !== snapshot || generation !== loading) return;
       await copyText(result.text, button);
       return;
     }
