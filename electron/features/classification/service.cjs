@@ -3,6 +3,18 @@ const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const { EXTENDED_FIELDS } = require('../../../shared/classifier-recognition.mjs');
 const { CORE_FIELDS, CLASSIFIER_FIELDS } = require('../../../shared/classifier.mjs');
+function archiveText(records) {
+  return [
+    CORE_FIELDS.join('\t'),
+    ...records.map((r) =>
+      CORE_FIELDS.map((k) => {
+        let value = r.data[k];
+        if (/^[\s\u0000-\u001f]*[=+@-]/.test(value) || /^\d+$/.test(value)) value = "'" + value;
+        return /[\t\r\n"]/.test(value) ? '"' + value.replaceAll('"', '""') + '"' : value;
+      }).join('\t')
+    )
+  ].join('\n');
+}
 function createClassificationService({ allowTestRules = false, clock = () => new Date() } = {}) {
   const operations = new Map(),
     jobs = new Map();
@@ -78,16 +90,7 @@ function createClassificationService({ allowTestRules = false, clock = () => new
         unresolved.length || !classified.records.length ? 'preview_partial' : 'preview_complete',
       unresolved,
       // Explicit archive confirmation persists the seven agreed fields only.
-      resultText: [
-        CORE_FIELDS.join('\t'),
-        ...classified.records.map((r) =>
-          CORE_FIELDS.map((k) => {
-            let value = r.data[k];
-            if (/^[\s\u0000-\u001f]*[=+@-]/.test(value) || /^\d+$/.test(value)) value = "'" + value;
-            return /[\t\r\n"]/.test(value) ? '"' + value.replaceAll('"', '""') + '"' : value;
-          }).join('\t')
-        )
-      ].join('\n'),
+      resultText: archiveText(classified.records),
       unresolvedText: unresolved
         .map((r) =>
           JSON.stringify({ recordId: r.recordId, location: r.location, code: 'REQUIRES_REVIEW' })
@@ -173,10 +176,33 @@ function createClassificationService({ allowTestRules = false, clock = () => new
     o.offsetMinutes = -new Date(o.processedAt).getTimezoneOffset();
     return publicResult(o);
   }
-  function getConfirmed(id) {
+  function getConfirmed(id, recordId) {
     const o = get(id);
     if (!['completed', 'partial_confirmed'].includes(o.status)) throw Error('NOT_CLASSIFIED');
-    return structuredClone(o);
+    if (recordId === undefined) return structuredClone(o);
+    if (typeof recordId !== 'string' || o.rulesVersion !== 'synthetic-records-1')
+      throw Error('INVALID_RECORD');
+    const record = o.records.find((r) => r.id === recordId);
+    if (!record) throw Error('UNKNOWN_RECORD');
+    o.archiveRecordIds ||= {};
+    o.archiveRecordIds[recordId] ||= randomUUID();
+    const result = structuredClone(o);
+    result.operationId = o.archiveRecordIds[recordId];
+    result.records = [structuredClone(record)];
+    result.unresolved = o.unresolved.filter((r) => r.id === recordId);
+    result.resultText = archiveText(result.records);
+    result.diagnostics = o.diagnostics.filter((d) => d.recordId === recordId);
+    result.unresolvedText = result.unresolved
+      .map((r) => JSON.stringify({ recordId: r.id, location: r.location, code: 'REQUIRES_REVIEW' }))
+      .join('\n');
+    result.counts = {
+      total: 1,
+      processed: result.unresolved.length ? 0 : 1,
+      unresolved: result.unresolved.length,
+      warnings: result.diagnostics.length
+    };
+    result.status = result.unresolved.length ? 'partial_confirmed' : 'completed';
+    return result;
   }
   function selectedRows(o, options = {}) {
     if (options.sort && !CLASSIFIER_FIELDS.some((f) => f.key === options.sort))

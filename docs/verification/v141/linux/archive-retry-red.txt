@@ -1,0 +1,25 @@
+✔ failure after no-overwrite finalization recovers ZIP and lost catalogue (56.092496ms)
+✔ write faults never report ready and corrupt ZIP is rejected (35.020746ms)
+✔ verified temp before finalization resumes without reclassification (22.228009ms)
+✔ ZIP byte limits, symlinks, traversal and CRC tampering reject (22.057253ms)
+✔ real permission denial preserves old ZIP; cancelled save is not ready (19.630383ms)
+✖ TZ06 retry after pre-write failure saves confirmed data without deleting foreign files (9.644114ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 271.636331
+
+✖ failing tests:
+
+test at tests/integration/archive-recovery.test.cjs:102:1
+✖ TZ06 retry after pre-write failure saves confirmed data without deleting foreign files (9.644114ms)
+  Error: ARCHIVE_RECOVERY_REQUIRED
+      at /workspace/BLEGO-final/electron/features/archive/service.cjs:35:15
+      at async Object.saveArchive (/workspace/BLEGO-final/electron/features/archive/service.cjs:117:14)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/archive-recovery.test.cjs:107:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

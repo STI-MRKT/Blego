@@ -923,15 +923,18 @@ document.addEventListener('click', async (event) => {
     } catch {toast('Не удалось сохранить файл. Выберите новое имя и проверьте доступ к папке.','err');}
     return;
   }
-  if (action === 'classifier-archive') {
+  if (action === 'classifier-archive' || action === 'classifier-archive-record') {
     const operationId=state.importData?.operationId, epoch=state.importEpoch;
     target.disabled=true;
     try {
       await window.blego.confirmClassification({operationId,decision:state.importData.status==='preview_partial'?'accept_partial':'accept_complete'});
       if(state.importEpoch!==epoch) return;
-      await window.blego.saveArchive(operationId);
+      await window.blego.saveArchive(action==='classifier-archive-record'?{operationId,recordId:target.dataset.row}:operationId);
       if(state.importEpoch!==epoch) return;
-      state.importSaved=true;await importPage(state.importData.offset);toast('Сохранено');
+      if(action==='classifier-archive')state.importSaved=true;
+      state.archiveView=null;state.archiveQuery={};
+      state.archives=await window.blego.listArchives();
+      await importPage(state.importData.offset);toast('Сохранено');
     } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }

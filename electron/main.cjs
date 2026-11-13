@@ -367,9 +367,12 @@ async function initialize() {
           diagnostics: r.entries['diagnostics.jsonl'].toString()
         };
       },
-      archiveSave: (id) => {
+      archiveSave: (request) => {
+        const id = typeof request === 'string' ? request : request?.operationId;
+        const recordId = typeof request === 'object' ? request?.recordId : undefined;
         const s = getSettings(store);
         return archives.saveArchive(id, {
+          recordId,
           archiveRoot: s.archiveRoot,
           includeOriginal:
             classification.getConfirmed(id).rulesVersion === 'synthetic-records-1'

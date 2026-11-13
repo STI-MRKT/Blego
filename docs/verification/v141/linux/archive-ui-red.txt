@@ -1,0 +1,22 @@
+✖ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (6953.80792ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7670.653538
+
+✖ failing tests:
+
+test at tests/ui/archive-v141.test.cjs:6:1
+✖ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (6953.80792ms)
+  locator.waitFor: Timeout 5000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('.hrow .nm').filter({ hasText: 'New.txt' }) to be visible[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/archive-v141.test.cjs:25:60) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('.hrow .nm').filter({ hasText: 'New.txt' }) to be visible" ]
+  }

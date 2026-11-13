@@ -98,3 +98,49 @@ test('real permission denial preserves old ZIP; cancelled save is not ready', as
   await assert.rejects(svc.saveArchive(f.id, { cancellation: abort.signal }));
   assert.equal(svc.listArchives().items.length, 1);
 });
+
+test('TZ06 retry after pre-write failure saves confirmed data without deleting foreign files', async (t) => {
+  const f = await fixture(t);
+  let fail = true;
+  const svc = createArchiveService({
+    ...f,
+    fault: (stage) => {
+      if (fail && stage === 'writing') throw Object.assign(Error('disk'), { code: 'ENOSPC' });
+    }
+  });
+  await assert.rejects(svc.saveArchive(f.id));
+  fail = false;
+  const archive = await svc.saveArchive(f.id);
+  assert.equal(svc.listArchives().total, 1);
+  assert.ok((await svc.openArchive(archive.archiveId)).entries['result.txt'].length);
+  assert.equal((await svc.saveArchive(f.id)).archiveId, archive.archiveId);
+});
+
+test('TZ06 selected classified record archives only its seven fields, retains source operation and is idempotent', async (t) => {
+  const f = await fixture(t);
+  const {
+    createClassificationService
+  } = require('../../electron/features/classification/service.cjs');
+  const classification = createClassificationService();
+  t.after(() => classification.close());
+  const input = await classification.read({
+    requestId: 'select-test',
+    originalName: 'two.txt',
+    bytes: Buffer.from(
+      'id:0001|email:first@example.test|cookies:FAKE_FIRST\nid:0002|email:second@example.test|cookies:FAKE_SECOND'
+    )
+  });
+  classification.confirmClassification(input.operationId, 'accept_complete');
+  const svc = createArchiveService({ ...f, classification });
+  const a = await svc.saveArchive(input.operationId, { recordId: '2' });
+  const text = (await svc.openArchive(a.archiveId)).entries['result.txt'].toString();
+  assert.ok(text.includes('second@example.test'));
+  assert.ok(!text.includes('first@example.test'));
+  assert.ok(!text.includes('FAKE_SECOND'));
+  assert.equal(a.counts.total, 1);
+  assert.equal(classification.page(input.operationId).records.length, 2);
+  assert.equal(
+    (await svc.saveArchive(input.operationId, { recordId: '2' })).archiveId,
+    a.archiveId
+  );
+});
