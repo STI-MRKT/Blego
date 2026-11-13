@@ -102,6 +102,8 @@ async function initialize() {
     {
       settingsGet: () => getSettings(store),
       geoCatalog: (request) => geo.catalog(request),
+      geoBoundary: (request) => geo.boundary(request),
+      imagesMoveGeo: (request) => images.moveGeo(request),
       imagesGenerateGeo: (request) => images.generateGeo(request),
       geoCancel: (id) => geo.cancel(id),
       geoImport: async () => {

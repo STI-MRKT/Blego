@@ -119,19 +119,25 @@ export function validateWorkspace(value) {
     if (!ids.has(groupId) || !validId(token)) fail();
   return w;
 }
-export function resolveFileOperations(workspace, fileId) {
+export function createWorkspaceResolver(workspace) {
   const w = validateWorkspace(workspace);
-  if (!Object.hasOwn(w.membership, fileId)) throw Error('INVALID_FILE_TOKEN');
-  const group = w.groups.find((g) => g.id === w.membership[fileId]),
-    overrides = new Map((w.overrides[fileId] || []).map((o) => [o.field, o]));
-  return METADATA_FIELDS.map((field) => {
-    const own = overrides.get(field);
-    return structuredClone(
-      own && own.action !== 'inherit'
-        ? own
-        : group.operations.find((o) => o.field === field) || { field, action: 'keep' }
-    );
-  });
+  const groupRules = new Map(
+    w.groups.map((group) => [group.id, new Map(group.operations.map((op) => [op.field, op]))])
+  );
+  return (fileId) => {
+    if (!Object.hasOwn(w.membership, fileId)) throw Error('INVALID_FILE_TOKEN');
+    const group = groupRules.get(w.membership[fileId]),
+      overrides = new Map((w.overrides[fileId] || []).map((op) => [op.field, op]));
+    return METADATA_FIELDS.map((field) => {
+      const own = overrides.get(field);
+      return structuredClone(
+        own && own.action !== 'inherit' ? own : group.get(field) || { field, action: 'keep' }
+      );
+    });
+  };
+}
+export function resolveFileOperations(workspace, fileId) {
+  return createWorkspaceResolver(workspace)(fileId);
 }
 export const engineOperations = (operations) =>
   operations.map(({ origin, ...operation }) => operation);

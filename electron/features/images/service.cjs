@@ -76,6 +76,54 @@ function createImageService({ engine = createEngine(), store, geo, hooks = {} } 
   }
   return {
     groups,
+    async moveGeo({ cityId, fileId, value, workspaceRevision, requestId }) {
+      if (!geo) throw Error('GEO_BOUNDARY_UNAVAILABLE');
+      if (active || adding) throw Error('IMAGES_BUSY');
+      const workspace = groups.snapshot();
+      if (workspace.revision !== workspaceRevision) throw Error('PLAN_STALE');
+      if (
+        !files.get(fileId)?.view?.capabilities.writable ||
+        !Object.hasOwn(workspace.membership, fileId)
+      )
+        throw Error('INVALID_FILE_TOKEN');
+      if (!value || Object.keys(value).some((k) => !['latitude', 'longitude'].includes(k)))
+        throw Error('GEO_INVALID_REQUEST');
+      const exclude = Object.keys(workspace.membership)
+        .filter((id) => id !== fileId)
+        .map((id) => groups.effective(id).find((op) => op.field === 'gps'))
+        .filter((op) => op?.action === 'set')
+        .map((op) => op.value);
+      const validated = await geo.validatePoint({ cityId, point: value, exclude, requestId });
+      if (active || adding || groups.snapshot().revision !== workspaceRevision)
+        throw Error('PLAN_STALE');
+      const previous = groups.effective(fileId).find((op) => op.field === 'gps');
+      groups.setGeneratedGPS({
+        updates: [
+          {
+            fileId,
+            operation: {
+              field: 'gps',
+              action: 'set',
+              value: {
+                ...(previous.action === 'set'
+                  ? previous.value
+                  : { altitudeMode: 'keep', altitude: null }),
+                ...validated.point
+              },
+              origin: {
+                kind: 'geo',
+                id: validated.city.id.replace(/:/g, '_'),
+                name: validated.city.name,
+                sourceHash: validated.city.sha256,
+                version: 1
+              }
+            }
+          }
+        ]
+      });
+      plans.clear();
+      return { workspace: groups.snapshot(), point: validated.point, city: validated.city };
+    },
     async generateGeo({ cityId, fileIds, requestId }) {
       if (!geo) throw Error('GEO_BOUNDARY_UNAVAILABLE');
       if (active || adding) throw Error('IMAGES_BUSY');

@@ -36,6 +36,8 @@ contextBridge.exposeInMainWorld('blego', {
       Array.from(files, (file) => webUtils.getPathForFile(file))
     ),
   geoCatalog: (request) => call('geoCatalog', request),
+  geoBoundary: (request) => call('geoBoundary', request),
+  moveImageGeo: (request) => call('imagesMoveGeo', request),
   generateImageGeo: (request) => call('imagesGenerateGeo', request),
   cancelGeo: (id) => call('geoCancel', id),
   importGeo: () => call('geoImport'),

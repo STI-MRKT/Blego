@@ -64,6 +64,27 @@ function createGeoService({ store } = {}) {
           .map(publicCity)
       };
     },
+    async boundary({ cityId, requestId } = {}) {
+      const city = all().find((c) => c.id === cityId);
+      if (!city) throw Error('GEO_BOUNDARY_UNAVAILABLE');
+      const geometry = await run({ kind: 'boundary', geometry: city.geometry }, requestId);
+      return { city: publicCity(city), geometry };
+    },
+    async validatePoint({ cityId, point, exclude = [], requestId } = {}) {
+      const city = all().find((c) => c.id === cityId);
+      if (!city) throw Error('GEO_BOUNDARY_UNAVAILABLE');
+      if (
+        !Array.isArray(exclude) ||
+        exclude.length > 1000 ||
+        exclude.some((p) => !p || !Number.isFinite(p.latitude) || !Number.isFinite(p.longitude))
+      )
+        throw Error('GEO_INVALID_REQUEST');
+      const value = await run(
+        { kind: 'point', geometry: city.geometry, point, exclude },
+        requestId
+      );
+      return { city: publicCity(city), point: value };
+    },
     async generate({ cityId, count, exclude = [], requestId } = {}) {
       const city = all().find((c) => c.id === cityId);
       if (!city) throw Error('GEO_BOUNDARY_UNAVAILABLE');

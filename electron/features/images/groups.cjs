@@ -3,7 +3,7 @@ const {
   emptyWorkspace,
   validateWorkspace,
   validateWorkspaceOperations,
-  resolveFileOperations,
+  createWorkspaceResolver,
   validName
 } = require('../../../shared/image-workspace.mjs');
 function createGroupStore({ store } = {}) {
@@ -14,12 +14,14 @@ function createGroupStore({ store } = {}) {
   workspace.overrides = {};
   workspace.selection = [];
   workspace.destinationByGroup = {};
+  let resolver = null;
   const snapshot = () => structuredClone(workspace);
   const mutate = (fn) => {
     const next = snapshot();
     fn(next);
     next.revision++;
     workspace = validateWorkspace(next);
+    resolver = null;
     return snapshot();
   };
   const group = (w, id) => {
@@ -131,7 +133,8 @@ function createGroupStore({ store } = {}) {
       });
     },
     effective(fileId) {
-      return resolveFileOperations(workspace, fileId);
+      resolver ||= createWorkspaceResolver(workspace);
+      return resolver(fileId);
     },
     save() {
       const saved = {
