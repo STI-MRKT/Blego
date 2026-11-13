@@ -1,0 +1,10 @@
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (2116.376278ms)
+✔ first-run tour never steals navigation after the user starts working (1741.822586ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4342.807403

@@ -1,0 +1,18 @@
+✔ TZ06 labelled recovery email is separate from primary email and seven-field schema (49.177482ms)
+✔ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (20.230993ms)
+✔ TZ06 infers standalone country and name with identity/date context, not countries in prose (7.378316ms)
+✔ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (2.202346ms)
+✔ TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without accepting arbitrary corrupt bytes (1.889659ms)
+✔ all JSON fields and nested raw values survive, including record 51 (64.355816ms)
+✔ CSV conflicting headers, extra cells, multiline locations are retained (5.390473ms)
+✔ unclosed quote, invalid JSON, malformed encoding and oversize are explicit errors (1.440254ms)
+✔ UTF16LE/BE BOM and explicit Windows1251 retain Cyrillic (3.724313ms)
+✔ invalid JSON record shapes remain accounted for rather than dropped (1.307709ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180.549702

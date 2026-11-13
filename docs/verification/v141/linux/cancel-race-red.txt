@@ -1,0 +1,22 @@
+✖ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (32646.980677ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33873.609621
+
+✖ failing tests:
+
+test at tests/ui/proxy-final.test.cjs:7:1
+✖ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (32646.980677ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('[data-action="net-cancel"]')[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/proxy-final.test.cjs:84:54) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('[data-action="net-cancel"]')` ]
+  }

@@ -373,13 +373,37 @@ export async function parseInput(input, options = {}) {
     encoding = 'utf-8';
     assumed = false;
   }
+  if (assumed && options.classification && bytes.length >= 16 && bytes.length % 2 === 0) {
+    const sample = bytes.subarray(0, Math.min(bytes.length, 4096));
+    let even = 0,
+      odd = 0;
+    for (let i = 0; i < sample.length; i++)
+      if (sample[i] === 0) {
+        if (i % 2) odd++;
+        else even++;
+      }
+    if (odd > sample.length / 8 && even < odd / 4) encoding = 'utf-16le';
+    else if (even > sample.length / 8 && odd < even / 4) encoding = 'utf-16be';
+  }
   if (!['utf-8', 'utf-16le', 'utf-16be', 'windows-1251'].includes(encoding))
     throw failure('UNSUPPORTED_ENCODING', 'read');
   let text;
   try {
     text = new TextDecoder(encoding, { fatal: true }).decode(bytes);
   } catch {
-    throw failure('INVALID_ENCODING', 'read');
+    if (!assumed || !options.classification || encoding !== 'utf-8')
+      throw failure('INVALID_ENCODING', 'read');
+    const candidate = new TextDecoder('windows-1251', { fatal: true }).decode(bytes);
+    // Single-byte encodings cannot be identified universally. Only accept a
+    // Cyrillic structured record; keep diagnostics and manual post-import override.
+    if (
+      !/[А-Яа-яЁё]{3}/u.test(candidate) ||
+      !/(?:^|[|\n])\s*(?:id|email|name|фио|почта)[:=]/iu.test(candidate) ||
+      /[\u0000-\u0008\u000e-\u001f]/u.test(candidate)
+    )
+      throw failure('INVALID_ENCODING', 'read');
+    encoding = 'windows-1251';
+    text = candidate;
   }
   const format = options.format || (input.originalName || '').split('.').pop().toLowerCase();
   const parsed = parseText(text, format, options);

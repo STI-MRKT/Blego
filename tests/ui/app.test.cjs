@@ -119,7 +119,7 @@ test(
         .join('\n')
     );
     await page.locator('.toasts').getByText('Copied', { exact: true }).first().waitFor();
-    await page.locator('.sidebar [data-view="settings"]').click();
+    await page.locator('.topbar [data-view="settings"]').click();
     await page.locator('[name="symbols"]').fill('★');
     await page.locator('#settings-form button[type="submit"]').click();
     await waitForAsync(page, async () => (await window.blego.getSettings()).symbols === '★');

@@ -100,3 +100,22 @@
   .hrow .cell-box{max-width:100%}
   .hrow .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
 }
+
+/* TZ06 BIO uses existing form tokens; zero minimum widths preserve compact view. */
+.biography .bio-field { min-width: 0; }
+.biography .head-actions .input { flex: 1; min-width: 0; }
+.biography textarea { width: 100%; resize: vertical; }
+.biography .bio-field:last-child { grid-column: 1 / -1; }
+
+/* TZ06 independent measured quality/trust meters; unknown stays neutral. */
+.quality-track { height: 8px; border-radius: 4px; overflow: hidden; background: var(--border); }
+.quality-track i { display: block; height: 100%; background: linear-gradient(90deg, #e05252, #ed933d, #e7cf45, #a0cf54, #48b878); background-size: 100% 100%; }
+.quality-track.unknown i { background: var(--muted); opacity: .35; }
+.classifier-cookie-value { white-space: pre-wrap; overflow: auto; max-height: 220px; max-width: 420px; overflow-wrap: anywhere; }
+
+.friend-name { overflow-wrap: anywhere; min-width: 0; }
+/* TZ06 protocol label must wrap when a native scrollbar narrows the proxy card. */
+@media(max-width:600px){
+  .proxy-card .mini-head{flex-wrap:wrap;gap:6px}
+  .proxy-card .mini-head .pill{max-width:100%;white-space:normal;height:auto;min-height:19px;overflow-wrap:anywhere}
+}

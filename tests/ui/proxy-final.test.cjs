@@ -9,6 +9,7 @@ test(
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-proxy-ui-'));
+    let releaseResponse = () => {};
     const store = await require('../../electron/local/store.cjs').openStore(root);
     store.set('tourSeen', true);
     store.close();
@@ -21,6 +22,7 @@ test(
       ]
     });
     t.after(async () => {
+      releaseResponse();
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
@@ -37,14 +39,14 @@ test(
     await page.locator('[data-view="network"]').click();
     await page.locator('#proxy-input').fill('http://user:synthetic-password@127.0.0.1:80');
     await page.locator('[data-action="proxy-check"]').click();
-    await page.getByText('Ошибка подключения', { exact: true }).waitFor();
-    assert.match(await page.locator('.proxy-result').innerText(), /REQUEST_BLOCKED/);
+    await page.getByText('Network Error', { exact: true }).waitFor();
+    assert.match(await page.locator('.proxy-result').innerText(), /Request blocked/);
     assert.doesNotMatch(await page.locator('.proxy-result').innerText(), /synthetic-password/);
     assert.equal(
       await page
         .locator('.risk-score')
         .allTextContents()
-        .then((x) => x.every((v) => v === 'Нет данных')),
+        .then((x) => x.every((v) => v === 'N/A')),
       true
     );
     await page.locator('#proxy-input').fill('http://new.example:8080');
@@ -68,20 +70,33 @@ test(
     await page.waitForFunction(
       () => document.querySelector('#speed-value')?.dataset.value === '10.5'
     );
-    assert.equal(await page.getByText('Скорость через прокси', { exact: true }).isVisible(), true);
+    assert.equal(await page.getByText('Proxy Speed', { exact: true }).isVisible(), true);
     let resolveStarted;
     const started = new Promise((resolve) => {
       resolveStarted = resolve;
     });
+    const response = new Promise((resolve) => {
+      releaseResponse = resolve;
+    });
+    let resolveFinished;
+    const finished = new Promise((resolve) => {
+      resolveFinished = resolve;
+    });
     await page.route('**/api/net/speed', async (route) => {
       resolveStarted();
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      await route.fulfill({ json: { mbps: 999, bytes: 1, ttfb: 1 } }).catch(() => {});
+      await response;
+      await route
+        .fulfill({ json: { mbps: 999, bytes: 1, ttfb: 1 } })
+        .catch(() => {})
+        .finally(resolveFinished);
     });
     await page.locator('[data-action="net-run"]').click();
     await started;
+    await page.waitForTimeout(650); // Deliberately slower than the old 400ms fixture.
     await page.locator('[data-action="net-cancel"]').click();
-    await page.waitForTimeout(500);
+    releaseResponse();
+    await finished;
+    await page.waitForFunction(async () => !(await import('/js/state.js')).state.network.running);
     const state = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       return {

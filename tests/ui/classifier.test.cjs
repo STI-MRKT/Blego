@@ -6,7 +6,7 @@ const fs = require('node:fs'),
 const { _electron } = require('playwright');
 const { openStore } = require('../../electron/local/store.cjs');
 test(
-  'classifier UI has eleven compact columns, explicit schema/mapping and stable navigation',
+  'classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-classifier-ui-'));
@@ -47,7 +47,8 @@ test(
       'ГЕО',
       'User-Agent',
       'Токен',
-      'Куки'
+      'Куки',
+      'Резервная почта'
     ]);
     assert.equal(await page.locator('.classifier-table tbody tr').count(), 50);
     const geometry = await page.locator('[data-row="1"][data-field="accountId"]').evaluate((b) => {
@@ -80,17 +81,20 @@ test(
       () => document.querySelectorAll('.classifier-table tbody tr').length === 1
     );
     await page.locator('[data-action="import-reset"]').click();
-    await page.locator('#classifier-schema').selectOption('core7');
-    await page.locator('#classifier-headers').selectOption('no');
     await page.locator('#file-input').setInputFiles({
       name: 'synthetic.tsv',
       mimeType: 'text/tab-separated-values',
       buffer: Buffer.from('Example Person\t0001\tFAKE_PASS\t\tperson@example.com\t01/02/2000\tGB')
     });
+    await page.locator('[data-classifier-status]').waitFor();
+    await page.locator('#classifier-options summary').click();
+    await page.locator('#classifier-schema').selectOption('core7');
+    await page.locator('#classifier-headers').selectOption('no');
+    await page.locator('[data-action="classifier-apply"]').click();
     await page.locator('[data-row="1"][data-field="fullName"]').waitFor();
+    await page.locator('.classifier-table').getByText('Example Person', { exact: true }).waitFor();
     assert.ok((await page.locator('.classifier-table').innerText()).includes('Example Person'));
     await page.locator('[data-action="import-reset"]').click();
-    await page.locator('#classifier-schema').selectOption('');
     await page.locator('#file-input').setInputFiles({
       name: 'synthetic.tsv',
       mimeType: 'text/tab-separated-values',
@@ -106,16 +110,21 @@ test(
         document.querySelector('[data-classifier-status]')?.dataset.classifierStatus ===
         'preview_complete'
     );
-    assert.ok(!(await page.locator('.classifier-table').innerText()).includes('FAKE_A'));
+    assert.ok((await page.locator('.classifier-table').innerText()).includes('FAKE_A'));
+    assert.ok((await page.locator('.classifier-table').innerText()).includes('FAKE_B'));
     await page
       .locator('.classifier-table [data-action="classifier-copy-cell"][data-field="password"]')
       .click();
     await page.waitForTimeout(100);
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'FAKE_A');
+    await page
+      .locator('.classifier-table [data-action="classifier-copy-cell"][data-field="emailPassword"]')
+      .click();
+    await page.waitForTimeout(100);
+    assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'FAKE_B');
     await page.locator('[data-action="import-reset"]').click();
     assert.equal(await page.locator('.classifier-table').count(), 0);
     if (process.env.BLEGO_CAPTURE_UX === '1') {
-      await page.locator('#classifier-headers').selectOption('');
       await page.locator('[data-action="import-sample"]').click();
       await page.locator('[data-classifier-status]').waitFor();
       await page.evaluate(() => document.getElementById('toasts')?.replaceChildren());

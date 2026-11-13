@@ -13,14 +13,13 @@ const NAV = [
     { view: 'photos', icon: I.image, label: 'Photos' },
     { view: 'friends', icon: I.users, label: 'Friends' },
     { view: 'checker', icon: I.shield, label: 'Checker' },
-    { view: 'settings', icon: I.shield, label: 'Settings' },
     { view: 'history', icon: I.clock, label: 'Archive' }
   ] }
 ];
 
 export const titleOf = (view) => {
   const item = NAV.flatMap((group) => group.items).find((entry) => entry.view === view);
-  return item ? item.label : '';
+  return item ? item.label : view==='settings'?'Settings':'';
 };
 
 function navItem(item) {
@@ -39,15 +38,15 @@ export function appHTML() {
         ${NAV.map((group) => `<div class="nav-label">${group.group}</div>${group.items.map(navItem).join('')}`).join('')}
       </nav>
       <div class="side-bottom">
-        <div class="side-note" title="Local workspace · no account" aria-label="Local workspace · no account"><span class="dot ok"></span><span class="side-note-text">Local workspace · no account</span></div>
+
         <div class="credit">powered by <span>blemish&amp;alterego</span></div>
       </div>
     </aside>
     <div class="main">
       <header class="topbar">
         <button class="icon-btn menu-toggle" data-action="menu-toggle" aria-controls="workspace-navigation" aria-expanded="false" aria-label="Раскрыть меню" title="Раскрыть меню">${I.chevron}</button><div class="tb-title">${titleOf(state.view)}</div>
-        <span class="pill tiny">LOCAL</span>
-        <div class="tb-right"></div>
+
+        <div class="tb-right"><button class="icon-btn" data-action="set-view" data-view="settings" ${state.view==='settings'?'aria-current="page"':''} aria-label="Settings" title="Settings">⚙</button></div>
       </header>
       <main class="content" id="view">${viewHTML()}</main>
     </div>

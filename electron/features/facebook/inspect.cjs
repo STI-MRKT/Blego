@@ -1,6 +1,6 @@
 const { normalizeTarget } = require('./normalize.cjs');
 const { STATUSES } = require('./diagnostics.cjs');
-const PARSER_VERSION = 'public-evidence-v2';
+const PARSER_VERSION = 'public-evidence-v3';
 function attributes(tag) {
   return Object.fromEntries(
     [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
@@ -24,7 +24,7 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
     availability = 'request_limited';
     reasonCode = 'REQUEST_LIMITED';
   } else if (
-    /\/checkpoint(?:\/|\?)|captcha/i.test(url) ||
+    /\/checkpoint(?:\/|\?|$)|captcha/i.test(url) ||
     /<form\b[^>]*action=["'][^"']*\/checkpoint\//i.test(body) ||
     /id=["']captcha/i.test(body)
   ) {
@@ -32,8 +32,9 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
     reasonCode = 'CHECKER_CHALLENGE';
   } else if (
     status === 401 ||
-    /\/login(?:\/|\?)/i.test(url) ||
-    /id=["']login_form["']/i.test(body)
+    /\/login(?:\.php)?(?:\/|\?|$)/i.test(url) ||
+    /id=["']login_form["']/i.test(body) ||
+    /<form\b[^>]*action=["'][^"']*\/login(?:\.php)?(?:[/?"'])/i.test(body)
   ) {
     availability = 'login_required';
     reasonCode = 'LOGIN_REQUIRED';
@@ -54,8 +55,16 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
     for (const match of body.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (attributes(match[1]).type !== 'application/ld+json') continue;
       try {
-        const data = JSON.parse(match[2]);
+        const data = JSON.parse(match[2], (_key, value, context) =>
+          typeof value === 'number' && !Number.isSafeInteger(value) ? context?.source : value
+        );
         const list = Array.isArray(data) ? data : [data];
+        // JSON-LD commonly groups top-level entities under @graph. Bound traversal
+        // and do not follow remote contexts or links.
+        for (let i = 0; i < list.length && i < 1000; i++) {
+          const graph = list[i]?.['@graph'];
+          if (Array.isArray(graph)) list.push(...graph.slice(0, 1000 - list.length));
+        }
         const personMatch = list.find(
           (item) =>
             item?.['@type'] === 'Person' &&

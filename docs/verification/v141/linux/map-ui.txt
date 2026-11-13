@@ -1,0 +1,11 @@
+✔ map drag retains dirty date through actual preview and export (4740.596334ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4354.907674ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (4070.90121ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14150.320662

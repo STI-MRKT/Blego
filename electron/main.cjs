@@ -16,6 +16,7 @@ const { startServer } = require('./server.cjs');
 
 let serverInstance = null;
 let serverUrl = null;
+let biographyCloseGate = null;
 
 const { openStore } = require('./local/store.cjs');
 const { getSettings, updateSettings } = require('./local/settings.cjs');
@@ -39,7 +40,7 @@ const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends;
+let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends, mapTiles;
 let recoveryReports = [];
 let imageExportPromise = null,
   imageExportReport = null;
@@ -53,6 +54,7 @@ async function initialize() {
   geo = require('./features/geo/service.cjs').createGeoService({ store });
   images = createImageService({ store, geo });
   await images.recover();
+  mapTiles = require('./features/geo/tiles.cjs').createTileService({ root: store.root });
   archives = createArchiveService({ store, classification });
   news = createNewsService({
     store,
@@ -125,6 +127,7 @@ async function initialize() {
       friendsOpen: (id) => shell.openExternal(friends.openUrl(id)),
       geoCatalog: (request) => geo.catalog(request),
       geoBoundary: (request) => geo.boundary(request),
+      mapTile: (request) => mapTiles.tile(request),
       imagesMoveGeo: (request) => images.moveGeo(request),
       imagesGenerateGeo: (request) => images.generateGeo(request),
       geoCancel: (id) => geo.cancel(id),
@@ -367,9 +370,12 @@ async function initialize() {
           diagnostics: r.entries['diagnostics.jsonl'].toString()
         };
       },
-      archiveSave: (id) => {
+      archiveSave: (request) => {
+        const id = typeof request === 'string' ? request : request?.operationId;
+        const recordId = typeof request === 'object' ? request?.recordId : undefined;
         const s = getSettings(store);
         return archives.saveArchive(id, {
+          recordId,
           archiveRoot: s.archiveRoot,
           includeOriginal:
             classification.getConfirmed(id).rulesVersion === 'synthetic-records-1'
@@ -468,6 +474,22 @@ async function initialize() {
       classificationConfirm: (arg) =>
         classification.confirmClassification(arg.operationId, arg.decision),
       generate: (request) => generateProfile(request, { store }),
+      closeGuardReady: () => biographyCloseGate?.ready(),
+      finishClose: (result) => biographyCloseGate?.acknowledge(result),
+      biography: (request) => {
+        const service = require('./features/generator/biography.cjs');
+        const p = store.get('lastCard');
+        if (!p || p.id !== request?.profileId) throw Error('STALE_PROFILE');
+        if (request.action === 'save') return service.saveBiography(request, { store });
+        if (request.action === 'suggest')
+          return service.bioSuggestions(p, { store, field: request.field, values: request.values });
+        if (request.action !== 'read') throw Error('INVALID_BIO');
+        return {
+          values: service.bioDefaults(p),
+          institutions: service.organizationOptions(p),
+          revision: p.biographyRevision || 0
+        };
+      },
       poolStats: (request) => getPoolStats(request, { store }),
       poolChoose: async () => {
         const result = await dialog.showOpenDialog(mainWindow, {
@@ -548,6 +570,17 @@ async function createWindow() {
     }
   });
   mainWindow = window;
+  biographyCloseGate = require('./features/generator/biography-close.cjs').createBiographyCloseGate(
+    {
+      send: (token) => window.webContents.send('local:before-close', token),
+      close: () => window.close(),
+      quit: () => app.quit()
+    }
+  );
+  window.on('close', (event) => biographyCloseGate?.onClose(event));
+  window.on('closed', () => {
+    biographyCloseGate = null;
+  });
   window.webContents.on('will-navigate', (event, target) => {
     if (target !== url) event.preventDefault();
   });
@@ -599,6 +632,11 @@ if (!hasLock) {
       imageExportPromise.finally(() => app.quit()).catch(() => {});
       return;
     }
+    biographyCloseGate?.beforeQuit(event);
+  });
+  // before-quit may be cancelled while BIO writes finish. Never close SQLite
+  // until Electron has accepted shutdown and all windows have actually closed.
+  app.on('will-quit', () => {
     if (serverInstance) serverInstance.close();
     proxyController?.abort();
     news?.close();

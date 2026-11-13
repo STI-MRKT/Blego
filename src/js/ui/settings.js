@@ -3,7 +3,7 @@ import { esc } from '../utils/dom.js';
 import { LOCALES } from '../data/locales.js';
 export function settingsHTML() {
   const s = state.settings;
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">Локальные настройки</div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
+  return `<div class="page"><div class="page-head"><div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
 <form id="settings-form" class="card pad ux-settings"><div class="ux-settings-basics">
 <label class="fl">Страна по умолчанию<select class="input" name="country">${Object.keys(LOCALES)
     .map((k) => `<option ${s.country === k ? 'selected' : ''}>${k}</option>`)
@@ -16,6 +16,7 @@ export function settingsHTML() {
 <label class="fl"><input type="checkbox" name="newsEnabled" ${s.newsEnabled ? 'checked' : ''}> Разрешить загрузку новостей<span class="sub" data-setting-help>Новости выбранной темы из встроенного каталога при открытии ленты или обновлении.</span></label>
 </div></div>
 <details class="ux-details ux-settings-advanced"><summary>Дополнительные настройки, словари, форматы и архив</summary>
+<p class="sub">Профили и предложенные BIO — синтетические. Названия учебных заведений взяты с официальных сайтов; выбор не подтверждает обучение. Работу, образование и биографию можно указать вручную.</p>
 <label class="fl">Field order (comma separated)<input class="input" name="fieldOrder" value="${esc((s.fieldOrder || []).join(','))}"></label>
 <label class="fl">Disabled optional fields<input class="input" name="disabledFields" value="${esc((s.disabledFields || []).join(','))}"></label>
 <label class="fl">Allow repeats for finite optional fields<input class="input" name="allowRepeats" value="${esc((s.allowRepeats || []).join(','))}"></label>

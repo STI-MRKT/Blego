@@ -1,3 +1,5 @@
+import { createBiographyEditor } from './services/biography.js';
+import { biographyStatus } from './ui/biography.js';
 import { mountCopyActions, initCopyPreferences, copyModelValue, invalidateImportCopies } from './utils/copy-actions.js';
 import { readSettingsForm } from './ui/settings.js';
 import { mountPhotoMap } from './ui/photo-map.js';
@@ -45,6 +47,40 @@ document.addEventListener('keydown', event => {
   }
 });
 matchMedia('(max-width:980px)').addEventListener('change', () => setMenuExpanded(false));
+
+function updateBiographyStatus(editor) {
+  if (state.bioEditor !== editor) return;
+  if (editor.error && !editor.errorNotified) toast('Не удалось сохранить BIO. Введённые данные сохранены на экране; повторите попытку.', 'err');
+  editor.errorNotified = editor.error;
+  document.querySelectorAll('[data-bio-field], [data-bio-institution]').forEach(input => { input.disabled = editor.frozen; });
+  const status = document.querySelector('.biography [role=status]');
+  if (status) status.textContent = biographyStatus(editor);
+  const retry = document.querySelector('[data-action="bio-retry"]');
+  if (retry) { retry.hidden = !editor.error; retry.style.display = editor.error ? '' : 'none'; }
+  document.querySelectorAll('[data-action="bio-regenerate"]').forEach(button => { button.disabled = editor.suggesting || editor.frozen; });
+}
+function biographyEditor(data) {
+  return createBiographyEditor(data, {
+    save: request => window.blego.biography(request),
+    onSaved: profile => { if (state.demo?.id === profile.id) state.demo = profile; },
+    onChange: updateBiographyStatus
+  });
+}
+async function flushBiography() { await state.bioEditor?.flush(); }
+window.blego?.onBeforeClose?.(async token => {
+  document.body.inert = true;
+  state.bioEditor?.freeze();
+  try {
+    await flushBiography();
+    await window.blego.finishClose({token, saved:true});
+  } catch {
+    state.bioEditor?.release();
+    document.body.inert = false;
+    toast('BIO не сохранено. Закрытие отменено; повторите сохранение.', 'err');
+    await window.blego.finishClose({token, saved:false});
+  }
+});
+window.blego?.closeGuardReady?.();
 
 function renderAll() {
   document.documentElement.lang = 'en';
@@ -400,6 +436,13 @@ function bindView() {
       if (button) button.disabled = !event.target.value.trim();
     };
   }
+  document.querySelectorAll('[data-bio-field]').forEach(el => { el.oninput = () => {
+    if(state.bioEditor?.profileId === state.demo?.id) state.bioEditor.update({[el.dataset.bioField]:el.value});
+  }; });
+  document.querySelectorAll('[data-bio-institution]').forEach(el => { el.onchange = () => {
+    if(!el.value || state.bioEditor?.profileId !== state.demo?.id) return;
+    state.bioEditor.update({[el.dataset.bioInstitution]:el.value}); renderView();
+  }; });
   const encoding = document.getElementById('import-encoding');
   if (encoding)
     encoding.onchange = (e) => {
@@ -463,10 +506,16 @@ function bindDrop(id, onFiles) {
 
 async function generate() {
   if (state.demoBusy) return;
+  const editor = state.bioEditor;
+  editor?.freeze();
   state.demoBusy = true;
   renderView();
   try {
-    state.demo = await makeDemo(state.locale, state.type);
+    await flushBiography();
+    const profile = await makeDemo(state.locale, state.type);
+    state.bioEditor?.dispose();
+    state.demo = profile;
+    state.generatorTab='profile';state.bioEditor=null;
     toast('New set saved');
   } catch (e) {
     toast(
@@ -476,6 +525,7 @@ async function generate() {
       'err'
     );
   } finally {
+    editor?.release();
     state.demoBusy = false;
     try {
       await refreshPoolStats();
@@ -498,7 +548,7 @@ async function handleFile(file) {
   if (state.importEpoch !== epoch) return;
   state.classifierQuery = ''; state.classifierDescending = false; state.importSaved = null;
   state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
-  if(state.classifierOptions)state.classifierOptions.recordMapping={};
+  state.classifierOptions={};state.importEncoding='';state.cookieRow=null;
   state.importName = file.name;
   state.importData = null;
   state.view = 'import';
@@ -555,6 +605,7 @@ async function importPage(offset) {
   try {
     const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending,warningsOnly:!!state.classifierWarningsOnly}});
     if (state.importData?.operationId !== operationId || state.importEpoch !== epoch || state.importPageRequest !== request) return;
+    state.cookieRow=null;state.classifierRevealed={};state.classifierDetailRow=null;
     state.importData = data; renderView();
   } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
 }
@@ -686,10 +737,10 @@ async function runProxyCheck(fullTest = false) {
   try {
     const result = await checkProxy(value, { reputation, fullTest });
     if(value === state.network.proxyInput.trim()){state.network.proxy=result;if(fullTest)state.network.speed=result.speed;}
-    else state.network.proxyError='Адрес изменился. Повторите проверку.';
+    else state.network.proxyError='Proxy address changed. Check again.';
   } catch (error) {
     state.network.proxy = null;
-    state.network.proxyError = error.message === 'CANCELLED' ? 'Проверка отменена' : `Не удалось проверить прокси: ${error.message}`;
+    state.network.proxyError = error.message === 'CANCELLED' ? 'Check cancelled.' : 'Network Error. Check the proxy address and try again.';
   }
   state.network.proxyLoading = false;
   renderView();
@@ -843,6 +894,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'set-view') {
     if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
+    state.cookieRow=null;state.classifierRevealed={};
     state.view = target.dataset.view;
     if (state.view === 'history')
       window.blego
@@ -892,20 +944,50 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if(action==='generator-tab'){
+    state.generatorTab=target.dataset.tab;
+    if(state.generatorTab==='bio'&&state.demo&&state.bioEditor?.profileId!==state.demo.id){
+      const id=state.demo.id;
+      try{
+        const result=await window.blego.biography({action:'read',profileId:id});
+        if(state.demo?.id===id && state.bioEditor?.profileId!==id) state.bioEditor=biographyEditor({profileId:id,...result});
+      }catch{toast('Не удалось открыть BIO','err');state.generatorTab='profile';}
+    }
+    renderView();return;
+  }
+  if(action==='bio-copy'){await copyText(state.bioEditor?.values[target.dataset.field]||'',target);return;}
+  if(action==='bio-retry'){
+    try{await flushBiography();}catch{toast('Не удалось сохранить BIO. Повторите попытку.','err');}return;
+  }
+  if(action==='bio-regenerate'){
+    const editor=state.bioEditor;if(!editor)return;
+    try{
+      const changed=await editor.suggest(target.dataset.field, request=>window.blego.biography(request));
+      if(state.bioEditor===editor && changed){
+        // Update values only, preserving focus/caret in any other edited field.
+        for(const [key,value] of Object.entries(editor.values)){
+          const input=document.querySelector(`[data-bio-field="${key}"]`);
+          if(input && input.value!==value)input.value=value;
+        }
+        if(!editor.values[target.dataset.field])toast('Нет подходящих данных. Поле можно заполнить вручную.');
+      }
+    }catch{toast('Не удалось подобрать значение BIO. Повторите попытку.','err');}
+    return;
+  }
   if (action === 'generate') {
     generate();
     return;
   }
   if (action === 'clear-demo') {
-    window.blego
-      .clearCard()
-      .then(() => {
-        state.demo = null;
-        renderView();
-      })
-      .catch(() => toast('Could not clear card', 'err'));
-    renderView();
-    toast('Set cleared');
+    if(state.demoBusy)return;
+    const editor=state.bioEditor; editor?.freeze(); state.demoBusy=true; renderView();
+    try {
+      await flushBiography();
+      await window.blego.clearCard();
+      editor?.dispose(); state.bioEditor=null; state.demo=null;
+      toast('Set cleared');
+    } catch { toast('Не удалось сохранить BIO или очистить карточку. Данные оставлены на экране.', 'err'); }
+    finally { editor?.release();state.demoBusy=false;renderView(); }
     return;
   }
   if (action === 'classifier-copy-row' || action === 'classifier-copy-table') {
@@ -923,20 +1005,24 @@ document.addEventListener('click', async (event) => {
     } catch {toast('Не удалось сохранить файл. Выберите новое имя и проверьте доступ к папке.','err');}
     return;
   }
-  if (action === 'classifier-archive') {
+  if (action === 'classifier-archive' || action === 'classifier-archive-record') {
     const operationId=state.importData?.operationId, epoch=state.importEpoch;
     target.disabled=true;
     try {
       await window.blego.confirmClassification({operationId,decision:state.importData.status==='preview_partial'?'accept_partial':'accept_complete'});
       if(state.importEpoch!==epoch) return;
-      await window.blego.saveArchive(operationId);
+      await window.blego.saveArchive(action==='classifier-archive-record'?{operationId,recordId:target.dataset.row}:operationId);
       if(state.importEpoch!==epoch) return;
-      state.importSaved=true;await importPage(state.importData.offset);toast('Сохранено');
+      if(action==='classifier-archive')state.importSaved=true;
+      state.archiveView=null;state.archiveQuery={};
+      state.archives=await window.blego.listArchives();
+      await importPage(state.importData.offset);toast('Сохранено');
     } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
   if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}
-  if(action==='classifier-details'){state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
+  if(action==='classifier-cookie-toggle'){state.cookieRow=state.cookieRow===target.dataset.row?null:target.dataset.row;state.classifierRevealed={};renderView();return;}
+  if(action==='classifier-details'){state.cookieRow=null;state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
   if(action==='classifier-close-details'){state.classifierDetailRow=null;state.classifierRevealed={};renderView();return;}
   if(action==='classifier-reveal'){
     if(target.dataset.row!==state.classifierDetailRow)return;
@@ -953,7 +1039,7 @@ document.addEventListener('click', async (event) => {
     try {
       const full = await window.blego.importCell({operationId, recordId:target.dataset.row, field:target.dataset.field});
       if (state.importEpoch!==epoch || state.importData?.operationId!==operationId) return;
-      if(full) await copyText(full,target);
+      if(full){const result=await copyText(full,target);if(result.ok&&target.dataset.field==='cookies'&&state.importEpoch===epoch&&state.view==='import'){state.cookieRow=null;state.classifierRevealed={};renderView();}}
     } catch {toast('Не удалось скопировать выбранное поле','err');}
     return;
   }
@@ -999,8 +1085,7 @@ document.addEventListener('click', async (event) => {
     state.importEpoch = (state.importEpoch || 0) + 1;
     state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
     state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
-    if(state.classifierOptions)state.classifierOptions.recordMapping={};
-    if(state.classifierOptions) state.classifierOptions.mapping={};
+    state.classifierOptions={};state.importEncoding='';state.cookieRow=null;
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);
     state.importRequest = null;
@@ -1055,9 +1140,9 @@ document.addEventListener('click', async (event) => {
     try {
       state.settings = await window.blego.updateSettings({ proxyEnabled: true });
       renderView();
-      await runNetwork(false);
+
     } catch (error) {
-      toast('Не удалось включить проверку сети: ' + error.message, 'err');
+      toast('Could not enable network checks.', 'err');
     }
     return;
   }

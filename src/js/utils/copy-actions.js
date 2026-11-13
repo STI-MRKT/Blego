@@ -106,7 +106,7 @@ export function mountCopyActions() {
   const host = document.getElementById('view');
   if (
     !host ||
-    !['generator', 'import', 'history', 'checker', 'network', 'news', 'photos'].includes(state.view)
+    !['generator', 'import', 'history', 'checker', 'photos'].includes(state.view)
   )
     return;
   // A copy menu belongs to its current view; an archive detail is a distinct source.

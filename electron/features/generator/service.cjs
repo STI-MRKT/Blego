@@ -137,6 +137,7 @@ async function generateProfile(
       if (r.used(f, values[f])) exhausted(f, p);
       r.reserve(f, values[f], id);
     }
+    if (values.bio) values.bio = require('./biography.cjs').pageBio(values.bio, p.type);
     const result = {
       id,
       country: p.country,
@@ -160,6 +161,8 @@ async function generateProfile(
         syntheticPhone: true
       }
     };
+    result.biography = require('./biography.cjs').generateBiography(result, { bios: p.bios });
+    result.biographyRevision = 0;
     store.db
       .prepare('INSERT OR IGNORE INTO rule_versions VALUES(?,?)')
       .run(p.rulesVersion, JSON.stringify(p));

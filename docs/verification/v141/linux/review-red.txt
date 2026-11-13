@@ -1,0 +1,62 @@
+✔ TZ06 labelled recovery email is separate from primary email and seven-field schema (51.366421ms)
+✔ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (28.043063ms)
+✔ TZ06 infers standalone country and name with identity/date context, not countries in prose (4.351729ms)
+✔ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (2.077844ms)
+✔ TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without accepting arbitrary corrupt bytes (2.126966ms)
+✖ mixed TXT retains weak, partial and extended-only records for manual review (2.114337ms)
+✔ TZ06 map tile placement uses Mercator and only the bounded visible viewport (4.97605ms)
+✔ TZ06 tile service is explicit, bounded and caches without collecting photo data (91.449712ms)
+✖ four concurrent map requests survive expiry cleanup and refetch truncated cache entries (12.188719ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 185.946652
+
+✖ failing tests:
+
+test at tests/unit/classifier-v141.test.cjs:106:1
+✖ mixed TXT retains weak, partial and extended-only records for manual review (2.114337ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 5
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v141.test.cjs:115:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 5,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/map-tiles.test.cjs:57:1
+✖ four concurrent map requests survive expiry cleanup and refetch truncated cache entries (12.188719ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'rejected',
+      'fulfilled',
+  +   'rejected',
+  +   'rejected'
+  -   'fulfilled',
+  -   'fulfilled',
+  -   'fulfilled'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/map-tiles.test.cjs:84:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'rejected', 'fulfilled', 'rejected', 'rejected' ],
+    expected: [ 'fulfilled', 'fulfilled', 'fulfilled', 'fulfilled' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

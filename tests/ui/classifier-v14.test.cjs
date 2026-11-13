@@ -35,7 +35,7 @@ test(
     });
     await page.locator('[data-classifier-status]').waitFor();
     assert.ok(
-      !(await page.locator('.classifier-page').innerHTML()).includes('FAKE_ACCOUNT_PASSWORD')
+      (await page.locator('.classifier-table').innerText()).includes('FAKE_ACCOUNT_PASSWORD')
     );
     assert.ok(
       !(await page.locator('.classifier-page').innerHTML()).includes('FAKE_UNASSIGNED_PASSWORD')
@@ -44,7 +44,9 @@ test(
     assert.equal(await details.count(), 1);
     await details.click();
     assert.ok(
-      (await page.locator('#classifier-record-details').innerText()).includes('Требует проверки')
+      (await page.locator('#classifier-record-details').innerText()).includes(
+        'Остались нераспознанные значения'
+      )
     );
     await page.locator('#classifier-record-details details summary').first().click();
     const select = page.locator('[data-classifier-row-map][data-row="2"][data-column="column_2"]');
@@ -64,7 +66,12 @@ test(
     );
     await page.locator('[data-action="classifier-reveal"][data-field="password"]').click();
     assert.ok(
-      !(await page.locator('.classifier-page').innerHTML()).includes('FAKE_UNASSIGNED_PASSWORD')
+      !(await page.locator('#classifier-record-details').innerHTML()).includes(
+        'FAKE_UNASSIGNED_PASSWORD'
+      )
+    );
+    assert.ok(
+      (await page.locator('.classifier-table').innerText()).includes('FAKE_UNASSIGNED_PASSWORD')
     );
     await page
       .locator('.classifier-table [data-action="import-cookie-copy"][data-row="2"]')

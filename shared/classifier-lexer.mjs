@@ -1,4 +1,5 @@
-import { cookieInfo } from './classifier-recognition.mjs';
+import { cookieInfo, recognizeValue, personName } from './classifier-recognition.mjs';
+import { fieldForHeader, validBirthDate } from './classifier.mjs';
 // Deterministic, bounded TXT lexer. Offsets are UTF-16 positions in decoded text.
 // JSON and browser identifiers are indivisible; source text is never reconstructed.
 const maxFields = 512,
@@ -208,6 +209,35 @@ export function structuredRecords(text) {
   if (depth.length) rowWarnings.push('INVALID_JSON_CELL');
   if (quoteStart) rowWarnings.push('UNCLOSED_QUOTE');
   if (cellStart < text.length || fields.length) row(text.length, text.length);
+  // Only confidently identified prose is omitted. Weak and unrecognized rows
+  // remain available for manual review; absence of a typed anchor is not junk.
+  const evidence = (r) =>
+    r.sourceEntries.length >= 2 ||
+    r.sourceEntries.some(
+      ({ value }) =>
+        recognizeValue(value, fieldForHeader, validBirthDate, (s) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+        ).key ||
+        /^\d+$/.test(value) ||
+        validBirthDate(value) ||
+        personName(value)
+    );
+  const prose = (r) =>
+    !evidence(r) &&
+    (/^(?:#|\/\/|--)(?:\s|$)/u.test(r.sourceEntries[0].value) ||
+      /^(?:Описание файла|Инструкция|Комментарий|Примечание|Read terms|Instructions?|Comments?|Notes?)(?:[:.\s]|$)/iu.test(
+        r.sourceEntries[0].value
+      ));
+  const useful = rows.some(evidence) ? rows.filter((r) => !prose(r)) : rows;
+  if (useful.length && useful.length !== rows.length) {
+    const ids = new Set(useful.map((r) => r.id));
+    const retained = diagnostics.filter((d) => ids.has(d.recordId));
+    const remap = new Map(useful.map((r, i) => [r.id, String(i + 1)]));
+    for (const r of useful) r.id = remap.get(r.id);
+    for (const d of retained) d.recordId = remap.get(d.recordId);
+    rows.splice(0, rows.length, ...useful);
+    diagnostics.splice(0, diagnostics.length, ...retained);
+  }
   const width = rows.reduce((n, r) => Math.max(n, r.sourceEntries.length), 0);
   return {
     records: rows,

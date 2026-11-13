@@ -1,0 +1,37 @@
+Cloud Linux investigation, 2026-11-13; anonymous public Meta page only. No stored HTML/cookies/session in Git. The probe is not an application fallback.
+
+/tmp/v141-facebook-browser-main.cjs:
+const {app,BrowserWindow,session}=require('electron');
+app.whenReady().then(()=>{
+ const isolated=session.fromPartition('blego-tz06-anonymous-'+Date.now());
+ isolated.setPermissionRequestHandler((_w,_p,done)=>done(false));
+ isolated.on('will-download',event=>event.preventDefault());
+ isolated.webRequest.onBeforeRequest((details,done)=>{
+  let allowed=false;
+  try {const u=new URL(details.url);allowed=u.protocol==='https:' && ['facebook.com','fbcdn.net'].some(h=>u.hostname===h||u.hostname.endsWith('.'+h));}catch{}
+  done({cancel:!allowed && details.url!=='about:blank'});
+ });
+ const w=new BrowserWindow({show:false,webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,session:isolated}});
+ w.webContents.setWindowOpenHandler(()=>({action:'deny'}));
+ w.loadURL('about:blank');
+});
+
+/tmp/v141-facebook-browser-probe.cjs:
+const fs=require('node:fs');
+(async()=>{
+ let app;const report={at:new Date().toISOString(),host:process.platform+'-'+process.arch,target:'https://www.facebook.com/Meta',isolation:'Ephemeral Electron session, no imported cookies/authentication, nodeIntegration false, sandbox true, no permissions/downloads/popups; only Facebook and fbcdn HTTPS resources'};
+ try{
+  app=await require('/workspace/BLEGO-final/node_modules/playwright')._electron.launch({args:['--ozone-platform=headless','--disable-gpu','/tmp/v141-facebook-browser-main.cjs']});
+  const page=await app.firstWindow();
+  try {const response=await page.goto(report.target,{waitUntil:'domcontentloaded',timeout:15000});await page.waitForTimeout(2000);
+    report.observation=await page.evaluate(()=>({url:location.href,title:document.title,canonical:document.querySelector('link[rel="canonical"]')?.href||null,ogType:document.querySelector('meta[property="og:type"]')?.content||null,loginForm:!!document.querySelector('form[action*="login"]'),jsonLdScripts:document.querySelectorAll('script[type="application/ld+json"]').length}));
+    const target=require('/workspace/BLEGO-final/electron/features/facebook/normalize.cjs').normalizeTarget(report.target);
+    const body=await page.content();
+    report.inspection=require('/workspace/BLEGO-final/electron/features/facebook/inspect.cjs').inspectResponse(target,{status:response.status(),url:page.url(),body:body.slice(0,1048576)});
+    report.status=report.inspection.status==='PROFILE_VISIBLE'?'PASS':'BLOCKED';
+  }catch(e){report.status='BLOCKED';report.reason=e.message.split('\n')[0];}
+ }catch(e){report.status='BLOCKED';report.reason=e.message.split('\n')[0];}
+ finally{await app?.close();fs.writeFileSync('/tmp/v141-facebook-browser.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));}
+})();
+
+Command: node /tmp/v141-facebook-browser-probe.cjs

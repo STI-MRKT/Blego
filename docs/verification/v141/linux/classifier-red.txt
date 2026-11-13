@@ -1,0 +1,84 @@
+✖ TZ06 labelled recovery email is separate from primary email and seven-field schema (46.424458ms)
+✖ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (23.843039ms)
+✖ TZ06 infers standalone country and name with identity/date context, not countries in prose (2.756765ms)
+✖ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (3.648645ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 176.896679
+
+✖ failing tests:
+
+test at tests/unit/classifier-v141.test.cjs:10:1
+✖ TZ06 labelled recovery email is separate from primary email and seven-field schema (46.424458ms)
+  AssertionError [ERR_ASSERTION]: backup email
+  + actual - expected
+  
+  + undefined
+  - 'recovery@example.test'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v141.test.cjs:13:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'recovery@example.test',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v141.test.cjs:21:1
+✖ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (23.843039ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  49 !== 20
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v141.test.cjs:26:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 49,
+    expected: 20,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v141.test.cjs:33:1
+✖ TZ06 infers standalone country and name with identity/date context, not countries in prose (2.756765ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '' !== 'GB'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v141.test.cjs:36:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'GB',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v141.test.cjs:43:1
+✖ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (3.648645ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '' !== 'FAKE_C'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v141.test.cjs:50:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'FAKE_C',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

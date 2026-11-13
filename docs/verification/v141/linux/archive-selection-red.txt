@@ -1,0 +1,34 @@
+✔ failure after no-overwrite finalization recovers ZIP and lost catalogue (53.972863ms)
+✔ write faults never report ready and corrupt ZIP is rejected (32.194034ms)
+✔ verified temp before finalization resumes without reclassification (21.64703ms)
+✔ ZIP byte limits, symlinks, traversal and CRC tampering reject (21.831819ms)
+✔ real permission denial preserves old ZIP; cancelled save is not ready (22.43066ms)
+✔ TZ06 retry after pre-write failure saves confirmed data without deleting foreign files (19.457163ms)
+✖ TZ06 selected classified record archives only its seven fields, retains source operation and is idempotent (89.465942ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 369.972831
+
+✖ failing tests:
+
+test at tests/integration/archive-recovery.test.cjs:119:1
+✖ TZ06 selected classified record archives only its seven fields, retains source operation and is idempotent (89.465942ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(!text.includes('first@example.test'))
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/archive-recovery.test.cjs:138:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

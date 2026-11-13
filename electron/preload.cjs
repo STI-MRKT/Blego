@@ -5,6 +5,13 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  onBeforeClose: (callback) => {
+    const listener = (_event, token) => callback(token);
+    ipcRenderer.on('local:before-close', listener);
+    return () => ipcRenderer.removeListener('local:before-close', listener);
+  },
+  closeGuardReady: () => call('closeGuardReady'),
+  finishClose: (result) => call('finishClose', result),
   friendsList: () => call('friendsList'),
   importFriends: () => call('friendsImport'),
   confirmFriends: (token) => call('friendsConfirm', token),
@@ -42,6 +49,7 @@ contextBridge.exposeInMainWorld('blego', {
     ),
   geoCatalog: (request) => call('geoCatalog', request),
   geoBoundary: (request) => call('geoBoundary', request),
+  mapTile: (request) => call('mapTile', request),
   moveImageGeo: (request) => call('imagesMoveGeo', request),
   generateImageGeo: (request) => call('imagesGenerateGeo', request),
   cancelGeo: (id) => call('geoCancel', id),
@@ -103,6 +111,7 @@ contextBridge.exposeInMainWorld('blego', {
   useBundledPool: (country) => call('poolBundled', country),
   selectPoolVersion: (request) => call('poolSelect', request),
   lastCard: () => call('lastCard'),
+  biography: (request) => call('biography', request),
   clearCard: () => call('clearCard'),
   tourSeen: () => call('tourSeen'),
   markTour: () => call('tourMark'),

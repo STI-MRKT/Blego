@@ -113,6 +113,24 @@ const { openStore } = require('../electron/local/store.cjs');
     }
     const readMs = Date.now() - started;
     console.log(`${expected} files read`);
+    const mapCapture = async (mode) => {
+      await page.locator(`[data-map-action="${mode}"]`).click();
+      await page.locator('#photo-map-canvas').scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        (mode) => document.getElementById('photo-map-canvas')?.dataset.mode === mode,
+        mode
+      );
+      if (process.env.BLEGO_CAPTURE) {
+        fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+        await page.locator('.photo-map').screenshot({
+          path: path.join(
+            process.env.BLEGO_CAPTURE,
+            `map-${folderCount ? 'folder' : 'files'}-${mode}.png`
+          )
+        });
+      }
+    };
+    await mapCapture('before');
     if (folderCount) {
       await page.locator('#geo-country').fill('FR');
       await page.locator('#geo-country').press('Tab');
@@ -137,6 +155,7 @@ const { openStore } = require('../electron/local/store.cjs');
     await choose([output]);
     await page.locator('#metadata-form [type="submit"]').click();
     await page.locator('[data-action="metadata-export"]').waitFor();
+    await mapCapture('after');
     await page.locator('[data-action="metadata-export"]').click();
     await waitForAsync(
       page,

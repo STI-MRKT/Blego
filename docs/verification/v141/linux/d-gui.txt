@@ -1,0 +1,10 @@
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (2350.283703ms)
+✔ TZ06 BIO edits and individual copies survive navigation, 360px and restart (1940.000983ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5128.770014

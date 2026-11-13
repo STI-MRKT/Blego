@@ -53,7 +53,7 @@ export function friendsHTML() {
     page = Math.max(0, Math.min(state.friendsPage || 0, pages - 1));
   return `<div class="page">
     <div class="page-head">
-      <div><div class="eyebrow">PEOPLE</div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>
+      <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>
       <div class="head-actions"><span class="pill">${list.length} / ${all.length} profiles</span><button class="btn" data-action="friends-import" ${state.friendsBusy ? 'disabled' : ''}>Импортировать Friends</button></div>
     </div>
     <form id="friends-search" class="controls"><label class="fl">Поиск<input class="input" id="friends-query" value="${esc(state.friendsQuery || '')}"></label><label class="fl">Площадка<select class="input" id="friends-platform"><option value="">Все</option>${platforms.map((platform) => `<option ${state.friendsPlatform === platform ? 'selected' : ''}>${esc(platform)}</option>`).join('')}</select></label><button class="btn" type="submit">Найти</button></form>
@@ -68,7 +68,7 @@ export function friendsHTML() {
         .map(
           (friend) => `<article class="friend-card">
         <div class="friend-top"><div class="avatar lg" style="--h:${Number(friend.hue) || 240}">${esc(initialsOf(friend.name || ''))}</div><span class="pill tiny">${esc(friend.geo)}</span></div>
-        <div class="friend-name">${esc(friend.name)}${friend.name ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(friend.name)}" aria-label="Копировать имя">${I.copy}</button>` : ''}</div>
+        <div class="friend-name">${esc(friend.name || friend.url)}${friend.name ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(friend.name)}" aria-label="Копировать имя">${I.copy}</button>` : ''}</div>
         <div class="friend-handle mono">${friend.handle ? '@' + esc(friend.handle) : ''}</div><div class="friend-niche">${esc(friend.niche)}</div>
         <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="${esc(friend.id)}">${I.link}Open profile</button><button class="btn" data-action="copy" data-copy="${esc(friend.url)}" data-friend-copy="url" aria-label="Копировать ссылку">${I.copy}</button></div>
         ${

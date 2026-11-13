@@ -20,19 +20,38 @@ function createArchiveService({ store, classification, root = store.root, fault 
   }
   async function saveArchive(operationId, options = {}) {
     if (typeof operationId !== 'string') throw Error('INVALID_OPERATION');
+    const confirmed = classification.getConfirmed(operationId, options.recordId);
+    operationId = confirmed.operationId;
     if (active.has(operationId)) return active.get(operationId);
     const job = (async () => {
       options.cancellation?.throwIfAborted();
-      const confirmed = classification.getConfirmed(operationId);
       const existing = store.db
-        .prepare('SELECT id,state FROM archives WHERE operation_id=?')
+        .prepare('SELECT id,state,metadata FROM archives WHERE operation_id=?')
         .get(operationId);
       if (existing) {
         if (existing.state === 'ready') return row(existing.id);
         await recover(options.archiveRoot || defaultRoot);
         const after = store.db.prepare('SELECT state FROM archives WHERE id=?').get(existing.id);
         if (after?.state === 'ready') return row(existing.id);
-        throw Error('ARCHIVE_RECOVERY_REQUIRED');
+        const pending = JSON.parse(existing.metadata);
+        // Retry only an empty reservation. Never remove a partial/foreign file:
+        // verified temporary ZIPs recover above; ambiguous artifacts need review.
+        const hasFile = async (file) => {
+          try {
+            await fs.promises.lstat(file);
+            return true;
+          } catch (error) {
+            if (error.code === 'ENOENT') return false;
+            throw error;
+          }
+        };
+        if (
+          after?.state !== 'pending' ||
+          (await hasFile(path.join(pending.archiveRoot, pending.fileName))) ||
+          (await hasFile(path.join(pending.archiveRoot, pending.fileName + '.pending')))
+        )
+          throw Error('ARCHIVE_RECOVERY_REQUIRED');
+        store.db.prepare("DELETE FROM archives WHERE id=? AND state='pending'").run(existing.id);
       }
       const archiveRoot = options.archiveRoot || defaultRoot;
       await fs.promises.mkdir(archiveRoot, { recursive: true, mode: 0o700 });

@@ -31,6 +31,13 @@ test(
     });
     const page = await app.firstWindow();
     await page.locator('[data-action="generate"]').waitFor();
+    if (process.platform === 'linux') {
+      // Exercise the 17px non-overlay scrollbar observed on installed macOS.
+      await page.addStyleTag({
+        content:
+          '.content { scrollbar-gutter: stable; } .content::-webkit-scrollbar { width: 17px; }'
+      });
+    }
     const env = await app.evaluate(({ BrowserWindow, screen }) => ({
       os: process.platform,
       arch: process.arch,
@@ -96,7 +103,7 @@ test(
         'settings',
         'history'
       ]) {
-        await page.locator(`.nav-item[data-view="${view}"]`).click();
+        await page.locator(`[data-view="${view}"]`).click();
         await page.waitForTimeout(120);
         if (width === 360)
           await page.locator('.content details').evaluateAll((elements) =>
@@ -144,7 +151,7 @@ test(
         assert.deepEqual(layout.clipped, [], `${width}/${view}: clipped controls`);
         assert.ok(layout.icons.every(Boolean), `${width}/${view}: clipped icons`);
         assert.equal(
-          await page.locator(`.nav-item[data-view="${view}"]`).getAttribute('aria-current'),
+          await page.locator(`[data-view="${view}"]`).getAttribute('aria-current'),
           'page'
         );
         sections.push(view);
