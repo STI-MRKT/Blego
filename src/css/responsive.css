@@ -26,3 +26,77 @@
   .news-cols{grid-template-columns:1fr}
   .net-facts{grid-template-columns:1fr 1fr}
 }
+
+/* v1.4: adaptive layout only; original palette, icons, effects and wide cards remain. */
+.menu-toggle{display:none}
+.nav{overflow-y:auto}
+.nav-item,.side-top,.side-bottom{flex-shrink:0}
+.nav-item svg,.logo{flex-shrink:0}
+.side-note{display:flex;align-items:center;gap:6px}
+.side-note-text{min-width:0}
+@media(max-width:980px){
+  .window{grid-template-columns:72px minmax(0,1fr)}
+  .menu-toggle{display:grid;flex-shrink:0}
+  .nav-item{justify-content:center;padding:0}
+  .nav-item .label,.nav-label,.brand-text,.side-note-text,.credit{display:none}
+  .side-brand{justify-content:center;padding-bottom:12px}
+  .side-note{justify-content:center}
+  .window.menu-expanded .sidebar{position:absolute;inset:0 auto 0 0;width:216px;z-index:100;box-shadow:var(--shadow-lg)}
+  .window.menu-expanded .main{grid-column:2}
+  .window.menu-expanded .nav-item{justify-content:flex-start;padding:0 10px}
+  .window.menu-expanded .nav-item .label,.window.menu-expanded .nav-label,.window.menu-expanded .brand-text,.window.menu-expanded .side-note-text,.window.menu-expanded .credit{display:block}
+  .window.menu-expanded .side-brand,.window.menu-expanded .side-note{justify-content:flex-start}
+  .window.menu-expanded .credit{font-size:10.5px;text-align:left;line-height:1.5;padding:12px 10px 6px}
+  .window.menu-expanded .menu-toggle{position:absolute;left:220px;top:12px;z-index:101;background:var(--panel)}
+  .page-head,.head-actions,.controls,.news-head{flex-wrap:wrap}
+  .head-actions{flex-shrink:1}
+  .page-head>div,.head-actions>*,.controls>*,.page,.card,fieldset,.fl,.cell-box,.net-grid>*,.net-grid2>*{min-width:0;max-width:100%}
+  .input{min-width:0;max-width:100%}
+  .table-wrap{max-width:100%;overflow-x:auto}
+  .btn{white-space:normal;min-height:34px;height:auto;padding-top:7px;padding-bottom:7px;overflow-wrap:anywhere;max-width:100%}
+  .btn svg{flex-shrink:0}
+  .btn span.lbl{display:inline}
+  .demo-card,.sk-card{grid-template-columns:1fr}
+  .demo-left{border-right:0;border-bottom:1px solid var(--border)}
+  .fields,.prof-grid,.news-cols{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:repeat(auto-fill,minmax(min(228px,100%),1fr))}
+  .friends-grid{grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr))}
+  .photo-grid{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}
+  .classifier-page .head-actions{flex-wrap:wrap}
+  .classifier-page .mono,.photo-grid figcaption,.friend-name{overflow-wrap:anywhere}
+}
+@media(max-width:600px){
+  .stage{padding:6px}
+  .window{grid-template-columns:56px minmax(0,1fr)}
+  .content{padding:12px 10px 24px}
+  .topbar{padding:0 8px;gap:6px}
+  .side-top{padding:14px 6px 0}
+  .nav{padding:4px 6px}
+  .side-bottom{padding:10px 6px}
+  .card.pad,.demo-left,.demo-right{padding:14px}
+  .page-head{gap:12px}
+  .head-actions{gap:6px}
+  .net-facts,.proxy-grid,.kv,.stats{grid-template-columns:1fr}
+  .ping-row{grid-template-columns:minmax(0,1fr) minmax(30px,1fr) 52px;gap:4px}
+  .ping-row>span{overflow:hidden;text-overflow:ellipsis}
+  .hrow{grid-template-columns:30px minmax(0,1fr) 30px;gap:8px}
+  .hrow .hmeta,.hrow .hstatus{grid-column:2}
+  .ux-generator .ux-primary-controls{padding:12px;gap:10px}
+  .ux-generator .ux-primary-controls .ctl-actions{flex-wrap:wrap}
+  .ux-generator .ux-primary-controls .ctl-actions .btn{flex:1 1 auto}
+  .ux-settings .ux-save-settings{min-width:0}
+  .ux-copy-actions>#copy-panel:not(:empty){right:12px;width:calc(100% - 86px);padding:10px}
+  .ux-photos .ux-group-controls fieldset>.fl{min-width:0}
+  #photo-map-inspector{flex-wrap:wrap}
+  .news-tabs{flex-wrap:wrap}
+  .photo-stats{flex-wrap:wrap}
+  .toasts{max-width:calc(100% - 24px)}
+  .toast{white-space:normal;overflow-wrap:anywhere}
+}
+@media(max-width:600px){
+  .hrow>:nth-child(3){grid-column:2;grid-row:2}
+  .hrow>.time{grid-column:2;grid-row:3}
+  .hrow>.del{grid-column:3;grid-row:1}
+  .hrow .cell-box{max-width:100%}
+  .hrow .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
+}

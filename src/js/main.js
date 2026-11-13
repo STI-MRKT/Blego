@@ -29,6 +29,23 @@ const shuffle = (list) => {
   return copy;
 };
 
+function setMenuExpanded(expanded) {
+  document.querySelector('.window')?.classList.toggle('menu-expanded', expanded);
+  const toggle = document.querySelector('[data-action="menu-toggle"]');
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Свернуть меню' : 'Раскрыть меню');
+    toggle.title = expanded ? 'Свернуть меню' : 'Раскрыть меню';
+  }
+}
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && document.querySelector('.menu-expanded')) {
+    setMenuExpanded(false);
+    document.querySelector('[data-action="menu-toggle"]')?.focus();
+  }
+});
+matchMedia('(max-width:980px)').addEventListener('change', () => setMenuExpanded(false));
+
 function renderAll() {
   document.documentElement.lang = 'en';
   document.documentElement.dataset.theme = 'dark';
@@ -803,6 +820,10 @@ document.addEventListener('click', async (event) => {
   if (action === 'archive-back') {
     state.archiveView = null;
     renderView();
+    return;
+  }
+  if (action === 'menu-toggle') {
+    setMenuExpanded(!document.querySelector('.window')?.classList.contains('menu-expanded'));
     return;
   }
   if (action === 'set-view') {

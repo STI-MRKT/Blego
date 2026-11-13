@@ -99,7 +99,14 @@ test(
       };
     });
     // Zoom in until a precise, in-city move exceeds the deliberate drag threshold.
-    for (let i = 0; i < 5; i++) await page.locator('[data-map-action="zoom-in"]').click();
+    for (let i = 0; i < 12; i++) {
+      const distance = await page.evaluate(async () => {
+        const { state } = await import('/js/state.js');
+        return Math.SQRT2 * 0.0001 * state.photoMap.view.scale;
+      });
+      if (distance >= 12) break;
+      await page.locator('[data-map-action="zoom-in"]').click();
+    }
     await canvas.scrollIntoViewIfNeeded();
     const drag = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
@@ -113,6 +120,7 @@ test(
       );
       return { x: r.x + r.width / 2, y: r.y + r.height / 2, endX: r.x + p.x, endY: r.y + p.y };
     });
+    assert.ok(Math.hypot(drag.endX - drag.x, drag.endY - drag.y) >= 12);
     await page.mouse.move(drag.x, drag.y);
     await page.mouse.down();
     await page.mouse.move(drag.endX, drag.endY, { steps: 5 });

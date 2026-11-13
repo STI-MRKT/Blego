@@ -24,7 +24,7 @@ export const titleOf = (view) => {
 };
 
 function navItem(item) {
-  return `<button class="nav-item ${state.view === item.view ? 'active' : ''}" data-action="set-view" data-view="${item.view}">
+  return `<button class="nav-item ${state.view === item.view ? 'active' : ''}" data-action="set-view" data-view="${item.view}" title="${item.label}" aria-label="${item.label}" ${state.view === item.view ? 'aria-current="page"' : ''}>
     ${item.icon}<span class="label">${item.label}</span>
   </button>`;
 }
@@ -35,17 +35,17 @@ export function appHTML() {
       <div class="side-top">
         <div class="side-brand"><div class="logo">B</div><div class="brand-text"><div class="brand-name">BLEGO</div><div class="brand-sub">local studio</div></div></div>
       </div>
-      <nav class="nav">
+      <nav class="nav" id="workspace-navigation" aria-label="Разделы BLEGO">
         ${NAV.map((group) => `<div class="nav-label">${group.group}</div>${group.items.map(navItem).join('')}`).join('')}
       </nav>
       <div class="side-bottom">
-        <div class="side-note"><span class="dot ok"></span>Local workspace · no account</div>
+        <div class="side-note" title="Local workspace · no account" aria-label="Local workspace · no account"><span class="dot ok"></span><span class="side-note-text">Local workspace · no account</span></div>
         <div class="credit">powered by <span>blemish&amp;alterego</span></div>
       </div>
     </aside>
     <div class="main">
       <header class="topbar">
-        <div class="tb-title">${titleOf(state.view)}</div>
+        <button class="icon-btn menu-toggle" data-action="menu-toggle" aria-controls="workspace-navigation" aria-expanded="false" aria-label="Раскрыть меню" title="Раскрыть меню">${I.chevron}</button><div class="tb-title">${titleOf(state.view)}</div>
         <span class="pill tiny">LOCAL</span>
         <div class="tb-right"></div>
       </header>

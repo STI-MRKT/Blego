@@ -526,14 +526,16 @@ async function ensureServer() {
 
 async function createWindow() {
   const url = await ensureServer();
-  const area = screen.getPrimaryDisplay().workAreaSize;
-  const width = Math.min(1380, Math.max(860, area.width - 48));
-  const height = Math.min(900, Math.max(520, area.height - 48));
+  const measured = screen.getPrimaryDisplay().workAreaSize;
+  // Headless Electron exposes a 1×1 virtual display; real work areas stay authoritative.
+  const area = measured.width > 1 && measured.height > 1 ? measured : { width: 1280, height: 900 };
+  const width = Math.min(1380, area.width, Math.max(360, area.width - 48));
+  const height = Math.min(900, area.height, Math.max(360, area.height - 48));
   const window = new BrowserWindow({
     width,
     height,
-    minWidth: Math.min(900, width),
-    minHeight: Math.min(560, height),
+    minWidth: Math.min(360, area.width),
+    minHeight: Math.min(360, area.height),
     title: 'BLEGO',
     backgroundColor: '#eceef3',
     show: false,

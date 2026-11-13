@@ -111,11 +111,11 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Spec:** docs/specs/BLEGO_V14_TZ05_RESPONSIVE_ADDENDUM.md. User explicitly authorizes responsive layout/minimum window changes while preserving original wide-screen aesthetics. Use a scoped responsive stylesheet and existing shell/navigation components; no framework or scaling.
 
-- [ ] Lower native window minimums appropriately for 360px tests and 1/3 macOS work-area width; respect window manager and retain saved bounds safely.
-- [ ] Automatic compact icon sidebar, accessible hover/focus labels, active state, explicit full-menu toggle and adaptive logo/status/developer footer.
-- [ ] All nine sections: local table scroll, single-column cards, reachable wrapping actions, min-width:0 and vertical main scroll. No form/operation reset on resize.
-- [ ] Real GUI tests at 360/390/427/480/504/576/768/980/1280; active state + copy/import/generation/batch preservation; return to original wide appearance.
-- [ ] Full verify/GUI and commit. Task 9 must test actual installed macOS window bounds at all widths, not claim browser viewport emulation as native resizing.
+- [x] Lower native window minimums appropriately for 360px tests and 1/3 macOS work-area width; respect window manager and retain saved bounds safely.
+- [x] Automatic compact icon sidebar, accessible hover/focus labels, active state, explicit full-menu toggle and adaptive logo/status/developer footer.
+- [x] All nine sections: local table scroll, single-column cards, reachable wrapping actions, min-width:0 and vertical main scroll. No form/operation reset on resize.
+- [x] Real GUI tests at 360/390/427/480/504/576/768/980/1280; active state + copy/import/generation/batch preservation; return to original wide appearance.
+- [x] Full verify/GUI and commit. Task 9 must test actual installed macOS window bounds at all widths, not claim browser viewport emulation as native resizing.
 
 ## Task 8: full regression
 
@@ -149,3 +149,7 @@ Completed work is not replayed or reset. Current tasks 2–5 are partial evidenc
 9. Full regression (Task 8), expanded performance baseline comparison on identical fixtures; 1/10/100/500/1000 images, memory/latency, representative real high-resolution photos separately from synthetic data.
 10. Native ARM64 QA (Task 9): installed resize, map, folder/export, native ExifTool, source/installed parity; DMG+checksum+Russian instructions ZIP. No signing credentials -> signed distribution BLOCKED.
 11. Independent whole-branch review and PR/handoff (Task 10). No merge.
+
+## Steering: phone copy and address order
+
+After responsive stage, before Settings: implement owner's `BLEGO_V14_GENERATOR_PHONE_ADDRESS_ADDENDUM.md` in a separate commit. National-number transformation only for the adjacent Generator phone button, using the displayed saved profile country (not a subsequently changed selector); keep zeros and full-set/persistence. Address display order address/city/postalCode for 24 presets. Focused unit/GUI tests, update superseded full-phone adjacent-button assertions while retaining full-set tests; full regression.
