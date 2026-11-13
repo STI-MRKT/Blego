@@ -21,3 +21,11 @@ Commands: node --test tests/unit/classifier*.test.cjs tests/integration/classifi
 Limit: A/B fixtures represent the supplied structures using synthetic values; exact comparison with the two confidential original TXT files is unavailable. Native ARM64 reacceptance remains pending for this candidate.
 
 Task 3 in progress: fetched eight real OSM administrative city/municipal geometries via a single cached, rate-limited developer lookup after reviewing current Nominatim policy. No public autocomplete/API dependency is being added to the application. Dataset provenance and geometry validation follow.
+
+Steering received during Task 3: generator supplement saved at docs/specs/BLEGO_V14_TZ05_GENERATOR_ADDENDUM.md and integrated into Task 7. Same branch/PR; no reset. TECH naming changes to brand strategy, overriding the prior all-female personal-name rule for TECH only. MODEL/CRYPTO preserve personal-name strategy and country specificity. Dayrep applies only to new generated emails, no mailbox claim/network verification. Existing history and internal additional fields are retained even though the disclosure is removed.
+
+Task 3 complete: 8 actual OSM administrative boundaries (BR/US/FR/PL/DE/ES/IT/GB), provenance/ODbL attribution, local-only catalogue and validated preview/confirm import into existing SQLite. Crypto-random spherical-area rejection sampling validates Polygon/MultiPolygon/hole topology, quantizes then rechecks inclusion and uniqueness; no altitude or center fallback. Worker bounds/cancellation prevent UI blocking. Dateline/polar geometry deliberately fails explicitly (documented limit); administrative boundaries may include water/rural land.
+
+Focused geometry/service tests 7/7 PASS, including 100 real-boundary points per city, cache reopen and cancellation. npm run verify PASS (lint, 77 unit, 96 integration); BLEGO_HEADLESS=1 npm run test:ui 16/16 PASS, zero skips. Linux x64. Logs /tmp/blego-v14-{geo-focused,task3-verify,task3-ui}.log. Formatter warning fixed, complete verify rerun. Catalogue acquisition and full geometry source/licensing documented in resources/geo/README.md and per-country provenance JSON.
+
+Task 4 in progress: integrate generated per-file GEO with the existing immutable image plans, workspace overrides, ExifTool writer and readback; explicit altitude Keep must preserve original altitude representations.

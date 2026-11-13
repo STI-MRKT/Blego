@@ -1,0 +1,13 @@
+# Local city boundaries
+
+© OpenStreetMap contributors. Data is available under the [Open Database License 1.0](https://opendatacommons.org/licenses/odbl/1-0/); attribution: https://www.openstreetmap.org/copyright. This extracted city boundary database is distributed under ODbL-1.0. Application code has its own license.
+
+`cities.json` is an un-simplified extraction of the first administrative city/municipality Polygon/MultiPolygon returned by the documented queries. The eight `*.provenance.json` files retain exact query URLs, response SHA-256, retrieved timestamps, selected OSM relation and object type. `version` identifies this retrieved snapshot, not a guessed OSM object revision. Original cached responses remain in the development audit workspace; geometries are distributed here.
+
+Initial coverage: São Paulo municipality (BR), New York city (US), Paris city (FR), Warszawa (PL), Berlin (DE), Madrid (ES), Roma municipality (IT), **City of London (GB, not Greater London)**. Administrative boundaries may include water/rural land; generated points are not claims of a street address, land use, residence or actual photo location.
+
+Acquired as one small, single-threaded developer lookup, with descriptive User-Agent, >1 second spacing and persistent response cache, after reviewing https://operations.osmfoundation.org/policies/nominatim/. No geocoding requests, public autocomplete, background refresh or location lookup run in BLEGO. Runtime search uses this local catalogue. No user data was sent.
+
+Additions: explicitly import a UTF-8 JSON package `{ "version": 1, "cities": [...] }` using the same city schema. Each city requires stable `id`, ISO-style two-letter `country`, `name`, `region`, `source`, HTTPS `sourceUrl`, `license`, dataset `version`, and valid GeoJSON `geometry`. Import validates topology and limits, previews additions/duplicates and commits to the existing SQLite store only after confirmation. Imported source claims are user supplied, not independently verified. Existing IDs are retained; import does not silently replace boundaries. At most 100 imported cities / 16 MiB cached; each input ≤8 MiB.
+
+Geometry: uniform longitude and sin(latitude) in area-weighted component bounding boxes, cryptographic random bytes, rejection against polygon and all holes, seven-decimal quantization followed by Point-in-Polygon and batch uniqueness. This is uniform spherical surface area within the supplied lon/lat contours, not ellipsoidal survey precision. No altitude generation. Worker timeout/cancellation and finite vertex, topology-pair and sampling-work budgets fail explicitly. Dateline-spanning boundaries and polar vertices are currently rejected, never approximated with a center/radius.

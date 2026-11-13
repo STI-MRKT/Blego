@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=Madrid&countrycodes=es&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:42.891336+00:00",
+  "sha256": "b2e585f9325f08f386326ee7bdc24a06d7216ff9916f23536c8cc0b9e9fead69",
+  "selectedRelation": 5326784,
+  "boundaryType": "city"
+}

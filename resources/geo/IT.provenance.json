@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=Rome&countrycodes=it&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:44.666803+00:00",
+  "sha256": "e69336c2f2b6b1e52d3f9b8c224de642ee5750955d66bba948afccec93825d54",
+  "selectedRelation": 41485,
+  "boundaryType": "city"
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=New+York+City&countrycodes=us&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:35.090621+00:00",
+  "sha256": "c37033b92d365fde2d94dab7309c064bb18055ddfde2ec262b1196ec63477a9e",
+  "selectedRelation": 175905,
+  "boundaryType": "city"
+}

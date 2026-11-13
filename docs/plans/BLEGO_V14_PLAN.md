@@ -5,7 +5,7 @@
 **Goal:** Implement specification #5 on top of BLEGO 1.3, preserving original graphics, data contracts and all existing functions.
 **Architecture:** Extend existing classifier worker/parser, image workspace/export engine, public Facebook queue, SQLite store and native clipboard. GEO uses licensed, provenance-bearing local city polygons and explicit CSPRNG generation; Friends uses an import/preview/confirm flow in the existing store.
 **Tech stack:** Electron/Node, existing JavaScript renderer, SQLite, ExifTool, Playwright; no new frontend framework or external AI classifier.
-**Spec:** `docs/specs/BLEGO_V14_TZ05.md`.
+**Spec:** `docs/specs/BLEGO_V14_TZ05.md`; generator supplement `docs/specs/BLEGO_V14_TZ05_GENERATOR_ADDENDUM.md` received during Task 3.
 **Base:** `782c1b2c1b61703f81542eafb8d97a33fc3264ec`; branch `codex/blego-v1-4-improvements` in existing isolated `/workspace/BLEGO-final`.
 
 ## Global constraints
@@ -58,10 +58,10 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** create `electron/features/geo/{geometry,catalog,service}.cjs`, `resources/geo/` manifest/boundaries/licenses and provenance docs; add tests `tests/unit/geo*.test.cjs`, `tests/integration/geo*.test.cjs`.
 **Interfaces:** `validateBoundary(feature)` returns bounded normalized geometry; `generatePoints(boundary,count,{exclude,signal})` returns distinct `{latitude,longitude}`; catalogue lists countries/cities with stable IDs/region/provenance and loads a boundary by ID. Local package preview/confirm updates existing SQLite cache atomically.
-- [ ] Retrieve/verify real initial boundaries and licensing; record exact URLs/IDs/timestamps without inventing unavailable cities.
-- [ ] Write failing geometry tests (holes, multipart, bounds, zero/negative, area distribution, uniqueness, invalid/thin/bounded-work cases).
-- [ ] Implement CSPRNG sampling and validation, provenance-bearing catalogue and local import/cache.
-- [ ] Verify real bundled geometries with sampled points, focused tests, full verify/GUI; commit.
+- [x] Retrieve/verify real initial boundaries and licensing; record exact URLs/IDs/timestamps without inventing unavailable cities.
+- [x] Write failing geometry tests (holes, multipart, bounds, zero/negative, area distribution, uniqueness, invalid/thin/bounded-work cases).
+- [x] Implement CSPRNG sampling and validation, provenance-bearing catalogue and local import/cache.
+- [x] Verify real bundled geometries with sampled points, focused tests, full verify/GUI; commit.
 
 ## Task 4: Photos integration
 
@@ -93,6 +93,10 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** existing generator/settings UI and main/copy model; GUI tests.
 - [ ] Failing exact Name/BIO copy tests (Unicode/truncation/empty BIO/native clipboard/keyboard); add accessible per-field buttons next to left-card text and truthful Russian toast.
+- [ ] Remove generator “Additional fields” disclosure only; retain full model, Copy full set and prior history.
+- [ ] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
+- [ ] New generated emails use only `@dayrep.com`, normalized from display name and reserved uniquely through existing registry; never rewrite old/imported emails or probe/send mail.
+- [ ] Add ≥50 natural unique localized BIOs per category, using existing selection; validate counts, normalized deduplication, country/language/category metadata, mass generation and restart/history.
 - [ ] Russian primary Settings labels/help and independent toggles; preserve advanced controls and store schema.
 - [ ] GUI setting independence/restart plus all existing copy checks; full suites and commit.
 

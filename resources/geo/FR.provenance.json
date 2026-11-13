@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=Paris&countrycodes=fr&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:37.371278+00:00",
+  "sha256": "f99962f06eaf625ed0193ca9a70b204c0a40c37dfc0679594168cb6c1f0a5b96",
+  "selectedRelation": 71525,
+  "boundaryType": "city"
+}
