@@ -48,6 +48,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** create `shared/classifier-lexer.mjs`, `shared/classifier-recognition.mjs`; extend `shared/importer.mjs`, `shared/classifier.mjs`, `electron/features/classification/{service,worker}.cjs`, existing IPC/preload and `src/js/ui/import.js`, `src/js/main.js`.
 **Interfaces:** lexer produces logical records with exact `sourceRecord`, `range`, `sourceEntries` and diagnostics; classifier retains `data`'s 11 keys and adds `extended`, `extraFields`, `warnings`, `confidence`; `options.recordMapping[recordId][column]` assigns a specific source entry. Existing `reclassify`, `page`, `cell`, `exportText` stay the entry points.
+
 - [x] Add failing unit tests for A/B, mixed formats, multiline and same-line records, holes in fields, exact JSON, malformed recovery, Unicode, conflicts and unsupported guesses.
 - [x] Implement lexer and recognition in existing worker pipeline; retain raw source and 7-field export.
 - [x] Add failing worker tests for 1/10/100/1000 records, per-record manual mapping, warning filters, cancellation and input limit; implement missing service/IPC behavior.
@@ -58,6 +59,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** create `electron/features/geo/{geometry,catalog,service}.cjs`, `resources/geo/` manifest/boundaries/licenses and provenance docs; add tests `tests/unit/geo*.test.cjs`, `tests/integration/geo*.test.cjs`.
 **Interfaces:** `validateBoundary(feature)` returns bounded normalized geometry; `generatePoints(boundary,count,{exclude,signal})` returns distinct `{latitude,longitude}`; catalogue lists countries/cities with stable IDs/region/provenance and loads a boundary by ID. Local package preview/confirm updates existing SQLite cache atomically.
+
 - [x] Retrieve/verify real initial boundaries and licensing; record exact URLs/IDs/timestamps without inventing unavailable cities.
 - [x] Write failing geometry tests (holes, multipart, bounds, zero/negative, area distribution, uniqueness, invalid/thin/bounded-work cases).
 - [x] Implement CSPRNG sampling and validation, provenance-bearing catalogue and local import/cache.
@@ -67,6 +69,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** existing images service/groups/write-policy, `shared/metadata-operations.mjs`, IPC/preload, `src/js/ui/photos.js`, `src/js/main.js`; tests `tests/integration/image-geo*.test.cjs`, `tests/ui/photos-geo*.test.cjs` and native batch script.
 **Interfaces:** generated per-file GPS operations use existing workspace overrides and immutable preview/export plans; `altitudeMode:'keep'|'set'|'remove'` extends existing GPS value semantics without changing old persisted operation behavior. Explicit regenerate replaces only selected targets; retry selects failed files only.
+
 - [x] Write failing per-file unique/stable GEO and altitude Keep/export tests; integrate existing workspace, never a second export pipeline.
 - [x] Country/city search, generate all/one, coordinates/provenance preview, manual advanced entry, multi-select/drop/remove/clear and failure retry.
 - [x] Actual JPEG/PNG/WebP write/readback and protected data/pixels; 1/10/100 plus representative high-resolution fixtures; cancel and failure isolation.
@@ -76,15 +79,17 @@ The user supplied a complete implementation order and authorized execution. Rout
 
 **Files:** existing `electron/features/facebook/{normalize,transport,inspect,service}.cjs`, IPC/preload, checker UI/main; unit/integration/GUI tests.
 **Interfaces:** preserve public queue/cancellation and compatibility fields; add explicit statuses, safe diagnostic cause/time/source, verified identity/name/avatar/object type only when evidence supports requested target. Imported local facts remain separate, explicit and unverified; no imported credential use.
-- [ ] Verify official Meta User/Graph API access limits and record documentation; no API call without authorized access.
-- [ ] Failing controlled tests for all 8 statuses, target mismatch, Retry-After, timeout/DNS/TLS/cancel/redirect, input dedup and retry one.
-- [ ] Extend bounded transport/queue and clear Russian UI with status filtering/sorting/individual copies/details.
-- [ ] Actual public requests separately recorded; protected API access BLOCKED if absent; full suites and commit.
+
+- [x] Verify official Meta User/Graph API access limits and record documentation; no API call without authorized access.
+- [x] Failing controlled tests for all 8 statuses, target mismatch, Retry-After, timeout/DNS/TLS/cancel/redirect, input dedup and retry one.
+- [x] Extend bounded transport/queue and clear Russian UI with status filtering/sorting/individual copies/details.
+- [x] Actual public requests separately recorded; protected API access BLOCKED if absent; full suites and commit.
 
 ## Task 6: Friends import
 
 **Files:** new `electron/features/friends/service.cjs`, existing data/UI, IPC/preload; unit/integration/GUI tests.
 **Interfaces:** `preview(bytes,format)` validates canonical URLs and returns added/duplicate/incomplete counts with a preview token; `confirm(token)` saves only accepted local rows in existing SQLite key/table, preserving built-in cards.
+
 - [ ] Failing TXT/CSV/JSON import, malicious URL, canonical dedup, preview tamper and restart tests.
 - [ ] Implement source-aware local import, search/GEO/platform filters, counts and safe explicit external opens; no scraping.
 - [ ] GUI import/confirm/filter/open/restart; full suites and commit. Real new links remain pending.
@@ -92,6 +97,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 ## Task 7: Generator / Settings
 
 **Files:** existing generator/settings UI and main/copy model; GUI tests.
+
 - [ ] Failing exact Name/BIO copy tests (Unicode/truncation/empty BIO/native clipboard/keyboard); add accessible per-field buttons next to left-card text and truthful Russian toast.
 - [ ] Remove generator “Additional fields” disclosure only; retain full model, Copy full set and prior history.
 - [ ] Introduce `person_name` / `brand_name` strategies: TECH uses thematic brands (25 supplied examples + 200–300 new unique names); MODEL/CRYPTO retain geographically appropriate female personal names, each +200–300 variants. Extend existing pools and registry, preserve exhaustion/opt-in repeat behavior.
@@ -103,6 +109,7 @@ The user supplied a complete implementation order and authorized execution. Rout
 ## Task 7b: responsive window and navigation (user supplement)
 
 **Spec:** docs/specs/BLEGO_V14_TZ05_RESPONSIVE_ADDENDUM.md. User explicitly authorizes responsive layout/minimum window changes while preserving original wide-screen aesthetics. Use a scoped responsive stylesheet and existing shell/navigation components; no framework or scaling.
+
 - [ ] Lower native window minimums appropriately for 360px tests and 1/3 macOS work-area width; respect window manager and retain saved bounds safely.
 - [ ] Automatic compact icon sidebar, accessible hover/focus labels, active state, explicit full-menu toggle and adaptive logo/status/developer footer.
 - [ ] All nine sections: local table scroll, single-column cards, reachable wrapping actions, min-width:0 and vertical main scroll. No form/operation reset on resize.

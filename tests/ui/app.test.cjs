@@ -191,7 +191,10 @@ test(
       .locator('#checker-input')
       .fill('0012345678901234567890123\nhttps://facebook.com/groups');
     await page.locator('[data-action="checker-run"]').click();
-    await page.getByText('Login required', { exact: true }).waitFor();
+    await page
+      .locator('.checker-row')
+      .getByText('Требуется авторизация', { exact: true })
+      .waitFor();
     await page.locator('#facebook-details > summary').click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[aria-label="Copy Facebook ID"]').first().click();
@@ -199,13 +202,12 @@ test(
     await page.locator('#fb-note-status-0').selectOption('blocked');
     await page.locator('#fb-note-comment-0').fill('Synthetic owner report');
     await page.locator('[data-action="facebook-note"]').click();
-    await page.getByText('1 owner reports', { exact: true }).waitFor();
+    await page.getByText('Сообщений: 1', { exact: true }).waitFor();
     assert.equal(
       await page
-        .getByText(
-          'Account restrictions remain unknown. Owner reports are separate from public checks.',
-          { exact: true }
-        )
+        .getByText('Сообщения владельца хранятся отдельно и не подтверждены публичной проверкой.', {
+          exact: true
+        })
         .count(),
       1
     );

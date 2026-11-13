@@ -29,7 +29,7 @@ function requestPage(url, { signal, maxBytes }) {
         agent: false,
         signal,
         headers: {
-          'User-Agent': 'BLEGO/1.1 public profile diagnostics',
+          'User-Agent': 'BLEGO/1.4 public profile diagnostics',
           Accept: 'text/html',
           'Accept-Encoding': 'identity'
         },

@@ -242,6 +242,12 @@ async function initialize() {
         const result = normalizeFacebookTargets(text);
         return {
           ...result,
+          importedFacts: Object.fromEntries(
+            result.targets.map((target) => [
+              target.canonicalUrl,
+              facebook.importedFacts(target.canonicalUrl)
+            ])
+          ),
           manualNotes: Object.fromEntries(
             result.targets.map((target) => [
               target.canonicalUrl,
@@ -263,6 +269,20 @@ async function initialize() {
       facebookCancel: () => {
         facebook.cancel();
         return true;
+      },
+      facebookLinkImport: ({ operationId, recordId }) => {
+        const id = classification.cell(operationId, recordId, 'accountId');
+        const profile = classification.cell(operationId, recordId, 'profileUrl');
+        const target = normalizeTarget(id || profile);
+        if (id && profile && normalizeTarget(profile).canonicalUrl !== target.canonicalUrl)
+          throw Error('FB_IDENTITY_CONFLICT');
+        const fact = facebook.linkImportedFacts({
+          targetKey: target.canonicalUrl,
+          name: classification.cell(operationId, recordId, 'fullName'),
+          avatarUrl: classification.cell(operationId, recordId, 'avatarUrl'),
+          recordId
+        });
+        return { target: target.canonicalUrl, fact };
       },
       facebookNote: (note) => facebook.saveManualNote(note),
       facebookOpen: (target) => shell.openExternal(normalizeTarget(target).canonicalUrl),

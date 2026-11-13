@@ -334,6 +334,7 @@ function bindView() {
       document.querySelector('.proxy-card .banner.err')?.remove();
     };
   }
+  for(const [id,key] of [['checker-status-filter','statusFilter'],['checker-sort','sort']]){const el=document.getElementById(id);if(el)el.onchange=()=>{state.checker[key]=el.value;renderView();};}
   const facebookDetails=document.getElementById('facebook-details');
   if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
   const checker = document.getElementById('checker-input');
@@ -349,7 +350,7 @@ function bindView() {
             .filter((line) => line.trim()).length
         : 0;
       const label = document.getElementById('checker-count');
-      if (label) label.textContent = `${count} rows`;
+      if (label) label.textContent = `${count} строк`;
       const button = document.querySelector('[data-action="checker-run"]');
       if (button) button.disabled = !event.target.value.trim();
     };
@@ -876,6 +877,7 @@ document.addEventListener('click', async (event) => {
     } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
+  if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}
   if(action==='classifier-details'){state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
   if(action==='classifier-close-details'){state.classifierDetailRow=null;state.classifierRevealed={};renderView();return;}
   if(action==='classifier-reveal'){
@@ -1340,10 +1342,11 @@ document.addEventListener('click', async (event) => {
     renderView();
     return;
   }
+  if(action==='checker-retry-one'){if(state.checker.checking)return;const row=state.checker.rows?.[Number(target.dataset.index)];if(!row?.link)return;for(const other of state.checker.rows)if(other.link===row.link)other.check=null;await runCheckerStatus(crypto.randomUUID(),row.link);return;}
   if (action === 'checker-run') {
     if(state.checker.checking)return;
     const runId=crypto.randomUUID(),input=state.checker.input;
-    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;
+    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;state.checker.statusFilter='';
     state.checker.checking={done:0,total:0};renderView();
     try {
       await window.blego.cancelFacebook();
@@ -1357,13 +1360,13 @@ document.addEventListener('click', async (event) => {
       } else {state.checker.checking=null;renderView();}
     }catch {
       if(state.checker.runId!==runId)return;
-      state.checker.checking=null;renderView();toast('Could not start this check. Use up to 100 profile IDs or direct links.','err');
+      state.checker.checking=null;renderView();toast('Не удалось начать проверку. Введите до 100 ID или прямых ссылок.','err');
     }
     return;
   }
   if (action === 'checker-cancel') {
     state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
-    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={availability:'cancelled',reasonCode:'CANCELLED'};
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'request_queue',checkedAt:null};
     renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
@@ -1394,10 +1397,10 @@ document.addEventListener('click', async (event) => {
   }
 });
 
-async function runCheckerStatus(runId = crypto.randomUUID()) {
+async function runCheckerStatus(runId = crypto.randomUUID(), onlyTarget=null) {
   const rows = state.checker.rows;
   if (!rows || state.checker.checking) return;
-  const targets = rows.filter((row) => row.link);
+  const targets = rows.filter((row) => row.link && (!onlyTarget || row.link===onlyTarget));
   state.checker.runId = runId;
   state.checker.checking = { done: 0, total: new Set(targets.map((row) => row.link)).size };
   renderView();
@@ -1407,15 +1410,14 @@ async function runCheckerStatus(runId = crypto.randomUUID()) {
       for(const row of rows)if(row.link===result.canonicalUrl)row.check=result;
       state.checker.checking = { done, total };
       const label = document.getElementById('checker-progress-text');
-      if (label) label.textContent = `Checking ${done} of ${total}`;
+      if (label) label.textContent = `Проверено ${done} из ${total}`;
       const fill = document.getElementById('checker-progress-fill');
       if (fill) fill.style.width = `${(100 * done) / total}%`;
     });
     if (state.checker.runId !== runId) return;
-    for (const row of state.checker.rows || [])
-      row.check = result.results.find((value) => value.canonicalUrl === row.link);
+    for (const row of state.checker.rows || []){const found=result.results.find(value=>value.canonicalUrl===row.link);if(found)row.check=found;}
   } catch (error) {
-    if (state.checker.runId === runId) toast('Could not complete this check. Try again.', 'err');
+    if (state.checker.runId === runId) toast('Не удалось завершить проверку. Повторите попытку.', 'err');
   } finally {
     if (state.checker.runId === runId) {
       state.checker.checking = null;

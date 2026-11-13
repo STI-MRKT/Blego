@@ -42,6 +42,7 @@ contextBridge.exposeInMainWorld('blego', {
   metadataPresets: () => call('metadataPresets'),
   saveMetadataPreset: (preset) => call('metadataPresetSave', preset),
   importMetadataPreset: () => call('metadataPresetImport'),
+  linkFacebookImport: (request) => call('facebookLinkImport', request),
   normalizeFacebook: (text) => call('facebookNormalize', text),
   checkFacebook: (request) => call('facebookCheck', request),
   cancelFacebook: () => call('facebookCancel'),

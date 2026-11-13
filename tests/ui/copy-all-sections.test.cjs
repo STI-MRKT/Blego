@@ -151,7 +151,10 @@ test(
     await page.locator('[data-copy-action="close"]').click();
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.locator('[data-action="checker-run"]').click();
-    await page.getByText('Login required', { exact: true }).waitFor();
+    await page
+      .locator('.checker-row')
+      .getByText('Требуется авторизация', { exact: true })
+      .waitFor();
     await page.locator('[data-copy-action="open"]').click();
     const fb = JSON.parse(await preview())[0];
     assert.equal(fb.id, '001234567890123456789');
