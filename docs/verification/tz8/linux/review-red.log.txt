@@ -1,0 +1,50 @@
+✖ changing the active photo group invalidates the prepared group snapshot (2279.38487ms)
+✖ sequential copy completion after navigation cannot advance or reopen a closed panel (924.834891ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3773.465564
+
+✖ failing tests:
+
+test at tests/ui/header-copy-removed.test.cjs:421:1
+✖ changing the active photo group invalidates the prepared group snapshot (2279.38487ms)
+  AssertionError [ERR_ASSERTION]: old group snapshot must close
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/header-copy-removed.test.cjs:463:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/ui/header-copy-removed.test.cjs:471:1
+✖ sequential copy completion after navigation cannot advance or reopen a closed panel (924.834891ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   "Cannot read properties of null (reading 'order')"
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/header-copy-removed.test.cjs:516:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ "Cannot read properties of null (reading 'order')" ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -9,6 +9,7 @@ on:
       - codex/blego-v1-4-improvements
       - codex/blego-v1-4-1-fixes
       - codex/blego-fp-bio-independent
+      - codex/blego-hide-header-copy
   workflow_dispatch:
     inputs:
       target:
