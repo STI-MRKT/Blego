@@ -45,6 +45,19 @@ async function requestTile(url, { signal, headers }) {
     req.on('error', reject);
   });
 }
+async function validateImage(body) {
+  if (
+    !Buffer.isBuffer(body) ||
+    body.length > LIMIT ||
+    !body.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
+  )
+    throw Error('INVALID_MAP_IMAGE');
+  const decoder = require('sharp')(body, { limitInputPixels: 256 * 256 });
+  const metadata = await decoder.metadata();
+  if (metadata.width !== 256 || metadata.height !== 256) throw Error('INVALID_MAP_IMAGE');
+  // Metadata alone accepts truncated PNGs. Decode the bounded raster as well.
+  await decoder.raw().toBuffer();
+}
 function createTileService({ root, request = requestTile, clock = () => Date.now() }) {
   const directory = path.join(root, 'map-tiles');
   const pending = new Map();
@@ -75,8 +88,15 @@ function createTileService({ root, request = requestTile, clock = () => Date.now
           !stat.isSymbolicLink() &&
           stat.size <= LIMIT &&
           clock() - stat.mtimeMs < TTL
-        )
-          return 'data:image/png;base64,' + (await fs.readFile(file)).toString('base64');
+        ) {
+          const body = await fs.readFile(file);
+          try {
+            await validateImage(body);
+            return 'data:image/png;base64,' + body.toString('base64');
+          } catch {
+            await fs.unlink(file);
+          }
+        }
       } catch (error) {
         if (error.code !== 'ENOENT') throw Error('MAP_CACHE_UNAVAILABLE');
       }
@@ -87,11 +107,16 @@ function createTileService({ root, request = requestTile, clock = () => Date.now
       let bytes = 0;
       for (const name of await fs.readdir(directory))
         if (/^\d+-\d+-\d+\.png$/.test(name)) {
-          const candidate = path.join(directory, name),
-            stat = await fs.lstat(candidate);
-          if (stat.isFile() && !stat.isSymbolicLink()) {
-            if (clock() - stat.mtimeMs >= TTL) await fs.unlink(candidate);
-            else bytes += stat.size;
+          const candidate = path.join(directory, name);
+          try {
+            const stat = await fs.lstat(candidate);
+            if (stat.isFile() && !stat.isSymbolicLink()) {
+              if (clock() - stat.mtimeMs >= TTL) await fs.unlink(candidate);
+              else bytes += stat.size;
+            }
+          } catch (error) {
+            // Another visible tile job may already have removed this stale entry.
+            if (error.code !== 'ENOENT') throw error;
           }
         }
       if (bytes + LIMIT > MAX_CACHE) throw Error('MAP_CACHE_FULL');
@@ -108,14 +133,7 @@ function createTileService({ root, request = requestTile, clock = () => Date.now
         backoff = clock() + 60000;
         throw Error('MAP_UNAVAILABLE');
       }
-      if (
-        !Buffer.isBuffer(body) ||
-        body.length > LIMIT ||
-        !body.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
-      )
-        throw Error('INVALID_MAP_IMAGE');
-      const metadata = await require('sharp')(body, { limitInputPixels: 256 * 256 }).metadata();
-      if (metadata.width !== 256 || metadata.height !== 256) throw Error('INVALID_MAP_IMAGE');
+      await validateImage(body);
       try {
         await fs.writeFile(file, body, { flag: 'wx', mode: 0o600 });
       } catch (error) {

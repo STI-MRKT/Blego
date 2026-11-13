@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-13T13:00:22.936Z",
+  "host": "linux-x64",
+  "facebook": {
+    "status": "BLOCKED",
+    "target": "https://www.facebook.com/meta",
+    "result": "NETWORK_ERROR",
+    "reason": "FB_CONNECTION_REFUSED",
+    "durationMs": 5109,
+    "scope": "One anonymous public profile; not a complete real-target acceptance matrix"
+  },
+  "map": {
+    "status": "BLOCKED",
+    "reason": "MAP_UNAVAILABLE"
+  }
+}

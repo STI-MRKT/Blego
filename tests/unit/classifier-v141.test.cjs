@@ -102,3 +102,22 @@ test('TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without ac
     parseInput({ bytes: Buffer.from([255]), originalName: 'input.txt' }, { classification: true })
   );
 });
+
+test('mixed TXT retains weak, partial and extended-only records for manual review', async () => {
+  const rows = [
+    'id:0001|email:first@example.test',
+    '0002|second@example.test|FAKE_PASSWORD',
+    'name:Jane Doe|recoveryEmail:backup@example.test',
+    'profileUrl:https://facebook.com/example.person',
+    'uncertain-value'
+  ];
+  const r = await read(rows.join('\n'));
+  assert.equal(r.records.length, rows.length);
+  assert.deepEqual(
+    r.records.map((x) => x.sourceRecord),
+    rows
+  );
+  assert.equal(r.records[1].data.password, '');
+  assert.equal(r.records[2].data.backupEmail, 'backup@example.test');
+  assert.equal(r.records[3].extended.profileUrl, 'https://facebook.com/example.person');
+});

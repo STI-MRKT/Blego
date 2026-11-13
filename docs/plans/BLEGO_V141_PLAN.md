@@ -22,50 +22,50 @@
 
 ## A1 Classifier
 Files shared/classifier*.mjs, shared/importer.mjs; tests/unit/classifier-v141.test.cjs, integration classifier tests.
-- [ ] Reproduce aliases/backupEmail, bare GEO, useful-content boundaries, repeated structure with synthetic fixtures; record RED.
-- [ ] Add backupEmail without changing core7/legacy schemas; extend exact labels, contextual recognition and conservatively validated file structure. Preserve exact ranges and unknown data.
-- [ ] Run focused tests, npm run verify; ledger actual results and commit.
+- [x] Reproduce aliases/backupEmail, bare GEO, useful-content boundaries, repeated structure with synthetic fixtures; record RED.
+- [x] Add backupEmail without changing core7/legacy schemas; extend exact labels, contextual recognition and conservatively validated file structure. Preserve exact ranges and unknown data.
+- [x] Run focused tests, npm run verify; ledger actual results and commit.
 
 ## A2 Archive
 Files src/js/main.js, src/js/ui/import.js, electron/features/importer/service.cjs and existing archive/storage modules as evidence requires.
-- [ ] Trace selected save -> confirmation -> SQLite/file -> list/restart with a GUI regression; record actual failure or existing PASS.
-- [ ] Fix only reproduced path failures; check partial data, collision, permissions, interruption and repeat save.
-- [ ] Focused integration/GUI plus npm run verify; commit.
+- [x] Trace selected save -> confirmation -> SQLite/file -> list/restart with a GUI regression; record actual failure or existing PASS.
+- [x] Fix only reproduced path failures; check partial data, collision, permissions, interruption and repeat save.
+- [x] Focused integration/GUI plus npm run verify; commit.
 
 ## A3 Map
 Files src/js/ui/photo-map.js, shared/photo-map.mjs, electron existing geo service/IPC if needed, map-specific local styles.
-- [ ] Reproduce current lack of geographic context; test container hidden/resize and markers.
+- [x] Reproduce current lack of geographic context; test container hidden/resize and markers.
 - [ ] Add licensed geographic background with explicit loading action and honest offline grid/boundaries, no metadata/photo transport. Keep existing point editing and GEO engine.
 - [ ] Real rendered screenshots, 20-photo export/readback, focused tests and npm run verify; commit.
 
 ## A4 Facebook
 Files electron/features/facebook existing service/parser, tests unit/integration/GUI.
-- [ ] Audit matching-profile evidence, redirects and login/challenge handling; RED for discovered false verdicts/missed valid evidence.
+- [x] Audit matching-profile evidence, redirects and login/challenge handling; RED for discovered false verdicts/missed valid evidence.
 - [ ] Preserve anonymous bounded requests, truthful 8 statuses, 100 targets/retry/cancel. Investigate isolated browser only if HTTP evidence warrants it; no auth/session use.
 - [ ] Controlled cases and separate real public request report, verify and commit.
 
 ## B Generator BIO
 Files existing generator service/contracts/storage/UI/main, new small BIO catalogue with official provenance.
-- [ ] Tests for old-profile compatibility, independent residence/birthplace, explicit school/university choices, save/restart and emoji exact copy.
-- [ ] Separate BIO section, editable fields with per-field copies, local contextual work/position, real sourced institutions or honest no-data, editable/regenerable main BIO and thematic page BIO emoji.
-- [ ] Preserve full set, phone and address order; verify, GUI, commit.
+- [x] Tests for old-profile compatibility, independent residence/birthplace, explicit school/university choices, save/restart and emoji exact copy.
+- [x] Separate BIO section, editable fields with per-field copies, local contextual work/position, real sourced institutions or honest no-data, editable/regenerable main BIO and thematic page BIO emoji.
+- [x] Preserve full set, phone and address order; verify, GUI, commit.
 
 ## C UI cleanup
 Files shell.js, network.js, news.js, import.js, main.js and scoped responsive CSS.
-- [ ] Tests for topbar settings, removed labels/controls, exact cookie reveal/copy/collapse/failure, automatic format, English Network and quality/trust N/A.
-- [ ] Implement requested removals; keep internal diagnostics/storage and all transports. Document measured quality formula independently of provider risk.
-- [ ] All sections/widths 360/390/480/576/768/980/1280, verify/GUI and commit.
+- [x] Tests for topbar settings, removed labels/controls, exact cookie reveal/copy/collapse/failure, automatic format, English Network and quality/trust N/A.
+- [x] Implement requested removals; keep internal diagnostics/storage and all transports. Document measured quality formula independently of provider risk.
+- [x] All sections/widths 360/390/480/576/768/980/1280, verify/GUI and commit.
 
 ## D Friends
 Files existing Friends service/UI/main and corresponding tests.
-- [ ] Diagnose seed/import/persistence/dedupe/partial records/search/filter/open refresh; RED for defects.
-- [ ] Fix causes, keep real user data and unavailable links; truthful counts and consistent cards.
-- [ ] Verify/restart GUI, commit.
+- [x] Diagnose seed/import/persistence/dedupe/partial records/search/filter/open refresh; RED for defects.
+- [x] Fix causes, keep real user data and unavailable links; truthful counts and consistent cards.
+- [x] Verify/restart GUI, commit.
 
 ## E Regression and review
-- [ ] npm run verify; BLEGO_HEADLESS=1 npm run test:ui; no skips/disabled old coverage (expectations update only for explicitly changed UI).
+- [x] npm run verify; BLEGO_HEADLESS=1 npm run test:ui; no skips/disabled old coverage (expectations update only for explicitly changed UI).
 - [ ] Compare 1.4 / 1.4.1 under same conditions: launch/generation/import/archive/map/20 photos/UI gaps/RSS; screenshots.
-- [ ] Fresh whole-branch review; fix important findings with RED/GREEN and full regression.
+- [x] Fresh whole-branch review; fix important findings with RED/GREEN and full regression.
 
 ## F ARM64 delivery
 Files package*.json, .github/workflows/blego-macos-qa.yml, QA scripts/docs.

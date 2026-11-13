@@ -1,0 +1,17 @@
+✔ TZ06 labelled recovery email is separate from primary email and seven-field schema (46.947545ms)
+✔ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (25.546231ms)
+✔ TZ06 infers standalone country and name with identity/date context, not countries in prose (9.611213ms)
+✔ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (2.148668ms)
+✔ TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without accepting arbitrary corrupt bytes (3.173926ms)
+✔ mixed TXT retains weak, partial and extended-only records for manual review (2.646616ms)
+✔ TZ06 map tile placement uses Mercator and only the bounded visible viewport (4.208005ms)
+✔ TZ06 tile service is explicit, bounded and caches without collecting photo data (74.473328ms)
+✔ four concurrent map requests survive expiry cleanup and refetch truncated cache entries (24.768942ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 187.017224

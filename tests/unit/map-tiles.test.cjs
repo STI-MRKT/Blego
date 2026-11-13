@@ -53,3 +53,45 @@ test('TZ06 tile service is explicit, bounded and caches without collecting photo
   ])
     await assert.rejects(service.tile(value));
 });
+
+test('four concurrent map requests survive expiry cleanup and refetch truncated cache entries', async (t) => {
+  const fs = require('node:fs'),
+    os = require('node:os'),
+    path = require('node:path');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-tiles-expiry-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const dir = path.join(root, 'map-tiles');
+  fs.mkdirSync(dir);
+  const png = await require('sharp')({
+    create: { width: 256, height: 256, channels: 3, background: '#246843' }
+  })
+    .png()
+    .toBuffer();
+  const expired = path.join(dir, '1-0-0.png');
+  fs.writeFileSync(expired, png);
+  fs.utimesSync(expired, new Date(0), new Date(0));
+  let calls = 0;
+  const service = require('../../electron/features/geo/tiles.cjs').createTileService({
+    root,
+    request: async () => {
+      calls++;
+      return png;
+    }
+  });
+  const results = await Promise.allSettled(
+    [0, 1, 2, 3].map((x) => service.tile({ z: 2, x, y: 1 }))
+  );
+  for (const bytes of [Buffer.alloc(0), png.subarray(0, 100)]) {
+    fs.writeFileSync(path.join(dir, '2-0-0.png'), bytes);
+    const before = calls;
+    assert.equal(
+      await service.tile({ z: 2, x: 0, y: 0 }),
+      'data:image/png;base64,' + png.toString('base64')
+    );
+    assert.equal(calls, before + 1);
+  }
+  assert.deepEqual(
+    results.map((r) => r.status),
+    Array(4).fill('fulfilled')
+  );
+});
