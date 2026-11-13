@@ -104,6 +104,9 @@ export function invalidateImportCopies() {
   }
 }
 export function mountCopyActions() {
+  // The global copy menu is keyboard-only. Do not insert an extra "Копировать"
+  // button into page headers: direct field copying remains visible in each view.
+  document.getElementById('copy-actions')?.remove();
   const host = document.getElementById('view');
   if (
     !host ||
@@ -117,13 +120,10 @@ export function mountCopyActions() {
   const bar = document.createElement('div');
   bar.className = 'ux-copy-actions';
   bar.id = 'copy-actions';
-  bar.innerHTML =
-    '<button class="btn btn-quiet" data-copy-action="open" title="Выбрать поля и формат копирования">Копировать</button><div id="copy-panel"></div>';
-  const head = host.querySelector('.page-head');
-  const headActions = head?.querySelector('.head-actions');
-  if (headActions) headActions.prepend(bar);
-  else if (head) head.append(bar);
-  else host.prepend(bar);
+  bar.innerHTML = '<div id="copy-panel"></div>';
+  // The advanced panel is still available through Ctrl+Alt+Shift+C.
+  // Keep the empty mount outside the page header so it cannot shift the layout.
+  document.body.append(bar);
   // A previously prepared panel is an explicit snapshot, not silently replaced by live updates.
   if (panel && panel.view === state.view) renderPanel();
 }
@@ -414,6 +414,10 @@ document.addEventListener('keydown', (event) => {
   ) {
     event.preventDefault();
     const id = sourceForView();
+    if (event.altKey) {
+      openPanel(id).catch((e) => toast(e.message, 'err'));
+      return;
+    }
     resolveCopySource(id)
       .then((model) =>
         model.rows.length === 1
