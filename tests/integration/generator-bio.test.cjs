@@ -18,6 +18,10 @@ test('TZ06 BIO explicit edit persists with profile and history without spending 
     saveBiography,
     bioSuggestions
   } = require('../../electron/features/generator/biography.cjs');
+  // Explicit legacy fixture: old attached BIO must remain compatible.
+  p.biography = { ...bioDefaults(p), birthplace: '' };
+  store.set('lastCard', p);
+  store.db.prepare('UPDATE requests SET profile=? WHERE profile_id=?').run(JSON.stringify(p), p.id);
   const defaults = bioDefaults(p);
   assert.equal(defaults.residence, `${p.fields.city}, Italy`);
   assert.equal(defaults.birthplace, ''); // Brand pages do not have a personal birthplace.
@@ -56,7 +60,7 @@ test('TZ06 BIO explicit edit persists with profile and history without spending 
     b
   );
 });
-test('BIO is generated and committed atomically with profile, idempotent retry does not regenerate', async (t) => {
+test('FP commits atomically without creating attached BIO; legacy writes still roll back on error', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-initial-bio-'));
   const store = await openStore(root);
   t.after(() => {
@@ -65,10 +69,8 @@ test('BIO is generated and committed atomically with profile, idempotent retry d
   });
   const request = { requestId: 'auto-bio', country: 'GB', type: 'model' };
   const p = await generateProfile(request, { store });
-  assert.ok(p.biography);
-  assert.equal(p.biographyRevision, 0);
-  assert.equal(p.biography.residence, `${p.fields.city}, United Kingdom`);
-  assert.equal(p.biography.mainBio, p.fields.bio);
+  assert.equal(p.biography, undefined);
+  assert.ok(p.fields.bio);
   assert.deepEqual(store.get('lastCard'), p);
   assert.deepEqual(
     JSON.parse(
@@ -94,7 +96,14 @@ test('BIO is generated and committed atomically with profile, idempotent retry d
   assert.throws(
     () =>
       saveBiography(
-        { profileId: p.id, revision: 0, values: { ...p.biography, mainBio: 'new draft' } },
+        {
+          profileId: p.id,
+          revision: 0,
+          values: {
+            ...require('../../electron/features/generator/biography.cjs').bioDefaults(p),
+            mainBio: 'new draft'
+          }
+        },
         { store }
       ),
     /SQLITE_FULL/

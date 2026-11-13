@@ -137,11 +137,8 @@ function bioSuggestions(profile, { store, field, values }) {
     ? suggestBiographyField(profile, field, { values, bios: p.bios })
     : generateBiography(profile, { bios: p.bios });
 }
-function saveBiography(request, { store }) {
-  const { profileId, revision, values } = request || {};
+function validateBiographyValues(values) {
   if (
-    typeof profileId !== 'string' ||
-    !Number.isSafeInteger(revision) ||
     !values ||
     typeof values !== 'object' ||
     Array.isArray(values) ||
@@ -154,6 +151,11 @@ function saveBiography(request, { store }) {
     )
   )
     throw Error('INVALID_BIO');
+}
+function saveBiography(request, { store }) {
+  const { profileId, revision, values } = request || {};
+  if (typeof profileId !== 'string' || !Number.isSafeInteger(revision)) throw Error('INVALID_BIO');
+  validateBiographyValues(values);
   return store.transaction(() => {
     const current = store.get('lastCard');
     if (!current || current.id !== profileId || (current.biographyRevision || 0) !== revision)
@@ -169,6 +171,7 @@ function saveBiography(request, { store }) {
 }
 module.exports = {
   FIELDS,
+  validateBiographyValues,
   bioDefaults,
   bioSuggestions,
   saveBiography,

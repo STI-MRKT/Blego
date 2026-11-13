@@ -1,4 +1,4 @@
-// One editor per profile. SQLite revisions are authoritative; snapshots are
+// One editor per independent record. SQLite revisions are authoritative; snapshots are
 // serialized without replacing a newer draft or blocking ordinary typing.
 export function createBiographyEditor(data, {save, onSaved = () => {}, onChange = () => {}, delay = 400}) {
   let timer = null, flight = null, suggestionFlight = null, disposed = false, version = 0;
@@ -29,11 +29,11 @@ export function createBiographyEditor(data, {save, onSaved = () => {}, onChange 
     flight = (async () => {
       while (editor.dirty && !disposed) {
         const sentVersion = version;
-        const request = {action:'save',profileId:editor.profileId,revision:editor.revision,values:{...editor.values}};
+        const request = {action:'save',recordId:editor.recordId,revision:editor.revision,values:{...editor.values}};
         editor.saving = true; editor.error = false; notify();
         try {
           const profile = await save(request);
-          editor.revision = profile.biographyRevision;
+          editor.revision = profile.revision;
           editor.dirty = version !== sentVersion;
           onSaved(profile);
         } catch (error) {
@@ -59,7 +59,7 @@ export function createBiographyEditor(data, {save, onSaved = () => {}, onChange 
     if (field === 'position') { keys.push('employer'); captured.push(versions.employer || 0); }
     editor.suggesting = true; notify();
     suggestionFlight = (async () => {
-      const patch = await request({action:'suggest',profileId:editor.profileId,field,values:{...editor.values}});
+      const patch = await request({action:'suggest',recordId:editor.recordId,field,values:{...editor.values}});
       if (disposed || keys.some((key,index) => (versions[key] || 0) !== captured[index])) return false;
       apply(patch, true);
       return true;

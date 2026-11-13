@@ -8,6 +8,26 @@ const { openStore } = require('../../electron/local/store.cjs');
 const { updateSettings } = require('../../electron/local/settings.cjs');
 const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
 const { generateProfile } = require('../../electron/features/generator/service.cjs');
+const {
+  createBiographyWorkspace
+} = require('../../electron/features/generator/biography-workspace.cjs');
+const london = { country: 'GB', city: 'London', postalCode: 'EC1A 1BB', type: 'model' };
+function seedBio(store) {
+  return createBiographyWorkspace({ store }).generate({ requestId: 'bio-seed', parameters: london })
+    .record;
+}
+async function generateBio(page, country = 'GB', city = 'London', type = 'model') {
+  await page.locator('[data-tab="bio"]').click();
+  await page.locator('#bio-country').selectOption(country);
+  await page.locator('#bio-city').fill(city);
+  await page.locator('#bio-type').selectOption(type);
+  await page.locator('[data-action="bio-generate"]').click();
+  await page.waitForFunction(
+    () => !document.querySelector('[data-action="bio-generate"]').disabled
+  );
+  await page.locator('#bio-residence').waitFor();
+  return page.evaluate(async () => (await window.blego.biography({ action: 'read' })).record);
+}
 const fixtureNames = new Set();
 function pool(country, city, index = 0) {
   const p = resolvePreset(country, 'model');
@@ -78,6 +98,7 @@ async function fixture(t, settings = {}) {
               globalThis.bioTransitionOriginal
             );
           globalThis.bioRelease?.();
+          globalThis.bioCityRelease?.();
           globalThis.bioTransitionRelease?.();
           globalThis.bioSuggestionRelease?.();
         })
@@ -100,14 +121,16 @@ async function fixture(t, settings = {}) {
 async function waitForStored(page, predicate, arg) {
   const deadline = Date.now() + 10000;
   do {
-    const profile = await page.evaluate(() => window.blego.lastCard());
+    const profile = await page.evaluate(
+      async () => (await window.blego.biography({ action: 'read' })).record
+    );
     if (predicate(profile, arg)) return profile;
     await new Promise((resolve) => setTimeout(resolve, 25));
   } while (Date.now() < deadline);
   assert.fail('Expected persisted BIO/profile was not observed within 10 seconds');
 }
 async function saved(page, field, value) {
-  return waitForStored(page, (p) => p?.biography?.[field] === value);
+  return waitForStored(page, (p) => p?.values?.[field] === value);
 }
 
 test(
@@ -123,19 +146,20 @@ test(
     await page.locator('[data-action="generate"]').click();
     await page.locator('.demo-card').waitFor();
     const profile = await page.evaluate(() => window.blego.lastCard());
-    for (const value of Object.values(profile.biography)) assert.ok(value);
+    const biography = await generateBio(page);
+    for (const value of Object.values(biography.values)) assert.ok(value);
     await page.locator('[data-tab="bio"]').click();
     await page.locator('#bio-residence').waitFor();
     assert.equal(await page.locator('[data-action="bio-save"]').count(), 0);
     assert.equal(await page.locator('[data-action="bio-retry"]').isVisible(), false);
-    for (const [field, value] of Object.entries(profile.biography))
+    for (const [field, value] of Object.entries(biography.values))
       assert.equal(await page.locator(`#bio-${field}`).inputValue(), value);
     await page.locator('#bio-birthplace').fill('Manual birthplace');
     await page.locator('[data-tab="profile"]').click();
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-birthplace').inputValue(), 'Manual birthplace');
     await saved(page, 'birthplace', 'Manual birthplace');
-    for (const field of Object.keys(profile.biography)) {
+    for (const field of Object.keys(biography.values)) {
       const value = `Synthetic manual ${field} 00 🧠`;
       await page.locator(`#bio-${field}`).fill(value);
       await page.locator(`[data-action="bio-copy"][data-field="${field}"]`).click();
@@ -168,7 +192,7 @@ test(
       ipcMain._invokeHandlers.set('local:biography', globalThis.bioOriginal)
     );
     // Each field can be regenerated; employer regeneration keeps its dependent position compatible.
-    for (const field of Object.keys(profile.biography)) {
+    for (const field of Object.keys(biography.values)) {
       await page.locator(`[data-action="bio-regenerate"][data-field="${field}"]`).click();
       await page.waitForFunction(
         (field) =>
@@ -223,6 +247,7 @@ test(
     const f = await fixture(t, { country: 'GB', type: 'model' });
     let store = await openStore(f.data);
     await generateProfile({ requestId: 'seed', country: 'GB', type: 'model' }, { store });
+    seedBio(store);
     store.close();
     let page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
@@ -325,33 +350,9 @@ test(
       ];
       if (bundled.city !== city)
         scenarios.push({ town: bundled.city, postal: bundled.postal, filled: true });
-      for (const [index, scenario] of scenarios.entries()) {
+      for (const scenario of scenarios) {
         const { town } = scenario;
-        const rows = pool(country, town, index);
-        if (scenario.postal) rows[0].postalCode = scenario.postal;
-        await page.evaluate(
-          async ({ country, rows }) =>
-            window.blego.updateSettings({
-              country,
-              type: 'model',
-              overrides: { common: { pool: rows } }
-            }),
-          { country, rows }
-        );
-        await page.locator('[data-input="locale"]').selectOption(country);
-        await page.locator('[data-action="generate"]').click();
-        await waitForStored(page, (p) => p?.country === country && p?.fields.city === town).catch(
-          (error) => {
-            error.message += ` (${country}/${town})`;
-            throw error;
-          }
-        );
-        await page.locator('.demo-card').waitFor();
-        await page.waitForFunction(
-          () => !document.querySelector('[data-action="generate"]').disabled
-        );
-        await page.locator('[data-tab="bio"]').click();
-        await page.locator('#bio-residence').waitFor();
+        await generateBio(page, country, town);
         for (const field of ['employer', 'position', 'university', 'school']) {
           const value = await page.locator(`#bio-${field}`).inputValue();
           if (scenario.filled) assert.ok(value, `${country}/${town}/${field}`);
@@ -362,7 +363,7 @@ test(
   }
 );
 test(
-  'BIO replacement and clear freeze inputs while IPC is pending and retain the last saved history',
+  'Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history',
   { timeout: 60000 },
   async (t) => {
     const f = await fixture(t, { country: 'GB', type: 'model' });
@@ -371,17 +372,22 @@ test(
       { requestId: 'transition-seed', country: 'GB', type: 'model' },
       { store: seed }
     );
+    seedBio(seed);
     seed.close();
     const page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
-    for (const action of ['generate', 'clear-demo']) {
-      const before = await page.evaluate(() => window.blego.lastCard());
+    for (const action of ['bio-generate', 'bio-clear']) {
+      const before = await page.evaluate(
+        async () => (await window.blego.biography({ action: 'read' })).record
+      );
       await page.locator('#bio-mainBio').fill(`saved before ${action}`);
       await f.app.evaluate(({ ipcMain }, action) => {
-        const channel = action === 'generate' ? 'local:generate' : 'local:clearCard';
+        const channel = 'local:biography';
         globalThis.bioTransitionChannel = channel;
         globalThis.bioTransitionOriginal = ipcMain._invokeHandlers.get(channel);
         ipcMain._invokeHandlers.set(channel, async (event, arg) => {
+          if (arg.action !== (action === 'bio-generate' ? 'generate' : 'clear'))
+            return globalThis.bioTransitionOriginal(event, arg);
           await new Promise((resolve) => {
             globalThis.bioTransitionRelease = resolve;
           });
@@ -406,14 +412,17 @@ test(
       const { DatabaseSync } = require('node:sqlite');
       const db = new DatabaseSync(path.join(f.data, 'local.sqlite'), { readOnly: true });
       const persisted = JSON.parse(
-        db.prepare('SELECT profile FROM requests WHERE profile_id=?').get(before.id).profile
+        db.prepare('SELECT value FROM kv WHERE key=?').get('bio:record:' + before.id).value
       );
       db.close();
-      assert.equal(persisted.biography.mainBio, `saved before ${action}`);
-      if (action === 'generate') {
-        await page.locator('.demo-card').waitFor();
-        await page.locator('[data-tab="bio"]').click();
-      } else await page.waitForFunction(() => !document.querySelector('[data-tab="bio"]'));
+      assert.equal(persisted.values.mainBio, `saved before ${action}`);
+      await page.waitForFunction(
+        () => !document.querySelector('[data-action="bio-generate"]').disabled
+      );
+      if (action === 'bio-clear') {
+        assert.equal(await page.locator('#bio-mainBio').count(), 0);
+        assert.equal(await page.locator('[data-tab="bio"]').count(), 1);
+      }
     }
   }
 );
@@ -432,6 +441,7 @@ test(
       { requestId: 'pending-suggestion', country: 'GB', type: 'model' },
       { store: seed }
     );
+    seedBio(seed);
     seed.close();
     let page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
@@ -461,5 +471,248 @@ test(
     page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), expected);
+  }
+);
+test(
+  'TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart',
+  { timeout: 90000 },
+  async (t) => {
+    const f = await fixture(t, { country: 'GB', type: 'model' });
+    let page = await f.launch();
+    assert.equal(await page.locator('[data-tab="profile"]').innerText(), 'ФП');
+    assert.equal(await page.locator('[data-tab="bio"]').isVisible(), true);
+    assert.equal(await page.evaluate(() => window.blego.lastCard()), null);
+    const bio = await generateBio(page, 'GB', 'London', 'tech');
+    assert.ok(bio.values.employer);
+    assert.ok(bio.values.school);
+    assert.equal(await page.evaluate(() => window.blego.lastCard()), null);
+    await page.locator('#bio-mainBio').fill('Independent BIO before FP');
+    await page.locator('[data-tab="profile"]').click();
+    await page.locator('[data-action="generate"]').click();
+    await page.locator('.demo-card').waitFor();
+    const fp = await page.evaluate(() => window.blego.lastCard());
+    assert.equal(fp.biography, undefined);
+    await saved(page, 'mainBio', 'Independent BIO before FP');
+    await page.locator('[data-action="copy-model"][data-field="phone"]').click();
+    const { nationalPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    assert.equal(
+      await f.app.evaluate(({ clipboard }) => clipboard.readText()),
+      nationalPhoneForCopy(fp.fields.phone, fp.country)
+    );
+    await page.locator('[data-action="copy-model"][data-card="true"]').click();
+    assert.ok(
+      (await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(fp.fields.phone)
+    );
+    await page.locator('[data-tab="bio"]').click();
+    assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent BIO before FP');
+    const next = await generateBio(page, 'IT', 'Milano', 'model');
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
+    await page.locator('[data-copy-action="open"]').click();
+    assert.equal(await page.locator('[data-copy-control="source"]').inputValue(), 'biography');
+    await page.locator('[data-tab="profile"]').click();
+    assert.equal(await page.locator('[data-copy-control="source"]').count(), 0);
+    await page.locator('[data-action="clear-demo"]').click();
+    await page.waitForFunction(async () => !(await window.blego.lastCard()));
+    assert.deepEqual(
+      await page.evaluate(async () => (await window.blego.biography({ action: 'read' })).record),
+      next
+    );
+    await page.locator('[data-action="generate"]').click();
+    await page.locator('.demo-card').waitFor();
+    const secondFp = await page.evaluate(() => window.blego.lastCard());
+    await page.locator('[data-tab="bio"]').click();
+    await page.locator('[data-action="bio-clear"]').click();
+    await page.waitForFunction(() => !document.querySelector('#bio-mainBio'));
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), secondFp);
+    await generateBio(page, 'GB', 'London', 'crypto');
+    await page.locator('#bio-country').selectOption('DE');
+    await page.locator('#bio-city').fill('Aachen');
+    await page.locator('#bio-type').selectOption('tech');
+    await page.locator('#bio-mainBio').fill('Independent final saved BIO');
+    const closed = f.app.waitForEvent('close');
+    await f.app.evaluate(({ app }) => {
+      setTimeout(() => app.quit(), 0);
+    });
+    await closed;
+    f.forget();
+    page = await f.launch();
+    await page.locator('.demo-card').waitFor();
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), secondFp);
+    await page.locator('[data-tab="bio"]').click();
+    assert.equal(await page.locator('#bio-country').inputValue(), 'DE');
+    assert.equal(await page.locator('#bio-city').inputValue(), 'Aachen');
+    assert.equal(await page.locator('#bio-type').inputValue(), 'tech');
+    assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent final saved BIO');
+    // Regeneration uses the saved result's London geography, not next-generation Aachen controls.
+    await page.locator('[data-action="bio-regenerate"][data-field="residence"]').click();
+    await saved(page, 'residence', 'London, United Kingdom');
+    for (const width of [360, 390, 427, 480, 504, 576, 768, 980, 1280]) {
+      await f.app.evaluate(
+        ({ BrowserWindow }, width) =>
+          BrowserWindow.getAllWindows()[0].setBounds({ width, height: 900 }),
+        width
+      );
+      await page.waitForFunction((width) => innerWidth === width, width);
+      for (const tab of ['profile', 'bio']) {
+        await page.locator(`[data-tab="${tab}"]`).click();
+        assert.ok(
+          await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+          `${tab} ${width}`
+        );
+        assert.equal(await page.locator('[data-tab="bio"]').isVisible(), true);
+        assert.equal(await page.locator('[data-tab="profile"]').isVisible(), true);
+      }
+    }
+  }
+);
+test(
+  'TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON',
+  { timeout: 45000 },
+  async (t) => {
+    const f = await fixture(t, { country: 'GB', type: 'model', disabledFields: ['city'] });
+    const store = await openStore(f.data);
+    const fp = await generateProfile(
+      { requestId: 'old-fp', country: 'GB', type: 'model' },
+      { store }
+    );
+    fp.biography = {
+      residence: 'Legacy city',
+      birthplace: '',
+      employer: 'Manual employer',
+      position: 'Manual role',
+      university: 'Manual university',
+      school: '',
+      mainBio: 'Old attached BIO'
+    };
+    fp.biographyRevision = 3;
+    const json = JSON.stringify(fp);
+    store.set('lastCard', fp);
+    store.db.prepare('UPDATE requests SET profile=? WHERE profile_id=?').run(json, fp.id);
+    store.close();
+    const page = await f.launch();
+    await page.locator('[data-tab="bio"]').click();
+    assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Old attached BIO');
+    assert.equal(await page.locator('#bio-city').inputValue(), '');
+    const readCounts = () => {
+      const { DatabaseSync } = require('node:sqlite');
+      const db = new DatabaseSync(path.join(f.data, 'local.sqlite'), { readOnly: true });
+      const count = db.prepare("SELECT COUNT(*) n FROM kv WHERE key GLOB 'bio:record:*'").get().n;
+      const original = db
+        .prepare('SELECT profile FROM requests WHERE profile_id=?')
+        .get(fp.id).profile;
+      db.close();
+      return { count, original };
+    };
+    for (let i = 0; i < 3; i++) {
+      await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
+      await page.locator('[data-action="bio-history"]').click();
+      await page.locator('[data-action="bio-open"]').click();
+      await page.waitForFunction(
+        () => !document.querySelector('[data-action="bio-generate"]').disabled
+      );
+    }
+    assert.deepEqual(readCounts(), { count: 0, original: json });
+    await page.locator('#bio-mainBio').fill('New independent legacy edit');
+    await saved(page, 'mainBio', 'New independent legacy edit');
+    assert.deepEqual(readCounts(), { count: 1, original: json });
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
+    await page.locator('[data-action="bio-clear"]').click();
+    await page.waitForFunction(() => !document.querySelector('#bio-mainBio'));
+    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
+    await page.locator('[data-action="bio-history"]').click();
+    assert.equal(await page.locator('#bio-history-record option').count(), 1);
+    await page.locator('[data-action="bio-open"]').click();
+    await page.locator('#bio-mainBio').waitFor();
+    assert.equal(await page.locator('#bio-mainBio').inputValue(), 'New independent legacy edit');
+    assert.deepEqual(readCounts(), { count: 1, original: json });
+  }
+);
+test(
+  'cross-country BIO history never offers stale city/postal suggestions while loading',
+  { timeout: 30000 },
+  async (t) => {
+    const f = await fixture(t);
+    const page = await f.launch();
+    const gb = await generateBio(page, 'GB', 'London', 'model');
+    await generateBio(page, 'DE', 'Berlin', 'tech');
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('#bio-cities option')].some((o) => o.value === 'Berlin')
+    );
+    await f.app.evaluate(({ ipcMain }) => {
+      globalThis.bioOriginal = ipcMain._invokeHandlers.get('local:biography');
+      ipcMain._invokeHandlers.set('local:biography', async (event, arg) => {
+        if (arg.action === 'cities' && arg.country === 'GB')
+          await new Promise((resolve) => {
+            globalThis.bioCityRelease = resolve;
+          });
+        return globalThis.bioOriginal(event, arg);
+      });
+    });
+    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
+    await page.locator('[data-action="bio-history"]').click();
+    await page.locator('#bio-history-record').selectOption(gb.id);
+    await page.locator('[data-action="bio-open"]').click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('#bio-country').value === 'GB' &&
+        !document.querySelector('[data-action="bio-generate"]').disabled
+    );
+    assert.equal(await page.locator('#bio-cities option').count(), 0);
+    await f.app.evaluate(() => globalThis.bioCityRelease());
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('#bio-cities option')].some((o) => o.value === 'London')
+    );
+  }
+);
+test(
+  'native quit waits for standalone BIO generation and parameter saves without losing either generator',
+  { timeout: 45000 },
+  async (t) => {
+    const f = await fixture(t, { country: 'GB', type: 'model' });
+    let page = await f.launch();
+    await page.locator('[data-action="generate"]').click();
+    await page.locator('.demo-card').waitFor();
+    const fp = await page.evaluate(() => window.blego.lastCard());
+    await page.locator('[data-tab="bio"]').click();
+    await page.locator('#bio-country').selectOption('GB');
+    await page.locator('#bio-city').fill('London');
+    await page.locator('#bio-type').selectOption('tech');
+    await f.app.evaluate(({ ipcMain }) => {
+      globalThis.bioOriginal = ipcMain._invokeHandlers.get('local:biography');
+      ipcMain._invokeHandlers.set('local:biography', async (event, arg) => {
+        if (arg.action === 'generate')
+          await new Promise((resolve) => {
+            globalThis.bioRelease = resolve;
+          });
+        return globalThis.bioOriginal(event, arg);
+      });
+    });
+    await page.locator('[data-action="bio-generate"]').click();
+    await page.waitForFunction(
+      () => document.querySelector('[data-action="bio-generate"]').disabled
+    );
+    // Observe actual IPC arrival before asking native Quit.
+    for (let i = 0; !(await f.app.evaluate(() => Boolean(globalThis.bioRelease))); i++) {
+      assert.ok(i < 100);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    await f.app.evaluate(({ app }) => app.quit());
+    await page.waitForFunction(() => document.body.inert);
+    assert.equal(
+      await f.app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length),
+      1
+    );
+    const closed = f.app.waitForEvent('close');
+    await f.app.evaluate(() => globalThis.bioRelease());
+    await closed;
+    f.forget();
+    page = await f.launch();
+    await page.locator('[data-tab="bio"]').click();
+    await page.locator('#bio-mainBio').waitFor();
+    assert.equal(await page.locator('#bio-residence').inputValue(), 'London, United Kingdom');
+    assert.equal(await page.locator('#bio-type').inputValue(), 'tech');
+    assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
+    const history = await page.evaluate(() => window.blego.biography({ action: 'history' }));
+    assert.equal(history.total, 1);
   }
 );
