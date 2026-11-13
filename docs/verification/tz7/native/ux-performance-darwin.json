@@ -1,0 +1,312 @@
+{
+  "at": "2026-11-13T20:38:43.469Z",
+  "os": "darwin",
+  "arch": "arm64",
+  "release": "24.6.0",
+  "method": "Three isolated launches per version; baseline14 and candidate are packaged binaries when baseline-executable is supplied, same current-host runtime and fixtures; baseline14 and candidate additionally import identical 1000-row synthetic CSV;  visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.",
+  "versions": [
+    {
+      "label": "original",
+      "samples": [
+        {
+          "import1000Ms": null,
+          "archiveMs": null,
+          "mapMs": null,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 149056,
+              "peakWorkingSetSizeKB": 159632
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 113888,
+              "peakWorkingSetSizeKB": 125776
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 42496,
+              "peakWorkingSetSizeKB": 42544
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 146944,
+              "peakWorkingSetSizeKB": 146944
+            }
+          ],
+          "launchMs": 2318,
+          "generationMs": 947,
+          "frameMedianMs": 16.69999999999891,
+          "frameP95Ms": 20.399999999999636,
+          "frameMaxMs": 235.19999999999982
+        },
+        {
+          "import1000Ms": null,
+          "archiveMs": null,
+          "mapMs": null,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 152288,
+              "peakWorkingSetSizeKB": 158272
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 105520,
+              "peakWorkingSetSizeKB": 115600
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 42720,
+              "peakWorkingSetSizeKB": 42768
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 147696,
+              "peakWorkingSetSizeKB": 147696
+            }
+          ],
+          "launchMs": 1166,
+          "generationMs": 872,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.700000000000273,
+          "frameMaxMs": 18.700000000000728
+        },
+        {
+          "import1000Ms": null,
+          "archiveMs": null,
+          "mapMs": null,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 153264,
+              "peakWorkingSetSizeKB": 153312
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 107072,
+              "peakWorkingSetSizeKB": 117536
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 42528,
+              "peakWorkingSetSizeKB": 42576
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 147680,
+              "peakWorkingSetSizeKB": 147680
+            }
+          ],
+          "launchMs": 718,
+          "generationMs": 911,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.699999999999818,
+          "frameMaxMs": 30.90000000000009
+        }
+      ]
+    },
+    {
+      "label": "baseline14",
+      "samples": [
+        {
+          "import1000Ms": 311,
+          "archiveMs": 621,
+          "mapMs": 608,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 206496,
+              "peakWorkingSetSizeKB": 206496
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 123680,
+              "peakWorkingSetSizeKB": 131728
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 42912,
+              "peakWorkingSetSizeKB": 42912
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 204880,
+              "peakWorkingSetSizeKB": 204880
+            }
+          ],
+          "launchMs": 1893,
+          "generationMs": 196,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 33.399999999999636,
+          "frameMaxMs": 301.8000000000002
+        },
+        {
+          "import1000Ms": 242,
+          "archiveMs": 790,
+          "mapMs": 282,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 209440,
+              "peakWorkingSetSizeKB": 209456
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 108272,
+              "peakWorkingSetSizeKB": 109456
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 42864,
+              "peakWorkingSetSizeKB": 42912
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 207536,
+              "peakWorkingSetSizeKB": 207536
+            }
+          ],
+          "launchMs": 1317,
+          "generationMs": 281,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 21.5,
+          "frameMaxMs": 83.29999999999973
+        },
+        {
+          "import1000Ms": 250,
+          "archiveMs": 685,
+          "mapMs": 194,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 206416,
+              "peakWorkingSetSizeKB": 206432
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 106352,
+              "peakWorkingSetSizeKB": 113264
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 44144,
+              "peakWorkingSetSizeKB": 44176
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 205936,
+              "peakWorkingSetSizeKB": 205936
+            }
+          ],
+          "launchMs": 923,
+          "generationMs": 312,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.699999999999818,
+          "frameMaxMs": 18.800000000000182
+        }
+      ]
+    },
+    {
+      "label": "candidate",
+      "samples": [
+        {
+          "import1000Ms": 304,
+          "archiveMs": 776,
+          "mapMs": 341,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 206336,
+              "peakWorkingSetSizeKB": 206352
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 107344,
+              "peakWorkingSetSizeKB": 114368
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 44672,
+              "peakWorkingSetSizeKB": 44720
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 216512,
+              "peakWorkingSetSizeKB": 216512
+            }
+          ],
+          "launchMs": 1697,
+          "generationMs": 212,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.699999999999818,
+          "frameMaxMs": 18.799999999999727
+        },
+        {
+          "import1000Ms": 313,
+          "archiveMs": 1012,
+          "mapMs": 266,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 207376,
+              "peakWorkingSetSizeKB": 207392
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 105232,
+              "peakWorkingSetSizeKB": 107872
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 43968,
+              "peakWorkingSetSizeKB": 44016
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 217616,
+              "peakWorkingSetSizeKB": 217616
+            }
+          ],
+          "launchMs": 1008,
+          "generationMs": 189,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.699999999999818,
+          "frameMaxMs": 31.300000000000182
+        },
+        {
+          "import1000Ms": 219,
+          "archiveMs": 556,
+          "mapMs": 209,
+          "memory": [
+            {
+              "type": "Browser",
+              "workingSetSizeKB": 208208,
+              "peakWorkingSetSizeKB": 208224
+            },
+            {
+              "type": "GPU",
+              "workingSetSizeKB": 102016,
+              "peakWorkingSetSizeKB": 105856
+            },
+            {
+              "type": "Utility",
+              "workingSetSizeKB": 44512,
+              "peakWorkingSetSizeKB": 44560
+            },
+            {
+              "type": "Tab",
+              "workingSetSizeKB": 215792,
+              "peakWorkingSetSizeKB": 215792
+            }
+          ],
+          "launchMs": 913,
+          "generationMs": 190,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.700000000000728,
+          "frameMaxMs": 35.5
+        }
+      ]
+    }
+  ]
+}

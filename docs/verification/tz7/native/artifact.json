@@ -1,0 +1,11 @@
+{
+  "run": "https://github.com/STI-MRKT/Blego/actions/runs/43501437897",
+  "artifactId": 14074603411,
+  "expiresAt": "2026-11-18T20:40:53Z",
+  "codeSha": "80b36de53b9b7b39b3e173a3dad13fa052cb7340",
+  "outerZipSha256": "84e319f7fda56434bec4be1560cee1db3255d5323ed972befb40339181795350",
+  "installerZipSha256": "5b5bd4f6c4ca7aa7c5b4c45928c1a794d6eeff8e4111859798fe25ce5627b037",
+  "dmgSha256": "909f866f84066ffbede4b7d907f46e10026a3f5ab5a6a20e596669f5e77d2c20",
+  "deliveryBytes": 150748753,
+  "checks": "outer SHA256, ZIP CRC/path validation, inner SHA256SUMS-mac/zip, installed codeSha and 38/38 GUI log verified"
+}
