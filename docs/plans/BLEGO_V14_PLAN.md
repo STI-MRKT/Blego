@@ -91,9 +91,9 @@ The user supplied a complete implementation order and authorized execution. Rout
 **Files:** new `electron/features/friends/service.cjs`, existing data/UI, IPC/preload; unit/integration/GUI tests.
 **Interfaces:** `preview(bytes,format)` validates canonical URLs and returns added/duplicate/incomplete counts with a preview token; `confirm(token)` saves only accepted local rows in existing SQLite key/table, preserving built-in cards.
 
-- [ ] Failing TXT/CSV/JSON import, malicious URL, canonical dedup, preview tamper and restart tests.
-- [ ] Implement source-aware local import, search/GEO/platform filters, counts and safe explicit external opens; no scraping.
-- [ ] GUI import/confirm/filter/open/restart; full suites and commit. Real new links remain pending.
+- [x] Failing TXT/CSV/JSON import, malicious URL, canonical dedup, preview tamper and restart tests.
+- [x] Implement source-aware local import, search/GEO/platform filters, counts and safe explicit external opens; no scraping.
+- [x] GUI import/confirm/filter/open/restart; full suites and commit. Real new links remain pending.
 
 ## Task 7: Generator / Settings
 

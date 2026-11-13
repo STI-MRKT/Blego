@@ -290,6 +290,9 @@ function bindView() {
       }
     };
   }
+  const friendsSearch=document.getElementById('friends-search');
+  if(friendsSearch){friendsSearch.onsubmit=event=>{event.preventDefault();state.friendsQuery=document.getElementById('friends-query').value;state.friendsPage=0;renderView();};document.getElementById('friends-query').oninput=event=>{state.friendsQuery=event.target.value;};}
+  const friendsPlatform=document.getElementById('friends-platform');if(friendsPlatform)friendsPlatform.onchange=()=>{state.friendsPlatform=friendsPlatform.value;state.friendsPage=0;renderView();};
   const settingsForm = document.getElementById('settings-form');
   if (settingsForm)
     settingsForm.onsubmit = async (event) => {
@@ -1359,8 +1362,23 @@ document.addEventListener('click', async (event) => {
     clearPhotos();
     return;
   }
+  if(action==='friends-import') {
+    if(state.friendsBusy)return;state.friendsBusy=true;renderView();
+    try {state.friendsPreview=await window.blego.importFriends();state.friendsPreviewPage=0;}
+    catch(error){toast(error.message==='FRIENDS_CREDENTIAL_FIELDS'?'Файлы с полями авторизации не подходят для Friends.':error.message==='FRIENDS_INPUT_LIMIT'?'Выберите TXT, CSV или JSON до 5 МиБ и 5000 записей.':'Не удалось прочитать список Friends. Проверьте формат и ссылки.','err');}
+    finally {state.friendsBusy=false;renderView();}return;
+  }
+  if(action==='friends-confirm') {
+    if(!state.friendsPreview||state.friendsBusy)return;state.friendsBusy=true;
+    try {const result=await window.blego.confirmFriends(state.friendsPreview.token);state.friendsRows=result.rows;state.friendsPreview=null;toast(`Добавлено: ${result.added}`);}
+    catch {toast('Не удалось сохранить Friends. Повторите предпросмотр.','err');}
+    finally {state.friendsBusy=false;renderView();}return;
+  }
+  if(action==='friends-cancel'){if(state.friendsPreview)await window.blego.cancelFriends(state.friendsPreview.token);state.friendsPreview=null;renderView();return;}
+  if(action==='friends-open'){try{await window.blego.openFriend(target.dataset.id);}catch{toast('Не удалось открыть выбранную ссылку.','err');}return;}
+  if(action==='friends-page'||action==='friends-preview-page'){state[action==='friends-page'?'friendsPage':'friendsPreviewPage']=Number(target.dataset.page)||0;renderView();return;}
   if (action === 'friends-geo') {
-    state.friendsGeo = target.dataset.geo || '';
+    state.friendsGeo = target.dataset.geo || '';state.friendsPage=0;
     renderView();
     return;
   }
@@ -1459,6 +1477,7 @@ if (window.blego) {
     state.type = state.settings.type;
     await refreshPoolStats();
     state.demo = await window.blego.lastCard();
+    state.friendsRows = await window.blego.friendsList();
     state.news.topic = newsTopic(state.settings.newsTopic);
     const cached = await window.blego.newsSnapshot(state.news.topic);
     Object.assign(state.news, cached);

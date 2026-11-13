@@ -39,7 +39,7 @@ const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook, images, geo;
+let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends;
 let recoveryReports = [];
 let imageExportPromise = null,
   imageExportReport = null;
@@ -49,6 +49,7 @@ async function initialize() {
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
+  friends = require('./features/friends/service.cjs').createFriendsService({ store });
   geo = require('./features/geo/service.cjs').createGeoService({ store });
   images = createImageService({ store, geo });
   await images.recover();
@@ -101,6 +102,27 @@ async function initialize() {
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      friendsList: () => friends.list(),
+      friendsImport: async () => {
+        const chosen = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'Friends', extensions: ['txt', 'csv', 'json'] }]
+        });
+        if (chosen.canceled) return null;
+        let bytes;
+        try {
+          bytes = await require('./features/images/files.cjs').readBounded(chosen.filePaths[0], {
+            maxBytes: 5 * 1024 * 1024
+          });
+        } catch (error) {
+          if (error.message === 'IMAGE_TOO_LARGE') throw Error('FRIENDS_INPUT_LIMIT');
+          throw error;
+        }
+        return friends.preview({ bytes, name: path.basename(chosen.filePaths[0]) });
+      },
+      friendsConfirm: (token) => friends.confirm(token),
+      friendsCancel: (token) => friends.cancel(token),
+      friendsOpen: (id) => shell.openExternal(friends.openUrl(id)),
       geoCatalog: (request) => geo.catalog(request),
       geoBoundary: (request) => geo.boundary(request),
       imagesMoveGeo: (request) => images.moveGeo(request),

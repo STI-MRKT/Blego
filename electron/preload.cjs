@@ -5,6 +5,11 @@ async function call(name, arg) {
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  friendsList: () => call('friendsList'),
+  importFriends: () => call('friendsImport'),
+  confirmFriends: (token) => call('friendsConfirm', token),
+  cancelFriends: (token) => call('friendsCancel', token),
+  openFriend: (id) => call('friendsOpen', id),
   prepareGroupExport: (request) => call('imageGroupPrepare', request),
   cancelGroupExport: (request) => call('imageGroupCancel', request),
   imageExportHistory: () => call('imageExportHistory'),
