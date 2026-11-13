@@ -278,7 +278,7 @@ test(
   }
 );
 test(
-  'BIO real catalog fills all eight country hubs and leaves sparse towns empty through real generator IPC',
+  'BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC',
   { timeout: 90000 },
   async (t) => {
     const f = await fixture(t);
@@ -303,8 +303,32 @@ test(
       IT: 'Abano Terme',
       GB: 'Bakewell'
     };
-    for (const [country, city] of Object.entries(hubs))
-      for (const [index, town] of [city, smallTowns[country]].entries()) {
+    const { organizationOptions } = require('../../electron/features/generator/biography.cjs');
+    for (const [country, city] of Object.entries(hubs)) {
+      const bundled = require(`../../resources/generator/countries/${country}.json`).places.find(
+        (place) => {
+          const options = organizationOptions({
+            country,
+            type: 'model',
+            namingStrategy: 'person_name',
+            fields: { city: place.city, postalCode: place.postal }
+          });
+          return ['company', 'university', 'school'].every((kind) =>
+            options.some((row) => row.kind === kind)
+          );
+        }
+      );
+      assert.ok(bundled, `${country}: bundled locality reference coverage`);
+      const scenarios = [
+        { town: city, filled: true },
+        { town: smallTowns[country], filled: false }
+      ];
+      if (bundled.city !== city)
+        scenarios.push({ town: bundled.city, postal: bundled.postal, filled: true });
+      for (const [index, scenario] of scenarios.entries()) {
+        const { town } = scenario;
+        const rows = pool(country, town, index);
+        if (scenario.postal) rows[0].postalCode = scenario.postal;
         await page.evaluate(
           async ({ country, rows }) =>
             window.blego.updateSettings({
@@ -312,7 +336,7 @@ test(
               type: 'model',
               overrides: { common: { pool: rows } }
             }),
-          { country, rows: pool(country, town, index) }
+          { country, rows }
         );
         await page.locator('[data-input="locale"]').selectOption(country);
         await page.locator('[data-action="generate"]').click();
@@ -330,10 +354,11 @@ test(
         await page.locator('#bio-residence').waitFor();
         for (const field of ['employer', 'position', 'university', 'school']) {
           const value = await page.locator(`#bio-${field}`).inputValue();
-          if (index === 0) assert.ok(value, `${country}/${field}`);
+          if (scenario.filled) assert.ok(value, `${country}/${town}/${field}`);
           else assert.equal(value, '', `${country}/${field}`);
         }
       }
+    }
   }
 );
 test(

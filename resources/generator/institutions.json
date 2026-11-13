@@ -893,5 +893,334 @@
         "Payments operations analyst"
       ]
     }
+  },
+  {
+    "id": "official:br:herval-bellusci",
+    "country": "BR",
+    "kind": "school",
+    "name": "Etec Engenheiro Herval Bellusci",
+    "city": "Adamantina",
+    "region": "São Paulo",
+    "sector": "secondary and technical education",
+    "url": "https://www.cps.sp.gov.br/etecs/etec-eng-herval-bellusci/",
+    "source": {
+      "name": "Centro Paula Souza official school directory",
+      "id": "https://www.cps.sp.gov.br/etecs/etec-eng-herval-bellusci/",
+      "url": "https://www.cps.sp.gov.br/etecs/etec-eng-herval-bellusci/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:us:amsterdam-high",
+    "country": "US",
+    "kind": "school",
+    "name": "Amsterdam High School",
+    "city": "Amsterdam",
+    "region": "New York",
+    "sector": "secondary education",
+    "url": "https://www.gasd.org/o/ahs/page/about-our-school/",
+    "source": {
+      "name": "Amsterdam High School official website",
+      "id": "https://www.gasd.org/o/ahs/page/about-our-school/",
+      "url": "https://www.gasd.org/o/ahs/page/about-our-school/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "localityPostals": [
+      "12010"
+    ]
+  },
+  {
+    "id": "official:fr:maximilien-perret",
+    "country": "FR",
+    "kind": "school",
+    "name": "Lycée Maximilien Perret",
+    "city": "Alfortville",
+    "region": "Île-de-France",
+    "sector": "secondary education",
+    "url": "https://lycee-maximilienperret.fr/",
+    "source": {
+      "name": "Lycée Maximilien Perret official website",
+      "id": "https://lycee-maximilienperret.fr/",
+      "url": "https://lycee-maximilienperret.fr/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:pl:andrychow-liceum",
+    "country": "PL",
+    "kind": "school",
+    "name": "I Liceum Ogólnokształcące im. Marii Skłodowskiej-Curie w Andrychowie",
+    "city": "Andrychów",
+    "region": "województwo małopolskie",
+    "sector": "secondary education",
+    "url": "https://liceum-andrychow.edu.pl/sekretariat/",
+    "source": {
+      "name": "I Liceum Ogólnokształcące im. Marii Skłodowskiej-Curie w Andrychowie official website",
+      "id": "https://liceum-andrychow.edu.pl/sekretariat/",
+      "url": "https://liceum-andrychow.edu.pl/sekretariat/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:pl:lpp-krakow",
+    "country": "PL",
+    "kind": "company",
+    "name": "LPP S.A.",
+    "city": "Kraków",
+    "region": "województwo małopolskie",
+    "sector": "fashion and apparel",
+    "url": "https://www.lpp.com/en/contact/",
+    "source": {
+      "name": "LPP S.A. official website",
+      "id": "https://www.lpp.com/en/contact/",
+      "url": "https://www.lpp.com/en/contact/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "aliases": [
+      "Krakow",
+      "Cracow"
+    ],
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:pl:ailleron",
+    "country": "PL",
+    "kind": "company",
+    "name": "Ailleron S.A.",
+    "city": "Kraków",
+    "region": "województwo małopolskie",
+    "sector": "financial technology software",
+    "url": "https://ailleron.com/terms-of-service/",
+    "source": {
+      "name": "Ailleron S.A. official website",
+      "id": "https://ailleron.com/terms-of-service/",
+      "url": "https://ailleron.com/terms-of-service/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "aliases": [
+      "Krakow",
+      "Cracow"
+    ],
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Financial platform operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:de:couven",
+    "country": "DE",
+    "kind": "school",
+    "name": "Couven Gymnasium Aachen",
+    "city": "Aachen",
+    "region": "Nordrhein-Westfalen",
+    "sector": "secondary education",
+    "url": "https://www.couven-gymnasium.de/wordpress2/ansprechpartner/schulleitungsteam/",
+    "source": {
+      "name": "Couven Gymnasium Aachen official website",
+      "id": "https://www.couven-gymnasium.de/wordpress2/ansprechpartner/schulleitungsteam/",
+      "url": "https://www.couven-gymnasium.de/wordpress2/ansprechpartner/schulleitungsteam/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:de:rwth-aachen",
+    "country": "DE",
+    "kind": "university",
+    "name": "RWTH Aachen University",
+    "city": "Aachen",
+    "region": "Nordrhein-Westfalen",
+    "sector": "higher education",
+    "url": "https://www.rwth-aachen.de/cms/root/Footer/Services/~bw/Impressum/lidx/1/",
+    "source": {
+      "name": "RWTH Aachen University official website",
+      "id": "https://www.rwth-aachen.de/cms/root/Footer/Services/~bw/Impressum/lidx/1/",
+      "url": "https://www.rwth-aachen.de/cms/root/Footer/Services/~bw/Impressum/lidx/1/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:de:armedangels",
+    "country": "DE",
+    "kind": "company",
+    "name": "Social Fashion Company GmbH (ARMEDANGELS)",
+    "city": "Köln",
+    "region": "Nordrhein-Westfalen",
+    "sector": "fashion and apparel",
+    "url": "https://www.armedangels.com/de-at/pages/impressum",
+    "source": {
+      "name": "Social Fashion Company GmbH (ARMEDANGELS) official website",
+      "id": "https://www.armedangels.com/de-at/pages/impressum",
+      "url": "https://www.armedangels.com/de-at/pages/impressum",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "aliases": [
+      "Cologne"
+    ],
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:de:auxmoney",
+    "country": "DE",
+    "kind": "company",
+    "name": "auxmoney GmbH",
+    "city": "Düsseldorf",
+    "region": "Nordrhein-Westfalen",
+    "sector": "financial technology and online lending",
+    "url": "https://www.auxmoney.com/impressum",
+    "source": {
+      "name": "auxmoney GmbH official website",
+      "id": "https://www.auxmoney.com/impressum",
+      "url": "https://www.auxmoney.com/impressum",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "aliases": [
+      "Dusseldorf"
+    ],
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Financial platform operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:es:udc",
+    "country": "ES",
+    "kind": "university",
+    "name": "Universidade da Coruña",
+    "city": "A Coruña",
+    "region": "Galicia",
+    "sector": "higher education",
+    "url": "https://www.udc.es/",
+    "source": {
+      "name": "Universidade da Coruña official website",
+      "id": "https://www.udc.es/",
+      "url": "https://www.udc.es/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:es:salvador-madariaga",
+    "country": "ES",
+    "kind": "school",
+    "name": "IES Salvador de Madariaga",
+    "city": "A Coruña",
+    "region": "Galicia",
+    "sector": "secondary education",
+    "url": "https://dirof.xunta.gal/diroficial/v2/unidades/A12X03291",
+    "source": {
+      "name": "Xunta de Galicia official directory",
+      "id": "https://dirof.xunta.gal/diroficial/v2/unidades/A12X03291",
+      "url": "https://dirof.xunta.gal/diroficial/v2/unidades/A12X03291",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
+  },
+  {
+    "id": "official:es:inditex",
+    "country": "ES",
+    "kind": "company",
+    "name": "Inditex",
+    "city": "Arteixo",
+    "region": "Galicia",
+    "sector": "fashion and apparel",
+    "url": "https://www.inditex.com/itxcomweb/nf/es/informacion/contacto",
+    "source": {
+      "name": "Inditex official website",
+      "id": "https://www.inditex.com/itxcomweb/nf/es/informacion/contacto",
+      "url": "https://www.inditex.com/itxcomweb/nf/es/informacion/contacto",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [
+        "Fashion stylist",
+        "Visual merchandiser"
+      ],
+      "tech": [],
+      "crypto": []
+    }
+  },
+  {
+    "id": "official:es:inversa",
+    "country": "ES",
+    "kind": "company",
+    "name": "Galaicus Fintech S.L. (Inversa)",
+    "city": "Ferrol",
+    "region": "Galicia",
+    "sector": "financial technology and online invoice financing",
+    "url": "https://www.inversa.es/en/contracts-and-rates/",
+    "source": {
+      "name": "Galaicus Fintech S.L. (Inversa) official website",
+      "id": "https://www.inversa.es/en/contracts-and-rates/",
+      "url": "https://www.inversa.es/en/contracts-and-rates/",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13",
+    "roles": {
+      "model": [],
+      "tech": [
+        "Software engineer",
+        "QA engineer"
+      ],
+      "crypto": [
+        "Digital finance analyst",
+        "Financial platform operations analyst"
+      ]
+    }
+  },
+  {
+    "id": "official:it:bachelet-abbiategrasso",
+    "country": "IT",
+    "kind": "school",
+    "name": "Istituto d'Istruzione Superiore Bachelet",
+    "city": "Abbiategrasso",
+    "region": "Lombardia",
+    "sector": "secondary education",
+    "url": "https://iisbachelet.edu.it/dove-siamo",
+    "source": {
+      "name": "Istituto d'Istruzione Superiore Bachelet official website",
+      "id": "https://iisbachelet.edu.it/dove-siamo",
+      "url": "https://iisbachelet.edu.it/dove-siamo",
+      "license": "Factual metadata only; official website content retains its original rights"
+    },
+    "checkedAt": "2026-11-13"
   }
 ]

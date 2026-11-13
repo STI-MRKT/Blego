@@ -159,3 +159,57 @@ test('bundled catalog is extendable factual data with eight-country coverage and
       assert.equal(empty.university, '');
     }
 });
+test('ambiguous direct city and alias matches cannot mix organizations from different regions', () => {
+  const catalog = [
+    row('US', 'company', 'Springfield', 'Region A'),
+    row('US', 'university', 'Springfield', 'Region B'),
+    row('US', 'school', 'Other spelling', 'Region B', { aliases: ['Springfield'] })
+  ];
+  assert.deepEqual(organizationOptions(profile('US', 'Springfield'), catalog), []);
+  const bio = generateBiography(profile('US', 'Springfield'), { catalog });
+  for (const key of ['employer', 'position', 'university', 'school']) assert.equal(bio[key], '');
+});
+test('every bundled country geography has usable full BIO reference coverage without overriding generation cities', () => {
+  for (const country of countries) {
+    const places = require(`../../resources/generator/countries/${country}.json`).places;
+    for (const type of ['model', 'crypto']) {
+      const covered = places.filter((place) => {
+        const p = profile(country, place.city, type);
+        p.fields.postalCode = place.postal;
+        const options = organizationOptions(p);
+        return ['company', 'university', 'school'].every((kind) =>
+          options.some((row) => row.kind === kind)
+        );
+      });
+      assert.ok(
+        covered.length > 0,
+        `${country}/${type}: catalog has no usable full BIO for bundled cities`
+      );
+    }
+  }
+});
+test('source-confirmed postcode disambiguates same-named cities before regional fallback', () => {
+  const catalog = [
+    row('US', 'school', 'Amsterdam', 'New York', { localityPostals: ['12010'] }),
+    row('US', 'university', 'New York', 'New York'),
+    row('US', 'company', 'New York', 'New York')
+  ];
+  const p = profile('US', 'Amsterdam');
+  assert.deepEqual(organizationOptions(p, catalog), []);
+  assert.deepEqual(
+    organizationOptions({ ...p, fields: { ...p.fields, postalCode: '99999' } }, catalog),
+    []
+  );
+  const valid = { ...p, fields: { ...p.fields, postalCode: '12010' } };
+  const bio = generateBiography(valid, { catalog });
+  assert.equal(bio.school, 'school fixture — Amsterdam');
+  assert.equal(bio.employer, 'company fixture — New York');
+  const ambiguous = [
+    ...catalog,
+    row('US', 'school', 'Amsterdam', 'Other region', { localityPostals: ['99999'] })
+  ];
+  assert.equal(
+    generateBiography(valid, { catalog: ambiguous }).employer,
+    'company fixture — New York'
+  );
+});

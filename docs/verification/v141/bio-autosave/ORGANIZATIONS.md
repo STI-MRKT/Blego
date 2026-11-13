@@ -4,18 +4,18 @@ Checked: 2026-11-13. Catalogue: `resources/generator/institutions.json` (the exi
 
 ## Scope and semantics
 
-- 40 records: 17 companies, 15 universities, 8 secondary schools across BR, US, FR, PL, DE, ES, IT and GB. Every country has a school, university, and at least one company compatible with each BIO category (model, tech, crypto).
+- 55 records: 23 companies, 17 universities, 15 secondary schools across BR, US, FR, PL, DE, ES, IT and GB. Every country has a school, university, and at least one company compatible with each BIO category (model, tech, crypto).
 - Bounded starter coverage only. Cities with no verified matching organization must stay blank; a company or institution must never acquire the generated person's city. Region names are consistent within a city. London does not alias the separate City of London municipality.
 - Names and locations are factual metadata from official institutional/company websites. Stable project IDs use an `official:<country>:<slug>` namespace. `source.id` is the official URL, not a fabricated external database ID.
 - `source.license` explicitly describes factual-metadata extraction and retention of original site rights. No open-content licence is asserted for official websites; no marketing paragraphs, logos, or photographs are redistributed in the catalogue.
 - `roles` is project-authored, industry-compatible synthetic BIO vocabulary, not a claim of current job openings, particular employee roles, employment, or attendance. Empty category arrays prohibit incompatible assignments. The crypto category permits financial technology/digital finance as requested; a payments company receives payments/digital-finance titles, never invented blockchain-engineering titles. No company receives a model role merely because it has a marketing department.
-- Names retain source spelling. City aliases are explicit ordinary equivalents (São Paulo/Sao Paulo, New York/New York City, Warszawa/Warsaw, Kraków/Krakow/Cracow, Gdańsk/Gdansk, Milan/Milano). No unrelated town is an alias. Runtime country places were inspected; their alphabetically bounded samples largely omit these cities, so aliases are not represented as proof of nationwide matching coverage.
+- Names retain source spelling. City aliases are explicit ordinary equivalents (São Paulo/Sao Paulo, New York/New York City, Warszawa/Warsaw, Kraków/Krakow/Cracow, Gdańsk/Gdansk, Milan/Milano). No unrelated town is an alias. Runtime country places were inspected; the initial major-city set had no intersection with seven of the eight alphabetically bounded samples. The verified bundled-city extension below corrects that functional gap without altering the geography distribution. It is still not nationwide coverage.
 
 ## Verification method and results
 
 The Firecrawl skill was used for official-page discovery and retrieval. Company records below were checked against returned page content, including footer/address text when the main-content extractor omitted it; HTTP 200 alone did not establish identity/location. Search snippets alone were not used as final evidence. Regional names are administrative labels, not copied descriptive text.
 
-All 17 included companies have successful official HTTP 200 content retrieval with identity and city evidence. Twenty-two of the 23 retained educational institutions have current successful content retrieval. Lycée Louis-le-Grand currently returns an HTTP 200 entry/splash page without location content: its same-day identity and Paris verification is retained from [INSTITUTIONS.md](../INSTITUTIONS.md), explicitly not counted as a fresh location verification. The existing 23 education rows were preserved, with stronger official contact URLs substituted where available.
+All 17 initial companies have successful official HTTP 200 content retrieval with identity and city evidence. Twenty-two of the 23 retained educational institutions have current successful content retrieval. Lycée Louis-le-Grand currently returns an HTTP 200 entry/splash page without location content: its same-day identity and Paris verification is retained from [INSTITUTIONS.md](../INSTITUTIONS.md), explicitly not counted as a fresh location verification. The existing 23 education rows were preserved, with stronger official contact URLs substituted where available.
 
 The first local curl recheck attempted 23 education URLs but all 23 failed before reaching the origin (HTTP 000, local proxy connection refused). Those attempts are **not** source failures or successful checks. Connector retrieval was used afterward. FEUSP's old HTTPS hostname returned a TLS error through the connector; the official faculty page linked to the school's canonical replacement, and `https://www3.ea.fe.usp.br/` returned HTTP 200. TLS validation was not disabled.
 
@@ -94,3 +94,59 @@ The final government-page retrieval exhausted the connected Firecrawl credit all
 ## Structural checks
 
 The catalogue parses as one JSON array; IDs are unique; required fields and HTTPS official URLs are present; company roles contain exactly model/tech/crypto arrays; each country has all three organization kinds and all three compatible company categories. Organization city/region values are internally consistent. This is data validation, not an assertion of nationwide source coverage.
+
+## Bundled-city coverage extension
+
+The initial catalogue supplied verified major-city records, but the runtime's first-500 country place samples omitted those cities in BR/US/FR/PL/DE/ES/IT. Fifteen additional records now establish one source-backed sampled locality in each country. No generator geography file was changed. All selected city/postal pairs were checked against the actual bundled `countries/*.json` records.
+
+| Country | Bundled city / postcode | Local secondary school | University choice | Model / crypto company choices | Administrative region |
+| --- | --- | --- | --- | --- | --- |
+| BR | Adamantina / 17800-000 | Etec Engenheiro Herval Bellusci | Universidade de São Paulo (São Paulo) | AMARO / Nubank (São Paulo) | São Paulo |
+| US | Amsterdam / 12010 | Amsterdam High School | Columbia University (New York) | Ralph Lauren / Gemini (New York) | New York |
+| FR | Alfortville / 94140 | Lycée Maximilien Perret | Sorbonne Université (Paris) | Christian Dior Couture / Ledger (Paris) | Île-de-France |
+| PL | Andrychów / 34-120 | I Liceum Ogólnokształcące | Uniwersytet Jagielloński (Kraków) | LPP Kraków branch / Ailleron (Kraków) | województwo małopolskie |
+| DE | Aachen / 52062 | Couven Gymnasium Aachen | RWTH Aachen University (Aachen) | ARMEDANGELS (Köln) / auxmoney (Düsseldorf) | Nordrhein-Westfalen |
+| ES | A Coruña / 15001 | IES Salvador de Madariaga | Universidade da Coruña (A Coruña) | Inditex (Arteixo) / Inversa (Ferrol) | Galicia |
+| IT | Abbiategrasso / 20081 | Istituto d'Istruzione Superiore Bachelet | Politecnico di Milano (Milan) | Giorgio Armani Milano / Nexi (Milan) | Lombardia |
+| GB | London / EC1A 1BB | Camden School for Girls | University College London | Burberry / Revolut | Greater London |
+
+Parentheses identify the organization’s **actual** city; regional fallback must keep that city visible. Same administrative region does not mean the same town, adjacent town, commuting distance, or a claim that the generated person attended/worked there. The school establishes a verified local region; unknown towns still cannot acquire a region by broad country-level fallback.
+
+### New records and content checks
+
+Thirteen additions were supported by fresh official curl HTTP 200 page content. Amsterdam High School and Inditex were read successfully from their official pages through the web reader after curl returned HTTP 406 and 403 respectively; the failing curl responses were not counted as verification. Curl used TLS verification, redirects, compressed-response decoding, a 25-second deadline and a 4 MB cap per URL. No authentication or TLS bypass was used.
+
+| Record | Official source | Observed factual evidence |
+| --- | --- | --- |
+| Etec Engenheiro Herval Bellusci — Adamantina | [Official source](https://www.cps.sp.gov.br/etecs/etec-eng-herval-bellusci/) | Centro Paula Souza names the school and provides Adamantina/SP, CEP 17800-000; its offerings explicitly include integrated ensino médio. |
+| Amsterdam High School — Amsterdam | [Official source](https://www.gasd.org/o/ahs/page/about-our-school/) | Official school page: 140 Saratoga Avenue, Amsterdam, NY 12010. Web reader returned full school-page content; curl HTTP 406. |
+| Lycée Maximilien Perret — Alfortville | [Official source](https://lycee-maximilienperret.fr/) | Official school footer: Place San Benedetto del Tronto, 94140 Alfortville. Onisep's government education entry independently names the lycée. |
+| I Liceum Ogólnokształcące im. Marii Skłodowskiej-Curie w Andrychowie — Andrychów | [Official source](https://liceum-andrychow.edu.pl/sekretariat/) | School secretariat: Ferdynanda Pachla 16, 34-120 Andrychów. Official homepage provides the full I Liceum / Marii Skłodowskiej-Curie name. |
+| LPP S.A. — Kraków | [Official source](https://www.lpp.com/en/contact/) | Official corporate contact lists its Cracow branch at Bagrowa 7, 30-733 Cracow; this is a separate verified site of LPP, not a renamed headquarters. |
+| Ailleron S.A. — Kraków | [Official source](https://ailleron.com/terms-of-service/) | Official terms name Ailleron S.A., Jana Pawła II 43b, 31-864 Kraków, and technology services for fintechs/banks. |
+| Couven Gymnasium Aachen — Aachen | [Official source](https://www.couven-gymnasium.de/wordpress2/ansprechpartner/schulleitungsteam/) | School contact page: Couven Gymnasium Aachen, Lütticher Str. 111a, 52074 Aachen. |
+| RWTH Aachen University — Aachen | [Official source](https://www.rwth-aachen.de/cms/root/Footer/Services/~bw/Impressum/lidx/1/) | Official legal notice: RWTH Aachen University, Templergraben 55, 52062 Aachen. |
+| Social Fashion Company GmbH (ARMEDANGELS) — Köln | [Official source](https://www.armedangels.com/de-at/pages/impressum) | Official imprint: Social Fashion Company GmbH, Thebäerstr. 17, 50823 Köln; fashion retail site. |
+| auxmoney GmbH — Düsseldorf | [Official source](https://www.auxmoney.com/impressum) | Official imprint: auxmoney GmbH, Kasernenstraße 67, D-40213 Düsseldorf; official homepage corroborates online lending. |
+| Universidade da Coruña — A Coruña | [Official source](https://www.udc.es/) | Official university homepage: Universidade da Coruña, Rúa da Maestranza 9, 15001 A Coruña. |
+| IES Salvador de Madariaga — A Coruña | [Official source](https://dirof.xunta.gal/diroficial/v2/unidades/A12X03291) | Xunta's official directory identifies school code 15005211, IES Salvador de Madariaga, Paseo de Ronda 49, A Coruña, and Galicia. The city education directory independently lists ESO and Bachillerato. |
+| Inditex — Arteixo | [Official source](https://www.inditex.com/itxcomweb/nf/es/informacion/contacto) | Official contact page: Inditex headquarters, Avenida de la Diputación s/n, 15143 Arteixo, A Coruña. Web reader returned full content; curl HTTP 403. Arteixo is the city, not A Coruña city. |
+| Galaicus Fintech S.L. (Inversa) — Ferrol | [Official source](https://www.inversa.es/en/contracts-and-rates/) | Official contracts and legal notice name Galaicus Fintech S.L. (INVERSA), Estrella 4, 15401 Ferrol, and its online invoice-financing platform. |
+| Istituto d'Istruzione Superiore Bachelet — Abbiategrasso | [Official source](https://iisbachelet.edu.it/dove-siamo) | Official school directions: Via Stignani 63, 20081 Abbiategrasso (MI). School offers liceo/secondary programmes and links the Lombardia regional school office. |
+
+### Administrative-region evidence and postal disambiguation
+
+- **São Paulo / New York:** the school-address sources explicitly provide SP and NY respectively; these are the Brazilian state and US state, not a transfer of the metropolitan city's name to another municipality.
+- **Île-de-France:** [Onisep's official lycée record](https://www.onisep.fr/ressources/structures-enseignement/ile-de-france/val-de-marne/lycee-polyvalent-maximilien-perret) places Alfortville under Île-de-France / Val-de-Marne (HTTP 200). The actual school footer has 94140; the Onisep postal correspondence uses CEDEX 94142. The row does not use a postcode guard for this unambiguous municipality.
+- **Małopolskie:** [Andrychów municipality's regional-programme notice](https://andrychow.eu/nabor-wnioskow-na-przekazanie-zbiornikow-na-deszczowke/) explicitly identifies its participation in a programme for municipalities of the Małopolskie voivodeship; full content was read through the web reader. Curl returned a bot-check page despite HTTP 200, so curl alone is not counted. [The voivodeship's official tourism portal](https://visitmalopolska.pl/web/visitmalopolska/punkty_informacji_turystycznej) also provided regional context through the web reader; curl was HTTP 403. The attempted administrative-act PDF returned HTTP 503 and was not treated as read evidence. Kraków uses the existing same regional label.
+- **Nordrhein-Westfalen:** RWTH's official legal notice identifies the supervising ministry of North Rhine-Westphalia. [NRW-Stiftung's municipality list](https://www.nrw-stiftung.de/staedte-kreise-gemeinden.html) includes Aachen, Düsseldorf and Köln (HTTP 200). The state label is used consistently; all three actual cities remain distinct.
+- **Galicia:** the Xunta school directory explicitly states Galicia. Official Turismo de Galicia pages for [Ferrol](https://www.turismo.gal/localizador-de-recursos/-/sit/que-visitar/ferrol?langId=es_ES) and [Arteixo](https://www.turismo.gal/localizador-de-recursos/-/sit/que-hacer/arteixo?langId=es_ES) returned HTTP 200 and corroborate both cities within the regional catalogue. A Coruña in company addresses can mean the province, which is why Inditex remains Arteixo and Inversa remains Ferrol.
+- **Lombardia:** the school links USR Lombardia and the Milano territorial school office. [Abbiategrasso municipality's transport page](https://www.comune.abbiategrasso.mi.it/it/page/trasporti-taxi-e-trasporti-eccezionali) returned HTTP 200 and identifies applicable Lombardia regional transport services. The existing Milan rows retain the same region.
+
+The US dataset contains **Albany 05820 (Vermont)** and **Accord 02018 (Massachusetts)**. Their names alone cannot justify New York records; neither was added. **Amsterdam 12010** matches both the bundled record and the official New York school address. Its row therefore adds `localityPostals: ["12010"]`; runtime matching must require the normalized profile postcode when this field is present. A missing or different postcode cannot establish New York through that row. No postcode was invented or copied from an unrelated city.
+
+Additional rejected candidates: Coinscrap's homepage returned HTTP 503 and the web reader timed out; no company row was created. The ARMEDANGELS de-de guessed imprint returned HTTP 404; the de-at official imprint returned HTTP 200 and lists the German company address. The guessed auxmoney about page was HTTP 404; the successful official imprint/homepage establish the included record. A first curl batch encountered an HTTP-compressed response decoding error; checks were rerun with compressed decoding enabled, and the failed batch was not counted.
+
+### Extension validation
+
+A read-only check against the unchanged bundled place records passed all eight city/postal pairs above. For each there is a local school, a university in the same verified administrative region, and compatible model/crypto companies in that region. The final JSON has **55 unique IDs: 23 company, 17 university and 15 school records**. Required fields, company-role array structure and city/region consistency remain intact. The reserved unknown-city fixtures (Abadia dos Dourados, Aaronsburg, Aast, Abisynia, Aach, Abadía, Abano Terme, Bakewell) gained no sources or aliases.

@@ -61,10 +61,20 @@ function organizationOptions(profile, rows = catalog) {
   const domestic = rows.filter(
     (row) => row.country === profile.country && row.id && row.region && row.source?.url
   );
+  const postalKey = (value) =>
+    String(value || '')
+      .normalize('NFKC')
+      .replace(/[\s-]/g, '')
+      .toUpperCase();
   const isLocal = (row) =>
-    [row.city, ...(row.aliases || [])].some((name) => cityKey(name) === city);
+    [row.city, ...(row.aliases || [])].some((name) => cityKey(name) === city) &&
+    (!row.localityPostals ||
+      row.localityPostals.some(
+        (postal) => postalKey(postal) === postalKey(profile.fields.postalCode)
+      ));
   const local = domestic.filter(isLocal);
   const regions = new Set(local.map((row) => row.region));
+  if (regions.size > 1) return [];
   const region = regions.size === 1 ? [...regions][0] : null;
   const result = [];
   for (const kind of ['company', 'university', 'school']) {
