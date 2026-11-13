@@ -31,7 +31,7 @@ test('no injected Copy button in any page header; direct and advanced copying re
   const assertNoHeaderCopy = async () => {
     assert.equal(await page.locator('.page-head [data-copy-action="open"]').count(), 0);
     assert.equal(await page.locator('[data-copy-action="open"]').count(), 0);
-    assert.equal(await page.getByRole('button', { name: 'Копировать', exact: true }).count(), 0);
+    assert.equal(await page.locator('.page-head').getByRole('button', { name: 'Копировать', exact: true }).count(), 0);
   };
 
   await assertNoHeaderCopy();
