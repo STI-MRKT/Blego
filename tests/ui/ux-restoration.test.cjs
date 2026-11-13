@@ -33,7 +33,8 @@ test(
     await page.waitForTimeout(900);
     const tourSkip = page.locator('[data-tour-action="skip"]');
     if (await tourSkip.isVisible()) await tourSkip.click();
-    await page.locator('.page-head .ux-copy-actions [data-copy-action="open"]').click();
+    assert.equal(await page.locator('.page-head [data-copy-action="open"]').count(), 0);
+    await page.keyboard.press('Control+Alt+Shift+C');
     await page.locator('[data-copy-control="format"]').waitFor();
     await page.locator('[data-copy-action="close"]').click();
 

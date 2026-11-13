@@ -1,0 +1,14 @@
+✔ all10 views have no general header Copy before/after generation/import/resize/restart; all FP/BIO copies remain exact (6319.993754ms)
+✔ advanced copy never resurrects after unsupported navigation or FP replacement/clear (1437.327583ms)
+✔ copy shortcuts respect text editing, native copy, selection, empty data and key repeat (1254.961387ms)
+✔ late advanced copy requests cannot reopen a panel after navigation away and back (906.277217ms)
+✔ changing the active photo group invalidates the prepared group snapshot (1878.268649ms)
+✔ sequential copy completion after navigation cannot advance or reopen a closed panel (1089.861235ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13418.345021
