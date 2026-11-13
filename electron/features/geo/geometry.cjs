@@ -213,7 +213,8 @@ function generatePoints(boundary, count, { exclude = [], signal, maxAttempts = 2
       ).toFixed(7)
     );
     const key = `${latitude.toFixed(7)},${longitude.toFixed(7)}`;
-    if (!seen.has(key) && contains(boundary, longitude, latitude)) {
+    // Reject against the selected proposal part: overlapping boxes must not double-weight other parts.
+    if (!seen.has(key) && partContains(part, longitude, latitude)) {
       seen.add(key);
       points.push({ latitude, longitude });
     }

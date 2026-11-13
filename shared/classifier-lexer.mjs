@@ -1,3 +1,4 @@
+import { cookieInfo } from './classifier-recognition.mjs';
 // Deterministic, bounded TXT lexer. Offsets are UTF-16 positions in decoded text.
 // JSON and browser identifiers are indivisible; source text is never reconstructed.
 const maxFields = 512,
@@ -22,11 +23,44 @@ export function wantsStructuredText(text, headerFor) {
   const named = first.filter(headerFor).length;
   return !(named >= 2 && named >= first.length / 2);
 }
+const cookiePrefix = /^(?:cookies?(?:[\s_-]*json)?|куки)\s*[:=]\s*/iu;
+function completedCookie(value) {
+  const info = cookieInfo(value.trim().replace(cookiePrefix, ''));
+  return info && !info.invalid ? info : null;
+}
 function nextCookieOwner(text, start) {
-  // Boundary evidence is local and bounded; never inspect arbitrary later rows.
+  // Parse only complete, bounded JSON candidates. Key order and object/array forms are equivalent.
   const tail = text.slice(start, start + 65536);
-  const match = /["']name["']\s*:\s*["']c_user["']\s*,\s*["']value["']\s*:\s*"(\d+)"/.exec(tail);
-  return match?.[1] || null;
+  const candidate = /(?:^|::|\||;)\s*(?:(?:cookies?(?:[\s_-]*json)?|куки)\s*[:=]\s*)?([\[{])/giu;
+  let match;
+  while ((match = candidate.exec(tail))) {
+    const begin = candidate.lastIndex - 1;
+    const stack = [];
+    let quote = false,
+      escape = false;
+    for (let i = begin; i < tail.length; i++) {
+      const char = tail[i];
+      if (quote) {
+        if (escape) escape = false;
+        else if (char === '\\') escape = true;
+        else if (char === '"') quote = false;
+      } else if (char === '"') quote = true;
+      else if (char === '[' || char === '{') {
+        stack.push(char);
+        if (stack.length > maxDepth) return null;
+      } else if (char === ']' || char === '}') {
+        if (stack.pop() !== (char === ']' ? '[' : '{')) return null;
+        if (!stack.length) {
+          const info = completedCookie(tail.slice(begin, i + 1));
+          if (info) return info.owners.length === 1 ? info.owners[0] : null;
+          candidate.lastIndex = i + 1;
+          break;
+        }
+      }
+      if (i === tail.length - 1) return null;
+    }
+  }
+  return null;
 }
 export function structuredRecords(text) {
   const rows = [],
@@ -47,7 +81,7 @@ export function structuredRecords(text) {
     const rawText = text.slice(cellStart, end),
       value = rawText.trim();
     fields.push({ value, rawText, range: { start: cellStart, end } });
-    if (/^[\[{]/.test(value) && /"(?:name|c_user)"/.test(value)) hasCookie = true;
+    if (!hasCookie && completedCookie(value)) hasCookie = true;
     cellStart = end;
   }
   function row(end, next) {
@@ -121,7 +155,10 @@ export function structuredRecords(text) {
     }
     if (!newline && !'[\{\"|;'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
     const current = text.slice(cellStart, i);
-    if ((c === '[' || c === '{') && /^\s*(?:(?:cookies?|cookiejson)\s*[:=]\s*)?$/i.test(current)) {
+    if (
+      (c === '[' || c === '{') &&
+      /^\s*(?:(?:cookies?(?:[\s_-]*json)?|куки)\s*[:=]\s*)?$/i.test(current)
+    ) {
       depth.push(c);
       continue;
     }
@@ -142,7 +179,7 @@ export function structuredRecords(text) {
       const next = i + delimiter.length;
       const upcoming = text.slice(next, next + 300).trimStart();
       const id = /^(?:(?:id|accountId|uid)\s*[:=]\s*)?(\d+)\s*(?:::|\|)/i.exec(upcoming)?.[1];
-      if (hasCookie && id && nextCookieOwner(text, next) === id) {
+      if (id && (hasCookie || completedCookie(current)) && nextCookieOwner(text, next) === id) {
         row(i, next);
         recordLine = line;
       } else {

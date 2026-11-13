@@ -71,3 +71,36 @@ test('GEO has count, work and cancellation bounds; never substitutes a center po
   controller.abort();
   assert.throws(() => generatePoints(g, 1, { signal: controller.signal }), /CANCELLED/);
 });
+
+test('disjoint multipart polygons with overlapping proposal boxes retain uniform area density', () => {
+  const boundary = validateBoundary({
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [0, 0],
+          [1.8, 0],
+          [0, 1.8],
+          [0, 0]
+        ]
+      ],
+      [
+        [
+          [0.2, 2],
+          [2, 0.2],
+          [2, 2],
+          [0.2, 2]
+        ]
+      ]
+    ]
+  });
+  const points = Array.from({ length: 4 }, () => generatePoints(boundary, 1000)).flat();
+  const overlap =
+    points.filter(
+      (p) => p.longitude > 0.2 && p.longitude < 1.8 && p.latitude > 0.2 && p.latitude < 1.8
+    ).length / points.length;
+  // Triangles do not overlap. Their boxes do; this region has ~1.96/3.24=60.49% of area.
+  // Whole-union acceptance incorrectly double-weights it (~75.38%). Spherical correction <0.1%.
+  assert.ok(overlap > 0.54 && overlap < 0.67, `overlapping-box fraction ${overlap}`);
+  assert.ok(points.every((p) => contains(boundary, p.longitude, p.latitude)));
+});

@@ -152,3 +152,26 @@ test('structured parser bounds excessive nesting and fields without echoing valu
     (e) => e.code === 'TOO_MANY_FIELDS'
   );
 });
+
+test('same-line records ending in cookie JSON retain separate identities and exact cookie payloads', async () => {
+  const variants = [
+    (id) => `[{"name":"c_user","value":"${id}"}]`,
+    (id) => `[{"value":"${id}","name":"c_user"}]`,
+    (id) => `{"c_user":"${id}","xs":"FAKE_ONLY"}`
+  ];
+  for (const payload of variants)
+    for (const label of ['', 'cookies:', 'cookie_json:'])
+      for (const separator of ['; ', ' | ', '::']) {
+        const ids = ['00020001', '00020002'],
+          text = ids
+            .map((id) => `id:${id}::name:Synthetic Person::${label}${payload(id)}`)
+            .join(separator);
+        const r = await read(text);
+        assert.equal(r.records.length, 2, `${label}/${separator}/${text}`);
+        for (const [i, row] of r.records.entries()) {
+          assert.equal(row.data.accountId, ids[i]);
+          assert.equal(row.data.cookies, payload(ids[i]));
+          assert.equal(row.sourceRecord, text.slice(row.range.start, row.range.end));
+        }
+      }
+});

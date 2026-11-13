@@ -36,7 +36,7 @@ test('actual exclusive-link collision retries without overwriting existing Unico
   const link = fs.promises.link;
   let collision;
   fs.promises.link = async (from, to) => {
-    if (!collision && path.dirname(to) === out) {
+    if (!collision && fs.realpathSync(path.dirname(to)) === fs.realpathSync(out)) {
       collision = to;
       fs.writeFileSync(to, 'existing colliding name', { flag: 'wx' });
     }
@@ -54,6 +54,7 @@ test('actual exclusive-link collision retries without overwriting existing Unico
   }
   assert.equal(report.files[0].status, 'completed', JSON.stringify(report));
   assert.equal(fs.readFileSync(existing, 'utf8'), 'existing original name');
+  assert.ok(collision, 'Actual publication must exercise exclusive-link collision');
   assert.equal(fs.readFileSync(collision, 'utf8'), 'existing colliding name');
   assert.deepEqual(fs.readFileSync(source), original);
   assert.ok(report.files[0].outputName.startsWith('Камера пробел ✓_meta_'));

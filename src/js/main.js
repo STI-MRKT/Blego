@@ -12,7 +12,7 @@ import { startTour } from './ui/tour.js';
 let workspaceInteracted = false;
 for (const event of ['pointerdown', 'keydown']) document.addEventListener(event, () => { workspaceInteracted = true; }, { once: true, capture: true });
 import { newsBlockHTML } from './ui/news.js';
-import { readMetadataForm, readMetadataData, draftFromOperations, imageErrorMessage } from './ui/photos.js';
+import { readMetadataForm, readMetadataData, draftFromOperations, rebaseGpsDraft, imageErrorMessage } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
@@ -114,8 +114,16 @@ function stashImageDraft() {
     state.imageDrafts[state.imageDraftKey] = {
       draft: state.metadataDraft,
       origins: state.metadataOrigins,
-      touched: state.metadataTouched || []
+      touched: state.metadataTouched || [],
+      excludedGps: state.metadataGpsExcluded || []
     };
+  }
+}
+function refreshImageGeoDrafts(fileId) {
+  for (const [key, saved] of Object.entries(state.imageDrafts || {})) {
+    if (!key.startsWith('files:')) continue;
+    const ids = key.slice(6).split(',');
+    if (ids.includes(fileId)) state.imageDrafts[key] = rebaseGpsDraft(saved, state.imageWorkspace.overrides[fileId] || [], ids.length > 1, fileId);
   }
 }
 function restoreImageDraft() {
@@ -133,6 +141,7 @@ function restoreImageDraft() {
   state.metadataDraft = loaded.draft;
   state.metadataOrigins = loaded.origins || {};
   state.metadataTouched = loaded.touched || [];
+  state.metadataGpsExcluded = loaded.excludedGps || [];
 }
 let imagePreviewRequest=0;
 function invalidateImagePreview(){imagePreviewRequest++;state.imagePreview=null;state.imagePreviewName='';}
@@ -156,7 +165,7 @@ async function applyImageForm({excludeGPS=false}={}) {
     for (const photo of selected) {
       const updates =
         selected.length > 1
-          ? ops.filter((op) => (state.metadataTouched || []).includes(op.field))
+          ? ops.filter((op) => (state.metadataTouched || []).includes(op.field) && !(op.field === 'gps' && state.metadataGpsExcluded?.includes(photo.fileId)))
           : ops;
       if (!updates.length) continue;
       const overrides =
@@ -215,8 +224,10 @@ function bindView() {
     if(state.imagesBusy)return;
     stashImageDraft();state.imagesBusy=true;
     try {
+      await state.imageInvalidation;
       const result=await window.blego.moveImageGeo({fileId,value,cityId:state.geoCity,workspaceRevision:state.imageWorkspace.revision,requestId:crypto.randomUUID()});
       state.imageWorkspace=result.workspace;state.metadataPlan=null;
+      refreshImageGeoDrafts(fileId);
     } finally {state.imagesBusy=false;restoreImageDraft();renderView();}
   },onError:error=>toast(imageErrorMessage(error.message),'err')});
   for(const id of ['metadata-advanced','image-groups-advanced','date-options','gps-manual']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
@@ -278,6 +289,10 @@ function bindView() {
             : name.startsWith('date-')
               ? 'captureDate'
               : null;
+      if (field === 'gps') {
+        state.metadataGpsExcluded = [];
+        document.querySelector('[data-gps-exclusions]')?.remove();
+      }
       if (field) {
         state.metadataDraftDirty = true;
         state.metadataTouched = [...new Set([...(state.metadataTouched || []), field])];
@@ -1156,6 +1171,7 @@ document.addEventListener('click', async (event) => {
           fields
         });
         const loaded = draftFromOperations(ops);
+        if (ops.some(op => op.field === 'gps')) state.metadataGpsExcluded = [];
         state.metadataDraft = { ...state.metadataDraft, ...loaded.draft };
         state.metadataOrigins = { ...state.metadataOrigins, ...loaded.origins };
         state.metadataDraftDirty = true;
@@ -1347,6 +1363,7 @@ document.addEventListener('click', async (event) => {
       state.metadataOrigins = loaded.origins;
       state.metadataDraftDirty = true;
       state.metadataTouched = preset.operations.map((op) => op.field);
+      state.metadataGpsExcluded = [];
       stashImageDraft();
       renderView();
       await applyImageForm();

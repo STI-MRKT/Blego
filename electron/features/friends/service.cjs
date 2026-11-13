@@ -4,11 +4,17 @@ const path = require('node:path');
 const { FRIENDS } = require('../../../src/js/data/friends.js');
 const { isPublicAddress } = require('../../local/network-safety.cjs');
 const { normalizeTarget } = require('../facebook/normalize.cjs');
+const { fieldForHeader } = require('../../../shared/classifier.mjs');
+const secretFields = new Set(['password', 'emailPassword', 'cookies', 'token']);
 const MAX_BYTES = 5 * 1024 * 1024,
   MAX_RECORDS = 5000;
 const isSecretKey = (key) =>
-  /^(?:password|passwd|pass|emailpassword|mailpassword|cookies?|accesstoken|token|session(?:id)?|authorization|twofactorurl|cuser|xs|datr|sb)$/iu.test(
-    String(key).normalize('NFKC').trim().replace(/[ _-]/g, '')
+  secretFields.has(fieldForHeader(String(key).normalize('NFKC'))) ||
+  /^(?:authtoken|refreshtoken|idtoken|apikey|clientsecret|session(?:id)?|authorization|twofactorurl|cuser|xs|datr|sb)$/iu.test(
+    String(key)
+      .normalize('NFKC')
+      .trim()
+      .replace(/[\s_-]/g, '')
   );
 function canonicalUrl(value) {
   if (typeof value !== 'string' || value.length > 2048 || /[\s<>"|\p{Cc}\p{Cf}]/u.test(value))

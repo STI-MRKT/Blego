@@ -137,7 +137,7 @@ function quickEditor(field, selected) {
       : field === 'captureDate' && v
         ? `${copyValue('date', v.local)} ${copyValue('time zone', v.offset)}`
         : 'No value';
-  return `<section class="card pad"><h3>${field === 'gps' ? 'GEO / GPS' : 'Date taken'}</h3>${field==='gps'?geoControls():''}<p class="sub">Current: ${current}</p><label class="fl">${field === 'gps' ? 'Location' : 'EXIF / XMP date'}<select class="input" name="action-${field}">${actionOptions()}</select></label>
+  return `<section class="card pad"><h3>${field === 'gps' ? 'GEO / GPS' : 'Date taken'}</h3>${field==='gps'?geoControls():''}${field==='gps' && state.metadataGpsExcluded?.length ? '<p class="sub" data-gps-exclusions>Перемещённые на карте точки сохранятся. Измените GEO в форме, чтобы применить его ко всем выбранным фото.</p>' : ''}<p class="sub">Current: ${current}</p><label class="fl">${field === 'gps' ? 'Location' : 'EXIF / XMP date'}<select class="input" name="action-${field}">${actionOptions()}</select></label>
  <div data-field-inputs="${field}" hidden>${field === 'gps' ? `<details id="gps-manual" ${openDetails('gps-manual')}><summary>Точные координаты и высота</summary><label class="fl">Latitude<div class="cell-box"><input class="input" name="gps-latitude" type="number" step="any" min="-90" max="90" placeholder="−90…90">${inputCopy('gps-latitude', 'latitude')}</div></label><label class="fl">Longitude<div class="cell-box"><input class="input" name="gps-longitude" type="number" step="any" min="-180" max="180" placeholder="−180…180">${inputCopy('gps-longitude', 'longitude')}</div></label><label class="fl">Высота<select class="input" name="gps-altitude-mode"><option value="keep">Сохранить исходную</option><option value="set">Указать</option><option value="remove">Удалить</option></select></label><label class="fl">Altitude (optional)<div class="cell-box"><input class="input" name="gps-altitude" type="number" step="any" placeholder="Metres">${inputCopy('gps-altitude', 'altitude')}</div></label></details>` : `<label class="fl">Date and time<div class="cell-box"><input class="input" name="date-local" type="datetime-local" step="1">${inputCopy('date-local', 'date')}</div></label>`}</div>
  ${field === 'captureDate' ? `<label class="fl">Time zone<select class="input" name="date-offset-mode"><option value="keep">Keep existing for each image</option><option value="set">Set offset</option><option value="remove">Remove offset</option></select></label><div data-offset-input hidden><label class="fl">UTC offset<div class="cell-box"><input class="input" name="date-offset" placeholder="+03:00 or −05:00">${inputCopy('date-offset', 'time zone')}</div></label></div><details id="date-options" ${openDetails('date-options')}><summary>Date fields</summary><label class="fl"><input type="checkbox" name="date-scope-exif" checked> EXIF date taken</label><label class="fl"><input type="checkbox" name="date-scope-xmp" checked> XMP date taken</label><p class="sub">Other dates stay unchanged.</p></details>` : ''}</section>`;
 }
@@ -282,4 +282,19 @@ export function draftFromOperations(operations) {
     } else draft['value-' + op.field] = Array.isArray(op.value) ? op.value.join('\n') : op.value;
   }
   return { draft, origins };
+}
+
+// A map move supersedes GPS only for that photo; pending edits to other photos survive.
+export function rebaseGpsDraft(saved, operations, multiple = false, fileId = '') {
+  if (multiple && (saved.touched || []).includes('gps')) {
+    return { ...saved, draft: { ...saved.draft }, origins: { ...saved.origins }, touched: [...saved.touched],
+      excludedGps: [...new Set([...(saved.excludedGps || []), fileId].filter(Boolean))] };
+  }
+  const gps = draftFromOperations(operations.filter(op => op.field === 'gps'));
+  const draft = Object.fromEntries(Object.entries(saved.draft || {}).filter(([key]) => key !== 'action-gps' && !key.startsWith('gps-')));
+  Object.assign(draft, multiple ? { 'action-gps': 'unchanged' } : gps.draft);
+  const origins = { ...(saved.origins || {}) };
+  delete origins.gps;
+  if (!multiple && gps.origins.gps) origins.gps = gps.origins.gps;
+  return { draft, origins, touched: (saved.touched || []).filter(field => field !== 'gps') };
 }

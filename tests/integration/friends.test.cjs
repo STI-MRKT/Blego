@@ -126,3 +126,42 @@ test('credential column whitespace and Unicode normalization cannot hide secrets
     );
   assert.equal(env.store.get('friends:imported'), undefined);
 });
+
+test('Friends rejects classifier credential aliases in JSON/CSV and explicit URL query keys', async (t) => {
+  const { createFriendsService } = require('../../electron/features/friends/service.cjs');
+  const env = await setup(t),
+    service = createFriendsService({ store: env.store });
+  for (const key of [
+    'cookiesJson',
+    'cookie_json',
+    'куки',
+    'пароль',
+    'пароль от почты',
+    'токен',
+    'auth_token'
+  ]) {
+    await assert.rejects(
+      service.preview({
+        bytes: Buffer.from(
+          JSON.stringify([{ url: 'https://example.test/p', [key]: 'FAKE_CREDENTIAL' }])
+        ),
+        name: 'auth.json'
+      }),
+      /FRIENDS_CREDENTIAL_FIELDS/
+    );
+    await assert.rejects(
+      service.preview({
+        bytes: Buffer.from(`url,${key}\nhttps://example.test/p,FAKE_CREDENTIAL`),
+        name: 'auth.csv'
+      }),
+      /FRIENDS_CREDENTIAL_FIELDS/
+    );
+    const query = await service.preview({
+      bytes: Buffer.from(`https://example.test/p?${encodeURIComponent(key)}=FAKE_CREDENTIAL`),
+      name: 'links.txt'
+    });
+    assert.equal(query.added, 0);
+    assert.equal(query.invalid, 1);
+  }
+  assert.equal(env.store.get('friends:imported'), undefined);
+});
