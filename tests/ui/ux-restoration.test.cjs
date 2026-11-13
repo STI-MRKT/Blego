@@ -64,13 +64,15 @@ test(
       );
       const saved = await page.evaluate(() => window.blego.lastCard());
       assert.equal(saved.country, country);
+      const national = saved.fields.phone.slice(
+        { BR: 2, US: 1, FR: 2, PL: 2, DE: 2, ES: 2, IT: 2, GB: 2 }[country] + 1
+      );
       await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
       for (let i = 0; i < 40; i++) {
-        if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === saved.fields.phone)
-          break;
+        if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === national) break;
         await page.waitForTimeout(25);
       }
-      assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), saved.fields.phone);
+      assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), national);
     }
     const category = page.locator('.row-chips button').first();
     const categoryText = await category.innerText();

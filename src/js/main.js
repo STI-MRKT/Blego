@@ -949,7 +949,7 @@ document.addEventListener('click', async (event) => {
         target.dataset.row,
         target.dataset.field,
         target,
-        { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true' }
+        { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true', nationalPhone: target.dataset.nationalPhone === 'true' }
       );
     } catch (error) {
       toast(error.message, 'err');

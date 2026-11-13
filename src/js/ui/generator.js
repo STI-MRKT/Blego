@@ -54,7 +54,7 @@ function fieldHTML(key, value) {
   return `<div class="field${rowStyle}">
     <div class="field-main"><div class="field-label">${esc(LABELS[key] || key)}</div>
       <div class="field-value wrap${style}" title="${esc(text)}">${visual}</div></div>
-    <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
+    <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" ${key === 'phone' ? 'data-national-phone="true"' : ''} aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
   </div>`;
 }
 function loadingHTML() {
@@ -79,7 +79,7 @@ function profileHTML() {
     </div>`;
   const fields = p.fields || {},
     keys = p.fieldOrder || [];
-  const primary = ['name', 'phone', 'email', 'postalCode', 'address', 'city', 'handle'].filter((key) =>
+  const primary = ['name', 'phone', 'email', 'address', 'city', 'postalCode', 'handle'].filter((key) =>
     keys.includes(key)
   );
   const name = textValue(fields.name);

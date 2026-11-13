@@ -102,9 +102,11 @@ test(
         await page.locator('[data-copy-action="close"]').click();
       }
       await checkClipboard(
-        Array.isArray(card.fields[field])
-          ? card.fields[field].join(', ')
-          : String(card.fields[field])
+        field === 'phone'
+          ? card.fields.phone.slice(3)
+          : Array.isArray(card.fields[field])
+            ? card.fields[field].join(', ')
+            : String(card.fields[field])
       );
     }
     await page.getByText('Copy full set', { exact: true }).click();
