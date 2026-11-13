@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=S%C3%A3o+Paulo&countrycodes=br&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:32.904521+00:00",
+  "sha256": "d88456ae88a472856105151d0e5d34f13d9f813b34356c588829b6b7f4912653",
+  "selectedRelation": 298285,
+  "boundaryType": "municipality"
+}

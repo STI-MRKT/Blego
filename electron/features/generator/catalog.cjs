@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const { createHash, randomUUID } = require('node:crypto');
 const { resolvePreset } = require('./sources.cjs');
+const { nameCount, usedNames, isPossibleName } = require('./naming.cjs');
 const { registry } = require('./registry.cjs');
 const { getSettings, countries } = require('../../local/settings.cjs');
 const { readZip } = require('../archive/zip.cjs');
@@ -32,8 +33,11 @@ function getPoolStats(
   const capacities = {
     nameCombinations: {
       certainty: 'known',
-      available: p.first.length * p.last.length,
-      scope: 'possible name combinations; names may repeat'
+      available:
+        nameCount(p) -
+        (store ? [...usedNames(store)].filter((name) => isPossibleName(p, name)).length : 0),
+      scope: 'installation',
+      repeatAllowed: p.allowRepeats.includes('name')
     },
     phone: {
       certainty: 'estimated',
@@ -60,7 +64,9 @@ function getPoolStats(
     };
   }
   const strict = Object.entries(capacities).filter(
-    ([key, value]) => ['bio', 'status', 'postalCode', 'phone'].includes(key) && !value.repeatAllowed
+    ([key, value]) =>
+      ['nameCombinations', 'bio', 'status', 'postalCode', 'phone'].includes(key) &&
+      !value.repeatAllowed
   );
   const minimum = Math.min(...strict.map(([, value]) => value.available));
   const limitingFields = strict

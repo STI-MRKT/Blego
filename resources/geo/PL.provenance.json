@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=Warsaw&countrycodes=pl&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:38.944172+00:00",
+  "sha256": "ad12c094b1b00dc2440cca8e055be9463540665b3ac4dfe92d908bba12bace6e",
+  "selectedRelation": 336075,
+  "boundaryType": "city"
+}

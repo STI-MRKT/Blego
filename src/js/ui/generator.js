@@ -18,7 +18,6 @@ const LABELS = {
   symbols: 'Символы',
   number: 'Номер'
 };
-const QUICK_FIELDS = new Set(['name', 'phone', 'email', 'handle', 'city', 'postalCode', 'address']);
 
 function textValue(value) {
   if (Array.isArray(value)) return value.join(', ');
@@ -55,7 +54,7 @@ function fieldHTML(key, value) {
   return `<div class="field${rowStyle}">
     <div class="field-main"><div class="field-label">${esc(LABELS[key] || key)}</div>
       <div class="field-value wrap${style}" title="${esc(text)}">${visual}</div></div>
-    <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
+    <button class="copy" data-action="copy-model" data-source="generator" data-field="${esc(key)}" ${key === 'phone' ? 'data-national-phone="true"' : ''} aria-label="Copy ${esc(key)}" title="Копировать">${I.copy}</button>
   </div>`;
 }
 function loadingHTML() {
@@ -80,10 +79,9 @@ function profileHTML() {
     </div>`;
   const fields = p.fields || {},
     keys = p.fieldOrder || [];
-  const primary = ['name', 'phone', 'email', 'postalCode', 'address', 'city', 'handle'].filter((key) =>
+  const primary = ['name', 'phone', 'email', 'address', 'city', 'postalCode', 'handle'].filter((key) =>
     keys.includes(key)
   );
-  const extended = keys.filter((key) => !QUICK_FIELDS.has(key));
   const name = textValue(fields.name);
   const hue = [...name].reduce((n, c) => n + c.codePointAt(0), 160) % 360;
   const categories = Array.isArray(fields.categories) ? fields.categories : [];
@@ -104,26 +102,18 @@ function profileHTML() {
           .join('')
           .toUpperCase()
       )}</div>
-      <div class="name">${esc(name)}</div><div class="handle" title="${esc(textValue(fields.handle))}">@${esc(conciseHandle(fields.handle, 26))}</div>
+      <div class="ux-profile-copy"><div class="name">${esc(name)}</div><button class="copy" data-action="copy-model" data-source="generator" data-field="name" aria-label="Копировать имя" title="Копировать имя">${I.copy}</button></div><div class="handle" title="${esc(textValue(fields.handle))}">@${esc(conciseHandle(fields.handle, 26))}</div>
       <div class="row-chips">${categories
         .slice(0, 4)
         .map((c) => `<button class="pill accent" data-action="copy" data-copy="${esc(c)}" aria-label="Copy category ${esc(c)}">${esc(c)}</button>`)
         .join('')}</div>
-      <p class="bio">${esc(textValue(fields.bio) || textValue(fields.status) || 'Локальный синтетический профиль')}</p>
+      <div class="ux-profile-copy"><p class="bio">${esc(textValue(fields.bio) || textValue(fields.status) || 'Локальный синтетический профиль')}</p><button class="copy" data-action="copy-model" data-source="generator" data-field="bio" aria-label="Копировать BIO" title="Копировать BIO" ${textValue(fields.bio) ? '' : 'disabled'}>${I.copy}</button></div>
       <div class="demo-meta">${esc(LOCALES[p.country]?.name?.en || p.country)} · ${esc(p.type)}<br>${esc(date)} · сохранено локально</div>
       <button class="btn btn-primary ux-copy-set" data-action="copy-model" data-source="generator" data-card="true">${I.copy} Copy full set</button>
     </div>
     <div class="demo-right">
       <div class="mini-head"><span class="t">Основные поля</span><span class="ttl"><i></i>Сохранено локально</span></div>
       <div class="fields">${primary.map((key) => fieldHTML(key, fields[key])).join('')}</div>
-      ${
-        extended.length
-          ? `<details class="ux-details ux-extra-fields">
-        <summary>Дополнительные поля · ${extended.length}</summary>
-        <div class="fields">${extended.map((key) => fieldHTML(key, fields[key])).join('')}</div>
-      </details>`
-          : ''
-      }
       <div class="demo-note">${I.alert}<span>Синтетический профиль. Сохранён на этом устройстве.</span></div>
     </div>
   </article>`;

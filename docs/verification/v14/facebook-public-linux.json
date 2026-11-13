@@ -1,0 +1,26 @@
+{
+  "os": "linux",
+  "arch": "x64",
+  "authentication": "none",
+  "importedCredentialsUsed": false,
+  "results": [
+    {
+      "canonicalUrl": "https://www.facebook.com/facebookapp",
+      "status": "NETWORK_ERROR",
+      "availability": "network_error",
+      "reasonCode": "FB_CONNECTION_REFUSED",
+      "source": "public_request",
+      "checkedAt": "2026-11-13T07:37:07.366Z",
+      "durationMs": 43
+    },
+    {
+      "canonicalUrl": "https://www.facebook.com/meta",
+      "status": "NETWORK_ERROR",
+      "availability": "network_error",
+      "reasonCode": "FB_CONNECTION_REFUSED",
+      "source": "public_request",
+      "checkedAt": "2026-11-13T07:37:14.407Z",
+      "durationMs": 7040
+    }
+  ]
+}

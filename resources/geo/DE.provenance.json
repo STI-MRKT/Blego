@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=Berlin&countrycodes=de&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:40.856988+00:00",
+  "sha256": "00db762ef657a34e386c793d0c350ec98d8da59f1501ee85a81b2c50b0357fd9",
+  "selectedRelation": 62422,
+  "boundaryType": "city"
+}

@@ -24,7 +24,7 @@ test('unique_contacts_survive_restart: 10000 artificial-capacity requests', asyn
     }
     const p = await generateProfile(
       { country: 'US', type: 'tech', requestId: `test-${i}` },
-      { store, settings: relaxed }
+      { store, settings: { ...relaxed, allowRepeats: [...relaxed.allowRepeats, 'name'] } }
     );
     ids.add(p.id);
     phones.add(p.fields.phone);
@@ -84,7 +84,7 @@ test('every country/type actually issues mandatory contacts', async (t) => {
         { store, settings: relaxed }
       );
       assert.ok(p.fields.phone.startsWith('+'));
-      assert.match(p.fields.email, /@example\.(com|net|org)$/);
+      assert.match(p.fields.email, /@dayrep\.com$/);
       assert.equal(p.type, type);
     }
 });

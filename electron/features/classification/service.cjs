@@ -1,6 +1,7 @@
 const { Worker } = require('node:worker_threads');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
+const { EXTENDED_FIELDS } = require('../../../shared/classifier-recognition.mjs');
 const { CORE_FIELDS, CLASSIFIER_FIELDS } = require('../../../shared/classifier.mjs');
 function createClassificationService({ allowTestRules = false, clock = () => new Date() } = {}) {
   const operations = new Map(),
@@ -63,7 +64,9 @@ function createClassificationService({ allowTestRules = false, clock = () => new
   function adopt(parsed, classified, options, operationId = randomUUID()) {
     const unresolved = classified.records.filter(
       (r) =>
-        r.unrecognized.length || !Object.entries(r.data).some(([k, v]) => k !== 'rowNumber' && v)
+        r.unrecognized.length ||
+        r.warnings?.length ||
+        !Object.entries(r.data).some(([k, v]) => k !== 'rowNumber' && v)
     );
     const old = operations.get(operationId);
     const o = {
@@ -110,7 +113,8 @@ function createClassificationService({ allowTestRules = false, clock = () => new
           encoding: options.encoding,
           headers: options.headers,
           schema: options.schema,
-          mapping: options.mapping
+          mapping: options.mapping,
+          recordMapping: options.recordMapping
         }
       },
       resourceLimits: { maxOldGenerationSizeMb: 512 }
@@ -179,6 +183,8 @@ function createClassificationService({ allowTestRules = false, clock = () => new
       throw Error('INVALID_SORT');
     if (options.query != null && (typeof options.query !== 'string' || options.query.length > 200))
       throw Error('INVALID_FILTER');
+    if (options.warningsOnly != null && typeof options.warningsOnly !== 'boolean')
+      throw Error('INVALID_FILTER');
     const query = (options.query || '').toLowerCase();
     const records = o.rulesVersion === 'synthetic-records-1' ? o.records : o.parsed.records;
     let result = query
@@ -190,6 +196,8 @@ function createClassificationService({ allowTestRules = false, clock = () => new
           )
         )
       : records;
+    if (options.warningsOnly)
+      result = result.filter((r) => r.warnings?.length || r.unrecognized?.length);
     if (options.sort)
       result = [...result].sort((a, b) => {
         const aa = a.data[options.sort],
@@ -223,10 +231,20 @@ function createClassificationService({ allowTestRules = false, clock = () => new
     };
   }
   function cell(id, recordId, key) {
-    if (!CLASSIFIER_FIELDS.some((f) => f.key === key)) throw Error('INVALID_FIELD');
+    if (typeof key !== 'string') throw Error('INVALID_FIELD');
     const r = get(id).records.find((r) => r.recordId === recordId);
     if (!r) throw Error('UNKNOWN_RECORD');
-    return r.data[key];
+    if (CLASSIFIER_FIELDS.some((f) => f.key === key)) return r.data[key];
+    if (EXTENDED_FIELDS.includes(key)) return r.extended[key];
+    if (key === 'sourceRecord') return r.sourceRecord;
+    if (key.startsWith('source:')) {
+      const entry = r.sourceEntries.find((e) => e.column === key.slice(7));
+      if (entry)
+        return typeof entry.value === 'object'
+          ? (entry.rawText ?? JSON.stringify(entry.value))
+          : String(entry.value ?? '');
+    }
+    throw Error('INVALID_FIELD');
   }
   function cancel(id) {
     const job = jobs.get(id);

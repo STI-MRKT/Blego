@@ -3,7 +3,7 @@ const {
   emptyWorkspace,
   validateWorkspace,
   validateWorkspaceOperations,
-  resolveFileOperations,
+  createWorkspaceResolver,
   validName
 } = require('../../../shared/image-workspace.mjs');
 function createGroupStore({ store } = {}) {
@@ -14,12 +14,14 @@ function createGroupStore({ store } = {}) {
   workspace.overrides = {};
   workspace.selection = [];
   workspace.destinationByGroup = {};
+  let resolver = null;
   const snapshot = () => structuredClone(workspace);
   const mutate = (fn) => {
     const next = snapshot();
     fn(next);
     next.revision++;
     workspace = validateWorkspace(next);
+    resolver = null;
     return snapshot();
   };
   const group = (w, id) => {
@@ -97,6 +99,29 @@ function createGroupStore({ store } = {}) {
         w.overrides[fileId] = validateWorkspaceOperations(overrides, { allowInherit: true });
       });
     },
+    setGeneratedGPS({ updates }) {
+      return mutate((w) => {
+        if (
+          !Array.isArray(updates) ||
+          new Set(updates.map((u) => u.fileId)).size !== updates.length
+        )
+          throw Error('INVALID_FILE_TOKEN');
+        for (const { fileId, operation } of updates) {
+          if (
+            !Object.hasOwn(w.membership, fileId) ||
+            operation.field !== 'gps' ||
+            operation.action !== 'set' ||
+            operation.origin?.kind !== 'geo'
+          )
+            throw Error('INVALID_FILE_TOKEN');
+          const clean = validateWorkspaceOperations([operation]);
+          w.overrides[fileId] = [
+            ...(w.overrides[fileId] || []).filter((o) => o.field !== 'gps'),
+            ...clean
+          ];
+        }
+      });
+    },
     select({ fileIds }) {
       return mutate((w) => {
         w.selection = fileIds;
@@ -108,7 +133,8 @@ function createGroupStore({ store } = {}) {
       });
     },
     effective(fileId) {
-      return resolveFileOperations(workspace, fileId);
+      resolver ||= createWorkspaceResolver(workspace);
+      return resolver(fileId);
     },
     save() {
       const saved = {

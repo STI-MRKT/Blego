@@ -1,16 +1,20 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const sharp = require('sharp');
-async function imageFixture(root, format = 'jpeg', { metadata = true, name } = {}) {
+async function imageFixture(
+  root,
+  format = 'jpeg',
+  { metadata = true, name, width = 12, height = 8 } = {}
+) {
   const file = path.join(root, name || `synthetic.${format === 'jpeg' ? 'jpg' : format}`);
-  const pixels = Buffer.alloc(12 * 8 * 4);
+  const pixels = Buffer.alloc(width * height * 4);
   for (let i = 0; i < pixels.length; i += 4) {
     pixels[i] = (i * 7) % 255;
     pixels[i + 1] = (i * 11) % 255;
     pixels[i + 2] = 120;
     pixels[i + 3] = format === 'jpeg' ? 255 : i % 3 ? 180 : 255;
   }
-  await sharp(pixels, { raw: { width: 12, height: 8, channels: 4 } })
+  await sharp(pixels, { raw: { width, height, channels: 4 } })
     .withMetadata({ orientation: 6 })
     .toFormat(format)
     .toFile(file);

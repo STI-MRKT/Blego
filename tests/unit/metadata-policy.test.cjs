@@ -43,3 +43,26 @@ test('Keep preserves multi-value or unknown camera metadata, which is not a writ
   assert.deepEqual(viewTags(raw).find((t) => t.field === 'iso').value, [100, 200]);
   assert.equal(viewTags(raw).find((t) => t.field === 'iso').referenceSupported, false);
 });
+test('GPS altitude Keep works even when the original has no latitude/longitude', () => {
+  const { expectedGPS } = require('../../electron/features/images/gps-policy.cjs');
+  const { validateOperations } = require('../../shared/metadata-operations.mjs');
+  const op = {
+    field: 'gps',
+    action: 'set',
+    value: { latitude: 0, longitude: -1, altitude: null, altitudeMode: 'keep' }
+  };
+  assert.equal(
+    expectedGPS(op, { 'GPS:GPSAltitude': '15', 'GPS:GPSAltitudeRef': '1' }).altitude,
+    -15
+  );
+  for (const mode of ['keep', 'remove'])
+    assert.throws(
+      () =>
+        validateOperations([{ ...op, value: { ...op.value, altitude: 2, altitudeMode: mode } }]),
+      /METADATA_INVALID_GPS/
+    );
+  assert.throws(
+    () => validateOperations([{ ...op, value: { ...op.value, altitudeMode: 'set' } }]),
+    /METADATA_INVALID_GPS/
+  );
+});

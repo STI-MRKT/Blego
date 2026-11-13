@@ -3,7 +3,7 @@ import { t } from '../i18n.js';
 import { toast } from './toast.js';
 import { checkCopyText } from '../../../shared/copy-format.mjs';
 
-export async function copyText(text, button) {
+export async function copyText(text, button, successMessage) {
   try {
     text = text == null ? '' : String(text);
     checkCopyText(text);
@@ -40,7 +40,7 @@ export async function copyText(text, button) {
         button.innerHTML = previous;
       }, 1300);
     }
-    toast(t('Скопировано', 'Copied'));
+    toast(successMessage || t('Скопировано', 'Copied'));
     return { ok: true };
   } catch (error) {
     toast(

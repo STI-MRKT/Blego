@@ -1,5 +1,6 @@
 const { normalizeTarget } = require('./normalize.cjs');
-const PARSER_VERSION = 'public-evidence-v1';
+const { STATUSES } = require('./diagnostics.cjs');
+const PARSER_VERSION = 'public-evidence-v2';
 function attributes(tag) {
   return Object.fromEntries(
     [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
@@ -16,6 +17,7 @@ function sameTarget(raw, target) {
   }
 }
 function inspectResponse(target, { status, body = '', url = target.canonicalUrl }) {
+  let facts = null;
   let availability = 'unknown',
     reasonCode = 'INSUFFICIENT_EVIDENCE';
   if (status === 429 || /temporarily blocked|too many requests/i.test(body)) {
@@ -54,12 +56,16 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       try {
         const data = JSON.parse(match[2]);
         const list = Array.isArray(data) ? data : [data];
-        person ||= list.some(
+        const personMatch = list.find(
           (item) =>
             item?.['@type'] === 'Person' &&
             sameTarget(item.url, target) &&
-            (target.kind !== 'id' || String(item.identifier) === target.target)
+            (!/^\d+$/.test(target.target) || String(item.identifier) === target.target)
         );
+        if (personMatch) {
+          person = true;
+          facts = personMatch;
+        }
       } catch {
         /* Unknown structured data is not evidence. */
       }
@@ -69,7 +75,37 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       reasonCode = 'MATCHED_CANONICAL_AND_PERSON';
     }
   }
+  const visible = availability === 'profile_visible';
+  const profileName =
+    visible &&
+    typeof facts?.name === 'string' &&
+    facts.name.length <= 300 &&
+    !/[\u0000-\u001f]/.test(facts.name)
+      ? facts.name
+      : null;
+  const candidate = typeof facts?.image === 'string' ? facts.image : facts?.image?.url;
+  let avatarUrl = null;
+  if (visible && typeof candidate === 'string' && candidate.length <= 2048) {
+    try {
+      const u = new URL(candidate);
+      if (
+        u.protocol === 'https:' &&
+        !u.username &&
+        !u.password &&
+        !u.port &&
+        (u.hostname === 'fbcdn.net' || u.hostname.endsWith('.fbcdn.net'))
+      )
+        avatarUrl = u.href;
+    } catch {
+      /* Unknown image references remain empty. */
+    }
+  }
   return {
+    status: STATUSES[availability],
+    source: 'public_page',
+    profileName,
+    avatarUrl,
+    objectType: visible ? 'Person' : null,
     target: target.target,
     canonicalUrl: target.canonicalUrl,
     availability,

@@ -128,7 +128,8 @@ for (const baseline of ['211d2a2', 'aeb8c237780088d33a1ac8c2f05549144088d192'])
       );
       assert.notEqual(next.fields.phone, card.fields.phone);
       assert.notEqual(next.fields.email, card.fields.email);
-      assert.equal(next.nameGender, 'female');
+      assert.equal(next.nameGender, null);
+      assert.equal(next.namingStrategy, 'brand_name');
     } finally {
       store.close();
     }

@@ -1,0 +1,60 @@
+{
+  "at": "2026-11-13T07:24:54.933Z",
+  "os": "linux",
+  "arch": "x64",
+  "fixture": "Synthetic 12×8 batches plus 4000×3000 RGBA/oriented JPEG/PNG/WebP; not worst-case 40 MP stress",
+  "batches": [
+    {
+      "count": 1,
+      "completed": 1,
+      "readMs": 134,
+      "exportMs": 372,
+      "totalMs": 675,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": "unique per file inside OSM Paris boundary",
+      "dimensions": "12×8"
+    },
+    {
+      "count": 10,
+      "completed": 10,
+      "readMs": 1257,
+      "exportMs": 2021,
+      "totalMs": 4611,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": "unique per file inside OSM Paris boundary",
+      "dimensions": "12×8"
+    },
+    {
+      "count": 100,
+      "completed": 100,
+      "readMs": 12611,
+      "exportMs": 26299,
+      "totalMs": 51905,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": "unique per file inside OSM Paris boundary",
+      "dimensions": "12×8"
+    },
+    {
+      "count": 3,
+      "completed": 3,
+      "readMs": 2136,
+      "exportMs": 2322,
+      "totalMs": 7833,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": "unique per file inside OSM Paris boundary",
+      "dimensions": "4000×3000"
+    }
+  ]
+}

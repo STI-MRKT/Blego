@@ -3,6 +3,7 @@ const path = require('node:path');
 const { randomUUID, createHash } = require('node:crypto');
 const { isDeepStrictEqual } = require('node:util');
 const { readBounded } = require('./files.cjs');
+const { exportDirectory } = require('./folders.cjs');
 const { inspectStructure, decodeHash } = require('./structure.cjs');
 const { verifyTags } = require('./write-policy.cjs');
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -21,15 +22,18 @@ async function exportCopy({
   hooks = {}
 }) {
   const base = { fileId: item.fileId, name: item.name };
-  let dir;
+  let dir, dirIdentity;
   const progress = (status) => onProgress?.({ ...base, status });
   try {
     abort(signal);
     const original = await readBounded(item.path);
     if (digest(original) !== planned.sourceHash) throw Error('SOURCE_CHANGED');
     if (!operations.some((op) => op.action !== 'keep')) return { ...base, status: 'no_changes' };
+    const relativeDirectory = item.sourceFolder ? path.posix.dirname(item.relativePath) : '';
+    const targetDirectory = await exportDirectory(destination, relativeDirectory);
     progress('writing');
     dir = await fs.promises.mkdtemp(path.join(destination, '.blego-meta-'));
+    dirIdentity = await fs.promises.lstat(dir);
     const marker = randomUUID();
     await fs.promises.writeFile(path.join(dir, 'owner.json'), JSON.stringify({ marker }), {
       flag: 'wx',
@@ -76,7 +80,8 @@ async function exportCopy({
       try {
         await hooks.beforePublish?.();
         abort(signal);
-        await fs.promises.link(temporary, path.join(destination, outputName));
+        await targetDirectory.verify();
+        await fs.promises.link(temporary, path.join(targetDirectory.path, outputName));
         break;
       } catch (error) {
         if (error.code !== 'EEXIST' || attempt === 4) throw error;
@@ -84,7 +89,8 @@ async function exportCopy({
     }
     // link is exclusive: an existing destination can never be replaced. Verified copies survive cancellation.
     if (process.platform !== 'win32') {
-      const d = await fs.promises.open(destination, 'r');
+      await targetDirectory.verify();
+      const d = await fs.promises.open(targetDirectory.path, 'r');
       try {
         await d.sync();
       } finally {
@@ -94,7 +100,8 @@ async function exportCopy({
     return {
       ...base,
       status: 'completed',
-      outputName,
+      outputName: relativeDirectory ? `${relativeDirectory}/${outputName}` : outputName,
+      relativeSourcePath: item.relativePath,
       outputHash: digest(output),
       sourceHash: planned.sourceHash,
       warnings: [
@@ -116,7 +123,18 @@ async function exportCopy({
     };
   } finally {
     if (dir) {
-      await fs.promises.rm(dir, { recursive: true, force: true }).catch(() => {});
+      try {
+        const current = await fs.promises.lstat(dir);
+        if (
+          current.isDirectory() &&
+          !current.isSymbolicLink() &&
+          current.dev === dirIdentity?.dev &&
+          current.ino === dirIdentity?.ino
+        )
+          await fs.promises.rm(dir, { recursive: true, force: true });
+      } catch {
+        /* Retain recovery marker unless our directory is absent. */
+      }
       if (store) {
         const pending = store.get('metadata:pending') || {};
         if (!fs.existsSync(dir)) {

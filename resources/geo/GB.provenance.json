@@ -1,0 +1,7 @@
+{
+  "url": "https://nominatim.openstreetmap.org/search?city=City+of+London&countrycodes=gb&format=jsonv2&polygon_geojson=1&addressdetails=1&limit=3",
+  "retrievedAt": "2026-11-13T07:06:46.315230+00:00",
+  "sha256": "89bdd688e357410c9b1da52f1cba0bc6ff8f45652804915d2c3bf9e7a5a5cbe6",
+  "selectedRelation": 51800,
+  "boundaryType": "city"
+}

@@ -147,3 +147,25 @@
 .classifier-page>.head-actions .input{width:auto;max-width:260px}
 .classifier-page .card{margin-top:12px}
 .classifier-table .copy{display:inline-flex;margin-left:6px;vertical-align:middle}
+
+/* Name/BIO copy stays adjacent without changing original card typography. */
+.ux-generator .ux-profile-copy {display:flex;align-items:flex-start;gap:6px;min-width:0;width:100%}
+.ux-generator .ux-profile-copy>.name,.ux-generator .ux-profile-copy>.bio {min-width:0;flex:1;overflow-wrap:anywhere;margin:0}
+.ux-generator .ux-profile-copy>.copy {position:static;flex:0 0 auto}
+
+/* Relative folder names must not widen the original photo cards. */
+.photo-source {min-width:0;overflow-wrap:anywhere;max-height:3em;overflow:hidden}
+
+/* Local map shares existing card, palette and controls; no app-wide scaling. */
+.photo-map {padding:16px;margin-bottom:16px;min-width:0}
+.photo-map .head-actions {display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.photo-map h3 {margin:0 auto 0 0}
+.photo-map [aria-pressed="true"] {border-color:var(--accent);background:var(--accent-soft)}
+#photo-map-canvas {display:block;width:100%;height:320px;border:1px solid var(--border);border-radius:10px;touch-action:none;cursor:grab}
+#photo-map-canvas:focus {outline:2px solid var(--accent);outline-offset:2px}
+#photo-map-inspector {display:flex;gap:12px;align-items:center;overflow-wrap:anywhere}
+#photo-map-inspector img {width:80px;height:80px;object-fit:contain;border-radius:8px}
+.ph.map-selected {outline:2px solid var(--accent)}
+@media(max-width:600px){.photo-map{padding:10px}#photo-map-canvas{height:240px}}
+/* Short primary-setting explanations remain secondary to the original controls. */
+.ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}

@@ -29,12 +29,16 @@ test(
     await installFacebookFixture(app);
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.getByRole('button', { name: 'Check', exact: true }).click();
-    await page.getByText('Login required', { exact: true }).first().waitFor();
+    await page
+      .locator('.checker-row')
+      .getByText('Требуется авторизация', { exact: true })
+      .first()
+      .waitFor();
     assert.equal((await app.evaluate(() => globalThis.fbCalls)).length, 1);
     for (const [label, value] of [
       ['Copy Facebook ID', '001234567890123456789'],
       ['Copy Facebook link', 'https://www.facebook.com/profile.php?id=001234567890123456789'],
-      ['Copy check result', 'Login required']
+      ['Copy check result', 'Требуется авторизация']
     ]) {
       await page.getByRole('button', { name: label, exact: true }).first().click();
       for (let i = 0; i < 50; i++) {
@@ -53,7 +57,13 @@ test(
       return !state.checker.checking && state.checker.rows?.length === 100;
     });
     assert.equal(await page.locator('.checker-row').count(), 100);
-    assert.equal(await page.getByText('Login required', { exact: true }).count(), 100);
+    assert.equal(
+      await page
+        .locator('.checker-row')
+        .getByText('Требуется авторизация', { exact: true })
+        .count(),
+      100
+    );
     await installFacebookFixture(app, 1000);
     await page.locator('#checker-input').fill('https://m.facebook.com/alice\n123456789');
     await page.getByRole('button', { name: 'Check', exact: true }).click();
@@ -66,10 +76,16 @@ test(
       calls[0].targets.map((t) => t.canonicalUrl),
       ['https://www.facebook.com/alice', 'https://www.facebook.com/profile.php?id=123456789']
     );
-    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+    await page.getByRole('button', { name: 'Отменить', exact: true }).click();
     await page.waitForTimeout(1200);
-    assert.equal(await page.getByText('Login required', { exact: true }).count(), 0);
-    assert.ok((await page.locator('#view').textContent()).includes('Cancelled'));
+    assert.equal(
+      await page
+        .locator('.checker-row')
+        .getByText('Требуется авторизация', { exact: true })
+        .count(),
+      0
+    );
+    assert.ok((await page.locator('#view').textContent()).includes('Отменено'));
     assert.ok(!/BANNED|NOT_BANNED/.test(await page.locator('#view').textContent()));
   }
 );

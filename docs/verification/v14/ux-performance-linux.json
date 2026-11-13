@@ -1,0 +1,96 @@
+{
+  "at": "2026-11-13T09:17:03.588Z",
+  "os": "linux",
+  "arch": "x64",
+  "release": "6.18.57",
+  "method": "Three isolated launches per version; baseline13 and candidate additionally import identical 1000-row synthetic CSV;  visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.",
+  "versions": [
+    {
+      "label": "original",
+      "samples": [
+        {
+          "import1000Ms": null,
+          "launchMs": 530,
+          "generationMs": 976,
+          "frameMedianMs": 50,
+          "frameP95Ms": 50.100000000000364,
+          "frameMaxMs": 83.40000000000009
+        },
+        {
+          "import1000Ms": null,
+          "launchMs": 337,
+          "generationMs": 874,
+          "frameMedianMs": 50,
+          "frameP95Ms": 50.100000000000364,
+          "frameMaxMs": 83.30000000000018
+        },
+        {
+          "import1000Ms": null,
+          "launchMs": 308,
+          "generationMs": 891,
+          "frameMedianMs": 50,
+          "frameP95Ms": 50.100000000000364,
+          "frameMaxMs": 83.40000000000009
+        }
+      ]
+    },
+    {
+      "label": "baseline13",
+      "samples": [
+        {
+          "import1000Ms": 167,
+          "launchMs": 452,
+          "generationMs": 131,
+          "frameMedianMs": 50,
+          "frameP95Ms": 66.59999999999991,
+          "frameMaxMs": 83.40000000000055
+        },
+        {
+          "import1000Ms": 234,
+          "launchMs": 568,
+          "generationMs": 154,
+          "frameMedianMs": 50,
+          "frameP95Ms": 66.70000000000005,
+          "frameMaxMs": 66.70000000000073
+        },
+        {
+          "import1000Ms": 242,
+          "launchMs": 813,
+          "generationMs": 361,
+          "frameMedianMs": 50,
+          "frameP95Ms": 50.100000000000364,
+          "frameMaxMs": 83.40000000000009
+        }
+      ]
+    },
+    {
+      "label": "candidate",
+      "samples": [
+        {
+          "import1000Ms": 221,
+          "launchMs": 433,
+          "generationMs": 163,
+          "frameMedianMs": 50,
+          "frameP95Ms": 50.100000000000364,
+          "frameMaxMs": 166.60000000000036
+        },
+        {
+          "import1000Ms": 219,
+          "launchMs": 611,
+          "generationMs": 154,
+          "frameMedianMs": 49.90000000000009,
+          "frameP95Ms": 50.09999999999991,
+          "frameMaxMs": 66.69999999999982
+        },
+        {
+          "import1000Ms": 227,
+          "launchMs": 401,
+          "generationMs": 165,
+          "frameMedianMs": 50,
+          "frameP95Ms": 66.70000000000027,
+          "frameMaxMs": 133.29999999999973
+        }
+      ]
+    }
+  ]
+}

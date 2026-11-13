@@ -92,13 +92,43 @@ const { imageFixture } = require('../tests/fixtures/images.cjs');
       batch.reduce((a, f) => a + f.size, 0),
       512 * 1024 * 1024
     );
+    assert.equal((await service.addFiles([small])).length, 1);
+    checks.push('512MiB remains accepted below the expanded queue budget PASS');
+    service.clear();
+    const { IMAGE_LIMITS } = await import('../shared/metadata-contracts.mjs');
+    // Sparse files exercise real stat/inode byte accounting without allocating or claiming
+    // to decode a 10GiB image corpus. Actual 512MiB decode/export remains below.
+    const budgetPaths = [];
+    let remaining = IMAGE_LIMITS.totalBytes;
+    while (remaining > 0) {
+      const file = path.join(root, `budget-${budgetPaths.length}.png`);
+      const size = Math.min(IMAGE_LIMITS.fileBytes, remaining);
+      const fd = fs.openSync(file, 'wx');
+      try {
+        fs.writeSync(fd, bytes);
+        fs.ftruncateSync(fd, size);
+      } finally {
+        fs.closeSync(fd);
+      }
+      budgetPaths.push(file);
+      remaining -= size;
+    }
+    const budget = await service.addFiles(budgetPaths);
+    assert.equal(
+      budget.reduce((sum, f) => sum + f.size, 0),
+      IMAGE_LIMITS.totalBytes
+    );
     await assert.rejects(service.addFiles([small]), /IMAGE_QUEUE_LIMIT/);
-    checks.push('512MiB registered exactly; over-limit rejected PASS (not whole-batch decode)');
+    checks.push(
+      `${IMAGE_LIMITS.totalBytes} byte queue registered exactly; additional file rejected PASS (sparse size accounting only)`
+    );
     service.clear();
     const ref = await service.addReference(small);
     assert.ok(ref.referenceId);
-    await assert.rejects(service.addFiles(paths), /IMAGE_QUEUE_LIMIT/);
+    await assert.rejects(service.addFiles(budgetPaths), /IMAGE_QUEUE_LIMIT/);
     checks.push('reference consumes shared byte limit PASS');
+    service.clear();
+    for (const file of budgetPaths) fs.unlinkSync(file);
     // A separate exact-total batch leaves per-file headroom for newly written metadata.
     for (const file of paths.slice(0, 10)) padded(file, 49 * 1024 * 1024);
     padded(tail, 22 * 1024 * 1024);
@@ -173,7 +203,7 @@ const { imageFixture } = require('../tests/fixtures/images.cjs');
           peakParentAndDirectChildRssMiB: Math.ceil(peak / 1048576),
           maxNodeEventLoopGapMs: Math.round(maxGap),
           limitations:
-            '512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination.'
+            '10GiB uses sparse files for stat-based queue accounting only, not decoding. 512MiB and 50MiB use valid tiny PNGs with ancillary padding; geometry stress is the separate 40MP case. GUI responsiveness measured separately; these are not every camera/ICC/entropy combination.'
         },
         null,
         2

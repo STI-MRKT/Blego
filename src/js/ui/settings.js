@@ -3,17 +3,17 @@ import { esc } from '../utils/dom.js';
 import { LOCALES } from '../data/locales.js';
 export function settingsHTML() {
   const s = state.settings;
-  return `<div class="page"><div class="page-head"><div><div class="eyebrow">Local preferences</div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
+  return `<div class="page"><div class="page-head"><div><div class="eyebrow">Локальные настройки</div><h1>Настройки</h1><p class="sub">Основное всегда под рукой. Сложные параметры собраны в дополнительном разделе.</p></div></div>
 <form id="settings-form" class="card pad ux-settings"><div class="ux-settings-basics">
-<label class="fl">Default country<select class="input" name="country">${Object.keys(LOCALES)
+<label class="fl">Страна по умолчанию<select class="input" name="country">${Object.keys(LOCALES)
     .map((k) => `<option ${s.country === k ? 'selected' : ''}>${k}</option>`)
-    .join('')}</select></label>
-<label class="fl">Default type<select class="input" name="type">${['model', 'tech', 'crypto'].map((k) => `<option ${s.type === k ? 'selected' : ''}>${k}</option>`).join('')}</select></label>
-<label class="fl">Symbols / marks<input class="input" name="symbols" value="${esc(s.symbols || '')}"></label>
-<div class="ux-settings-toggle-panel"><h3>Доступ к инструментам</h3><p class="sub">Внешние запросы выполняются только после выбранного вами действия. Новостные источники задаются ниже.</p>
-<label class="fl"><input type="checkbox" name="proxyEnabled" ${s.proxyEnabled ? 'checked' : ''}> Enable manual network / proxy checks</label>
-<label class="fl"><input type="checkbox" name="facebookEnabled" ${s.facebookEnabled ? 'checked' : ''}> Enable manual public Facebook profile diagnostics (does not determine account bans)</label>
-<label class="fl"><input type="checkbox" name="newsEnabled" ${s.newsEnabled ? 'checked' : ''}> Enable selected news sources</label>
+    .join('')}</select><span class="sub" data-setting-help>Страна для новых профилей; сохранённые данные не меняются.</span></label>
+<label class="fl">Тип профиля по умолчанию<select class="input" name="type">${['model', 'tech', 'crypto'].map((k) => `<option ${s.type === k ? 'selected' : ''}>${k}</option>`).join('')}</select><span class="sub" data-setting-help>Тематика новых профилей: model, tech или crypto.</span></label>
+<label class="fl">Символы и отметки<input class="input" name="symbols" value="${esc(s.symbols || '')}"><span class="sub" data-setting-help>Ваши отметки для новых профилей. Можно оставить пустым.</span></label>
+<div class="ux-settings-toggle-panel"><h3>Доступ к инструментам</h3><p class="sub">Разрешения независимы. Отключение сетевых функций не мешает локальной работе.</p>
+<label class="fl"><input type="checkbox" name="proxyEnabled" ${s.proxyEnabled ? 'checked' : ''}> Разрешить проверку сети и прокси<span class="sub" data-setting-help>Подключение проверяется по вашей команде; скорость измеряется отдельной кнопкой.</span></label>
+<label class="fl"><input type="checkbox" name="facebookEnabled" ${s.facebookEnabled ? 'checked' : ''}> Разрешить проверку публичных Facebook-профилей<span class="sub" data-setting-help>Проверяет доступность страницы по вашему запросу, без вывода о блокировке аккаунта.</span></label>
+<label class="fl"><input type="checkbox" name="newsEnabled" ${s.newsEnabled ? 'checked' : ''}> Разрешить загрузку новостей<span class="sub" data-setting-help>Новости выбранной темы из встроенного каталога при открытии ленты или обновлении.</span></label>
 </div></div>
 <details class="ux-details ux-settings-advanced"><summary>Дополнительные настройки, словари, форматы и архив</summary>
 <label class="fl">Field order (comma separated)<input class="input" name="fieldOrder" value="${esc((s.fieldOrder || []).join(','))}"></label>

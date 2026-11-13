@@ -1,5 +1,6 @@
 import { resolveFileOperations } from '../../../shared/image-workspace.mjs';
 import { state } from '../state.js';
+import { nationalPhoneForCopy } from './phone.mjs';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
 import { copyText } from './clipboard.js';
@@ -266,9 +267,10 @@ export async function copyModelValue(
   rowId,
   key,
   button,
-  { card = false, personal = false } = {}
+  { card = false, personal = false, nationalPhone = false } = {}
 ) {
   const generation = loading;
+  const profileCountry = id === 'generator' ? state.demo?.country : null;
   const model = await resolveCopySource(id),
     row = model.rows.find((r) => r.id === String(rowId)) || (!rowId ? model.rows[0] : null);
   if (!row) throw Error('COPY_SELECTION_CHANGED');
@@ -288,7 +290,9 @@ export async function copyModelValue(
     { resolveSource: async () => model, revealedFields: personal ? [key] : [] }
   );
   if(id.startsWith('import') && generation !== loading) throw Error('COPY_SELECTION_CHANGED');
-  return copyText(result.text, button);
+  if(nationalPhone && !card && id === 'generator' && key === 'phone')
+    return copyText(nationalPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');
+  return copyText(result.text, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
 }
 document.addEventListener('change', async (event) => {
   try {

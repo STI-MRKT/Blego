@@ -75,6 +75,7 @@ test(
     await page.locator('[name="action-captureDate"]').selectOption('set');
     await page.locator('[name="date-local"]').fill('2024-02-29T12:34:56');
     await page.locator('[name="action-gps"]').selectOption('set');
+    await page.locator('#gps-manual summary').click();
     await page.locator('[name="gps-latitude"]').fill('0');
     await page.locator('[name="gps-longitude"]').fill('0');
     await page.getByRole('button', { name: 'Preview changes', exact: true }).click();

@@ -1,5 +1,6 @@
 const { randomUUID, randomInt } = require('node:crypto');
 const { resolvePreset, transliterate } = require('./sources.cjs');
+const { selectName, ensureNameRegistry, usedNames } = require('./naming.cjs');
 const { registry } = require('./registry.cjs');
 const { getSettings } = require('../../local/settings.cjs');
 const { loadDataset } = require('./catalog.cjs');
@@ -26,6 +27,7 @@ async function generateProfile(
     settings,
     loadDataset(store, request.country)
   );
+  await ensureNameRegistry(store);
   return store.transaction(() => {
     const old = store.db
       .prepare('SELECT profile FROM requests WHERE request_id=?')
@@ -45,11 +47,17 @@ async function generateProfile(
       return pick(choices);
     };
     if (p.pool) {
-      const row = p.pool.find((row) =>
-        ['phone', 'email', 'handle'].every((f) => !r.used(f, row[f]))
+      const row = p.pool.find(
+        (row) =>
+          ['phone', 'email', 'handle'].every((f) => !r.used(f, row[f])) &&
+          (p.allowRepeats.includes('name') || !r.used('name', row.name))
       );
       if (!row) exhausted('pool', p);
-      if (typeof row.name !== 'string' || !p.first.some((name) => row.name.startsWith(name + ' ')))
+      if (typeof row.name !== 'string' || !row.name.trim()) throw Error('INVALID_POOL_NAME');
+      if (
+        p.namingStrategy === 'person_name' &&
+        !p.first.some((name) => row.name.startsWith(name + ' '))
+      )
         throw Error('POOL_NAME_NOT_FEMALE');
       Object.assign(values, row);
       if (
@@ -58,15 +66,20 @@ async function generateProfile(
       )
         throw Error('INVALID_POOL_CONTACT');
     } else {
-      const first = pick(p.first),
-        last = pick(p.last);
-      values.name = `${first} ${last}`;
-      const a = transliterate(first).slice(0, 12) || 'profile',
-        b = transliterate(last).slice(0, 12) || 'name';
+      values.name = selectName(p, usedNames(store));
+      if (!values.name) exhausted('name', p);
+      const base =
+        transliterate(values.name).replaceAll('-', '.').slice(0, 47).replace(/\.+$/u, '') ||
+        'profile';
       const suffix = id.replaceAll('-', '');
-      values.handle = `${p.type}.${a}.${suffix}`;
-      const emailParts = [`${a}.${b}`, `${b}.${a}`, `${a[0]}-${b}`];
-      values.email = `${pick(emailParts)}.${suffix}@${pick(['example.com', 'example.net', 'example.org'])}`;
+      values.handle = `${p.type}.${base.slice(0, 20)}.${suffix}`;
+      let emailCounter = store.get(`email-sequence:dayrep:${base}`) || 0;
+      values.email = `${base}${emailCounter ? '.' + emailCounter : ''}@dayrep.com`;
+      while (r.used('email', values.email)) {
+        if (++emailCounter > Number.MAX_SAFE_INTEGER - 1) exhausted('email', p);
+        values.email = `${base}.${emailCounter}@dayrep.com`;
+      }
+      store.set(`email-sequence:dayrep:${base}`, emailCounter + 1);
       let counter = store.get(`phone-sequence:${p.phonePrefix}`) || 0;
       // Shared dialing codes share a counter across countries/types. No probabilistic retry loop.
       if (counter >= 10 ** (p.phoneDigits - p.nationalPrefix.length)) exhausted('phone', p);
@@ -108,6 +121,7 @@ async function generateProfile(
     if (has('categories') && !values.categories) values.categories = p.categories;
     if (has('symbols') && values.symbols === undefined) values.symbols = p.symbols;
     for (const f of p.fieldOrder) if (values[f] === undefined) throw Error('INCOMPLETE_PROFILE');
+    if (!r.used('name', values.name)) r.reserve('name', values.name, id);
     r.reserve('id', id, id);
     for (const f of [
       'phone',
@@ -128,6 +142,9 @@ async function generateProfile(
       country: p.country,
       type: p.type,
       nameGender: p.nameGender,
+      namingStrategy: p.namingStrategy,
+      namingDatasetId: p.namingDatasetId,
+      bioDatasetId: p.bioDatasetId,
       datasetId: p.datasetId,
       datasetVersion: p.datasetVersion,
       transliterationVersion: 'latin-v1',

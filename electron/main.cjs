@@ -39,7 +39,7 @@ const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
 const { createFacebookService } = require('./features/facebook/service.cjs');
 const { createImageService } = require('./features/images/service.cjs');
-let store, mainWindow, archives, news, poolCatalog, facebook, images;
+let store, mainWindow, archives, news, poolCatalog, facebook, images, geo, friends;
 let recoveryReports = [];
 let imageExportPromise = null,
   imageExportReport = null;
@@ -49,7 +49,9 @@ async function initialize() {
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
   facebook = createFacebookService({ store });
-  images = createImageService({ store });
+  friends = require('./features/friends/service.cjs').createFriendsService({ store });
+  geo = require('./features/geo/service.cjs').createGeoService({ store });
+  images = createImageService({ store, geo });
   await images.recover();
   archives = createArchiveService({ store, classification });
   news = createNewsService({
@@ -87,12 +89,56 @@ async function initialize() {
       /* absent legacy marker */
     }
   }
+  let lastImageScanProgress = 0;
+  const imageScanProgress = (progress) => {
+    const now = Date.now();
+    if (progress.phase !== 'complete' && now - lastImageScanProgress < 80) return;
+    lastImageScanProgress = now;
+    mainWindow?.webContents.send('local:image-scan', progress);
+  };
   registerIpc(
     ipcMain,
     () => mainWindow,
     () => serverUrl,
     {
       settingsGet: () => getSettings(store),
+      friendsList: () => friends.list(),
+      friendsImport: async () => {
+        const chosen = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'Friends', extensions: ['txt', 'csv', 'json'] }]
+        });
+        if (chosen.canceled) return null;
+        let bytes;
+        try {
+          bytes = await require('./features/images/files.cjs').readBounded(chosen.filePaths[0], {
+            maxBytes: 5 * 1024 * 1024
+          });
+        } catch (error) {
+          if (error.message === 'IMAGE_TOO_LARGE') throw Error('FRIENDS_INPUT_LIMIT');
+          throw error;
+        }
+        return friends.preview({ bytes, name: path.basename(chosen.filePaths[0]) });
+      },
+      friendsConfirm: (token) => friends.confirm(token),
+      friendsCancel: (token) => friends.cancel(token),
+      friendsOpen: (id) => shell.openExternal(friends.openUrl(id)),
+      geoCatalog: (request) => geo.catalog(request),
+      geoBoundary: (request) => geo.boundary(request),
+      imagesMoveGeo: (request) => images.moveGeo(request),
+      imagesGenerateGeo: (request) => images.generateGeo(request),
+      geoCancel: (id) => geo.cancel(id),
+      geoImport: async () => {
+        const chosen = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openFile'],
+          filters: [{ name: 'City boundaries', extensions: ['json'] }]
+        });
+        if (chosen.canceled) return null;
+        const bytes = await require('./features/images/files.cjs').readBounded(chosen.filePaths[0]);
+        return geo.previewImport(bytes);
+      },
+      geoImportConfirm: (token) => geo.confirmImport(token),
+      imagesAddDropped: (paths) => images.addFiles(paths, { onProgress: imageScanProgress }),
       imageWorkspace: () => images.groups.snapshot(),
       imageWorkspaceChange: ({ action, ...request }) => {
         const allowed = [
@@ -140,7 +186,17 @@ async function initialize() {
             { name: 'All files', extensions: ['*'] }
           ]
         });
-        return result.canceled ? [] : images.addFiles(result.filePaths);
+        return result.canceled
+          ? []
+          : images.addFiles(result.filePaths, { onProgress: imageScanProgress });
+      },
+      imagesFolders: async () => {
+        const result = await dialog.showOpenDialog(mainWindow, {
+          properties: ['openDirectory', 'multiSelections']
+        });
+        return result.canceled
+          ? []
+          : images.addFiles(result.filePaths, { onProgress: imageScanProgress });
       },
       imagesDestination: async () => {
         const result = await dialog.showOpenDialog(mainWindow, {
@@ -227,6 +283,12 @@ async function initialize() {
         const result = normalizeFacebookTargets(text);
         return {
           ...result,
+          importedFacts: Object.fromEntries(
+            result.targets.map((target) => [
+              target.canonicalUrl,
+              facebook.importedFacts(target.canonicalUrl)
+            ])
+          ),
           manualNotes: Object.fromEntries(
             result.targets.map((target) => [
               target.canonicalUrl,
@@ -248,6 +310,20 @@ async function initialize() {
       facebookCancel: () => {
         facebook.cancel();
         return true;
+      },
+      facebookLinkImport: ({ operationId, recordId }) => {
+        const id = classification.cell(operationId, recordId, 'accountId');
+        const profile = classification.cell(operationId, recordId, 'profileUrl');
+        const target = normalizeTarget(id || profile);
+        if (id && profile && normalizeTarget(profile).canonicalUrl !== target.canonicalUrl)
+          throw Error('FB_IDENTITY_CONFLICT');
+        const fact = facebook.linkImportedFacts({
+          targetKey: target.canonicalUrl,
+          name: classification.cell(operationId, recordId, 'fullName'),
+          avatarUrl: classification.cell(operationId, recordId, 'avatarUrl'),
+          recordId
+        });
+        return { target: target.canonicalUrl, fact };
       },
       facebookNote: (note) => facebook.saveManualNote(note),
       facebookOpen: (target) => shell.openExternal(normalizeTarget(target).canonicalUrl),
@@ -450,14 +526,16 @@ async function ensureServer() {
 
 async function createWindow() {
   const url = await ensureServer();
-  const area = screen.getPrimaryDisplay().workAreaSize;
-  const width = Math.min(1380, Math.max(860, area.width - 48));
-  const height = Math.min(900, Math.max(520, area.height - 48));
+  const measured = screen.getPrimaryDisplay().workAreaSize;
+  // Headless Electron exposes a 1×1 virtual display; real work areas stay authoritative.
+  const area = measured.width > 1 && measured.height > 1 ? measured : { width: 1280, height: 900 };
+  const width = Math.min(1380, area.width, Math.max(360, area.width - 48));
+  const height = Math.min(900, area.height, Math.max(360, area.height - 48));
   const window = new BrowserWindow({
     width,
     height,
-    minWidth: Math.min(900, width),
-    minHeight: Math.min(560, height),
+    minWidth: Math.min(360, area.width),
+    minHeight: Math.min(360, area.height),
     title: 'BLEGO',
     backgroundColor: '#eceef3',
     show: false,
@@ -526,6 +604,7 @@ if (!hasLock) {
     news?.close();
     facebook?.cancel();
     images?.cancelReads();
+    geo?.close();
     classification.close();
     if (store) store.close();
   });

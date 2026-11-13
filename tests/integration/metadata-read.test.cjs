@@ -1,3 +1,4 @@
+const { IMAGE_LIMITS } = require('../../shared/metadata-contracts.mjs');
 const { distinctCopies } = require('../fixtures/images.cjs');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -128,13 +129,27 @@ test('missing and mixed metadata remain distinct and file/queue/total limits rej
   assert.equal(plan.files[0].beforeAfter[0].before, null);
   assert.equal(plan.files[1].beforeAfter[0].before, 'Исходный заголовок');
   assert.equal(plan.files[0].beforeAfter[0].after, null);
-  await assert.rejects(service.addFiles(distinctCopies(plain, 101)), /IMAGE_QUEUE_LIMIT/);
+  await assert.rejects(
+    service.addFiles(distinctCopies(plain, IMAGE_LIMITS.files + 1)),
+    /IMAGE_QUEUE_LIMIT/
+  );
   const huge = path.join(root, 'huge.jpg');
   fs.writeFileSync(huge, '');
   fs.truncateSync(huge, 50 * 1024 * 1024 + 1);
   await assert.rejects(service.addFiles([huge]), /IMAGE_TOO_LARGE/);
   fs.truncateSync(huge, 50 * 1024 * 1024);
-  await assert.rejects(service.addFiles(distinctCopies(huge, 11)), /IMAGE_QUEUE_LIMIT/);
+  // Sparse files exercise queued-byte accounting without allocating 10 GiB of test data.
+  const oversizedBatch = Array.from(
+    { length: Math.floor(IMAGE_LIMITS.totalBytes / IMAGE_LIMITS.fileBytes) + 1 },
+    (_, i) => {
+      const file = path.join(root, `sparse-${i}.jpg`);
+      const fd = fs.openSync(file, 'wx');
+      fs.ftruncateSync(fd, IMAGE_LIMITS.fileBytes);
+      fs.closeSync(fd);
+      return file;
+    }
+  );
+  await assert.rejects(service.addFiles(oversizedBatch), /IMAGE_QUEUE_LIMIT/);
   const [next] = await service.addFiles(distinctCopies(plain, 1));
   assert.ok(next.fileId);
 });

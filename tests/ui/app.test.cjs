@@ -91,13 +91,22 @@ test(
       assert.equal(actual, expected);
     }
     const extraFields = page.locator('details.ux-extra-fields');
-    if (await extraFields.count()) await extraFields.locator('summary').click();
+    assert.equal(await extraFields.count(), 0);
     for (const field of card.fieldOrder) {
-      await page.locator(`[aria-label="Copy ${field}"]`).click();
+      const direct = page.locator(`[aria-label="Copy ${field}"]`);
+      if (await direct.count()) await direct.click();
+      else {
+        await page.locator('.page-head [data-copy-action="open"]').click();
+        await page.locator('[data-row-field]').selectOption(field);
+        await page.locator('[data-copy-action="field"]').click();
+        await page.locator('[data-copy-action="close"]').click();
+      }
       await checkClipboard(
-        Array.isArray(card.fields[field])
-          ? card.fields[field].join(', ')
-          : String(card.fields[field])
+        field === 'phone'
+          ? card.fields.phone.slice(3)
+          : Array.isArray(card.fields[field])
+            ? card.fields[field].join(', ')
+            : String(card.fields[field])
       );
     }
     await page.getByText('Copy full set', { exact: true }).click();
@@ -191,7 +200,10 @@ test(
       .locator('#checker-input')
       .fill('0012345678901234567890123\nhttps://facebook.com/groups');
     await page.locator('[data-action="checker-run"]').click();
-    await page.getByText('Login required', { exact: true }).waitFor();
+    await page
+      .locator('.checker-row')
+      .getByText('Требуется авторизация', { exact: true })
+      .waitFor();
     await page.locator('#facebook-details > summary').click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[aria-label="Copy Facebook ID"]').first().click();
@@ -199,13 +211,12 @@ test(
     await page.locator('#fb-note-status-0').selectOption('blocked');
     await page.locator('#fb-note-comment-0').fill('Synthetic owner report');
     await page.locator('[data-action="facebook-note"]').click();
-    await page.getByText('1 owner reports', { exact: true }).waitFor();
+    await page.getByText('Сообщений: 1', { exact: true }).waitFor();
     assert.equal(
       await page
-        .getByText(
-          'Account restrictions remain unknown. Owner reports are separate from public checks.',
-          { exact: true }
-        )
+        .getByText('Сообщения владельца хранятся отдельно и не подтверждены публичной проверкой.', {
+          exact: true
+        })
         .count(),
       1
     );

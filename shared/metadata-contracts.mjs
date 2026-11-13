@@ -1,7 +1,8 @@
 export const IMAGE_LIMITS = Object.freeze({
-  files: 100,
+  files: 1000,
   fileBytes: 50 * 1024 * 1024,
-  totalBytes: 512 * 1024 * 1024,
+  totalBytes: 10 * 1024 * 1024 * 1024,
+  retainedMetadataBytes: 64 * 1024 * 1024,
   pixels: 40_000_000,
   parallel: 2,
   engineMs: 60_000,

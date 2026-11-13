@@ -8,7 +8,8 @@ export async function parseIds(text) {
     status: row.reasonCode || 'Valid syntax only',
     link: row.canonicalUrl || '',
     targetKey: row.canonicalUrl,
-    notes: normalized.manualNotes[row.canonicalUrl] || []
+    notes: normalized.manualNotes[row.canonicalUrl] || [],
+    localFacts: normalized.importedFacts?.[row.canonicalUrl] || null
   }));
 }
 export async function checkProfiles(rows, runId, onProgress) {

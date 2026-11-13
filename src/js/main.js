@@ -1,5 +1,6 @@
 import { mountCopyActions, initCopyPreferences, copyModelValue, invalidateImportCopies } from './utils/copy-actions.js';
 import { readSettingsForm } from './ui/settings.js';
+import { mountPhotoMap } from './ui/photo-map.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
 import { toast } from './utils/toast.js';
@@ -11,7 +12,7 @@ import { startTour } from './ui/tour.js';
 let workspaceInteracted = false;
 for (const event of ['pointerdown', 'keydown']) document.addEventListener(event, () => { workspaceInteracted = true; }, { once: true, capture: true });
 import { newsBlockHTML } from './ui/news.js';
-import { readMetadataForm, readMetadataData, draftFromOperations, imageErrorMessage } from './ui/photos.js';
+import { readMetadataForm, readMetadataData, draftFromOperations, rebaseGpsDraft, imageErrorMessage } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
@@ -27,6 +28,23 @@ const shuffle = (list) => {
   }
   return copy;
 };
+
+function setMenuExpanded(expanded) {
+  document.querySelector('.window')?.classList.toggle('menu-expanded', expanded);
+  const toggle = document.querySelector('[data-action="menu-toggle"]');
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Свернуть меню' : 'Раскрыть меню');
+    toggle.title = expanded ? 'Свернуть меню' : 'Раскрыть меню';
+  }
+}
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && document.querySelector('.menu-expanded')) {
+    setMenuExpanded(false);
+    document.querySelector('[data-action="menu-toggle"]')?.focus();
+  }
+});
+matchMedia('(max-width:980px)').addEventListener('change', () => setMenuExpanded(false));
 
 function renderAll() {
   document.documentElement.lang = 'en';
@@ -96,8 +114,16 @@ function stashImageDraft() {
     state.imageDrafts[state.imageDraftKey] = {
       draft: state.metadataDraft,
       origins: state.metadataOrigins,
-      touched: state.metadataTouched || []
+      touched: state.metadataTouched || [],
+      excludedGps: state.metadataGpsExcluded || []
     };
+  }
+}
+function refreshImageGeoDrafts(fileId) {
+  for (const [key, saved] of Object.entries(state.imageDrafts || {})) {
+    if (!key.startsWith('files:')) continue;
+    const ids = key.slice(6).split(',');
+    if (ids.includes(fileId)) state.imageDrafts[key] = rebaseGpsDraft(saved, state.imageWorkspace.overrides[fileId] || [], ids.length > 1, fileId);
   }
 }
 function restoreImageDraft() {
@@ -115,6 +141,7 @@ function restoreImageDraft() {
   state.metadataDraft = loaded.draft;
   state.metadataOrigins = loaded.origins || {};
   state.metadataTouched = loaded.touched || [];
+  state.metadataGpsExcluded = loaded.excludedGps || [];
 }
 let imagePreviewRequest=0;
 function invalidateImagePreview(){imagePreviewRequest++;state.imagePreview=null;state.imagePreviewName='';}
@@ -125,23 +152,24 @@ async function workspaceChange(action, request = {}) {
   state.metadataPlan = null;
   return reply.result;
 }
-async function applyImageForm() {
-  const ops = readMetadataForm(document.getElementById('metadata-form'));
+async function applyImageForm({excludeGPS=false}={}) {
+  let ops = readMetadataForm(document.getElementById('metadata-form'));
+  if(excludeGPS)ops=ops.filter(o=>o.field!=='gps');
   if (state.imageEditTarget === 'group')
     await workspaceChange('setGroupOperations', {
       groupId: state.imageGroupId || 'ungrouped',
-      operations: ops
+      operations: excludeGPS ? [...(state.imageWorkspace.groups.find(g=>g.id===(state.imageGroupId||'ungrouped'))?.operations||[]).filter(o=>o.field==='gps'),...ops] : ops
     });
   else {
     const selected = state.photos.filter((p) => p.selected);
     for (const photo of selected) {
       const updates =
         selected.length > 1
-          ? ops.filter((op) => (state.metadataTouched || []).includes(op.field))
+          ? ops.filter((op) => (state.metadataTouched || []).includes(op.field) && !(op.field === 'gps' && state.metadataGpsExcluded?.includes(photo.fileId)))
           : ops;
       if (!updates.length) continue;
       const overrides =
-        selected.length > 1
+        selected.length > 1 || excludeGPS
           ? [
               ...(state.imageWorkspace.overrides[photo.fileId] || []).filter(
                 (op) => !updates.some((update) => update.field === op.field)
@@ -187,15 +215,27 @@ async function prepareImageExport(retry = {}) {
 function syncQuickMetadata() {
  const form=document.getElementById('metadata-form');if(!form)return;
  for(const field of ['captureDate','gps']){const wrap=form.querySelector(`[data-field-inputs="${field}"]`);if(wrap)wrap.hidden=form.elements.namedItem('action-'+field)?.value!=='set';}
+ const altitude=form.elements.namedItem('gps-altitude');if(altitude)altitude.disabled=form.elements.namedItem('gps-altitude-mode')?.value!=='set';
  const offset=form.querySelector('[data-offset-input]');if(offset)offset.hidden=form.elements.namedItem('date-offset-mode')?.value!=='set';
 }
 function bindView() {
   mountCopyActions();
-  for(const id of ['metadata-advanced','image-groups-advanced','date-options']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
+  mountPhotoMap({onMove:async(fileId,value)=>{
+    if(state.imagesBusy)return;
+    stashImageDraft();state.imagesBusy=true;
+    try {
+      await state.imageInvalidation;
+      const result=await window.blego.moveImageGeo({fileId,value,cityId:state.geoCity,workspaceRevision:state.imageWorkspace.revision,requestId:crypto.randomUUID()});
+      state.imageWorkspace=result.workspace;state.metadataPlan=null;
+      refreshImageGeoDrafts(fileId);
+    } finally {state.imagesBusy=false;restoreImageDraft();renderView();}
+  },onError:error=>toast(imageErrorMessage(error.message),'err')});
+  for(const id of ['metadata-advanced','image-groups-advanced','date-options','gps-manual']){const el=document.getElementById(id);if(el)el.ontoggle=()=>{state.imageDisclosures||={};state.imageDisclosures[id]=el.open;};}
   document.querySelectorAll('[data-image-select]').forEach((input) => {
     input.onchange = () => {
       const photo = state.photos.find((p) => p.fileId === input.dataset.imageSelect);
       photo.selected = input.checked;
+      if(state.photoMap)state.photoMap.selected=photo.fileId;
       state.imageInvalidation = workspaceChange('select', {
         fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId)
       }).catch((e) => toast(e.message, 'err'));
@@ -222,6 +262,11 @@ function bindView() {
         renderView();
       };
   }
+  const geoCountry=document.getElementById('geo-country');
+  const updateCities=()=>{const select=document.getElementById('geo-city');if(!select)return;select.replaceChildren(new Option('Выберите город',''),...(state.geoCatalogue?.cities||[]).filter(c=>c.country===state.geoCountry&&(!state.geoQuery||`${c.name} ${c.region}`.toLowerCase().includes(state.geoQuery.toLowerCase()))).map(c=>new Option(`${c.name} — ${c.region}`,c.id)));select.value=state.geoCity||'';document.querySelector('[data-action="geo-generate"]').disabled=!select.value;};
+  if(geoCountry)geoCountry.onchange=()=>{const c=state.geoCatalogue.countries.find(c=>c.code===geoCountry.value.trim().toUpperCase()||c.name.toLowerCase()===geoCountry.value.trim().toLowerCase());state.geoCountry=c?.code||'';state.geoCity='';geoCountry.value=state.geoCountry;updateCities();mountPhotoMap();};
+  const geoQuery=document.getElementById('geo-city-query');if(geoQuery)geoQuery.oninput=()=>{state.geoQuery=geoQuery.value;updateCities();};
+  const geoCity=document.getElementById('geo-city');if(geoCity)geoCity.onchange=()=>{state.geoCity=geoCity.value;document.querySelector('[data-action="geo-generate"]').disabled=!state.geoCity;stashImageDraft();renderView();};
   const metadataForm = document.getElementById('metadata-form');
   if (metadataForm) {
     for (const [key, value] of Object.entries(state.metadataDraft || {})) {
@@ -244,6 +289,10 @@ function bindView() {
             : name.startsWith('date-')
               ? 'captureDate'
               : null;
+      if (field === 'gps') {
+        state.metadataGpsExcluded = [];
+        document.querySelector('[data-gps-exclusions]')?.remove();
+      }
       if (field) {
         state.metadataDraftDirty = true;
         state.metadataTouched = [...new Set([...(state.metadataTouched || []), field])];
@@ -273,6 +322,9 @@ function bindView() {
       }
     };
   }
+  const friendsSearch=document.getElementById('friends-search');
+  if(friendsSearch){friendsSearch.onsubmit=event=>{event.preventDefault();state.friendsQuery=document.getElementById('friends-query').value;state.friendsPage=0;renderView();};document.getElementById('friends-query').oninput=event=>{state.friendsQuery=event.target.value;};}
+  const friendsPlatform=document.getElementById('friends-platform');if(friendsPlatform)friendsPlatform.onchange=()=>{state.friendsPlatform=friendsPlatform.value;state.friendsPage=0;renderView();};
   const settingsForm = document.getElementById('settings-form');
   if (settingsForm)
     settingsForm.onsubmit = async (event) => {
@@ -282,10 +334,10 @@ function bindView() {
         state.locale = state.settings.country;
         state.type = state.settings.type;
         await refreshPoolStats();
-        toast('Settings saved');
+        toast('Настройки сохранены');
         renderView();
       } catch (e) {
-        toast(`Settings were not saved: ${e.message}`, 'err');
+        toast('Не удалось сохранить настройки. Проверьте введённые значения.', 'err');
       }
     };
 
@@ -327,6 +379,7 @@ function bindView() {
       document.querySelector('.proxy-card .banner.err')?.remove();
     };
   }
+  for(const [id,key] of [['checker-status-filter','statusFilter'],['checker-sort','sort']]){const el=document.getElementById(id);if(el)el.onchange=()=>{state.checker[key]=el.value;renderView();};}
   const facebookDetails=document.getElementById('facebook-details');
   if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
   const checker = document.getElementById('checker-input');
@@ -342,7 +395,7 @@ function bindView() {
             .filter((line) => line.trim()).length
         : 0;
       const label = document.getElementById('checker-count');
-      if (label) label.textContent = `${count} rows`;
+      if (label) label.textContent = `${count} строк`;
       const button = document.querySelector('[data-action="checker-run"]');
       if (button) button.disabled = !event.target.value.trim();
     };
@@ -359,6 +412,9 @@ function bindView() {
   document.querySelectorAll('[data-classifier-map]').forEach(el => {
     el.onchange = () => {state.classifierOptions ||= {}; state.classifierOptions.mapping ||= {}; if(el.value) state.classifierOptions.mapping[el.dataset.classifierMap]=el.value; else delete state.classifierOptions.mapping[el.dataset.classifierMap];};
   });
+  document.querySelectorAll('[data-classifier-row-map]').forEach(el=>{el.onchange=()=>{state.classifierOptions ||= {}; const maps=state.classifierOptions.recordMapping ||= {}; const row=maps[el.dataset.row] ||= {}; if(el.value)row[el.dataset.column]=el.value;else delete row[el.dataset.column];};});
+  const warningsOnly=document.getElementById('classifier-warnings-only');
+  if(warningsOnly)warningsOnly.onchange=()=>{state.classifierWarningsOnly=warningsOnly.checked;state.classifierDetailRow=null;state.classifierRevealed={};importPage(0);};
   const extra = document.getElementById('classifier-extra');
   if(extra) extra.ontoggle = () => {if(extra.isConnected) state.classifierExtraOpen=extra.open;};
   const sort = document.getElementById('classifier-sort');
@@ -432,7 +488,7 @@ async function generate() {
 
 function classificationOptions() {
   const o = state.classifierOptions || {};
-  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, encoding:state.importEncoding || undefined};
+  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, encoding:state.importEncoding || undefined};
 }
 async function handleFile(file) {
   invalidateImportCopies();
@@ -441,6 +497,8 @@ async function handleFile(file) {
     await window.blego.cancelImport(state.importRequest || state.importData.operationId);
   if (state.importEpoch !== epoch) return;
   state.classifierQuery = ''; state.classifierDescending = false; state.importSaved = null;
+  state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
+  if(state.classifierOptions)state.classifierOptions.recordMapping={};
   state.importName = file.name;
   state.importData = null;
   state.view = 'import';
@@ -495,7 +553,7 @@ async function importPage(offset) {
   const operationId = state.importData?.operationId, epoch = state.importEpoch;
   const request = state.importPageRequest = (state.importPageRequest || 0) + 1;
   try {
-    const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending}});
+    const data = await window.blego.importPage({operationId,offset,options:{query:state.classifierQuery || '',sort:'rowNumber',descending:!!state.classifierDescending,warningsOnly:!!state.classifierWarningsOnly}});
     if (state.importData?.operationId !== operationId || state.importEpoch !== epoch || state.importPageRequest !== request) return;
     state.importData = data; renderView();
   } catch { if(state.importEpoch===epoch) toast('Не удалось открыть страницу', 'err'); }
@@ -504,6 +562,7 @@ async function reclassifyInput() {
   invalidateImportCopies();
   const operationId = state.importData?.operationId, epoch = state.importEpoch;
   if(!operationId) return;
+  state.classifierDetailRow=null;state.classifierRevealed={};
   state.importStep='loading'; state.importRequest=operationId; renderView();
   try {
     await window.blego.reclassify({operationId,options:classificationOptions()});
@@ -636,15 +695,22 @@ async function runProxyCheck(fullTest = false) {
   renderView();
 }
 
-async function addPhotos() {
+async function addPhotos(droppedFiles, folders = false) {
   if (state.imagesBusy) return;
   stashImageDraft();
   state.imagesBusy = true;
   state.imagesReading = true;
   state.imagesReadCancelled = false;
+  state.imageScan = null;
   renderView();
+  const stopScan = window.blego.onImageScan((progress) => {
+    state.imageScan = progress;
+    const element=document.getElementById('image-scan-status');
+    if(element) element.textContent=`Найдено: ${progress.found} · Пропущено: ${progress.skipped} · Повторов: ${progress.duplicates}`;
+  });
+  let lastReadRender = 0;
   try {
-    const files = await window.blego.chooseImages();
+    const files = droppedFiles ? await window.blego.addDroppedImages(Array.from(droppedFiles)) : folders ? await window.blego.chooseImageFolders() : await window.blego.chooseImages();
     state.photos.push(...files);
     state.metadataPresets = await window.blego.metadataPresets();
     state.imageWorkspace = await window.blego.imageWorkspace();
@@ -654,7 +720,7 @@ async function addPhotos() {
         continue;
       }
       file.status = 'reading';
-      renderView();
+      if(Date.now()-lastReadRender>=150){renderView();lastReadRender=Date.now();}
       try {
         file.view = await window.blego.readImageMetadata(file.fileId);
         file.size = file.view.size;
@@ -672,6 +738,8 @@ async function addPhotos() {
   } finally {
     state.imagesBusy = false;
     state.imagesReading = false;
+    if(state.photoMap)state.photoMap.view=null;
+    stopScan();
     restoreImageDraft();
     renderView();
   }
@@ -769,6 +837,10 @@ document.addEventListener('click', async (event) => {
     renderView();
     return;
   }
+  if (action === 'menu-toggle') {
+    setMenuExpanded(!document.querySelector('.window')?.classList.contains('menu-expanded'));
+    return;
+  }
   if (action === 'set-view') {
     if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
     state.view = target.dataset.view;
@@ -863,6 +935,17 @@ document.addEventListener('click', async (event) => {
     } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
+  if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}
+  if(action==='classifier-details'){state.classifierDetailRow=target.dataset.row;state.classifierRevealed={};renderView();document.getElementById('classifier-record-details')?.scrollIntoView({block:'nearest'});return;}
+  if(action==='classifier-close-details'){state.classifierDetailRow=null;state.classifierRevealed={};renderView();return;}
+  if(action==='classifier-reveal'){
+    if(target.dataset.row!==state.classifierDetailRow)return;
+    state.classifierRevealed ||= {};
+    const key=target.dataset.field; state.classifierRevealed[key]=!state.classifierRevealed[key];
+    const open=[...document.querySelectorAll('#classifier-record-details details')].map(d=>d.open);
+    renderView();document.querySelectorAll('#classifier-record-details details').forEach((d,i)=>{d.open=open[i];});return;
+  }
+  if(action==='classifier-apply-record'){await reclassifyInput();return;}
   if (action === 'classifier-apply') {await reclassifyInput(); return;}
   if (action === 'classifier-filter') {state.classifierQuery=document.getElementById('classifier-query')?.value || '';await importPage(0);return;}
   if (action === 'import-cookie-copy' || action === 'classifier-copy-cell') {
@@ -881,7 +964,7 @@ document.addEventListener('click', async (event) => {
         target.dataset.row,
         target.dataset.field,
         target,
-        { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true' }
+        { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true', nationalPhone: target.dataset.nationalPhone === 'true' }
       );
     } catch (error) {
       toast(error.message, 'err');
@@ -915,6 +998,8 @@ document.addEventListener('click', async (event) => {
     invalidateImportCopies();
     state.importEpoch = (state.importEpoch || 0) + 1;
     state.classifierQuery=''; state.classifierDescending=false; state.classifierExtraOpen=false;
+    state.classifierDetailRow=null;state.classifierRevealed={};state.classifierWarningsOnly=false;
+    if(state.classifierOptions)state.classifierOptions.recordMapping={};
     if(state.classifierOptions) state.classifierOptions.mapping={};
     const id = state.importRequest || state.importData?.operationId;
     if (id) window.blego.cancelImport(id);
@@ -1086,6 +1171,7 @@ document.addEventListener('click', async (event) => {
           fields
         });
         const loaded = draftFromOperations(ops);
+        if (ops.some(op => op.field === 'gps')) state.metadataGpsExcluded = [];
         state.metadataDraft = { ...state.metadataDraft, ...loaded.draft };
         state.metadataOrigins = { ...state.metadataOrigins, ...loaded.origins };
         state.metadataDraftDirty = true;
@@ -1130,6 +1216,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'metadata-cancel') {
+    if(state.geoBusy){await window.blego.cancelGeo(state.geoBusy);return;}
     if (state.imagesReading) state.imagesReadCancelled = true;
     if (state.imagesReading) await window.blego.cancelImageExport();
     else await window.blego.cancelGroupExport({ runId: state.imageRunId });
@@ -1194,7 +1281,36 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
-  if (action === 'images-choose' || action === 'images-browse') {
+  if(action==='geo-generate'||action==='geo-regenerate-one'){
+    if(state.imagesBusy)return;
+    const ids=action==='geo-regenerate-one'?[target.dataset.id]:state.photos.filter(p=>p.selected&&p.view?.capabilities.writable).map(p=>p.fileId);
+    const old=state.imageWorkspace?.overrides[ids[0]]?.find(o=>o.origin?.kind==='geo');
+    const cityId=action==='geo-regenerate-one'?(state.geoCatalogue?.cities.find(c=>c.id.replace(/:/g,'_')===old?.origin.id)?.id):state.geoCity;
+    const requestId=crypto.randomUUID();
+    state.geoBusy=requestId;state.imagesBusy=true;
+    try{
+      await state.imageInvalidation;
+      await applyImageForm({excludeGPS:true});
+      renderView();
+      const result=await window.blego.generateImageGeo({cityId,fileIds:ids,requestId});
+      state.photoMap={...(state.photoMap||{}),mode:'after',view:null};
+      state.imageWorkspace=result.workspace;state.metadataPlan=null;
+      if(state.imageDrafts)delete state.imageDrafts[state.imageDraftKey];restoreImageDraft();
+      toast(`GEO создано для ${ids.length} фото`);
+    }catch(e){toast(imageErrorMessage(e.message),'err');}
+    finally{state.geoBusy=null;state.imagesBusy=false;renderView();}return;
+  }
+  if(action==='geo-import'||action==='geo-import-confirm'){
+    try{
+      stashImageDraft();
+      if(action==='geo-import')state.geoImportPreview=await window.blego.importGeo();
+      else{await window.blego.confirmGeoImport(state.geoImportPreview.token);state.geoImportPreview=null;state.geoCatalogue=await window.blego.geoCatalog();toast('Каталог сохранён');}
+      renderView();
+    }catch(e){toast(imageErrorMessage(e.message),'err');}return;
+  }
+  if (action === 'images-folder') { await addPhotos(null, true); return; }
+  if (action === 'photo-page') { stashImageDraft(); state.photoPage=Number(target.dataset.page)||0; renderView(); return; }
+  if (action === 'images-choose'  || action === 'images-browse') {
     await addPhotos();
     return;
   }
@@ -1247,6 +1363,7 @@ document.addEventListener('click', async (event) => {
       state.metadataOrigins = loaded.origins;
       state.metadataDraftDirty = true;
       state.metadataTouched = preset.operations.map((op) => op.field);
+      state.metadataGpsExcluded = [];
       stashImageDraft();
       renderView();
       await applyImageForm();
@@ -1283,15 +1400,31 @@ document.addEventListener('click', async (event) => {
     clearPhotos();
     return;
   }
+  if(action==='friends-import') {
+    if(state.friendsBusy)return;state.friendsBusy=true;renderView();
+    try {state.friendsPreview=await window.blego.importFriends();state.friendsPreviewPage=0;}
+    catch(error){toast(error.message==='FRIENDS_CREDENTIAL_FIELDS'?'Файлы с полями авторизации не подходят для Friends.':error.message==='FRIENDS_INPUT_LIMIT'?'Выберите TXT, CSV или JSON до 5 МиБ и 5000 записей.':'Не удалось прочитать список Friends. Проверьте формат и ссылки.','err');}
+    finally {state.friendsBusy=false;renderView();}return;
+  }
+  if(action==='friends-confirm') {
+    if(!state.friendsPreview||state.friendsBusy)return;state.friendsBusy=true;
+    try {const result=await window.blego.confirmFriends(state.friendsPreview.token);state.friendsRows=result.rows;state.friendsPreview=null;toast(`Добавлено: ${result.added}`);}
+    catch {toast('Не удалось сохранить Friends. Повторите предпросмотр.','err');}
+    finally {state.friendsBusy=false;renderView();}return;
+  }
+  if(action==='friends-cancel'){if(state.friendsPreview)await window.blego.cancelFriends(state.friendsPreview.token);state.friendsPreview=null;renderView();return;}
+  if(action==='friends-open'){try{await window.blego.openFriend(target.dataset.id);}catch{toast('Не удалось открыть выбранную ссылку.','err');}return;}
+  if(action==='friends-page'||action==='friends-preview-page'){state[action==='friends-page'?'friendsPage':'friendsPreviewPage']=Number(target.dataset.page)||0;renderView();return;}
   if (action === 'friends-geo') {
-    state.friendsGeo = target.dataset.geo || '';
+    state.friendsGeo = target.dataset.geo || '';state.friendsPage=0;
     renderView();
     return;
   }
+  if(action==='checker-retry-one'){if(state.checker.checking)return;const row=state.checker.rows?.[Number(target.dataset.index)];if(!row?.link)return;for(const other of state.checker.rows)if(other.link===row.link)other.check=null;await runCheckerStatus(crypto.randomUUID(),row.link);return;}
   if (action === 'checker-run') {
     if(state.checker.checking)return;
     const runId=crypto.randomUUID(),input=state.checker.input;
-    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;
+    state.checker.runId=runId;state.checker.rows=null;state.checker.cancelled=false;state.checker.statusFilter='';
     state.checker.checking={done:0,total:0};renderView();
     try {
       await window.blego.cancelFacebook();
@@ -1305,13 +1438,13 @@ document.addEventListener('click', async (event) => {
       } else {state.checker.checking=null;renderView();}
     }catch {
       if(state.checker.runId!==runId)return;
-      state.checker.checking=null;renderView();toast('Could not start this check. Use up to 100 profile IDs or direct links.','err');
+      state.checker.checking=null;renderView();toast('Не удалось начать проверку. Введите до 100 ID или прямых ссылок.','err');
     }
     return;
   }
   if (action === 'checker-cancel') {
     state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
-    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={availability:'cancelled',reasonCode:'CANCELLED'};
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'request_queue',checkedAt:null};
     renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
@@ -1342,10 +1475,10 @@ document.addEventListener('click', async (event) => {
   }
 });
 
-async function runCheckerStatus(runId = crypto.randomUUID()) {
+async function runCheckerStatus(runId = crypto.randomUUID(), onlyTarget=null) {
   const rows = state.checker.rows;
   if (!rows || state.checker.checking) return;
-  const targets = rows.filter((row) => row.link);
+  const targets = rows.filter((row) => row.link && (!onlyTarget || row.link===onlyTarget));
   state.checker.runId = runId;
   state.checker.checking = { done: 0, total: new Set(targets.map((row) => row.link)).size };
   renderView();
@@ -1355,15 +1488,14 @@ async function runCheckerStatus(runId = crypto.randomUUID()) {
       for(const row of rows)if(row.link===result.canonicalUrl)row.check=result;
       state.checker.checking = { done, total };
       const label = document.getElementById('checker-progress-text');
-      if (label) label.textContent = `Checking ${done} of ${total}`;
+      if (label) label.textContent = `Проверено ${done} из ${total}`;
       const fill = document.getElementById('checker-progress-fill');
       if (fill) fill.style.width = `${(100 * done) / total}%`;
     });
     if (state.checker.runId !== runId) return;
-    for (const row of state.checker.rows || [])
-      row.check = result.results.find((value) => value.canonicalUrl === row.link);
+    for (const row of state.checker.rows || []){const found=result.results.find(value=>value.canonicalUrl===row.link);if(found)row.check=found;}
   } catch (error) {
-    if (state.checker.runId === runId) toast('Could not complete this check. Try again.', 'err');
+    if (state.checker.runId === runId) toast('Не удалось завершить проверку. Повторите попытку.', 'err');
   } finally {
     if (state.checker.runId === runId) {
       state.checker.checking = null;
@@ -1377,11 +1509,13 @@ if (window.blego) {
     state.settings = await window.blego.getSettings();
     state.imageWorkspace = await window.blego.imageWorkspace();
     state.metadataPresets = await window.blego.metadataPresets();
+    state.geoCatalogue=await window.blego.geoCatalog();
     await initCopyPreferences();
     state.locale = state.settings.country;
     state.type = state.settings.type;
     await refreshPoolStats();
     state.demo = await window.blego.lastCard();
+    state.friendsRows = await window.blego.friendsList();
     state.news.topic = newsTopic(state.settings.newsTopic);
     const cached = await window.blego.newsSnapshot(state.news.topic);
     Object.assign(state.news, cached);

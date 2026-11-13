@@ -1,3 +1,4 @@
+const { altitudeValues, isAltitudeKey, expectedGPS } = require('./gps-policy.cjs');
 const { dateWriteArgs, verifyDate } = require('./date-policy.cjs');
 const { cameraNumber, equivalentCamera } = require('../../../shared/metadata-operations.mjs');
 const cameraFields = ['iso', 'fNumber', 'exposureTime', 'focalLength'];
@@ -8,8 +9,25 @@ function writeArgs(operations, format, before = {}) {
   for (const op of validateOperations(operations)) {
     if (op.action === 'keep') continue;
     if (op.field === 'gps') {
+      if (op.action === 'set' && op.value.altitudeMode === 'keep')
+        args.push(
+          '--GPSAltitude',
+          '--GPSAltitudeRef',
+          '--LocationCreatedGPSAltitude',
+          '--LocationShownGPSAltitude'
+        );
+      const keepAltitude = op.action === 'set' && op.value.altitudeMode === 'keep';
+      if (keepAltitude) {
+        for (const tag of new Set(
+          Object.keys(before)
+            .filter((k) => k.startsWith('GPS:') && !isAltitudeKey(k))
+            .map((k) => k.split(':').at(-1))
+        )) {
+          if (/^[A-Za-z][A-Za-z0-9]*$/.test(tag)) args.push(`-GPS:${tag}=`);
+          else throw Error('METADATA_UNSUPPORTED_GPS_TAG');
+        }
+      } else args.push('-GPS:all=');
       args.push(
-        '-GPS:all=',
         '-XMP-exif:GPS*=',
         '-XMP-iptcExt:LocationCreatedGPS*=',
         '-XMP-iptcExt:LocationShownGPS*='
@@ -24,7 +42,7 @@ function writeArgs(operations, format, before = {}) {
           `-XMP-exif:GPSLatitude=${v.latitude}`,
           `-XMP-exif:GPSLongitude=${v.longitude}`
         );
-        if (v.altitude != null)
+        if (v.altitude != null && !['keep', 'remove'].includes(v.altitudeMode))
           args.push(
             `-EXIF:GPSAltitude=${Math.abs(v.altitude)}`,
             `-EXIF:GPSAltitudeRef=${v.altitude < 0 ? 1 : 0}`,
@@ -74,7 +92,9 @@ function verifyTags(operations, before, after) {
         ? normalizedValue(op.field, before)
         : op.action === 'remove'
           ? null
-          : op.value;
+          : op.field === 'gps'
+            ? expectedGPS(op, before)
+            : op.value;
     const actual = normalizedValue(op.field, after);
     if (op.field === 'gps' && actual && expected) {
       for (const k of ['latitude', 'longitude', 'altitude'])
@@ -88,8 +108,17 @@ function verifyTags(operations, before, after) {
     } else if (!isDeepStrictEqual(actual, expected))
       throw Error(`METADATA_VERIFY_${op.field.toUpperCase()}`);
     if (op.field === 'gps' && op.action === 'set') {
+      if (
+        op.value.altitudeMode === 'keep' &&
+        !isDeepStrictEqual(altitudeValues(before), altitudeValues(after))
+      )
+        throw Error('METADATA_VERIFY_ALTITUDE_KEEP');
       for (const key of fieldKeys('gps', after)) {
-        if (key.startsWith('Composite:')) continue; // Derived by ExifTool, not stored metadata.
+        if (
+          key.startsWith('Composite:') ||
+          (op.value.altitudeMode === 'keep' && isAltitudeKey(key))
+        )
+          continue; // Derived by ExifTool, not stored metadata.
         const split = key.lastIndexOf(':'),
           group = key.split(':')[0],
           tag = key.slice(split + 1);

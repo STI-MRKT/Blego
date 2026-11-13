@@ -1,10 +1,15 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 async function call(name, arg) {
   const r = await ipcRenderer.invoke(`local:${name}`, arg);
   if (!r.ok) throw Object.assign(Error(r.code), { details: r.details });
   return r.value;
 }
 contextBridge.exposeInMainWorld('blego', {
+  friendsList: () => call('friendsList'),
+  importFriends: () => call('friendsImport'),
+  confirmFriends: (token) => call('friendsConfirm', token),
+  cancelFriends: (token) => call('friendsCancel', token),
+  openFriend: (id) => call('friendsOpen', id),
   prepareGroupExport: (request) => call('imageGroupPrepare', request),
   cancelGroupExport: (request) => call('imageGroupCancel', request),
   imageExportHistory: () => call('imageExportHistory'),
@@ -24,6 +29,24 @@ contextBridge.exposeInMainWorld('blego', {
   },
   copyImage: (id) => call('imageCopy', id),
   chooseImages: () => call('imagesChoose'),
+  chooseImageFolders: () => call('imagesFolders'),
+  onImageScan: (callback) => {
+    const listener = (_event, result) => callback(result);
+    ipcRenderer.on('local:image-scan', listener);
+    return () => ipcRenderer.removeListener('local:image-scan', listener);
+  },
+  addDroppedImages: (files) =>
+    call(
+      'imagesAddDropped',
+      Array.from(files, (file) => webUtils.getPathForFile(file))
+    ),
+  geoCatalog: (request) => call('geoCatalog', request),
+  geoBoundary: (request) => call('geoBoundary', request),
+  moveImageGeo: (request) => call('imagesMoveGeo', request),
+  generateImageGeo: (request) => call('imagesGenerateGeo', request),
+  cancelGeo: (id) => call('geoCancel', id),
+  importGeo: () => call('geoImport'),
+  confirmGeoImport: (token) => call('geoImportConfirm', token),
   readImageMetadata: (id) => call('imageRead', id),
   previewImage: (fileId, thumbnail = false) => call('imagePreview', { fileId, thumbnail }),
   planMetadataChanges: (request) => call('imagesPlan', request),
@@ -32,6 +55,7 @@ contextBridge.exposeInMainWorld('blego', {
   metadataPresets: () => call('metadataPresets'),
   saveMetadataPreset: (preset) => call('metadataPresetSave', preset),
   importMetadataPreset: () => call('metadataPresetImport'),
+  linkFacebookImport: (request) => call('facebookLinkImport', request),
   normalizeFacebook: (text) => call('facebookNormalize', text),
   checkFacebook: (request) => call('facebookCheck', request),
   cancelFacebook: () => call('facebookCancel'),

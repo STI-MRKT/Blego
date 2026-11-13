@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-13T10:31:17.759Z",
+  "os": "darwin",
+  "arch": "arm64",
+  "node": "v24.22.1",
+  "source": {
+    "url": "https://commons.wikimedia.org/wiki/File:Fronalpstock_big.jpg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg",
+    "artist": "Hannes Röst",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "sha256": "24eb29eccdf0af691b406d1a3d22c0ef5d761cc454d8a917848c33958f6fc857"
+  },
+  "method": "Real public landscape panorama, resized to 6000px for 40MP limit; JPEG/PNG/WebP derivatives made before measurement. Three actual exports with explicit date/GPS. Same source, transformations and machine for baseline/candidate. Parent Node RSS (not child-process total). Single sample, not cold-cache benchmark.",
+  "files": [
+    {
+      "format": "jpeg",
+      "width": 6000,
+      "height": 2696,
+      "bytes": 2129093,
+      "sha256": "00159116cc45a3b8493b715a2b8b120b1136b5196fc1498f756d6fc7bd9a2572"
+    },
+    {
+      "format": "png",
+      "width": 6000,
+      "height": 2696,
+      "bytes": 36205790,
+      "sha256": "14fa40a0a788a2307d9f4871ede762f5102d4fa7a3a71f0694ee3636f02c4ea4"
+    },
+    {
+      "format": "webp",
+      "width": 6000,
+      "height": 2696,
+      "bytes": 1341490,
+      "sha256": "434defedc2d0cf8f69de555c7a8b8855c64c83f2313ee4022ee73b1578ea6ae9"
+    }
+  ],
+  "readMs": 1721.8357500000002,
+  "exportMs": 7023.907499999999,
+  "totalMs": 10545.218583000002,
+  "peakRssBytes": 769720320,
+  "eventLoopP95Ms": 29.491199,
+  "originalHashes": "PASS",
+  "pixels": "PASS",
+  "dateGpsReadback": "PASS",
+  "status": "PASS"
+}
