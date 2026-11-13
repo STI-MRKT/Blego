@@ -18,9 +18,10 @@ const STEPS = [
     text: 'Один клик — и синтетический профиль готов. Значения копируются отдельно или целиком; последний профиль сохраняется локально.'
   },
   {
+    view: 'news',
     selector: '.news-head',
     title: 'Новости',
-    text: 'Выбранные вами новостные источники доступны во вкладках. Обновление выполняется после включения новостей в настройках.'
+    text: 'Выберите тему и нажмите «Загрузить новости». Последняя успешная лента сохраняется для просмотра без сети.'
   },
   {
     view: 'network',
@@ -69,8 +70,9 @@ function markTourSeen() {
   }
 }
 
-export async function startTour({ navigate } = {}) {
+export async function startTour({ navigate, shouldStart = () => true } = {}) {
   if (await hasSeenTour()) return false;
+  if (!shouldStart()) return false;
   if (document.getElementById('tour-root')) return false;
   markTourSeen();
 

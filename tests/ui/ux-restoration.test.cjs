@@ -23,6 +23,9 @@ test(
       fs.rmSync(root, { recursive: true, force: true });
     });
     const page = await app.firstWindow();
+    await app.evaluate(({ BrowserWindow }) =>
+      BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
+    );
     await page.locator('[data-action="generate"]').first().waitFor();
     await page.evaluate(() => window.blego.markTour()).catch(() => {});
     await page.locator('[data-action="generate"]').first().click();
