@@ -59,3 +59,5 @@ Original CSS tokens/base/components/shell/tools/views, graphic assets and animat
 [Date/GEO primary controls](native/photos-primary.png) · [Before/after preview](native/photos-preview.png) · [Export result](native/photos-export.png)
 
 Static screenshots do not certify every animation or physical Mac responsiveness. Native launch/generation/frame samples and batch timing are recorded in ACCEPTANCE.md; final owner UX acceptance remains outstanding.
+
+Rendered comparison inspection confirms the original shell/sidebar geometry, palette, rounded cards, generator avatar/field arrangement, photo drop area and network gauge remain recognizable. Expected differences are the separate News entry, Archive placement, removed obsolete profile timer and compact functional controls/disclosures. Populated native photo/archive/classifier images supplement the empty-state comparison. This is an inspection result, not a pixel-identical or physical-display animation guarantee.

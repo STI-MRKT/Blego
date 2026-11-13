@@ -1,0 +1,1 @@
+8e08972645970f319d6e9bd3ebe22c090ccadf0403afeaa43c368d2f7f547242  release/BLEGO-1.3.0-arm64.dmg

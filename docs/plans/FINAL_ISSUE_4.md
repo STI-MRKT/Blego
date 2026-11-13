@@ -11,6 +11,6 @@ Preserve classifier, storage and existing native metadata engine. PR #1/#3 and o
 - [x] 3. Facebook: compact public-availability workflow, cancellation/rate/error tests.
 - [x] 4. Photos: explicit date/GEO keep/set/remove, zero coordinates, previews/readback/batch/cancel/preservation tests.
 - [x] 5. Archive/generator/navigation: original components, per-element copying, preserved classifier/storage, compact secondary details.
-- [ ] 6. Full regression and fresh review; native ARM64 engine, DMG and installed-app tests; PR without merge.
+- [x] 6. Full regression and fresh review; native ARM64 engine, DMG and installed-app tests; PR without merge.
 
 Each implementation stage gets focused tests, `npm run verify`, relevant GUI regression and a separate commit. Failed checks are fixed, not disabled. External services are tested separately from fixtures. Signing/notarization are excluded; no release publication. Evidence and limitations live in `docs/verification/final-issue-4/`.

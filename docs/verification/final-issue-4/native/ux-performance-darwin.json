@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-13T05:26:28.345Z",
+  "os": "darwin",
+  "arch": "arm64",
+  "release": "24.6.0",
+  "method": "Three isolated launches per version; visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.",
+  "versions": [
+    {
+      "label": "original",
+      "samples": [
+        {
+          "launchMs": 3347,
+          "generationMs": 5750,
+          "frameMedianMs": 16.600000000000364,
+          "frameP95Ms": 25.299999999999272,
+          "frameMaxMs": 133.23400000000038
+        },
+        {
+          "launchMs": 1164,
+          "generationMs": 1786,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.900000000000546,
+          "frameMaxMs": 217.90000000000055
+        },
+        {
+          "launchMs": 986,
+          "generationMs": 1784,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.800000000000182,
+          "frameMaxMs": 249.80000000000018
+        }
+      ]
+    },
+    {
+      "label": "candidate",
+      "samples": [
+        {
+          "launchMs": 1291,
+          "generationMs": 823,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 20.09999999999991,
+          "frameMaxMs": 49.70000000000027
+        },
+        {
+          "launchMs": 1053,
+          "generationMs": 128,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 34,
+          "frameMaxMs": 284.5999999999999
+        },
+        {
+          "launchMs": 818,
+          "generationMs": 1931,
+          "frameMedianMs": 16.699999999999818,
+          "frameP95Ms": 18.90000000000009,
+          "frameMaxMs": 42.09999999999991
+        }
+      ]
+    }
+  ]
+}
