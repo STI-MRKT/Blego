@@ -1,4 +1,4 @@
-import { cookieInfo } from './classifier-recognition.mjs';
+import { cookieInfo, profileIdentity } from './classifier-recognition.mjs';
 // Deterministic, bounded TXT lexer. Offsets are UTF-16 positions in decoded text.
 // JSON and browser identifiers are indivisible; source text is never reconstructed.
 const maxFields = 512,
@@ -208,6 +208,34 @@ export function structuredRecords(text) {
   if (depth.length) rowWarnings.push('INVALID_JSON_CELL');
   if (quoteStart) rowWarnings.push('UNCLOSED_QUOTE');
   if (cellStart < text.length || fields.length) row(text.length, text.length);
+  // Prose is retained in the original source but is not a profile when the file
+  // contains identifiable records. Entire opaque files remain reviewable.
+  const useful = rows.filter(
+    (r) =>
+      r.sourceEntries.some((e) => {
+        const value = e.value;
+        return (
+          /^(?:id|accountId|uid|facebook[ _-]?id)\s*[:=]\s*\d+$/i.test(value) ||
+          !!profileIdentity(value) ||
+          !!completedCookie(value)
+        );
+      }) ||
+      (r.sourceEntries.length >= 2 &&
+        r.sourceEntries.filter((e) =>
+          /^(?:name|fullName|фио|email|mail|почта|password|пароль|emailPassword|geo|country|birthDate|dob)\s*[:=]\s*\S/iu.test(
+            e.value
+          )
+        ).length >= 2)
+  );
+  if (useful.length && useful.length !== rows.length) {
+    const ids = new Set(useful.map((r) => r.id));
+    const retained = diagnostics.filter((d) => ids.has(d.recordId));
+    const remap = new Map(useful.map((r, i) => [r.id, String(i + 1)]));
+    for (const r of useful) r.id = remap.get(r.id);
+    for (const d of retained) d.recordId = remap.get(d.recordId);
+    rows.splice(0, rows.length, ...useful);
+    diagnostics.splice(0, diagnostics.length, ...retained);
+  }
   const width = rows.reduce((n, r) => Math.max(n, r.sourceEntries.length), 0);
   return {
     records: rows,

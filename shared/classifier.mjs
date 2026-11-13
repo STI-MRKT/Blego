@@ -17,13 +17,14 @@ export const CLASSIFIER_FIELDS = [
   ['geo', 'ГЕО'],
   ['userAgent', 'User-Agent'],
   ['token', 'Токен'],
-  ['cookies', 'Куки']
+  ['cookies', 'Куки'],
+  ['backupEmail', 'Резервная почта']
 ].map(([key, label]) => ({ key, label }));
 export const CORE_FIELDS = CLASSIFIER_FIELDS.slice(1, 8).map((f) => f.key);
 export const SCHEMAS = {
   core7: CORE_FIELDS,
-  full10: CLASSIFIER_FIELDS.slice(1).map((f) => f.key),
-  numbered11: CLASSIFIER_FIELDS.map((f) => f.key)
+  full10: CLASSIFIER_FIELDS.slice(1, 11).map((f) => f.key),
+  numbered11: CLASSIFIER_FIELDS.slice(0, 11).map((f) => f.key)
 };
 const normalize = (s) =>
   String(s)
@@ -37,6 +38,14 @@ const aliases = {
   password: ['password', 'pass', 'passwd', 'пароль'],
   emailPassword: ['emailpassword', 'mailpassword', 'парольотпочты', 'парольпочты'],
   email: ['email', 'mail', 'почта'],
+  backupEmail: [
+    'backupEmail',
+    'recoveryEmail',
+    'reserveMail',
+    'резервная почта',
+    'запасная почта',
+    'почта восстановления'
+  ],
   birthDate: ['birthdate', 'birthday', 'dob', 'датарождения'],
   geo: ['geo', 'country', 'гео', 'страна'],
   userAgent: ['useragent', 'ua'],
@@ -62,6 +71,43 @@ export function validBirthDate(s) {
   if (y < 1 || month < 1 || month > 12 || day < 1) return false;
   const leap = y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0);
   return day <= [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+}
+const countryNames = new Set(['USA', 'UK']);
+for (const locale of ['en', 'ru']) {
+  const names = new Intl.DisplayNames([locale], { type: 'region' });
+  for (const code of countryCodes) countryNames.add(names.of(code).toLowerCase());
+}
+const isCountry = (value) =>
+  countryCodes.has(value) || countryNames.has(value) || countryNames.has(value.toLowerCase());
+// Learn only positions explicitly labelled by a majority (at least two) of
+// equal-width records. A candidate must retain two independently typed anchors
+// and agree at EVERY typed position; arbitrary adjacent strings are not a schema.
+function fileLayouts(parsed) {
+  const groups = new Map();
+  if (!parsed.structured) return groups;
+  for (const record of parsed.records) {
+    const entries = record.sourceEntries || [];
+    const width = entries.length;
+    if (!groups.has(width))
+      groups.set(width, { count: 0, positions: Array.from({ length: width }, () => new Map()) });
+    const group = groups.get(width);
+    group.count++;
+    entries.forEach((entry, i) => {
+      const r = recognizeValue(entry.value, fieldForHeader, validBirthDate, emailValid);
+      if (r.explicit && !r.invalid)
+        group.positions[i].set(r.key, (group.positions[i].get(r.key) || 0) + 1);
+    });
+  }
+  for (const [width, group] of groups)
+    groups.set(
+      width,
+      group.positions.map((counts) => {
+        if (counts.size !== 1) return null;
+        const [key, n] = [...counts][0];
+        return n >= 2 && n > group.count / 2 ? key : null;
+      })
+    );
+  return groups;
 }
 function guess(value) {
   if (emailValid(value)) return 'email';
@@ -98,6 +144,7 @@ export function classifyRecords(parsed, options = {}) {
     if (!initialWarnings.has(d.recordId)) initialWarnings.set(d.recordId, []);
     initialWarnings.get(d.recordId).push(d);
   }
+  const layouts = fileLayouts(parsed);
   const records = parsed.records.map((source, index) => {
     const data = Object.fromEntries(CLASSIFIER_FIELDS.map((f) => [f.key, '']));
     data.rowNumber = String(index + 1);
@@ -138,7 +185,16 @@ export function classifyRecords(parsed, options = {}) {
     const identityConflict = relatedIds.size > 1 || recognized.some((r) => r.profile?.conflict);
     const contextual = relatedIds.size > 0;
     const hasDate = recognized.some((r) => validBirthDate(r.value || ''));
-    const hasGeo = recognized.some((r) => r.key === 'geo');
+    const hasGeo = recognized.some((r) => r.key === 'geo' || isCountry(r.value || ''));
+    const layout = layouts.get(entries.length);
+    const layoutValid =
+      layout &&
+      recognized.every((r, i) => !r.invalid && (!r.key || !layout[i] || r.key === layout[i])) &&
+      recognized.filter(
+        (r, i) =>
+          ['accountId', 'email', 'userAgent', 'cookies', 'profileUrl'].includes(r.key) &&
+          r.key === layout[i]
+      ).length >= 2;
     const rowMapping = options.recordMapping?.[source.id] || {};
     if (
       typeof rowMapping !== 'object' ||
@@ -165,8 +221,10 @@ export function classifyRecords(parsed, options = {}) {
       if (parsed.structured && !inferred && contextual) {
         if (/^\d+$/.test(value) && relatedIds.has(value)) inferred = 'accountId';
         else if (validBirthDate(value)) inferred = 'birthDate';
+        else if (isCountry(value)) inferred = 'geo';
         else if (hasDate && hasGeo && personName(value)) inferred = 'fullName';
       }
+      if (!inferred && layoutValid) inferred = layout[position];
       const key =
         rowMapped || named || schema || mapped || (parsed.structured ? inferred : guess(value));
       const priority = rowMapped
@@ -203,7 +261,11 @@ export function classifyRecords(parsed, options = {}) {
       const valid =
         winners.length === 1 &&
         !(key === 'birthDate' && winners[0].value && !validBirthDate(winners[0].value)) &&
-        !(key === 'email' && winners[0].value && !emailValid(winners[0].value));
+        !(
+          ['email', 'backupEmail'].includes(key) &&
+          winners[0].value &&
+          !emailValid(winners[0].value)
+        );
       if (valid) (EXTENDED_FIELDS.includes(key) ? extended : data)[key] = winners[0].value;
       else report(winners.length > 1 ? 'AMBIGUOUS_FIELD' : 'INVALID_FIELD', key);
       for (const v of values)

@@ -111,7 +111,7 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
   }
   if (key) {
     const invalid =
-      (key === 'email' && value && !emailValid(value)) ||
+      (['email', 'backupEmail'].includes(key) && value && !emailValid(value)) ||
       (key === 'birthDate' && value && !validDate(value)) ||
       (key === 'accountId' && value && !/^\d+$/.test(value)) ||
       (key.endsWith('Url') && value && !safeUrl(value)) ||

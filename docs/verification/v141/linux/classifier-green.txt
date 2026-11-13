@@ -1,0 +1,37 @@
+✔ explicit classifier copy/export includes exactly seven fields and protects spreadsheets (34.710361ms)
+✔ global import adapter still redacts passwords, cookie and tokens (4.179098ms)
+✔ format A recognizes explicit fields and multiline JSON without splitting UA semicolons (52.523751ms)
+✔ format B uses identity context and preserves empty/unknown fields and extended labels (12.249455ms)
+✔ mixed formats and two same-line records keep exact source spans and row cookies (11.450137ms)
+✔ conflicting URL/cookie identities remain warnings and cannot silently select an owner (2.983729ms)
+✔ broken JSON recovers at a strong next-record boundary without borrowing its cookie (2.431856ms)
+✔ opaque values, ambiguous passwords and dates without context are not invented (1.899345ms)
+✔ row-specific assignment preserves original value and does not move adjacent fields (5.272034ms)
+✔ two-factor and mail-service URLs are metadata, never login codes or network actions (1.515701ms)
+✔ quoted secret payload and URL semicolons are not field separators (3.674813ms)
+✔ ambiguous profile query identity never becomes an account ID (1.475157ms)
+✔ legacy CSV and JSON rows expose exact original record spans (2.997372ms)
+✔ structured parser bounds excessive nesting and fields without echoing values (2.551998ms)
+✔ same-line records ending in cookie JSON retain separate identities and exact cookie payloads (15.690859ms)
+✔ TZ06 labelled recovery email is separate from primary email and seven-field schema (55.255778ms)
+✔ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (21.655691ms)
+✔ TZ06 infers standalone country and name with identity/date context, not countries in prose (4.299196ms)
+✔ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (2.236036ms)
+✔ named fields preserve ID precision, cookie JSON representation and missing cells (57.693028ms)
+✔ explicit headerless schemas retain first row and empty positions, never guessed by count (3.28457ms)
+✔ JSON cookie objects keep original source slice and duplicate fields stay unresolved (3.177899ms)
+✔ multiline JSON and quoted CSV are logical cells; pipe and semicolon inside JSON are ignored (5.895817ms)
+✔ cautious heuristics reject ambiguity and impossible dates without inventing passwords or tokens (2.062508ms)
+✔ explicit mapping, alias collisions and invalid dates retain original unresolved values (3.375958ms)
+✔ auto headers preserve headerless GEO ID and identical aliases remain ambiguous (1.705331ms)
+✔ prototype-named columns remain unresolved without creating extra result fields (1.912137ms)
+✔ explicit missing fields stay empty instead of taking heuristic values from other columns (1.432676ms)
+✔ identical named header columns must not silently pick the first conflicting value (1.614924ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.78365
