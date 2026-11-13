@@ -1,0 +1,16 @@
+100 files read
+{
+  "host": "linux-x64",
+  "executable": "development Electron",
+  "files": 100,
+  "folderCount": 100,
+  "readMs": 19189,
+  "reads": 100,
+  "completed": 100,
+  "outputFiles": 100,
+  "elapsedSeconds": 46.345,
+  "eventLoopTicks": 1758,
+  "maxEventLoopGapMs": 144,
+  "progressRows": 100,
+  "fixture": "12×8 RGBA PNG; not maximum-size stress"
+}
