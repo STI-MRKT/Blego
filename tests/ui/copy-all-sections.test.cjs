@@ -69,6 +69,15 @@ test(
       BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
     );
     const clip = () => app.evaluate(({ clipboard }) => clipboard.readText());
+    async function openAdvancedCopy() {
+      // Advanced copying stays available by shortcut, without a header button.
+      await page.evaluate(() => {
+        document.activeElement?.blur?.();
+        window.getSelection()?.removeAllRanges();
+      });
+      await page.keyboard.press('Control+Alt+Shift+C');
+      await page.locator('[data-copy-control="format"]').waitFor();
+    }
     async function preview(format = 'json') {
       await page.locator('[data-copy-control="format"]').selectOption(format);
       await page.locator('[data-copy-action="preview"]').click();
@@ -79,12 +88,13 @@ test(
     }
     async function open(view) {
       await page.locator(`[data-view="${view}"]`).click();
-      await page.locator('[data-copy-action="open"]').click();
+      await openAdvancedCopy();
       await page.locator('[data-copy-control="format"]').waitFor();
     }
     await page.locator('[data-action="generate"]').click();
     await page.locator('.demo-card').waitFor();
-    await page.locator('[data-copy-action="open"]').click();
+    assert.equal(await page.locator('.page-head [data-copy-action="open"]').count(), 0);
+    await openAdvancedCopy();
     await page.locator('[data-copy-control="format"]').waitFor();
     const profile = JSON.parse(await preview())[0];
     assert.ok(profile.phone && profile.email);
@@ -100,7 +110,7 @@ test(
     const completeProfile = JSON.parse(await preview())[0];
     assert.ok(completeProfile.phone && completeProfile.email, 'full profile must keep contacts');
     await app.evaluate(async ({ clipboard }) => clipboard.writeText('shortcut sentinel'));
-    await page.locator('[data-copy-action="open"]').focus();
+    await page.locator('.ux-copy-set').focus();
     await page.keyboard.press('Control+Shift+C');
     await page.waitForTimeout(150);
     assert.ok((await clip()).includes(`phone: ${profile.phone}`));
@@ -118,7 +128,7 @@ test(
       )
     });
     await page.locator('[data-classifier-status]').waitFor();
-    await page.locator('[data-copy-action="open"]').click();
+    await openAdvancedCopy();
     await page.locator('[data-copy-control="format"]').waitFor();
     const all = JSON.parse(await preview());
     assert.equal(all.length, 51);
@@ -155,7 +165,7 @@ test(
       .locator('.checker-row')
       .getByText('Требуется авторизация', { exact: true })
       .waitFor();
-    await page.locator('[data-copy-action="open"]').click();
+    await openAdvancedCopy();
     const fb = JSON.parse(await preview())[0];
     assert.equal(fb.id, '001234567890123456789');
     assert.equal(fb.banAssessment, 'unknown');
@@ -237,7 +247,7 @@ test(
       const { state } = await import('/js/state.js');
       return state.archives.items[0]?.originalName === 'old.txt';
     });
-    await page.locator('[data-copy-action="open"]').click();
+    await openAdvancedCopy();
     await page.locator('[data-copy-control="scope"]').selectOption('filter');
     assert.deepEqual(
       JSON.parse(await preview()).map((r) => r.originalName),
@@ -255,7 +265,7 @@ test(
     }, file);
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
-    await page.locator('[data-copy-action="open"]').click();
+    await openAdvancedCopy();
     const image = JSON.parse(await preview())[0];
     assert.equal(image.gps, undefined);
     await page.locator('[data-copy-control="personal"]').check();
