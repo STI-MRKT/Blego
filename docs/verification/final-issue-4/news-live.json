@@ -1,0 +1,1165 @@
+{
+  "at": "2026-11-13T04:27:00.540Z",
+  "os": "linux",
+  "arch": "x64",
+  "node": "v24.22.1",
+  "topics": [
+    {
+      "topic": "fashion",
+      "configured": 3,
+      "successful": 3,
+      "received": 73,
+      "unique": 24,
+      "displayed": 24,
+      "lastSuccessfulAt": "2026-11-13T04:27:00.582Z",
+      "elapsedMs": 5543,
+      "sources": [
+        {
+          "id": "vogue-us",
+          "name": "Vogue",
+          "topic": "fashion",
+          "url": "https://www.vogue.com/feed/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:00.545Z",
+          "lastAttemptAt": "2026-11-13T04:27:00.545Z",
+          "code": null,
+          "received": 30
+        },
+        {
+          "id": "wwd",
+          "name": "WWD",
+          "topic": "fashion",
+          "url": "https://wwd.com/feed/",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:00.581Z",
+          "lastAttemptAt": "2026-11-13T04:27:00.581Z",
+          "code": null,
+          "received": 10
+        },
+        {
+          "id": "guardian-fashion",
+          "name": "The Guardian Fashion",
+          "topic": "fashion",
+          "url": "https://www.theguardian.com/fashion/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:00.582Z",
+          "lastAttemptAt": "2026-11-13T04:27:00.582Z",
+          "code": null,
+          "received": 33
+        }
+      ],
+      "displayedLinks": [
+        {
+          "title": "Liu Jo Fall 2027 Ready-to-Wear",
+          "link": "https://www.vogue.com/fashion-shows/fall-2027-ready-to-wear/liu-jo",
+          "publishedAt": 1794543680000
+        },
+        {
+          "title": "Will Fashion Brands Back Higher Wages in Bangladesh?",
+          "link": "https://wwd.com/sourcing-journal/sustainability/bangladesh-wage-protest-fashion-brands-clean-clothes-campaign-1239414418/",
+          "publishedAt": 1794527226000
+        },
+        {
+          "title": "The Minimalist ’90s-Style Coat Will Be Everywhere This Winter",
+          "link": "https://www.vogue.com/article/90s-coat-trend",
+          "publishedAt": 1794523797000
+        },
+        {
+          "title": "Kathryn Hahn Breaks Up a Monochrome Gray Look With the Help of Daringly Sharp Snake Print Pumps",
+          "link": "https://wwd.com/footwear-news/shoe-trends/kathryn-hahn-hagelstam-snake-print-pumps-1239413554/",
+          "publishedAt": 1794519823000
+        },
+        {
+          "title": "40+ Affordable Jewelry Brands to Know and Shop in 2026",
+          "link": "https://www.vogue.com/article/best-affordable-jewelry",
+          "publishedAt": 1794514876000
+        },
+        {
+          "title": "Artist Kent Monkman’s Latest Work Is Filled With Fashion Easter Eggs",
+          "link": "https://www.vogue.com/article/kent-monkman-officer-and-a-laughing-girl-exhibit",
+          "publishedAt": 1794509519000
+        },
+        {
+          "title": "The Best Statement Coats and Jackets for Winter 2026—And How to Style Them",
+          "link": "https://www.vogue.com/article/statement-outerwear-trend",
+          "publishedAt": 1794507977000
+        },
+        {
+          "title": "Past and Prologue: Burberry’s Daniel Lee is Bringing Fashion—and His Extended Family—Home.",
+          "link": "https://www.vogue.com/article/past-and-prologue-burberrys-daniel-lee-is-bringing-fashion-and-his-extended-family-home",
+          "publishedAt": 1794488400000
+        },
+        {
+          "title": "Kim Kardashian Plays Nurse in One of Louis Vuitton’s Rarest Runway Looks",
+          "link": "https://www.vogue.com/article/kim-kardashian-louis-vuitton-marc-jacobs-nurse-look",
+          "publishedAt": 1794485094000
+        },
+        {
+          "title": "The Great Bear Rainforest: How Fashion Rallied to Stop the Deforestation of an Ancient Rainforest",
+          "link": "https://www.vogue.com/article/how-fashion-rallied-to-stop-the-deforestation-of-an-ancient-rainforest",
+          "publishedAt": 1794479400000
+        },
+        {
+          "title": "The Vogue Business Funding Tracker",
+          "link": "https://www.vogue.com/article/the-vogue-business-funding-tracker",
+          "publishedAt": 1794469244000
+        },
+        {
+          "title": "Jess Cartner-Morley on fashion: this season’s big idea? Wear a skirt. It’s that simple",
+          "link": "https://www.theguardian.com/fashion/2026/nov/11/jess-cartner-morley-on-fashion-fashions-big-idea-this-season-wear-a-skirt",
+          "publishedAt": 1794405652000
+        },
+        {
+          "title": "From the streets of Lagos to the Chanel catwalk: how a creative’s thrift-shop style took her to Paris",
+          "link": "https://www.theguardian.com/global-development/2026/nov/09/fashion-lagos-chanel-model-rachel-ojuromi-nigeria-thrift-style",
+          "publishedAt": 1794200460000
+        },
+        {
+          "title": "From the overblown to the ordinary? Met Gala 2027 to celebrate ‘poetics of everyday’",
+          "link": "https://www.theguardian.com/fashion/2026/nov/08/met-gala-2027-theme-poetics-everyday",
+          "publishedAt": 1794124836000
+        },
+        {
+          "title": "‘Minimal look, maximal politics’: why the black T-shirt signals modern power",
+          "link": "https://www.theguardian.com/fashion/2026/nov/06/minimal-look-maximal-politics-how-the-black-t-shirt-became-a-political-weapon",
+          "publishedAt": 1794045070000
+        },
+        {
+          "title": "Prince, the pope, and autumn 2026: purple is hot this season",
+          "link": "https://www.theguardian.com/fashion/2026/nov/06/prince-pope-autumn-2026-purple-hot-this-season",
+          "publishedAt": 1793987497000
+        },
+        {
+          "title": "Martine Rose appointed creative director at Balenciaga",
+          "link": "https://www.theguardian.com/fashion/2026/nov/06/martine-rose-appointed-creative-director-balenciaga-fashion-house",
+          "publishedAt": 1793983555000
+        },
+        {
+          "title": "Jess Cartner-Morley’s November style essentials: fancy flats, sexy knits and a Christmassy pigeon",
+          "link": "https://www.theguardian.com/thefilter/2026/nov/01/jess-cartner-morleys-november-style-essentials-2026",
+          "publishedAt": 1793538012000
+        },
+        {
+          "title": "Fashion and tradition: how John Smedley is innovating in a tough market",
+          "link": "https://www.theguardian.com/business/2026/nov/01/john-smedley-knitwear-brand-innovating-fashion-tradition-tough-market-manufacturing",
+          "publishedAt": 1793534411000
+        },
+        {
+          "title": "Dripping with style: what fashion insiders wear in the rain – plus we pick the best raincoats and accessories",
+          "link": "https://www.theguardian.com/fashion/2026/oct/30/fashion-autumn-rain-best-raincoats-accessories",
+          "publishedAt": 1793372416000
+        },
+        {
+          "title": "DIY socks, messy collars and cummerbunds: nine wardrobe updates from the catwalks",
+          "link": "https://www.theguardian.com/fashion/2026/oct/29/diy-socks-messy-collars-and-cummberbunds-nine-wardrobe-updates-from-the-catwalks",
+          "publishedAt": 1793343647000
+        },
+        {
+          "title": "Jess Cartner-Morley on fashion: to nail this year’s British heritage look, just study Rivals",
+          "link": "https://www.theguardian.com/fashion/2026/oct/28/jess-cartner-morley-on-fashion-british-heritage-look-rivals",
+          "publishedAt": 1793170804000
+        },
+        {
+          "title": "‘A form of anti-status status’ – how much would you pay for a plain tote bag?",
+          "link": "https://www.theguardian.com/fashion/2026/oct/22/how-the-canvas-tote-bag-went-from-supermarket-staple-to-status-symbol",
+          "publishedAt": 1792735201000
+        },
+        {
+          "title": "Fast-fashion giant Shein outperforms several Australian retailers on ethics, report says",
+          "link": "https://www.theguardian.com/fashion/2026/oct/21/fast-fashion-giant-shein-outperforms-several-australian-retailers-on-ethics",
+          "publishedAt": 1792550175000
+        }
+      ]
+    },
+    {
+      "topic": "ai",
+      "configured": 3,
+      "successful": 2,
+      "received": 40,
+      "unique": 20,
+      "displayed": 20,
+      "lastSuccessfulAt": "2026-11-13T04:27:06.088Z",
+      "elapsedMs": 440,
+      "sources": [
+        {
+          "id": "techcrunch-ai",
+          "name": "TechCrunch AI",
+          "topic": "ai",
+          "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:06.087Z",
+          "lastAttemptAt": "2026-11-13T04:27:06.087Z",
+          "code": null,
+          "received": 20
+        },
+        {
+          "id": "wired-ai",
+          "name": "WIRED AI",
+          "topic": "ai",
+          "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+          "status": "unavailable",
+          "stale": true,
+          "lastSuccessfulAt": null,
+          "lastAttemptAt": "2026-11-13T04:27:06.087Z",
+          "code": "EMPTY_FEED",
+          "received": 0
+        },
+        {
+          "id": "guardian-ai",
+          "name": "The Guardian AI",
+          "topic": "ai",
+          "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:06.088Z",
+          "lastAttemptAt": "2026-11-13T04:27:06.088Z",
+          "code": null,
+          "received": 20
+        }
+      ],
+      "displayedLinks": [
+        {
+          "title": "Nectar launches an AI agent to automate creator discovery and outreach for brands",
+          "link": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands/",
+          "publishedAt": 1794510660000
+        },
+        {
+          "title": "Jensen Huang built an AI kingdom. Now he’s gone, will Nvidia’s ramparts be breached?",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/jensen-huang-built-an-ai-kingdom-now-hes-gone-will-nvidias-ramparts-be-breached",
+          "publishedAt": 1794505835000
+        },
+        {
+          "title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+          "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+          "publishedAt": 1794505000000
+        },
+        {
+          "title": "United Airlines blocks AI agents from booking flights, citing cybersecurity risks",
+          "link": "https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks/",
+          "publishedAt": 1794503878000
+        },
+        {
+          "title": "SoftBank’s billion-dollar loss may have put a cap on AI’s natural gas ambitions",
+          "link": "https://techcrunch.com/2026/11/12/softbanks-billion-dollar-loss-may-have-put-a-cap-on-ais-natural-gas-ambitions/",
+          "publishedAt": 1794502852000
+        },
+        {
+          "title": "Phota Labs uses AI to turn everyday photos into professional-looking shots",
+          "link": "https://techcrunch.com/2026/11/12/phota-labs-uses-ai-to-turn-everyday-photos-into-professional-looking-shots/",
+          "publishedAt": 1794502800000
+        },
+        {
+          "title": "Five ways Jensen Huang’s ouster from Nvidia could damage the AI industry",
+          "link": "https://techcrunch.com/2026/11/12/five-ways-jensen-huangs-ouster-from-nvidia-could-damage-the-ai-industry/",
+          "publishedAt": 1794501153000
+        },
+        {
+          "title": "From washing dishes at Denny’s to rockstar of AI: the rise and fall of Nvidia’s Jensen Huang",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/rise-and-fall-of-nvidia-ceo-jensen-huang-profile",
+          "publishedAt": 1794500251000
+        },
+        {
+          "title": "Norwest pushes deeper into AI with new $4B fund",
+          "link": "https://techcrunch.com/2026/11/12/norwest-pushes-deeper-into-ai-with-new-4b-fund/",
+          "publishedAt": 1794496694000
+        },
+        {
+          "title": "Cyberattack on Fireworks AI allowed hackers to access Notion customers’ chat transcripts",
+          "link": "https://techcrunch.com/2026/11/12/cyberattack-on-fireworks-ai-allowed-hackers-to-access-notion-customers-chat-transcripts/",
+          "publishedAt": 1794495748000
+        },
+        {
+          "title": "US public workers are fighting to protect their jobs from AI – and some are winning",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/us-workers-governments-unions-ai",
+          "publishedAt": 1794495644000
+        },
+        {
+          "title": "Zimbabwean author Simbarashe Kundizeza cleared of using AI to write prize-winning story",
+          "link": "https://www.theguardian.com/books/2026/nov/12/zimbabwean-author-simbarashe-kundizeza-cleared-ai-caine-prize-winning-story",
+          "publishedAt": 1794489278000
+        },
+        {
+          "title": "AI helped UK defy expectations – but will economy’s resilience fizzle out?",
+          "link": "https://www.theguardian.com/business/2026/nov/12/ai-uk-economy-john-healey",
+          "publishedAt": 1794488892000
+        },
+        {
+          "title": "NHS England deletes ‘misleading’ claim 137 trusts benefiting from Palantir AI tools",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/nhs-england-deletes-misleading-claim-137-trusts-benefiting-from-palantir-ai-tools",
+          "publishedAt": 1794481247000
+        },
+        {
+          "title": "Fewer hours and higher wages – or more burnout and surveillance: employers told to prepare for AI",
+          "link": "https://www.theguardian.com/technology/2026/nov/12/fewer-hours-and-higher-wages-or-more-burnout-and-surveillance-employers-told-to-prepare-for-ai",
+          "publishedAt": 1794466544000
+        },
+        {
+          "title": "AI datacentres plan on-site power stations on huge scale despite climate risks, research reveals",
+          "link": "https://www.theguardian.com/world/2026/nov/11/ai-datacentres-on-site-gas-fired-power-stations",
+          "publishedAt": 1794398448000
+        },
+        {
+          "title": "AI has made it ‘close to impossible’ to assess university coursework, regulator says",
+          "link": "https://www.theguardian.com/education/2026/nov/11/ai-close-to-impossible-assess-university-coursework-regulator",
+          "publishedAt": 1794380433000
+        },
+        {
+          "title": "From the archive: Weizenbaum’s nightmares: how the inventor of the first chatbot turned against AI – podcast",
+          "link": "https://www.theguardian.com/news/audio/2026/nov/11/from-the-archive-weizenbaums-nightmares-how-the-inventor-of-the-first-chatbot-turned-against-ai-podcast",
+          "publishedAt": 1794373231000
+        },
+        {
+          "title": "Albanese’s love affair with music is on the rocks over AI. Can he write a different tune? | Peter Lewis",
+          "link": "https://www.theguardian.com/commentisfree/2026/nov/11/albaneses-love-affair-with-music-is-on-the-rocks-over-ai-can-he-write-a-different-tune",
+          "publishedAt": 1794348020000
+        },
+        {
+          "title": "Anthropic targets valuation of up to $1.4tn in stock market flotation",
+          "link": "https://www.theguardian.com/technology/2026/nov/10/anthropic-valuation-stock-market-flotation-ipo-wall-street-ai",
+          "publishedAt": 1794327193000
+        }
+      ]
+    },
+    {
+      "topic": "crypto",
+      "configured": 3,
+      "successful": 3,
+      "received": 93,
+      "unique": 58,
+      "displayed": 40,
+      "lastSuccessfulAt": "2026-11-13T04:27:06.528Z",
+      "elapsedMs": 5815,
+      "sources": [
+        {
+          "id": "coindesk",
+          "name": "CoinDesk",
+          "topic": "crypto",
+          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:06.527Z",
+          "lastAttemptAt": "2026-11-13T04:27:06.527Z",
+          "code": null,
+          "received": 25
+        },
+        {
+          "id": "cointelegraph",
+          "name": "Cointelegraph",
+          "topic": "crypto",
+          "url": "https://cointelegraph.com/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:06.528Z",
+          "lastAttemptAt": "2026-11-13T04:27:06.528Z",
+          "code": null,
+          "received": 30
+        },
+        {
+          "id": "decrypt",
+          "name": "Decrypt",
+          "topic": "crypto",
+          "url": "https://decrypt.co/feed",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:06.528Z",
+          "lastAttemptAt": "2026-11-13T04:27:06.528Z",
+          "code": null,
+          "received": 38
+        }
+      ],
+      "displayedLinks": [
+        {
+          "title": "Bitcoin dips below $70,000 as Dollar Index hits 19-month high",
+          "link": "https://www.coindesk.com/markets/2026/11/13/bitcoin-dips-below-usd70-000-as-selloff-gathers-pace",
+          "publishedAt": 1794541020000
+        },
+        {
+          "title": "North Korea's Binance hack faces U.S. crackdown as DOJ targets $1.2 billion in stolen crypto",
+          "link": "https://www.coindesk.com/policy/2026/11/12/north-korea-s-binance-hack-faces-u-s-crackdown-as-doj-targets-usd1-2-billion-in-stolen-crypto",
+          "publishedAt": 1794524152000
+        },
+        {
+          "title": "Here’s what happened in crypto today",
+          "link": "https://cointelegraph.com/news/what-happened-in-crypto-today",
+          "publishedAt": 1794521501000
+        },
+        {
+          "title": "North Korea Stole $400 Million in Crypto Using Deepfake Video Calls, DOJ Says",
+          "link": "https://decrypt.co/383208/north-korea-stole-400-million-crypto-deepfake-video-calls",
+          "publishedAt": 1794521163000
+        },
+        {
+          "title": "Strategy stock sheds 5% amid MSCI index removal, Bitcoin sell-off",
+          "link": "https://cointelegraph.com/markets/strategy-shares-fall-5-msci-index-removal-bitcoin",
+          "publishedAt": 1794520324000
+        },
+        {
+          "title": "Strategy Made $19.5 Billion in Profit. So Why Is MSCI Removing It From Stock Indexes?",
+          "link": "https://decrypt.co/383204/why-msci-removing-bitcoin-treasury-strategy-stock-indexes",
+          "publishedAt": 1794518763000
+        },
+        {
+          "title": "US Justice Department, business groups and DeFi firms challenge Illinois crypto tax",
+          "link": "https://cointelegraph.com/news/us-justice-department-business-groups-defi-illinois-crypto-tax",
+          "publishedAt": 1794517086000
+        },
+        {
+          "title": "Why the Path to Quantum Resistance Runs Uphill for Bitcoin Wallet Makers",
+          "link": "https://decrypt.co/383201/why-path-quantum-resistance-runs-uphill-bitcoin-wallet",
+          "publishedAt": 1794515763000
+        },
+        {
+          "title": "DTCC Plans Solana Expansion as Wallet Rules Limit Access",
+          "link": "https://cointelegraph.com/news/dtcc-plans-solana-expansion-wallet-rules-limit-access",
+          "publishedAt": 1794514061000
+        },
+        {
+          "title": "Illinois Crypto Tax Draws Unlikely Alliance of DOJ, Banks and DeFi",
+          "link": "https://decrypt.co/383144/illinois-crypto-tax-draws-alliance-doj-banks-defi",
+          "publishedAt": 1794505562000
+        },
+        {
+          "title": "'A Massive Mistake': Tech, AI and Crypto Founders React to Jensen Huang’s Nvidia Exit",
+          "link": "https://decrypt.co/383141/massive-mistake-tech-ai-crypto-founders-react-jensen-huang-nvidia-exit",
+          "publishedAt": 1794503682000
+        },
+        {
+          "title": "Illinois crypto tax is impossible to enforce as written, crypto industry tells court",
+          "link": "https://www.coindesk.com/policy/2026/11/12/illinois-crypto-tax-is-impossible-to-enforce-as-written-crypto-industry-tells-court",
+          "publishedAt": 1794501952000
+        },
+        {
+          "title": "Tron, Tether and Chainalysis Form a New Crypto-Crime Task Force—Replacing One That Just Collapsed",
+          "link": "https://decrypt.co/383139/tron-tether-chainalysis-new-crypto-crime-task-force-replacing-trm",
+          "publishedAt": 1794501362000
+        },
+        {
+          "title": "Anchorage Digital’s Stablecoins Can Now Settle Payments on Visa’s Network",
+          "link": "https://decrypt.co/383098/anchorage-digital-stablecoins-settle-payments-visa-network",
+          "publishedAt": 1794499263000
+        },
+        {
+          "title": "Bitcoin slides toward $71K as Nvidia stock tumbles after Huang steps down",
+          "link": "https://cointelegraph.com/markets/bitcoin-price-drops-71k-stocks-nvidia-huang-resignation",
+          "publishedAt": 1794498366000
+        },
+        {
+          "title": "DTCC adds Solana to Wall Street tokenization plans, targeting 2027 rollout",
+          "link": "https://www.coindesk.com/business/2026/11/12/dtcc-adds-solana-to-wall-street-tokenization-plans-targeting-2027-rollout",
+          "publishedAt": 1794498348000
+        },
+        {
+          "title": "Crypto for Advisors: The blockchain built to run financial markets",
+          "link": "https://www.coindesk.com/coindesk-indices/2026/11/12/crypto-for-advisors-the-blockchain-built-to-run-financial-markets",
+          "publishedAt": 1794497669000
+        },
+        {
+          "title": "Jupiter adds Anchorage-backed USDGO to its $1 billion Solana lending platform",
+          "link": "https://www.coindesk.com/business/2026/11/12/jupiter-adds-anchorage-backed-usdgo-to-its-usd1-billion-solana-lending-platform",
+          "publishedAt": 1794494700000
+        },
+        {
+          "title": "SoFi Brings Its Bank-Issued Stablecoin to Polygon’s Payments Stack",
+          "link": "https://decrypt.co/383096/sofi-brings-bank-issued-stablecoin-polygon-payments-stack",
+          "publishedAt": 1794492062000
+        },
+        {
+          "title": "Thailand proposes $148K daily cap on stablecoin deposits and withdrawals",
+          "link": "https://cointelegraph.com/news/thailand-tighter-stablecoin-rules-crypto-exchange",
+          "publishedAt": 1794491043000
+        },
+        {
+          "title": "Crypto hack losses equal 57 cents per $1 earned onchain: Ark’s Valente",
+          "link": "https://cointelegraph.com/news/crypto-hackers-stole-57-cents-every-1-earned-ark",
+          "publishedAt": 1794490319000
+        },
+        {
+          "title": "Are Alt-L1s over? Security, costs drive smaller chains to Ethereum",
+          "link": "https://cointelegraph.com/magazine/are-alt-l1s-over-security-costs-drive-smaller-chains-to-ethereum",
+          "publishedAt": 1794490200000
+        },
+        {
+          "title": "DTCC to Bring Tokenized Stocks and Treasuries to Solana in 2027",
+          "link": "https://decrypt.co/383132/dtcc-to-bring-tokenized-stocks-and-treasuries-to-solana-in-2027",
+          "publishedAt": 1794489947000
+        },
+        {
+          "title": "Uber’s UK banking partner Griffin raises $20M for stablecoin services",
+          "link": "https://cointelegraph.com/news/digital-bank-griffin-100m-valuation-card-stablecoin",
+          "publishedAt": 1794489716000
+        },
+        {
+          "title": "Morning Minute: Tokenized Stock Venues Are Launching Without Big Tech’s Approval",
+          "link": "https://decrypt.co/383129/morning-minute-tokenized-stock-venues-are-launching-without-big-techs-approval",
+          "publishedAt": 1794488784000
+        },
+        {
+          "title": "EU DeFi proposals could push users to riskier platforms, says Coinbase exec",
+          "link": "https://cointelegraph.com/news/eu-defi-riskier-platforms-coinbase-exec",
+          "publishedAt": 1794486103000
+        },
+        {
+          "title": "Bitcoin weakness erases September's bullish signal",
+          "link": "https://www.coindesk.com/daybook-us/2026/11/12/bitcoin-weakness-erases-september-s-bullish-signal",
+          "publishedAt": 1794485700000
+        },
+        {
+          "title": "UK bank Griffin raises $20 million to expand into stablecoin payments",
+          "link": "https://www.coindesk.com/business/2026/11/12/uk-bank-griffin-raises-usd20-million-to-expand-into-stablecoin-payments",
+          "publishedAt": 1794485082000
+        },
+        {
+          "title": "Ethereum researchers drop faster blocks to race toward quantum defenses in 2027",
+          "link": "https://www.coindesk.com/tech/2026/11/12/ethereum-researchers-drop-faster-blocks-to-race-toward-quantum-defenses-in-2027",
+          "publishedAt": 1794483821000
+        },
+        {
+          "title": "Stablecoin supply falls $14.2B in biggest 30-day drop since June 2022",
+          "link": "https://cointelegraph.com/markets/stablecoin-supply-drops-worst-slump-since-mid-2022",
+          "publishedAt": 1794483530000
+        },
+        {
+          "title": "Bitcoin dips with Nvidia as ETF outflows reach day five",
+          "link": "https://www.coindesk.com/markets/2026/11/12/bitcoin-dips-with-nvidia-as-etf-outflows-reach-day-five",
+          "publishedAt": 1794483000000
+        },
+        {
+          "title": "Bitcoin ETFs Bleed $1.4B in Five Days as Investors Cut Risk",
+          "link": "https://decrypt.co/383122/bitcoin-etfs-bleed-1-4b-in-five-days-as-investors-cut-risk",
+          "publishedAt": 1794482659000
+        },
+        {
+          "title": "Ethlabs drops Hegotá slot proposal in push for 2027 quantum readiness",
+          "link": "https://cointelegraph.com/news/ethlabs-ethereum-quantum-security-2027-quick-slots",
+          "publishedAt": 1794479429000
+        },
+        {
+          "title": "India’s financial crimes watchdog raids crypto exchanges CoinDCX and Delta over alleged illegal cross-border trades",
+          "link": "https://www.coindesk.com/policy/2026/11/12/india-s-financial-crimes-watchdog-raids-crypto-exchanges-coindcx-and-delta-over-alleged-illegal-cross-border-trades",
+          "publishedAt": 1794478248000
+        },
+        {
+          "title": "Live updates: Bitcoin slumps below $72,000 as Nvidia's Huang resigns, interest rates surge",
+          "link": "https://www.coindesk.com/tech/2026/11/12/live-news-strategy-kicked-out-of-msci-indexes-as-nvidia-slump-rattles-markets",
+          "publishedAt": 1794474904000
+        },
+        {
+          "title": "Gemini sells UK and European operations to stablecoin payments firm KAST for under $10 million",
+          "link": "https://www.coindesk.com/business/2026/11/12/gemini-sells-uk-and-european-operations-to-stablecoin-payments-firm-kast-for-under-usd10-million",
+          "publishedAt": 1794474420000
+        },
+        {
+          "title": "BlackRock Bitcoin ETF outflows hit $2B over nine sessions",
+          "link": "https://cointelegraph.com/markets/blackrock-bitcoin-etf-ibit-outflows-nine-day-streak",
+          "publishedAt": 1794470808000
+        },
+        {
+          "title": "Canaan may sell more bitcoin for stock buybacks as mining-rig revenue falls 96%",
+          "link": "https://www.coindesk.com/markets/2026/11/12/canaan-may-sell-more-bitcoin-for-stock-buybacks-as-mining-rig-revenue-falls-96",
+          "publishedAt": 1794469278000
+        },
+        {
+          "title": "MSCI is dropping Strategy from its index, and the exclusion could hit its bitcoin-buying machine",
+          "link": "https://www.coindesk.com/markets/2026/11/12/msci-is-dropping-strategy-from-its-index-and-the-exclusion-could-hit-its-bitcoin-buying-machine",
+          "publishedAt": 1794466837000
+        },
+        {
+          "title": "South Korea to permit crypto withdrawal freezes during hacking threats",
+          "link": "https://cointelegraph.com/news/south-korea-crypto-withdrawal-freezes-suspected-hacks",
+          "publishedAt": 1794462888000
+        }
+      ]
+    },
+    {
+      "topic": "finance",
+      "configured": 3,
+      "successful": 3,
+      "received": 107,
+      "unique": 37,
+      "displayed": 37,
+      "lastSuccessfulAt": "2026-11-13T04:27:12.342Z",
+      "elapsedMs": 5284,
+      "sources": [
+        {
+          "id": "bbc-business",
+          "name": "BBC Business",
+          "topic": "finance",
+          "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:12.342Z",
+          "lastAttemptAt": "2026-11-13T04:27:12.342Z",
+          "code": null,
+          "received": 57
+        },
+        {
+          "id": "marketwatch",
+          "name": "MarketWatch",
+          "topic": "finance",
+          "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:12.342Z",
+          "lastAttemptAt": "2026-11-13T04:27:12.342Z",
+          "code": null,
+          "received": 10
+        },
+        {
+          "id": "guardian-business",
+          "name": "The Guardian Business",
+          "topic": "finance",
+          "url": "https://www.theguardian.com/business/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:12.342Z",
+          "lastAttemptAt": "2026-11-13T04:27:12.342Z",
+          "code": null,
+          "received": 40
+        }
+      ],
+      "displayedLinks": [
+        {
+          "title": "Opening trading-card packs has become a $2 billion market",
+          "link": "https://www.marketwatch.com/story/opening-trading-card-packs-has-become-a-2-billion-market-new-apps-are-trying-to-cash-in-b7ba11f5?mod=mw_rss_topstories",
+          "publishedAt": 1794523080000
+        },
+        {
+          "title": "The 10 best stocks for a year-end momentum trade",
+          "link": "https://www.marketwatch.com/story/the-10-best-stocks-for-a-year-end-momentum-trade-8d4cf8f7?mod=mw_rss_topstories",
+          "publishedAt": 1794520200000
+        },
+        {
+          "title": "Nvidia turmoil continues as Jensen Huang resigns over affairs scandal and company appoints interim CEO – as it happened",
+          "link": "https://www.theguardian.com/technology/live/2026/nov/12/nvidia-ceo-jensen-huang-affairs-share-price-plunges-live-latest",
+          "publishedAt": 1794519188000
+        },
+        {
+          "title": "The S&P 500 is shrugging off Nvidia’s selloff this week. Here’s what’s keeping the rest of the market afloat.",
+          "link": "https://www.marketwatch.com/story/the-s-p-500-is-shrugging-off-nvidias-selloff-heres-whats-keeping-the-rest-of-the-market-afloat-7cdf2f05?mod=mw_rss_topstories",
+          "publishedAt": 1794517680000
+        },
+        {
+          "title": "The bond market now has an even bigger fear than AI fallout",
+          "link": "https://www.marketwatch.com/story/the-bond-market-now-has-an-even-bigger-fear-than-the-ai-fallout-b6401b54?mod=mw_rss_topstories",
+          "publishedAt": 1794516240000
+        },
+        {
+          "title": "I’m 17 and will be a first-generation college student. Is law school worth being $200,000 in debt?",
+          "link": "https://www.marketwatch.com/story/im-17-and-will-be-a-first-generation-college-student-is-law-school-worth-being-200-000-in-debt-df9b23c3?mod=mw_rss_topstories",
+          "publishedAt": 1794514620000
+        },
+        {
+          "title": "The Guardian view on venture capitalism: investor profits are no industrial strategy | Editorial",
+          "link": "https://www.theguardian.com/commentisfree/2026/nov/12/the-guardian-view-on-venture-capitalism-investor-profits-are-no-industrial-strategy",
+          "publishedAt": 1794509592000
+        },
+        {
+          "title": "Jensen Huang was a busted flush at Nvidia – he had to go | Nils Pratley",
+          "link": "https://www.theguardian.com/technology/nils-pratley-on-finance/2026/nov/12/jensen-huang-was-a-busted-flush-at-nvidia-he-had-to-go",
+          "publishedAt": 1794509208000
+        },
+        {
+          "title": "Home sales hit 16-year low in October amid record-high mortgage rates",
+          "link": "https://www.theguardian.com/business/2026/nov/12/home-sales-october-low",
+          "publishedAt": 1794504367000
+        },
+        {
+          "title": "UK car industry to press EU for two-year delay to Brexit EV tariffs",
+          "link": "https://www.theguardian.com/business/2026/nov/12/uk-car-industry-rules-of-origin-brexit-ev-tariffs-eu",
+          "publishedAt": 1794501027000
+        },
+        {
+          "title": "Look at the Poundland scandal and see a crisis that goes beyond Britain’s high streets | Polly Toynbee",
+          "link": "https://www.theguardian.com/commentisfree/2026/nov/12/poundland-scandal-law-britain-store-manager-labour",
+          "publishedAt": 1794499263000
+        },
+        {
+          "title": "Poundland gets more time to secure a rescue deal as emergency talks continue",
+          "link": "https://www.bbc.co.uk/news/articles/c3702jjkez4ko?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794493799000
+        },
+        {
+          "title": "Poundland owner secures two extra weeks to ensure retail chain’s survival",
+          "link": "https://www.theguardian.com/business/2026/nov/12/poundland-owner-secures-two-extra-weeks-ensure-retail-chains-survival",
+          "publishedAt": 1794491194000
+        },
+        {
+          "title": "Faisal Islam: Why the UK economy is surprisingly resilient",
+          "link": "https://www.bbc.co.uk/news/articles/cj62p32k90wyo?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794490029000
+        },
+        {
+          "title": "AI helped UK defy expectations – but will economy’s resilience fizzle out?",
+          "link": "https://www.theguardian.com/business/2026/nov/12/ai-uk-economy-john-healey",
+          "publishedAt": 1794488892000
+        },
+        {
+          "title": "Metro Bank up for sale, with billionaire investor in line for £420m windfall",
+          "link": "https://www.theguardian.com/business/2026/nov/12/metro-bank-up-for-sale-billionaire-investor-in-line-420m-windfall",
+          "publishedAt": 1794487429000
+        },
+        {
+          "title": "Burberry returns to profit as sales soar, from £85 socks to £9,000 coats",
+          "link": "https://www.theguardian.com/business/2026/nov/12/burberry-profit-sales-socks-bags-china-us",
+          "publishedAt": 1794486161000
+        },
+        {
+          "title": "UK economy grows at fastest rate for more than two years",
+          "link": "https://www.bbc.co.uk/news/articles/ck3rgd429zd5o?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794482425000
+        },
+        {
+          "title": "Billions lost and markets roiled by one man’s indiscretion. Isn’t it now clear that these tech bros are too powerful? | Aditya Chakrabortty",
+          "link": "https://www.theguardian.com/commentisfree/2026/nov/12/billions-lost-markets-roiled-one-man-indiscretion-tech-bro-jensen-huang-affair-nvidia",
+          "publishedAt": 1794482271000
+        },
+        {
+          "title": "UK drone maker founded by Ukrainians hits £4.5bn value after raising £500m",
+          "link": "https://www.theguardian.com/business/2026/nov/12/uk-drone-maker-ukraine-value-uforce",
+          "publishedAt": 1794479510000
+        },
+        {
+          "title": "AI helps UK economy grow at fastest pace for more than two years",
+          "link": "https://www.theguardian.com/business/2026/nov/12/uk-economy-grows-third-quarter-oil-price-ons-gdp",
+          "publishedAt": 1794474772000
+        },
+        {
+          "title": "Water industry bonus ban to be tightened as Ofwat warns of ‘damage to public trust’",
+          "link": "https://www.theguardian.com/business/2026/nov/12/water-industry-bonus-ban-tightened-ofwat",
+          "publishedAt": 1794470392000
+        },
+        {
+          "title": "KKR and RWE are rich firms. Why do they need a UK state loan for their windfarms? | Nils Pratley",
+          "link": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/nov/11/kkr-rwe-uk-state-loan-vanguard-windfarms",
+          "publishedAt": 1794420926000
+        },
+        {
+          "title": "Poundland founder writes to King for help",
+          "link": "https://www.bbc.co.uk/news/videos/cm4gndjd4nnno?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794419975000
+        },
+        {
+          "title": "Air traffic control boss says he was ‘most disliked person in the UK’ after flight chaos",
+          "link": "https://www.theguardian.com/business/2026/nov/11/air-traffic-control-nats-martin-rolfe-outages-ryanair",
+          "publishedAt": 1794404152000
+        },
+        {
+          "title": "‘I’d steal 10-15 times a day’: ex-offenders on the addictions driving prolific shoplifting",
+          "link": "https://www.theguardian.com/business/2026/nov/11/drug-addiction-shoplifting-rehabilitation",
+          "publishedAt": 1794399024000
+        },
+        {
+          "title": "Police to target 500 chronic shoplifters in retail crime crackdown in England",
+          "link": "https://www.theguardian.com/uk-news/2026/nov/11/police-target-chronic-shoplifters-retail-crackdown-england-wales",
+          "publishedAt": 1794397597000
+        },
+        {
+          "title": "Private renters in the UK: how difficult is the rental market where you live?",
+          "link": "https://www.theguardian.com/money/2026/nov/11/private-renters-in-the-uk-how-difficult-is-the-rental-market-where-you-live",
+          "publishedAt": 1794396542000
+        },
+        {
+          "title": "Prime property, slow sales: why London’s stock of empty high-end flats is piling up",
+          "link": "https://www.theguardian.com/news/2026/nov/11/property-london-empty-high-end-flats-developers",
+          "publishedAt": 1794376830000
+        },
+        {
+          "title": "Nvidia hires major US law firm to investigate alleged Chinese spy affair",
+          "link": "https://www.bbc.co.uk/news/articles/ck1wvwwl3x0go?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794351135000
+        },
+        {
+          "title": "Claude chatbot maker set for $1.3tn stock market debut despite 'catastrophic' AI warning",
+          "link": "https://www.bbc.co.uk/news/articles/crpdgd723x2zo?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794333372000
+        },
+        {
+          "title": "Kim Kardashian's Skims offers refunds for $148 advent calendar after backlash",
+          "link": "https://www.bbc.co.uk/news/articles/cqp8g8p53x6ko?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794330295000
+        },
+        {
+          "title": "US inflation higher than expected in October - here's what is happening with prices",
+          "link": "https://www.bbc.co.uk/news/articles/cwy8lx3pg4k2o?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794321946000
+        },
+        {
+          "title": "Trump says FBI investigating Nvidia boss's affair with alleged Chinese spy",
+          "link": "https://www.bbc.co.uk/news/articles/cqg7x7dpvym8o?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794299001000
+        },
+        {
+          "title": "Californians reject wealth tax for billionaires",
+          "link": "https://www.bbc.co.uk/news/articles/cq398em3032wo?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794281686000
+        },
+        {
+          "title": "Nvidia shares tumble over investigation into Huang's affair with alleged Chinese spy",
+          "link": "https://www.bbc.co.uk/news/articles/c6zxjx01vyleo?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794254281000
+        },
+        {
+          "title": "Poundland unable to buy new stock as fears over collapse grow",
+          "link": "https://www.bbc.co.uk/news/articles/cw1l3lmem165o?at_campaign=rss&at_medium=RSS",
+          "publishedAt": 1794242800000
+        }
+      ]
+    },
+    {
+      "topic": "tech",
+      "configured": 5,
+      "successful": 5,
+      "received": 120,
+      "unique": 66,
+      "displayed": 40,
+      "lastSuccessfulAt": "2026-11-13T04:27:17.979Z",
+      "elapsedMs": 615,
+      "sources": [
+        {
+          "id": "techcrunch",
+          "name": "TechCrunch",
+          "topic": "tech",
+          "url": "https://techcrunch.com/feed/",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:17.626Z",
+          "lastAttemptAt": "2026-11-13T04:27:17.626Z",
+          "code": null,
+          "received": 20
+        },
+        {
+          "id": "ars",
+          "name": "Ars Technica",
+          "topic": "tech",
+          "url": "https://feeds.arstechnica.com/arstechnica/index",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:17.627Z",
+          "lastAttemptAt": "2026-11-13T04:27:17.627Z",
+          "code": null,
+          "received": 20
+        },
+        {
+          "id": "verge",
+          "name": "The Verge",
+          "topic": "tech",
+          "url": "https://www.theverge.com/rss/index.xml",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:17.627Z",
+          "lastAttemptAt": "2026-11-13T04:27:17.627Z",
+          "code": null,
+          "received": 10
+        },
+        {
+          "id": "engadget",
+          "name": "Engadget",
+          "topic": "tech",
+          "url": "https://www.engadget.com/rss.xml",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:17.627Z",
+          "lastAttemptAt": "2026-11-13T04:27:17.627Z",
+          "code": null,
+          "received": 20
+        },
+        {
+          "id": "wired",
+          "name": "WIRED",
+          "topic": "tech",
+          "url": "https://www.wired.com/feed/rss",
+          "status": "ok",
+          "stale": false,
+          "lastSuccessfulAt": "2026-11-13T04:27:17.979Z",
+          "lastAttemptAt": "2026-11-13T04:27:17.979Z",
+          "code": null,
+          "received": 50
+        }
+      ],
+      "displayedLinks": [
+        {
+          "title": "‘Bring Back THE Boss’: Nvidia Employees Petition for Jensen Huang’s Return",
+          "link": "https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/",
+          "publishedAt": 1794532669000
+        },
+        {
+          "title": "Donald Trump really wants Tim Cook to run Nvidia",
+          "link": "https://www.theverge.com/tech/1032774/president-donald-trump-tim-cook-nvidia-jensen-huang",
+          "publishedAt": 1794530767000
+        },
+        {
+          "title": "Roborock Robot Vacuum Early Black Friday Deals (2026)",
+          "link": "https://www.wired.com/story/best-early-black-friday-robot-vacuum-deals-roborock-2026/",
+          "publishedAt": 1794527698000
+        },
+        {
+          "title": "Humble Bundle redesign removes two-factor verification from settings",
+          "link": "https://www.theverge.com/games/1032659/humble-bundle-redesign-two-factor-verification-security-settings",
+          "publishedAt": 1794526252000
+        },
+        {
+          "title": "Microsoft Outlook is still down",
+          "link": "https://www.theverge.com/tech/1032226/microsoft-outlook-is-down",
+          "publishedAt": 1794525853000
+        },
+        {
+          "title": "Democrats launch Nvidia investigation, write scathing letter on Huang’s ‘scheme’ with Trump",
+          "link": "https://techcrunch.com/2026/11/12/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-with-trump/",
+          "publishedAt": 1794523371000
+        },
+        {
+          "title": "FAA expands AI advice to manage air traffic congestion across entire US airspace",
+          "link": "https://arstechnica.com/ai/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/",
+          "publishedAt": 1794522527000
+        },
+        {
+          "title": "Jensen Huang Is Out. Will Nvidia’s Rivals Cash In?",
+          "link": "https://www.wired.com/story/uncanny-valley-podcast-jensen-huang-is-out-will-nvidias-rivals-cash-in/",
+          "publishedAt": 1794521681000
+        },
+        {
+          "title": "Google’s new Gemini model is better at understanding complicated questions",
+          "link": "https://www.theverge.com/ai-artificial-intelligence/1032505/google-search-ai-mode-gemini-4-hydrogen",
+          "publishedAt": 1794520532000
+        },
+        {
+          "title": "‘It’s a mistake’: reactions from tech leaders on Jensen Huang’s resignation",
+          "link": "https://www.theverge.com/tech/1032434/nvidia-jensen-huang-resignation-reactions",
+          "publishedAt": 1794519900000
+        },
+        {
+          "title": "The unfolding Jensen Huang scandal: a timeline",
+          "link": "https://techcrunch.com/2026/11/12/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/",
+          "publishedAt": 1794519300000
+        },
+        {
+          "title": "Here are the 25 original Xbox games you can now play on PC",
+          "link": "https://www.theverge.com/games/1032321/microsoft-xbox-original-games-pc-backwards-compatibility",
+          "publishedAt": 1794517200000
+        },
+        {
+          "title": "Major Microsoft Outlook Outage Leaves People With Email Jobs Unable to Email",
+          "link": "https://www.wired.com/story/major-microsoft-outlook-outage-hits-365-customers-north-america/",
+          "publishedAt": 1794513693000
+        },
+        {
+          "title": "The Elder Scrolls' most obscure adventure gets a 4K PC makeover",
+          "link": "https://arstechnica.com/gaming/2026/11/the-elder-scrolls-most-obscure-adventure-gets-a-4k-pc-makeover/",
+          "publishedAt": 1794512951000
+        },
+        {
+          "title": "Google’s latest Search upgrade promises better answers to your most complicated questions",
+          "link": "https://techcrunch.com/2026/11/12/googles-latest-search-upgrade-promises-better-answers-to-your-most-complicated-questions/",
+          "publishedAt": 1794511665000
+        },
+        {
+          "title": "Who is Collette Kress, NVIDIA's interim CEO?",
+          "link": "https://www.engadget.com/2315274/who-is-collette-kress-nvidia-ceo/",
+          "publishedAt": 1794511607000
+        },
+        {
+          "title": "Google rolls out Gemini 4 Hydrogen, finally replacing 3.8 Flash",
+          "link": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash/",
+          "publishedAt": 1794511383000
+        },
+        {
+          "title": "Multiple Microsoft 365 services are experiencing an outage",
+          "link": "https://www.engadget.com/2315259/multiple-microsoft-365-services-are-experiencing-an-outage/",
+          "publishedAt": 1794511052000
+        },
+        {
+          "title": "Nectar launches an AI agent to automate creator discovery and outreach for brands",
+          "link": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands/",
+          "publishedAt": 1794510660000
+        },
+        {
+          "title": "Ukraine says it can’t stop Russian strikes because Starshield is limited again",
+          "link": "https://arstechnica.com/tech-policy/2026/11/ukraine-says-spacex-starshield-is-restricted-again-spacex-claims-it-isnt/",
+          "publishedAt": 1794510597000
+        },
+        {
+          "title": "Microsoft’s Outlook email hit by new outage",
+          "link": "https://techcrunch.com/2026/11/12/microsofts-outlook-email-hit-by-new-outage/",
+          "publishedAt": 1794510219000
+        },
+        {
+          "title": "Google faces calls for AI moratoriums in schools after Gemini pilot backlash",
+          "link": "https://arstechnica.com/tech-policy/2026/11/families-fight-to-keep-googles-disturbing-ai-off-school-issued-chromebooks/",
+          "publishedAt": 1794509865000
+        },
+        {
+          "title": "Jensen Huang’s exit puts Nvidia’s support for open source in question",
+          "link": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question/",
+          "publishedAt": 1794508763000
+        },
+        {
+          "title": "Building a rocket is hard. AST SpaceMobile thinks it's \"simple.\"",
+          "link": "https://arstechnica.com/space/2026/11/building-a-rocket-is-hard-ast-spacemobile-thinks-its-simple/",
+          "publishedAt": 1794508102000
+        },
+        {
+          "title": "Google DeepMind Staff Tap the UK Government to Escalate Their Unionization Fight",
+          "link": "https://www.wired.com/story/google-deepmind-staff-escalate-their-union-fight/",
+          "publishedAt": 1794506741000
+        },
+        {
+          "title": "Ex-NVIDIA CEO Jensen Huang is set to testify before Congress this month",
+          "link": "https://www.engadget.com/2315091/ex-nvidia-ceo-jensen-huang-is-set-to-testify-before-congress-this-month/",
+          "publishedAt": 1794505988000
+        },
+        {
+          "title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+          "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+          "publishedAt": 1794505000000
+        },
+        {
+          "title": "The amazing disappearing exoplanet",
+          "link": "https://arstechnica.com/science/2026/11/the-amazing-disappearing-exoplanet/",
+          "publishedAt": 1794503890000
+        },
+        {
+          "title": "United Airlines blocks AI agents from booking flights, citing cybersecurity risks",
+          "link": "https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks/",
+          "publishedAt": 1794503878000
+        },
+        {
+          "title": "SoftBank’s billion-dollar loss may have put a cap on AI’s natural gas ambitions",
+          "link": "https://techcrunch.com/2026/11/12/softbanks-billion-dollar-loss-may-have-put-a-cap-on-ais-natural-gas-ambitions/",
+          "publishedAt": 1794502852000
+        },
+        {
+          "title": "Phota Labs uses AI to turn everyday photos into professional-looking shots",
+          "link": "https://techcrunch.com/2026/11/12/phota-labs-uses-ai-to-turn-everyday-photos-into-professional-looking-shots/",
+          "publishedAt": 1794502800000
+        },
+        {
+          "title": "Apple Sports adds live UFC updates",
+          "link": "https://www.engadget.com/2313383/apple-sports-adds-live-ufc-updates/",
+          "publishedAt": 1794502800000
+        },
+        {
+          "title": "Five ways Jensen Huang’s ouster from Nvidia could damage the AI industry",
+          "link": "https://techcrunch.com/2026/11/12/five-ways-jensen-huangs-ouster-from-nvidia-could-damage-the-ai-industry/",
+          "publishedAt": 1794501153000
+        },
+        {
+          "title": "Trump floats Apple chairman Tim Cook as Jensen Huang’s successor",
+          "link": "https://techcrunch.com/2026/11/12/trump-floats-apple-chairman-tim-cook-as-jensen-huangs-successor/",
+          "publishedAt": 1794499964000
+        },
+        {
+          "title": "Jensen Huang is out at Nvidia — who is Colette Kress, his interim replacement?",
+          "link": "https://techcrunch.com/2026/11/12/jensen-huang-is-out-at-nvidia-who-is-colette-kress-his-interim-replacement/",
+          "publishedAt": 1794497849000
+        },
+        {
+          "title": "Norwest pushes deeper into AI with new $4B fund",
+          "link": "https://techcrunch.com/2026/11/12/norwest-pushes-deeper-into-ai-with-new-4b-fund/",
+          "publishedAt": 1794496694000
+        },
+        {
+          "title": "Pre-orders for some Apple Home Collection devices will open November 13",
+          "link": "https://www.engadget.com/2314724/pre-orders-for-some-apple-home-collection-devices-will-open-november-13/",
+          "publishedAt": 1794496615000
+        },
+        {
+          "title": "Cyberattack on Fireworks AI allowed hackers to access Notion customers’ chat transcripts",
+          "link": "https://techcrunch.com/2026/11/12/cyberattack-on-fireworks-ai-allowed-hackers-to-access-notion-customers-chat-transcripts/",
+          "publishedAt": 1794495748000
+        },
+        {
+          "title": "Google pushes privacy angle as Gemini-powered smartglasses debut starting at $395",
+          "link": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/",
+          "publishedAt": 1794495017000
+        },
+        {
+          "title": "Meet Colette Kress, Nvidia’s New Interim CEO",
+          "link": "https://www.wired.com/story/who-is-colette-kress-the-woman-who-could-succeed-jensen-huang/",
+          "publishedAt": 1794492873000
+        }
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "url": "https://www.vogue.com/feed/rss",
+      "status": 200
+    },
+    {
+      "url": "https://wwd.com/feed/",
+      "status": 200
+    },
+    {
+      "url": "https://www.theguardian.com/fashion/rss",
+      "status": 200
+    },
+    {
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "status": 200
+    },
+    {
+      "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "status": 200
+    },
+    {
+      "url": "https://www.theguardian.com/technology/artificialintelligenceai/rss",
+      "status": 200
+    },
+    {
+      "url": "https://cointelegraph.com/rss",
+      "status": 200
+    },
+    {
+      "url": "https://decrypt.co/feed",
+      "status": 200
+    },
+    {
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "status": 308
+    },
+    {
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss",
+      "status": 200
+    },
+    {
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "status": 200
+    },
+    {
+      "url": "https://www.theguardian.com/business/rss",
+      "status": 302
+    },
+    {
+      "url": "https://www.theguardian.com/uk/business/rss",
+      "status": 200
+    },
+    {
+      "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+      "status": 200
+    },
+    {
+      "url": "https://techcrunch.com/feed/",
+      "status": 200
+    },
+    {
+      "url": "https://www.theverge.com/rss/index.xml",
+      "status": 200
+    },
+    {
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "status": 200
+    },
+    {
+      "url": "https://www.wired.com/feed/rss",
+      "status": 200
+    },
+    {
+      "url": "https://www.engadget.com/rss.xml",
+      "status": 200
+    }
+  ]
+}

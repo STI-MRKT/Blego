@@ -42,7 +42,7 @@ contextBridge.exposeInMainWorld('blego', {
     ipcRenderer.on('local:facebook-result', listener);
     return () => ipcRenderer.removeListener('local:facebook-result', listener);
   },
-  newsSnapshot: () => call('newsSnapshot'),
+  newsSnapshot: (topic) => call('newsSnapshot', topic),
   refreshNews: (options) => call('newsRefresh', options),
   cancelNews: () => call('newsCancel'),
   onNews: (callback) => {

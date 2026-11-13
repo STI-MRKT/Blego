@@ -13,6 +13,7 @@ import { readMetadataForm, readMetadataData, draftFromOperations } from './ui/ph
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
 import { loadNews } from './services/news.js';
+import { newsTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
 
@@ -494,43 +495,48 @@ async function reclassifyInput() {
   finally {if(state.importEpoch===epoch) {state.importRequest=null;renderView();}}
 }
 
+let newsRequest = 0;
 function ensureNews() {
-  if (!state.settings.newsEnabled) return;
+  if (state.view !== 'news' || !state.settings.newsEnabled) return;
   if (!state.news.lastAttemptAt && !state.news.loading) refreshNews(false);
 }
-
 async function refreshNews(force) {
-  if (state.news.loading) return;
-  state.news.loading = true;
-  state.news.error = '';
-  updateNews();
+  const topic=state.news.topic, request=++newsRequest;
+  state.news.loading=true;state.news.error='';updateNews();
   try {
-    const data = await loadNews(force);
-    state.news.items = data.items;
-    state.news.counts = data.counts || {};
-    state.news.updatedAt = data.lastSuccessfulAt ? Date.parse(data.lastSuccessfulAt) : 0;
-    state.news.sourceStates = data.sourceStates;
-    state.news.lastAttemptAt = data.lastAttemptAt;
-
-    state.news.error =
-      data.error ||
-      (data.items.length
-        ? ''
-        : 'News sources did not respond. Check the connection and try again.');
-  } catch (error) {
-    void error;
-    state.news.error = 'News is unavailable. Check the connection and try again.';
+    if (!state.settings.newsEnabled) state.settings=await window.blego.updateSettings({newsEnabled:true});
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    const data=await loadNews(force,topic);
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    Object.assign(state.news,data);
+    state.news.updatedAt=data.lastSuccessfulAt?Date.parse(data.lastSuccessfulAt):0;
+    const failed=Object.values(data.sourceStates||{}).some(s=>s.stale);
+    state.news.error=data.cancelled?'Update cancelled.':failed?(data.items.length?'Some sources are unavailable. Saved articles remain available.':'News sources did not respond. Try again later.'):'';
+  } catch {
+    if(request!==newsRequest)return;
+    state.news.error='News is unavailable. Saved articles remain available.';
   }
-  state.news.loading = false;
-  updateNews();
+  state.news.loading=false;updateNews();
 }
+document.addEventListener('change',async event=>{
+  if(event.target.id!=='news-topic')return;
+  const topic=newsTopic(event.target.value), request=++newsRequest;
+  state.news.topic=topic;state.news.items=[];state.news.lastAttemptAt=null;state.news.loading=true;state.news.error='';updateNews();
+  try {
+    await window.blego.updateSettings({newsTopic:topic});
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    const cached=await window.blego.newsSnapshot(topic);
+    if(request!==newsRequest||state.news.topic!==topic)return;
+    Object.assign(state.news,cached);state.news.updatedAt=cached.lastSuccessfulAt?Date.parse(cached.lastSuccessfulAt):0;
+    if(state.settings.newsEnabled) refreshNews(false); else {state.news.loading=false;updateNews();}
+  }catch {if(request!==newsRequest)return;state.news.loading=false;state.news.error='Could not load this topic.';updateNews();}
+});
 
 function updateNews() {
   const block = document.getElementById('news-block');
   if (block) {
     const selection = window.getSelection();
     if (
-      block.contains(document.activeElement) ||
       (selection?.toString() && block.contains(selection.anchorNode))
     )
       return;
@@ -910,20 +916,12 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'news-cancel') {
-    window.blego.cancelNews();
+    newsRequest++;state.news.loading=false;state.news.error='Update cancelled.';updateNews();
+    window.blego.cancelNews().catch(()=>toast('Cancellation could not be confirmed.','err'));
     return;
   }
   if (action === 'news-refresh') {
     refreshNews(true);
-    return;
-  }
-  if (action === 'news-topic') {
-    state.news.topic = target.dataset.topic || '';
-    window.blego.updateSettings({ newsTopic: state.news.topic });
-    if (!state.news.topic && !state.news.order.length) {
-      state.news.order = shuffle(state.news.items.map((item) => item.link));
-    }
-    updateNews();
     return;
   }
   if (action === 'net-enable') {
@@ -1333,10 +1331,11 @@ if (window.blego) {
     state.type = state.settings.type;
     await refreshPoolStats();
     state.demo = await window.blego.lastCard();
-    state.news.topic = state.settings.newsTopic;
-    const cached = await window.blego.newsSnapshot();
+    state.news.topic = newsTopic(state.settings.newsTopic);
+    const cached = await window.blego.newsSnapshot(state.news.topic);
     Object.assign(state.news, cached);
     window.blego.onNews((data) => {
+      if(data.topic !== state.news.topic) return;
       Object.assign(state.news, data);
       state.news.updatedAt = data.lastSuccessfulAt ? Date.parse(data.lastSuccessfulAt) : 0;
       updateNews();

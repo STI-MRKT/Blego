@@ -44,8 +44,6 @@ ${state.poolImport ? `<div class="card pad"><p>${esc(state.poolImport.country)} 
 <p class="sub">Archive folder: ${esc(s.archiveRoot || 'Application data / archives')}</p><button type="button" class="btn" data-action="archive-directory">Choose archive folder</button>
 <label class="fl"><input type="checkbox" name="includeOriginal" ${s.includeOriginal ? 'checked' : ''}> Include original bytes in future ZIPs (off by default)</label>
 <label class="fl">Refresh interval<select class="input" name="newsInterval">${[15, 30, 60, 180].map((n) => `<option value="${n}" ${s.newsInterval === n ? 'selected' : ''}>${n} minutes</option>`).join('')}</select></label>
-<label class="fl">News sources (JSON array: id, name, url, topic)<textarea class="input" name="newsSources" rows="4">${esc(JSON.stringify(s.newsSources || [], null, 2))}</textarea></label>
-<p class="sub">No sources are selected by default. Settings contain no passwords or API keys.</p>
 </details><button class="btn btn-primary ux-save-settings" type="submit">Сохранить настройки</button>
 </form></div>`;
 }
@@ -71,6 +69,6 @@ export function readSettingsForm(form) {
     facebookEnabled: data.has('facebookEnabled'),
     newsEnabled: data.has('newsEnabled'),
     newsInterval: Number(data.get('newsInterval')),
-    newsSources: JSON.parse(data.get('newsSources'))
+    newsSources: state.settings.newsSources || []
   };
 }
