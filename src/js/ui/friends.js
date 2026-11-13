@@ -68,7 +68,7 @@ export function friendsHTML() {
         .map(
           (friend) => `<article class="friend-card">
         <div class="friend-top"><div class="avatar lg" style="--h:${Number(friend.hue) || 240}">${esc(initialsOf(friend.name || ''))}</div><span class="pill tiny">${esc(friend.geo)}</span></div>
-        <div class="friend-name">${esc(friend.name)}${friend.name ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(friend.name)}" aria-label="Копировать имя">${I.copy}</button>` : ''}</div>
+        <div class="friend-name">${esc(friend.name || friend.url)}${friend.name ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(friend.name)}" aria-label="Копировать имя">${I.copy}</button>` : ''}</div>
         <div class="friend-handle mono">${friend.handle ? '@' + esc(friend.handle) : ''}</div><div class="friend-niche">${esc(friend.niche)}</div>
         <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="${esc(friend.id)}">${I.link}Open profile</button><button class="btn" data-action="copy" data-copy="${esc(friend.url)}" data-friend-copy="url" aria-label="Копировать ссылку">${I.copy}</button></div>
         ${

@@ -112,3 +112,5 @@
 .quality-track i { display: block; height: 100%; background: linear-gradient(90deg, #e05252, #ed933d, #e7cf45, #a0cf54, #48b878); background-size: 100% 100%; }
 .quality-track.unknown i { background: var(--muted); opacity: .35; }
 .classifier-cookie-value { white-space: pre-wrap; overflow: auto; max-height: 220px; max-width: 420px; overflow-wrap: anywhere; }
+
+.friend-name { overflow-wrap: anywhere; min-width: 0; }

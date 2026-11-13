@@ -1,0 +1,10 @@
+✔ BIO fields cannot be changed while an asynchronous save or suggestion is pending (7.050328ms)
+✔ TZ06 incomplete Friends card identifies its real URL while optional name remains empty (6.286241ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78.074137
