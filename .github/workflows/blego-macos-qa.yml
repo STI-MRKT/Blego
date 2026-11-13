@@ -125,6 +125,8 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/blego-original-reference" 6e57eabfb5b51af4475b90686fa580b5ce57e9b0
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
           node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --baseline-executable "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
+      - name: Bounded live public-service observations
+        run: BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-public-services.cjs release/public-services-native.json
       - name: Record checksums
         run: |
           (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS-mac.txt
@@ -156,6 +158,7 @@ jobs:
             release/real-photo-*.json
             release/responsive-native.json
             release/verification-native.log
+            release/public-services-native.json
             release/metadata-ui-folder20-*.log
             release/*.png
             release/ux-performance-*.json
@@ -184,5 +187,6 @@ jobs:
             release/real-photo-*.json
             release/responsive-native.json
             release/verification-native.log
+            release/public-services-native.json
             release/ux-performance-*.json
             release/*.png
