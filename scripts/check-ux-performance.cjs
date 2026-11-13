@@ -17,7 +17,7 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
     arch: process.arch,
     release: os.release(),
     method:
-      'Three isolated launches per version; visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Not a scientific cold-cache benchmark.',
+      'Three isolated launches per version; visible Electron window, local generation; renderer /api requests blocked for comparable offline observations. Screenshots use fixed renderer viewports because the host display can constrain native window bounds. Not a scientific cold-cache benchmark.',
     versions: []
   };
   for (const [label, project, binary] of [
@@ -86,6 +86,13 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
               ({ BrowserWindow }, bounds) => BrowserWindow.getAllWindows()[0].setBounds(bounds),
               { width, height }
             );
+            await page.setViewportSize({ width, height });
+            const viewport = await page.evaluate(() => ({
+              width: innerWidth,
+              height: innerHeight
+            }));
+            if (viewport.width !== width || viewport.height !== height)
+              throw Error('SCREENSHOT_VIEWPORT_MISMATCH');
             for (const view of [
               'generator',
               'network',
@@ -99,9 +106,11 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
               if (!(await nav.count())) continue;
               await nav.click();
               await page.waitForTimeout(650);
-              await page.screenshot({
+              const png = await page.screenshot({
                 path: path.join(output, `ux-${label}-${view}-${width}.png`)
               });
+              if (png.readUInt32BE(16) !== width || png.readUInt32BE(20) !== height)
+                throw Error('SCREENSHOT_DIMENSIONS_MISMATCH');
             }
           }
         }
