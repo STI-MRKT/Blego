@@ -31,6 +31,13 @@ test(
     });
     const page = await app.firstWindow();
     await page.locator('[data-action="generate"]').waitFor();
+    if (process.platform === 'linux') {
+      // Exercise the 17px non-overlay scrollbar observed on installed macOS.
+      await page.addStyleTag({
+        content:
+          '.content { scrollbar-gutter: stable; } .content::-webkit-scrollbar { width: 17px; }'
+      });
+    }
     const env = await app.evaluate(({ BrowserWindow, screen }) => ({
       os: process.platform,
       arch: process.arch,

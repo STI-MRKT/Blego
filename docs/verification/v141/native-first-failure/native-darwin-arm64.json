@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "target": "darwin-arm64",
+  "osRelease": "24.6.0",
+  "node": "v24.22.1",
+  "sharp": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  },
+  "manifest": {
+    "root": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64",
+    "manifestSha256": "7769ca438ed01da2fa2b2f042ed41f58846fd5a1129033b7f2c6ce45dce5e971",
+    "files": 1799,
+    "perlVersion": "v5.40.1"
+  },
+  "dependencies": "/Users/runner/work/Blego/Blego/build/metadata-runtime/darwin-arm64/bin/perl:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)\n",
+  "pathEmpty": true,
+  "formats": [
+    {
+      "format": "jpeg",
+      "status": "PASS",
+      "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+      "outputSha256": "2f43eaba0a65b71168cb0a65cd76f963838b3d559c8495e7330a46c2efc345fe"
+    },
+    {
+      "format": "png",
+      "status": "PASS",
+      "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+      "outputSha256": "bb22688dfb3013d70db39f4f36110381ff74bf5009a46cedff4ede8a52e60c39"
+    },
+    {
+      "format": "webp",
+      "status": "PASS",
+      "verification": "actual read/write/readback, protected payload and pixels, unchanged original",
+      "outputSha256": "0b96c9a29719601d00cb9209fa6fba1bf0fdd5df95d6176db5ebdf835d559fb8"
+    }
+  ],
+  "checkedAt": "2026-11-13T13:05:12.184Z",
+  "codeSha": "2ac654f35a659b6b39f119884f719010704753d6"
+}

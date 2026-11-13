@@ -31,6 +31,7 @@ test(
       fs.rmSync(root, { recursive: true, force: true });
     });
     let page = await launch();
+    await page.locator('.topbar [data-view="settings"]').waitFor();
     assert.equal(await page.locator('.sidebar [data-view="settings"]').count(), 0);
     assert.equal(await page.locator('.topbar [data-view="settings"]').count(), 1);
     await page.locator('[data-view="import"]').click();

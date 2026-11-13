@@ -1,0 +1,25 @@
+✖ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (3276.528655ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3759.583508
+
+✖ failing tests:
+
+test at tests/ui/responsive.test.cjs:12:1
+✖ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (3276.528655ms)
+  AssertionError [ERR_ASSERTION]: 360/network: content overflow {"width":360,"document":360,"scroll":280,"client":273,"clipped":[],"icons":[true,true,true,true,true,true,true,true]}
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/responsive.test.cjs:147:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

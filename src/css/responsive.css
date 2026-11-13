@@ -114,3 +114,8 @@
 .classifier-cookie-value { white-space: pre-wrap; overflow: auto; max-height: 220px; max-width: 420px; overflow-wrap: anywhere; }
 
 .friend-name { overflow-wrap: anywhere; min-width: 0; }
+/* TZ06 protocol label must wrap when a native scrollbar narrows the proxy card. */
+@media(max-width:600px){
+  .proxy-card .mini-head{flex-wrap:wrap;gap:6px}
+  .proxy-card .mini-head .pill{max-width:100%;white-space:normal;height:auto;min-height:19px;overflow-wrap:anywhere}
+}
