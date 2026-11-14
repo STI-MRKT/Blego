@@ -21,7 +21,7 @@ test('TZ06 Network renders independent numeric/unknown scales without removed co
   assert.ok(html.includes('data-score="65"'));
   assert.ok(html.includes('data-score="unknown"'));
 });
-test('TZ06 News has article links but no copy buttons', async () => {
+test('News retains article links and metadata with only the two TZ10 card copies', async () => {
   const { state } = await import('../../src/js/state.js');
   const { newsBlockHTML } = await import('../../src/js/ui/news.js');
   state.news = {
@@ -39,5 +39,10 @@ test('TZ06 News has article links but no copy buttons', async () => {
   };
   const html = newsBlockHTML();
   assert.ok(html.includes('https://example.test/article'));
-  assert.ok(!/data-action="copy"|news-copy/.test(html));
+  assert.equal((html.match(/data-news-copy=/g) || []).length, 2);
+  assert.ok(!html.includes('data-copy-action="open"'));
+  for (const value of ['Synthetic source', 'Synthetic author']) {
+    assert.ok(html.includes(value));
+    assert.ok(!html.includes(`data-copy="${value}"`));
+  }
 });

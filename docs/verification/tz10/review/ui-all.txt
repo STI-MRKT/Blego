@@ -1,0 +1,62 @@
+
+> blego@1.4.2 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (10387.341329ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2958.445369ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (2141.942519ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (5662.62991ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (1012.097567ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1427.620842ms)
+✔ TZ9 learned mail password displays, copies and archives without changing absent values (1123.071863ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (1972.898577ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1230.632694ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (10274.825543ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3052.61504ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2125.659218ms)
+✔ TZ9 checker shows evidence-backed ACTIVE/BLOCKED, neutral errors, exact copy and fresh retry (1435.703033ms)
+✔ TZ10 Friends bulk copy uses GEO/platform/search, all pages, imported rows and real clipboard (10344.284929ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (1947.777348ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (9209.330541ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (2915.475732ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (4709.42111ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (990.922136ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (1769.319262ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (4283.49759ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (1619.006761ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (1039.575409ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (1446.092906ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9198.64391ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1174.669521ms)
+✔ all10 views have no general header Copy before/after generation/import/resize/restart; all FP/BIO copies remain exact (13231.863694ms)
+✔ advanced copy never resurrects after unsupported navigation or FP replacement/clear (5861.542984ms)
+✔ copy shortcuts respect text editing, native copy, selection, empty data and key repeat (1317.612084ms)
+✔ late advanced copy requests cannot reopen a panel after navigation away and back (5784.721555ms)
+✔ changing the active photo group invalidates the prepared group snapshot (1742.120777ms)
+✔ sequential copy completion after navigation cannot advance or reopen a closed panel (5825.832015ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4361.882033ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2557.007967ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (837.320878ms)
+✔ TZ9 20 photos: Brazil to Italy loads city tiles, preserves consent and exports matching GPS (14674.520029ms)
+✔ TZ10 News copies exact title and URL in all topics, refreshed RSS and reopened SQLite cache without navigation (12615.842518ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata with card-only field copies (2370.123026ms)
+✔ map drag retains dirty date through actual preview and export (3975.407651ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4216.413617ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (4169.126134ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3425.387627ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3671.469127ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (5474.682978ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1920.805571ms)
+✔ first-run tour never steals navigation after the user starts working (1719.784015ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (21146.419103ms)
+✔ TZ9 fresh UI enables three tools; disabling one survives restart without changing others (1435.701546ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2341.248263ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (9746.543814ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 50
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 242175.611275

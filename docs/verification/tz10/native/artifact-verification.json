@@ -1,0 +1,18 @@
+{
+  "codeSha": "0c70817257a3d9298034285ff60102622273ac0f",
+  "status": "PASS",
+  "installedGuiTests": 50,
+  "installer": "BLEGO-1.4.2-TZ10-macOS-ARM64-install.zip",
+  "installerBytes": 150728402,
+  "installerSha256": "b7a2eb7608cd9e247f354c976b3bd57b439bb2fdf38831232c866042e9567732",
+  "dmg": "BLEGO-1.4.2-arm64.dmg",
+  "dmgSha256": "4841e65f0ecd8f2b1990597f202855c320c439e42be460dc6e536f0ac023b2df",
+  "innerMembers": [
+    "BLEGO-1.4.2-arm64.dmg",
+    "SHA256SUMS",
+    "INSTALL-RU.txt"
+  ],
+  "zipCrc": "PASS",
+  "downloadedDmgMatchesInstaller": "PASS",
+  "artifactDirectory": "/workspace/BLEGO-tz10-artifacts/qa-0c70817"
+}

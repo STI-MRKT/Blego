@@ -3,6 +3,18 @@ import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 import { initialsOf } from '../utils/random.js';
 import { FRIENDS } from '../data/friends.js';
+import { filterFriends, uniqueFriendLinks } from '../../../shared/friends-copy.mjs';
+const currentRows = () => state.friendsRows || FRIENDS.map((row, i) => ({ ...row, id: `seed-${i}`, platform: 'Instagram', copyUrl: row.url }));
+const currentFilter = () => ({ geo: state.friendsGeo, platform: state.friendsPlatform, query: state.friendsQuery });
+export const friendsCopyLinks = () => uniqueFriendLinks(filterFriends(currentRows(), currentFilter()));
+export function syncFriendsCopyActions() {
+  const count = friendsCopyLinks().length;
+  const seven = document.querySelector('[data-friends-copy="seven"]'), all = document.querySelector('[data-friends-copy="all"]');
+  if (seven) seven.disabled = Boolean(state.friendsCopyBusy) || count < 7;
+  if (all) all.disabled = Boolean(state.friendsCopyBusy) || count === 0;
+  const message = document.querySelector('[data-friends-copy-empty]');
+  if (message) message.textContent = count ? '' : 'Нет доступных ссылок';
+}
 function pager(page, count, action) {
   return count > 1
     ? `<div class="head-actions"><button class="btn" data-action="${action}" data-page="${page - 1}" ${page === 0 ? 'disabled' : ''}>Назад</button><span>${page + 1} / ${count}</span><button class="btn" data-action="${action}" data-page="${page + 1}" ${page + 1 >= count ? 'disabled' : ''}>Далее</button></div>`
@@ -30,22 +42,8 @@ function previewHTML() {
     )}</tbody></table></div><div class="head-actions"><button class="btn btn-primary" data-action="friends-confirm" ${!preview.added || state.friendsBusy ? 'disabled' : ''}>Добавить подтверждённые записи</button><button class="btn" data-action="friends-cancel">Отмена</button></div></section>`;
 }
 export function friendsHTML() {
-  const all =
-    state.friendsRows ||
-    FRIENDS.map((row, i) => ({ ...row, id: `seed-${i}`, platform: 'Instagram' }));
-  const selected = state.friendsGeo,
-    query = (state.friendsQuery || '').toLocaleLowerCase();
-  const list = all.filter(
-    (friend) =>
-      (!selected || friend.geo === selected) &&
-      (!state.friendsPlatform || friend.platform === state.friendsPlatform) &&
-      (!query ||
-        [friend.name, friend.url, friend.geo, friend.niche, friend.notes].some((v) =>
-          String(v || '')
-            .toLocaleLowerCase()
-            .includes(query)
-        ))
-  );
+  const all = currentRows(), selected = state.friendsGeo;
+  const list = filterFriends(all, currentFilter()), links = uniqueFriendLinks(list);
   const geos = [...new Set(all.map((f) => f.geo).filter(Boolean))].sort(),
     platforms = [...new Set(all.map((f) => f.platform).filter(Boolean))].sort();
   const count = (geo) => all.filter((friend) => friend.geo === geo).length;
@@ -61,6 +59,7 @@ export function friendsHTML() {
       <button class="geo-chip ${selected ? '' : 'on'}" data-action="friends-geo" data-geo="">All <b>${all.length}</b></button>
       ${geos.map((geo) => `<button class="geo-chip ${selected === geo ? 'on' : ''}" data-action="friends-geo" data-geo="${esc(geo)}">${esc(geo)} <b>${count(geo)}</b></button>`).join('')}
     </div>
+    <div class="head-actions friends-copy-actions"><button class="btn" data-action="friends-copy" data-friends-copy="seven" ${links.length < 7 || state.friendsCopyBusy ? 'disabled' : ''}>${I.copy}Скопировать 7</button><button class="btn" data-action="friends-copy" data-friends-copy="all" ${!links.length || state.friendsCopyBusy ? 'disabled' : ''}>${I.copy}Скопировать все</button><span class="sub" data-friends-copy-empty aria-live="polite">${links.length ? '' : 'Нет доступных ссылок'}</span></div>
     ${previewHTML()}${pager(page, pages, 'friends-page')}
     <div class="friends-grid">
       ${list
