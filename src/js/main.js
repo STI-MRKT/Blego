@@ -1123,6 +1123,12 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if (action === 'news-copy') {
+    const field=target.dataset.newsCopy;
+    if(field!=='title' && field!=='link')return;
+    await copyText(target.dataset.copy || '',null,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
+    return;
+  }
   if (action === 'copy') {
     copyText(target.dataset.copy || '', target);
     return;

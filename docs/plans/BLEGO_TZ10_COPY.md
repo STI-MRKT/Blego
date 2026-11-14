@@ -18,22 +18,22 @@ Touch only Friends, News, narrowly necessary copy utility/main dispatch, tests/Q
 - Narrow cards and high counts/size-limit errors must leave all actions reachable and report honest outcome.
 
 ### Task1: audit / baseline
-- [ ] Confirm remote HEAD/branch/clean isolation; npmci/verify/UI baseline. Save counts/logs.
-- [ ] Commit design/plan and baseline evidence.
+- [x] Confirm remote HEAD/branch/clean isolation; npmci/verify/UI baseline. Save counts/logs.
+- [x] Commit design/plan and baseline evidence.
 
 ### Task2: Friends
 Files: electron/features/friends/service.cjs; new shared/friends-copy.mjs; src/js/ui/friends.js; src/js/main.js; src/js/utils/clipboard.js; new unit/integration/UI tests.
 Interfaces: list rows gain transient copyUrl:string|null, never persisted. filterFriends(rows,{geo,platform,query}), uniqueFriendLinks(rows), selectSeven(urls,previous=[],randomInt=...), friendsCopyMessage(count,seven). UI exports friendsCopyLinks and syncFriendsCopyActions for existing oninput/dispatch; state/selection stays session-only.
-- [ ] RED list canonical eligibility/duplicates/storage unchanged, buttons0/3/7/10+, filtering, uniform sampler and repeated-set handling.
-- [ ] Implement minimal code; buttons use fresh current filters and all pages. Common clipboard limit unchanged; custom Friends failure text only after failure, success after readback.
-- [ ] GUI actual import + GEO/platform/search/pagination>100 +7/all/readback, failure/delayed write, narrow/re-render, no external request. Targeted +fullverify/UI GREEN, commit.
+- [x] RED list canonical eligibility/duplicates/storage unchanged, buttons0/3/7/10+, filtering, uniform sampler and repeated-set handling.
+- [x] Implement minimal code; buttons use fresh current filters and all pages. Common clipboard limit unchanged; custom Friends failure text only after failure, success after readback.
+- [x] GUI actual import + GEO/platform/search/pagination>100 +7/all/readback, failure/delayed write, narrow/re-render, no external request. Targeted +fullverify/UI GREEN, commit.
 
 ### Task3: News
 Files: src/js/ui/news.js; src/js/main.js; new tests/unit/news-copy.test.cjs and tests/ui/news-copy.test.cjs; update old copy-removal expectation to new card contract, retain header absence/navigation assertions.
 Interfaces: data-action=news-copy with escaped full model value and title/link kind, copyText existing IPC, no new listeners.
-- [ ] RED two per-card buttons and actual exact title/URL clipboard, no browser-open on copy.
-- [ ] Add compact actions using existing copy icon, no source/date buttons or global Copy.
-- [ ] GUI all5topics, refresh, persisted SQLite cache/restart, long title/queryURL, failures/360px; targeted + fullverify/UI GREEN, commit.
+- [x] RED two per-card buttons and actual exact title/URL clipboard, no browser-open on copy.
+- [x] Add compact actions using existing copy icon, no source/date buttons or global Copy.
+- [x] GUI all5topics, refresh, persisted SQLite cache/restart, long title/queryURL, failures/360px; targeted + fullverify/UI GREEN, commit.
 
 ### Task4: review / native QA / PR
 Files: existing .github/workflows/blego-macos-qa.yml narrow branch/artifact/guide updates; docs/verification/tz10.
@@ -50,3 +50,7 @@ Ruling: reuse canonicalUrl via transient copyUrl rather than duplicate normaliza
 Ruling: bounded rejection sampling rather than a biased forced replacement;32 repeated identical sets yields an honest error, not an infinite loop. With healthy RNG this bound is negligible even for8profiles. Test deterministic repeat and rejection boundaries.
 Task1 complete: npmci/lint145unit131integration48GUI PASS,0fail/skip;GUI209.231s. Baseline collected before new tests were added to those respective suite glob expansions. Task2 RED observed: missing transient canonical copyUrl, missing buttons, missing selection helper. Test runner requires unrestricted child-process sandbox profile in this cloud; initial restricted invocation could not execute test workers, rerun used normal authorized cloud test execution.
 Task2 complete: transient canonical copyUrl reuses Friends validation without changing saved rows. Uniform Fisher–Yates/rejection checked over40320 equally likely eight-profile permutations; each omitted URL occurs5040times. Unit/integration RED→GREEN5/5; actual Electron GUI import/filter/paging113links/copy7/repeat/exact7/3/zero/clipboardfail/delayedwrite/360px PASS. Full lint149unit132integration49GUI PASS,0skip. Global copy infrastructure retains10MiB limit/readback; only optional Friends error text added. Friends query oninput updates bulk availability immediately while existing Find/card rendering remains unchanged. No new network/IPC/storage mechanism.
+
+Task3 complete: targeted News RED→GREEN; full lint150unit132integration50GUI PASS,0fail/skip (GUI241.082s). Real Electron native clipboard checks cover5topics, controlled RSS through actual parser, refreshed values, reopened SQLite cache, long title/query URL, navigation isolation, failure and360px. Earlier unit expectation from TZ6 forbade all News copy controls; it failed as expected under the new contract. Updated only that obsolete assertion to exact2card buttons while retaining absence of header/metadata copy and existing Network assertions. First failure evidence preserved. Raw RED log trailing whitespace removed only for diff hygiene.
+Ruling: TZ10 supersedes earlier blanket News-copy removal; old tests now assert the two explicitly required per-card actions while retaining all unrelated guarantees. Cost if wrong: reintroducing forbidden metadata/header controls; new assertions explicitly reject those.
+Visual inspection: Linux News360 screenshot shows both buttons in bounds. Friends wide screenshot initially retained test scroll position; test capture now resets content scroll, product behavior unchanged. Native QA remains pending.

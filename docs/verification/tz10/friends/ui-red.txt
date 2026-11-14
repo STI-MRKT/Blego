@@ -13,9 +13,9 @@
 test at tests/ui/friends-bulk-copy.test.cjs:6:1
 ✖ TZ10 Friends bulk copy uses GEO/platform/search, all pages, imported rows and real clipboard (1086.603547ms)
   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
-  
+
   0 !== 1
-  
+
       at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/friends-bulk-copy.test.cjs:14:9)
       at async Test.run (node:internal/test_runner/test:1409:7)
       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {

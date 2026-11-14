@@ -18,7 +18,7 @@ test at tests/integration/friends-copy.test.cjs:5:1
 ✖ Friends copy eligibility reuses canonical URL validation without rewriting persisted rows (14.439556ms)
   AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
   + actual - expected
-  
+
     [
   +   undefined,
   +   undefined,
@@ -33,7 +33,7 @@ test at tests/integration/friends-copy.test.cjs:5:1
   -   null,
   -   null
     ]
-  
+
       at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/friends-copy.test.cjs:11:9)
       at async Test.run (node:internal/test_runner/test:1409:7)
       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
@@ -48,7 +48,7 @@ test at tests/integration/friends-copy.test.cjs:5:1
 test at tests/unit/friends-copy.test.cjs:3:1
 ✖ Friends renders disabled seven below seven and no-links feedback without a header Copy (16.888858ms)
   AssertionError [ERR_ASSERTION]: The input did not match the regular expression /data-friends-copy="seven"[^>]*disabled/. Input:
-  
+
   '<div class="page">\n' +
     '    <div class="page-head">\n' +
     '      <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>\n' +
@@ -82,7 +82,7 @@ test at tests/unit/friends-copy.test.cjs:3:1
     '      </article>\n' +
     '    </div>\n' +
     '  </div>'
-  
+
       at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/friends-copy.test.cjs:9:10)
       at async Test.run (node:internal/test_runner/test:1409:7)
       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
