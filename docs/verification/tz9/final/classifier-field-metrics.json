@@ -1,0 +1,198 @@
+{
+  "codeSha": "96f40c79913a0e85183f6ecf1e1be8535aa739ce",
+  "host": "linux-x64",
+  "scope": "Synthetic labelled corpus only; no original values in report",
+  "fields": {
+    "fullName": {
+      "present": 2,
+      "correct": 2,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 25
+    },
+    "accountId": {
+      "present": 27,
+      "correct": 27,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 0
+    },
+    "password": {
+      "present": 15,
+      "correct": 15,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 12
+    },
+    "emailPassword": {
+      "present": 19,
+      "correct": 19,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 8
+    },
+    "email": {
+      "present": 26,
+      "correct": 26,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 1
+    },
+    "birthDate": {
+      "present": 1,
+      "correct": 1,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 26
+    },
+    "geo": {
+      "present": 2,
+      "correct": 2,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 25
+    },
+    "userAgent": {
+      "present": 1,
+      "correct": 1,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 26
+    },
+    "token": {
+      "present": 1,
+      "correct": 1,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 26
+    },
+    "cookies": {
+      "present": 3,
+      "correct": 3,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 24
+    },
+    "backupEmail": {
+      "present": 8,
+      "correct": 8,
+      "falseAssignments": 0,
+      "missing": 0,
+      "correctEmpty": 19
+    }
+  },
+  "datasets": [
+    {
+      "name": "explicit English labels and separate passwords",
+      "records": 1,
+      "correct": 4,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 17.46
+    },
+    {
+      "name": "Russian label and quoted unusual characters",
+      "records": 1,
+      "correct": 3,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 5.11
+    },
+    {
+      "name": "absent mail password",
+      "records": 1,
+      "correct": 3,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 0.87
+    },
+    {
+      "name": "unlabelled adjacent string remains ambiguous",
+      "records": 1,
+      "correct": 2,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 0.96
+    },
+    {
+      "name": "two emails without roles remain ambiguous",
+      "records": 1,
+      "correct": 1,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 0.99
+    },
+    {
+      "name": "tab and semicolon with introductory prose",
+      "records": 1,
+      "correct": 3,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 10.9
+    },
+    {
+      "name": "same width different schemes and held-out values",
+      "records": 7,
+      "correct": 34,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 1.67
+    },
+    {
+      "name": "conflicting layouts never guess password role",
+      "records": 5,
+      "correct": 18,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 0.93
+    },
+    {
+      "name": "multiline nested cookie with account boundaries",
+      "records": 2,
+      "correct": 7,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 1.13
+    },
+    {
+      "name": "prior synthetic format A",
+      "records": 1,
+      "correct": 9,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 1.58
+    },
+    {
+      "name": "prior synthetic format B keeps absent mail password empty",
+      "records": 1,
+      "correct": 6,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 2.33
+    },
+    {
+      "name": "space-separated mail password label",
+      "records": 1,
+      "correct": 3,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 0.53
+    },
+    {
+      "name": "labelled multiline blocks keep missing password out of next account",
+      "records": 2,
+      "correct": 5,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 1.49
+    },
+    {
+      "name": "typed-looking passwords retain explicit roles",
+      "records": 2,
+      "correct": 7,
+      "falseAssignments": 0,
+      "missing": 0,
+      "elapsedMs": 1.27
+    }
+  ]
+}

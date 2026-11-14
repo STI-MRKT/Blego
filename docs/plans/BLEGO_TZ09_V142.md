@@ -65,10 +65,10 @@
 - [x] Fresh whole-branch reviewer reads spec/plan/ledger/base diff; one RED→GREEN fix pass for important issues and full regression. Commit fixes before checked Mac candidate (review repeated only if user asks).
 
 ### Task7 — Native QA, evidence and PR
-- [ ] Push marked candidate; same-host baseline5f30cf5 performance comparison; prepare/verify bundled runtime, build DMG, mount readonly, copy app outside repo, full installed GUI +20photos/citytiles/readback and all new cases.
-- [ ] Real OSM city viewport separately: require correct city z/x/y and actual raster pixels, not world screenshot; failures explicitly BLOCKED. Anonymous Facebook live outcome separate from deterministic PASS.
-- [ ] Download artifact; verify codeSHA/ZIP CRC/inner files/DMG SHA256, view screenshots. Record OS/host/commands/timings and limits; DeveloperID/notary BLOCKED if absent.
-- [ ] New PR against codex/blego-hide-header-copy; attach it, no merge/release. Deliver exact install ZIP, checksums, changed-file inventory, classifier metrics, all four root causes/status map and screenshots.
+- [x] Push marked candidate; same-host baseline5f30cf5 performance comparison; prepare/verify bundled runtime, build DMG, mount readonly, copy app outside repo, full installed GUI +20photos/citytiles/readback and all new cases.
+- [x] Real OSM city viewport separately: require correct city z/x/y and actual raster pixels, not world screenshot; failures explicitly BLOCKED. Anonymous Facebook live outcome separate from deterministic PASS.
+- [x] Download artifact; verify codeSHA/ZIP CRC/inner files/DMG SHA256, view screenshots. Record OS/host/commands/timings and limits; DeveloperID/notary BLOCKED if absent.
+- [x] New PR against codex/blego-hide-header-copy; attach it, no merge/release. Deliver exact install ZIP, checksums, changed-file inventory, classifier metrics, all four root causes/status map and screenshots.
 
 ## Ledger
 
@@ -95,3 +95,5 @@ Native QA reporting refinement: public-service probe records actual city Before(
 
 Task6 complete: reviewed tree lint145unit131integration PASS; full48GUI PASS217.822s,0fail/skip. QA script subsequently changed only for bounded live Before/After evidence and truthful FAIL/BLOCKED; lint rerun PASS. Native candidate follows this single review fix pass. Using verification-before-completion and finishing-a-development-branch; user has already selected push/new PR without merge, so no redundant integration-choice prompt. Preserve worktree for review.
 Live QA script on Linux completed exit0 with honest external BLOCKED: Facebook NETWORK_ERROR/FB_CONNECTION_REFUSED5111ms; OSM BeforeSãoPaulo0/2tiles,z17 and AfterRoma0/4tiles,z8. Both20points/correct city; no false raster PASS. Native network outcome must be checked independently.
+
+Task7 complete as executed QA, with explicit external/signing limits: code96f40c79913a0e85183f6ecf1e1be8535aa739ce,run43581533318 success,macOS15.8.2/AppleM1Virtual.145unit131integration48installedGUI PASS,0skip. Native20exports/ExifTool/originals/resize PASS. RealOSM Before3/3z17 and After8/8z9 PASS;liveMeta HTTP200 UNKNOWN/INSUFFICIENT_EVIDENCE =>QA BLOCKED,not a ban. Artifact14109485611 downloaded,outer SHA and inner CRC/member/DMG checksum checked. Exact installer ZIP delivered;DeveloperID/notary absent. Historical1000FAIL preserved. PR10 draft againstPR9,notmerged/released. codex_app attach_artifact was called forPR10 but did not return and was cancelled after several minutes;direct PR URL remains available. No second reviewer/fix loop;all three Important findings addressed by one tested pass. Final documentation commit does not change built code.
