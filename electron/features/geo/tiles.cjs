@@ -157,23 +157,24 @@ function createTileService({ root, request = requestTile, clock = () => Date.now
         consumers.delete(id);
         job.users.delete(id);
       };
-      consumers.set(id, () => {
+      const cancelConsumer = () => {
         done();
         reject(Error('CANCELLED'));
         if (!job.users.size) {
           job.controller.abort();
           if (pending.get(key) === job) pending.delete(key);
         }
-      });
+      };
+      consumers.set(id, cancelConsumer);
       job.promise.then(
         (value) => {
-          if (consumers.has(id)) {
+          if (consumers.get(id) === cancelConsumer) {
             done();
             resolve(value);
           }
         },
         (error) => {
-          if (consumers.has(id)) {
+          if (consumers.get(id) === cancelConsumer) {
             done();
             reject(error);
           }

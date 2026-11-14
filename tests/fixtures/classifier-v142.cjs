@@ -170,3 +170,37 @@ module.exports.cases.push(
     review: true
   }
 );
+module.exports.cases.push(
+  {
+    name: 'space-separated mail password label',
+    text: 'id:15001|email fifteen@example.test|mail password SYNTHETIC_MAIL',
+    expected: [
+      { accountId: '15001', email: 'fifteen@example.test', emailPassword: 'SYNTHETIC_MAIL' }
+    ]
+  },
+  {
+    name: 'labelled multiline blocks keep missing password out of next account',
+    text: 'Условия: синтетический пример\nid:15002\nemail:sixteen@example.test\nemail pass:ONLY_FIRST\n\nid:15003\nemail:seventeen@example.test',
+    expected: [
+      { accountId: '15002', email: 'sixteen@example.test', emailPassword: 'ONLY_FIRST' },
+      { accountId: '15003', email: 'seventeen@example.test' }
+    ]
+  },
+  {
+    name: 'typed-looking passwords retain explicit roles',
+    text: 'id:15004|email:eighteen@example.test|mail password:00001234|password:2000-01-02\nid:15005|email:nineteen@example.test|email pass:looks-like@example.test',
+    expected: [
+      {
+        accountId: '15004',
+        email: 'eighteen@example.test',
+        emailPassword: '00001234',
+        password: '2000-01-02'
+      },
+      {
+        accountId: '15005',
+        email: 'nineteen@example.test',
+        emailPassword: 'looks-like@example.test'
+      }
+    ]
+  }
+);

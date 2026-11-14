@@ -25,7 +25,7 @@ export function createMapTileLoader({ load, cancel, decode, onChange, cache = ne
       pending.set(key, job);
       const cancelled = new Promise((_, reject) => { job.abort = () => reject(Error('CANCELLED')); });
       const timeout = new Promise((_, reject) => { job.timer = setTimeout(() => { Promise.resolve(cancel(job.id)).catch(() => {}); reject(Error('TIMEOUT')); }, timeoutMs); });
-      Promise.race([Promise.resolve().then(() => load({ z: tile.z, x: tile.x, y: tile.y, requestId: job.id })).then(decode), cancelled, timeout]).then((image) => {
+      Promise.race([Promise.resolve().then(() => { if (closed || pending.get(key) !== job) throw Error('CANCELLED'); return load({ z: tile.z, x: tile.x, y: tile.y, requestId: job.id }); }).then(decode), cancelled, timeout]).then((image) => {
         if (closed || pending.get(key) !== job || !wanted.has(key)) return;
         cache.set(key, image); attempts.delete(key);
         if (cache.size > 128) cache.delete(cache.keys().next().value);

@@ -1,0 +1,12 @@
+{
+  "host": "linux-x64",
+  "datasets": 14,
+  "records": 27,
+  "correctAssignments": 105,
+  "precision": 1,
+  "recall": 1,
+  "falseAssignments": 0,
+  "missingValues": 0,
+  "ambiguousRecords": 4,
+  "elapsedMs": 39.24
+}

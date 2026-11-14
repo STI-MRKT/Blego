@@ -197,6 +197,34 @@ export function structuredRecords(text) {
     if (newline) {
       const step = c === '\r' && text[i + 1] === '\n' ? 2 : 1;
       const after = text.slice(i + step, i + step + 300).trimStart();
+      const recognize = (value) =>
+        recognizeValue(value, fieldForHeader, validBirthDate, (s) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+        );
+      const nextLine = text.slice(i + step, i + step + 65536).split(/[\r\n]/, 1)[0];
+      const nextField = recognize(nextLine.trim());
+      const currentFields = [
+        ...fields.map((field) => recognize(field.value)),
+        recognize(current.trim())
+      ];
+      // Only an ID-anchored labelled block can continue without a separator.
+      // Blank lines, a new ID, or a repeated role begin another record.
+      if (
+        nextField.explicit &&
+        !nextField.invalid &&
+        nextField.key !== 'accountId' &&
+        currentFields.some(
+          (field) => field.key === 'accountId' && field.explicit && !field.invalid
+        ) &&
+        currentFields.at(-1).explicit &&
+        !currentFields.some((field) => field.key === nextField.key)
+      ) {
+        field(i);
+        cellStart = i + step;
+        line++;
+        i += step - 1;
+        continue;
+      }
       // An explicit continuation marker is reliable; otherwise keep lines with
       // an unfinished field separator together until a new identity appears.
       const previousSeparator = current.trim() === '' && fields.length;
@@ -229,7 +257,7 @@ export function structuredRecords(text) {
   const prose = (r) =>
     !evidence(r) &&
     (/^(?:#|\/\/|--)(?:\s|$)/u.test(r.sourceEntries[0].value) ||
-      /^(?:Описание файла|Инструкция|Комментарий|Примечание|Read terms|Instructions?|Comments?|Notes?)(?:[:.\s]|$)/iu.test(
+      /^(?:Описание файла|Инструкция|Комментарий|Примечание|Условия|Пояснения|Заголовок|Terms|Description|Header|Read terms|Instructions?|Comments?|Notes?)(?:[:.\s]|$)/iu.test(
         r.sourceEntries[0].value
       ));
   const useful = rows.some(evidence) ? rows.filter((r) => !prose(r)) : rows;

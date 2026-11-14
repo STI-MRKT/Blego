@@ -90,10 +90,19 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
   let value = raw,
     key = null,
     explicit = false;
-  const m = [
-    /^\s*([\p{L}\p{N}_ -]{1,40}?)\s*[:=]\s*([\s\S]*)$/u.exec(raw),
-    /^\s*([\p{L}\p{N}_-]{1,40})\s+([\s\S]*)$/u.exec(raw)
-  ].find((match) => match && (headerFor(match[1]) || extendedAliases.has(normalize(match[1]))));
+  const known = (label) => headerFor(label) || extendedAliases.get(normalize(label));
+  const labelled = /^\s*([\p{L}\p{N}_ -]{1,40}?)\s*[:=]\s*([\s\S]*)$/u.exec(raw);
+  // Prefer the longest known space-delimited label ("mail password" over "mail").
+  const spaced = [...raw.slice(0, 41).matchAll(/\s+/g)]
+    .filter((match) => match.index > 0 && match.index <= 40)
+    .map((match) => [
+      raw,
+      raw.slice(0, match.index).trim(),
+      raw.slice(match.index + match[0].length)
+    ])
+    .filter((match) => known(match[1]))
+    .at(-1);
+  const m = labelled && known(labelled[1]) ? labelled : spaced;
   if (m) {
     key = headerFor(m[1]) || extendedAliases.get(normalize(m[1]));
     if (key) {

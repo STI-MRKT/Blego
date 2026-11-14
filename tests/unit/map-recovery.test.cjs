@@ -87,5 +87,39 @@ test('TZ9 viewport scheduler retries individually, bounds requests and ignores s
   assert.equal(loader.snapshot().ready, 1);
   assert.ok(cache.has('4/9/1'));
   assert.ok(!cache.has('4/8/1'));
+  assert.ok(!calls.has(8), 'cancel before dispatch must not start a stale network request');
   loader.dispose();
 });
+test(
+  'TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID',
+  { timeout: 2000 },
+  async (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'map-consumer-reuse-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const png = await require('sharp')({
+      create: { width: 256, height: 256, channels: 3, background: '#246843' }
+    })
+      .png()
+      .toBuffer();
+    const service = require('../../electron/features/geo/tiles.cjs').createTileService({
+      root,
+      request: async () => {
+        await pause(50);
+        return png;
+      }
+    });
+    const first = service.tile({ z: 2, x: 1, y: 1, requestId: 'same-id' });
+    const rejected = assert.rejects(first, /CANCELLED/);
+    await pause(10);
+    service.cancel('same-id');
+    const second = service.tile({ z: 2, x: 2, y: 1, requestId: 'same-id' });
+    await rejected;
+    const value = await Promise.race([
+      second,
+      pause(500).then(() => {
+        throw Error('REPLACEMENT_DID_NOT_SETTLE');
+      })
+    ]);
+    assert.match(value, /^data:image/);
+  }
+);

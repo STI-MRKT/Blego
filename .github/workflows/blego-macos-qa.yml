@@ -10,6 +10,7 @@ on:
       - codex/blego-v1-4-1-fixes
       - codex/blego-fp-bio-independent
       - codex/blego-hide-header-copy
+      - codex/blego-v1-4-2-fixes
   workflow_dispatch:
     inputs:
       target:
@@ -89,9 +90,10 @@ jobs:
         run: |
           set -o pipefail
           npm run verify | tee release/verification-native.log
-      - name: Prepare identical BLEGO 1.4 performance reference
+          node scripts/check-classifier-v142.cjs > release/classifier-quality-native.json
+      - name: Prepare identical incoming BLEGO 1.4.1 performance reference
         run: |
-          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 95b80ff302fafef8c395169d4fe5e23019d37f31
+          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 5f30cf51a0f04da13975a7ecd11b96c488457623
           (cd "$RUNNER_TEMP/blego-baseline-reference" && npm ci && node node_modules/electron/install.js)
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
@@ -140,20 +142,20 @@ jobs:
         run: BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-public-services.cjs release/public-services-native.json
       - name: Record checksums
         run: |
-          (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS-mac.txt
+          (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS
           sw_vers > release/macOS-env.txt
           uname -m >> release/macOS-env.txt
           sysctl -n hw.model >> release/macOS-env.txt
           sysctl -n machdep.cpu.brand_string >> release/macOS-env.txt
           git rev-parse HEAD >> release/macOS-env.txt
-          cat release/SHA256SUMS-mac.txt
+          cat release/SHA256SUMS
           echo 'QA only; not notarized or Developer ID signed' >> release/macOS-env.txt
       - name: Prepare install ZIP after installed-app acceptance
         run: |
           install_arch="$(printf '%s' "$TARGET_ARCH" | tr '[:lower:]' '[:upper:]')"
-          cp docs/verification/v141/INSTALL-RU.txt release/INSTALL-RU.txt
-          zip -j "release/BLEGO-1.4.1-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS-mac.txt release/INSTALL-RU.txt
-          unzip -t "release/BLEGO-1.4.1-macOS-$install_arch-install.zip"
+          cp docs/verification/tz9/INSTALL-RU.txt release/INSTALL-RU.txt
+          zip -j "release/BLEGO-1.4.2-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS release/INSTALL-RU.txt
+          unzip -t "release/BLEGO-1.4.2-macOS-$install_arch-install.zip"
           (cd release && shasum -a 256 *-install.zip) > release/SHA256SUMS-zip.txt
       - name: Upload QA packages after all gates
         uses: actions/upload-artifact@v4
@@ -170,12 +172,13 @@ jobs:
             release/responsive-native.json
             release/verification-native.log
             release/public-services-native.json
+            release/classifier-quality-native.json
             release/metadata-ui-folder20-*.log
             release/*.png
             release/ux-performance-*.json
             release/metadata-load-*.json
             release/metadata-ui-batch-*.log
-            release/SHA256SUMS-mac.txt
+            release/SHA256SUMS
             release/macOS-env.txt
             release/native-darwin-*.json
             release/installed-darwin-*.json
@@ -199,5 +202,6 @@ jobs:
             release/responsive-native.json
             release/verification-native.log
             release/public-services-native.json
+            release/classifier-quality-native.json
             release/ux-performance-*.json
             release/*.png
