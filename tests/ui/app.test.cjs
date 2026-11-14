@@ -18,6 +18,12 @@ test(
     const data = path.join(root, 'data');
     const store = await openStore(data);
     store.set('tourSeen', true);
+    // This scenario specifically verifies an existing explicit opt-out.
+    require('../../electron/local/settings.cjs').updateSettings(store, {
+      facebookEnabled: false,
+      proxyEnabled: false,
+      newsEnabled: false
+    });
     const classifier = createClassificationService({ allowTestRules: true });
     const { parseInput } = await import('../../shared/importer.mjs');
     const parsed = await parseInput({

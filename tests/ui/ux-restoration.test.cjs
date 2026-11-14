@@ -10,6 +10,12 @@ test(
   { timeout: 90000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-ux-'));
+    // Keep the explicit disabled-network UX scenario; fresh ON defaults have their own test.
+    const store = await require('../../electron/local/store.cjs').openStore(
+      path.join(root, 'data')
+    );
+    require('../../electron/local/settings.cjs').updateSettings(store, { proxyEnabled: false });
+    store.close();
     const app = await _electron.launch({
       executablePath: process.env.BLEGO_EXECUTABLE || undefined,
       args: [

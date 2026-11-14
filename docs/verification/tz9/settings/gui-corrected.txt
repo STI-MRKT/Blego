@@ -1,0 +1,12 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (10739.629059ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (2299.462101ms)
+✔ TZ9 fresh UI enables three tools; disabling one survives restart without changing others (1336.17973ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (9862.633035ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25715.04287
