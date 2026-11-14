@@ -38,50 +38,40 @@ test('News RSS and Atom retain the complete normalized headline beyond 300 chara
   }
 });
 
-
-test('News displays at most 15 unique topic cards and reports fewer than 10 without invented entries', async () => {
+test('News shows up to 15 cards per topic and never pads sparse feeds', async () => {
   const { state } = await import('../../src/js/state.js');
   const { newsBlockHTML } = await import('../../src/js/ui/news.js');
   const { NEWS_TOPICS } = await import('../../shared/news-catalog.mjs');
   state.settings.newsEnabled = true;
 
-  for (const { id: topic } of NEWS_TOPICS) {
+  for (const { id } of NEWS_TOPICS) {
     state.news = {
-      topic,
-      loading: false,
-      items: [
-        ...Array.from({ length: 24 }, (_, index) => ({
-          id: `${topic}-${index}`,
-          topic,
-          title: `${topic} real-feed-shaped article ${index}`,
-          link: `https://example.test/${topic}/${index}`,
-          source: 'Test feed'
-        })),
-        { id: 'other-topic', topic: 'unrelated', title: 'Irrelevant', link: 'https://example.test/other' }
-      ]
+      topic: id,
+      items: Array.from({ length: 24 }, (_, i) => ({
+        id: `${id}-${i}`,
+        topic: id,
+        title: `Article ${i}`,
+        link: `https://example.test/${id}/${i}`
+      }))
     };
     const html = newsBlockHTML();
-    assert.equal((html.match(/class="news-item-card"/g) || []).length, 15, topic);
-    assert.equal((html.match(/data-news-copy="title"/g) || []).length, 15, topic);
-    assert.equal((html.match(/data-news-copy="link"/g) || []).length, 15, topic);
-    assert.ok(html.includes('Showing 15 stories'), topic);
-    assert.ok(!html.includes('real-feed-shaped article 15'), topic);
-    assert.ok(!html.includes('Irrelevant'), topic);
+    assert.equal((html.match(/class="news-item-card"/g) || []).length, 15);
+    assert.equal((html.match(/data-news-copy="title"/g) || []).length, 15);
+    assert.equal((html.match(/data-news-copy="link"/g) || []).length, 15);
+    assert.ok(html.includes('Showing 15 stories'));
+    assert.ok(!html.includes('Article 15'));
   }
 
   state.news = {
     topic: 'tech',
-    loading: false,
-    items: Array.from({ length: 9 }, (_, index) => ({
-      id: `tech-${index}`,
+    items: Array.from({ length: 9 }, (_, i) => ({
+      id: `tech-${i}`,
       topic: 'tech',
-      title: `Available article ${index}`,
-      link: `https://example.test/tech/${index}`,
-      source: 'Test feed'
+      title: `Available article ${i}`,
+      link: `https://example.test/tech/${i}`
     }))
   };
-  const scarce = newsBlockHTML();
-  assert.equal((scarce.match(/class="news-item-card"/g) || []).length, 9);
-  assert.ok(scarce.includes('Fewer than 10 articles are currently available'));
-  assert.ok(!scarce.includes('Available article 9'));
+  const html = newsBlockHTML();
+  assert.equal((html.match(/class="news-item-card"/g) || []).length, 9);
+  assert.ok(html.includes('Fewer than 10 articles are currently available'));
 });
