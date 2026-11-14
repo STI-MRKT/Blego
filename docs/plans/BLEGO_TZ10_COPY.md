@@ -38,8 +38,8 @@ Interfaces: data-action=news-copy with escaped full model value and title/link k
 ### Task4: review / native QA / PR
 Files: existing .github/workflows/blego-macos-qa.yml narrow branch/artifact/guide updates; docs/verification/tz10.
 - [x] One fresh independent whole-branch review; one RED→GREEN important-fix pass, full regression. Source boundaries check. Keep1.4.2 version; TZ10-specific installer ZIP name avoids confusing prior artifact.
-- [ ] Push marked QA candidate; native runtime gate, DMG/mount/copyoutside, all installedGUI including real clipboard exact payload assertions and screenshots; no tests skipped.
-- [ ] Download/verify SHA/ZIP/member list/OS/codeSHA; full requirement report/files/clipboard evidence/screenshots. New draft PR against incoming branch, attach, no merge/release.
+- [x] Push marked QA candidate; native runtime gate, DMG/mount/copyoutside, all installedGUI including real clipboard exact payload assertions and screenshots; no tests skipped.
+- [x] Download/verify SHA/ZIP/member list/OS/codeSHA; full requirement report/files/clipboard evidence/screenshots. New draft PR against incoming branch, attach, no merge/release.
 
 ## Ledger
 Plan identity: docs/plans/BLEGO_TZ10_COPY.md.
@@ -62,3 +62,5 @@ Final: Ruling: unchanged modules received scope review, not a fresh deep audit �
 Final: Ruling: keep existing Friends canonicalization and News URL normalization — they remain the specified contracts and stored values remain unchanged; cost if wrong is an inherited normalization limitation, not silently introduced new policy.
 
 Final: fixed RSS/Atom title truncation — News full-headline regression RED→GREEN2/2; whole suite lint151unit132integration50GUI PASS,0fail/skip. GUI uses >300-character END_MARKER through real parser, cache/restart and native clipboard. No re-review. Native QA candidate marked next; user already requested new PR and installer, so no repeated approval or release/merge. PR11 draft created against incoming branch. Host attach_artifact called but did not return; direct PR URL retained.
+
+Task4 complete: native run43591238946 PASS on macOS15.8.2 AppleM1Virtual arm64; code0c70817257a3d9298034285ff60102622273ac0f. Native151unit132integration50installedGUI,0fail/skip. MountedDMG→dittooutsidecheckout→actualApp; Friends7/repeat113all and5News topics full527–532character headlines read back from nativeclipboard. Fourwide/narrow screenshots inspected. Downloaded outerartifactSHA/CRC, installerCRC/exact3members, innerDMG/SHA256SUMS all verified. ZIP150728402bytes, DMG4841e65f0ecd8f2b1990597f202855c320c439e42be460dc6e536f0ac023b2df. DeveloperID/notary absent. PR11draft, no merge/release. Separate doc-only acceptance commit follows; builtcodeSHA remains0c70817.

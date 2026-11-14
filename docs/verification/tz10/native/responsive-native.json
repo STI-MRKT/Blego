@@ -1,0 +1,196 @@
+{
+  "os": "darwin",
+  "arch": "arm64",
+  "workArea": {
+    "x": 0,
+    "y": 25,
+    "width": 1024,
+    "height": 684
+  },
+  "minimum": [
+    360,
+    360
+  ],
+  "widths": [
+    {
+      "requested": 360,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 360,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 390,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 390,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 427,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 427,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 480,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 480,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 504,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 504,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 576,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 576,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 768,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 768,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 980,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 980,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    },
+    {
+      "requested": 1280,
+      "bounds": {
+        "x": 0,
+        "y": 25,
+        "width": 1280,
+        "height": 684
+      },
+      "sections": [
+        "generator",
+        "import",
+        "news",
+        "network",
+        "photos",
+        "friends",
+        "checker",
+        "settings",
+        "history"
+      ]
+    }
+  ]
+}
