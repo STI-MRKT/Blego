@@ -46,6 +46,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     decode: async data => { const img = new Image(); img.src = data; await img.decode(); return img; },
     onChange: schedule
   });
+  panel.querySelector('[data-map-action="retry"]').hidden = true;
   const context = canvas.getContext('2d');
   const color = getComputedStyle(document.documentElement);
   const palette = {
@@ -238,7 +239,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     (button) =>
       (button.onclick = () => {
         const action = button.dataset.mapAction;
-        if(action==='background'){model.background=!model.background;button.setAttribute('aria-pressed',String(model.background));button.textContent=model.background?'Скрыть подложку':'Загрузить подложку';if(!model.background)loader.update([]);schedule();return;}
+        if(action==='background'){panel.querySelector('[data-map-action="retry"]').hidden=true;model.background=!model.background;button.setAttribute('aria-pressed',String(model.background));button.textContent=model.background?'Скрыть подложку':'Загрузить подложку';if(!model.background)loader.update([]);schedule();return;}
         if(action==='retry'){loader.retry();schedule();return;}
         if (action === 'before' || action === 'after') {
           model.mode = action;

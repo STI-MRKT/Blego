@@ -43,9 +43,12 @@ export function createMapTileLoader({ load, cancel, decode, onChange, cache = ne
   }
   return {
     update(tiles) {
-      wanted = new Map(tiles.map((tile) => [keyOf(tile), tile]));
+      const next = new Map(tiles.map((tile) => [keyOf(tile), tile]));
+      const changed = next.size !== wanted.size || [...next.keys()].some(key => !wanted.has(key));
+      wanted = next;
       for (const [key, job] of pending) if (!wanted.has(key)) stop(key, job);
       pump();
+      if (changed) notify();
     },
     snapshot() {
       const keys = [...wanted.keys()];

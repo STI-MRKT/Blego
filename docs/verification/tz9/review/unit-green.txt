@@ -1,0 +1,23 @@
+✔ long IDs retain exact digits; canonical duplicates preserve input mappings (3.781384ms)
+✔ spoofed hosts, credentials, reserved paths, invalid IDs and overlarge batches reject locally (2.448536ms)
+✔ public responses never establish account sanctions and one og:title proves nothing (8.579284ms)
+✔ Facebook facts require identity-bound public evidence and explicit eight-state vocabulary (6.084136ms)
+✔ network failures have sanitized differentiated diagnostics, never raw messages (2.279009ms)
+✔ TZ06 login.php and checkpoint root cannot become unknown or visible (3.139431ms)
+✔ TZ06 bounded JSON-LD graph recognizes matching public Person but no unrelated entity (1.578302ms)
+✔ TZ9 public evidence matrix never converts transport/login/other-profile responses to BLOCKED (8.150531ms)
+✔ TZ9 ACTIVE/BLOCKED presentation is evidence-bound; legacy results require recheck (1.204384ms)
+✔ TZ9 hidden unavailable placeholders and contradictory Person evidence stay UNKNOWN (0.862329ms)
+✔ TZ9 contradictory structured target identity cannot establish BLOCKED or ACTIVE (0.517788ms)
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (208.363005ms)
+✔ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (222.361636ms)
+✔ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (68.097872ms)
+✔ TZ9 exhausted retained tiles notify a new viewport once so Retry survives remount (0.555251ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1130.10225

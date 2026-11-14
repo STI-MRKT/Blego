@@ -31,6 +31,7 @@ test(
     const hash = (f) => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
     const hashes = files.map(hash);
     const seen = [];
+    let offline = true;
     const raster = await require('sharp')({
       create: { width: 256, height: 256, channels: 3, background: '#34945a' }
     })
@@ -38,6 +39,11 @@ test(
       .toBuffer();
     const server = require('node:http').createServer((req, res) => {
       seen.push(req.url);
+      if (offline) {
+        res.writeHead(503);
+        res.end('temporary failure');
+        return;
+      }
       res.writeHead(200, { 'Content-Type': 'image/png' });
       res.end(raster);
     });
@@ -101,12 +107,48 @@ test(
       return state.photos.length === 20 && !state.imagesBusy;
     });
     assert.equal(seen.length, 0, 'no network without map consent');
+    assert.equal(
+      await page.locator('[data-map-action="retry"]').isVisible(),
+      false,
+      'retry must not be visible before any failure'
+    );
     await page.locator('[data-map-action="background"]').click();
     const loaded = async () =>
       page.waitForFunction(() => {
         const c = document.getElementById('photo-map-canvas');
         return Number(c.dataset.tiles) > 0 && c.dataset.tiles === c.dataset.requiredTiles;
       });
+    await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible' });
+    const required = Number(
+      await page.locator('#photo-map-canvas').getAttribute('data-required-tiles')
+    );
+    const end = Date.now() + 10000;
+    while (Date.now() < end) {
+      const counts = new Map();
+      for (const key of seen) counts.set(key, (counts.get(key) || 0) + 1);
+      if (counts.size === required && [...counts.values()].every((count) => count === 3)) break;
+      await page.waitForTimeout(50);
+    }
+    assert.equal(
+      seen.length,
+      required * 3,
+      'all visible tile budgets must be exhausted before remount'
+    );
+    await page.waitForTimeout(150);
+    await page.evaluate(async () => {
+      const { mountPhotoMap } = await import('/js/ui/photo-map.js');
+      mountPhotoMap();
+    });
+    await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 3000 });
+    await page.locator('[data-view="friends"]').click();
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
+    await page.locator('[data-map-action="background"]').click();
+    await page.locator('[data-map-action="background"]').click();
+    await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
+    offline = false;
+    await page.locator('[data-map-action="retry"]').click();
+    await loaded();
     // This assertion exposes the original defect before requiring new diagnostics.
     await page.locator('#geo-country').fill('IT');
     await page.locator('#geo-country').press('Tab');

@@ -169,3 +169,5 @@
 @media(max-width:600px){.photo-map{padding:10px}#photo-map-canvas{height:240px}}
 /* Short primary-setting explanations remain secondary to the original controls. */
 .ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}
+/* Retry is a conditional new map action; .btn otherwise overrides the UA hidden rule. */
+.photo-map [data-map-action="retry"][hidden] { display:none; }

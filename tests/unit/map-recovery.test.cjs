@@ -123,3 +123,29 @@ test(
     assert.match(value, /^data:image/);
   }
 );
+test('TZ9 exhausted retained tiles notify a new viewport once so Retry survives remount', async () => {
+  const { createMapTileLoader } = await import('../../src/js/utils/map-tile-loader.mjs');
+  const attempts = new Map([['2/1/1', { count: 3, at: 0 }]]);
+  let notifications = 0,
+    loads = 0;
+  const loader = createMapTileLoader({
+    attempts,
+    load: async () => {
+      loads++;
+    },
+    cancel: () => {},
+    decode: async (x) => x,
+    onChange: () => notifications++
+  });
+  const wanted = [{ z: 2, x: 1, y: 1 }];
+  loader.update(wanted);
+  assert.equal(loader.snapshot().failed, 1);
+  assert.equal(loads, 0);
+  assert.equal(notifications, 1);
+  loader.update(wanted);
+  assert.equal(notifications, 1, 'unchanged viewport must not create a redraw loop');
+  loader.update([]);
+  loader.update(wanted);
+  assert.equal(notifications, 3, 'off/on restores terminal status');
+  loader.dispose();
+});

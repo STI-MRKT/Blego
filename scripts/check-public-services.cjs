@@ -1,4 +1,4 @@
-// Bounded anonymous QA: one public Facebook target and one requested city viewport.
+// Bounded anonymous QA: one public Facebook target and two requested city viewports (Before/After).
 // Synthetic photos stay local; only normal OSM z/x/y tiles are requested.
 const fs = require('node:fs'),
   os = require('node:os'),
@@ -39,6 +39,19 @@ const fs = require('node:fs'),
     store.close();
     const { imageFixture, distinctCopies } = require('../tests/fixtures/images.cjs');
     const photo = await imageFixture(root, 'jpeg');
+    await require('../electron/features/images/engine.cjs')
+      .createEngine()
+      .writeCopy(
+        photo,
+        [
+          {
+            field: 'gps',
+            action: 'set',
+            value: { latitude: -23.55, longitude: -46.63, altitude: null }
+          }
+        ],
+        'jpeg'
+      );
     app = await require('playwright')._electron.launch({
       executablePath: process.env.BLEGO_EXECUTABLE || undefined,
       args: [
@@ -55,14 +68,6 @@ const fs = require('node:fs'),
       const { state } = await import('/js/state.js');
       return !state.imagesBusy && state.photos.length === 20;
     });
-    await page.locator('#geo-country').fill('IT');
-    await page.locator('#geo-country').press('Tab');
-    await page.locator('#geo-city').selectOption('osm:relation:41485');
-    await page.locator('[data-action="geo-generate"]').click();
-    await waitForAsync(page, async () => {
-      const { state } = await import('/js/state.js');
-      return !state.imagesBusy && !state.geoBusy && state.photoMap.mode === 'after';
-    });
     await page.locator('#photo-map-canvas').scrollIntoViewIfNeeded();
     await page.evaluate(() => {
       const c = document.getElementById('photo-map-canvas');
@@ -71,66 +76,88 @@ const fs = require('node:fs'),
       );
     });
     await page.locator('[data-map-action="background"]').click();
-    let failure = null;
-    try {
-      await page.waitForFunction(
-        () => {
-          const c = document.getElementById('photo-map-canvas'),
-            a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-          let changed = 0;
-          for (let i = 0; i < a.length; i += 4)
-            if (a[i] !== __cityBefore[i] || a[i + 1] !== __cityBefore[i + 1]) changed++;
-          return (
-            Number(c.dataset.requiredTiles) > 0 &&
-            c.dataset.tiles === c.dataset.requiredTiles &&
-            changed > 1000
-          );
-        },
-        null,
-        { timeout: 45000 }
-      );
-    } catch {
-      failure = 'CITY_TILES_INCOMPLETE';
-    }
-    const evidence = await page.evaluate(async () => {
-      const { state } = await import('/js/state.js'),
-        { visibleTiles } = await import('/shared/photo-map.mjs');
-      const c = document.getElementById('photo-map-canvas'),
-        r = c.getBoundingClientRect();
-      return {
-        cityId: state.geoCity,
-        center: state.photoMap.view.center,
-        mode: c.dataset.mode,
-        points: Number(c.dataset.points),
-        rendered: Number(c.dataset.tiles),
-        required: Number(c.dataset.requiredTiles),
-        tiles: visibleTiles(state.photoMap.view, r.width, r.height).map(({ z, x, y }) => ({
-          z,
-          x,
-          y
-        })),
-        message: document.getElementById('map-background-status').textContent
+    const capture = async (mode, filename) => {
+      let failure = null;
+      try {
+        await page.waitForFunction(
+          () => {
+            const c = document.getElementById('photo-map-canvas'),
+              a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+            let changed = 0;
+            for (let i = 0; i < a.length; i += 4)
+              if (a[i] !== __cityBefore[i] || a[i + 1] !== __cityBefore[i + 1]) changed++;
+            return (
+              Number(c.dataset.requiredTiles) > 0 &&
+              c.dataset.tiles === c.dataset.requiredTiles &&
+              changed > 1000
+            );
+          },
+          null,
+          { timeout: 45000 }
+        );
+      } catch {
+        failure = 'CITY_TILES_INCOMPLETE';
+      }
+      const evidence = await page.evaluate(async () => {
+        const { state } = await import('/js/state.js'),
+          { visibleTiles } = await import('/shared/photo-map.mjs');
+        const c = document.getElementById('photo-map-canvas'),
+          r = c.getBoundingClientRect();
+        return {
+          cityId: state.geoCity,
+          center: state.photoMap.view.center,
+          mode: c.dataset.mode,
+          points: Number(c.dataset.points),
+          rendered: Number(c.dataset.tiles),
+          required: Number(c.dataset.requiredTiles),
+          tiles: visibleTiles(state.photoMap.view, r.width, r.height).map(({ z, x, y }) => ({
+            z,
+            x,
+            y
+          })),
+          message: document.getElementById('map-background-status').textContent
+        };
+      });
+      const city =
+        (mode === 'before'
+          ? Math.abs(evidence.center.latitude + 23.55) < 0.01 &&
+            Math.abs(evidence.center.longitude + 46.63) < 0.01
+          : evidence.center.latitude > 41 &&
+            evidence.center.latitude < 43 &&
+            evidence.center.longitude > 11 &&
+            evidence.center.longitude < 14) && evidence.tiles.every((t) => t.z >= 8);
+      const result = {
+        status:
+          !city || evidence.points !== 20 || !evidence.required
+            ? 'FAIL'
+            : failure
+              ? evidence.rendered < evidence.required
+                ? 'BLOCKED'
+                : 'FAIL'
+              : 'PASS',
+        reason: failure || (!city ? 'WRONG_CITY_VIEW' : null),
+        ...evidence,
+        scope:
+          'Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider'
       };
-    });
-    const city =
-      evidence.center.latitude > 41 &&
-      evidence.center.latitude < 43 &&
-      evidence.center.longitude > 11 &&
-      evidence.center.longitude < 14 &&
-      evidence.tiles.every((t) => t.z >= 8);
-    report.map = {
-      status: !failure && city && evidence.points === 20 ? 'PASS' : 'BLOCKED',
-      reason: failure || (!city ? 'WRONG_CITY_VIEW' : null),
-      ...evidence,
-      scope:
-        'Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider'
+      await page.locator('.photo-map').screenshot({ path: path.join(path.dirname(out), filename) });
+      if (result.status === 'FAIL') process.exitCode = 1;
+      return result;
     };
-    await page
-      .locator('.photo-map')
-      .screenshot({ path: path.join(path.dirname(out), 'map-live-rome.png') });
+    report.mapBefore = await capture('before', 'map-live-sao-paulo.png');
+    await page.locator('#geo-country').fill('IT');
+    await page.locator('#geo-country').press('Tab');
+    await page.locator('#geo-city').selectOption('osm:relation:41485');
+    await page.locator('[data-action="geo-generate"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy && !state.geoBusy && state.photoMap.mode === 'after';
+    });
+    report.map = await capture('after', 'map-live-rome.png');
   } catch (e) {
-    report.error = /^[A-Z_]+$/.test(e.message) ? e.message : 'LIVE_CHECK_UNAVAILABLE';
-    report.map.status = 'BLOCKED';
+    report.error = /^[A-Z_]+$/.test(e.message) ? e.message : 'LIVE_CHECK_FAILED';
+    report.map.status = 'FAIL';
+    process.exitCode = 1;
   } finally {
     if (app) await app.close();
     fs.rmSync(root, { recursive: true, force: true });

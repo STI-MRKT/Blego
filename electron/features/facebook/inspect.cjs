@@ -3,9 +3,9 @@ const { STATUSES } = require('./diagnostics.cjs');
 const PARSER_VERSION = 'public-evidence-v4';
 function attributes(tag) {
   return Object.fromEntries(
-    [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
+    [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)].map((match) => [
       match[1].toLowerCase(),
-      (match[2] ?? match[3]).replaceAll('&amp;', '&')
+      (match[2] ?? match[3] ?? match[4]).replaceAll('&amp;', '&')
     ])
   );
 }
@@ -16,10 +16,51 @@ function sameTarget(raw, target) {
     return false;
   }
 }
+// Strip explicitly hidden descendants before treating wording as page evidence.
+// This is conservative static inspection, not execution of third-party CSS/JS.
+function visibleMarkup(html) {
+  const stack = [],
+    output = [];
+  const voidTags = new Set(
+    'area base br col embed hr img input link meta param source track wbr'.split(' ')
+  );
+  for (const match of html.matchAll(/<(?:[^>"']|"[^"]*"|'[^']*')*>|[^<]+/g)) {
+    const token = match[0],
+      close = /^<\s*\/([a-z][\w:-]*)/i.exec(token);
+    if (close) {
+      const index = stack.map((item) => item.tag).lastIndexOf(close[1].toLowerCase());
+      if (index < 0) continue;
+      const hidden = stack.at(-1)?.hidden;
+      stack.length = index;
+      if (!hidden) output.push(token);
+      continue;
+    }
+    const open = /^<\s*([a-z][\w:-]*)/i.exec(token);
+    if (open) {
+      const attrs = attributes(token),
+        tag = open[1].toLowerCase();
+      const style = (attrs.style || '').replace(/\/\*[\s\S]*?\*\//g, '');
+      const hidden = Boolean(
+        stack.at(-1)?.hidden ||
+        /\s(?:hidden|inert)(?=\s|=|\/?>)/i.test(token) ||
+        attrs['aria-hidden']?.toLowerCase() === 'true' ||
+        /(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse)|opacity\s*:\s*0(?:\.0*)?|content-visibility\s*:\s*hidden)\s*(?:!important\s*)?(?:;|$)/i.test(
+          style
+        )
+      );
+      if (!hidden) output.push(token);
+      if (!voidTags.has(tag) && !/\/\s*>$/.test(token)) stack.push({ tag, hidden });
+      if (stack.length > 256) return '';
+    } else if (!stack.at(-1)?.hidden) output.push(token);
+  }
+  return output.join('');
+}
 function inspectResponse(target, { status, body = '', url = target.canonicalUrl }) {
   body = typeof body === 'string' ? body.replace(/<!--[\s\S]*?-->/g, '') : '';
   const complete = !/<html\b/i.test(body) || /<\/html\s*>/i.test(body);
-  const markup = body.replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+  const markup = visibleMarkup(
+    body.replace(/<(script|style|template|noscript)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
+  );
   const text = (html) =>
     html
       .replace(/<[^>]*>/g, ' ')
@@ -38,7 +79,7 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
   let facts = null;
   let availability = 'unknown',
     reasonCode = 'INSUFFICIENT_EVIDENCE';
-  if (status === 429 || /temporarily blocked|too many requests/i.test(body)) {
+  if (status === 429 || /temporarily blocked|too many requests/i.test(text(markup))) {
     availability = 'request_limited';
     reasonCode = 'REQUEST_LIMITED';
   } else if (
@@ -63,7 +104,11 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       (a) => a.rel?.toLowerCase() === 'canonical' && sameTarget(a.href, target)
     );
     const profile = meta.some((a) => a.property === 'og:type' && a.content === 'profile');
-    let person = false;
+    let person = false,
+      contradictoryIdentity = false;
+    const contradictoryCanonical = links.some(
+      (a) => a.rel?.toLowerCase() === 'canonical' && !sameTarget(a.href, target)
+    );
     for (const match of body.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (attributes(match[1]).type !== 'application/ld+json') continue;
       try {
@@ -77,6 +122,14 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
           const graph = list[i]?.['@graph'];
           if (Array.isArray(graph)) list.push(...graph.slice(0, 1000 - list.length));
         }
+        contradictoryIdentity ||= list.some(
+          (item) =>
+            item?.['@type'] === 'Person' &&
+            ((typeof item.url === 'string' && !sameTarget(item.url, target)) ||
+              (/^\d+$/.test(target.target) &&
+                item.identifier != null &&
+                String(item.identifier) !== target.target))
+        );
         const personMatch = list.find(
           (item) =>
             item?.['@type'] === 'Person' &&
@@ -95,13 +148,22 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
         /* Unknown structured data is not evidence. */
       }
     }
-    if (status === 200 && canonical && profile && person && sameTarget(url, target)) {
+    if (
+      status === 200 &&
+      canonical &&
+      profile &&
+      person &&
+      !contradictoryCanonical &&
+      !contradictoryIdentity &&
+      sameTarget(url, target)
+    ) {
       availability = 'profile_visible';
       reasonCode = 'MATCHED_CANONICAL_AND_PERSON';
     } else if (
       unavailableMessage &&
       sameTarget(url, target) &&
-      !links.some((a) => a.rel?.toLowerCase() === 'canonical' && !sameTarget(a.href, target))
+      !contradictoryCanonical &&
+      !contradictoryIdentity
     ) {
       availability = 'unavailable';
       reasonCode = 'PAGE_UNAVAILABLE_MESSAGE';

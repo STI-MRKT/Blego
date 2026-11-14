@@ -62,3 +62,34 @@ test('TZ9 ACTIVE/BLOCKED presentation is evidence-bound; legacy results require 
   ])
     assert.equal(facebookPresentation({ availability }).tone, '');
 });
+test('TZ9 hidden unavailable placeholders and contradictory Person evidence stay UNKNOWN', () => {
+  for (const attr of [
+    'hidden',
+    'hidden="false"',
+    'inert',
+    'aria-hidden="true"',
+    'style="display:none"',
+    'style="visibility: hidden"',
+    'style="opacity:0"',
+    'style=display:none'
+  ]) {
+    const body = `<html><body><main>Loading public profile</main><div ${attr}><section><h1>Content isn’t available</h1></section></div></body></html>`;
+    assert.equal(inspectResponse(target, { status: 200, body }).availability, 'unknown', attr);
+  }
+});
+test('TZ9 contradictory structured target identity cannot establish BLOCKED or ACTIVE', () => {
+  const wrong =
+    '<script type="application/ld+json">{"@type":"Person","url":"https://www.facebook.com/profile.php?id=456","identifier":"456","name":"Another Synthetic Person"}</script>';
+  assert.equal(
+    inspectResponse(target, { status: 200, body: wrong + '<h1>Content isn’t available</h1>' })
+      .availability,
+    'unknown'
+  );
+  assert.equal(
+    inspectResponse(target, {
+      status: 200,
+      body: profile() + '<link rel="canonical" href="https://www.facebook.com/profile.php?id=456">'
+    }).availability,
+    'unknown'
+  );
+});
