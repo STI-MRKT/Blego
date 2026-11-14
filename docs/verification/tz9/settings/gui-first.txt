@@ -1,0 +1,116 @@
+
+> blego@1.4.1 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✖ Electron offline workflow, native clipboard, pending import, ZIP and restart (9758.791396ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2136.950296ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (2152.645465ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (2309.57578ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (960.638466ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1446.814801ms)
+✔ TZ9 learned mail password displays, copies and archives without changing absent values (1073.491053ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (1967.44943ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1193.294772ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (10442.693837ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3060.922404ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2137.220736ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (1968.230845ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (9052.175656ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (2857.60934ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (4737.120541ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (962.960692ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (1938.707449ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (4297.728172ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (1669.856356ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (1109.253138ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (1445.74658ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9422.740185ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1176.96497ms)
+✔ all10 views have no general header Copy before/after generation/import/resize/restart; all FP/BIO copies remain exact (9829.524765ms)
+✔ advanced copy never resurrects after unsupported navigation or FP replacement/clear (5850.486775ms)
+✔ copy shortcuts respect text editing, native copy, selection, empty data and key repeat (1258.063804ms)
+✔ late advanced copy requests cannot reopen a panel after navigation away and back (5775.536129ms)
+✔ changing the active photo group invalidates the prepared group snapshot (1597.202877ms)
+✔ sequential copy completion after navigation cannot advance or reopen a closed panel (5840.393155ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4367.101199ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2551.100587ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (936.755921ms)
+✔ TZ9 20 photos: Brazil to Italy loads city tiles, preserves consent and exports matching GPS (13550.100462ms)
+✖ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (693.940189ms)
+✔ map drag retains dirty date through actual preview and export (3949.668259ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4005.802857ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (4030.95393ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3512.337307ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3650.412105ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4803.503564ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1816.464873ms)
+✔ first-run tour never steals navigation after the user starts working (1709.571347ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (17870.848443ms)
+✔ TZ9 fresh UI enables three tools; disabling one survives restart without changing others (1463.986599ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2316.337717ms)
+✖ restored quick workflow keeps generator compact and network telemetry visual (9928.813613ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 44
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 201818.613744
+
+✖ failing tests:
+
+test at tests/ui/app.test.cjs:13:1
+✖ Electron offline workflow, native clipboard, pending import, ZIP and restart (9758.791396ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/app.test.cjs:197:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/ui/news-topics.test.cjs:8:1
+✖ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (693.940189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'fashion'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/news-topics.test.cjs:64:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'fashion' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/ui/ux-restoration.test.cjs:8:1
+✖ restored quick workflow keeps generator compact and network telemetry visual (9928.813613ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/ux-restoration.test.cjs:98:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,21 @@
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (224.390783ms)
+✔ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (224.65825ms)
+✖ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (517.258556ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1056.214207
+
+✖ failing tests:
+
+test at tests/unit/map-recovery.test.cjs:93:1
+✖ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (517.258556ms)
+  Error: REPLACEMENT_DID_NOT_SETTLE
+      at /workspace/BLEGO-final/tests/unit/map-recovery.test.cjs:101:68
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/map-recovery.test.cjs:101:14)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

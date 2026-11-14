@@ -1,0 +1,12 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (11090.096022ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (9963.698152ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3154.291308ms)
+✔ TZ9 checker shows evidence-backed ACTIVE/BLOCKED, neutral errors, exact copy and fresh retry (1372.559656ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27222.757409

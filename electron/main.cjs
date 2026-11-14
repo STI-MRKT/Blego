@@ -131,6 +131,7 @@ async function initialize() {
       geoCatalog: (request) => geo.catalog(request),
       geoBoundary: (request) => geo.boundary(request),
       mapTile: (request) => mapTiles.tile(request),
+      cancelMapTile: (id) => mapTiles.cancel(id),
       imagesMoveGeo: (request) => images.moveGeo(request),
       imagesGenerateGeo: (request) => images.generateGeo(request),
       geoCancel: (id) => geo.cancel(id),

@@ -1,0 +1,38 @@
+✖ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (64.498589ms)
+✖ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (1.969552ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 161.114671
+
+✖ failing tests:
+
+test at tests/unit/map-recovery.test.cjs:7:1
+✖ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (64.498589ms)
+  Error: MAP_UNAVAILABLE
+      at /workspace/BLEGO-final/electron/features/geo/tiles.cjs:103:36
+      at async Object.tile (/workspace/BLEGO-final/electron/features/geo/tiles.cjs:146:14)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/map-recovery.test.cjs:22:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/unit/map-recovery.test.cjs:39:1
+✖ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (1.969552ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/BLEGO-final/src/js/utils/map-tile-loader.mjs' imported from /workspace/BLEGO-final/tests/unit/map-recovery.test.cjs
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+      at #resolve (node:internal/modules/esm/loader:687:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+      at node:internal/modules/esm/loader:636:32
+      at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///workspace/BLEGO-final/src/js/utils/map-tile-loader.mjs'
+  }

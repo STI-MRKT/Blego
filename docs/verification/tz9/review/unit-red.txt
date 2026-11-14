@@ -1,0 +1,83 @@
+✔ TZ9 public evidence matrix never converts transport/login/other-profile responses to BLOCKED (10.565765ms)
+✔ TZ9 ACTIVE/BLOCKED presentation is evidence-bound; legacy results require recheck (2.191522ms)
+✖ TZ9 hidden unavailable placeholders and contradictory Person evidence stay UNKNOWN (2.306948ms)
+✖ TZ9 contradictory structured target identity cannot establish BLOCKED or ACTIVE (0.882709ms)
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (223.294352ms)
+✔ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (224.278296ms)
+✔ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (67.984303ms)
+✖ TZ9 exhausted retained tiles notify a new viewport once so Retry survives remount (1.444089ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 5
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1083.150775
+
+✖ failing tests:
+
+test at tests/unit/facebook-v142.test.cjs:65:1
+✖ TZ9 hidden unavailable placeholders and contradictory Person evidence stay UNKNOWN (2.306948ms)
+  AssertionError [ERR_ASSERTION]: hidden
+  + actual - expected
+  
+  + 'unavailable'
+  - 'unknown'
+       ^
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v142.test.cjs:68:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'unavailable',
+    expected: 'unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/facebook-v142.test.cjs:71:1
+✖ TZ9 contradictory structured target identity cannot establish BLOCKED or ACTIVE (0.882709ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'unavailable'
+  - 'unknown'
+       ^
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v142.test.cjs:73:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'unavailable',
+    expected: 'unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/map-recovery.test.cjs:126:1
+✖ TZ9 exhausted retained tiles notify a new viewport once so Retry survives remount (1.444089ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/map-recovery.test.cjs:131:72)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

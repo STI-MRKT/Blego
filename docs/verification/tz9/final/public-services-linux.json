@@ -1,0 +1,75 @@
+{
+  "at": "2026-11-14T09:36:30.959Z",
+  "host": "linux-x64",
+  "facebook": {
+    "status": "BLOCKED",
+    "target": "https://www.facebook.com/meta",
+    "result": "NETWORK_ERROR",
+    "reason": "FB_CONNECTION_REFUSED",
+    "durationMs": 5111,
+    "scope": "One anonymous public target; no credentials or platform-bypass methods"
+  },
+  "map": {
+    "status": "BLOCKED",
+    "reason": "CITY_TILES_INCOMPLETE",
+    "cityId": "osm:relation:41485",
+    "center": {
+      "longitude": 12.54510095,
+      "latitude": 41.89879626417336
+    },
+    "mode": "after",
+    "points": 20,
+    "rendered": 0,
+    "required": 4,
+    "tiles": [
+      {
+        "z": 8,
+        "x": 136,
+        "y": 94
+      },
+      {
+        "z": 8,
+        "x": 137,
+        "y": 94
+      },
+      {
+        "z": 8,
+        "x": 136,
+        "y": 95
+      },
+      {
+        "z": 8,
+        "x": 137,
+        "y": 95
+      }
+    ],
+    "message": "Подложка загружена частично (0/4) · повторите загрузку",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  },
+  "mapBefore": {
+    "status": "BLOCKED",
+    "reason": "CITY_TILES_INCOMPLETE",
+    "center": {
+      "longitude": -46.63,
+      "latitude": -23.55
+    },
+    "mode": "before",
+    "points": 20,
+    "rendered": 0,
+    "required": 2,
+    "tiles": [
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74361
+      },
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74362
+      }
+    ],
+    "message": "Подложка загружена частично (0/2) · повторите загрузку",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  }
+}

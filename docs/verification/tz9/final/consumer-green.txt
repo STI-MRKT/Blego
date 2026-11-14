@@ -1,0 +1,11 @@
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (196.059739ms)
+✔ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (223.673575ms)
+✔ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (66.144874ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1005.919706

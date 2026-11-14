@@ -1,0 +1,101 @@
+{
+  "at": "2026-11-14T09:53:14.659Z",
+  "host": "darwin-arm64",
+  "facebook": {
+    "status": "BLOCKED",
+    "target": "https://www.facebook.com/meta",
+    "result": "UNKNOWN",
+    "reason": "INSUFFICIENT_EVIDENCE",
+    "httpStatus": 200,
+    "durationMs": 749,
+    "scope": "One anonymous public target; no credentials or platform-bypass methods"
+  },
+  "map": {
+    "status": "PASS",
+    "reason": null,
+    "cityId": "osm:relation:41485",
+    "center": {
+      "longitude": 12.54510095,
+      "latitude": 41.89879626417336
+    },
+    "mode": "after",
+    "points": 20,
+    "rendered": 8,
+    "required": 8,
+    "tiles": [
+      {
+        "z": 9,
+        "x": 272,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 273,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 274,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 275,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 272,
+        "y": 190
+      },
+      {
+        "z": 9,
+        "x": 273,
+        "y": 190
+      },
+      {
+        "z": 9,
+        "x": 274,
+        "y": 190
+      },
+      {
+        "z": 9,
+        "x": 275,
+        "y": 190
+      }
+    ],
+    "message": "OpenStreetMap загружен",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  },
+  "mapBefore": {
+    "status": "PASS",
+    "reason": null,
+    "center": {
+      "longitude": -46.63,
+      "latitude": -23.55
+    },
+    "mode": "before",
+    "points": 20,
+    "rendered": 3,
+    "required": 3,
+    "tiles": [
+      {
+        "z": 17,
+        "x": 48557,
+        "y": 74362
+      },
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74362
+      },
+      {
+        "z": 17,
+        "x": 48559,
+        "y": 74362
+      }
+    ],
+    "message": "OpenStreetMap загружен",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  }
+}

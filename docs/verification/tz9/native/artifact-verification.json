@@ -1,0 +1,18 @@
+{
+  "codeSha": "96f40c79913a0e85183f6ecf1e1be8535aa739ce",
+  "status": "PASS",
+  "installedGuiTests": 48,
+  "installer": "BLEGO-1.4.2-macOS-ARM64-install.zip",
+  "installerBytes": 150722504,
+  "installerSha256": "d1b737cc84aaf941a6fa9a8f9cf4f35b485b4731651c408e2ce168e08d6aeec6",
+  "dmg": "BLEGO-1.4.2-arm64.dmg",
+  "dmgSha256": "dda45a406bfe8a2fd54b9210e1f596b2bfb58c97b475cb0b9ad5334b1eac32be",
+  "innerMembers": [
+    "BLEGO-1.4.2-arm64.dmg",
+    "SHA256SUMS",
+    "INSTALL-RU.txt"
+  ],
+  "zipCrc": "PASS",
+  "downloadedDmgMatchesInstaller": "PASS",
+  "artifactDirectory": "/workspace/BLEGO-v142-artifacts/qa-96f40c7"
+}

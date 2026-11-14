@@ -1,0 +1,12 @@
+✔ map: one failed tile does not poison another tile (85.506588ms)
+✔ classifier: explicit email pass remains separate from account password (39.182289ms)
+✔ settings: new store enables the three tools (2.237406ms)
+✔ facebook: bare HTTP403 is not evidence of unavailable target content (3.113408ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 265.190281

@@ -1,16 +1,18 @@
-// One bounded public target and one world tile; no credentials, bulk download or pan/zoom.
+// Bounded anonymous QA: one public Facebook target and two requested city viewports (Before/After).
+// Synthetic photos stay local; only normal OSM z/x/y tiles are requested.
 const fs = require('node:fs'),
   os = require('node:os'),
   path = require('node:path');
 (async () => {
   const out = process.argv[2];
   if (!out) throw Error('REPORT_PATH_REQUIRED');
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-public-'));
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-public-city-'));
   const report = {
     at: new Date().toISOString(),
     host: process.platform + '-' + process.arch,
     facebook: {},
-    map: {}
+    map: { status: 'BLOCKED' }
   };
   let app;
   try {
@@ -18,72 +20,143 @@ const fs = require('node:fs'),
     const target = require('../electron/features/facebook/normalize.cjs').normalizeTarget(
       'https://www.facebook.com/Meta'
     );
-    for await (const r of fb.check({ targets: [target], runId: 'public-qa' }))
+    const { facebookPresentation } = await import('../shared/facebook-presentation.mjs');
+    for await (const r of fb.check({ targets: [target], runId: 'public-qa' })) {
+      const shown = facebookPresentation(r);
       report.facebook = {
-        status: r.status === 'PROFILE_VISIBLE' ? 'PASS' : 'BLOCKED',
+        status: ['ACTIVE', 'BLOCKED'].includes(shown.status) ? 'PASS' : 'BLOCKED',
         target: target.canonicalUrl,
-        result: r.status,
+        result: shown.status,
         reason: r.reasonCode,
+        httpStatus: r.httpStatus,
         durationMs: r.durationMs,
-        scope: 'One anonymous public profile; not a complete real-target acceptance matrix'
+        scope: 'One anonymous public target; no credentials or platform-bypass methods'
       };
+    }
     const data = path.join(root, 'data');
-    try {
-      await require('../electron/features/geo/tiles.cjs')
-        .createTileService({ root: data })
-        .tile({ z: 0, x: 0, y: 0 });
-      report.map = {
-        status: 'PASS',
-        source: 'https://tile.openstreetmap.org/0/0/0.png',
-        scope:
-          'One visible world tile through production transport and validated disk cache; no public pan/zoom automation'
-      };
-    } catch (e) {
-      report.map = { status: 'BLOCKED', reason: e.code || e.message };
-    }
-    if (report.map.status === 'PASS' && process.env.BLEGO_EXECUTABLE) {
-      const store = await require('../electron/local/store.cjs').openStore(data);
-      store.set('tourSeen', true);
-      store.close();
-      const photo = await require('../tests/fixtures/images.cjs').imageFixture(root, 'png');
-      app = await require('playwright')._electron.launch({
-        executablePath: process.env.BLEGO_EXECUTABLE,
-        args: [`--user-data-dir=${data}`]
-      });
-      const page = await app.firstWindow();
-      await page.locator('[data-view="photos"]').click();
-      await page.locator('#photo-input').setInputFiles(photo);
-      await page.waitForFunction(
-        () => Number(document.getElementById('photo-map-canvas')?.dataset.points) > 0
+    const store = await require('../electron/local/store.cjs').openStore(data);
+    store.set('tourSeen', true);
+    store.close();
+    const { imageFixture, distinctCopies } = require('../tests/fixtures/images.cjs');
+    const photo = await imageFixture(root, 'jpeg');
+    await require('../electron/features/images/engine.cjs')
+      .createEngine()
+      .writeCopy(
+        photo,
+        [
+          {
+            field: 'gps',
+            action: 'set',
+            value: { latitude: -23.55, longitude: -46.63, altitude: null }
+          }
+        ],
+        'jpeg'
       );
-      await page.evaluate(async () => {
-        const { state } = await import('/js/state.js');
-        state.photoMap.view = { center: { latitude: 0, longitude: 0 }, scale: 256 / 360 };
-        window.dispatchEvent(new Event('resize'));
-      });
-      await page.waitForTimeout(100);
-      await page.evaluate(() => {
-        const c = document.getElementById('photo-map-canvas');
-        window.__worldBefore = Array.from(
-          c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    app = await require('playwright')._electron.launch({
+      executablePath: process.env.BLEGO_EXECUTABLE || undefined,
+      args: [
+        ...(process.platform === 'linux' ? ['--ozone-platform=headless', '--disable-gpu'] : []),
+        ...(process.env.BLEGO_EXECUTABLE ? [] : ['.']),
+        `--user-data-dir=${data}`
+      ]
+    });
+    const page = await app.firstWindow();
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('#photo-input').setInputFiles(distinctCopies(photo, 20));
+    const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy && state.photos.length === 20;
+    });
+    await page.locator('#photo-map-canvas').scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      const c = document.getElementById('photo-map-canvas');
+      window.__cityBefore = Array.from(
+        c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+      );
+    });
+    await page.locator('[data-map-action="background"]').click();
+    const capture = async (mode, filename) => {
+      let failure = null;
+      try {
+        await page.waitForFunction(
+          () => {
+            const c = document.getElementById('photo-map-canvas'),
+              a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+            let changed = 0;
+            for (let i = 0; i < a.length; i += 4)
+              if (a[i] !== __cityBefore[i] || a[i + 1] !== __cityBefore[i + 1]) changed++;
+            return (
+              Number(c.dataset.requiredTiles) > 0 &&
+              c.dataset.tiles === c.dataset.requiredTiles &&
+              changed > 1000
+            );
+          },
+          null,
+          { timeout: 45000 }
         );
-      });
-      await page.locator('[data-map-action="background"]').click();
-      await page.waitForFunction(() => {
+      } catch {
+        failure = 'CITY_TILES_INCOMPLETE';
+      }
+      const evidence = await page.evaluate(async () => {
+        const { state } = await import('/js/state.js'),
+          { visibleTiles } = await import('/shared/photo-map.mjs');
         const c = document.getElementById('photo-map-canvas'),
-          a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-        let n = 0;
-        for (let i = 0; i < a.length; i += 4)
-          if (a[i] !== __worldBefore[i] || a[i + 1] !== __worldBefore[i + 1]) n++;
-        return Number(c.dataset.tiles) > 0 && n > 1000;
+          r = c.getBoundingClientRect();
+        return {
+          cityId: state.geoCity,
+          center: state.photoMap.view.center,
+          mode: c.dataset.mode,
+          points: Number(c.dataset.points),
+          rendered: Number(c.dataset.tiles),
+          required: Number(c.dataset.requiredTiles),
+          tiles: visibleTiles(state.photoMap.view, r.width, r.height).map(({ z, x, y }) => ({
+            z,
+            x,
+            y
+          })),
+          message: document.getElementById('map-background-status').textContent
+        };
       });
-      await page
-        .locator('.photo-map')
-        .screenshot({ path: path.join(path.dirname(out), 'map-live-world.png') });
-      report.map.installedRender = 'PASS';
-    }
+      const city =
+        (mode === 'before'
+          ? Math.abs(evidence.center.latitude + 23.55) < 0.01 &&
+            Math.abs(evidence.center.longitude + 46.63) < 0.01
+          : evidence.center.latitude > 41 &&
+            evidence.center.latitude < 43 &&
+            evidence.center.longitude > 11 &&
+            evidence.center.longitude < 14) && evidence.tiles.every((t) => t.z >= 8);
+      const result = {
+        status:
+          !city || evidence.points !== 20 || !evidence.required
+            ? 'FAIL'
+            : failure
+              ? evidence.rendered < evidence.required
+                ? 'BLOCKED'
+                : 'FAIL'
+              : 'PASS',
+        reason: failure || (!city ? 'WRONG_CITY_VIEW' : null),
+        ...evidence,
+        scope:
+          'Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider'
+      };
+      await page.locator('.photo-map').screenshot({ path: path.join(path.dirname(out), filename) });
+      if (result.status === 'FAIL') process.exitCode = 1;
+      return result;
+    };
+    report.mapBefore = await capture('before', 'map-live-sao-paulo.png');
+    await page.locator('#geo-country').fill('IT');
+    await page.locator('#geo-country').press('Tab');
+    await page.locator('#geo-city').selectOption('osm:relation:41485');
+    await page.locator('[data-action="geo-generate"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy && !state.geoBusy && state.photoMap.mode === 'after';
+    });
+    report.map = await capture('after', 'map-live-rome.png');
   } catch (e) {
-    report.error = e.message;
+    report.error = /^[A-Z_]+$/.test(e.message) ? e.message : 'LIVE_CHECK_FAILED';
+    report.map.status = 'FAIL';
     process.exitCode = 1;
   } finally {
     if (app) await app.close();
@@ -92,4 +165,7 @@ const fs = require('node:fs'),
     fs.writeFileSync(out, JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify(report, null, 2));
   }
-})();
+})().catch((e) => {
+  console.error(e.message);
+  process.exitCode = 1;
+});

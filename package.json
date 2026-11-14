@@ -1,6 +1,6 @@
 {
   "name": "blego",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "BLEGO local studio",
   "main": "electron/main.cjs",
   "author": "blemish&alterego",

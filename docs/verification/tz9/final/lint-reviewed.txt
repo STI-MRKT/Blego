@@ -1,0 +1,11 @@
+
+> blego@1.4.2 lint
+> node scripts/check.cjs && npm run format:check
+
+Syntax checked 252 JavaScript files; git diff --check exit 0
+
+> blego@1.4.2 format:check
+> prettier --check "electron/**/*.cjs" "shared/*.mjs" "tests/**/*.cjs" "scripts/*.cjs"
+
+Checking formatting...
+All matched files use Prettier code style!

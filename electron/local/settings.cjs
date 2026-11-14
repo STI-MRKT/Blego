@@ -10,9 +10,9 @@ const defaults = {
   overrides: {},
   archiveRoot: null,
   includeOriginal: false,
-  newsEnabled: false,
-  proxyEnabled: false,
-  facebookEnabled: false,
+  newsEnabled: true,
+  proxyEnabled: true,
+  facebookEnabled: true,
   newsInterval: 30,
   newsSources: [],
   newsTopic: ''

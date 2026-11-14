@@ -10,7 +10,13 @@ test(
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-ui-'));
-    fs.writeFileSync(path.join(root, 'blego-state.json'), JSON.stringify({ tourSeen: true }));
+    // Exercise the preserved explicit opt-out path, independently of fresh-install defaults.
+    const initialStore = await require('../../electron/local/store.cjs').openStore(root);
+    initialStore.set('tourSeen', true);
+    require('../../electron/local/settings.cjs').updateSettings(initialStore, {
+      newsEnabled: false
+    });
+    initialStore.close();
     let app;
     t.after(async () => {
       if (app) await app.close();

@@ -7,14 +7,18 @@ const maxFields = 512,
   maxDepth = 64;
 const problem = (code) => Object.assign(Error(code), { code });
 const strongStart = (s) =>
-  /^(?:(?:id|accountId|uid)\s*[:=]\s*\d+\s*(?:::|\|)|\d{5,}\s*(?:::|\|))/i.test(s.trimStart());
+  /^(?:(?:id|accountId|uid)\s*[:=]\s*\d+\s*(?:::|\||;|\t)|\d{5,}\s*(?:::|\||;|\t))/i.test(
+    s.trimStart()
+  );
 const isUA = (s) =>
   /^(?:(?:user[ -]?agent|ua)\s*[:=]\s*)?(?:Mozilla|Dalvik|Opera)\//i.test(s.trimStart());
 export function wantsStructuredText(text, headerFor) {
   if (
     !text.includes('|') &&
     !text.includes('::') &&
-    !/^\s*(?:id|accountId|name|mail|email|cookies)\s*[:=]/i.test(text)
+    !text.includes('\t') &&
+    !text.includes(';') &&
+    !/^\s*(?:id|accountId|name|mail|email|cookies)\s*[:=]/im.test(text)
   )
     return false;
   const first = text
@@ -154,7 +158,7 @@ export function structuredRecords(text) {
       if (c === '\n') line++;
       continue;
     }
-    if (!newline && !'[\{\"|;'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
+    if (!newline && !'[\{\"|;\t'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
     const current = text.slice(cellStart, i);
     if (
       (c === '[' || c === '{') &&
@@ -169,8 +173,8 @@ export function structuredRecords(text) {
     }
     const delimiter = text.startsWith('::', i)
       ? '::'
-      : c === '|'
-        ? '|'
+      : c === '|' || c === '\t'
+        ? c
         : c === ';' &&
             !isUA(current) &&
             !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
@@ -179,7 +183,7 @@ export function structuredRecords(text) {
     if (delimiter) {
       const next = i + delimiter.length;
       const upcoming = text.slice(next, next + 300).trimStart();
-      const id = /^(?:(?:id|accountId|uid)\s*[:=]\s*)?(\d+)\s*(?:::|\|)/i.exec(upcoming)?.[1];
+      const id = /^(?:(?:id|accountId|uid)\s*[:=]\s*)?(\d+)\s*(?:::|\||;|\t)/i.exec(upcoming)?.[1];
       if (id && (hasCookie || completedCookie(current)) && nextCookieOwner(text, next) === id) {
         row(i, next);
         recordLine = line;
@@ -193,6 +197,34 @@ export function structuredRecords(text) {
     if (newline) {
       const step = c === '\r' && text[i + 1] === '\n' ? 2 : 1;
       const after = text.slice(i + step, i + step + 300).trimStart();
+      const recognize = (value) =>
+        recognizeValue(value, fieldForHeader, validBirthDate, (s) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+        );
+      const nextLine = text.slice(i + step, i + step + 65536).split(/[\r\n]/, 1)[0];
+      const nextField = recognize(nextLine.trim());
+      const currentFields = [
+        ...fields.map((field) => recognize(field.value)),
+        recognize(current.trim())
+      ];
+      // Only an ID-anchored labelled block can continue without a separator.
+      // Blank lines, a new ID, or a repeated role begin another record.
+      if (
+        nextField.explicit &&
+        !nextField.invalid &&
+        nextField.key !== 'accountId' &&
+        currentFields.some(
+          (field) => field.key === 'accountId' && field.explicit && !field.invalid
+        ) &&
+        currentFields.at(-1).explicit &&
+        !currentFields.some((field) => field.key === nextField.key)
+      ) {
+        field(i);
+        cellStart = i + step;
+        line++;
+        i += step - 1;
+        continue;
+      }
       // An explicit continuation marker is reliable; otherwise keep lines with
       // an unfinished field separator together until a new identity appears.
       const previousSeparator = current.trim() === '' && fields.length;
@@ -225,7 +257,7 @@ export function structuredRecords(text) {
   const prose = (r) =>
     !evidence(r) &&
     (/^(?:#|\/\/|--)(?:\s|$)/u.test(r.sourceEntries[0].value) ||
-      /^(?:Описание файла|Инструкция|Комментарий|Примечание|Read terms|Instructions?|Comments?|Notes?)(?:[:.\s]|$)/iu.test(
+      /^(?:Описание файла|Инструкция|Комментарий|Примечание|Условия|Пояснения|Заголовок|Terms|Description|Header|Read terms|Instructions?|Comments?|Notes?)(?:[:.\s]|$)/iu.test(
         r.sourceEntries[0].value
       ));
   const useful = rows.some(evidence) ? rows.filter((r) => !prose(r)) : rows;

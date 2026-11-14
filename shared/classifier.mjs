@@ -1,3 +1,4 @@
+import { discoverLayouts, matchingLayout } from './classifier-layouts.mjs';
 import {
   EXTENDED_FIELDS,
   recognizeValue,
@@ -36,7 +37,14 @@ const aliases = {
   fullName: ['fullname', 'name', 'фио', 'имя'],
   accountId: ['accountid', 'id', 'uid', 'facebookid'],
   password: ['password', 'pass', 'passwd', 'пароль'],
-  emailPassword: ['emailpassword', 'mailpassword', 'парольотпочты', 'парольпочты'],
+  emailPassword: [
+    'emailpassword',
+    'mailpassword',
+    'emailpass',
+    'mailpass',
+    'парольотпочты',
+    'парольпочты'
+  ],
   email: ['email', 'mail', 'почта'],
   backupEmail: [
     'backupEmail',
@@ -79,36 +87,6 @@ for (const locale of ['en', 'ru']) {
 }
 const isCountry = (value) =>
   countryCodes.has(value) || countryNames.has(value) || countryNames.has(value.toLowerCase());
-// Learn only positions explicitly labelled by a majority (at least two) of
-// equal-width records. A candidate must retain two independently typed anchors
-// and agree at EVERY typed position; arbitrary adjacent strings are not a schema.
-function fileLayouts(parsed) {
-  const groups = new Map();
-  if (!parsed.structured) return groups;
-  for (const record of parsed.records) {
-    const entries = record.sourceEntries || [];
-    const width = entries.length;
-    if (!groups.has(width))
-      groups.set(width, { count: 0, positions: Array.from({ length: width }, () => new Map()) });
-    const group = groups.get(width);
-    group.count++;
-    entries.forEach((entry, i) => {
-      const r = recognizeValue(entry.value, fieldForHeader, validBirthDate, emailValid);
-      if (r.explicit && !r.invalid)
-        group.positions[i].set(r.key, (group.positions[i].get(r.key) || 0) + 1);
-    });
-  }
-  for (const [width, group] of groups)
-    groups.set(
-      width,
-      group.positions.map((counts) => {
-        if (counts.size !== 1) return null;
-        const [key, n] = [...counts][0];
-        return n >= 2 && n > group.count / 2 ? key : null;
-      })
-    );
-  return groups;
-}
 function guess(value) {
   if (emailValid(value)) return 'email';
   if (validBirthDate(value)) return 'birthDate';
@@ -144,11 +122,14 @@ export function classifyRecords(parsed, options = {}) {
     if (!initialWarnings.has(d.recordId)) initialWarnings.set(d.recordId, []);
     initialWarnings.get(d.recordId).push(d);
   }
-  const layouts = fileLayouts(parsed);
+  const layouts = discoverLayouts(parsed, (value) =>
+    recognizeValue(value, fieldForHeader, validBirthDate, emailValid)
+  );
   const records = parsed.records.map((source, index) => {
     const data = Object.fromEntries(CLASSIFIER_FIELDS.map((f) => [f.key, '']));
     data.rowNumber = String(index + 1);
     const extended = Object.fromEntries(EXTENDED_FIELDS.map((k) => [k, '']));
+    const fieldSources = {};
     const candidates = new Map(),
       unrecognized = [];
     const warnings = [...(initialWarnings.get(source.id) || [])];
@@ -186,15 +167,8 @@ export function classifyRecords(parsed, options = {}) {
     const contextual = relatedIds.size > 0;
     const hasDate = recognized.some((r) => validBirthDate(r.value || ''));
     const hasGeo = recognized.some((r) => r.key === 'geo' || isCountry(r.value || ''));
-    const layout = layouts.get(entries.length);
-    const layoutValid =
-      layout &&
-      recognized.every((r, i) => !r.invalid && (!r.key || !layout[i] || r.key === layout[i])) &&
-      recognized.filter(
-        (r, i) =>
-          ['accountId', 'email', 'userAgent', 'cookies', 'profileUrl'].includes(r.key) &&
-          r.key === layout[i]
-      ).length >= 2;
+    const layout = matchingLayout(layouts, recognized);
+    const layoutValid = Boolean(layout);
     const rowMapping = options.recordMapping?.[source.id] || {};
     if (
       typeof rowMapping !== 'object' ||
@@ -224,7 +198,12 @@ export function classifyRecords(parsed, options = {}) {
         else if (isCountry(value)) inferred = 'geo';
         else if (hasDate && hasGeo && personName(value)) inferred = 'fullName';
       }
-      if (!inferred && layoutValid) inferred = layout[position];
+      const learned = layoutValid && layout[position];
+      if (
+        learned &&
+        (!inferred || (!found.explicit && inferred === 'email' && learned === 'backupEmail'))
+      )
+        inferred = learned;
       const key =
         rowMapped || named || schema || mapped || (parsed.structured ? inferred : guess(value));
       const priority = rowMapped
@@ -253,7 +232,21 @@ export function classifyRecords(parsed, options = {}) {
         return;
       }
       if (!candidates.has(key)) candidates.set(key, []);
-      candidates.get(key).push({ value, priority, original });
+      candidates.get(key).push({
+        value,
+        priority,
+        original,
+        method:
+          rowMapped || mapped
+            ? 'manual'
+            : named || found.explicit
+              ? 'label'
+              : schema
+                ? 'schema'
+                : learned === key
+                  ? 'repeated-layout'
+                  : 'syntax-context'
+      });
     });
     for (const [key, values] of candidates) {
       const best = Math.max(...values.map((v) => v.priority));
@@ -266,15 +259,31 @@ export function classifyRecords(parsed, options = {}) {
           winners[0].value &&
           !emailValid(winners[0].value)
         );
-      if (valid) (EXTENDED_FIELDS.includes(key) ? extended : data)[key] = winners[0].value;
-      else report(winners.length > 1 ? 'AMBIGUOUS_FIELD' : 'INVALID_FIELD', key);
+      if (valid) {
+        (EXTENDED_FIELDS.includes(key) ? extended : data)[key] = winners[0].value;
+        fieldSources[key] = [
+          {
+            column: winners[0].original.column,
+            range: winners[0].original.range,
+            method: winners[0].method
+          }
+        ];
+      } else report(winners.length > 1 ? 'AMBIGUOUS_FIELD' : 'INVALID_FIELD', key);
       for (const v of values)
         if (v.value !== '' && (!valid || v !== winners[0])) unrecognized.push(v.original);
     }
     if (parsed.structured) {
       if (identityConflict) report('IDENTITY_CONFLICT', 'accountId');
-      else if (!data.accountId && relatedIds.size === 1 && !candidates.has('accountId'))
+      else if (!data.accountId && relatedIds.size === 1 && !candidates.has('accountId')) {
         data.accountId = [...relatedIds][0];
+        fieldSources.accountId = entries
+          .filter((_, i) => recognized[i].cookie?.owners?.length || recognized[i].profile?.id)
+          .map((entry) => ({
+            column: entry.column,
+            range: entry.range,
+            method: 'linked-identity'
+          }));
+      }
       if (data.cookies && cookieInfo(data.cookies)?.invalid)
         report('INVALID_COOKIE_JSON', 'cookies');
       const profile = profileIdentity(extended.profileUrl);
@@ -315,13 +324,15 @@ export function classifyRecords(parsed, options = {}) {
         source.sourceRecord ??
         (typeof source.raw === 'string' ? source.raw : JSON.stringify(source.raw)),
       range: source.range,
-      sourceEntries: entries
+      sourceEntries: entries,
+      fieldSources
     };
   });
   return {
     records,
     diagnostics,
     rulesVersion: 'synthetic-records-1',
+    layouts: layouts.map(({ fields, count }) => ({ fields, examples: count })),
     columns: CLASSIFIER_FIELDS.map((f) => f.key)
   };
 }

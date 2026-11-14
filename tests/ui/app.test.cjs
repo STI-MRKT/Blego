@@ -18,6 +18,12 @@ test(
     const data = path.join(root, 'data');
     const store = await openStore(data);
     store.set('tourSeen', true);
+    // This scenario specifically verifies an existing explicit opt-out.
+    require('../../electron/local/settings.cjs').updateSettings(store, {
+      facebookEnabled: false,
+      proxyEnabled: false,
+      newsEnabled: false
+    });
     const classifier = createClassificationService({ allowTestRules: true });
     const { parseInput } = await import('../../shared/importer.mjs');
     const parsed = await parseInput({
@@ -201,10 +207,7 @@ test(
       .locator('#checker-input')
       .fill('0012345678901234567890123\nhttps://facebook.com/groups');
     await page.locator('[data-action="checker-run"]').click();
-    await page
-      .locator('.checker-row')
-      .getByText('Требуется авторизация', { exact: true })
-      .waitFor();
+    await page.locator('.checker-row').getByText('LOGIN_REQUIRED', { exact: true }).waitFor();
     await page.locator('#facebook-details > summary').click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[aria-label="Copy Facebook ID"]').first().click();

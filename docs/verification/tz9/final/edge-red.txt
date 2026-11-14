@@ -1,0 +1,76 @@
+✔ TZ9 classifier: explicit English labels and separate passwords (58.88292ms)
+✔ TZ9 classifier: Russian label and quoted unusual characters (6.190781ms)
+✔ TZ9 classifier: absent mail password (1.303427ms)
+✔ TZ9 classifier: unlabelled adjacent string remains ambiguous (2.223932ms)
+✔ TZ9 classifier: two emails without roles remain ambiguous (2.332418ms)
+✔ TZ9 classifier: tab and semicolon with introductory prose (13.120135ms)
+✔ TZ9 classifier: same width different schemes and held-out values (2.149519ms)
+✔ TZ9 classifier: conflicting layouts never guess password role (3.076147ms)
+✔ TZ9 classifier: multiline nested cookie with account boundaries (1.996141ms)
+✔ TZ9 classifier: prior synthetic format A (2.279682ms)
+✔ TZ9 classifier: prior synthetic format B keeps absent mail password empty (2.934088ms)
+✖ TZ9 classifier: space-separated mail password label (2.299337ms)
+✖ TZ9 classifier: labelled multiline blocks keep missing password out of next account (3.521094ms)
+✔ TZ9 classifier: typed-looking passwords retain explicit roles (1.950197ms)
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (228.496874ms)
+✖ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (226.037689ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 13
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 556.60241
+
+✖ failing tests:
+
+test at tests/unit/classifier-v142.test.cjs:5:3
+✖ TZ9 classifier: space-separated mail password label (2.299337ms)
+  AssertionError [ERR_ASSERTION]: row 0, emailPassword
+  + actual - expected
+  
+  + ''
+  - 'SYNTHETIC_MAIL'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:16:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'SYNTHETIC_MAIL',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v142.test.cjs:5:3
+✖ TZ9 classifier: labelled multiline blocks keep missing password out of next account (3.521094ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  6 !== 2
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 6,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/map-recovery.test.cjs:55:1
+✖ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (226.037689ms)
+  AssertionError [ERR_ASSERTION]: cancel before dispatch must not start a stale network request
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/map-recovery.test.cjs:90:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
