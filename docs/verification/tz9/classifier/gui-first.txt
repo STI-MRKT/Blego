@@ -1,0 +1,85 @@
+
+> blego@1.4.1 test:ui
+> node --test --test-concurrency=1 tests/ui/*.test.cjs
+
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (9927.873597ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (2333.070576ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (2325.983921ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (2696.292936ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (1186.988728ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (1796.298567ms)
+✖ TZ9 learned mail password displays, copies and archives without changing absent values (31197.888599ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (2314.073536ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (1729.761567ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (11160.490332ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (3885.505661ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (2899.940435ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (2871.584487ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (6114.122896ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (3000.871166ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (7085.509603ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (1288.647915ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (2552.6721ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (5863.285929ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (2091.481343ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (1181.715866ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (1710.013743ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (9536.620233ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (1177.460997ms)
+✔ all10 views have no general header Copy before/after generation/import/resize/restart; all FP/BIO copies remain exact (5908.185973ms)
+✔ advanced copy never resurrects after unsupported navigation or FP replacement/clear (1505.477544ms)
+✔ copy shortcuts respect text editing, native copy, selection, empty data and key repeat (1252.390849ms)
+✔ late advanced copy requests cannot reopen a panel after navigation away and back (984.241507ms)
+✔ changing the active photo group invalidates the prepared group snapshot (1675.986514ms)
+✔ sequential copy completion after navigation cannot advance or reopen a closed panel (885.585445ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (4324.439473ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (2553.752375ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (937.334101ms)
+✔ TZ9 20 photos: Brazil to Italy loads city tiles, preserves consent and exports matching GPS (12698.576683ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls (2342.623929ms)
+✔ map drag retains dirty date through actual preview and export (4052.069447ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4165.433042ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (3883.106784ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (3532.934569ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (3843.293523ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (4641.469957ms)
+✔ proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result (1728.384157ms)
+✔ first-run tour never steals navigation after the user starts working (1757.407088ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (17949.870201ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (2426.594948ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (5295.734364ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 45
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 218727.999766
+
+✖ failing tests:
+
+test at tests/ui/classifier-v142.test.cjs:8:1
+✖ TZ9 learned mail password displays, copies and archives without changing absent values (31197.888599ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('[data-action="classifier-archive"]')[22m
+  [2m    - locator resolved to <button class="btn" data-action="classifier-archive">Сохранить в архив</button>[22m
+  [2m  - attempting click action[22m
+  [2m    2 × waiting for element to be visible, enabled and stable[22m
+  [2m      - element is not visible[22m
+  [2m    - retrying click action[22m
+  [2m    - waiting 20ms[22m
+  [2m    2 × waiting for element to be visible, enabled and stable[22m
+  [2m      - element is not visible[22m
+  [2m    - retrying click action[22m
+  [2m      - waiting 100ms[22m
+  [2m    58 × waiting for element to be visible, enabled and stable[22m
+  [2m       - element is not visible[22m
+  [2m     - retrying click action[22m
+  [2m       - waiting 500ms[22m
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/classifier-v142.test.cjs:49:62) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('[data-action="classifier-archive"]')`, '    - locator resolved to <button class="btn" data-action="classifier-archive">Сохранить в архив</button>', '  - attempting click action', '    2 × waiting for element to be visible, enabled and stable', '      - element is not visible', '    - retrying click action', '    - waiting 20ms', '    2 × waiting for element to be visible, enabled and stable', '      - element is not visible', '    - retrying click action', '      - waiting 100ms', '    58 × waiting for element to be visible, enabled and stable', '       - element is not visible', '     - retrying click action', '       - waiting 500ms' ]
+  }

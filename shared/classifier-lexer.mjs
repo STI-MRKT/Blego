@@ -7,14 +7,18 @@ const maxFields = 512,
   maxDepth = 64;
 const problem = (code) => Object.assign(Error(code), { code });
 const strongStart = (s) =>
-  /^(?:(?:id|accountId|uid)\s*[:=]\s*\d+\s*(?:::|\|)|\d{5,}\s*(?:::|\|))/i.test(s.trimStart());
+  /^(?:(?:id|accountId|uid)\s*[:=]\s*\d+\s*(?:::|\||;|\t)|\d{5,}\s*(?:::|\||;|\t))/i.test(
+    s.trimStart()
+  );
 const isUA = (s) =>
   /^(?:(?:user[ -]?agent|ua)\s*[:=]\s*)?(?:Mozilla|Dalvik|Opera)\//i.test(s.trimStart());
 export function wantsStructuredText(text, headerFor) {
   if (
     !text.includes('|') &&
     !text.includes('::') &&
-    !/^\s*(?:id|accountId|name|mail|email|cookies)\s*[:=]/i.test(text)
+    !text.includes('\t') &&
+    !text.includes(';') &&
+    !/^\s*(?:id|accountId|name|mail|email|cookies)\s*[:=]/im.test(text)
   )
     return false;
   const first = text
@@ -154,7 +158,7 @@ export function structuredRecords(text) {
       if (c === '\n') line++;
       continue;
     }
-    if (!newline && !'[\{\"|;'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
+    if (!newline && !'[\{\"|;\t'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
     const current = text.slice(cellStart, i);
     if (
       (c === '[' || c === '{') &&
@@ -169,8 +173,8 @@ export function structuredRecords(text) {
     }
     const delimiter = text.startsWith('::', i)
       ? '::'
-      : c === '|'
-        ? '|'
+      : c === '|' || c === '\t'
+        ? c
         : c === ';' &&
             !isUA(current) &&
             !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
@@ -179,7 +183,7 @@ export function structuredRecords(text) {
     if (delimiter) {
       const next = i + delimiter.length;
       const upcoming = text.slice(next, next + 300).trimStart();
-      const id = /^(?:(?:id|accountId|uid)\s*[:=]\s*)?(\d+)\s*(?:::|\|)/i.exec(upcoming)?.[1];
+      const id = /^(?:(?:id|accountId|uid)\s*[:=]\s*)?(\d+)\s*(?:::|\||;|\t)/i.exec(upcoming)?.[1];
       if (id && (hasCookie || completedCookie(current)) && nextCookieOwner(text, next) === id) {
         row(i, next);
         recordLine = line;

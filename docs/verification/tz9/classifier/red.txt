@@ -1,0 +1,102 @@
+✖ TZ9 classifier: explicit English labels and separate passwords (41.181121ms)
+✖ TZ9 classifier: Russian label and quoted unusual characters (7.210287ms)
+✖ TZ9 classifier: absent mail password (6.324342ms)
+✖ TZ9 classifier: unlabelled adjacent string remains ambiguous (2.427633ms)
+✖ TZ9 classifier: two emails without roles remain ambiguous (2.459273ms)
+✖ TZ9 classifier: tab and semicolon with introductory prose (2.778127ms)
+✖ TZ9 classifier: same width different schemes and held-out values (4.520761ms)
+✖ TZ9 classifier: conflicting layouts never guess password role (2.105386ms)
+✖ TZ9 classifier: multiline nested cookie with account boundaries (2.692647ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 184.042836
+
+✖ failing tests:
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: explicit English labels and separate passwords (41.181121ms)
+  AssertionError [ERR_ASSERTION]: row 0, emailPassword
+  
+  '' !== 'MAIL_DEMO'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:11:82)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'MAIL_DEMO',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: Russian label and quoted unusual characters (7.210287ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: absent mail password (6.324342ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: unlabelled adjacent string remains ambiguous (2.427633ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: two emails without roles remain ambiguous (2.459273ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: tab and semicolon with introductory prose (2.778127ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  3 !== 1
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:9:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: same width different schemes and held-out values (4.520761ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: conflicting layouts never guess password role (2.105386ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v142.test.cjs:4:30
+✖ TZ9 classifier: multiline nested cookie with account boundaries (2.692647ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'accountId')
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v142.test.cjs:13:83)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
