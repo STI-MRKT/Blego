@@ -14,6 +14,9 @@ import { startTour } from './ui/tour.js';
 let workspaceInteracted = false;
 for (const event of ['pointerdown', 'keydown']) document.addEventListener(event, () => { workspaceInteracted = true; }, { once: true, capture: true });
 import { newsBlockHTML } from './ui/news.js';
+import { friendsCopyLinks, syncFriendsCopyActions } from './ui/friends.js';
+import { selectSeven, friendsCopyMessage } from '../../shared/friends-copy.mjs';
+let previousFriendsLinks = [];
 import { readMetadataForm, readMetadataData, draftFromOperations, rebaseGpsDraft, imageErrorMessage } from './ui/photos.js';
 import { makeDemo } from './services/generator.js';
 import { importErrorMessage } from './services/importer.js';
@@ -412,7 +415,7 @@ function bindView() {
     };
   }
   const friendsSearch=document.getElementById('friends-search');
-  if(friendsSearch){friendsSearch.onsubmit=event=>{event.preventDefault();state.friendsQuery=document.getElementById('friends-query').value;state.friendsPage=0;renderView();};document.getElementById('friends-query').oninput=event=>{state.friendsQuery=event.target.value;};}
+  if(friendsSearch){friendsSearch.onsubmit=event=>{event.preventDefault();state.friendsQuery=document.getElementById('friends-query').value;state.friendsPage=0;renderView();};document.getElementById('friends-query').oninput=event=>{state.friendsQuery=event.target.value;syncFriendsCopyActions();};}
   const friendsPlatform=document.getElementById('friends-platform');if(friendsPlatform)friendsPlatform.onchange=()=>{state.friendsPlatform=friendsPlatform.value;state.friendsPage=0;renderView();};
   const settingsForm = document.getElementById('settings-form');
   if (settingsForm)
@@ -1546,6 +1549,19 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'photos-clear') {
     clearPhotos();
+    return;
+  }
+  if(action==='friends-copy') {
+    if(state.friendsCopyBusy)return;
+    const seven=target.dataset.friendsCopy==='seven', urls=friendsCopyLinks();
+    if(!urls.length || (seven && urls.length<7))return;
+    state.friendsCopyBusy=true;syncFriendsCopyActions();
+    try {
+      const selected=seven?selectSeven(urls,previousFriendsLinks):urls;
+      const result=await copyText(selected.join('\n'),null,friendsCopyMessage(selected.length,seven),'Не удалось скопировать ссылки');
+      if(result.ok && seven)previousFriendsLinks=selected;
+    } catch {toast('Не удалось скопировать ссылки','err');}
+    finally {state.friendsCopyBusy=false;syncFriendsCopyActions();}
     return;
   }
   if(action==='friends-import') {

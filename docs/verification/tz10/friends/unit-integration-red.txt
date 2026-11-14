@@ -1,0 +1,146 @@
+✖ Friends copy eligibility reuses canonical URL validation without rewriting persisted rows (14.439556ms)
+✖ Friends renders disabled seven below seven and no-links feedback without a header Copy (16.888858ms)
+✖ Friends copies complete filtered unique canonical URLs rather than visible page or other GEO (1.811442ms)
+✖ seven sampling is uniform over all eight-profile permutations, immutable, and not first seven (0.938259ms)
+✖ seven selection rejects a repeated set, permits exactly seven, and bounds broken RNG retries (0.9869ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159.678954
+
+✖ failing tests:
+
+test at tests/integration/friends-copy.test.cjs:5:1
+✖ Friends copy eligibility reuses canonical URL validation without rewriting persisted rows (14.439556ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   undefined,
+  +   undefined,
+  +   undefined,
+  +   undefined,
+  +   undefined,
+  +   undefined
+  -   'https://www.instagram.com/example/',
+  -   'https://www.instagram.com/example/',
+  -   null,
+  -   'https://example.test/profile?a=1&b=2',
+  -   null,
+  -   null
+    ]
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/friends-copy.test.cjs:11:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ undefined, undefined, undefined, undefined, undefined, undefined ],
+    expected: [ 'https://www.instagram.com/example/', 'https://www.instagram.com/example/', null, 'https://example.test/profile?a=1&b=2', null, null ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/friends-copy.test.cjs:3:1
+✖ Friends renders disabled seven below seven and no-links feedback without a header Copy (16.888858ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /data-friends-copy="seven"[^>]*disabled/. Input:
+  
+  '<div class="page">\n' +
+    '    <div class="page-head">\n' +
+    '      <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>\n' +
+    '      <div class="head-actions"><span class="pill">3 / 3 profiles</span><button class="btn" data-action="friends-import" >Импортировать Friends</button></div>\n' +
+    '    </div>\n' +
+    '    <form id="friends-search" class="controls"><label class="fl">Поиск<input class="input" id="friends-query" value=""></label><label class="fl">Площадка<select class="input" id="friends-platform"><option value="">Все</option></select></label><button class="btn" type="submit">Найти</button></form>\n' +
+    '    <div class="geo-filter">\n' +
+    '      <button class="geo-chip " data-action="friends-geo" data-geo="">All <b>3</b></button>\n' +
+    '      <button class="geo-chip on" data-action="friends-geo" data-geo="US">US <b>3</b></button>\n' +
+    '    </div>\n' +
+    '    \n' +
+    '    <div class="friends-grid">\n' +
+    '      <article class="friend-card">\n' +
+    '        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n' +
+    '        <div class="friend-name">https://example.test/0</div>\n' +
+    '        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n' +
+    '        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/0" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n' +
+    '        \n' +
+    '      </article><article class="friend-card">\n' +
+    '        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n' +
+    '        <div class="friend-name">https://example.test/1</div>\n' +
+    '        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n' +
+    '        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/1" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n' +
+    '        \n' +
+    '      </article><article class="friend-card">\n' +
+    '        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n' +
+    '        <div class="friend-name">https://example.test/2</div>\n' +
+    '        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n' +
+    '        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/2" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n' +
+    '        \n' +
+    '      </article>\n' +
+    '    </div>\n' +
+    '  </div>'
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/friends-copy.test.cjs:9:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<div class="page">\n    <div class="page-head">\n      <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>\n      <div class="head-actions"><span class="pill">3 / 3 profiles</span><button class="btn" data-action="friends-import" >Импортировать Friends</button></div>\n    </div>\n    <form id="friends-search" class="controls"><label class="fl">Поиск<input class="input" id="friends-query" value=""></label><label class="fl">Площадка<select class="input" id="friends-platform"><option value="">Все</option></select></label><button class="btn" type="submit">Найти</button></form>\n    <div class="geo-filter">\n      <button class="geo-chip " data-action="friends-geo" data-geo="">All <b>3</b></button>\n      <button class="geo-chip on" data-action="friends-geo" data-geo="US">US <b>3</b></button>\n    </div>\n    \n    <div class="friends-grid">\n      <article class="friend-card">\n        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n        <div class="friend-name">https://example.test/0</div>\n        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/0" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n        \n      </article><article class="friend-card">\n        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n        <div class="friend-name">https://example.test/1</div>\n        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/1" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n        \n      </article><article class="friend-card">\n        <div class="friend-top"><div class="avatar lg" style="--h:240"></div><span class="pill tiny">US</span></div>\n        <div class="friend-name">https://example.test/2</div>\n        <div class="friend-handle mono"></div><div class="friend-niche"></div>\n        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a4 4 0 005.7 0l2.4-2.4a4 4 0 00-5.7-5.7L11.6 6.7"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-2.4 2.4a4 4 0 005.7 5.7l1.3-1.3"/></svg>Open profile</button><button class="btn" data-action="copy" data-copy="https://example.test/2" data-friend-copy="url" aria-label="Копировать ссылку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.2"/><path d="M5.5 15V5.8A1.8 1.8 0 017.3 4h8"/></svg></button></div>\n        \n      </article>\n    </div>\n  </div>',
+    expected: /data-friends-copy="seven"[^>]*disabled/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/unit/friends-copy.test.cjs:15:1
+✖ Friends copies complete filtered unique canonical URLs rather than visible page or other GEO (1.811442ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/BLEGO-final/shared/friends-copy.mjs' imported from /workspace/BLEGO-final/tests/unit/friends-copy.test.cjs
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+      at #resolve (node:internal/modules/esm/loader:687:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+      at node:internal/modules/esm/loader:636:32
+      at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///workspace/BLEGO-final/shared/friends-copy.mjs'
+  }
+
+test at tests/unit/friends-copy.test.cjs:22:1
+✖ seven sampling is uniform over all eight-profile permutations, immutable, and not first seven (0.938259ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/BLEGO-final/shared/friends-copy.mjs' imported from /workspace/BLEGO-final/tests/unit/friends-copy.test.cjs
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+      at #resolve (node:internal/modules/esm/loader:687:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+      at node:internal/modules/esm/loader:636:32
+      at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///workspace/BLEGO-final/shared/friends-copy.mjs'
+  }
+
+test at tests/unit/friends-copy.test.cjs:31:1
+✖ seven selection rejects a repeated set, permits exactly seven, and bounds broken RNG retries (0.9869ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/BLEGO-final/shared/friends-copy.mjs' imported from /workspace/BLEGO-final/tests/unit/friends-copy.test.cjs
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+      at #resolve (node:internal/modules/esm/loader:687:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+      at node:internal/modules/esm/loader:636:32
+      at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///workspace/BLEGO-final/shared/friends-copy.mjs'
+  }
