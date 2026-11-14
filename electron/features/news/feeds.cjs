@@ -61,7 +61,7 @@ function parseFeed(xml, source, { relevance = true } = {}) {
   const items = [],
     seen = new Set();
   for (const e of array(entries)) {
-    const title = plain(e.title).slice(0, 300);
+    const title = plain(e.title);
     const links = array(e.link);
     const candidate =
       links.find((l) => typeof l === 'object' && (!l['@_rel'] || l['@_rel'] === 'alternate')) ||

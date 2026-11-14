@@ -37,7 +37,7 @@ Interfaces: data-action=news-copy with escaped full model value and title/link k
 
 ### Task4: review / native QA / PR
 Files: existing .github/workflows/blego-macos-qa.yml narrow branch/artifact/guide updates; docs/verification/tz10.
-- [ ] One fresh independent whole-branch review; one RED→GREEN important-fix pass, full regression. Source boundaries check. Keep1.4.2 version; TZ10-specific installer ZIP name avoids confusing prior artifact.
+- [x] One fresh independent whole-branch review; one RED→GREEN important-fix pass, full regression. Source boundaries check. Keep1.4.2 version; TZ10-specific installer ZIP name avoids confusing prior artifact.
 - [ ] Push marked QA candidate; native runtime gate, DMG/mount/copyoutside, all installedGUI including real clipboard exact payload assertions and screenshots; no tests skipped.
 - [ ] Download/verify SHA/ZIP/member list/OS/codeSHA; full requirement report/files/clipboard evidence/screenshots. New draft PR against incoming branch, attach, no merge/release.
 
@@ -54,3 +54,11 @@ Task2 complete: transient canonical copyUrl reuses Friends validation without ch
 Task3 complete: targeted News RED→GREEN; full lint150unit132integration50GUI PASS,0fail/skip (GUI241.082s). Real Electron native clipboard checks cover5topics, controlled RSS through actual parser, refreshed values, reopened SQLite cache, long title/query URL, navigation isolation, failure and360px. Earlier unit expectation from TZ6 forbade all News copy controls; it failed as expected under the new contract. Updated only that obsolete assertion to exact2card buttons while retaining absence of header/metadata copy and existing Network assertions. First failure evidence preserved. Raw RED log trailing whitespace removed only for diff hygiene.
 Ruling: TZ10 supersedes earlier blanket News-copy removal; old tests now assert the two explicitly required per-card actions while retaining all unrelated guarantees. Cost if wrong: reintroducing forbidden metadata/header controls; new assertions explicitly reject those.
 Visual inspection: Linux News360 screenshot shows both buttons in bounds. Friends wide screenshot initially retained test scroll position; test capture now resets content scroll, product behavior unchanged. Native QA remains pending.
+
+Final review: fresh gpt-6-astra reviewer reviewed7679fed..c817ebf read-only. One Important: RSS title was truncated at300characters before copying; RED regression reproduces this. Fix retains complete normalized title under existing2MiB feed cap, existing CSS clamping and10MiB clipboard guard; RSS/Atom unit fixture and all-topic GUI fixture now exceed300withEND_MARKER, including refresh/cache reopen.
+Final: minor (deferred): add deterministic failed-seven/retry and filter/route changes during pending Friends writes; reviewer found no product defect. Existing test covers failed/delayed all-write, implementation snapshots input and advances history only on success.
+Final: Ruling: native QA was outside reviewer execution — run actual installed macOS ARM64 checks before claiming acceptance; cost if wrong is an unverified installer, so evidence is a release gate.
+Final: Ruling: unchanged modules received scope review, not a fresh deep audit — full existing regression remains required; cost is residual pre-existing defects outside this narrow task, disclosed as such.
+Final: Ruling: keep existing Friends canonicalization and News URL normalization — they remain the specified contracts and stored values remain unchanged; cost if wrong is an inherited normalization limitation, not silently introduced new policy.
+
+Final: fixed RSS/Atom title truncation — News full-headline regression RED→GREEN2/2; whole suite lint151unit132integration50GUI PASS,0fail/skip. GUI uses >300-character END_MARKER through real parser, cache/restart and native clipboard. No re-review. Native QA candidate marked next; user already requested new PR and installer, so no repeated approval or release/merge. PR11 draft created against incoming branch. Host attach_artifact called but did not return; direct PR URL retained.

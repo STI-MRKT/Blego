@@ -55,7 +55,8 @@ test(
           globalThis.feedCalls.push(topic);
           const title =
             `${topic} Fashion design Artificial intelligence cryptocurrency finance technology — «QA ${globalThis.newsRevision}» ` +
-            'complete headline '.repeat(8);
+            'complete headline '.repeat(24) +
+            'END_MARKER';
           return `<rss version="2.0"><channel><item><guid>${topic}-${globalThis.newsRevision}</guid><title><![CDATA[${title}]]></title><link>https://example.test/${topic}/${globalThis.newsRevision}?lang=en&amp;edition=qa&amp;item=7&amp;utm_source=rss</link><author>Synthetic author</author></item></channel></rss>`;
         }
       });
@@ -78,7 +79,8 @@ test(
     async function check(topic, revision) {
       const title =
         `${topic} Fashion design Artificial intelligence cryptocurrency finance technology — «QA ${revision}» ` +
-        'complete headline '.repeat(8);
+        'complete headline '.repeat(24) +
+        'END_MARKER';
       const expectedTitle = title.trim(),
         url = `https://example.test/${topic}/${revision}?edition=qa&item=7&lang=en`;
       await page.getByText(expectedTitle, { exact: true }).waitFor();

@@ -25,3 +25,15 @@ test('News renders exactly two escaped field copies per card without copying met
   assert.ok(!html.includes('data-copy="Author only"'));
   assert.ok(!html.includes('data-copy-action="open"'));
 });
+
+test('News RSS and Atom retain the complete normalized headline beyond 300 characters for field copy', () => {
+  const { parseFeed } = require('../../electron/features/news/feeds.cjs');
+  const title = 'Fashion design '.repeat(30) + 'END_MARKER';
+  const source = { id: 'qa', name: 'QA', topic: 'fashion' };
+  for (const xml of [
+    `<rss version="2.0"><channel><item><title>${title}</title><link>https://example.test/story</link></item></channel></rss>`,
+    `<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>${title}</title><link href="https://example.test/story" /></entry></feed>`
+  ]) {
+    assert.equal(parseFeed(xml, source, { relevance: false })[0].title, title);
+  }
+});
