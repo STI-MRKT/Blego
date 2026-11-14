@@ -61,12 +61,14 @@ async function validateImage(body) {
 function createTileService({ root, request = requestTile, clock = () => Date.now() }) {
   const directory = path.join(root, 'map-tiles');
   const pending = new Map();
-  let backoff = 0;
+  const consumers = new Map();
   async function tile(arg) {
     if (
       !arg ||
       typeof arg !== 'object' ||
-      Object.keys(arg).sort().join(',') !== 'x,y,z' ||
+      Object.keys(arg).some((key) => !['x', 'y', 'z', 'requestId'].includes(key)) ||
+      (arg.requestId !== undefined &&
+        (typeof arg.requestId !== 'string' || !/^[a-zA-Z0-9-]{1,80}$/.test(arg.requestId))) ||
       ![arg.z, arg.x, arg.y].every(Number.isInteger) ||
       arg.z < 0 ||
       arg.z > 19 ||
@@ -78,76 +80,112 @@ function createTileService({ root, request = requestTile, clock = () => Date.now
       throw Error('INVALID_TILE');
     const key = `${arg.z}-${arg.x}-${arg.y}.png`,
       file = path.join(directory, key);
-    if (pending.has(key)) return pending.get(key);
-    if (pending.size >= 4) throw Error('MAP_BUSY');
-    const job = (async () => {
-      try {
-        const stat = await fs.lstat(file);
-        if (
-          stat.isFile() &&
-          !stat.isSymbolicLink() &&
-          stat.size <= LIMIT &&
-          clock() - stat.mtimeMs < TTL
-        ) {
-          const body = await fs.readFile(file);
-          try {
-            await validateImage(body);
-            return 'data:image/png;base64,' + body.toString('base64');
-          } catch {
-            await fs.unlink(file);
-          }
-        }
-      } catch (error) {
-        if (error.code !== 'ENOENT') throw Error('MAP_CACHE_UNAVAILABLE');
-      }
-      if (clock() < backoff) throw Error('MAP_UNAVAILABLE');
-      await fs.mkdir(directory, { recursive: true, mode: 0o700 });
-      // No eviction of fresh tiles: keep the provider's seven-day minimum and
-      // refuse new downloads when the bounded cache is full.
-      let bytes = 0;
-      for (const name of await fs.readdir(directory))
-        if (/^\d+-\d+-\d+\.png$/.test(name)) {
-          const candidate = path.join(directory, name);
-          try {
-            const stat = await fs.lstat(candidate);
-            if (stat.isFile() && !stat.isSymbolicLink()) {
-              if (clock() - stat.mtimeMs >= TTL) await fs.unlink(candidate);
-              else bytes += stat.size;
+    const id = arg.requestId || Symbol();
+    if (consumers.has(id)) throw Error('INVALID_TILE');
+    let job = pending.get(key);
+    if (!job) {
+      if (pending.size >= 4) throw Error('MAP_BUSY');
+      job = { controller: new AbortController(), users: new Set() };
+      job.promise = (async () => {
+        try {
+          const stat = await fs.lstat(file);
+          if (
+            stat.isFile() &&
+            !stat.isSymbolicLink() &&
+            stat.size <= LIMIT &&
+            clock() - stat.mtimeMs < TTL
+          ) {
+            const body = await fs.readFile(file);
+            try {
+              await validateImage(body);
+              return 'data:image/png;base64,' + body.toString('base64');
+            } catch {
+              await fs.unlink(file);
             }
-          } catch (error) {
-            // Another visible tile job may already have removed this stale entry.
-            if (error.code !== 'ENOENT') throw error;
+          }
+        } catch (error) {
+          if (error.code !== 'ENOENT') throw Error('MAP_CACHE_UNAVAILABLE');
+        }
+        await fs.mkdir(directory, { recursive: true, mode: 0o700 });
+        // No eviction of fresh tiles: keep the provider's seven-day minimum and
+        // refuse new downloads when the bounded cache is full.
+        let bytes = 0;
+        for (const name of await fs.readdir(directory))
+          if (/^\d+-\d+-\d+\.png$/.test(name)) {
+            const candidate = path.join(directory, name);
+            try {
+              const stat = await fs.lstat(candidate);
+              if (stat.isFile() && !stat.isSymbolicLink()) {
+                if (clock() - stat.mtimeMs >= TTL) await fs.unlink(candidate);
+                else bytes += stat.size;
+              }
+            } catch (error) {
+              // Another visible tile job may already have removed this stale entry.
+              if (error.code !== 'ENOENT') throw error;
+            }
+          }
+        if (bytes + LIMIT > MAX_CACHE) throw Error('MAP_CACHE_FULL');
+        let body;
+        try {
+          body = await request(`https://tile.openstreetmap.org/${arg.z}/${arg.x}/${arg.y}.png`, {
+            signal: AbortSignal.any([job.controller.signal, AbortSignal.timeout(8000)]),
+            headers: {
+              'User-Agent': 'BLEGO/1.4.1 (+https://github.com/STI-MRKT/Blego)',
+              Accept: 'image/png'
+            }
+          });
+        } catch {
+          if (job.controller.signal.aborted) throw Error('CANCELLED');
+          throw Error('MAP_UNAVAILABLE');
+        }
+        if (job.controller.signal.aborted) throw Error('CANCELLED');
+        await validateImage(body);
+        try {
+          await fs.writeFile(file, body, { flag: 'wx', mode: 0o600 });
+        } catch (error) {
+          if (error.code !== 'EEXIST') throw Error('MAP_CACHE_UNAVAILABLE');
+        }
+        return 'data:image/png;base64,' + body.toString('base64');
+      })().finally(() => {
+        if (pending.get(key) === job) pending.delete(key);
+      });
+      pending.set(key, job);
+    }
+    job.users.add(id);
+    return new Promise((resolve, reject) => {
+      const done = () => {
+        consumers.delete(id);
+        job.users.delete(id);
+      };
+      consumers.set(id, () => {
+        done();
+        reject(Error('CANCELLED'));
+        if (!job.users.size) {
+          job.controller.abort();
+          if (pending.get(key) === job) pending.delete(key);
+        }
+      });
+      job.promise.then(
+        (value) => {
+          if (consumers.has(id)) {
+            done();
+            resolve(value);
+          }
+        },
+        (error) => {
+          if (consumers.has(id)) {
+            done();
+            reject(error);
           }
         }
-      if (bytes + LIMIT > MAX_CACHE) throw Error('MAP_CACHE_FULL');
-      let body;
-      try {
-        body = await request(`https://tile.openstreetmap.org/${arg.z}/${arg.x}/${arg.y}.png`, {
-          signal: AbortSignal.timeout(8000),
-          headers: {
-            'User-Agent': 'BLEGO/1.4.1 (+https://github.com/STI-MRKT/Blego)',
-            Accept: 'image/png'
-          }
-        });
-      } catch {
-        backoff = clock() + 60000;
-        throw Error('MAP_UNAVAILABLE');
-      }
-      await validateImage(body);
-      try {
-        await fs.writeFile(file, body, { flag: 'wx', mode: 0o600 });
-      } catch (error) {
-        if (error.code !== 'EEXIST') throw Error('MAP_CACHE_UNAVAILABLE');
-      }
-      return 'data:image/png;base64,' + body.toString('base64');
-    })();
-    pending.set(key, job);
-    try {
-      return await job;
-    } finally {
-      pending.delete(key);
-    }
+      );
+    });
   }
-  return { tile };
+  function cancel(id) {
+    if (typeof id !== 'string' || !/^[a-zA-Z0-9-]{1,80}$/.test(id)) throw Error('INVALID_TILE');
+    consumers.get(id)?.();
+    return { cancelled: true };
+  }
+  return { tile, cancel };
 }
 module.exports = { createTileService };
