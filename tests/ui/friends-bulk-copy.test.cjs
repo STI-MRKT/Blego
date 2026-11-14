@@ -162,6 +162,9 @@ test(
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
     );
+    await page.locator('#view').evaluate((view) => {
+      view.scrollTop = 0;
+    });
     await page.waitForTimeout(2700);
     if (process.env.BLEGO_CAPTURE) {
       fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
