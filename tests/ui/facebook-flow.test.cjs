@@ -31,14 +31,14 @@ test(
     await page.getByRole('button', { name: 'Check', exact: true }).click();
     await page
       .locator('.checker-row')
-      .getByText('Требуется авторизация', { exact: true })
+      .getByText('LOGIN_REQUIRED', { exact: true })
       .first()
       .waitFor();
     assert.equal((await app.evaluate(() => globalThis.fbCalls)).length, 1);
     for (const [label, value] of [
       ['Copy Facebook ID', '001234567890123456789'],
       ['Copy Facebook link', 'https://www.facebook.com/profile.php?id=001234567890123456789'],
-      ['Copy check result', 'Требуется авторизация']
+      ['Copy check result', 'LOGIN_REQUIRED']
     ]) {
       await page.getByRole('button', { name: label, exact: true }).first().click();
       for (let i = 0; i < 50; i++) {
@@ -58,10 +58,7 @@ test(
     });
     assert.equal(await page.locator('.checker-row').count(), 100);
     assert.equal(
-      await page
-        .locator('.checker-row')
-        .getByText('Требуется авторизация', { exact: true })
-        .count(),
+      await page.locator('.checker-row').getByText('LOGIN_REQUIRED', { exact: true }).count(),
       100
     );
     await installFacebookFixture(app, 1000);
@@ -79,10 +76,7 @@ test(
     await page.getByRole('button', { name: 'Отменить', exact: true }).click();
     await page.waitForTimeout(1200);
     assert.equal(
-      await page
-        .locator('.checker-row')
-        .getByText('Требуется авторизация', { exact: true })
-        .count(),
+      await page.locator('.checker-row').getByText('LOGIN_REQUIRED', { exact: true }).count(),
       0
     );
     assert.ok((await page.locator('#view').textContent()).includes('Отменено'));

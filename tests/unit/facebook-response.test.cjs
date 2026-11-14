@@ -10,15 +10,15 @@ test('public responses never establish account sanctions and one og:title proves
     [200, 'You are temporarily blocked', 'request_limited'],
     [200, "<p>This content isn't available right now</p>", 'unavailable'],
     [429, '', 'request_limited'],
-    [403, '', 'unavailable'],
-    [404, '', 'unavailable'],
+    [403, '', 'unknown'],
+    [404, '', 'unknown'],
     [200, '<p>Незнакомая страница</p>', 'unknown']
   ]) {
     const result = inspectResponse(target, { status, body, url: target.canonicalUrl });
     assert.equal(result.availability, availability);
     assert.equal(result.banAssessment, 'unknown');
   }
-  const body = `<link rel="canonical" href="${target.canonicalUrl}"><meta property="og:type" content="profile"><script type="application/ld+json">{"@type":"Person","url":"${target.canonicalUrl}","identifier":"123"}</script>`;
+  const body = `<link rel="canonical" href="${target.canonicalUrl}"><meta property="og:type" content="profile"><script type="application/ld+json">{"@type":"Person","url":"${target.canonicalUrl}","identifier":"123","name":"Synthetic Person"}</script>`;
   assert.equal(
     inspectResponse(target, { status: 200, body, url: target.canonicalUrl }).availability,
     'profile_visible'

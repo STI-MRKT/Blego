@@ -17,7 +17,7 @@ test('Facebook facts require identity-bound public evidence and explicit eight-s
   assert.equal(wrong.profileName, null);
   assert.equal(wrong.avatarUrl, null);
   for (const [status, html, expected] of [
-    [403, '', 'UNAVAILABLE'],
+    [403, '', 'UNKNOWN'],
     [401, '', 'LOGIN_REQUIRED'],
     [200, '<form action="/checkpoint/">', 'CHALLENGE_REQUIRED'],
     [429, '', 'RATE_LIMITED'],

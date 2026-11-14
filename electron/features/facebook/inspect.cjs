@@ -1,6 +1,6 @@
 const { normalizeTarget } = require('./normalize.cjs');
 const { STATUSES } = require('./diagnostics.cjs');
-const PARSER_VERSION = 'public-evidence-v3';
+const PARSER_VERSION = 'public-evidence-v4';
 function attributes(tag) {
   return Object.fromEntries(
     [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
@@ -17,6 +17,24 @@ function sameTarget(raw, target) {
   }
 }
 function inspectResponse(target, { status, body = '', url = target.canonicalUrl }) {
+  body = typeof body === 'string' ? body.replace(/<!--[\s\S]*?-->/g, '') : '';
+  const complete = !/<html\b/i.test(body) || /<\/html\s*>/i.test(body);
+  const markup = body.replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+  const text = (html) =>
+    html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&(?:#0?39|apos);/gi, "'")
+      .replace(/&(?:#8217|rsquo);/gi, '’')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  const unavailable =
+    /^(?:(?:this )?content isn['’]t available(?: right now)?|(?:this )?page isn['’]t available|page not found)[.!]?$/i;
+  const unavailableMessage =
+    unavailable.test(text(markup)) ||
+    [...markup.matchAll(/<(h1|h2|title)\b[^>]*>([\s\S]*?)<\/\1>/gi)].some((match) =>
+      unavailable.test(text(match[2]))
+    );
   let facts = null;
   let availability = 'unknown',
     reasonCode = 'INSUFFICIENT_EVIDENCE';
@@ -38,15 +56,9 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
   ) {
     availability = 'login_required';
     reasonCode = 'LOGIN_REQUIRED';
-  } else if (status === 403 || status === 404 || status === 410) {
-    availability = 'unavailable';
-    reasonCode = `HTTP_${status}`;
-  } else if (/content isn['’]t available|page isn['’]t available|page not found/i.test(body)) {
-    availability = 'unavailable';
-    reasonCode = 'PAGE_UNAVAILABLE_MESSAGE';
-  } else if (status >= 200 && status < 300) {
-    const links = [...body.matchAll(/<link\b[^>]*>/gi)].map((m) => attributes(m[0]));
-    const meta = [...body.matchAll(/<meta\b[^>]*>/gi)].map((m) => attributes(m[0]));
+  } else if ([200, 404, 410].includes(status) && complete) {
+    const links = [...markup.matchAll(/<link\b[^>]*>/gi)].map((m) => attributes(m[0]));
+    const meta = [...markup.matchAll(/<meta\b[^>]*>/gi)].map((m) => attributes(m[0]));
     const canonical = links.some(
       (a) => a.rel?.toLowerCase() === 'canonical' && sameTarget(a.href, target)
     );
@@ -68,6 +80,10 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
         const personMatch = list.find(
           (item) =>
             item?.['@type'] === 'Person' &&
+            typeof item.name === 'string' &&
+            item.name.trim().length > 0 &&
+            item.name.length <= 300 &&
+            !/[\u0000-\u001f]/.test(item.name) &&
             sameTarget(item.url, target) &&
             (!/^\d+$/.test(target.target) || String(item.identifier) === target.target)
         );
@@ -79,11 +95,22 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
         /* Unknown structured data is not evidence. */
       }
     }
-    if (canonical && profile && person && sameTarget(url, target)) {
+    if (status === 200 && canonical && profile && person && sameTarget(url, target)) {
       availability = 'profile_visible';
       reasonCode = 'MATCHED_CANONICAL_AND_PERSON';
+    } else if (
+      unavailableMessage &&
+      sameTarget(url, target) &&
+      !links.some((a) => a.rel?.toLowerCase() === 'canonical' && !sameTarget(a.href, target))
+    ) {
+      availability = 'unavailable';
+      reasonCode = 'PAGE_UNAVAILABLE_MESSAGE';
     }
+    if (availability === 'unknown' && status !== 200) reasonCode = `HTTP_${status}`;
   }
+  if (!complete && availability === 'unknown') reasonCode = 'INCOMPLETE_RESPONSE';
+  else if (availability === 'unknown' && status === 403) reasonCode = 'HTTP_403';
+  else if (availability === 'unknown' && status >= 500) reasonCode = 'FB_HTTP_ERROR';
   const visible = availability === 'profile_visible';
   const profileName =
     visible &&
@@ -111,6 +138,7 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
   }
   return {
     status: STATUSES[availability],
+    publicContent: visible ? 'available' : availability === 'unavailable' ? 'unavailable' : null,
     source: 'public_page',
     profileName,
     avatarUrl,

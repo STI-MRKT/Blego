@@ -1,0 +1,9 @@
+{
+  "host": "linux-x64",
+  "at": "2026-11-14T09:08:43.511Z",
+  "target": "https://www.facebook.com/meta",
+  "status": "BLOCKED",
+  "result": "NETWORK_ERROR",
+  "reason": "FB_CONNECTION_REFUSED",
+  "durationMs": 5059
+}
