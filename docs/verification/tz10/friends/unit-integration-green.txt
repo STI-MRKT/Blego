@@ -1,0 +1,13 @@
+✔ Friends copy eligibility reuses canonical URL validation without rewriting persisted rows (23.460842ms)
+✔ Friends renders disabled seven below seven and no-links feedback without a header Copy (6.421555ms)
+✔ Friends copies complete filtered unique canonical URLs rather than visible page or other GEO (1.200698ms)
+✔ seven sampling is uniform over all eight-profile permutations, immutable, and not first seven (29.869511ms)
+✔ seven selection rejects a repeated set, permits exactly seven, and bounds broken RNG retries (1.040334ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 124.042985

@@ -1,0 +1,196 @@
+
+> blego@1.4.2 verify
+> npm run lint && npm run test:unit && npm run test:integration
+
+
+> blego@1.4.2 lint
+> node scripts/check.cjs && npm run format:check
+
+Syntax checked 258 JavaScript files; git diff --check exit 0
+
+> blego@1.4.2 format:check
+> prettier --check "electron/**/*.cjs" "shared/*.mjs" "tests/**/*.cjs" "scripts/*.cjs"
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> blego@1.4.2 test:unit
+> node --test tests/unit/*.test.cjs
+
+✔ safe archive names preserve Cyrillic and reject extraction attacks (1.618787ms)
+✔ manifest metadata cannot carry HTML in numeric fields (1.654277ms)
+✔ existing supported country set remains available (3.613047ms)
+✔ HTML escaping preserves text without executable tags (0.889873ms)
+✔ autosave debounces edits, announces saved only after persistence, and preserves typing in flight (27.765394ms)
+✔ write failure retains draft and revision, flush rejects, retry commits once (0.987807ms)
+✔ flush before debounce persists latest draft and no-change flush does not write (0.374971ms)
+✔ late suggestions never overwrite manual input or a disposed profile (0.55229ms)
+✔ transition freeze blocks new edits and suggestions, but flush waits for an already requested suggestion before saving (0.624173ms)
+✔ normal close and Cmd+Q wait for flush; stale acknowledgements cannot close; failed save keeps window (1.995986ms)
+✔ successful quit flush reissues quit once; repeated close requests share the pending flush (0.3178ms)
+✔ all eight countries: same-city organizations fill BIO and role matches the selected company (2.369578ms)
+✔ unknown small towns stay empty; no country fallback or cross-country/region/category leakage (0.585431ms)
+✔ regional fallback has actual city, schools remain local, aliases work, ambiguous region fails closed (0.259355ms)
+✔ brands receive thematic/location data without invented personal employment or education (0.999462ms)
+✔ individual suggestions preserve unrelated fields and position uses the current employer only (0.985059ms)
+✔ bundled catalog is extendable factual data with eight-country coverage and compatible roles (3.539272ms)
+✔ ambiguous direct city and alias matches cannot mix organizations from different regions (0.338985ms)
+✔ every bundled country geography has usable full BIO reference coverage without overriding generation cities (50.086008ms)
+✔ source-confirmed postcode disambiguates same-named cities before regional fallback (0.533506ms)
+✔ BIO autosave keeps inputs editable, removes Save/unsaved banner and offers each field regeneration (6.021471ms)
+✔ explicit classifier copy/export includes exactly seven fields and protects spreadsheets (44.068601ms)
+✔ global import adapter still redacts passwords, cookie and tokens (3.599032ms)
+✔ format A recognizes explicit fields and multiline JSON without splitting UA semicolons (41.652174ms)
+✔ format B uses identity context and preserves empty/unknown fields and extended labels (10.646022ms)
+✔ mixed formats and two same-line records keep exact source spans and row cookies (10.066267ms)
+✔ conflicting URL/cookie identities remain warnings and cannot silently select an owner (1.388964ms)
+✔ broken JSON recovers at a strong next-record boundary without borrowing its cookie (1.984034ms)
+✔ opaque values, ambiguous passwords and dates without context are not invented (1.069658ms)
+✔ row-specific assignment preserves original value and does not move adjacent fields (5.958372ms)
+✔ two-factor and mail-service URLs are metadata, never login codes or network actions (1.695348ms)
+✔ quoted secret payload and URL semicolons are not field separators (1.45583ms)
+✔ ambiguous profile query identity never becomes an account ID (1.167638ms)
+✔ legacy CSV and JSON rows expose exact original record spans (2.047125ms)
+✔ structured parser bounds excessive nesting and fields without echoing values (2.277906ms)
+✔ same-line records ending in cookie JSON retain separate identities and exact cookie payloads (17.640669ms)
+✔ TZ06 labelled recovery email is separate from primary email and seven-field schema (66.823697ms)
+✔ TZ06 skips prose around 20 useful records, retaining exact spans and multiline values (35.594103ms)
+✔ TZ06 infers standalone country and name with identity/date context, not countries in prose (8.101518ms)
+✔ TZ06 repeats only explicitly anchored file structure and never guesses adjacent passwords (4.444855ms)
+✔ TZ06 detects bounded structured Windows-1251 and BOM-less UTF16 without accepting arbitrary corrupt bytes (3.993036ms)
+✔ mixed TXT retains weak, partial and extended-only records for manual review (3.851935ms)
+✔ TZ9 classifier: explicit English labels and separate passwords (57.235946ms)
+✔ TZ9 classifier: Russian label and quoted unusual characters (7.018142ms)
+✔ TZ9 classifier: absent mail password (1.85017ms)
+✔ TZ9 classifier: unlabelled adjacent string remains ambiguous (1.913753ms)
+✔ TZ9 classifier: two emails without roles remain ambiguous (1.515227ms)
+✔ TZ9 classifier: tab and semicolon with introductory prose (11.16078ms)
+✔ TZ9 classifier: same width different schemes and held-out values (4.285271ms)
+✔ TZ9 classifier: conflicting layouts never guess password role (2.149609ms)
+✔ TZ9 classifier: multiline nested cookie with account boundaries (2.584247ms)
+✔ TZ9 classifier: prior synthetic format A (4.55158ms)
+✔ TZ9 classifier: prior synthetic format B keeps absent mail password empty (3.312374ms)
+✔ TZ9 classifier: space-separated mail password label (1.803511ms)
+✔ TZ9 classifier: labelled multiline blocks keep missing password out of next account (1.812404ms)
+✔ TZ9 classifier: typed-looking passwords retain explicit roles (1.507773ms)
+✔ named fields preserve ID precision, cookie JSON representation and missing cells (33.476776ms)
+✔ explicit headerless schemas retain first row and empty positions, never guessed by count (2.409499ms)
+✔ JSON cookie objects keep original source slice and duplicate fields stay unresolved (1.737609ms)
+✔ multiline JSON and quoted CSV are logical cells; pipe and semicolon inside JSON are ignored (5.916751ms)
+✔ cautious heuristics reject ambiguity and impossible dates without inventing passwords or tokens (1.348379ms)
+✔ explicit mapping, alias collisions and invalid dates retain original unresolved values (2.469631ms)
+✔ auto headers preserve headerless GEO ID and identical aliases remain ambiguous (1.884377ms)
+✔ prototype-named columns remain unresolved without creating extra result fields (1.428911ms)
+✔ explicit missing fields stay empty instead of taking heuristic values from other columns (1.320144ms)
+✔ identical named header columns must not silently pick the first conflicting value (1.371628ms)
+✔ clipboard_failure_is_not_success (0.981599ms)
+✔ untrusted_ipc_is_rejected (0.364465ms)
+✔ Electron 45 async clipboard success is awaited (0.178327ms)
+✔ single_value_is_exact, absent values stay empty (7.522124ms)
+✔ card_obeys_saved_order and mandatory profile contacts cannot be omitted (1.063811ms)
+✔ copy_filter_includes_offscreen_rows; selected rows span pages; all includes 120 (4.467718ms)
+✔ tsv_quotes_roundtrip and explicit spreadsheet safety preserves raw single copying (3.696528ms)
+✔ mass_report_excludes_secrets and personal fields require deliberate disclosure (2.336975ms)
+✔ over_10_mib rejects before exposing a partial payload; input model snapshot survives yields (35.593449ms)
+✔ copy adapters cover every section from models and omit credentials/private metadata by default (9.117787ms)
+✔ mass import strips nested credentials and URL secrets while exact disclosed cell remains available (1.049505ms)
+✔ JSON unsafe numeric ID keeps its source lexeme and adapters reject already rounded numbers (47.77945ms)
+✔ missing CSV fields render empty in classified preview with disabled copy (11.249232ms)
+✔ long IDs retain exact digits; canonical duplicates preserve input mappings (2.8543ms)
+✔ spoofed hosts, credentials, reserved paths, invalid IDs and overlarge batches reject locally (1.429605ms)
+✔ public responses never establish account sanctions and one og:title proves nothing (8.541477ms)
+✔ Facebook facts require identity-bound public evidence and explicit eight-state vocabulary (6.793677ms)
+✔ network failures have sanitized differentiated diagnostics, never raw messages (2.518816ms)
+✔ TZ06 login.php and checkpoint root cannot become unknown or visible (3.091098ms)
+✔ TZ06 bounded JSON-LD graph recognizes matching public Person but no unrelated entity (1.663055ms)
+✔ TZ9 public evidence matrix never converts transport/login/other-profile responses to BLOCKED (7.115868ms)
+✔ TZ9 ACTIVE/BLOCKED presentation is evidence-bound; legacy results require recheck (1.72351ms)
+✔ TZ9 hidden unavailable placeholders and contradictory Person evidence stay UNKNOWN (1.180657ms)
+✔ TZ9 contradictory structured target identity cannot establish BLOCKED or ACTIVE (0.601706ms)
+✔ RSS/Atom Unicode, single-quoted namespace links and unknown dates (10.924062ms)
+✔ external XML entities, malformed XML, oversized feeds reject (2.965907ms)
+✔ Friends renders disabled seven below seven and no-links feedback without a header Copy (9.153476ms)
+✔ Friends copies complete filtered unique canonical URLs rather than visible page or other GEO (1.877379ms)
+✔ seven sampling is uniform over all eight-profile permutations, immutable, and not first seven (37.736214ms)
+✔ seven selection rejects a repeated set, permits exactly seven, and bounds broken RNG retries (1.112315ms)
+✔ TZ06 incomplete Friends card identifies its real URL while optional name remains empty (9.595913ms)
+✔ every country uses an explicitly female, normalized and traceable name dataset (25.610549ms)
+✔ FP and BIO tabs are permanent, standalone BIO controls do not expose FP generation (9.563643ms)
+✔ BIO clipboard model has only its own seven fields and preserves draft content (1.684854ms)
+✔ adjacent phone copy uses the profile country, preserves national zeros and never synthesizes a trunk prefix (6.859091ms)
+✔ address display order is address/city/postalCode for all 24 presets without changing saved field order or values (38.613208ms)
+✔ authored pools supplement each person category by 256 new female country-specific variants and TECH by 250 brands (47.728473ms)
+✔ every localized category gains 50 distinct BIOs while original texts and explicit overrides remain intact (49.240353ms)
+✔ all 24 country/type presets are complete and thematic (32.399558ms)
+✔ local configuration is data only and contacts cannot be disabled (2.167171ms)
+✔ GEO honors holes, negative and zero coordinates, multipart and unique batch values (7.376917ms)
+✔ GEO is uniform in spherical area, not uniformly by polygon or latitude (4.899343ms)
+✔ GEO rejects malformed, self-crossing, outside-hole and unsupported dateline geometry (1.170178ms)
+✔ GEO has count, work and cancellation bounds; never substitutes a center point (0.746396ms)
+✔ disjoint multipart polygons with overlapping proposal boxes retain uniform area density (23.238902ms)
+✔ explicit_keep_overrides_group_set; inherit resolves group; defaults never invent values (9.167719ms)
+✔ empty set, implicit origins, unknown fields and executable/path-shaped workspace input reject (1.074675ms)
+✔ all JSON fields and nested raw values survive, including record 51 (42.525934ms)
+✔ CSV conflicting headers, extra cells, multiline locations are retained (3.537035ms)
+✔ unclosed quote, invalid JSON, malformed encoding and oversize are explicit errors (1.61054ms)
+✔ UTF16LE/BE BOM and explicit Windows1251 retain Cyrillic (3.483529ms)
+✔ invalid JSON record shapes remain accounted for rather than dropped (1.207219ms)
+✔ TZ9 failed tile does not block siblings; dedup cancellation keeps other consumers alive (204.862051ms)
+✔ TZ9 viewport scheduler retries individually, bounds requests and ignores stale replies (223.848768ms)
+✔ TZ9 a cancelled consumer ID cannot settle or erase a later request using that ID (71.806148ms)
+✔ TZ9 exhausted retained tiles notify a new viewport once so Retry survives remount (1.100803ms)
+✔ TZ06 map tile placement uses Mercator and only the bounded visible viewport (4.746739ms)
+✔ TZ06 tile service is explicit, bounded and caches without collecting photo data (65.456677ms)
+✔ four concurrent map requests survive expiry cleanup and refetch truncated cache entries (20.870393ms)
+✔ packaging refuses absent native runtime and foreign host instead of shipping a broken metadata editor (2.575912ms)
+✔ metadata operations enforce keep/set/remove, fixed fields, real dates and explicit GPS (4.712498ms)
+✔ Keep preserves multi-value or unknown camera metadata, which is not a writable scalar (3.578845ms)
+✔ GPS altitude Keep works even when the original has no latitude/longitude (0.831496ms)
+✔ native gate rejects foreign host, unsafe manifest entries and changed runtime bytes (10.063754ms)
+✔ network endpoint policy rejects service, documentation and IPv4-mapped local ranges (10.096377ms)
+✔ News renders exactly two escaped field copies per card without copying metadata or adding a header action (6.63727ms)
+✔ generated phone values display in human-readable country groups without changing their digits (2.034532ms)
+✔ unknown or noncanonical phone strings are preserved exactly (0.569972ms)
+✔ map GPS draft rebasing preserves unrelated date edits and leaves multi-selection coordinates individual (8.335682ms)
+✔ map distinguishes missing GPS from zero, resolves effective operations and never mutates plans (7.845126ms)
+✔ 1000 point clusters preserve identities, expand with zoom and keep selected marker independently reachable (4.850138ms)
+✔ one validated workspace resolver serves a batch without leaking mutable operations (1.094057ms)
+✔ catalog reports real capacities and data deficits, not product-sized full profile promises (25.85479ms)
+✔ bulk mode requires explicit consent while existing optional-repeat settings remain compatible (4.935075ms)
+✔ stable v3 parses detections.risk, never confidence, and requests only the verified IP (25.24018ms)
+✔ v3 refuses mismatched IP, malformed/status errors; safely labels 401/403/429 (4.056467ms)
+✔ provider TTL, cancellation and errors cannot leak a key or invent stale trust (7.070115ms)
+✔ local quality requires three actual attempts and separates loss, RTT and jitter from reputation (0.397537ms)
+✔ explicit proxy protocols, authentication and direct mode (1.651862ms)
+✔ missing reputation stays unknown and latency is not a risk input (1.067974ms)
+✔ secret vault never falls back to plaintext (2.386395ms)
+✔ settings reject unknown and invalid values (1.889327ms)
+✔ TZ06 Network renders independent numeric/unknown scales without removed controls or Russian chrome (7.89362ms)
+✖ TZ06 News has article links but no copy buttons (22.654372ms)
+ℹ tests 150
+ℹ suites 0
+ℹ pass 149
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2008.146731
+
+✖ failing tests:
+
+test at tests/unit/ui-v141.test.cjs:24:1
+✖ TZ06 News has article links but no copy buttons (22.654372ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(!/data-action="copy"|news-copy/.test(html))
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/ui-v141.test.cjs:42:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

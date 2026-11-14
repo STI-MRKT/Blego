@@ -11,6 +11,7 @@ on:
       - codex/blego-fp-bio-independent
       - codex/blego-hide-header-copy
       - codex/blego-v1-4-2-fixes
+      - codex/blego-friends-news-copy
   workflow_dispatch:
     inputs:
       target:
@@ -54,6 +55,9 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
       BLEGO_CAPTURE: release
+      QA_SPEC: ${{ github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
+      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
+      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -91,9 +95,9 @@ jobs:
           set -o pipefail
           npm run verify | tee release/verification-native.log
           node scripts/check-classifier-v142.cjs > release/classifier-quality-native.json
-      - name: Prepare identical incoming BLEGO 1.4.1 performance reference
+      - name: Prepare identical incoming BLEGO performance reference
         run: |
-          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" 5f30cf51a0f04da13975a7ecd11b96c488457623
+          git worktree add --detach "$RUNNER_TEMP/blego-baseline-reference" "$QA_BASE_SHA"
           (cd "$RUNNER_TEMP/blego-baseline-reference" && npm ci && node node_modules/electron/install.js)
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
@@ -153,9 +157,9 @@ jobs:
       - name: Prepare install ZIP after installed-app acceptance
         run: |
           install_arch="$(printf '%s' "$TARGET_ARCH" | tr '[:lower:]' '[:upper:]')"
-          cp docs/verification/tz9/INSTALL-RU.txt release/INSTALL-RU.txt
-          zip -j "release/BLEGO-1.4.2-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS release/INSTALL-RU.txt
-          unzip -t "release/BLEGO-1.4.2-macOS-$install_arch-install.zip"
+          cp "docs/verification/$QA_SPEC/INSTALL-RU.txt" release/INSTALL-RU.txt
+          zip -j "release/BLEGO-1.4.2$QA_ARCHIVE_TAG-macOS-$install_arch-install.zip" release/*-$TARGET_ARCH.dmg release/SHA256SUMS release/INSTALL-RU.txt
+          unzip -t "release/BLEGO-1.4.2$QA_ARCHIVE_TAG-macOS-$install_arch-install.zip"
           (cd release && shasum -a 256 *-install.zip) > release/SHA256SUMS-zip.txt
       - name: Upload QA packages after all gates
         uses: actions/upload-artifact@v4
@@ -173,6 +177,7 @@ jobs:
             release/verification-native.log
             release/public-services-native.json
             release/classifier-quality-native.json
+            release/tz10-*-clipboard.json
             release/metadata-ui-folder20-*.log
             release/*.png
             release/ux-performance-*.json
@@ -203,5 +208,6 @@ jobs:
             release/verification-native.log
             release/public-services-native.json
             release/classifier-quality-native.json
+            release/tz10-*-clipboard.json
             release/ux-performance-*.json
             release/*.png

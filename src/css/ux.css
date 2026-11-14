@@ -171,3 +171,6 @@
 .ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}
 /* Retry is a conditional new map action; .btn otherwise overrides the UA hidden rule. */
 .photo-map [data-map-action="retry"][hidden] { display:none; }
+/* New card-local News actions wrap without changing the original card palette or grid. */
+.news-copy-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.news-copy-actions .btn{font-size:11px;padding:6px 8px}

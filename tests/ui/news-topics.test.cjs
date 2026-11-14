@@ -6,7 +6,7 @@ const fs = require('node:fs'),
 const { _electron } = require('playwright');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 test(
-  'News preserves topic, ignores late other-topic replies and retains article metadata without Copy controls',
+  'News preserves topic, ignores late other-topic replies and retains article metadata with card-only field copies',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-ui-'));
@@ -73,7 +73,8 @@ test(
     await page.getByText('finance headline', { exact: true }).waitFor();
     await page.waitForTimeout(800);
     assert.equal(await page.locator('.news-title').textContent(), 'finance headline');
-    assert.equal(await page.locator('#news-block [data-action="copy"], #copy-actions').count(), 0);
+    assert.equal(await page.locator('.news-item-card [data-news-copy]').count(), 2);
+    assert.equal(await page.locator('.page-head [data-copy-action], #copy-actions').count(), 0);
     assert.equal(
       await page.locator('.news-title').getAttribute('href'),
       'https://example.com/finance'

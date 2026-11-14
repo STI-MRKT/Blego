@@ -191,8 +191,9 @@ test(
     await page.locator('[data-view="network"]').click();
     assert.equal(await page.locator('#copy-actions, [data-action="copy"]').count(), 0);
     await page.locator('[data-view="news"]').click();
-    assert.equal(await page.locator('#copy-actions, [data-action="copy"]').count(), 0);
-    // Serialization privacy remains unit-tested; these screens no longer offer copy.
+    assert.equal(await page.locator('#copy-actions, .page-head [data-copy-action]').count(), 0);
+    assert.equal(await page.locator('.news-item-card [data-news-copy]').count(), 2);
+    // Serialization privacy remains unit-tested; News exposes only the requested title/URL copies.
     await page.evaluate(() => {
       const node = document.querySelector('.news-title').firstChild;
       const range = document.createRange();

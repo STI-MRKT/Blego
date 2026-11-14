@@ -1,0 +1,35 @@
+✔ News renders exactly two escaped field copies per card without copying metadata or adding a header action (8.856902ms)
+✖ News RSS and Atom retain the complete normalized headline beyond 300 characters for field copy (24.981137ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 146.453535
+
+✖ failing tests:
+
+test at tests/unit/news-copy.test.cjs:29:1
+✖ News RSS and Atom retain the complete normalized headline beyond 300 characters for field copy (24.981137ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design '
+  - 'Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design END_MARKER'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/news-copy.test.cjs:37:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design ',
+    expected: 'Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design Fashion design END_MARKER',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

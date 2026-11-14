@@ -3,7 +3,7 @@ import { t } from '../i18n.js';
 import { toast } from './toast.js';
 import { checkCopyText } from '../../../shared/copy-format.mjs';
 
-export async function copyText(text, button, successMessage) {
+export async function copyText(text, button, successMessage, errorMessage) {
   try {
     text = text == null ? '' : String(text);
     checkCopyText(text);
@@ -49,7 +49,7 @@ export async function copyText(text, button, successMessage) {
             'Больше 10 МиБ. Используйте экспорт файла.',
             'Larger than 10 MiB. Export a file instead.'
           )
-        : t(
+        : errorMessage || t(
             'Не удалось скопировать. Выделите текст вручную.',
             'Copy failed. Select the text manually.'
           ),

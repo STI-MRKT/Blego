@@ -104,7 +104,18 @@ function createFriendsService({ store }) {
       throw Error('FRIENDS_STORE_INVALID');
     return rows;
   };
-  const list = () => structuredClone([...seed, ...saved()]);
+  const list = () =>
+    structuredClone(
+      [...seed, ...saved()].map((row) => {
+        let copyUrl = null;
+        try {
+          copyUrl = canonicalUrl(row.url);
+        } catch {
+          /* Invalid legacy rows stay visible, not copyable. */
+        }
+        return { ...row, copyUrl };
+      })
+    );
   return {
     list,
     async preview({ bytes, name }) {

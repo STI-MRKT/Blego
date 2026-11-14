@@ -1,0 +1,29 @@
+✖ TZ10 News copies exact title and URL in all topics, refreshed RSS and reopened SQLite cache without navigation (928.341202ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1412.037695
+
+✖ failing tests:
+
+test at tests/ui/news-copy.test.cjs:10:1
+✖ TZ10 News copies exact title and URL in all topics, refreshed RSS and reopened SQLite cache without navigation (928.341202ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 2
+
+      at check (/workspace/BLEGO-final/tests/ui/news-copy.test.cjs:85:14)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/news-copy.test.cjs:110:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
