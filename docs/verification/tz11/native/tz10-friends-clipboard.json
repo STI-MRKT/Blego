@@ -1,0 +1,29 @@
+{
+  "host": "darwin-arm64",
+  "seven": [
+    "https://www.instagram.com/qa_us_35/",
+    "https://www.instagram.com/qa_us_52/",
+    "https://www.instagram.com/qa_us_32/",
+    "https://www.instagram.com/qa_us_22/",
+    "https://www.instagram.com/avabrooks/",
+    "https://www.instagram.com/qa_us_98/",
+    "https://www.instagram.com/qa_us_37/"
+  ],
+  "repeat": [
+    "https://www.instagram.com/qa_us_71/",
+    "https://www.instagram.com/qa_us_42/",
+    "https://www.instagram.com/qa_us_0/",
+    "https://www.instagram.com/qa_us_16/",
+    "https://www.instagram.com/qa_us_58/",
+    "https://www.instagram.com/qa_us_89/",
+    "https://www.instagram.com/qa_us_14/"
+  ],
+  "allCount": 113,
+  "allPages": true,
+  "searchCount": 11,
+  "exactSeven": true,
+  "three": true,
+  "empty": true,
+  "failurePreserved": true,
+  "awaitedWrite": true
+}

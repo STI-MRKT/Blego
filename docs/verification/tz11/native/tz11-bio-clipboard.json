@@ -1,0 +1,13 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "copies": {
+    "employer": "Ralph Lauren Corporation",
+    "employerCity": "New York",
+    "university": "Columbia University",
+    "universityCity": "New York",
+    "school": "Stuyvesant High School",
+    "schoolCity": "New York"
+  },
+  "exact": true
+}

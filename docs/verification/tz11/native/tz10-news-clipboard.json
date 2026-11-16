@@ -1,0 +1,74 @@
+{
+  "host": "darwin-arm64",
+  "proof": [
+    {
+      "topic": "fashion",
+      "revision": 1,
+      "title": "fashion Fashion design Artificial intelligence cryptocurrency finance technology — «QA 1» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/fashion/1?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "ai",
+      "revision": 1,
+      "title": "ai Fashion design Artificial intelligence cryptocurrency finance technology — «QA 1» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/ai/1?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "crypto",
+      "revision": 1,
+      "title": "crypto Fashion design Artificial intelligence cryptocurrency finance technology — «QA 1» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/crypto/1?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "finance",
+      "revision": 1,
+      "title": "finance Fashion design Artificial intelligence cryptocurrency finance technology — «QA 1» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/finance/1?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "tech",
+      "revision": 1,
+      "title": "tech Fashion design Artificial intelligence cryptocurrency finance technology — «QA 1» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/tech/1?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "tech",
+      "revision": 2,
+      "title": "tech Fashion design Artificial intelligence cryptocurrency finance technology — «QA 2» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/tech/2?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "tech",
+      "revision": 2,
+      "title": "tech Fashion design Artificial intelligence cryptocurrency finance technology — «QA 2» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/tech/2?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    },
+    {
+      "topic": "tech",
+      "revision": 2,
+      "title": "tech Fashion design Artificial intelligence cryptocurrency finance technology — «QA 2» complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline complete headline END_MARKER",
+      "url": "https://example.test/tech/2?edition=qa&item=7&lang=en",
+      "clipboard": "exact native readback",
+      "copyDidNotOpenBrowser": true
+    }
+  ],
+  "cacheAfterRestart": true,
+  "copyFailurePreservedClipboard": true,
+  "titleOpensBrowser": true,
+  "topics": 5,
+  "source": "controlled RSS transport; actual parser,SQLite,renderer and native clipboard"
+}

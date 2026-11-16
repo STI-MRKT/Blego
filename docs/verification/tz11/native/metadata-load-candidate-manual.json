@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-16T09:06:55.734Z",
+  "os": "darwin",
+  "arch": "arm64",
+  "maxPhotoCount": 20,
+  "project": "/Users/runner/work/Blego/Blego",
+  "fixture": "Synthetic 12×8 RGBA/oriented images, not worst-case 40 MP stress",
+  "batches": [
+    {
+      "folderLoad": false,
+      "scanMs": 3.3164580000000115,
+      "peakRssBytes": 81723392,
+      "eventLoopP95Ms": 23.478271,
+      "count": 1,
+      "completed": 1,
+      "readMs": 95,
+      "exportMs": 373,
+      "totalMs": 569,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    },
+    {
+      "folderLoad": false,
+      "scanMs": 1.6702080000000024,
+      "peakRssBytes": 95076352,
+      "eventLoopP95Ms": 24.248319,
+      "count": 10,
+      "completed": 10,
+      "readMs": 999,
+      "exportMs": 1533,
+      "totalMs": 3333,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    },
+    {
+      "folderLoad": false,
+      "scanMs": 2.0623750000004293,
+      "peakRssBytes": 101089280,
+      "eventLoopP95Ms": 24.952831,
+      "count": 20,
+      "completed": 20,
+      "readMs": 1595,
+      "exportMs": 2532,
+      "totalMs": 5858,
+      "readback": "PASS",
+      "originalHashes": "PASS",
+      "pixelsAndAlpha": "PASS",
+      "date": "2024-02-29T12:34:56-05:00",
+      "gps": {
+        "latitude": 0,
+        "longitude": -73.987654,
+        "altitude": 0
+      },
+      "dimensions": "12×8"
+    }
+  ]
+}
