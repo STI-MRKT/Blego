@@ -2040,7 +2040,23 @@
     "Zemlak",
     "Ziemann",
     "Zieme",
-    "Zulauf"
+    "Zulauf",
+    "Ashworth",
+    "Bancroft",
+    "Blackwood",
+    "Bradshaw",
+    "Caldwell",
+    "Chadwick",
+    "Coleridge",
+    "Ellsworth",
+    "Pembroke",
+    "Fenwick",
+    "Hargreaves",
+    "Hartwell",
+    "Hawthorne",
+    "Langford",
+    "Lockwood",
+    "Merriweather"
   ],
   "places": [
     {
@@ -4057,7 +4073,7 @@
   "nationalPrefix": "202",
   "schemaVersion": 1,
   "datasetId": "blego-us-female",
-  "datasetVersion": "2026-11-12.2",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -4080,7 +4096,13 @@
       "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
       "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "f6cf4e3b11c9935e15edc5729aafdded4358475c6470196f4acac6f3191c9be5"
+  "checksum": "207378cedd9db0e857b67807cea5c0d155ec0ee43116122df18879f82cf1b1c8"
 }

@@ -1,0 +1,292 @@
+{
+  "base": "99c5a3ec074032ea9380de40d8ff78e7318716c9",
+  "method": "Globally unique NFKC/trim/lowercase/whitespace-normalized dictionary entries; no generated name/address combinations counted. US/GB shared English counted once.",
+  "names": {
+    "before": 9232,
+    "added": 224,
+    "removed": 0,
+    "after": 9456
+  },
+  "bios": {
+    "before": 1680,
+    "added": 210,
+    "removed": 0,
+    "after": 1890
+  },
+  "addresses": {
+    "before": 0,
+    "added": 200,
+    "removed": 0,
+    "after": 200
+  },
+  "countries": {
+    "BR": {
+      "first": {
+        "before": 81,
+        "added": 0,
+        "removed": 0,
+        "after": 81
+      },
+      "last": {
+        "before": 21,
+        "added": 16,
+        "removed": 0,
+        "after": 37
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "US": {
+      "first": {
+        "before": 1563,
+        "added": 0,
+        "removed": 0,
+        "after": 1563
+      },
+      "last": {
+        "before": 473,
+        "added": 16,
+        "removed": 0,
+        "after": 489
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "FR": {
+      "first": {
+        "before": 435,
+        "added": 0,
+        "removed": 0,
+        "after": 435
+      },
+      "last": {
+        "before": 150,
+        "added": 16,
+        "removed": 0,
+        "after": 166
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "PL": {
+      "first": {
+        "before": 163,
+        "added": 0,
+        "removed": 0,
+        "after": 163
+      },
+      "last": {
+        "before": 710,
+        "added": 16,
+        "removed": 0,
+        "after": 726
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "DE": {
+      "first": {
+        "before": 573,
+        "added": 0,
+        "removed": 0,
+        "after": 573
+      },
+      "last": {
+        "before": 1688,
+        "added": 16,
+        "removed": 0,
+        "after": 1704
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "ES": {
+      "first": {
+        "before": 120,
+        "added": 0,
+        "removed": 0,
+        "after": 120
+      },
+      "last": {
+        "before": 625,
+        "added": 16,
+        "removed": 0,
+        "after": 641
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "IT": {
+      "first": {
+        "before": 617,
+        "added": 0,
+        "removed": 0,
+        "after": 617
+      },
+      "last": {
+        "before": 2170,
+        "added": 16,
+        "removed": 0,
+        "after": 2186
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    },
+    "GB": {
+      "first": {
+        "before": 1563,
+        "added": 0,
+        "removed": 0,
+        "after": 1563
+      },
+      "last": {
+        "before": 473,
+        "added": 16,
+        "removed": 0,
+        "after": 489
+      },
+      "modelAndCrypto": "Both retain female personal-name strategy and use the added surname atoms; these atoms count once, not once per category.",
+      "addresses": 25
+    }
+  },
+  "tech": {
+    "before": 275,
+    "added": 96,
+    "removed": 0,
+    "after": 371
+  },
+  "localizedBios": {
+    "model": {
+      "en": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pt": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "fr": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pl": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "de": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "es": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "it": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      }
+    },
+    "tech": {
+      "en": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pt": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "fr": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pl": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "de": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "es": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "it": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      }
+    },
+    "crypto": {
+      "en": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pt": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "fr": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "pl": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "de": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "es": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      },
+      "it": {
+        "before": 50,
+        "added": 10,
+        "removed": 0,
+        "after": 60
+      }
+    }
+  }
+}

@@ -98,7 +98,13 @@ async function generateProfile(
       ['status', p.statuses]
     ])
       if (has(f) && values[f] === undefined) values[f] = finite(f, a);
-    const places = p.places.filter(
+    const addressChoices =
+      has('address') && !values.address && !values.city && !values.postalCode
+        ? p.addresses.filter(
+            (row) => p.allowRepeats.includes('address') || !r.used('address', row.address)
+          )
+        : [];
+    const places = [...p.places, ...addressChoices].filter(
       (x) =>
         !has('postalCode') ||
         p.allowRepeats.includes('postalCode') ||
@@ -109,10 +115,12 @@ async function generateProfile(
     if (has('city') && !values.city) values.city = place.city;
     if (has('postalCode') && !values.postalCode) values.postalCode = place.postal;
     if (has('address') && !values.address)
-      values.address = finite(
-        'address',
-        p.streets.flatMap((s) => Array.from({ length: 240 }, (_, i) => `${s} ${i + 1}`))
-      );
+      values.address =
+        place.address ||
+        finite(
+          'address',
+          p.streets.flatMap((s) => Array.from({ length: 240 }, (_, i) => `${s} ${i + 1}`))
+        );
     if (has('number') && !values.number) {
       const n = store.get(`number:${p.country}`) || 0;
       values.number = String(n).padStart(6, '0');
@@ -146,6 +154,9 @@ async function generateProfile(
       namingStrategy: p.namingStrategy,
       namingDatasetId: p.namingDatasetId,
       bioDatasetId: p.bioDatasetId,
+      ...(place.address
+        ? { addressProvenance: { kind: 'synthetic', datasetId: p.addressDatasetId } }
+        : {}),
       datasetId: p.datasetId,
       datasetVersion: p.datasetVersion,
       transliterationVersion: 'latin-v1',

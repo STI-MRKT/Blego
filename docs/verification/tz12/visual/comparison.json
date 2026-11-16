@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "candidateLabel": "candidate",
+  "method": "Identical synthetic fixtures, own version renderer/CSS, same-host screenshots; compares all 15 News bounds and FP closed-control bounds at seven viewports. Does not assert cross-platform pixel identity.",
+  "comparisons": [
+    {
+      "width": 360,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 480,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 576,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 768,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 980,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1280,
+      "newsCards": 15,
+      "newsOriginalBoundsEqual": true,
+      "fpControlBoundsEqual": true,
+      "noOverflow": true
+    }
+  ]
+}

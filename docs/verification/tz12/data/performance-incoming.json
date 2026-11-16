@@ -1,0 +1,28 @@
+{
+  "project": "/tmp/blego-tz12-incoming",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "method": "Three independent 100-profile SQLite stores, same country/type sequence, explicit bulk consent, production random selection. Includes registry and rules hashing; not a cold-cache scientific benchmark.",
+  "samples": [
+    {
+      "totalMs": 315.297251,
+      "p50Ms": 2.735949000000005,
+      "p95Ms": 6.9622460000000075,
+      "maxMs": 11.82956999999999
+    },
+    {
+      "totalMs": 248.29496100000006,
+      "p50Ms": 2.3412190000000237,
+      "p95Ms": 3.255235999999968,
+      "maxMs": 10.150320999999963
+    },
+    {
+      "totalMs": 229.6027829999988,
+      "p50Ms": 2.192690999999968,
+      "p95Ms": 3.103558000000021,
+      "maxMs": 6.379008999999996
+    }
+  ]
+}

@@ -1,0 +1,1028 @@
+{
+  "id": "blego-tz12-addresses-2026-11-16",
+  "version": 1,
+  "provenance": {
+    "kind": "synthetic",
+    "notice": "Authored example street/house lines, not verified deliverable addresses or real residences. City/postal pairs are copied exactly from the existing country resources (GeoNames except the retained GB examples).",
+    "source": "resources/generator/countries/{country}.json; see DATA_SOURCES.md and geo provenance",
+    "format": "National street/house order; country, city and postal code remain separate fields."
+  },
+  "records": {
+    "BR": [
+      {
+        "city": "Abadia de Goiás",
+        "postal": "75345-000",
+        "address": "Rua das Acácias, 12"
+      },
+      {
+        "city": "Abadia de Goiás",
+        "postal": "75345-000",
+        "address": "Rua dos Ipês, 14"
+      },
+      {
+        "city": "Abadia de Goiás",
+        "postal": "75345-000",
+        "address": "Travessa das Palmeiras, 16"
+      },
+      {
+        "city": "Abadia de Goiás",
+        "postal": "75345-000",
+        "address": "Rua das Hortênsias, 18"
+      },
+      {
+        "city": "Abadia de Goiás",
+        "postal": "75345-000",
+        "address": "Alameda dos Jasmins, 20"
+      },
+      {
+        "city": "Abadiânia",
+        "postal": "72940-000",
+        "address": "Rua das Acácias, 22"
+      },
+      {
+        "city": "Abadiânia",
+        "postal": "72940-000",
+        "address": "Rua dos Ipês, 24"
+      },
+      {
+        "city": "Abadiânia",
+        "postal": "72940-000",
+        "address": "Travessa das Palmeiras, 26"
+      },
+      {
+        "city": "Abadiânia",
+        "postal": "72940-000",
+        "address": "Rua das Hortênsias, 28"
+      },
+      {
+        "city": "Abadiânia",
+        "postal": "72940-000",
+        "address": "Alameda dos Jasmins, 30"
+      },
+      {
+        "city": "Abaetetuba",
+        "postal": "68440-000",
+        "address": "Rua das Acácias, 32"
+      },
+      {
+        "city": "Abaetetuba",
+        "postal": "68440-000",
+        "address": "Rua dos Ipês, 34"
+      },
+      {
+        "city": "Abaetetuba",
+        "postal": "68440-000",
+        "address": "Travessa das Palmeiras, 36"
+      },
+      {
+        "city": "Abaetetuba",
+        "postal": "68440-000",
+        "address": "Rua das Hortênsias, 38"
+      },
+      {
+        "city": "Abaetetuba",
+        "postal": "68440-000",
+        "address": "Alameda dos Jasmins, 40"
+      },
+      {
+        "city": "Abaeté",
+        "postal": "35620-000",
+        "address": "Rua das Acácias, 42"
+      },
+      {
+        "city": "Abaeté",
+        "postal": "35620-000",
+        "address": "Rua dos Ipês, 44"
+      },
+      {
+        "city": "Abaeté",
+        "postal": "35620-000",
+        "address": "Travessa das Palmeiras, 46"
+      },
+      {
+        "city": "Abaeté",
+        "postal": "35620-000",
+        "address": "Rua das Hortênsias, 48"
+      },
+      {
+        "city": "Abaeté",
+        "postal": "35620-000",
+        "address": "Alameda dos Jasmins, 50"
+      },
+      {
+        "city": "Abaiara",
+        "postal": "63240-000",
+        "address": "Rua das Acácias, 52"
+      },
+      {
+        "city": "Abaiara",
+        "postal": "63240-000",
+        "address": "Rua dos Ipês, 54"
+      },
+      {
+        "city": "Abaiara",
+        "postal": "63240-000",
+        "address": "Travessa das Palmeiras, 56"
+      },
+      {
+        "city": "Abaiara",
+        "postal": "63240-000",
+        "address": "Rua das Hortênsias, 58"
+      },
+      {
+        "city": "Abaiara",
+        "postal": "63240-000",
+        "address": "Alameda dos Jasmins, 60"
+      }
+    ],
+    "US": [
+      {
+        "city": "Aaronsburg",
+        "postal": "16820",
+        "address": "12 Cedar Grove Lane"
+      },
+      {
+        "city": "Aaronsburg",
+        "postal": "16820",
+        "address": "14 Willow Brook Road"
+      },
+      {
+        "city": "Aaronsburg",
+        "postal": "16820",
+        "address": "16 Orchard View Drive"
+      },
+      {
+        "city": "Aaronsburg",
+        "postal": "16820",
+        "address": "18 Meadow Ridge Court"
+      },
+      {
+        "city": "Aaronsburg",
+        "postal": "16820",
+        "address": "20 Maple Hollow Street"
+      },
+      {
+        "city": "Abbeville",
+        "postal": "29620",
+        "address": "22 Cedar Grove Lane"
+      },
+      {
+        "city": "Abbeville",
+        "postal": "29620",
+        "address": "24 Willow Brook Road"
+      },
+      {
+        "city": "Abbeville",
+        "postal": "29620",
+        "address": "26 Orchard View Drive"
+      },
+      {
+        "city": "Abbeville",
+        "postal": "29620",
+        "address": "28 Meadow Ridge Court"
+      },
+      {
+        "city": "Abbeville",
+        "postal": "29620",
+        "address": "30 Maple Hollow Street"
+      },
+      {
+        "city": "Abbot",
+        "postal": "04406",
+        "address": "32 Cedar Grove Lane"
+      },
+      {
+        "city": "Abbot",
+        "postal": "04406",
+        "address": "34 Willow Brook Road"
+      },
+      {
+        "city": "Abbot",
+        "postal": "04406",
+        "address": "36 Orchard View Drive"
+      },
+      {
+        "city": "Abbot",
+        "postal": "04406",
+        "address": "38 Meadow Ridge Court"
+      },
+      {
+        "city": "Abbot",
+        "postal": "04406",
+        "address": "40 Maple Hollow Street"
+      },
+      {
+        "city": "Abbotsford",
+        "postal": "54405",
+        "address": "42 Cedar Grove Lane"
+      },
+      {
+        "city": "Abbotsford",
+        "postal": "54405",
+        "address": "44 Willow Brook Road"
+      },
+      {
+        "city": "Abbotsford",
+        "postal": "54405",
+        "address": "46 Orchard View Drive"
+      },
+      {
+        "city": "Abbotsford",
+        "postal": "54405",
+        "address": "48 Meadow Ridge Court"
+      },
+      {
+        "city": "Abbotsford",
+        "postal": "54405",
+        "address": "50 Maple Hollow Street"
+      },
+      {
+        "city": "Abbott",
+        "postal": "76621",
+        "address": "52 Cedar Grove Lane"
+      },
+      {
+        "city": "Abbott",
+        "postal": "76621",
+        "address": "54 Willow Brook Road"
+      },
+      {
+        "city": "Abbott",
+        "postal": "76621",
+        "address": "56 Orchard View Drive"
+      },
+      {
+        "city": "Abbott",
+        "postal": "76621",
+        "address": "58 Meadow Ridge Court"
+      },
+      {
+        "city": "Abbott",
+        "postal": "76621",
+        "address": "60 Maple Hollow Street"
+      }
+    ],
+    "FR": [
+      {
+        "city": "Aast",
+        "postal": "64460",
+        "address": "12 rue des Tilleuls"
+      },
+      {
+        "city": "Aast",
+        "postal": "64460",
+        "address": "14 allée des Acacias"
+      },
+      {
+        "city": "Aast",
+        "postal": "64460",
+        "address": "16 rue des Lavandières"
+      },
+      {
+        "city": "Aast",
+        "postal": "64460",
+        "address": "18 impasse des Glycines"
+      },
+      {
+        "city": "Aast",
+        "postal": "64460",
+        "address": "20 rue du Verger"
+      },
+      {
+        "city": "Abainville",
+        "postal": "55130",
+        "address": "22 rue des Tilleuls"
+      },
+      {
+        "city": "Abainville",
+        "postal": "55130",
+        "address": "24 allée des Acacias"
+      },
+      {
+        "city": "Abainville",
+        "postal": "55130",
+        "address": "26 rue des Lavandières"
+      },
+      {
+        "city": "Abainville",
+        "postal": "55130",
+        "address": "28 impasse des Glycines"
+      },
+      {
+        "city": "Abainville",
+        "postal": "55130",
+        "address": "30 rue du Verger"
+      },
+      {
+        "city": "Abancourt",
+        "postal": "59268",
+        "address": "32 rue des Tilleuls"
+      },
+      {
+        "city": "Abancourt",
+        "postal": "59268",
+        "address": "34 allée des Acacias"
+      },
+      {
+        "city": "Abancourt",
+        "postal": "59268",
+        "address": "36 rue des Lavandières"
+      },
+      {
+        "city": "Abancourt",
+        "postal": "59268",
+        "address": "38 impasse des Glycines"
+      },
+      {
+        "city": "Abancourt",
+        "postal": "59268",
+        "address": "40 rue du Verger"
+      },
+      {
+        "city": "Abaucourt",
+        "postal": "54610",
+        "address": "42 rue des Tilleuls"
+      },
+      {
+        "city": "Abaucourt",
+        "postal": "54610",
+        "address": "44 allée des Acacias"
+      },
+      {
+        "city": "Abaucourt",
+        "postal": "54610",
+        "address": "46 rue des Lavandières"
+      },
+      {
+        "city": "Abaucourt",
+        "postal": "54610",
+        "address": "48 impasse des Glycines"
+      },
+      {
+        "city": "Abaucourt",
+        "postal": "54610",
+        "address": "50 rue du Verger"
+      },
+      {
+        "city": "Abbans-Dessous",
+        "postal": "25320",
+        "address": "52 rue des Tilleuls"
+      },
+      {
+        "city": "Abbans-Dessous",
+        "postal": "25320",
+        "address": "54 allée des Acacias"
+      },
+      {
+        "city": "Abbans-Dessous",
+        "postal": "25320",
+        "address": "56 rue des Lavandières"
+      },
+      {
+        "city": "Abbans-Dessous",
+        "postal": "25320",
+        "address": "58 impasse des Glycines"
+      },
+      {
+        "city": "Abbans-Dessous",
+        "postal": "25320",
+        "address": "60 rue du Verger"
+      }
+    ],
+    "PL": [
+      {
+        "city": "Abramy",
+        "postal": "05-310",
+        "address": "ul. Wrzosowa 12"
+      },
+      {
+        "city": "Abramy",
+        "postal": "05-310",
+        "address": "ul. Jaśminowa 14"
+      },
+      {
+        "city": "Abramy",
+        "postal": "05-310",
+        "address": "ul. Topolowa 16"
+      },
+      {
+        "city": "Abramy",
+        "postal": "05-310",
+        "address": "ul. Leszczynowa 18"
+      },
+      {
+        "city": "Abramy",
+        "postal": "05-310",
+        "address": "ul. Modrzewiowa 20"
+      },
+      {
+        "city": "Abramów",
+        "postal": "21-143",
+        "address": "ul. Wrzosowa 22"
+      },
+      {
+        "city": "Abramów",
+        "postal": "21-143",
+        "address": "ul. Jaśminowa 24"
+      },
+      {
+        "city": "Abramów",
+        "postal": "21-143",
+        "address": "ul. Topolowa 26"
+      },
+      {
+        "city": "Abramów",
+        "postal": "21-143",
+        "address": "ul. Leszczynowa 28"
+      },
+      {
+        "city": "Abramów",
+        "postal": "21-143",
+        "address": "ul. Modrzewiowa 30"
+      },
+      {
+        "city": "Achrymowce",
+        "postal": "16-123",
+        "address": "ul. Wrzosowa 32"
+      },
+      {
+        "city": "Achrymowce",
+        "postal": "16-123",
+        "address": "ul. Jaśminowa 34"
+      },
+      {
+        "city": "Achrymowce",
+        "postal": "16-123",
+        "address": "ul. Topolowa 36"
+      },
+      {
+        "city": "Achrymowce",
+        "postal": "16-123",
+        "address": "ul. Leszczynowa 38"
+      },
+      {
+        "city": "Achrymowce",
+        "postal": "16-123",
+        "address": "ul. Modrzewiowa 40"
+      },
+      {
+        "city": "Adamczowice",
+        "postal": "27-640",
+        "address": "ul. Wrzosowa 42"
+      },
+      {
+        "city": "Adamczowice",
+        "postal": "27-640",
+        "address": "ul. Jaśminowa 44"
+      },
+      {
+        "city": "Adamczowice",
+        "postal": "27-640",
+        "address": "ul. Topolowa 46"
+      },
+      {
+        "city": "Adamczowice",
+        "postal": "27-640",
+        "address": "ul. Leszczynowa 48"
+      },
+      {
+        "city": "Adamczowice",
+        "postal": "27-640",
+        "address": "ul. Modrzewiowa 50"
+      },
+      {
+        "city": "Adamczycha",
+        "postal": "06-320",
+        "address": "ul. Wrzosowa 52"
+      },
+      {
+        "city": "Adamczycha",
+        "postal": "06-320",
+        "address": "ul. Jaśminowa 54"
+      },
+      {
+        "city": "Adamczycha",
+        "postal": "06-320",
+        "address": "ul. Topolowa 56"
+      },
+      {
+        "city": "Adamczycha",
+        "postal": "06-320",
+        "address": "ul. Leszczynowa 58"
+      },
+      {
+        "city": "Adamczycha",
+        "postal": "06-320",
+        "address": "ul. Modrzewiowa 60"
+      }
+    ],
+    "DE": [
+      {
+        "city": "Aach",
+        "postal": "54298",
+        "address": "Lindenweg 12"
+      },
+      {
+        "city": "Aach",
+        "postal": "54298",
+        "address": "Akazienstraße 14"
+      },
+      {
+        "city": "Aach",
+        "postal": "54298",
+        "address": "Birkenallee 16"
+      },
+      {
+        "city": "Aach",
+        "postal": "54298",
+        "address": "Kastanienweg 18"
+      },
+      {
+        "city": "Aach",
+        "postal": "54298",
+        "address": "Holunderweg 20"
+      },
+      {
+        "city": "Aachen",
+        "postal": "52062",
+        "address": "Lindenweg 22"
+      },
+      {
+        "city": "Aachen",
+        "postal": "52062",
+        "address": "Akazienstraße 24"
+      },
+      {
+        "city": "Aachen",
+        "postal": "52062",
+        "address": "Birkenallee 26"
+      },
+      {
+        "city": "Aachen",
+        "postal": "52062",
+        "address": "Kastanienweg 28"
+      },
+      {
+        "city": "Aachen",
+        "postal": "52062",
+        "address": "Holunderweg 30"
+      },
+      {
+        "city": "Aalen",
+        "postal": "73430",
+        "address": "Lindenweg 32"
+      },
+      {
+        "city": "Aalen",
+        "postal": "73430",
+        "address": "Akazienstraße 34"
+      },
+      {
+        "city": "Aalen",
+        "postal": "73430",
+        "address": "Birkenallee 36"
+      },
+      {
+        "city": "Aalen",
+        "postal": "73430",
+        "address": "Kastanienweg 38"
+      },
+      {
+        "city": "Aalen",
+        "postal": "73430",
+        "address": "Holunderweg 40"
+      },
+      {
+        "city": "Abensberg",
+        "postal": "93326",
+        "address": "Lindenweg 42"
+      },
+      {
+        "city": "Abensberg",
+        "postal": "93326",
+        "address": "Akazienstraße 44"
+      },
+      {
+        "city": "Abensberg",
+        "postal": "93326",
+        "address": "Birkenallee 46"
+      },
+      {
+        "city": "Abensberg",
+        "postal": "93326",
+        "address": "Kastanienweg 48"
+      },
+      {
+        "city": "Abensberg",
+        "postal": "93326",
+        "address": "Holunderweg 50"
+      },
+      {
+        "city": "Achim",
+        "postal": "28832",
+        "address": "Lindenweg 52"
+      },
+      {
+        "city": "Achim",
+        "postal": "28832",
+        "address": "Akazienstraße 54"
+      },
+      {
+        "city": "Achim",
+        "postal": "28832",
+        "address": "Birkenallee 56"
+      },
+      {
+        "city": "Achim",
+        "postal": "28832",
+        "address": "Kastanienweg 58"
+      },
+      {
+        "city": "Achim",
+        "postal": "28832",
+        "address": "Holunderweg 60"
+      }
+    ],
+    "ES": [
+      {
+        "city": "A Coruña",
+        "postal": "15001",
+        "address": "Calle de los Olmos, 12"
+      },
+      {
+        "city": "A Coruña",
+        "postal": "15001",
+        "address": "Calle del Almendro, 14"
+      },
+      {
+        "city": "A Coruña",
+        "postal": "15001",
+        "address": "Camino de las Encinas, 16"
+      },
+      {
+        "city": "A Coruña",
+        "postal": "15001",
+        "address": "Calle de las Acacias, 18"
+      },
+      {
+        "city": "A Coruña",
+        "postal": "15001",
+        "address": "Calle del Jazmín, 20"
+      },
+      {
+        "city": "Ababuj",
+        "postal": "44155",
+        "address": "Calle de los Olmos, 22"
+      },
+      {
+        "city": "Ababuj",
+        "postal": "44155",
+        "address": "Calle del Almendro, 24"
+      },
+      {
+        "city": "Ababuj",
+        "postal": "44155",
+        "address": "Camino de las Encinas, 26"
+      },
+      {
+        "city": "Ababuj",
+        "postal": "44155",
+        "address": "Calle de las Acacias, 28"
+      },
+      {
+        "city": "Ababuj",
+        "postal": "44155",
+        "address": "Calle del Jazmín, 30"
+      },
+      {
+        "city": "Abadiño",
+        "postal": "48220",
+        "address": "Calle de los Olmos, 32"
+      },
+      {
+        "city": "Abadiño",
+        "postal": "48220",
+        "address": "Calle del Almendro, 34"
+      },
+      {
+        "city": "Abadiño",
+        "postal": "48220",
+        "address": "Camino de las Encinas, 36"
+      },
+      {
+        "city": "Abadiño",
+        "postal": "48220",
+        "address": "Calle de las Acacias, 38"
+      },
+      {
+        "city": "Abadiño",
+        "postal": "48220",
+        "address": "Calle del Jazmín, 40"
+      },
+      {
+        "city": "Abaigar",
+        "postal": "31280",
+        "address": "Calle de los Olmos, 42"
+      },
+      {
+        "city": "Abaigar",
+        "postal": "31280",
+        "address": "Calle del Almendro, 44"
+      },
+      {
+        "city": "Abaigar",
+        "postal": "31280",
+        "address": "Camino de las Encinas, 46"
+      },
+      {
+        "city": "Abaigar",
+        "postal": "31280",
+        "address": "Calle de las Acacias, 48"
+      },
+      {
+        "city": "Abaigar",
+        "postal": "31280",
+        "address": "Calle del Jazmín, 50"
+      },
+      {
+        "city": "Abalos",
+        "postal": "26339",
+        "address": "Calle de los Olmos, 52"
+      },
+      {
+        "city": "Abalos",
+        "postal": "26339",
+        "address": "Calle del Almendro, 54"
+      },
+      {
+        "city": "Abalos",
+        "postal": "26339",
+        "address": "Camino de las Encinas, 56"
+      },
+      {
+        "city": "Abalos",
+        "postal": "26339",
+        "address": "Calle de las Acacias, 58"
+      },
+      {
+        "city": "Abalos",
+        "postal": "26339",
+        "address": "Calle del Jazmín, 60"
+      }
+    ],
+    "IT": [
+      {
+        "city": "Abano Terme",
+        "postal": "35031",
+        "address": "Via dei Tigli, 12"
+      },
+      {
+        "city": "Abano Terme",
+        "postal": "35031",
+        "address": "Via delle Magnolie, 14"
+      },
+      {
+        "city": "Abano Terme",
+        "postal": "35031",
+        "address": "Vicolo del Gelsomino, 16"
+      },
+      {
+        "city": "Abano Terme",
+        "postal": "35031",
+        "address": "Via degli Olmi, 18"
+      },
+      {
+        "city": "Abano Terme",
+        "postal": "35031",
+        "address": "Via delle Acacie, 20"
+      },
+      {
+        "city": "Abatemarco",
+        "postal": "84060",
+        "address": "Via dei Tigli, 22"
+      },
+      {
+        "city": "Abatemarco",
+        "postal": "84060",
+        "address": "Via delle Magnolie, 24"
+      },
+      {
+        "city": "Abatemarco",
+        "postal": "84060",
+        "address": "Vicolo del Gelsomino, 26"
+      },
+      {
+        "city": "Abatemarco",
+        "postal": "84060",
+        "address": "Via degli Olmi, 28"
+      },
+      {
+        "city": "Abatemarco",
+        "postal": "84060",
+        "address": "Via delle Acacie, 30"
+      },
+      {
+        "city": "Abbadia Cerreto",
+        "postal": "26834",
+        "address": "Via dei Tigli, 32"
+      },
+      {
+        "city": "Abbadia Cerreto",
+        "postal": "26834",
+        "address": "Via delle Magnolie, 34"
+      },
+      {
+        "city": "Abbadia Cerreto",
+        "postal": "26834",
+        "address": "Vicolo del Gelsomino, 36"
+      },
+      {
+        "city": "Abbadia Cerreto",
+        "postal": "26834",
+        "address": "Via degli Olmi, 38"
+      },
+      {
+        "city": "Abbadia Cerreto",
+        "postal": "26834",
+        "address": "Via delle Acacie, 40"
+      },
+      {
+        "city": "Abbadia Lariana",
+        "postal": "23821",
+        "address": "Via dei Tigli, 42"
+      },
+      {
+        "city": "Abbadia Lariana",
+        "postal": "23821",
+        "address": "Via delle Magnolie, 44"
+      },
+      {
+        "city": "Abbadia Lariana",
+        "postal": "23821",
+        "address": "Vicolo del Gelsomino, 46"
+      },
+      {
+        "city": "Abbadia Lariana",
+        "postal": "23821",
+        "address": "Via degli Olmi, 48"
+      },
+      {
+        "city": "Abbadia Lariana",
+        "postal": "23821",
+        "address": "Via delle Acacie, 50"
+      },
+      {
+        "city": "Abbasanta",
+        "postal": "09071",
+        "address": "Via dei Tigli, 52"
+      },
+      {
+        "city": "Abbasanta",
+        "postal": "09071",
+        "address": "Via delle Magnolie, 54"
+      },
+      {
+        "city": "Abbasanta",
+        "postal": "09071",
+        "address": "Vicolo del Gelsomino, 56"
+      },
+      {
+        "city": "Abbasanta",
+        "postal": "09071",
+        "address": "Via degli Olmi, 58"
+      },
+      {
+        "city": "Abbasanta",
+        "postal": "09071",
+        "address": "Via delle Acacie, 60"
+      }
+    ],
+    "GB": [
+      {
+        "city": "London",
+        "postal": "EC1A 1BB",
+        "address": "12 Willow Mews"
+      },
+      {
+        "city": "London",
+        "postal": "EC1A 1BB",
+        "address": "14 Orchard Walk"
+      },
+      {
+        "city": "London",
+        "postal": "EC1A 1BB",
+        "address": "16 Cedar Grove"
+      },
+      {
+        "city": "London",
+        "postal": "EC1A 1BB",
+        "address": "18 Meadow Close"
+      },
+      {
+        "city": "London",
+        "postal": "EC1A 1BB",
+        "address": "20 Birch Gardens"
+      },
+      {
+        "city": "Manchester",
+        "postal": "M1 1AE",
+        "address": "22 Willow Mews"
+      },
+      {
+        "city": "Manchester",
+        "postal": "M1 1AE",
+        "address": "24 Orchard Walk"
+      },
+      {
+        "city": "Manchester",
+        "postal": "M1 1AE",
+        "address": "26 Cedar Grove"
+      },
+      {
+        "city": "Manchester",
+        "postal": "M1 1AE",
+        "address": "28 Meadow Close"
+      },
+      {
+        "city": "Manchester",
+        "postal": "M1 1AE",
+        "address": "30 Birch Gardens"
+      },
+      {
+        "city": "Birmingham",
+        "postal": "B1 1AA",
+        "address": "32 Willow Mews"
+      },
+      {
+        "city": "Birmingham",
+        "postal": "B1 1AA",
+        "address": "34 Orchard Walk"
+      },
+      {
+        "city": "Birmingham",
+        "postal": "B1 1AA",
+        "address": "36 Cedar Grove"
+      },
+      {
+        "city": "Birmingham",
+        "postal": "B1 1AA",
+        "address": "38 Meadow Close"
+      },
+      {
+        "city": "Birmingham",
+        "postal": "B1 1AA",
+        "address": "40 Birch Gardens"
+      },
+      {
+        "city": "Bristol",
+        "postal": "BS1 4DJ",
+        "address": "42 Willow Mews"
+      },
+      {
+        "city": "Bristol",
+        "postal": "BS1 4DJ",
+        "address": "44 Orchard Walk"
+      },
+      {
+        "city": "Bristol",
+        "postal": "BS1 4DJ",
+        "address": "46 Cedar Grove"
+      },
+      {
+        "city": "Bristol",
+        "postal": "BS1 4DJ",
+        "address": "48 Meadow Close"
+      },
+      {
+        "city": "Bristol",
+        "postal": "BS1 4DJ",
+        "address": "50 Birch Gardens"
+      },
+      {
+        "city": "Edinburgh",
+        "postal": "EH1 1YZ",
+        "address": "52 Willow Mews"
+      },
+      {
+        "city": "Edinburgh",
+        "postal": "EH1 1YZ",
+        "address": "54 Orchard Walk"
+      },
+      {
+        "city": "Edinburgh",
+        "postal": "EH1 1YZ",
+        "address": "56 Cedar Grove"
+      },
+      {
+        "city": "Edinburgh",
+        "postal": "EH1 1YZ",
+        "address": "58 Meadow Close"
+      },
+      {
+        "city": "Edinburgh",
+        "postal": "EH1 1YZ",
+        "address": "60 Birch Gardens"
+      }
+    ]
+  }
+}

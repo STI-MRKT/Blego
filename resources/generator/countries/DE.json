@@ -2265,7 +2265,23 @@
     "Zwiener",
     "Zümsande",
     "Östringer",
-    "Überacker"
+    "Überacker",
+    "Altenburg",
+    "Birkenfeld",
+    "Braunschweig",
+    "Eberstein",
+    "Zuckerkandl",
+    "Feuchtwanger",
+    "Finsterwalder",
+    "Hohenlohe",
+    "Hollenbach",
+    "Kirchheimer",
+    "Klingenberg",
+    "Tannhäuser",
+    "Reichenbach",
+    "Riemenschneider",
+    "Seidensticker",
+    "Weidenreich"
   ],
   "places": [
     {
@@ -4284,7 +4300,7 @@
   "nationalPrefix": "151",
   "schemaVersion": 1,
   "datasetId": "blego-de-female",
-  "datasetVersion": "2026-11-12.2",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -4307,7 +4323,13 @@
       "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
       "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "21efd5fc01406bda0e8a0345f8e3f004f571fac23250318b6c644846c5d1e78a"
+  "checksum": "ec59c4e0d87195a61cfe80521c051599649a9e764d852cdce73af1dc96478c3a"
 }

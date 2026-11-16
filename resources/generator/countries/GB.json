@@ -2040,7 +2040,23 @@
     "Zemlak",
     "Ziemann",
     "Zieme",
-    "Zulauf"
+    "Zulauf",
+    "Rushworth",
+    "Bickerstaff",
+    "Broughton",
+    "Cresswell",
+    "Dalrymple",
+    "Fothergill",
+    "Fortescue",
+    "Hesketh",
+    "Hollingworth",
+    "Lonsdale",
+    "Lyttelton",
+    "Marwood",
+    "Molyneux",
+    "Penrose",
+    "Peverell",
+    "Rivington"
   ],
   "places": [
     {
@@ -2083,7 +2099,7 @@
   "nationalPrefix": "7700",
   "schemaVersion": 1,
   "datasetId": "blego-gb-female",
-  "datasetVersion": "2026-11-12.1",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -2102,7 +2118,13 @@
       "source": "Inherited BLEGO country resources at 6e57eab",
       "verifiedPostalLinks": 0,
       "notes": "Existing format examples retained; independent postal verification pending. Streets are synthetic profile components."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "3a63481e10e4b854135ac1940deee7b824452632a2c17deacea311687d5bf975"
+  "checksum": "4b52e5cbb6878f5d03c4d2e3099eb59522e1fbf74eb289720260ad11234f779f"
 }

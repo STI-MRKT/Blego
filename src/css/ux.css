@@ -171,6 +171,28 @@
 .ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}
 /* Retry is a conditional new map action; .btn otherwise overrides the UA hidden rule. */
 .photo-map [data-map-action="retry"][hidden] { display:none; }
-/* New card-local News actions wrap without changing the original card palette or grid. */
-.news-copy-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
-.news-copy-actions .btn{font-size:11px;padding:6px 8px}
+/* TZ12: actions occupy the original bottom inset, never a new card row. */
+.news-card{container-type:inline-size}
+.news-card .news-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.news-item-card{position:relative}
+.news-copy-actions{position:absolute;right:11px;bottom:0;display:flex;gap:4px;height:12px}
+.news-copy-actions .copy{width:22px;height:12px;padding:0;border:0;border-radius:3px;background:transparent}
+.news-copy-actions .copy svg{width:10px;height:10px}
+.news-copy-actions .copy:focus-visible{outline:2px solid var(--accent);outline-offset:1px;opacity:1}
+@container(max-width:703px){.news-card .news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container(max-width:465px){.news-card .news-grid{grid-template-columns:minmax(0,1fr)}}
+
+
+/* TZ12 generator-only popups use the unchanged FP input/panel tokens. */
+.generator-picker-list{position:fixed;z-index:120;overflow-y:auto;overscroll-behavior:contain;padding:4px;border:1px solid var(--border-2);border-radius:9px;background:var(--panel-2);color:var(--text);box-shadow:var(--shadow-lg);font-size:13px}
+.generator-picker-list [role="option"]{padding:8px 7px;border-radius:5px;cursor:pointer;overflow-wrap:anywhere;line-height:1.35}
+.generator-picker-list [role="option"]:hover,.generator-picker-list .active{background:var(--accent-soft);color:var(--accent)}
+.generator-picker-list [aria-selected="true"]{font-weight:620;color:var(--accent)}
+.generator-picker-list [aria-disabled="true"]{opacity:.5;cursor:default}
+.generator-picker-empty{padding:8px;color:var(--muted);line-height:1.4}
+.ux-generator .biography .bio-field{display:flex;flex-direction:column;align-items:stretch;gap:3px}
+.ux-generator .biography .bio-field>.head-actions{display:flex;flex-wrap:nowrap;align-items:center;gap:8px}
+.ux-generator .biography .bio-value{height:22px;min-height:22px;padding:0;border-color:transparent;border-radius:3px;background:transparent;font-size:13px;font-weight:540;line-height:1.35}
+.ux-generator .biography textarea.bio-value{height:auto;min-height:72px}
+.ux-generator .biography .bio-field>select{margin-top:6px}
+.ux-generator #bio-city{padding-right:30px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8a98' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}

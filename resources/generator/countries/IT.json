@@ -2791,7 +2791,23 @@
     "Zuliani",
     "Zullo",
     "Zumbo",
-    "Zunino"
+    "Zunino",
+    "Alighieri",
+    "Boccaccini",
+    "Boncompagni",
+    "Caccioppoli",
+    "Calamandrei",
+    "Castelnuovo",
+    "Cavalcaselle",
+    "Dallapiccola",
+    "Deledda",
+    "Fusinato",
+    "Ginzburg",
+    "Levi-Montalcini",
+    "Malaparte",
+    "Meneghello",
+    "Morante",
+    "Ortese"
   ],
   "places": [
     {
@@ -4810,7 +4826,7 @@
   "nationalPrefix": "3",
   "schemaVersion": 1,
   "datasetId": "blego-it-female",
-  "datasetVersion": "2026-11-12.2",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -4833,7 +4849,13 @@
       "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
       "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "397d58257721d5aa184e514dffe1e258de00e64c6461ae6badc2363e63f725bb"
+  "checksum": "da638544079d7ab423cd56d935ef296f6af9b1f54e98406be4c44032bb05cb07"
 }
