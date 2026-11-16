@@ -62,6 +62,13 @@ test(
     const country = page.locator('#bio-country');
     await country.waitFor();
     assert.deepEqual(await country.evaluate(style), reference);
+    // Typeahead belongs to its control, even when focus moves within the timeout.
+    await country.focus();
+    await country.press('g');
+    await page.locator('#bio-type').focus();
+    await page.locator('#bio-type').press('t');
+    await page.locator('#bio-type').press('Enter');
+    assert.equal(await page.locator('#bio-type').inputValue(), 'tech');
     await country.selectOption('US');
     await page.waitForFunction(() => document.querySelectorAll('#bio-cities option').length > 0);
     // Two same-name cities must retain the exact selected postal identity.

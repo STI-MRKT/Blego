@@ -141,7 +141,7 @@ document.addEventListener('keydown', event => {
     highlight(key === 'Home' ? 0 : choices.length - 1);
   } else if (!city && key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
     event.preventDefault();
-    search = Date.now() - searchTime > 700 ? key : search + key;
+    search = owner !== input || Date.now() - searchTime > 700 ? key : search + key;
     searchTime = Date.now();
     if (owner !== input) open(input);
     const index = choices.findIndex(choice => normalize(choice.label).startsWith(normalize(search)));

@@ -1,12 +1,12 @@
 # ТЕХНИЧЕСКОЕ ЗАДАНИЕ №12
 # BLEGO — восстановление дизайна News, унификация ФП / BIO и расширение генератора
 
-**Исполнитель:** Codex — Senior Software Engineer / Electron Developer  
-**Проект:** BLEGO Local Studio  
-**Репозиторий:** https://github.com/STI-MRKT/Blego  
-**Основная платформа:** macOS ARM64, Apple Silicon  
-**Тип задачи:** визуальная доработка и расширение существующих словарей  
-**Приоритет:** P1  
+**Исполнитель:** Codex — Senior Software Engineer / Electron Developer
+**Проект:** BLEGO Local Studio
+**Репозиторий:** https://github.com/STI-MRKT/Blego
+**Основная платформа:** macOS ARM64, Apple Silicon
+**Тип задачи:** визуальная доработка и расширение существующих словарей
+**Приоритет:** P1
 **Требование:** сохранить всю существующую функциональность BLEGO.
 
 ---

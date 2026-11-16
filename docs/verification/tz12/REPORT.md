@@ -65,6 +65,13 @@ The coordinator returned the following actual results during implementation:
 | macOS ARM64 installed application | Existing native workflow configured; record run/artifact after execution | BLOCKED — pending |
 | DMG / ZIP SHA-256 | Produced only after installed-app acceptance | BLOCKED — pending |
 
+Final review follow-up: the typeahead buffer now resets when keyboard focus moves
+to another picker. Its focused GUI passed (1/1, 6.4 s) after the earlier complete
+60-scenario GUI run; this one-line control change has no dictionary/backend impact.
+Final lint passed (293 JavaScript files and Prettier), and branch-wide
+`git diff --check 99c5a3e` passed. Copied-spec trailing spaces were normalized and
+five superseded auxiliary captures removed; all 35 TZ12 popup captures remain.
+
 Failures found and resolved: the removed native datalist broke an existing stale-city
 observation (hidden compatible options restored); an immediate resize observation
 raced layout (control ResizeObserver, width clamp and condition-based test wait);
