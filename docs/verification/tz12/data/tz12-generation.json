@@ -1,0 +1,19 @@
+{
+  "checkpoints": [
+    {
+      "count": 100,
+      "elapsedMs": 318.55656999999997
+    },
+    {
+      "count": 1000,
+      "elapsedMs": 3346.5102729999994
+    }
+  ],
+  "uniqueContacts": 1000,
+  "strictProfiles": 6,
+  "strictError": "POOL_EXHAUSTED",
+  "p50Ms": 2.6985310000000027,
+  "p95Ms": 6.698613000000023,
+  "maxMs": 23.10961300000008,
+  "nameCapacity": 764339
+}

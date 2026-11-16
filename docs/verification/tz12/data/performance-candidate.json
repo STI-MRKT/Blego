@@ -1,0 +1,28 @@
+{
+  "project": "/workspace/BLEGO-final",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "method": "Three independent 100-profile SQLite stores, same country/type sequence, explicit bulk consent, production random selection. Includes registry and rules hashing; not a cold-cache scientific benchmark.",
+  "samples": [
+    {
+      "totalMs": 260.57963999999987,
+      "p50Ms": 2.2960390000000075,
+      "p95Ms": 4.038247999999996,
+      "maxMs": 8.803512000000012
+    },
+    {
+      "totalMs": 224.5658560000001,
+      "p50Ms": 2.1859550000000354,
+      "p95Ms": 3.078790999999967,
+      "maxMs": 5.007965000000013
+    },
+    {
+      "totalMs": 269.490866,
+      "p50Ms": 2.064724999999953,
+      "p95Ms": 4.370321999999987,
+      "maxMs": 27.880943000000002
+    }
+  ]
+}
