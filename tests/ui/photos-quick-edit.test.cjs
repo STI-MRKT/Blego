@@ -33,7 +33,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
     );
@@ -78,8 +78,14 @@ test(
     await page.locator('#gps-manual summary').click();
     await page.locator('[name="gps-latitude"]').fill('0');
     await page.locator('[name="gps-longitude"]').fill('0');
-    await page.getByRole('button', { name: 'Preview changes', exact: true }).click();
-    await page.locator('[data-metadata-plan]').waitFor();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
+    assert.equal(
+      await page.locator('[data-metadata-plan]').count(),
+      0,
+      'primary Photos has no technical preview panel'
+    );
     await capture('photos-preview');
     assert.equal(fs.readdirSync(out).length, 0);
     await page.getByRole('button', { name: 'Save copies', exact: true }).click();
@@ -103,7 +109,9 @@ test(
       const { state } = await import('/js/state.js');
       return state.metadataExport.runId;
     });
-    await page.getByRole('button', { name: 'Preview changes', exact: true }).click();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
     await page.getByRole('button', { name: 'Save copies', exact: true }).click();
     await page.getByRole('button', { name: 'Cancel export', exact: true }).click();
     await waitForAsync(

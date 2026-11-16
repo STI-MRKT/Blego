@@ -1,0 +1,96 @@
+{
+  "at": "2026-11-16T06:11:31.898Z",
+  "host": "linux-x64",
+  "targets": [
+    {
+      "target": "https://www.facebook.com/NASA",
+      "result": {
+        "status": "NETWORK_ERROR",
+        "source": "public_request",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "nasa",
+        "canonicalUrl": "https://www.facebook.com/nasa",
+        "availability": "network_error",
+        "reasonCode": "FB_CONNECTION_REFUSED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:11:21.817Z",
+        "durationMs": 5060,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-0",
+        "evidenceSummary": "FB_CONNECTION_REFUSED"
+      },
+      "display": {
+        "status": "NETWORK_ERROR",
+        "tone": "",
+        "description": ""
+      },
+      "proof": null,
+      "acceptance": "BLOCKED"
+    },
+    {
+      "target": "https://www.facebook.com/meta",
+      "result": {
+        "status": "NETWORK_ERROR",
+        "source": "public_request",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "meta",
+        "canonicalUrl": "https://www.facebook.com/meta",
+        "availability": "network_error",
+        "reasonCode": "FB_CONNECTION_REFUSED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:11:26.868Z",
+        "durationMs": 5050,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-1",
+        "evidenceSummary": "FB_CONNECTION_REFUSED"
+      },
+      "display": {
+        "status": "NETWORK_ERROR",
+        "tone": "",
+        "description": ""
+      },
+      "proof": null,
+      "acceptance": "BLOCKED"
+    },
+    {
+      "target": "https://www.facebook.com/zuck",
+      "result": {
+        "status": "NETWORK_ERROR",
+        "source": "public_request",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "zuck",
+        "canonicalUrl": "https://www.facebook.com/zuck",
+        "availability": "network_error",
+        "reasonCode": "FB_CONNECTION_REFUSED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:11:31.897Z",
+        "durationMs": 5029,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-2",
+        "evidenceSummary": "FB_CONNECTION_REFUSED"
+      },
+      "display": {
+        "status": "NETWORK_ERROR",
+        "tone": "",
+        "description": ""
+      },
+      "proof": null,
+      "acceptance": "BLOCKED"
+    }
+  ],
+  "positivePublicAcceptance": "BLOCKED",
+  "confirmedUnavailableTarget": {
+    "status": "BLOCKED",
+    "reason": "No independently confirmed unavailable public target supplied; not inferred from random IDs or HTTP status"
+  },
+  "scope": "Live anonymous transport/inspector. Controlled HTML tests are separate and cannot substitute for live positive acceptance."
+}

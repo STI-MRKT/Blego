@@ -9,7 +9,19 @@ const STATUSES = {
   cancelled: 'CANCELLED'
 };
 function networkReason(error) {
-  const code = error?.code || error?.cause?.code || '';
+  const raw =
+    error?.code || error?.cause?.code || /net::(ERR_[A-Z_]+)/.exec(error?.message || '')?.[1] || '';
+  const code =
+    {
+      ERR_NAME_NOT_RESOLVED: 'ENOTFOUND',
+      ERR_CONNECTION_REFUSED: 'ECONNREFUSED',
+      ERR_CONNECTION_RESET: 'ECONNRESET',
+      ERR_CONNECTION_CLOSED: 'ECONNRESET',
+      ERR_CONNECTION_TIMED_OUT: 'ETIMEDOUT',
+      ERR_TIMED_OUT: 'ETIMEDOUT',
+      ERR_INTERNET_DISCONNECTED: 'ENETDOWN',
+      ERR_ADDRESS_UNREACHABLE: 'EHOSTUNREACH'
+    }[raw] || raw;
   if (error?.name === 'TimeoutError' || ['ETIMEDOUT', 'ESOCKETTIMEDOUT'].includes(code))
     return 'FB_TIMEOUT';
   if (['ENOTFOUND', 'EAI_AGAIN', 'ENODATA'].includes(code)) return 'FB_DNS_ERROR';

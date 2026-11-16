@@ -12,7 +12,7 @@ function cellHTML(record, field) {
   return `<td><span class="classifier-value${long ? ' mono' : ''}">${esc(shown)}</span><button class="copy" data-action="${field.key === 'cookies' ? 'import-cookie-copy' : 'classifier-copy-cell'}" data-row="${esc(record.id)}" data-field="${field.key}" aria-label="Копировать ${field.key === 'cookies' ? 'cookie целиком' : esc(field.label)}" ${!raw ? 'disabled' : ''}>${I.copy}</button></td>`;
 }
 
-const extraLabels = {profileUrl:'Ссылка профиля',mailServiceUrl:'Почтовый сервис',twoFactorUrl:'Ссылка 2FA',avatarUrl:'Аватар',documentUrl:'Документ',limit:'Лимит',fpStatus:'FP',sentCount:'Отправлено',friendsInfo:'Друзья'};
+const extraLabels = {login:'Логин',twoFactorCode:'Код 2FA',profileUrl:'Ссылка профиля',mailServiceUrl:'Почтовый сервис',twoFactorUrl:'Ссылка 2FA',avatarUrl:'Аватар',documentUrl:'Документ',limit:'Лимит',fpStatus:'FP',sentCount:'Отправлено',friendsInfo:'Друзья'};
 const warningLabels = {IDENTITY_CONFLICT:'ID в источниках различаются',COOKIE_ID_CONFLICT:'ID не совпадает с владельцем cookie',AMBIGUOUS_FIELD:'Несколько вариантов поля',INVALID_FIELD:'Неверное значение поля',UNRECOGNIZED_VALUES:'Остались нераспознанные значения',INVALID_JSON_CELL:'Повреждённый JSON',INVALID_COOKIE_JSON:'Повреждённый JSON cookie',UNCLOSED_QUOTE:'Незакрытая кавычка',DUPLICATE:'Повтор записи',MISSING_CELL:'Пропущено поле',EXTRA_CELL:'Дополнительное поле'};
 function detailValue(record, key, label, raw) {
   const revealed=state.classifierRevealed?.[key]===true;
@@ -32,7 +32,7 @@ function recordDetailsHTML(p, confirmed) {
 function optionsHTML(p) {
   const opts = state.classifierOptions || {};
   return `<div class="head-actions"><label class="fl">Заголовки<select class="input" id="classifier-headers">${[['','Авто'],['yes','Есть'],['no','Нет']].map(([v,label])=>`<option value="${v}" ${opts.headers===v?'selected':''}>${label}</option>`).join('')}</select></label>
-  <label class="fl">Порядок колонок<select class="input" id="classifier-schema">${[['','Определить поля'],['core7','Основные 7 полей'],['full10','Все 10 полей без №'],['numbered11','Все 11 полей с №']].map(([v,label])=>`<option value="${v}" ${opts.schema===v?'selected':''}>${label}</option>`).join('')}</select></label>
+  <label class="fl">Порядок колонок<select class="input" id="classifier-schema">${[['','Определить поля'],['credentials6','Логин · пароль · почта · пароль почты · 2FA · ID'],['account5','Логин · пароль · ID · cookie · User-Agent'],['mixedA','Смешанный формат A'],['core7','Основные 7 полей'],['full10','Все 10 полей без №'],['numbered11','Все 11 полей с №']].map(([v,label])=>`<option value="${v}" ${opts.schema===v?'selected':''}>${label}</option>`).join('')}</select></label>
   <label class="fl">Кодировка<select class="input" id="import-encoding">${[['','Авто / UTF-8'],['utf-8','UTF-8'],['utf-16le','UTF-16LE'],['utf-16be','UTF-16BE'],['windows-1251','Windows-1251']].map(([v,label])=>`<option value="${v}" ${state.importEncoding===v?'selected':''}>${label}</option>`).join('')}</select></label></div>
   ${p ? `<p class="sub">Уточните поля, которые не удалось определить.</p><div class="head-actions">${p.sourceColumns.map(c=>`<label class="fl">${esc(c)}<select class="input" data-classifier-map="${esc(c)}"><option value="">Авто</option>${CLASSIFIER_FIELDS.slice(1).map(f=>`<option value="${f.key}" ${opts.mapping?.[c]===f.key?'selected':''}>${esc(f.label)}</option>`).join('')}</select></label>`).join('')}</div><button class="btn" data-action="classifier-apply">Применить соответствие</button>` : ''}`;
 }

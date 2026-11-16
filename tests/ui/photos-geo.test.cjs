@@ -27,7 +27,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     assert.equal(await page.locator('#photo-input').count(), 1);
     await page.locator('#photo-input').setInputFiles(files);
@@ -81,8 +81,14 @@ test(
     await app.evaluate(({ dialog }, out) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [out] });
     }, out);
-    await page.getByRole('button', { name: 'Preview changes', exact: true }).click();
-    await page.locator('[data-metadata-plan]').waitFor();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
+    assert.equal(
+      await page.locator('[data-metadata-plan]').count(),
+      0,
+      'primary Photos has no technical preview panel'
+    );
     assert.deepEqual(await coords(), changed);
     await page.getByRole('button', { name: 'Save copies', exact: true }).click();
     await waitForAsync(page, async () => {

@@ -1,11 +1,27 @@
 const { normalizeTarget } = require('./normalize.cjs');
 const { STATUSES } = require('./diagnostics.cjs');
-const PARSER_VERSION = 'public-evidence-v4';
+const PARSER_VERSION = 'public-evidence-v5';
+function decodeEntities(value) {
+  return String(value).replace(
+    /&(?:#(x[0-9a-f]+|[0-9]+)|(amp|quot|apos|lt|gt|nbsp|rsquo));/gi,
+    (all, number, name) => {
+      if (number) {
+        const n = number[0].toLowerCase() === 'x' ? parseInt(number.slice(1), 16) : Number(number);
+        return n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff)
+          ? String.fromCodePoint(n)
+          : '�';
+      }
+      return { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ', rsquo: '’' }[
+        name.toLowerCase()
+      ];
+    }
+  );
+}
 function attributes(tag) {
   return Object.fromEntries(
     [...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)].map((match) => [
       match[1].toLowerCase(),
-      (match[2] ?? match[3] ?? match[4]).replaceAll('&amp;', '&')
+      decodeEntities(match[2] ?? match[3] ?? match[4])
     ])
   );
 }
@@ -66,11 +82,11 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       .replace(/<[^>]*>/g, ' ')
       .replace(/&(?:#0?39|apos);/gi, "'")
       .replace(/&(?:#8217|rsquo);/gi, '’')
-      .replace(/&nbsp;/gi, ' ')
+      .replace(/&(?:#[^;]+|[a-z]+);/gi, decodeEntities)
       .replace(/\s+/g, ' ')
       .trim();
   const unavailable =
-    /^(?:(?:this )?content isn['’]t available(?: right now)?|(?:this )?page isn['’]t available|page not found)[.!]?$/i;
+    /^(?:(?:this )?content isn['’]t available(?: right now)?|(?:this )?page isn['’]t available|page not found|этот контент(?: сейчас)? недоступен|эта страница недоступна|esta página no está disponible|ce contenu n['’]est pas disponible|este conteúdo não está disponível)[.!]?$/i;
   const unavailableMessage =
     unavailable.test(text(markup)) ||
     [...markup.matchAll(/<(h1|h2|title)\b[^>]*>([\s\S]*?)<\/\1>/gi)].some((match) =>
@@ -104,11 +120,32 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       (a) => a.rel?.toLowerCase() === 'canonical' && sameTarget(a.href, target)
     );
     const profile = meta.some((a) => a.property === 'og:type' && a.content === 'profile');
+    const og = (key) =>
+      meta.filter((a) => a.property?.toLowerCase() === 'og:' + key).map((a) => a.content || '');
+    const ogUrls = og('url'),
+      titles = og('title'),
+      descriptions = og('description');
+    const matchingPreview =
+      ogUrls.length === 1 &&
+      sameTarget(ogUrls[0], target) &&
+      titles.length === 1 &&
+      titles[0].trim().length > 0;
+    const headingMatches = [...markup.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].some(
+      (m) => text(m[1]) === text(titles[0] || '')
+    );
+    const bodyMarkup = markup.replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, '');
+    const description = descriptions.length === 1 ? text(descriptions[0]) : '';
+    const substantive =
+      description.length >= 40 &&
+      description.length <= 4000 &&
+      text(bodyMarkup).includes(description);
+    const visiblePage = matchingPreview && canonical && headingMatches && substantive;
+
     let person = false,
       contradictoryIdentity = false;
-    const contradictoryCanonical = links.some(
-      (a) => a.rel?.toLowerCase() === 'canonical' && !sameTarget(a.href, target)
-    );
+    const contradictoryCanonical =
+      links.some((a) => a.rel?.toLowerCase() === 'canonical' && !sameTarget(a.href, target)) ||
+      ogUrls.some((url) => !sameTarget(url, target));
     for (const match of body.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (attributes(match[1]).type !== 'application/ld+json') continue;
       try {
@@ -160,6 +197,16 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       availability = 'profile_visible';
       reasonCode = 'MATCHED_CANONICAL_AND_PERSON';
     } else if (
+      status === 200 &&
+      visiblePage &&
+      !contradictoryCanonical &&
+      !contradictoryIdentity &&
+      sameTarget(url, target)
+    ) {
+      availability = 'profile_visible';
+      reasonCode = 'MATCHED_PUBLIC_PAGE_CONTENT';
+      facts = { name: text(titles[0]), objectType: 'PublicPage' };
+    } else if (
       unavailableMessage &&
       sameTarget(url, target) &&
       !contradictoryCanonical &&
@@ -168,6 +215,8 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
       availability = 'unavailable';
       reasonCode = 'PAGE_UNAVAILABLE_MESSAGE';
     }
+    if (availability === 'unknown' && matchingPreview && !contradictoryCanonical)
+      reasonCode = 'PUBLIC_PREVIEW_ONLY';
     if (availability === 'unknown' && status !== 200) reasonCode = `HTTP_${status}`;
   }
   if (!complete && availability === 'unknown') reasonCode = 'INCOMPLETE_RESPONSE';
@@ -204,7 +253,7 @@ function inspectResponse(target, { status, body = '', url = target.canonicalUrl 
     source: 'public_page',
     profileName,
     avatarUrl,
-    objectType: visible ? 'Person' : null,
+    objectType: visible ? facts?.objectType || 'Person' : null,
     target: target.target,
     canonicalUrl: target.canonicalUrl,
     availability,

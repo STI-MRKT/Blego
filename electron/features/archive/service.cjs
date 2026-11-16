@@ -21,6 +21,8 @@ function createArchiveService({ store, classification, root = store.root, fault 
   async function saveArchive(operationId, options = {}) {
     if (typeof operationId !== 'string') throw Error('INVALID_OPERATION');
     const confirmed = classification.getConfirmed(operationId, options.recordId);
+    if (options.includeOriginal && confirmed.containsTwoFactor)
+      throw Error('ARCHIVE_2FA_ORIGINAL_NOT_ALLOWED');
     operationId = confirmed.operationId;
     if (active.has(operationId)) return active.get(operationId);
     const job = (async () => {

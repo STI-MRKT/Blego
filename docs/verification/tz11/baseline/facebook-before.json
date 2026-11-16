@@ -1,0 +1,27 @@
+{
+  "direct": [
+    {
+      "target": "https://www.facebook.com/meta",
+      "error": "ECONNREFUSED"
+    },
+    {
+      "target": "https://www.facebook.com/NASA",
+      "error": "ECONNREFUSED"
+    }
+  ],
+  "configuredHttpsRoute": {
+    "target": "https://www.facebook.com/NASA",
+    "http": 200,
+    "bodyBytes": 523070,
+    "openGraphTargetMatches": true,
+    "visibleBodyContent": false,
+    "scriptTypes": {
+      "application/json": 32,
+      "js": 45
+    },
+    "result": "UNKNOWN",
+    "reason": "INSUFFICIENT_EVIDENCE",
+    "acceptance": "BLOCKED",
+    "note": "curl through configured environment route; not proof that direct Electron transport succeeded. Full HTML and remote image query values not persisted."
+  }
+}

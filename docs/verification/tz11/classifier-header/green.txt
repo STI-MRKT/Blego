@@ -1,0 +1,37 @@
+✔ TZ11 csv 2FA headers preserve codes separately from links and prevent raw archive disclosure (170.789504ms)
+✔ TZ11 json 2FA headers preserve codes separately from links and prevent raw archive disclosure (108.587798ms)
+✔ TZ11 worker recognizes all labelled formats and keeps exact source, core7 and 2FA privacy (1365.550715ms)
+✔ TZ11 TXT: 2fa header code (45.16902ms)
+✔ TZ11 TXT: 2fa header URL (1.892263ms)
+✔ TZ11 TXT: slash header protects URL and UA (6.540846ms)
+✔ TZ11 TXT: labelled : (2.013263ms)
+✔ TZ11 TXT: labelled :: (1.13562ms)
+✔ TZ11 TXT: labelled ; (4.092666ms)
+✔ TZ11 TXT: labelled | (1.337905ms)
+✔ TZ11 TXT: labelled  /  (3.885347ms)
+✔ TZ11 TXT: labelled  \\  (1.834136ms)
+✔ TZ11 TXT: B explicitly confirmed (1.186783ms)
+✔ TZ11 TXT: B header (1.444767ms)
+✔ TZ11 TXT: C confirmed (1.249475ms)
+✔ TZ11 TXT: A confirmed mixed (2.425386ms)
+✔ TZ11 TXT: missing mail password (1.194141ms)
+✔ TZ11 TXT: empty mail password (1.664798ms)
+✔ TZ11 TXT: backup separate (1.036465ms)
+✔ TZ11 TXT: quoted password separators (1.636042ms)
+✔ TZ11 TXT: URL paths and UA preserved (1.007598ms)
+✔ TZ11 TXT: nested multiline cookie (2.539843ms)
+✔ TZ11 TXT: Russian and English comments (12.688895ms)
+✔ TZ11 TXT: 2fa URL is distinct (1.426269ms)
+✔ TZ11 TXT: no invented passwords in bare tuple (1.148553ms)
+✔ TZ11 TXT: mixed records do not transfer secrets (1.194254ms)
+✔ TZ11 TXT: repeat layout (1.537289ms)
+✔ TZ11 TXT: unconfirmed filesystem path untouched (1.319756ms)
+✔ TZ11 TXT: conflicting email not selected (2.465349ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1516.236853

@@ -191,8 +191,8 @@ test(
     await f.app.evaluate(({ ipcMain }) =>
       ipcMain._invokeHandlers.set('local:biography', globalThis.bioOriginal)
     );
-    // Each field can be regenerated; employer regeneration keeps its dependent position compatible.
-    for (const field of Object.keys(biography.values)) {
+    // Existing independent fields regenerate; new cities regenerate together with the organization.
+    for (const field of Object.keys(biography.values).filter((key) => !key.endsWith('City'))) {
       await page.locator(`[data-action="bio-regenerate"][data-field="${field}"]`).click();
       await page.waitForFunction(
         (field) =>
@@ -470,7 +470,13 @@ test(
     f.forget();
     page = await f.launch();
     await page.locator('[data-tab="bio"]').click();
-    assert.equal(await page.locator('#bio-mainBio').inputValue(), expected);
+    const restored = await page.locator('#bio-mainBio').inputValue();
+    assert.ok(['✨', '📸', '🎨', '👗'].some((emoji) => restored === `${expected} ${emoji}`));
+    assert.equal(
+      (await page.evaluate(async () => (await window.blego.biography({ action: 'read' })).record))
+        .values.mainBio,
+      restored
+    );
   }
 );
 test(

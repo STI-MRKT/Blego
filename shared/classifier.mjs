@@ -1,10 +1,12 @@
 import { discoverLayouts, matchingLayout } from './classifier-layouts.mjs';
 import {
   EXTENDED_FIELDS,
+  extendedFieldForHeader,
   recognizeValue,
   cookieInfo,
   profileIdentity,
-  personName
+  personName,
+  safeUrl
 } from './classifier-recognition.mjs';
 // Production rules for the explicit synthetic-record contract in GitHub issue #2.
 export const CLASSIFIER_FIELDS = [
@@ -23,6 +25,22 @@ export const CLASSIFIER_FIELDS = [
 ].map(([key, label]) => ({ key, label }));
 export const CORE_FIELDS = CLASSIFIER_FIELDS.slice(1, 8).map((f) => f.key);
 export const SCHEMAS = {
+  credentials6: ['login', 'password', 'email', 'emailPassword', 'twoFactorCode', 'accountId'],
+  account5: ['login', 'password', 'accountId', 'cookies', 'userAgent'],
+  mixedA: [
+    'email',
+    'token',
+    'userAgent',
+    null,
+    'cookies',
+    'password',
+    'email',
+    'password',
+    'emailPassword',
+    'birthDate',
+    'accountId',
+    'fullName'
+  ],
   core7: CORE_FIELDS,
   full10: CLASSIFIER_FIELDS.slice(1, 11).map((f) => f.key),
   numbered11: CLASSIFIER_FIELDS.slice(0, 11).map((f) => f.key)
@@ -63,7 +81,15 @@ const aliases = {
 const aliasMap = new Map(
   Object.entries(aliases).flatMap(([k, names]) => names.map((n) => [normalize(n), k]))
 );
-export const fieldForHeader = (header) => aliasMap.get(normalize(header)) || null;
+export const fieldForHeader = (header, value) => {
+  const field = aliasMap.get(normalize(header)) || extendedFieldForHeader(header);
+  return field === 'twoFactorUrl' &&
+    normalize(header) === '2fa' &&
+    value !== undefined &&
+    !safeUrl(value)
+    ? 'twoFactorCode'
+    : field;
+};
 const countryCodes = new Set(
   'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW'.split(
     ' '
@@ -103,7 +129,7 @@ export function classifyRecords(parsed, options = {}) {
     Object.entries(mapping).some(
       ([k, v]) =>
         !parsed.columns.includes(k) ||
-        !CLASSIFIER_FIELDS.some((f) => f.key === v && v !== 'rowNumber')
+        ![...CLASSIFIER_FIELDS.slice(1).map((f) => f.key), ...EXTENDED_FIELDS].includes(v)
     )
   )
     throw Object.assign(Error('INVALID_MAPPING'), { code: 'INVALID_MAPPING' });
@@ -186,8 +212,13 @@ export function classifyRecords(parsed, options = {}) {
       if (typeof value === 'object') value = entry.rawText ?? JSON.stringify(value);
       else if (typeof value === 'number') value = entry.rawText ?? String(value);
       else value = String(value);
-      const named = parsed.headerless ? null : fieldForHeader(entry.header ?? entry.column);
-      const schema = options.schema ? SCHEMAS[options.schema][position] : null;
+      const named = parsed.headerless ? null : fieldForHeader(entry.header ?? entry.column, value);
+      const schema =
+        options.schema &&
+        (!['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
+          entries.length === SCHEMAS[options.schema].length)
+          ? SCHEMAS[options.schema][position]
+          : null;
       const mapped = Object.hasOwn(mapping, entry.column) ? mapping[entry.column] : null;
       const rowMapped = Object.hasOwn(rowMapping, entry.column) ? rowMapping[entry.column] : null;
       const found = recognized[position];
@@ -218,7 +249,7 @@ export function classifyRecords(parsed, options = {}) {
                 ? 4
                 : 1;
       const original = { ...entry, value, location: source.location };
-      if (parsed.structured && !rowMapped && !named && !schema && !mapped && found.key)
+      if (parsed.structured && (!found.explicit || (!rowMapped && !named && !schema && !mapped)))
         value = found.value;
       if (parsed.structured && found.invalidJSON) report('INVALID_COOKIE_JSON', entry.column);
       if (parsed.structured && found.invalid && !rowMapped && !mapped) {
@@ -250,7 +281,8 @@ export function classifyRecords(parsed, options = {}) {
     });
     for (const [key, values] of candidates) {
       const best = Math.max(...values.map((v) => v.priority));
-      const winners = values.filter((v) => v.priority === best);
+      const bestValues = values.filter((v) => v.priority === best);
+      const winners = [...new Map(bestValues.map((v) => [v.value, v])).values()];
       const valid =
         winners.length === 1 &&
         !(key === 'birthDate' && winners[0].value && !validBirthDate(winners[0].value)) &&
@@ -270,7 +302,8 @@ export function classifyRecords(parsed, options = {}) {
         ];
       } else report(winners.length > 1 ? 'AMBIGUOUS_FIELD' : 'INVALID_FIELD', key);
       for (const v of values)
-        if (v.value !== '' && (!valid || v !== winners[0])) unrecognized.push(v.original);
+        if (v.value !== '' && (!valid || v.value !== winners[0].value))
+          unrecognized.push(v.original);
     }
     if (parsed.structured) {
       if (identityConflict) report('IDENTITY_CONFLICT', 'accountId');

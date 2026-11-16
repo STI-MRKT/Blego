@@ -1,4 +1,6 @@
 export const EXTENDED_FIELDS = [
+  'login',
+  'twoFactorCode',
   'profileUrl',
   'mailServiceUrl',
   'twoFactorUrl',
@@ -11,6 +13,8 @@ export const EXTENDED_FIELDS = [
 ];
 const extendedAliases = new Map(
   Object.entries({
+    login: ['login', 'username', 'логин'],
+    twoFactorCode: ['twofactorcode', '2facode', '2faкод', 'код2fa'],
     profileUrl: ['profileurl', 'facebookurl', 'profile'],
     mailServiceUrl: ['mailservice', 'mailserviceurl'],
     twoFactorUrl: ['2fa', 'twofactorurl'],
@@ -22,6 +26,7 @@ const extendedAliases = new Map(
     friendsInfo: ['friend', 'friends', 'friendsinfo']
   }).flatMap(([key, names]) => names.map((name) => [name, key]))
 );
+export const extendedFieldForHeader = (s) => extendedAliases.get(normalize(String(s))) || null;
 const normalize = (s) => s.toLowerCase().replace(/[\s_-]+/g, '');
 export function safeUrl(value) {
   try {
@@ -110,7 +115,7 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
       value = m[2];
     }
   }
-  if (explicit && /^"[\s\S]*"$/.test(value)) {
+  if (/^"[\s\S]*"$/.test(value)) {
     try {
       const v = JSON.parse(value);
       if (typeof v === 'string') value = v;
@@ -118,6 +123,8 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
       /* keep exact malformed payload for review */
     }
   }
+  if (key === 'twoFactorUrl' && normalize(m?.[1] || '') === '2fa' && !safeUrl(value))
+    key = 'twoFactorCode';
   if (key) {
     const invalid =
       (['email', 'backupEmail'].includes(key) && value && !emailValid(value)) ||

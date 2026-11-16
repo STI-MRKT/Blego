@@ -130,7 +130,12 @@ test('legacy BIO opens without duplicate records, preserves original FP JSON, an
   let bio = createBiographyWorkspace({ store });
   const legacy = bio.read().record;
   assert.notEqual(legacy.id, p.id);
-  assert.deepEqual(legacy.values, p.biography);
+  assert.deepEqual(legacy.values, {
+    ...p.biography,
+    employerCity: '',
+    universityCity: '',
+    schoolCity: ''
+  });
   for (let i = 0; i < 3; i++) bio.open(legacy.id);
   assert.equal(
     store.db.prepare("SELECT COUNT(*) n FROM kv WHERE key GLOB 'bio:record:*'").get().n,
@@ -242,7 +247,12 @@ test('legacy profiles with disabled optional city remain readable/editable witho
   const id = 'legacy:' + fp.id;
   assert.equal(bio.read().parameters.city, '');
   assert.equal(bio.history().total, 1);
-  assert.deepEqual(bio.open(id).record.values, fp.biography);
+  assert.deepEqual(bio.open(id).record.values, {
+    ...fp.biography,
+    employerCity: '',
+    universityCity: '',
+    schoolCity: ''
+  });
   bio.save({
     recordId: id,
     revision: 0,

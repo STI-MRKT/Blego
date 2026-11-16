@@ -1,0 +1,13 @@
+✔ stable v3 parses detections.risk, never confidence, and requests only the verified IP (30.084494ms)
+✔ v3 refuses mismatched IP, malformed/status errors; safely labels 401/403/429 (4.765235ms)
+✔ provider TTL, cancellation and errors cannot leak a key or invent stale trust (8.313933ms)
+✔ anonymous delisting shortens TTL only when it is in the future (2.746718ms)
+✔ local quality requires three actual attempts and separates loss, RTT and jitter from reputation (0.414838ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51.535898

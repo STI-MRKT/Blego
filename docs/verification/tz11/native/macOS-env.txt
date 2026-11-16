@@ -1,0 +1,8 @@
+ProductName:		macOS
+ProductVersion:		15.8.2
+BuildVersion:		24H232
+arm64
+VirtualMac2,1
+Apple M1 (Virtual)
+0a1918cb5d3d70517c2e3e5ad1e6038eb6806b30
+QA only; not notarized or Developer ID signed

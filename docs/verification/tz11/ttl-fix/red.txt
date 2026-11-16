@@ -1,0 +1,35 @@
+✔ stable v3 parses detections.risk, never confidence, and requests only the verified IP (31.191239ms)
+✔ v3 refuses mismatched IP, malformed/status errors; safely labels 401/403/429 (5.241849ms)
+✔ provider TTL, cancellation and errors cannot leak a key or invent stale trust (12.26534ms)
+✖ anonymous delisting shortens TTL only when it is in the future (2.143404ms)
+✔ local quality requires three actual attempts and separates loss, RTT and jitter from reputation (0.351236ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56.633531
+
+✖ failing tests:
+
+test at tests/unit/proxy-v3.test.cjs:115:1
+✖ anonymous delisting shortens TTL only when it is in the future (2.143404ms)
+  AssertionError [ERR_ASSERTION]: past
+  + actual - expected
+  
+  + '2030-01-01T00:00:00.000Z'
+  - '2030-01-01T00:01:00.000Z'
+                    ^
+  
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/proxy-v3.test.cjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '2030-01-01T00:00:00.000Z',
+    expected: '2030-01-01T00:01:00.000Z',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

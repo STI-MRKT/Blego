@@ -1,0 +1,79 @@
+✖ TZ11 BIO generates real organization pairs in eight countries, preserves provenance and independent saved manual values (25.236215ms)
+✖ TZ11 old combined standalone rows are adapted on read without writes or duplicate history (15.556059ms)
+✖ TZ11 exact catalog adaptation separates names/cities, preserves unknown legacy labels and official city names (1.605597ms)
+✖ TZ11 city edits invalidate late organization and position suggestions as a pair (2.757587ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10084.500463
+
+✖ failing tests:
+
+test at tests/integration/biography-v143.test.cjs:5:1
+✖ TZ11 BIO generates real organization pairs in eight countries, preserves provenance and independent saved manual values (25.236215ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'employer')
+      at /workspace/BLEGO-final/tests/integration/biography-v143.test.cjs:13:70
+      at Array.find (<anonymous>)
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/biography-v143.test.cjs:13:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/integration/biography-v143.test.cjs:25:1
+✖ TZ11 old combined standalone rows are adapted on read without writes or duplicate history (15.556059ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'Ralph Lauren Corporation — New York'
+  - 'Ralph Lauren Corporation'
+                             ^
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/biography-v143.test.cjs:32:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Ralph Lauren Corporation — New York',
+    expected: 'Ralph Lauren Corporation',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/biography-v143.test.cjs:2:1
+✖ TZ11 exact catalog adaptation separates names/cities, preserves unknown legacy labels and official city names (1.605597ms)
+  Error: Cannot find module '../../electron/features/generator/biography-values.cjs'
+  Require stack:
+  - /workspace/BLEGO-final/tests/unit/biography-v143.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at require (node:internal/modules/helpers:157:16)
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/biography-v143.test.cjs:3:43)
+      at Test.runInAsyncScope (node:async_hooks:227:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '/workspace/BLEGO-final/tests/unit/biography-v143.test.cjs' ]
+  }
+
+test at tests/unit/biography-v143.test.cjs:16:1
+✖ TZ11 city edits invalidate late organization and position suggestions as a pair (2.757587ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/biography-v143.test.cjs:21:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,64 @@
+✖ review: 2FA source confidentiality survives remapping and schema removal without authorizing core or original export (125.802253ms)
+✖ review: composite URLs and unframed password separators stay byte-exact (36.895818ms)
+✖ review: confirmed colon records keep trailing empty fields and never consume the next account (3.872225ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.694634
+
+✖ failing tests:
+
+test at tests/integration/classifier-review-v143.test.cjs:5:1
+✖ review: 2FA source confidentiality survives remapping and schema removal without authorizing core or original export (125.802253ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/classifier-review-v143.test.cjs:25:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /CONFIDENTIAL_FIELD_MAPPING/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-review-v143.test.cjs:14:1
+✖ review: composite URLs and unframed password separators stay byte-exact (36.895818ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'https://example.test/path'
+  - 'https://example.test/path:password=SYNTHETIC'
+                              ^
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-review-v143.test.cjs:17:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'https://example.test/path',
+    expected: 'https://example.test/path:password=SYNTHETIC',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-review-v143.test.cjs:25:1
+✖ review: confirmed colon records keep trailing empty fields and never consume the next account (3.872225ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-review-v143.test.cjs:34:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

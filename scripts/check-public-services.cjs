@@ -16,23 +16,6 @@ const fs = require('node:fs'),
   };
   let app;
   try {
-    const fb = require('../electron/features/facebook/service.cjs').createFacebookService();
-    const target = require('../electron/features/facebook/normalize.cjs').normalizeTarget(
-      'https://www.facebook.com/Meta'
-    );
-    const { facebookPresentation } = await import('../shared/facebook-presentation.mjs');
-    for await (const r of fb.check({ targets: [target], runId: 'public-qa' })) {
-      const shown = facebookPresentation(r);
-      report.facebook = {
-        status: ['ACTIVE', 'BLOCKED'].includes(shown.status) ? 'PASS' : 'BLOCKED',
-        target: target.canonicalUrl,
-        result: shown.status,
-        reason: r.reasonCode,
-        httpStatus: r.httpStatus,
-        durationMs: r.durationMs,
-        scope: 'One anonymous public target; no credentials or platform-bypass methods'
-      };
-    }
     const data = path.join(root, 'data');
     const store = await require('../electron/local/store.cjs').openStore(data);
     store.set('tourSeen', true);
@@ -61,21 +44,78 @@ const fs = require('node:fs'),
       ]
     });
     const page = await app.firstWindow();
+    await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1280, 900));
+    const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
+    await page.locator('[data-view="checker"]').click();
+    await page
+      .locator('#checker-input')
+      .fill(
+        'https://www.facebook.com/Meta\nhttps://www.facebook.com/NASA\nhttps://www.facebook.com/zuck'
+      );
+    await page.locator('[data-action="checker-run"]').click();
+    await waitForAsync(
+      page,
+      async () => {
+        const { state } = await import('/js/state.js');
+        return (
+          !state.checker.checking &&
+          state.checker.rows?.length === 3 &&
+          state.checker.rows.every((r) => r.check)
+        );
+      },
+      undefined,
+      { timeout: 90000 }
+    );
+    const checks = await page.evaluate(async () =>
+      (await import('/js/state.js')).state.checker.rows.map((r) => r.check)
+    );
+    const { facebookPresentation } = await import('../shared/facebook-presentation.mjs');
+    report.facebook = {
+      status: checks.some((r) => facebookPresentation(r).status === 'ACTIVE') ? 'PASS' : 'BLOCKED',
+      targets: checks.map((r) => ({
+        target: r.canonicalUrl,
+        result: facebookPresentation(r).status,
+        reason: r.reasonCode,
+        httpStatus: r.httpStatus,
+        checkedAt: r.checkedAt,
+        durationMs: r.durationMs,
+        diagnostics: r.diagnostics
+      })),
+      scope:
+        'Actual application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.',
+      confirmedUnavailableTarget: 'BLOCKED: no independently confirmed unavailable target supplied'
+    };
+    await page.screenshot({ path: path.join(path.dirname(out), 'tz11-checker-live.png') });
+
+    report.trustProvider = await app.evaluate(async ({ app }) => {
+      const require = process
+        .getBuiltinModule('node:module')
+        .createRequire(app.getAppPath() + '/package.json');
+      const ip = '8.8.8.8';
+      const provider =
+        require('./electron/features/proxy/proxycheck.cjs').createProxycheckProvider();
+      const sources = await require('./electron/features/proxy/providers.cjs').lookupProviders(
+        ip,
+        [provider],
+        new AbortController().signal
+      );
+      const assessment = require('./electron/features/proxy/assessment.cjs').assess(sources, ip);
+      return {
+        status: assessment.score === null ? 'BLOCKED' : 'PASS',
+        sampleIp: ip,
+        sources,
+        assessment,
+        scope:
+          'Explicit QA lookup of one fixed public DNS IP using the app provider adapter, without keys or proxy credentials. This is provider evidence, not proof of a user proxy route.'
+      };
+    });
     await page.locator('[data-view="photos"]').click();
     await page.locator('#photo-input').setInputFiles(distinctCopies(photo, 20));
-    const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
       return !state.imagesBusy && state.photos.length === 20;
     });
     await page.locator('#photo-map-canvas').scrollIntoViewIfNeeded();
-    await page.evaluate(() => {
-      const c = document.getElementById('photo-map-canvas');
-      window.__cityBefore = Array.from(
-        c.getContext('2d').getImageData(0, 0, c.width, c.height).data
-      );
-    });
-    await page.locator('[data-map-action="background"]').click();
     const capture = async (mode, filename) => {
       let failure = null;
       try {
@@ -83,13 +123,12 @@ const fs = require('node:fs'),
           () => {
             const c = document.getElementById('photo-map-canvas'),
               a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-            let changed = 0;
-            for (let i = 0; i < a.length; i += 4)
-              if (a[i] !== __cityBefore[i] || a[i + 1] !== __cityBefore[i + 1]) changed++;
+            const colors = new Set();
+            for (let i = 0; i < a.length; i += 64) colors.add(`${a[i]},${a[i + 1]},${a[i + 2]}`);
             return (
               Number(c.dataset.requiredTiles) > 0 &&
               c.dataset.tiles === c.dataset.requiredTiles &&
-              changed > 1000
+              colors.size > 32
             );
           },
           null,

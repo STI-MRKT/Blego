@@ -65,7 +65,7 @@ const { openStore } = require('../electron/local/store.cjs');
         XDG_CACHE_HOME: path.join(root, 'cache')
       }
     });
-    const page = await app.firstWindow();
+    const page = await require('../tests/fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     await page.evaluate(() => {
       globalThis.__batch = { ticks: 0, maxGapMs: 0, last: performance.now() };
@@ -153,7 +153,9 @@ const { openStore } = require('../electron/local/store.cjs');
     await page.locator('[name="date-offset-mode"]').selectOption('set');
     await page.locator('[name="date-offset"]').fill('-05:00');
     await choose([output]);
-    await page.locator('#metadata-form [type="submit"]').click();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
     await page.locator('[data-action="metadata-export"]').waitFor();
     await mapCapture('after');
     await page.locator('[data-action="metadata-export"]').click();

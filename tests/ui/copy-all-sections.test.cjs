@@ -61,7 +61,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow(),
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app),
       errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.locator('[data-action="generate"]').waitFor();
@@ -177,20 +177,37 @@ test(
         sources: [],
         password: 'DO-NOT-COPY'
       };
-      state.news.items = [
-        {
-          id: 'news-test',
-          title: 'Synthetic article',
-          source: 'Local fixture',
-          link: 'https://example.com/?token=DO-NOT-COPY',
-          description: 'Provided summary',
-          topic: 'fashion'
-        }
-      ];
     });
     await page.locator('[data-view="network"]').click();
     assert.equal(await page.locator('#copy-actions, [data-action="copy"]').count(), 0);
+    // Keep the production refresh path active, but never let live RSS race this clipboard fixture.
+    await app.evaluate(({ ipcMain }) => {
+      ipcMain.removeHandler('local:newsRefresh');
+      ipcMain.handle('local:newsRefresh', () => ({
+        ok: true,
+        value: {
+          topic: 'fashion',
+          lastAttemptAt: '2026-01-01T00:00:00Z',
+          lastSuccessfulAt: '2026-01-01T00:00:00Z',
+          sourceStates: {},
+          items: [
+            {
+              id: 'news-test',
+              title: 'Synthetic article',
+              source: 'Local fixture',
+              link: 'https://example.com/?token=DO-NOT-COPY',
+              description: 'Provided summary',
+              topic: 'fashion'
+            }
+          ]
+        }
+      }));
+    });
     await page.locator('[data-view="news"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.news.loading && state.news.items[0]?.id === 'news-test';
+    });
     assert.equal(await page.locator('#copy-actions, .page-head [data-copy-action]').count(), 0);
     assert.equal(await page.locator('.news-item-card [data-news-copy]').count(), 2);
     // Serialization privacy remains unit-tested; News exposes only the requested title/URL copies.

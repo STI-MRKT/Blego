@@ -1,0 +1,74 @@
+MAP_DRAG_DIAGNOSTICS {
+  pointer: {
+    x: 128,
+    y: 105.15625,
+    width: 237,
+    height: 240,
+    clientX: 212,
+    clientY: 218
+  },
+  view: {
+    center: { longitude: 2.3469411, latitude: 48.85888446995688 },
+    scale: 769.4242996406906
+  },
+  actual: [
+    { field: 'gps', action: 'set', value: [Object], origin: [Object] }
+  ],
+  busy: false
+} {
+  x: 202.5,
+  y: 232.84375,
+  endX: 212.34863103542162,
+  endY: 217.87497907922597
+}
+✖ map drag retains dirty date through actual preview and export (33644.450956ms)
+MAP_DRAG_DIAGNOSTICS {
+  pointer: {
+    x: 128,
+    y: 105.15625,
+    width: 237,
+    height: 240,
+    clientX: 212,
+    clientY: 218
+  },
+  view: {
+    center: { longitude: 2.3469411, latitude: 48.85888446995688 },
+    scale: 769.4242996406906
+  },
+  actual: [
+    { field: 'gps', action: 'set', value: [Object], origin: [Object] }
+  ],
+  busy: false
+} {
+  x: 202.5,
+  y: 232.84375,
+  endX: 212.34863103542162,
+  endY: 217.87497907922597
+}
+✖ map drag retains other photos pending GPS and dates through actual preview and export (32949.543813ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67101.131208
+
+✖ failing tests:
+
+test at tests/ui/photo-map-draft.test.cjs:10:3
+✖ map drag retains dirty date through actual preview and export (33644.450956ms)
+  Error: Async condition did not become true within 30000 ms
+      at waitForAsync (/workspace/BLEGO-final/tests/fixtures/wait-for-async.cjs:9:9)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/photo-map-draft.test.cjs:155:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/ui/photo-map-draft.test.cjs:10:3
+✖ map drag retains other photos pending GPS and dates through actual preview and export (32949.543813ms)
+  Error: Async condition did not become true within 30000 ms
+      at waitForAsync (/workspace/BLEGO-final/tests/fixtures/wait-for-async.cjs:9:9)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/ui/photo-map-draft.test.cjs:155:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

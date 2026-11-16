@@ -1,0 +1,39 @@
+✔ TZ11 public Page with matching identity and substantive visible content needs no Person JSON-LD (8.529478ms)
+✔ TZ11 metadata-only shells, wrong identity, hidden content and login never become ACTIVE (3.3062ms)
+✔ TZ11 localized unavailable headings use actual target evidence; script placeholders stay unknown (2.092824ms)
+✔ TZ11 Checker shows requested and normalized target plus concrete reason without verbose header (7.424106ms)
+✔ TZ11 normalized checker rows retain original input separately from canonical URL (1.635223ms)
+✖ Chromium DNS, TLS, connection and timeout errors retain specific diagnostics (2.643963ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 128.568852
+
+✖ failing tests:
+
+test at tests/unit/facebook-v143.test.cjs:116:1
+✖ Chromium DNS, TLS, connection and timeout errors retain specific diagnostics (2.643963ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'NETWORK_FAILURE'
+  - 'FB_DNS_ERROR'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v143.test.cjs:118:319)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'NETWORK_FAILURE',
+    expected: 'FB_DNS_ERROR',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

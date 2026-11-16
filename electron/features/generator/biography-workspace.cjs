@@ -1,10 +1,12 @@
 const { randomUUID } = require('node:crypto');
+const { bioDefaults, bioSuggestions, organizationOptions } = require('./biography.cjs');
 const {
-  validateBiographyValues,
-  bioDefaults,
-  bioSuggestions,
-  organizationOptions
-} = require('./biography.cjs');
+  ORGANIZATIONS,
+  validateWorkspaceBiography,
+  separateBiography,
+  styleBiography
+} = require('./biography-values.cjs');
+const { FIELDS } = require('./biography.cjs');
 const catalog = require('../../../resources/generator/institutions.json');
 const { countries } = require('../../local/settings.cjs');
 const { loadDataset } = require('./catalog.cjs');
@@ -39,6 +41,13 @@ const asProfile = (p) => ({
   fields: { city: p.city, postalCode: p.postalCode }
 });
 function createBiographyWorkspace({ store }) {
+  const adaptRecord = (record) =>
+    record
+      ? {
+          ...record,
+          ...separateBiography(record.values, record.parameters.country, catalog, record)
+        }
+      : null;
   function legacy(id) {
     if (!id.startsWith('legacy:')) return null;
     const row = store.db
@@ -69,7 +78,7 @@ function createBiographyWorkspace({ store }) {
   }
   function record(id) {
     if (typeof id !== 'string' || !id || id.length > 160) return null;
-    return store.get(`bio:record:${id}`) || legacy(id);
+    return adaptRecord(store.get(`bio:record:${id}`) || legacy(id));
   }
   if (!store.get(KEY)) {
     const p = store.get('lastCard');
@@ -127,18 +136,19 @@ function createBiographyWorkspace({ store }) {
         if (previous) {
           if (JSON.stringify(previous.parameters) !== JSON.stringify(p))
             throw Error('REQUEST_CONFLICT');
-          return previous.snapshot;
+          return { ...previous.snapshot, record: adaptRecord(previous.snapshot.record) };
         }
         const config = store.get(KEY),
           now = new Date().toISOString();
         const current = {
           id: randomUUID(),
           parameters: p,
-          values: bioSuggestions(asProfile(p), { store }),
+          ...separateBiography(bioSuggestions(asProfile(p), { store }), p.country),
           revision: 0,
           createdAt: now,
           updatedAt: now
         };
+        current.values.mainBio = styleBiography(current.values.mainBio, p.type);
         store.set(`bio:record:${current.id}`, current);
         store.set(KEY, {
           parameters: p,
@@ -151,12 +161,12 @@ function createBiographyWorkspace({ store }) {
       });
     },
     save({ recordId, revision, values }) {
-      validateBiographyValues(values);
+      validateWorkspaceBiography(values);
       return store.transaction(() => {
         const current = assertCurrent(recordId, revision);
         const updated = {
           ...current,
-          values: { ...values },
+          ...separateBiography(values, current.parameters.country, catalog, current),
           revision: revision + 1,
           updatedAt: new Date().toISOString()
         };
@@ -166,8 +176,25 @@ function createBiographyWorkspace({ store }) {
     },
     suggest({ recordId, field, values }) {
       const current = assertCurrent(recordId);
-      validateBiographyValues(values);
-      return bioSuggestions(asProfile(current.parameters), { store, field, values });
+      validateWorkspaceBiography(values);
+      const legacyValues = Object.fromEntries(FIELDS.map((key) => [key, values[key]]));
+      for (const key of Object.keys(ORGANIZATIONS))
+        if (values[key] && values[key + 'City'])
+          legacyValues[key] = values[key] + ' — ' + values[key + 'City'];
+      const patch = bioSuggestions(asProfile(current.parameters), {
+        store,
+        field,
+        values: legacyValues
+      });
+      if (field === 'mainBio')
+        return { mainBio: styleBiography(patch.mainBio, current.parameters.type) };
+      if (Object.hasOwn(ORGANIZATIONS, field)) {
+        const combined = { ...values, ...patch };
+        delete combined[field + 'City'];
+        const separated = separateBiography(combined, current.parameters.country).values;
+        return { ...patch, [field]: separated[field], [field + 'City']: separated[field + 'City'] };
+      }
+      return patch;
     },
     clear() {
       return store.transaction(() => {

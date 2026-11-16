@@ -1,3 +1,4 @@
+import { imageDraftPlan, hasImageChanges } from './services/photo-plan.js';
 import { createBiographyEditor } from './services/biography.js';
 import { biographyStatus } from './ui/biography.js';
 import { mountCopyActions, initCopyPreferences, copyModelValue, invalidateImportCopies } from './utils/copy-actions.js';
@@ -250,7 +251,7 @@ async function applyImageForm({excludeGPS=false}={}) {
   if (state.imageEditTarget === 'group')
     await workspaceChange('setGroupOperations', {
       groupId: state.imageGroupId || 'ungrouped',
-      operations: excludeGPS ? [...(state.imageWorkspace.groups.find(g=>g.id===(state.imageGroupId||'ungrouped'))?.operations||[]).filter(o=>o.field==='gps'),...ops] : ops
+      operations: [...(state.imageWorkspace.groups.find(g=>g.id===(state.imageGroupId||'ungrouped'))?.operations||[]).filter(op=>!ops.some(next=>next.field===op.field)),...ops]
     });
   else {
     const selected = state.photos.filter((p) => p.selected);
@@ -261,25 +262,49 @@ async function applyImageForm({excludeGPS=false}={}) {
           : ops;
       if (!updates.length) continue;
       const overrides =
-        selected.length > 1 || excludeGPS
-          ? [
+        [
               ...(state.imageWorkspace.overrides[photo.fileId] || []).filter(
                 (op) => !updates.some((update) => update.field === op.field)
               ),
               ...updates
-            ]
-          : updates;
+            ];
       await workspaceChange('setFileOverrides', { fileId: photo.fileId, overrides });
     }
   }
   if (state.imageDrafts) delete state.imageDrafts[state.imageDraftKey];
   restoreImageDraft();
 }
-async function prepareImageExport(retry = {}) {
+let imagePlanEpoch=0, imagePlanTimer=null;
+async function previewCurrentImageDraft() {
+  const epoch=++imagePlanEpoch;
+  clearTimeout(imagePlanTimer);
+  await state.imageInvalidation;
+  const form=document.getElementById('metadata-form');
+  if(!form || !state.imageWorkspace)return null;
+  const fileIds=state.photos.filter(p=>p.selected&&p.view).map(p=>p.fileId);
+  if(!fileIds.length)return null;
+  const {batches}=imageDraftPlan(state.imageWorkspace,{fileIds,operations:readMetadataForm(form),touched:state.metadataTouched,excludedGps:state.metadataGpsExcluded,target:state.imageEditTarget,groupId:state.imageGroupId||'ungrouped'});
+  const files=[];
+  for(const batch of batches){
+    if(epoch!==imagePlanEpoch)return null;
+    const preview=await window.blego.planMetadataChanges({...batch,acknowledgeMakerNotes:state.metadataDraft?.['confirm-maker']===true});
+    files.push(...preview.files);
+  }
+  if(epoch!==imagePlanEpoch)return null;
+  state.metadataPreview={files};state.metadataPreviewError=null;
+  return state.metadataPreview;
+}
+function scheduleImagePreview(){
+  clearTimeout(imagePlanTimer);imagePlanEpoch++;state.metadataPreview=null;
+  if(state.view!=='photos'||state.imagesBusy||!state.photos.some(p=>p.selected&&p.view))return;
+  const epoch=imagePlanEpoch;
+  imagePlanTimer=setTimeout(()=>{previewCurrentImageDraft().catch(error=>{if(imagePlanEpoch===epoch+1)state.metadataPreviewError=error.message;});},350);
+}
+async function prepareImageExport(retry = {}, {acknowledgeMakerNotes = !!state.metadataDraft?.['confirm-maker']} = {}) {
   await state.imageInvalidation;
   const fileIds = state.photos.filter((p) => p.selected).map((p) => p.fileId);
   await workspaceChange('select', { fileIds });
-  const scope = document.getElementById('image-export-scope')?.value || 'selection';
+  const scope = state.imagesBusy ? (state.imageExportScope || 'selection') : (document.getElementById('image-export-scope')?.value || 'selection');
   const groupId = state.imageGroupId || 'ungrouped';
   const workspace = state.imageWorkspace;
   const ids =
@@ -292,7 +317,7 @@ async function prepareImageExport(retry = {}) {
   for (const id of new Set(ids.map((id) => workspace.membership[id]))) {
     toast('Choose export folder for ' + workspace.groups.find((g) => g.id === id).name);
     const token = await window.blego.chooseImageDestination();
-    if (!token) return;
+    if (!token || state.photoSaveCancelled) return;
     destinationByGroup[id] = token;
   }
   state.metadataPlan = await window.blego.prepareGroupExport({
@@ -301,8 +326,78 @@ async function prepareImageExport(retry = {}) {
     workspaceRevision: workspace.revision,
     destinationByGroup,
     ...retry,
-    acknowledgeMakerNotes: !!document.querySelector('[name="confirm-maker"]')?.checked
+    acknowledgeMakerNotes
   });
+}
+async function saveImageCopies(retry={}) {
+  if(state.imagesBusy)return;
+    let unsubscribe;
+    try {
+      const form=document.getElementById('metadata-form');
+      if(!form)return;
+      state.metadataDraft={...state.metadataDraft,...Object.fromEntries(new FormData(form))};
+      for(const control of form.querySelectorAll('input[type=checkbox][name]'))state.metadataDraft[control.name]=control.checked;
+      const acknowledgeMakerNotes=state.metadataDraft['confirm-maker']===true;
+      state.imageExportScope=document.getElementById('image-export-scope')?.value || 'selection';
+      state.imagesBusy=true;state.photoSaveCancelled=false;
+      renderView();
+      clearTimeout(imagePlanTimer);imagePlanEpoch++;
+      const preview=await previewCurrentImageDraft();
+      if(state.photoSaveCancelled)return;
+      if(!preview || (state.imageExportScope==='selection' && !hasImageChanges(preview))){toast('Нет изменений для сохранения');return;}
+      await applyImageForm();
+      if(state.photoSaveCancelled)return;
+      await prepareImageExport(retry,{acknowledgeMakerNotes});
+      if(state.photoSaveCancelled || !state.metadataPlan)return;
+      const plan=state.metadataPlan;
+      const runId = crypto.randomUUID();
+      state.imageRunId = runId;
+      state.imagesBusy = true;
+      state.metadataExport = null;
+      state.metadataProgress = {};
+      renderView();
+      unsubscribe = window.blego.onImageProgress((result) => {
+        if (result.runId && result.runId !== state.imageRunId) return;
+        state.metadataProgress[result.fileId] = result;
+        if (state.view === 'photos') {
+          const box = document.querySelector('[data-metadata-progress]');
+          if (box && !state.photoTools) {box.textContent='Обработано: '+Object.values(state.metadataProgress).filter(f=>['completed','failed','cancelled','no_changes'].includes(f.status)).length+' / '+plan.files.length;}
+          else if (box) {
+            let row = box.querySelector(`[data-progress-id="${result.fileId}"]`);
+            if (!row) {
+              row = document.createElement('p');
+              row.dataset.progressId = result.fileId;
+              box.append(row);
+            }
+            row.textContent = [
+              result.groupName,
+              result.name,
+              result.status,
+              result.error,
+              result.outputName
+            ]
+              .filter(Boolean)
+              .join(' · ');
+          }
+        }
+      });
+      state.metadataExport = await window.blego.applyMetadataPlan({
+        planId: plan.planId,
+        workspaceRevision: plan.workspaceRevision,
+        runId
+      });
+      const completed=state.metadataExport.files.filter(f=>f.status==='completed').length;
+      if(completed)toast('Сохранено копий: '+completed);
+      else if(state.metadataExport.files.every(f=>f.status==='no_changes'))toast('Нет изменений для сохранения');
+      state.imageExportHistory = await window.blego.imageExportHistory();
+      state.metadataPlan = null;
+    } catch (error) {
+      toast(imageErrorMessage(error.message), 'err');
+    } finally {
+      unsubscribe?.();
+      state.imagesBusy = false;
+      renderView();
+    }
 }
 function syncQuickMetadata() {
  const form=document.getElementById('metadata-form');if(!form)return;
@@ -393,18 +488,20 @@ function bindView() {
         delete state.metadataOrigins?.[event.target.name.slice(6)];
       if (event.target.name?.startsWith('gps-')) delete state.metadataOrigins?.gps;
       if (event.target.name?.startsWith('date-')) delete state.metadataOrigins?.captureDate;
-      state.metadataDraft = Object.fromEntries(new FormData(metadataForm));
+      state.metadataDraft = {...state.metadataDraft, ...Object.fromEntries(new FormData(metadataForm))};
       for(const k of ['exif','xmp'])state.metadataDraft['date-scope-'+k]=metadataForm.elements.namedItem('date-scope-'+k).checked;
       state.metadataDraft['confirm-maker'] =
-        metadataForm.elements.namedItem('confirm-maker').checked;
+        metadataForm.elements.namedItem('confirm-maker')?.checked ?? state.metadataDraft['confirm-maker'] ?? false;
       state.metadataPlan = null;
       state.imageInvalidation = workspaceChange('select', {
         fileIds: state.photos.filter((p) => p.selected).map((p) => p.fileId)
       }).catch((e) => toast(e.message, 'err'));
       document.querySelector('[data-metadata-plan]')?.remove();
+      scheduleImagePreview();
     };
     metadataForm.onsubmit = async (event) => {
       event.preventDefault();
+      if(!state.photoTools){await saveImageCopies();return;}
       try {
         await applyImageForm();
         await prepareImageExport();
@@ -414,6 +511,7 @@ function bindView() {
       }
     };
   }
+  scheduleImagePreview();
   const friendsSearch=document.getElementById('friends-search');
   if(friendsSearch){friendsSearch.onsubmit=event=>{event.preventDefault();state.friendsQuery=document.getElementById('friends-query').value;state.friendsPage=0;renderView();};document.getElementById('friends-query').oninput=event=>{state.friendsQuery=event.target.value;syncFriendsCopyActions();};}
   const friendsPlatform=document.getElementById('friends-platform');if(friendsPlatform)friendsPlatform.onchange=()=>{state.friendsPlatform=friendsPlatform.value;state.friendsPage=0;renderView();};
@@ -512,7 +610,8 @@ function bindView() {
   }; });
   document.querySelectorAll('[data-bio-institution]').forEach(el => { el.onchange = () => {
     if(!el.value || !state.bioEditor) return;
-    state.bioEditor.update({[el.dataset.bioInstitution]:el.value}); renderView();
+    const field=el.dataset.bioInstitution, organization=state.bioEditor.institutions.find(row=>row.id===el.value&&row.kind===field);
+    if(organization)state.bioEditor.update({[field]:organization.name,[field+'City']:organization.city}); renderView();
   }; });
   const encoding = document.getElementById('import-encoding');
   if (encoding)
@@ -685,7 +784,7 @@ async function reclassifyInput() {
     if(state.importEpoch !== epoch) return;
     state.classifierQuery=''; state.classifierDescending=false;
     state.importStep='preview'; await importPage(0);
-  } catch {if(state.importEpoch===epoch) {state.importStep='preview';toast('Не удалось применить соответствие', 'err');}}
+  } catch(error) {if(state.importEpoch===epoch) {state.importStep='preview';toast(error.message==='CONFIDENTIAL_FIELD_MAPPING'?'Код 2FA нельзя включать в обычный экспорт. Оставьте для него отдельное поле 2FA.':'Не удалось применить соответствие', 'err');}}
   finally {if(state.importEpoch===epoch) {state.importRequest=null;renderView();}}
 }
 
@@ -793,14 +892,12 @@ async function runProxyCheck(fullTest = false) {
   const value = state.network.proxyInput.trim();
   state.network.proxyFullTest = fullTest;
   if(fullTest){state.network.speed=null;state.network.speedRoute=value?'proxy':'direct';}
-  const reputation = document.getElementById('proxy-reputation')?.checked === true;
-  state.network.reputation = reputation;
   state.network.proxyLoading = true;
   state.network.proxy = null;
   state.network.proxyError = '';
   renderView();
   try {
-    const result = await checkProxy(value, { reputation, fullTest });
+    const result = await checkProxy(value, { fullTest });
     if(value === state.network.proxyInput.trim()){state.network.proxy=result;if(fullTest)state.network.speed=result.speed;}
     else state.network.proxyError='Proxy address changed. Check again.';
   } catch (error) {
@@ -1083,7 +1180,7 @@ document.addEventListener('click', async (event) => {
       state.archiveView=null;state.archiveQuery={};
       state.archives=await window.blego.listArchives();
       await importPage(state.importData.offset);toast('Сохранено');
-    } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
+    } catch (error) {toast(error.message.includes('ARCHIVE_2FA_ORIGINAL_NOT_ALLOWED')?'Исходный файл содержит 2FA. Отключите включение оригинала в ZIP, чтобы сохранить семь полей.':'Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
   if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}
@@ -1361,8 +1458,7 @@ document.addEventListener('click', async (event) => {
       const fileIds = [...document.querySelectorAll('[data-retry-file]:checked')].map(
         (x) => x.dataset.retryFile
       );
-      await prepareImageExport({ retryRunId: state.metadataExport.runId, fileIds });
-      renderView();
+      await saveImageCopies({ retryRunId: state.metadataExport.runId, fileIds });
     } catch (e) {
       toast(imageErrorMessage(e.message), 'err');
     }
@@ -1373,6 +1469,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'metadata-cancel') {
+    state.photoSaveCancelled=true;
     if(state.geoBusy){await window.blego.cancelGeo(state.geoBusy);return;}
     if (state.imagesReading) state.imagesReadCancelled = true;
     if (state.imagesReading) await window.blego.cancelImageExport();
@@ -1387,57 +1484,8 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
-  if (action === 'metadata-export') {
-    if (state.imagesBusy || !state.metadataPlan) return;
-    let unsubscribe;
-    try {
-      const plan = state.metadataPlan;
-      const runId = crypto.randomUUID();
-      state.imageRunId = runId;
-      state.imagesBusy = true;
-      state.metadataExport = null;
-      state.metadataProgress = {};
-      renderView();
-      unsubscribe = window.blego.onImageProgress((result) => {
-        if (result.runId && result.runId !== state.imageRunId) return;
-        state.metadataProgress[result.fileId] = result;
-        if (state.view === 'photos') {
-          const box = document.querySelector('[data-metadata-progress]');
-          if (box) {
-            let row = box.querySelector(`[data-progress-id="${result.fileId}"]`);
-            if (!row) {
-              row = document.createElement('p');
-              row.dataset.progressId = result.fileId;
-              box.append(row);
-            }
-            row.textContent = [
-              result.groupName,
-              result.name,
-              result.status,
-              result.error,
-              result.outputName
-            ]
-              .filter(Boolean)
-              .join(' · ');
-          }
-        }
-      });
-      state.metadataExport = await window.blego.applyMetadataPlan({
-        planId: plan.planId,
-        workspaceRevision: plan.workspaceRevision,
-        runId
-      });
-      state.imageExportHistory = await window.blego.imageExportHistory();
-      state.metadataPlan = null;
-    } catch (error) {
-      toast(imageErrorMessage(error.message), 'err');
-    } finally {
-      unsubscribe?.();
-      state.imagesBusy = false;
-      renderView();
-    }
-    return;
-  }
+  if (action === 'metadata-export') {await saveImageCopies();return;}
+  if (action === 'photos-tools') {stashImageDraft();state.photoTools=!state.photoTools;renderView();return;}
   if(action==='geo-generate'||action==='geo-regenerate-one'){
     if(state.imagesBusy)return;
     const ids=action==='geo-regenerate-one'?[target.dataset.id]:state.photos.filter(p=>p.selected&&p.view?.capabilities.writable).map(p=>p.fileId);

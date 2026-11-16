@@ -29,7 +29,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-action="generate"]').waitFor();
     if (process.platform === 'linux') {
       // Exercise the 17px non-overlay scrollbar observed on installed macOS.
@@ -188,8 +188,14 @@ test(
     await app.evaluate(({ dialog }, root) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [root] });
     }, root);
-    await page.getByRole('button', { name: 'Preview changes', exact: true }).click();
-    await page.locator('[data-metadata-plan]').waitFor();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
+    assert.equal(
+      await page.locator('[data-metadata-plan]').count(),
+      0,
+      'primary Photos has no technical preview panel'
+    );
     await page.getByRole('button', { name: 'Save copies', exact: true }).click();
     await resize(480);
     await resize(360);

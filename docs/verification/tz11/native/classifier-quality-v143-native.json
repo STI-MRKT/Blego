@@ -1,0 +1,3233 @@
+{
+  "os": "darwin",
+  "arch": "arm64",
+  "node": "v24.22.1",
+  "at": "2026-11-16T09:06:11.710Z",
+  "cases": [
+    {
+      "name": "2fa header code",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 2,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 14.014249999999997,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "2fa header URL",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 2,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.8960830000000044,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "slash header protects URL and UA",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 4,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 5.784500000000008,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled :",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 1.762166999999991,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled ::",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.8419579999999911,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled ;",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 2.225291999999996,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled |",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.5764999999999958,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled  / ",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.5046660000000003,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "labelled  \\\\ ",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.3502909999999986,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "B explicitly confirmed",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.29145799999999156,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "B header",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 6,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.5105410000000035,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "C confirmed",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 5,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.4680000000000035,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "A confirmed mixed",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 9,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 1.2299159999999887,
+      "fields": {
+        "fullName": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "missing mail password",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 3,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.1372090000000128,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "empty mail password",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 4,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.27299999999999613,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "backup separate",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 4,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.2276250000000033,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "quoted password separators",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 3,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.4749999999999943,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "URL paths and UA preserved",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 4,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.1576249999999959,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "nested multiline cookie",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 3,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.5541249999999991,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "Russian and English comments",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 3,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 12.988292000000001,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "2fa URL is distinct",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 3,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.8574169999999981,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "no invented passwords in bare tuple",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 1,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 1,
+      "durationMs": 1.0166250000000048,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "mixed records do not transfer secrets",
+      "records": 2,
+      "expectedRecords": 2,
+      "correct": 5,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 0.6491670000000056,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 2,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 2,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "repeat layout",
+      "records": 3,
+      "expectedRecords": 3,
+      "correct": 9,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 0,
+      "durationMs": 1.346291000000008,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 3,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 3,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 3,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "unconfirmed filesystem path untouched",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 2,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 1,
+      "durationMs": 0.4196669999999898,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    },
+    {
+      "name": "conflicting email not selected",
+      "records": 1,
+      "expectedRecords": 1,
+      "correct": 1,
+      "missing": 0,
+      "falseAssignments": 0,
+      "precision": 1,
+      "recall": 1,
+      "ambiguous": 1,
+      "durationMs": 0.7928750000000093,
+      "fields": {
+        "fullName": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "accountId": {
+          "correct": 1,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "password": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "emailPassword": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "email": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "birthDate": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "geo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "userAgent": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "token": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "cookies": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "backupEmail": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "login": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorCode": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "profileUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "mailServiceUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "twoFactorUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "avatarUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "documentUrl": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "limit": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "fpStatus": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "sentCount": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        },
+        "friendsInfo": {
+          "correct": 0,
+          "missing": 0,
+          "falseAssignments": 0
+        }
+      }
+    }
+  ],
+  "status": "PASS"
+}

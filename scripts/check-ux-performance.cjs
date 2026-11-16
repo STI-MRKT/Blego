@@ -2,6 +2,7 @@ const fs = require('node:fs'),
   os = require('node:os'),
   path = require('node:path');
 const { _electron } = require('playwright');
+const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
 const args = process.argv.slice(2),
   get = (k) => args[args.indexOf(k) + 1];
 const original = get('--original'),
@@ -48,7 +49,7 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           ]
         });
         await app.context().route('**/api/**', (route) => route.abort());
-        const page = await app.firstWindow();
+        const page = await require('../tests/fixtures/map-offline.cjs').firstWindowOfflineMap(app);
         await page.locator('[data-action="generate"]').first().waitFor();
         const launchMs = performance.now() - started;
         await app.evaluate(({ BrowserWindow }) => {
@@ -85,8 +86,36 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
         frames.sort((a, b) => a - b);
         let import1000Ms = null,
           archiveMs = null,
-          mapMs = null;
+          mapMs = null,
+          bioGenerationMs = null;
         if (label !== 'original') {
+          await page.locator('[data-tab="bio"]').click();
+          const previousBio = await page.evaluate(async () => {
+            const { state } = await import('/js/state.js');
+            const record = (await window.blego.biography({ action: 'read' })).record;
+            return { persistedId: record?.id || null, editorId: state.bioEditor?.recordId || null };
+          });
+          const bioStart = performance.now();
+          await page.locator('[data-action="bio-generate"]').click();
+          await waitForAsync(
+            page,
+            async ({ persistedId, editorId }) => {
+              const { state } = await import('/js/state.js');
+              const record = (await window.blego.biography({ action: 'read' })).record;
+              return Boolean(
+                record?.id &&
+                record.id !== persistedId &&
+                record.id !== editorId &&
+                record.values?.mainBio &&
+                !state.bioBusy &&
+                state.bioEditor?.recordId === record.id &&
+                document.querySelector('#bio-mainBio')?.value === record.values.mainBio
+              );
+            },
+            previousBio
+          );
+          bioGenerationMs = Math.round(performance.now() - bioStart);
+          await page.locator('[data-tab="profile"]').click();
           await page.locator('[data-view="import"]').first().click();
           const csv =
             'fullName,accountId,email,geo\n' +
@@ -110,7 +139,8 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           const archiveStart = performance.now();
           await page.locator('#classifier-extra summary').click();
           await page.locator('[data-action="classifier-archive"]').click();
-          await page.waitForFunction(
+          await waitForAsync(
+            page,
             async () => (await import('/js/state.js')).state.importSaved === true
           );
           await page.locator('[data-view="history"]').click();
@@ -129,6 +159,7 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
         }
         samples.push({
           import1000Ms,
+          bioGenerationMs,
           archiveMs,
           mapMs,
           memory: await app.evaluate(({ app }) =>

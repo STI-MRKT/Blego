@@ -1,0 +1,164 @@
+✔ Electron offline workflow, native clipboard, pending import, ZIP and restart (27325.302125ms)
+✔ original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion (4296.817209ms)
+✔ TZ06 saving a new classified TXT opens a fresh archive list even after viewing an older entry, and survives restart (6317.9985ms)
+✖ TZ11 BIO copies six organization values independently, regenerates pairs and restores manual city after native restart (35345.445166ms)
+✔ cookie cell copies exact original at 12/1000/10000 chars across sort, filter and pages; mass copy excludes secrets (8806.461417ms)
+✔ discard invalidates raw import snapshots and prepared clipboard payloads (3285.519375ms)
+✔ classifier masks secrets, explains a row, assigns locally and copies exact values (3460.818833ms)
+✔ TZ9 learned mail password displays, copies and archives without changing absent values (3291.127125ms)
+✔ TZ11 colon fields and private 2FA copy exactly; archive remains core7 (3411.252708ms)
+✔ classifier UI has legacy columns plus separate backup email, explicit schema/mapping and stable navigation (4617.656375ms)
+✔ TZ06 cleanup retains settings access and exact cookie reveal closes only after successful copy (3394.277125ms)
+✖ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (8416.825625ms)
+✔ one Check normalizes and checks public availability; copies and cancellation remain truthful (5714.101459ms)
+✔ Facebook filter/sort keep individual copies and retry one target without losing other results (4094.485583ms)
+✔ TZ9 checker shows evidence-backed ACTIVE/BLOCKED, neutral errors, exact copy and fresh retry (4225.706833ms)
+✔ TZ11 public-page content without JSON-LD renders truthful results and full target diagnostics (6637.707291ms)
+✔ TZ10 Friends bulk copy uses GEO/platform/search, all pages, imported rows and real clipboard (13486.457584ms)
+✔ Friends preview requires confirmation, preserves cards and supports search/filter/copy/open/restart (6133.98525ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (10177.071292ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (6449.900333ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (9719.970667ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (2960.90325ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (5712.014833ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (8000.495833ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (4116.34725ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (3385.381542ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (6126.029458ms)
+✔ Generator adjacent phone copies only national digits while address order and saved full profiles survive resize and restart (16225.848834ms)
+✔ generator copies exact Name/BIO from compact card, preserves full fields and reports native clipboard failure (3770.830917ms)
+✔ all10 views have no general header Copy before/after generation/import/resize/restart; all FP/BIO copies remain exact (16618.053458ms)
+✔ advanced copy never resurrects after unsupported navigation or FP replacement/clear (4492.946458ms)
+✔ copy shortcuts respect text editing, native copy, selection, empty data and key repeat (4838.66175ms)
+✔ late advanced copy requests cannot reopen a panel after navigation away and back (3901.54925ms)
+✔ changing the active photo group invalidates the prepared group snapshot (3900.366666ms)
+✔ sequential copy completion after navigation cannot advance or reopen a closed panel (3282.994791ms)
+✔ group UI preserves drafts, explicit reference fields, save and restart (11163.308375ms)
+✔ late image preview cannot replace another image or reopen after close or selection change (4336.383542ms)
+✔ one-click copy retrieves the full synthetic cookie from the correct imported row (3003.721834ms)
+✔ Photos automatically paints its basemap on empty start, missing GPS, Before/After, resize and restart (7099.795125ms)
+✔ TZ9 20 photos: Brazil to Italy automatically loads city tiles and exports matching GPS (14008.212167ms)
+✔ TZ11 Trust consent is requested once, survives restart and cannot be forged through settings IPC (10871.872292ms)
+✔ TZ10 News copies exact title and URL in all topics, refreshed RSS and reopened SQLite cache without navigation (16286.566667ms)
+✔ News preserves topic, ignores late other-topic replies and retains article metadata with card-only field copies (5615.815834ms)
+✔ map drag retains dirty date through actual preview and export (5782.430541ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (5737.979ms)
+✔ local map shows Before/After, missing GPS, real pointer moves and stable resize without external requests (6770.13525ms)
+✔ native folder chooser shows nested source paths and exports the same relative structure (4880.1575ms)
+✔ Photos local city selection, drop, per-file regeneration and stable preview use existing workspace (5466.450834ms)
+✔ Photos thumbnails, explicit date/GPS, preview and actual saved copies preserve original files (6221.813458ms)
+✔ TZ11 Photos saves20 individual images with automatic fresh plan and no primary technical panels (13778.677584ms)
+✔ TZ11 Photos saves20 folder images with automatic fresh plan and no primary technical panels (15252.8505ms)
+✔ TZ11 cancel during destination selection cannot export or show success; next save is fresh (4487.065458ms)
+✔ review: Save carries explicit MakerNotes acknowledgment through fresh preparation and actual camera copy (4269.649459ms)
+✔ proxy UI keeps original gauge, plaintext input, consented reputation and honest blocked result (4773.6065ms)
+✔ first-run tour never steals navigation after the user starts working (2694.208375ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (26473.123125ms)
+✔ TZ9 fresh UI enables three tools; disabling one survives restart without changing others (6713.279583ms)
+✔ Russian primary Settings explain controls and each permission survives restart without changing unrelated preferences (7108.901ms)
+✔ restored quick workflow keeps generator compact and network telemetry visual (8610.398042ms)
+ℹ tests 59
+ℹ suites 0
+ℹ pass 57
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 482407.086084
+
+✖ failing tests:
+
+test at tests/ui/biography-v143.test.cjs:8:1
+✖ TZ11 BIO copies six organization values independently, regenerates pairs and restores manual city after native restart (35345.445166ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+    - waiting for locator('[data-tab="bio"]')
+      - locator resolved to <button data-tab="bio" aria-pressed="false" class="btn btn-quiet" data-action="generator-tab">BIO</button>
+    - attempting click action
+      - waiting for element to be visible, enabled and stable
+      - element is not stable
+    - retrying click action
+      - waiting for element to be visible, enabled and stable
+    - element was detached from the DOM, retrying
+      - locator resolved to <button data-tab="bio" aria-pressed="false" class="btn btn-quiet" data-action="generator-tab">BIO</button>
+    - attempting click action
+      2 × waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+      - retrying click action
+      - waiting 20ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+    2 × retrying click action
+        - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events
+    12 × retrying click action
+         - waiting 500ms
+         - waiting for element to be visible, enabled and stable
+         - element is visible, enabled and stable
+         - scrolling into view if needed
+         - done scrolling
+         - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+       - retrying click action
+         - waiting 500ms
+         - waiting for element to be visible, enabled and stable
+         - element is visible, enabled and stable
+         - scrolling into view if needed
+         - done scrolling
+         - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+       - retrying click action
+         - waiting 500ms
+         - waiting for element to be visible, enabled and stable
+         - element is visible, enabled and stable
+         - scrolling into view if needed
+         - done scrolling
+         - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events
+       - retrying click action
+         - waiting 500ms
+         - waiting for element to be visible, enabled and stable
+         - element is visible, enabled and stable
+         - scrolling into view if needed
+         - done scrolling
+         - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events
+    2 × retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+  
+      at TestContext.<anonymous> (/Users/runner/work/Blego/Blego/tests/ui/biography-v143.test.cjs:96:44) {
+    name: 'TimeoutError',
+    log: [ `  - waiting for locator('[data-tab="bio"]')`, '    - locator resolved to <button data-tab="bio" aria-pressed="false" class="btn btn-quiet" data-action="generator-tab">BIO</button>', '  - attempting click action', '    - waiting for element to be visible, enabled and stable', '    - element is not stable', '  - retrying click action', '    - waiting for element to be visible, enabled and stable', '  - element was detached from the DOM, retrying', '    - locator resolved to <button data-tab="bio" aria-pressed="false" class="btn btn-quiet" data-action="generator-tab">BIO</button>', '  - attempting click action', '    2 × waiting for element to be visible, enabled and stable', '      - element is visible, enabled and stable', '      - scrolling into view if needed', '      - done scrolling', '      - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events', '    - retrying click action', '    - waiting 20ms', '    - waiting for element to be visible, enabled and stable', '    - element is visible, enabled and stable', '    - scrolling into view if needed', '    - done scrolling', '    - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events', '  2 × retrying click action', '      - waiting 100ms', '      - waiting for element to be visible, enabled and stable', '      - element is visible, enabled and stable', '      - scrolling into view if needed', '      - done scrolling', '      - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events', '  12 × retrying click action', '       - waiting 500ms', '       - waiting for element to be visible, enabled and stable', '       - element is visible, enabled and stable', '       - scrolling into view if needed', '       - done scrolling', '       - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events', '     - retrying click action', '       - waiting 500ms', '       - waiting for element to be visible, enabled and stable', '       - element is visible, enabled and stable', '       - scrolling into view if needed', '       - done scrolling', '       - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events', '     - retrying click action', '       - waiting 500ms', '       - waiting for element to be visible, enabled and stable', '       - element is visible, enabled and stable', '       - scrolling into view if needed', '       - done scrolling', '       - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events', '     - retrying click action', '       - waiting 500ms', '       - waiting for element to be visible, enabled and stable', '       - element is visible, enabled and stable', '       - scrolling into view if needed', '       - done scrolling', '       - <button class="btn btn-quiet" data-tour-action="skip">Пропустить</button> from <div id="tour-root">…</div> subtree intercepts pointer events', '  2 × retrying click action', '      - waiting 500ms', '      - waiting for element to be visible, enabled and stable', '      - element is visible, enabled and stable', '      - scrolling into view if needed', '      - done scrolling', '      - <div class="tour-block"></div> from <div id="tour-root">…</div> subtree intercepts pointer events', '  - retrying click action', '    - waiting 500ms' ]
+  }
+
+test at tests/ui/copy-all-sections.test.cjs:10:1
+✖ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (8416.825625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Culture Corner: JFK Jr.’s Style Explored in New Book by Jeremy Freed'
+  - 'Synthetic article'
+  
+      at TestContext.<anonymous> (/Users/runner/work/Blego/Blego/tests/ui/copy-all-sections.test.cjs:219:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Culture Corner: JFK Jr.’s Style Explored in New Book by Jeremy Freed',
+    expected: 'Synthetic article',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,50 @@
+✖ TZ11 csv 2FA headers preserve codes separately from links and prevent raw archive disclosure (133.196615ms)
+✖ TZ11 json 2FA headers preserve codes separately from links and prevent raw archive disclosure (94.087074ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 418.657231
+
+✖ failing tests:
+
+test at tests/integration/classifier-2fa-header.test.cjs:5:38
+✖ TZ11 csv 2FA headers preserve codes separately from links and prevent raw archive disclosure (133.196615ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + ''
+  - 'SYNTHETIC_CODE_ONLY'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/classifier-2fa-header.test.cjs:11:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'SYNTHETIC_CODE_ONLY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/integration/classifier-2fa-header.test.cjs:5:38
+✖ TZ11 json 2FA headers preserve codes separately from links and prevent raw archive disclosure (94.087074ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + ''
+  - 'SYNTHETIC_CODE_ONLY'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/classifier-2fa-header.test.cjs:11:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'SYNTHETIC_CODE_ONLY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

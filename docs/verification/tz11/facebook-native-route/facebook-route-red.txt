@@ -1,0 +1,20 @@
+✖ TZ11 Electron route uses isolated public DNS, anonymous manual redirects and decoded bounded HTML (24.645708ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 113.797006
+
+✖ failing tests:
+
+test at tests/integration/facebook-electron-route.test.cjs:2:1
+✖ TZ11 Electron route uses isolated public DNS, anonymous manual redirects and decoded bounded HTML (24.645708ms)
+  TypeError [Error]: createElectronPublicTransport is not a function
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/facebook-electron-route.test.cjs:6:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)

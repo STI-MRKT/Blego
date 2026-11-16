@@ -1,7 +1,7 @@
 // Raw diagnostic statuses remain available in history. Only current, explicit
 // public-content evidence may produce either of the two decisive UI outcomes.
 export function facebookPresentation(result) {
-  const current = result?.parserVersion === 'public-evidence-v4' && result.source === 'public_page';
+  const current = result?.parserVersion === 'public-evidence-v5' && result.source === 'public_page';
   if (current && result.publicContent === 'available' && result.availability === 'profile_visible')
     return { status: 'ACTIVE', tone: 'ok', description: 'Публичный контент доступен' };
   if (current && result.publicContent === 'unavailable' && result.availability === 'unavailable')

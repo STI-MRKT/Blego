@@ -1,0 +1,12 @@
+✔ TZ11 public-page content without JSON-LD renders truthful results and full target diagnostics (4807.025798ms)
+✔ TZ11 Trust consent is requested once, survives restart and cannot be forged through settings IPC (2818.686018ms)
+✔ proxy UI keeps original gauge, plaintext input, consented reputation and honest blocked result (1780.978961ms)
+✔ first-run tour never steals navigation after the user starts working (1703.62889ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12227.755223

@@ -1,8 +1,14 @@
 const { Worker } = require('node:worker_threads');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
-const { EXTENDED_FIELDS } = require('../../../shared/classifier-recognition.mjs');
-const { CORE_FIELDS, CLASSIFIER_FIELDS } = require('../../../shared/classifier.mjs');
+const { EXTENDED_FIELDS, recognizeValue } = require('../../../shared/classifier-recognition.mjs');
+const {
+  CORE_FIELDS,
+  SCHEMAS,
+  CLASSIFIER_FIELDS,
+  fieldForHeader,
+  validBirthDate
+} = require('../../../shared/classifier.mjs');
 function archiveText(records) {
   return [
     CORE_FIELDS.join('\t'),
@@ -74,18 +80,89 @@ function createClassificationService({ allowTestRules = false, clock = () => new
     };
   }
   function adopt(parsed, classified, options, operationId = randomUUID()) {
+    const old = operations.get(operationId);
+    // Confidentiality belongs to the original source, not its latest assigned column.
+    // It lasts for this in-memory operation and is never serialized into archive entries.
+    const confidentialSources = [...(old?.confidentialSources || [])];
+    const classifiedById = new Map(classified.records.map((r) => [r.id, r]));
+    for (const source of parsed.records) {
+      const record = classifiedById.get(source.id);
+      const entries =
+        source.sourceEntries ||
+        Object.entries(source.data).map(([column, value]) => ({ column, value }));
+      for (const [index, entry] of entries.entries()) {
+        const rawValue = String(entry.value ?? '');
+        const found = recognizeValue(rawValue, fieldForHeader, validBirthDate, (s) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+        );
+        const named = !parsed.headerless && fieldForHeader(entry.header ?? entry.column, rawValue);
+        const schema = SCHEMAS[options.schema];
+        const role = schema && entries.length === schema.length ? schema[index] : null;
+        if (
+          rawValue &&
+          (named === 'twoFactorCode' ||
+            role === 'twoFactorCode' ||
+            found.key === 'twoFactorCode' ||
+            record?.fieldSources.twoFactorCode?.some((s) => s.column === entry.column))
+        ) {
+          confidentialSources.push({
+            rawValue,
+            value: found.key === 'twoFactorCode' ? found.value : rawValue,
+            range: entry.range || null
+          });
+        }
+      }
+    }
+    const protectedValues = new Set(
+      confidentialSources.flatMap((s) => [s.rawValue, s.value]).filter(Boolean)
+    );
+    const protectedRanges = [];
+    for (const range of confidentialSources
+      .map((s) => s.range)
+      .filter(Boolean)
+      .sort((a, b) => a.start - b.start)) {
+      const last = protectedRanges.at(-1);
+      if (last && range.start <= last.end) last.end = Math.max(last.end, range.end);
+      else protectedRanges.push({ ...range });
+    }
+    const overlapsProtected = (range) => {
+      let low = 0,
+        high = protectedRanges.length;
+      while (low < high) {
+        const mid = (low + high) >>> 1;
+        if (protectedRanges[mid].start < range.end) low = mid + 1;
+        else high = mid;
+      }
+      return low > 0 && protectedRanges[low - 1].end > range.start;
+    };
+    for (const record of classified.records)
+      for (const field of CORE_FIELDS) {
+        if (!record.data[field]) continue;
+        const protectedSource = record.fieldSources[field]?.some((source) => {
+          const entry = record.sourceEntries.find((e) => e.column === source.column);
+          return (
+            protectedValues.has(String(entry?.value ?? '')) ||
+            (source.range && overlapsProtected(source.range))
+          );
+        });
+        if (protectedValues.has(record.data[field]) || protectedSource)
+          throw Error('CONFIDENTIAL_FIELD_MAPPING');
+      }
     const unresolved = classified.records.filter(
       (r) =>
         r.unrecognized.length ||
         r.warnings?.length ||
         !Object.entries(r.data).some(([k, v]) => k !== 'rowNumber' && v)
     );
-    const old = operations.get(operationId);
     const o = {
       operationId,
       parsed,
       options,
       ...classified,
+      confidentialSources: [
+        ...new Map(confidentialSources.map((s) => [JSON.stringify(s), s])).values()
+      ],
+      containsTwoFactor: Boolean(old?.containsTwoFactor || confidentialSources.length),
       status:
         unresolved.length || !classified.records.length ? 'preview_partial' : 'preview_complete',
       unresolved,

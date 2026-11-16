@@ -26,7 +26,7 @@ test(
           `--user-data-dir=${path.join(root, 'data')}`
         ]
       });
-      const page = await app.firstWindow();
+      const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
       await page.locator('[data-action="generate"]').first().waitFor();
       await page.evaluate(() => window.blego.markTour()).catch(() => {});
       await page.locator('[data-view="photos"]').click();
@@ -52,6 +52,7 @@ test(
     );
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('[data-action="photos-tools"]').click();
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
       return !state.imagesBusy;
@@ -221,6 +222,7 @@ test(
     await app.close();
     app = null;
     page = await launch();
+    await page.locator('[data-action="photos-tools"]').click();
     assert.equal(
       await page.locator('#image-group option').filter({ hasText: 'Explicit group' }).count(),
       1

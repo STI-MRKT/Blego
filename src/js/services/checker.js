@@ -3,6 +3,7 @@ export async function parseIds(text) {
   const normalized = await window.blego.normalizeFacebook(text);
   return normalized.inputRows.map((row) => ({
     id: row.target || row.raw,
+    input: row.raw,
     inputIndex: row.inputIndex,
     type: row.kind === 'id' ? 'numeric' : row.kind === 'username' ? 'vanity' : 'invalid',
     status: row.reasonCode || 'Valid syntax only',

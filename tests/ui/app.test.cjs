@@ -62,7 +62,7 @@ test(
         }
       });
       assert.equal(await app.evaluate(({ app }) => app.getPath('userData')), fs.realpathSync(data));
-      const page = await app.firstWindow();
+      const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
       await app.evaluate(({ BrowserWindow }) =>
         BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
       );
@@ -237,6 +237,7 @@ test(
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('[data-action="photos-tools"]').click();
     await page.locator('#metadata-advanced > summary').click();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Новый заголовок');

@@ -1,0 +1,147 @@
+{
+  "at": "2026-11-16T06:32:51.242Z",
+  "host": "linux-x64",
+  "targets": [
+    {
+      "target": "https://www.facebook.com/NASA",
+      "result": {
+        "status": "LOGIN_REQUIRED",
+        "source": "public_page",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "nasa",
+        "canonicalUrl": "https://www.facebook.com/nasa",
+        "availability": "login_required",
+        "reasonCode": "LOGIN_REQUIRED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:32:47.431Z",
+        "durationMs": 632,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-0",
+        "evidenceSummary": "LOGIN_REQUIRED",
+        "publicContent": null,
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/"
+      },
+      "display": {
+        "status": "LOGIN_REQUIRED",
+        "tone": "",
+        "description": ""
+      },
+      "proof": {
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/",
+        "bodyBytes": 320505,
+        "bodySha256": "f5d59501702d15c3127f192494cb2956371a0bafcb2f226a6f15938d99499545",
+        "transport": {
+          "encoding": "identity",
+          "charset": "utf-8",
+          "decodedBytes": 320505,
+          "transport": "electron-session"
+        },
+        "headings": 0,
+        "structuredScripts": 0,
+        "method": "anonymous HTTPS; TLS verified; bounded redirects/decoded response; no credentials"
+      },
+      "acceptance": "BLOCKED"
+    },
+    {
+      "target": "https://www.facebook.com/meta",
+      "result": {
+        "status": "LOGIN_REQUIRED",
+        "source": "public_page",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "meta",
+        "canonicalUrl": "https://www.facebook.com/meta",
+        "availability": "login_required",
+        "reasonCode": "LOGIN_REQUIRED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:32:49.489Z",
+        "durationMs": 2057,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-1",
+        "evidenceSummary": "LOGIN_REQUIRED",
+        "publicContent": null,
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/"
+      },
+      "display": {
+        "status": "LOGIN_REQUIRED",
+        "tone": "",
+        "description": ""
+      },
+      "proof": {
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/",
+        "bodyBytes": 320524,
+        "bodySha256": "73b562036137d9d8f6c3b218c8a49dd1371ad85e7bff8ffc336dcb97068f96f3",
+        "transport": {
+          "encoding": "identity",
+          "charset": "utf-8",
+          "decodedBytes": 320524,
+          "transport": "electron-session"
+        },
+        "headings": 0,
+        "structuredScripts": 0,
+        "method": "anonymous HTTPS; TLS verified; bounded redirects/decoded response; no credentials"
+      },
+      "acceptance": "BLOCKED"
+    },
+    {
+      "target": "https://www.facebook.com/zuck",
+      "result": {
+        "status": "LOGIN_REQUIRED",
+        "source": "public_page",
+        "attempted": true,
+        "profileName": null,
+        "avatarUrl": null,
+        "objectType": null,
+        "target": "zuck",
+        "canonicalUrl": "https://www.facebook.com/zuck",
+        "availability": "login_required",
+        "reasonCode": "LOGIN_REQUIRED",
+        "banAssessment": "unknown",
+        "checkedAt": "2026-11-16T06:32:51.240Z",
+        "durationMs": 1750,
+        "parserVersion": "public-evidence-v5",
+        "runId": "tz11-live-2",
+        "evidenceSummary": "LOGIN_REQUIRED",
+        "publicContent": null,
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/"
+      },
+      "display": {
+        "status": "LOGIN_REQUIRED",
+        "tone": "",
+        "description": ""
+      },
+      "proof": {
+        "httpStatus": 200,
+        "finalUrl": "https://www.facebook.com/login/",
+        "bodyBytes": 320631,
+        "bodySha256": "176809106b4ac7317df2a31e5233e8f0073e48a5c4bf8fe06fda25fd4b5252bb",
+        "transport": {
+          "encoding": "identity",
+          "charset": "utf-8",
+          "decodedBytes": 320631,
+          "transport": "electron-session"
+        },
+        "headings": 0,
+        "structuredScripts": 0,
+        "method": "anonymous HTTPS; TLS verified; bounded redirects/decoded response; no credentials"
+      },
+      "acceptance": "BLOCKED"
+    }
+  ],
+  "positivePublicAcceptance": "BLOCKED",
+  "confirmedUnavailableTarget": {
+    "status": "BLOCKED",
+    "reason": "No independently confirmed unavailable public target supplied; not inferred from random IDs or HTTP status"
+  },
+  "scope": "Live anonymous transport/inspector. Controlled HTML tests are separate and cannot substitute for live positive acceptance."
+}

@@ -39,7 +39,13 @@ export function matchingLayout(layouts, values) {
       // Plain email syntax cannot distinguish primary from backup. Labels can.
       const compatibleEmail = value.key === 'email' && !value.explicit && target === 'backupEmail';
       if (value.key && target && value.key !== target && !compatibleEmail) return false;
-      if (anchors.has(target) && (value.key === target || compatibleEmail)) evidence++;
+      if (
+        anchors.has(target) &&
+        (value.key === target ||
+          compatibleEmail ||
+          (target === 'accountId' && /^\d+$/.test(value.value)))
+      )
+        evidence++;
     }
     return evidence >= 2;
   });
