@@ -26,7 +26,7 @@ test(
           `--user-data-dir=${path.join(root, 'data')}`
         ]
       });
-      const page = await app.firstWindow();
+      const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
       await page.locator('[data-action="generate"]').first().waitFor();
       await page.evaluate(() => window.blego.markTour()).catch(() => {});
       await page.locator('[data-view="photos"]').click();

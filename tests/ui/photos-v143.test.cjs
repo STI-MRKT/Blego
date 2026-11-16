@@ -40,7 +40,7 @@ for (const folders of [false, true])
         await app.close();
         fs.rmSync(root, { recursive: true, force: true });
       });
-      const page = await app.firstWindow();
+      const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
       await page.locator('[data-view="photos"]').click();
       if (folders) {
         await app.evaluate(({ dialog }, input) => {
@@ -137,7 +137,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     await page.locator('#photo-input').setInputFiles(file);
     await waitForAsync(page, async () => !(await import('/js/state.js')).state.imagesBusy);
@@ -210,7 +210,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     await page.locator('#photo-input').setInputFiles(file);
     await waitForAsync(page, async () => !(await import('/js/state.js')).state.imagesBusy);

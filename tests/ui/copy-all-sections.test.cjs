@@ -61,7 +61,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow(),
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app),
       errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.locator('[data-action="generate"]').waitFor();

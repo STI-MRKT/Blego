@@ -12,9 +12,8 @@ let dispose = () => {};
 const boundaries = new Map();
 const tiles = new Map(), tileAttempts = new Map();
 export function photoMapHTML() {
-  if (!state.photos.length) return '';
   const mode = state.photoMap?.mode || 'before';
-  return `<section class="card photo-map" aria-label="Карта фотографий"><div class="head-actions"><h3>Местоположение</h3><button class="btn" data-map-action="before" aria-pressed="${mode === 'before'}">До</button><button class="btn" data-map-action="after" aria-pressed="${mode === 'after'}">После</button><button class="btn" data-map-action="zoom-in" aria-label="Приблизить карту">+</button><button class="btn" data-map-action="zoom-out" aria-label="Отдалить карту">−</button><button class="btn" data-map-action="fit">Показать все</button></div><div class="head-actions"><button class="btn" data-map-action="background" aria-pressed="${Boolean(state.photoMap?.background)}">${state.photoMap?.background ? 'Скрыть подложку' : 'Загрузить подложку'}</button><button class="btn" data-map-action="retry" hidden>Повторить загрузку</button><span class="sub" id="map-background-status">Подложка не загружена · локальные границы доступны без сети</span></div><p class="sub">При загрузке OpenStreetMap получает область карты. Фотографии и метаданные не передаются.</p><canvas id="photo-map-canvas" tabindex="0" aria-label="Карта GPS. Стрелки перемещают карту, плюс и минус меняют масштаб."></canvas><p class="sub"><a href="https://www.openstreetmap.org/copyright" data-action="open-external" data-url="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></p><p class="sub" id="photo-map-status" role="status"></p><label class="fl">Фотография<select class="input" id="photo-map-select"><option value="">Выберите фотографию</option></select></label><div id="photo-map-inspector"></div><p class="sub">Выбранную точку в режиме «После» можно перетащить внутри выбранного города. Точные координаты — в дополнительных полях GEO.</p></section>`;
+  return `<section class="card photo-map" aria-label="Карта фотографий"><div class="head-actions"><h3>Местоположение</h3><button class="btn" data-map-action="before" aria-pressed="${mode === 'before'}">До</button><button class="btn" data-map-action="after" aria-pressed="${mode === 'after'}">После</button><button class="btn" data-map-action="zoom-in" aria-label="Приблизить карту">+</button><button class="btn" data-map-action="zoom-out" aria-label="Отдалить карту">−</button><button class="btn" data-map-action="fit">Показать все</button></div><div class="head-actions"><button class="btn" data-map-action="retry" hidden>Повторить загрузку</button><span class="sub" id="map-background-status">Загрузка подложки…</span></div><p class="sub">При загрузке OpenStreetMap получает область карты. Фотографии и метаданные не передаются.</p><canvas id="photo-map-canvas" tabindex="0" aria-label="Карта GPS. Стрелки перемещают карту, плюс и минус меняют масштаб."></canvas><p class="sub"><a href="https://www.openstreetmap.org/copyright" data-action="open-external" data-url="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></p><p class="sub" id="photo-map-status" role="status"></p><label class="fl">Фотография<select class="input" id="photo-map-select"><option value="">Выберите фотографию</option></select></label><div id="photo-map-inspector"></div><p class="sub">Выбранную точку в режиме «После» можно перетащить внутри выбранного города. Точные координаты — в дополнительных полях GEO.</p></section>`;
 }
 export function mountPhotoMap({ onMove, onError } = {}) {
   dispose();
@@ -26,6 +25,7 @@ export function mountPhotoMap({ onMove, onError } = {}) {
   const panel = canvas.closest('.photo-map'),
     select = document.getElementById('photo-map-select');
   const model = (state.photoMap ||= { mode: 'before', view: null, selected: null });
+  model.background = true; // Photos always displays its basemap; opening this view starts loading.
   const rows = photoMapRows(state.photos, state.imageWorkspace),
     cityId = state.geoCity;
   let geometry = boundaries.get(cityId)?.geometry || null,
@@ -116,7 +116,8 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     context.fillStyle = palette.panel;
     context.fillRect(0, 0, width, height);
     let renderedTiles=0;
-    const wanted = model.background && points().length ? visibleTiles(view,width,height) : [];
+    const wanted = visibleTiles(view,width,height);
+    canvas.dataset.background = 'true';
     if(model.background) {
       for(const tile of wanted) {
         const img=tiles.get(`${tile.z}/${tile.x}/${tile.y}`);
@@ -130,13 +131,10 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     canvas.dataset.tiles = String(renderedTiles);
     canvas.dataset.requiredTiles = String(wanted.length);
     const complete = wanted.length > 0 && renderedTiles === wanted.length;
-    document.getElementById('map-background-status').textContent = !model.background
-      ? 'Подложка не загружена · локальные границы доступны без сети'
-      : !points().length ? 'Без GEO'
-      : complete ? 'OpenStreetMap загружен'
-      : progress.failed ? `Подложка загружена частично (${renderedTiles}/${wanted.length}) · повторите загрузку`
+    document.getElementById('map-background-status').textContent = complete ? 'OpenStreetMap загружен'
+      : progress.failed ? `Не удалось загрузить всю подложку (${renderedTiles}/${wanted.length}) · повторите загрузку`
       : `Загрузка подложки… ${renderedTiles}/${wanted.length}`;
-    panel.querySelector('[data-map-action="retry"]').hidden = !model.background || complete || !progress.failed;
+    panel.querySelector('[data-map-action="retry"]').hidden = complete || !progress.failed;
     context.strokeStyle = palette.border;
     context.lineWidth = 1;
     const step = 10 ** Math.floor(Math.log10(100 / view.scale));
@@ -239,7 +237,6 @@ export function mountPhotoMap({ onMove, onError } = {}) {
     (button) =>
       (button.onclick = () => {
         const action = button.dataset.mapAction;
-        if(action==='background'){panel.querySelector('[data-map-action="retry"]').hidden=true;model.background=!model.background;button.setAttribute('aria-pressed',String(model.background));button.textContent=model.background?'Скрыть подложку':'Загрузить подложку';if(!model.background)loader.update([]);schedule();return;}
         if(action==='retry'){loader.retry();schedule();return;}
         if (action === 'before' || action === 'after') {
           model.mode = action;

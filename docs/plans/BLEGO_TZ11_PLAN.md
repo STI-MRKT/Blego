@@ -19,45 +19,45 @@ Base91bc0c66f2eac47d6740f1f3657d7f51d13bee2b, branch codex/blego-v1-4-3-fixes. P
 
 ## Task1 audit/baseline
 Files: docs/specs/BLEGO_TZ11.md, this plan, docs/verification/tz11/baseline.
-- [ ] Fetch and compare actual base/PR; preserve worktrees and uncommitted changes; create specified branch.
-- [ ] npm ci; npm run verify; BLEGO_HEADLESS=1 npm run test:ui. Expected152unit132integration50GUI; record actual failures/counts before changing code.
-- [ ] Inspect current interfaces and live Facebook without credentials; save only sanitized diagnostics. Commit audit.
+- [x] Fetch and compare actual base/PR; preserve worktrees and uncommitted changes; create specified branch.
+- [x] npm ci; npm run verify; BLEGO_HEADLESS=1 npm run test:ui. Expected152unit132integration50GUI; record actual failures/counts before changing code.
+- [x] Inspect current interfaces and live Facebook without credentials; save only sanitized diagnostics. Commit audit.
 
 ## Task2 Facebook Checker
 Files: electron/features/facebook/{inspect,transport,diagnostics,service}.cjs, src/js/ui/checker.js, shared/facebook-results.mjs where existing presentation resides; new tests/{unit,integration,ui}/facebook-v143.test.cjs; scripts/check-facebook-v143.cjs.
 Interface: existing fetchPublicProfile(raw,{signal,request,maxBytes,deadline}) and inspectResponse(target,response), add bounded sanitized transport/evidence diagnostics without storing fullHTML. Preserve publicContent vs banAssessment distinction.
-- [ ] RED controlled real-pattern publicPage evidence without mandatory PersonJSONLD; login/challenge precedence, contradictory identity, unavailable localized message; compressed/charset/truncated transport and source diagnostics.
-- [ ] Minimal evidence rules tied to observed public representations; no arbitrary HTTP200 verdict. UI description exact supplied Russian, preserve copy/search/retry/cancel.
-- [ ] GREEN targeted; real public tests record transport method/status/reason, BLOCKED if unavailable; fullverify/UI then commit.
+- [x] RED controlled real-pattern publicPage evidence without mandatory PersonJSONLD; login/challenge precedence, contradictory identity, unavailable localized message; compressed/charset/truncated transport and source diagnostics.
+- [x] Minimal evidence rules tied to observed public representations; no arbitrary HTTP200 verdict. UI description exact supplied Russian, preserve copy/search/retry/cancel.
+- [x] GREEN targeted; real public tests record transport method/status/reason, BLOCKED if unavailable; fullverify/UI then commit.
 
 ## Task3 Classifier
 Files: shared/classifier-{lexer,recognition,layouts}.mjs, shared/classifier.mjs, shared/importer.mjs, electron/features/classification/service.cjs; relevant copy/archive contract; new labelled synthetic fixtures and tests/{unit,integration,ui}/classifier-v143.test.cjs; scripts/check-classifier-v143.cjs.
 Interface: preserve structuredRecords offsets/sourceEntries and discovery/mapping; add twoFactorCode confidential recognized field, explicit labels and confirmed schema roles. No fuzzy password guesses; schema confirmation through explicit labels/header or explicit user mapping for ambiguous bare tuples. Singlecolon and confirmed slash/backslash boundaries protect composite values.
-- [ ] RED fixtures A/B/C +20spec cases; expected source exactness, ambiguity, conflict/provenance, no fabricated fields and no cross-account values.
-- [ ] Extend existing lexer/group recognition minimally. Preserve multi-line/nestedJSON and old formats. Add manual role mapping for opaque unconfirmed positions.
-- [ ] 2FA local recognition only, excluded from seven-field export AND persisted archive payload/source. Confirm original in-memory source retained; no blanket removal of other fields.
-- [ ] GREEN labelled precision/recall/false assignments metrics; GUI copy/cookie collapse/archive; fullverify/UI then commit.
+- [x] RED fixtures A/B/C +20spec cases; expected source exactness, ambiguity, conflict/provenance, no fabricated fields and no cross-account values.
+- [x] Extend existing lexer/group recognition minimally. Preserve multi-line/nestedJSON and old formats. Add manual role mapping for opaque unconfirmed positions.
+- [x] 2FA local recognition only, excluded from seven-field export AND persisted archive payload/source. Confirm original in-memory source retained; no blanket removal of other fields.
+- [x] GREEN labelled precision/recall/false assignments metrics; GUI copy/cookie collapse/archive; fullverify/UI then commit.
 
 ## Task4 Network
 Files: src/js/{main,state}.js, src/js/ui/network.js, electron/local/settings.cjs (data default only, Settings UI unchanged), existing proxy IPC/service; tests/{unit,integration,ui}/network-v143.test.cjs.
 Interface: persisted nullable proxyReputationConsent; first-use notification offers explicit grant/refusal. Proxy always checks ordinary connection; reputation request only with backend persisted grant and exitIP. Subsequent checks reuse choice, N/A on refusal/providerfailure.
-- [ ] RED no checkbox; first-use approve/decline/restart, backend rejects unconsented renderer request; no proxycredentials to provider; independent connection quality.
-- [ ] Remove checkbox markup/state dependency, reuse existing settings persistence/dialog/IPC. Keep speed explicit.
-- [ ] GREEN controlled provider replies and real bounded observation; fullverify/UI then commit.
+- [x] RED no checkbox; first-use approve/decline/restart, backend rejects unconsented renderer request; no proxycredentials to provider; independent connection quality.
+- [x] Remove checkbox markup/state dependency, reuse existing settings persistence/dialog/IPC. Keep speed explicit.
+- [x] GREEN controlled provider replies and real bounded observation; fullverify/UI then commit.
 
 ## Task5 Photos
 Files: src/js/ui/photos.js, src/js/main.js, small renderer service helper if needed; existing tests/UI and scripts/check-metadata-ui-batch.cjs updated for new user flow; tests/ui/photos-v143.test.cjs.
 Interface: existing applyImageForm/prepareImageExport/applyMetadataPlan retained; export coordinator prepares freshest authorized snapshot then applies only matching revision. Primary view excludes old panels; secondary tools view retains all existing group/preset/detail capabilities and storage.
-- [ ] RED no listed technical panels in primaryDOM, save without Preview, implicit preparation after edits, stale plan/cancel/nochange/errors/retry only failed files.
-- [ ] Primary Save runs current-plan validation safely, no export on nochange, progress/error in user terms. Secondary controls use existing handlers and restore drafts; no originaloverwrite.
-- [ ] GREEN actual20files +20folder JPEG/PNG/WebP date/GPS readback/originalhashes; adapt older GUI navigation without removing checks; fullverify/UI then commit.
+- [x] RED no listed technical panels in primaryDOM, save without Preview, implicit preparation after edits, stale plan/cancel/nochange/errors/retry only failed files.
+- [x] Primary Save runs current-plan validation safely, no export on nochange, progress/error in user terms. Secondary controls use existing handlers and restore drafts; no originaloverwrite.
+- [x] GREEN actual20files +20folder JPEG/PNG/WebP date/GPS readback/originalhashes; adapt older GUI navigation without removing checks; fullverify/UI then commit.
 
 ## Task6 BIO
 Files: electron/features/generator/biography-workspace.cjs and narrow helpers in biography.cjs, src/js/ui/biography.js, src/js/services/biography.js, src/js/main.js. Do not change FP generation contract. Tests/{unit,integration,ui}/biography-v143.test.cjs.
 Interface: standaloneBIO retains current strings and adds employerCity/universityCity/schoolCity plus organization identity metadata. Read adapter matches exact catalog/name/legacylabel; unmatched full label untouched, city empty. Persist only on explicit edit/generation, no destructive migration.
-- [ ] RED separate exact copies/name withdash/NewYorkUniversity; regional actualcity, legacy/read/idempotence, regeneratepair, racing edits and restart.
-- [ ] Extend standalone workspace normalization/validation; paired updates and revisions use existing editor/autosave. Catalog identity retained without trusting mismatched manual names.
-- [ ] GREEN actualnativeclipboard/narrow/FPindependence; fullverify/UI then commit.
+- [x] RED separate exact copies/name withdash/NewYorkUniversity; regional actualcity, legacy/read/idempotence, regeneratepair, racing edits and restart.
+- [x] Extend standalone workspace normalization/validation; paired updates and revisions use existing editor/autosave. Catalog identity retained without trusting mismatched manual names.
+- [x] GREEN actualnativeclipboard/narrow/FPindependence; fullverify/UI then commit.
 
 ## Task7 regression/review/nativeQA/PR
 Files: package.json/package-lock.json version1.4.3, existing macOSQA workflow and minimal QA scripts; docs/verification/tz11.
@@ -95,3 +95,5 @@ Classifier follow-up: CSV/JSON/TXT explicit 2fa headers now distinguish a code f
 Final review: four Important findings accepted (composite delimiters, empty final columns/record boundaries, sticky 2FA confidentiality, MakerNotes acknowledgment). All reproduced RED; targeted GREEN3 classifier +1actual-copy GUI; common verify190unit141integration PASS. Protected intervals are merged and binary-searched to avoid quadratic filtering. One Minor metrics issue deferred, with all reviewer boundaries/rulings in docs/verification/tz11/review/REVIEW.md. Full GUI will rerun with the new automatic-map steering before native QA. No second reviewer.
 
 User steering: Photos basemap must always display. Remove manual load/hide control; automatically request current viewport (including empty world map) while Photos is open. Reuse existing loader/cache/retry/cancel and show errors when tiles unavailable. Tests will use controlled/offline tile transports; real OSM observed separately. This explicit request supersedes the earlier per-map manual enable requirement; no device location or images are sent.
+
+Automatic-map steering complete: Photos always renders the map, even with no files/GPS, and immediately requests the current viewport; no load/hide button. Existing bounded loader/cache/cancellation retained; Before/After, resize, navigation/restart and20photo Brazil→Italy +exact GPS export pass. Non-map GUI scenarios now explicitly inject offline tile failures so regression does not repeatedly query OSM; controlled map suites retain real service/cache/Canvas checks. RED missing-canvas tests ->GREEN. Clean npmci, lint191unit141integration59GUI PASS/0skip (285.023s). Live Linux app UI: Meta/NASA/Zuck HTTP200 LOGIN_REQUIRED; positive public-content acceptance BLOCKED. OSM0tiles and fixed-IP Trust unavailable in this cloud; separate native live observation pending. No fake network success.

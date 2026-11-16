@@ -48,7 +48,7 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           ]
         });
         await app.context().route('**/api/**', (route) => route.abort());
-        const page = await app.firstWindow();
+        const page = await require('../tests/fixtures/map-offline.cjs').firstWindowOfflineMap(app);
         await page.locator('[data-action="generate"]').first().waitFor();
         const launchMs = performance.now() - started;
         await app.evaluate(({ BrowserWindow }) => {

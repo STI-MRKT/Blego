@@ -30,7 +30,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     await app.evaluate(({ dialog }, files) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: files });

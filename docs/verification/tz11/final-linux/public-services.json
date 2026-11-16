@@ -1,0 +1,119 @@
+{
+  "at": "2026-11-16T07:43:59.594Z",
+  "host": "linux-x64",
+  "facebook": {
+    "status": "BLOCKED",
+    "targets": [
+      {
+        "target": "https://www.facebook.com/meta",
+        "result": "LOGIN_REQUIRED",
+        "reason": "LOGIN_REQUIRED",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T07:44:02.215Z",
+        "durationMs": 689
+      },
+      {
+        "target": "https://www.facebook.com/nasa",
+        "result": "LOGIN_REQUIRED",
+        "reason": "LOGIN_REQUIRED",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T07:44:04.105Z",
+        "durationMs": 1889
+      },
+      {
+        "target": "https://www.facebook.com/zuck",
+        "result": "LOGIN_REQUIRED",
+        "reason": "LOGIN_REQUIRED",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T07:44:05.951Z",
+        "durationMs": 1845
+      }
+    ],
+    "scope": "Actual application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.",
+    "confirmedUnavailableTarget": "BLOCKED: no independently confirmed unavailable target supplied"
+  },
+  "map": {
+    "status": "BLOCKED",
+    "reason": "CITY_TILES_INCOMPLETE",
+    "cityId": "osm:relation:41485",
+    "center": {
+      "longitude": 12.54510095,
+      "latitude": 41.89879626417336
+    },
+    "mode": "after",
+    "points": 20,
+    "rendered": 0,
+    "required": 4,
+    "tiles": [
+      {
+        "z": 8,
+        "x": 136,
+        "y": 94
+      },
+      {
+        "z": 8,
+        "x": 137,
+        "y": 94
+      },
+      {
+        "z": 8,
+        "x": 136,
+        "y": 95
+      },
+      {
+        "z": 8,
+        "x": 137,
+        "y": 95
+      }
+    ],
+    "message": "Не удалось загрузить всю подложку (0/4) · повторите загрузку",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  },
+  "trustProvider": {
+    "status": "BLOCKED",
+    "sampleIp": "8.8.8.8",
+    "sources": [
+      {
+        "id": "proxycheck.io",
+        "status": "unavailable"
+      }
+    ],
+    "assessment": {
+      "name": "IP Trust",
+      "version": "proxycheck-v3-100-minus-risk",
+      "score": null,
+      "trustScore": null,
+      "trustSource": null,
+      "status": "insufficient_data",
+      "factors": [],
+      "description": "100 minus provider risk; not a safety guarantee or connection quality."
+    },
+    "scope": "Explicit QA lookup of one fixed public DNS IP using the app provider adapter, without keys or proxy credentials. This is provider evidence, not proof of a user proxy route."
+  },
+  "mapBefore": {
+    "status": "BLOCKED",
+    "reason": "CITY_TILES_INCOMPLETE",
+    "center": {
+      "longitude": -46.63,
+      "latitude": -23.55
+    },
+    "mode": "before",
+    "points": 20,
+    "rendered": 0,
+    "required": 2,
+    "tiles": [
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74361
+      },
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74362
+      }
+    ],
+    "message": "Не удалось загрузить всю подложку (0/2) · повторите загрузку",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  }
+}

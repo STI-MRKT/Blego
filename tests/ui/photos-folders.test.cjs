@@ -30,7 +30,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-view="photos"]').click();
     assert.equal(
       await page.getByRole('button', { name: 'Добавить папку', exact: true }).count(),

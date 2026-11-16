@@ -182,7 +182,7 @@ async function fixture(t) {
         `--user-data-dir=${root}`
       ]
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await page.locator('[data-tab="profile"]').waitFor();
     return page;
   }

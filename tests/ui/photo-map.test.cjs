@@ -28,7 +28,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow(),
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app),
       external = [],
       errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
@@ -86,7 +86,7 @@ test(
     await app.evaluate(
       ({ ipcMain }, fixture) => {
         const channel = 'local:mapTile';
-        const original = ipcMain._invokeHandlers.get(channel);
+        const original = globalThis.offlineMapOriginal || ipcMain._invokeHandlers.get(channel);
         if (typeof original !== 'function') throw Error('MAP_IPC_HANDLER_REQUIRED');
         globalThis.mapFixtureRequests = [];
         ipcMain.removeHandler(channel);
@@ -118,7 +118,6 @@ test(
     // Zoom out to request new tiles while retaining uncovered raster pixels
     // outside the translucent city polygon for the exact-color assertion.
     for (let i = 0; i < 3; i++) await page.locator('[data-map-action="zoom-out"]').click();
-    await page.locator('[data-map-action="background"]').click();
     await page.waitForFunction(
       () => Number(document.getElementById('photo-map-canvas').dataset.tiles) > 0
     );
@@ -148,7 +147,6 @@ test(
       ),
       'the renderer requested a changed viewport, beyond the initial fixture cache'
     );
-    await page.locator('[data-map-action="background"]').click();
     for (let i = 0; i < 3; i++) await page.locator('[data-map-action="zoom-in"]').click();
     const id = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');

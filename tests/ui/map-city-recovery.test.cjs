@@ -8,7 +8,7 @@ const { _electron } = require('playwright');
 const { imageFixture, distinctCopies } = require('../fixtures/images.cjs');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 test(
-  'TZ9 20 photos: Brazil to Italy loads city tiles, preserves consent and exports matching GPS',
+  'TZ9 20 photos: Brazil to Italy automatically loads city tiles and exports matching GPS',
   { timeout: 180000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-city-ui-'));
@@ -106,13 +106,11 @@ test(
       const { state } = await import('/js/state.js');
       return state.photos.length === 20 && !state.imagesBusy;
     });
-    assert.equal(seen.length, 0, 'no network without map consent');
     assert.equal(
-      await page.locator('[data-map-action="retry"]').isVisible(),
-      false,
-      'retry must not be visible before any failure'
+      await page.locator('[data-map-action="background"]').count(),
+      0,
+      'background loads automatically'
     );
-    await page.locator('[data-map-action="background"]').click();
     const loaded = async () =>
       page.waitForFunction(() => {
         const c = document.getElementById('photo-map-canvas');
@@ -122,15 +120,27 @@ test(
     const required = Number(
       await page.locator('#photo-map-canvas').getAttribute('data-required-tiles')
     );
+    const currentKeys = new Set(
+      await page.evaluate(async () => {
+        const { state } = await import('/js/state.js'),
+          { visibleTiles } = await import('/shared/photo-map.mjs');
+        const r = document.getElementById('photo-map-canvas').getBoundingClientRect();
+        return visibleTiles(state.photoMap.view, r.width, r.height).map(
+          (t) => `/${t.z}/${t.x}/${t.y}.png`
+        );
+      })
+    );
+    assert.equal(currentKeys.size, required);
+    const currentRequests = () => seen.filter((key) => currentKeys.has(key));
     const end = Date.now() + 10000;
     while (Date.now() < end) {
       const counts = new Map();
-      for (const key of seen) counts.set(key, (counts.get(key) || 0) + 1);
+      for (const key of currentRequests()) counts.set(key, (counts.get(key) || 0) + 1);
       if (counts.size === required && [...counts.values()].every((count) => count === 3)) break;
       await page.waitForTimeout(50);
     }
     assert.equal(
-      seen.length,
+      currentRequests().length,
       required * 3,
       'all visible tile budgets must be exhausted before remount'
     );
@@ -143,8 +153,6 @@ test(
     await page.locator('[data-view="friends"]').click();
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
-    await page.locator('[data-map-action="background"]').click();
-    await page.locator('[data-map-action="background"]').click();
     await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
     offline = false;
     await page.locator('[data-map-action="retry"]').click();
@@ -152,15 +160,9 @@ test(
     // This assertion exposes the original defect before requiring new diagnostics.
     await page.locator('#geo-country').fill('IT');
     await page.locator('#geo-country').press('Tab');
-    assert.equal(
-      await page.locator('[data-map-action="background"]').getAttribute('aria-pressed'),
-      'true'
-    );
+    assert.equal(await page.locator('#photo-map-canvas').getAttribute('data-background'), 'true');
     await page.locator('#geo-city').selectOption('osm:relation:41485');
-    assert.equal(
-      await page.locator('[data-map-action="background"]').getAttribute('aria-pressed'),
-      'true'
-    );
+    assert.equal(await page.locator('#photo-map-canvas').getAttribute('data-background'), 'true');
     await page.locator('[data-action="geo-generate"]').click();
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
@@ -226,10 +228,7 @@ test(
     await page.locator('[data-view="friends"]').click();
     await page.locator('[data-view="photos"]').click();
     await loaded();
-    assert.equal(
-      await page.locator('[data-map-action="background"]').getAttribute('aria-pressed'),
-      'true'
-    );
+    assert.equal(await page.locator('#photo-map-canvas').getAttribute('data-background'), 'true');
     await app.evaluate(({ dialog }, output) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [output] });
     }, output);

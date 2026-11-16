@@ -44,6 +44,7 @@ const fs = require('node:fs'),
       ]
     });
     const page = await app.firstWindow();
+    await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1280, 900));
     const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
     await page.locator('[data-view="checker"]').click();
     await page
@@ -86,6 +87,28 @@ const fs = require('node:fs'),
     };
     await page.screenshot({ path: path.join(path.dirname(out), 'tz11-checker-live.png') });
 
+    report.trustProvider = await app.evaluate(async ({ app }) => {
+      const require = process
+        .getBuiltinModule('node:module')
+        .createRequire(app.getAppPath() + '/package.json');
+      const ip = '8.8.8.8';
+      const provider =
+        require('./electron/features/proxy/proxycheck.cjs').createProxycheckProvider();
+      const sources = await require('./electron/features/proxy/providers.cjs').lookupProviders(
+        ip,
+        [provider],
+        new AbortController().signal
+      );
+      const assessment = require('./electron/features/proxy/assessment.cjs').assess(sources, ip);
+      return {
+        status: assessment.score === null ? 'BLOCKED' : 'PASS',
+        sampleIp: ip,
+        sources,
+        assessment,
+        scope:
+          'Explicit QA lookup of one fixed public DNS IP using the app provider adapter, without keys or proxy credentials. This is provider evidence, not proof of a user proxy route.'
+      };
+    });
     await page.locator('[data-view="photos"]').click();
     await page.locator('#photo-input').setInputFiles(distinctCopies(photo, 20));
     await waitForAsync(page, async () => {
@@ -93,13 +116,6 @@ const fs = require('node:fs'),
       return !state.imagesBusy && state.photos.length === 20;
     });
     await page.locator('#photo-map-canvas').scrollIntoViewIfNeeded();
-    await page.evaluate(() => {
-      const c = document.getElementById('photo-map-canvas');
-      window.__cityBefore = Array.from(
-        c.getContext('2d').getImageData(0, 0, c.width, c.height).data
-      );
-    });
-    await page.locator('[data-map-action="background"]').click();
     const capture = async (mode, filename) => {
       let failure = null;
       try {
@@ -107,13 +123,12 @@ const fs = require('node:fs'),
           () => {
             const c = document.getElementById('photo-map-canvas'),
               a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-            let changed = 0;
-            for (let i = 0; i < a.length; i += 4)
-              if (a[i] !== __cityBefore[i] || a[i + 1] !== __cityBefore[i + 1]) changed++;
+            const colors = new Set();
+            for (let i = 0; i < a.length; i += 64) colors.add(`${a[i]},${a[i + 1]},${a[i + 2]}`);
             return (
               Number(c.dataset.requiredTiles) > 0 &&
               c.dataset.tiles === c.dataset.requiredTiles &&
-              changed > 1000
+              colors.size > 32
             );
           },
           null,

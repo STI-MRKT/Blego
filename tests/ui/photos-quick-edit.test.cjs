@@ -33,7 +33,7 @@ test(
       await app.close();
       fs.rmSync(root, { recursive: true, force: true });
     });
-    const page = await app.firstWindow();
+    const page = await require('../fixtures/map-offline.cjs').firstWindowOfflineMap(app);
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].setBounds({ width: 1280, height: 900 })
     );
