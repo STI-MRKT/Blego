@@ -1,0 +1,11 @@
+✔ review: 2FA source confidentiality survives remapping and schema removal without authorizing core or original export (480.103564ms)
+✔ review: composite URLs and unframed password separators stay byte-exact (54.521935ms)
+✔ review: confirmed colon records keep trailing empty fields and never consume the next account (4.272561ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 619.268947

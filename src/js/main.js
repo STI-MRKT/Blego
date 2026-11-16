@@ -300,7 +300,7 @@ function scheduleImagePreview(){
   const epoch=imagePlanEpoch;
   imagePlanTimer=setTimeout(()=>{previewCurrentImageDraft().catch(error=>{if(imagePlanEpoch===epoch+1)state.metadataPreviewError=error.message;});},350);
 }
-async function prepareImageExport(retry = {}) {
+async function prepareImageExport(retry = {}, {acknowledgeMakerNotes = !!state.metadataDraft?.['confirm-maker']} = {}) {
   await state.imageInvalidation;
   const fileIds = state.photos.filter((p) => p.selected).map((p) => p.fileId);
   await workspaceChange('select', { fileIds });
@@ -326,7 +326,7 @@ async function prepareImageExport(retry = {}) {
     workspaceRevision: workspace.revision,
     destinationByGroup,
     ...retry,
-    acknowledgeMakerNotes: !!state.metadataDraft?.['confirm-maker']
+    acknowledgeMakerNotes
   });
 }
 async function saveImageCopies(retry={}) {
@@ -337,6 +337,7 @@ async function saveImageCopies(retry={}) {
       if(!form)return;
       state.metadataDraft={...state.metadataDraft,...Object.fromEntries(new FormData(form))};
       for(const control of form.querySelectorAll('input[type=checkbox][name]'))state.metadataDraft[control.name]=control.checked;
+      const acknowledgeMakerNotes=state.metadataDraft['confirm-maker']===true;
       state.imageExportScope=document.getElementById('image-export-scope')?.value || 'selection';
       state.imagesBusy=true;state.photoSaveCancelled=false;
       renderView();
@@ -346,7 +347,7 @@ async function saveImageCopies(retry={}) {
       if(!preview || (state.imageExportScope==='selection' && !hasImageChanges(preview))){toast('Нет изменений для сохранения');return;}
       await applyImageForm();
       if(state.photoSaveCancelled)return;
-      await prepareImageExport(retry);
+      await prepareImageExport(retry,{acknowledgeMakerNotes});
       if(state.photoSaveCancelled || !state.metadataPlan)return;
       const plan=state.metadataPlan;
       const runId = crypto.randomUUID();
@@ -783,7 +784,7 @@ async function reclassifyInput() {
     if(state.importEpoch !== epoch) return;
     state.classifierQuery=''; state.classifierDescending=false;
     state.importStep='preview'; await importPage(0);
-  } catch {if(state.importEpoch===epoch) {state.importStep='preview';toast('Не удалось применить соответствие', 'err');}}
+  } catch(error) {if(state.importEpoch===epoch) {state.importStep='preview';toast(error.message==='CONFIDENTIAL_FIELD_MAPPING'?'Код 2FA нельзя включать в обычный экспорт. Оставьте для него отдельное поле 2FA.':'Не удалось применить соответствие', 'err');}}
   finally {if(state.importEpoch===epoch) {state.importRequest=null;renderView();}}
 }
 

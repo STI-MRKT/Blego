@@ -81,7 +81,7 @@ const fs = require('node:fs'),
         diagnostics: r.diagnostics
       })),
       scope:
-        'Actual installed application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.',
+        'Actual application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.',
       confirmedUnavailableTarget: 'BLOCKED: no independently confirmed unavailable target supplied'
     };
     await page.screenshot({ path: path.join(path.dirname(out), 'tz11-checker-live.png') });

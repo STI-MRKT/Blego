@@ -212,11 +212,13 @@ export function structuredRecords(text, options = {}) {
     const extra =
       c === ':' &&
       (!text.startsWith('::', i) || colonSchema || header?.delimiter === ':') &&
-      ((nextLabel && !fieldForHeader(current.trim())) ||
+      ((nextLabel &&
+        !fieldForHeader(current.trim()) &&
+        (!composite || /\s/.test(text[i - 1] || ''))) ||
         (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
         ? ':'
         : (c === '/' || (c === '\\' && length === 2)) &&
-            ((nextLabel && (!composite || /\s/.test(text[i - 1] || ''))) ||
+            ((nextLabel && /\s/.test(text[i - 1] || '') && /\s/.test(text[i + length] || '')) ||
               (header?.delimiter === text.slice(i, i + length) &&
                 current.trim() &&
                 /\s/.test(text[i - 1] || '') &&
@@ -282,7 +284,10 @@ export function structuredRecords(text, options = {}) {
       // An explicit continuation marker is reliable; otherwise keep lines with
       // an unfinished field separator together until a new identity appears.
       const previousSeparator = current.trim() === '' && fields.length;
-      if (/^(?:::|\||;)/.test(after) || (previousSeparator && !strongStart(after))) {
+      if (
+        /^(?:::|\||;)/.test(after) ||
+        (previousSeparator && !header && !options.schema && !colonTuple && !strongStart(after))
+      ) {
         line++;
         if (step === 2) i++;
         continue;

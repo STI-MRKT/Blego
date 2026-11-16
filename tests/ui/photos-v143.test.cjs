@@ -189,3 +189,66 @@ test(
     );
   }
 );
+test(
+  'review: Save carries explicit MakerNotes acknowledgment through fresh preparation and actual camera copy',
+  { timeout: 45000 },
+  async (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-maker-save-')),
+      out = path.join(root, 'out');
+    fs.mkdirSync(out);
+    const file = await imageFixture(root, 'jpeg'),
+      original = fs.readFileSync(file);
+    const app = await _electron.launch({
+      executablePath: process.env.BLEGO_EXECUTABLE || undefined,
+      args: [
+        ...(process.env.BLEGO_HEADLESS ? ['--ozone-platform=headless', '--disable-gpu'] : []),
+        ...(process.env.BLEGO_EXECUTABLE ? [] : ['.']),
+        `--user-data-dir=${path.join(root, 'data')}`
+      ]
+    });
+    t.after(async () => {
+      await app.close();
+      fs.rmSync(root, { recursive: true, force: true });
+    });
+    const page = await app.firstWindow();
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('#photo-input').setInputFiles(file);
+    await waitForAsync(page, async () => !(await import('/js/state.js')).state.imagesBusy);
+    await page.locator('[data-action="photos-tools"]').click();
+    await page
+      .locator('details')
+      .filter({ has: page.locator('[name="action-make"]') })
+      .locator('summary')
+      .first()
+      .click();
+    await page.locator('[name="action-make"]').selectOption('set');
+    await page.locator('[name="value-make"]').fill('Synthetic Camera');
+    await page.locator('[name="confirm-maker"]').check();
+    await app.evaluate(({ ipcMain, dialog }, out) => {
+      const channel = 'local:imageGroupPrepare',
+        original = ipcMain._invokeHandlers.get(channel);
+      globalThis.makerAcknowledgments = [];
+      ipcMain.removeHandler(channel);
+      ipcMain.handle(channel, (event, arg) => {
+        globalThis.makerAcknowledgments.push(arg.acknowledgeMakerNotes);
+        return arg.acknowledgeMakerNotes
+          ? original(event, arg)
+          : { ok: false, code: 'MAKER_NOTES_CONFIRMATION_REQUIRED' };
+      });
+      dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [out] });
+    }, out);
+    await page.locator('[data-action="metadata-export"]').click();
+    await waitForAsync(page, async () => {
+      const { state } = await import('/js/state.js');
+      return !state.imagesBusy;
+    });
+    assert.deepEqual(await app.evaluate(() => globalThis.makerAcknowledgments), [true]);
+    const report = await page.evaluate(
+      async () => (await import('/js/state.js')).state.metadataExport
+    );
+    assert.equal(report.files[0].status, 'completed');
+    assert.deepEqual(fs.readFileSync(file), original);
+    const tags = (await createEngine().read(path.join(out, report.files[0].outputName))).tags;
+    assert.equal(normalizedValue('make', tags), 'Synthetic Camera');
+  }
+);
