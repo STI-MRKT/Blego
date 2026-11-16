@@ -5,11 +5,16 @@ const fs = require('node:fs'),
   os = require('node:os');
 const { _electron } = require('playwright');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
+const { openStore } = require('../../electron/local/store.cjs');
 test(
   'TZ9 fresh UI enables three tools; disabling one survives restart without changing others',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-fresh-settings-'));
+    // This fixture tests untouched settings defaults, not the independent first-run tour.
+    const store = await openStore(root);
+    store.set('tourSeen', true);
+    store.close();
     const launch = () =>
       _electron.launch({
         executablePath: process.env.BLEGO_EXECUTABLE || undefined,

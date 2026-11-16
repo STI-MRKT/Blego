@@ -132,31 +132,61 @@ test(
     );
     assert.equal(currentKeys.size, required);
     const currentRequests = () => seen.filter((key) => currentKeys.has(key));
+    // Earlier import/layout mounts can dispatch and then cancel requests for the
+    // same keys. The loader counts completed failures; the server sees cancelled
+    // traffic too. Wait for every current key and a quiet window beyond the
+    // longest automatic retry delay (3 * 350ms) plus the 100ms render debounce.
+    const quietWindowMs = 1300;
     const end = Date.now() + 10000;
+    let previousCount = -1;
+    let quietSince = Date.now();
     while (Date.now() < end) {
+      const requests = currentRequests();
+      if (requests.length !== previousCount) {
+        previousCount = requests.length;
+        quietSince = Date.now();
+      }
       const counts = new Map();
-      for (const key of currentRequests()) counts.set(key, (counts.get(key) || 0) + 1);
-      if (counts.size === required && [...counts.values()].every((count) => count === 3)) break;
+      for (const key of requests) counts.set(key, (counts.get(key) || 0) + 1);
+      if (
+        counts.size === required &&
+        [...counts.values()].every((count) => count >= 3) &&
+        Date.now() - quietSince >= quietWindowMs
+      )
+        break;
       await page.waitForTimeout(50);
     }
-    assert.equal(
-      currentRequests().length,
-      required * 3,
-      'all visible tile budgets must be exhausted before remount'
+    for (const key of currentKeys)
+      assert.ok(currentRequests().filter((request) => request === key).length >= 3, key);
+    assert.ok(
+      Date.now() - quietSince >= quietWindowMs,
+      'automatic requests must stop after exhausting the visible tile budgets'
     );
-    await page.waitForTimeout(150);
+    const exhaustedRequests = currentRequests().length;
     await page.evaluate(async () => {
       const { mountPhotoMap } = await import('/js/ui/photo-map.js');
       mountPhotoMap();
     });
     await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 3000 });
+    await page.waitForTimeout(quietWindowMs);
+    assert.equal(
+      currentRequests().length,
+      exhaustedRequests,
+      'same-canvas remount retains exhausted budgets'
+    );
     await page.locator('[data-view="friends"]').click();
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
-    await page.locator('[data-map-action="retry"]').waitFor({ state: 'visible', timeout: 5000 });
+    await page.waitForTimeout(quietWindowMs);
+    assert.equal(
+      currentRequests().length,
+      exhaustedRequests,
+      'navigation remount cannot silently retry exhausted tiles'
+    );
     offline = false;
     await page.locator('[data-map-action="retry"]').click();
     await loaded();
+    assert.ok(currentRequests().length > exhaustedRequests, 'explicit Retry starts new requests');
     // This assertion exposes the original defect before requiring new diagnostics.
     await page.locator('#geo-country').fill('IT');
     await page.locator('#geo-country').press('Tab');

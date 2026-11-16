@@ -62,7 +62,7 @@ The coordinator returned the following actual results during implementation:
 | Final integrated suite | `npm run verify`: lint, 195/195 unit, 143/143 integration; no skips | PASS |
 | Final Linux Electron GUI | `BLEGO_HEADLESS=1 npm run test:ui`: 60/60, no skips, 274.386 s | PASS |
 | Visual comparison gate | All 15 News bounds equal original, FP controls equal incoming, no overflow across seven widths | PASS |
-| macOS ARM64 installed application | Existing native workflow configured; record run/artifact after execution | BLOCKED — pending |
+| macOS ARM64 installed application | Run 43845667208: 58/60 GUI; two fixture failures corrected below | FAIL — native rerun pending |
 | DMG / ZIP SHA-256 | Produced only after installed-app acceptance | BLOCKED — pending |
 
 Final review follow-up: the typeahead buffer now resets when keyboard focus moves
@@ -135,3 +135,29 @@ actual installed candidate are captured separately in `release/tz12-visual/`, wi
 install ZIP follow successful installed-app acceptance. The coordinating agent must
 append actual native run, artifact, checksums and any remaining blockers before a
 completion claim.
+
+### Native attempt 1 — run 43845667208
+
+The installed macOS ARM64 GUI gate ran all 60 scenarios: **58 passed, 2 failed**.
+This run is not accepted as an installation PASS. The failures were in unchanged
+map/settings scenarios, not the TZ12 controls or dictionaries:
+
+- `map-city-recovery`: the HTTP fixture counted 13 cumulative requests for three
+  final viewport tiles against an expected 9. The renderer's attempt budget counts
+  completed failures, while the fixture's lifetime server log also includes
+  requests cancelled by earlier import/layout remounts. Cancellation deliberately
+  does not consume a failure attempt. The assertion now waits for each final key
+  and a quiet interval longer than automatic retry/debounce, then requires **zero
+  additional requests after both direct and navigation remounts**. Explicit Retry
+  must start requests and recover the raster. The existing scheduler unit still
+  asserts exactly three failed attempts and concurrency at most four.
+- `settings-defaults-v142`: the independent first-run tour intercepted Settings
+  Save. This settings fixture now seeds only `tourSeen` using the existing store;
+  all three settings defaults remain untouched and their save/restart assertions
+  remain enabled. The tour's own tests remain in the suite.
+
+These corrections change only the two GUI test fixtures. No production map,
+settings, scheduler, IPC or default behavior is changed. The coordinator reran
+`tests/unit/map-recovery.test.cjs` (PASS) and both affected cloud Electron GUI
+files (2/2 PASS). The installed ARM64 rerun remains pending; no tests are disabled
+or skipped.
