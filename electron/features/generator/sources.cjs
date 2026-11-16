@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
+const addressSupplement = require('../../../resources/generator/supplements/addresses-tz12.json');
 const { namingPreset, nameCount } = require('./naming.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
@@ -81,6 +82,9 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...c,
     ...t,
     ...namingPreset(country, type, c),
+    // Imported geography remains authoritative; bundled examples never cross into it.
+    addresses: dataset ? [] : addressSupplement.records[country],
+    addressDatasetId: dataset ? null : addressSupplement.id,
     bios: [...t.bios[c.language], ...bioSupplement.bios[type][c.language]],
     bioDatasetId: bioSupplement.id,
     statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],

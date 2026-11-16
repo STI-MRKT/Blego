@@ -877,7 +877,23 @@
     "Żukowska",
     "Żurawska",
     "Żurek",
-    "Żyła"
+    "Żyła",
+    "Baczyńska",
+    "Bartoszewska",
+    "Białoszewska",
+    "Gojawiczyńska",
+    "Iłłakowiczówna",
+    "Konopnicka",
+    "Korczak",
+    "Kuncewiczowa",
+    "Nałkowska",
+    "Orzeszkowa",
+    "Poświatowska",
+    "Szymborska",
+    "Świrszczyńska",
+    "Tokarczuk",
+    "Żmichowska",
+    "Ziemiańska"
   ],
   "places": [
     {
@@ -2894,7 +2910,7 @@
   "nationalPrefix": "5",
   "schemaVersion": 1,
   "datasetId": "blego-pl-female",
-  "datasetVersion": "2026-11-12.2",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -2917,7 +2933,13 @@
       "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
       "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "ecf55818c96b1833f85650525ef41d810494b8a33970f420c9aca5dfdadb749b"
+  "checksum": "bf0cf7dc5d5f5a17006422aab02279845acfc20aeaf8a2d265a3bd9cee3f7042"
 }

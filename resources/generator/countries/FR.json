@@ -589,7 +589,23 @@
     "Thomas",
     "Vasseur",
     "Vidal",
-    "Vincent"
+    "Vincent",
+    "Beauchamp",
+    "Beaufort",
+    "Bellanger",
+    "Bonnefoy",
+    "Bousquet",
+    "Chabert",
+    "Chantepie",
+    "Charbonneau",
+    "Chastain",
+    "Delacroix",
+    "Delaroche",
+    "Lenoir",
+    "Monnier",
+    "Pelletier",
+    "Perrault",
+    "Rochefort"
   ],
   "places": [
     {
@@ -2606,7 +2622,7 @@
   "nationalPrefix": "6",
   "schemaVersion": 1,
   "datasetId": "blego-fr-female",
-  "datasetVersion": "2026-11-12.2",
+  "datasetVersion": "2026-11-16-tz12",
   "nameGender": "female",
   "preparedAt": "2026-11-12",
   "normalizationVersion": "NFKC-name-v1",
@@ -2629,7 +2645,13 @@
       "sourcePairedPostalLinks": 500,
       "verifiedPostalLinks": 0,
       "notes": "Exact locality/postal pairs from GeoNames, with NFKC/whitespace normalization. Independent second-source postal verification has not been performed; no coordinates or real household data imported. BR covers major municipal codes only."
+    },
+    "tz12Names": {
+      "kind": "editorial surname additions",
+      "license": "Project-authored dictionary selection; original MIT source retained",
+      "count": 16,
+      "gender": "female-compatible surname forms; unchanged female given names"
     }
   },
-  "checksum": "46b3ea9b844937df8ebabb9f1e728057b064dfe345d9ac3c49c7087f78a8f07d"
+  "checksum": "b42cb8582a85412285bcf7618e82f928ab68fa37ee90dbfc3e1719d4cdc8cd27"
 }
