@@ -1,0 +1,110 @@
+✖ TZ11 actual HTTP streams decode supported compression/charset and reject invalid HTML transport (41.706689ms)
+✖ TZ11 public Page with matching identity and substantive visible content needs no Person JSON-LD (5.362274ms)
+✖ TZ11 metadata-only shells, wrong identity, hidden content and login never become ACTIVE (2.304921ms)
+✖ TZ11 localized unavailable headings use actual target evidence; script placeholders stay unknown (1.26582ms)
+✖ TZ11 Checker shows requested and normalized target plus concrete reason without verbose header (13.148688ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 207.847938
+
+✖ failing tests:
+
+test at tests/integration/facebook-v143.test.cjs:11:1
+✖ TZ11 actual HTTP streams decode supported compression/charset and reject invalid HTML transport (41.706689ms)
+  TypeError [Error]: readHtmlResponse is not a function
+      at /workspace/BLEGO-final/tests/integration/facebook-v143.test.cjs:9:146
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async response (/workspace/BLEGO-final/tests/integration/facebook-v143.test.cjs:9:13)
+      at async TestContext.<anonymous> (/workspace/BLEGO-final/tests/integration/facebook-v143.test.cjs:14:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/unit/facebook-v143.test.cjs:8:1
+✖ TZ11 public Page with matching identity and substantive visible content needs no Person JSON-LD (5.362274ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'unknown'
+  - 'profile_visible'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v143.test.cjs:10:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'unknown',
+    expected: 'profile_visible',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/facebook-v143.test.cjs:16:1
+✖ TZ11 metadata-only shells, wrong identity, hidden content and login never become ACTIVE (2.304921ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'INSUFFICIENT_EVIDENCE'
+  - 'PUBLIC_PREVIEW_ONLY'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v143.test.cjs:19:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'INSUFFICIENT_EVIDENCE',
+    expected: 'PUBLIC_PREVIEW_ONLY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/facebook-v143.test.cjs:24:1
+✖ TZ11 localized unavailable headings use actual target evidence; script placeholders stay unknown (1.26582ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'unknown'
+  - 'unavailable'
+       ^
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v143.test.cjs:26:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'unknown',
+    expected: 'unavailable',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/facebook-v143.test.cjs:30:1
+✖ TZ11 Checker shows requested and normalized target plus concrete reason without verbose header (13.148688ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(html.includes('Проверка доступности Facebook-профилей'))
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/facebook-v143.test.cjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
