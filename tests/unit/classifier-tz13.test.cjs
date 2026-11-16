@@ -1,0 +1,114 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { fields, pairs, block } = require('../fixtures/classifier-tz13.cjs');
+async function classify(text, format = 'txt', options = {}) {
+  const { parseInput } = await import('../../shared/importer.mjs');
+  const { classifyRecords } = await import('../../shared/classifier.mjs');
+  const parsed = await parseInput(
+    { bytes: Buffer.from(text), originalName: `synthetic.${format}` },
+    { classification: true, ...options }
+  );
+  return { parsed, ...classifyRecords(parsed, options) };
+}
+function assertFields(record, expected) {
+  for (const [key, value] of Object.entries(expected))
+    assert.equal(record.data[key] ?? record.extended[key], value, key);
+}
+test('TZ13 vertical tab labels form one record and preserve every payload character and source span', async () => {
+  const result = await classify(block);
+  assert.equal(result.records.length, 1);
+  assertFields(result.records[0], fields);
+  assert.equal(result.records[0].sourceRecord, block);
+  for (const entry of result.records[0].sourceEntries)
+    assert.equal(block.slice(entry.range.start, entry.range.end), entry.value);
+});
+test('TZ13 horizontal tab label/value pairs protect separators, quotes and whitespace', async () => {
+  const text = pairs.flat().join('\t');
+  const result = await classify(text);
+  assert.equal(result.records.length, 1);
+  assertFields(result.records[0], fields);
+});
+test('TZ13 instructions, URLs and unknown labels cannot shift or teach opaque credentials', async () => {
+  const text = [
+    'Instructions: synthetic fixture, do not sign in',
+    'Login FB\tsynthetic.one',
+    'ID Account\t000100013',
+    'Help\thttps://example.test/path:password=NOT_A_PASSWORD',
+    'Unknown field\tpassword=DO_NOT_CLASSIFY',
+    'Email\tone@example.test',
+    'Notes: retain unknown raw values'
+  ].join('\n');
+  const result = await classify(text);
+  assert.equal(result.records.length, 1);
+  const record = result.records[0];
+  assertFields(record, {
+    login: 'synthetic.one',
+    accountId: '000100013',
+    email: 'one@example.test',
+    password: '',
+    emailPassword: ''
+  });
+  assert.ok(record.unrecognized.some((entry) => entry.value === 'password=DO_NOT_CLASSIFY'));
+  assert.ok(record.warnings.some((w) => w.code === 'UNRECOGNIZED_VALUES'));
+  assert.equal(record.sourceRecord, text);
+});
+test('TZ13 repeated login starts the next block without inheriting missing secrets', async () => {
+  const next = 'Login FB\tsynthetic.two\nEmail\ttwo@example.test\nID Account\t000100014';
+  for (const separator of ['\n', '\n\n']) {
+    const result = await classify(block + separator + next);
+    assert.equal(result.records.length, 2);
+    assertFields(result.records[0], fields);
+    assertFields(result.records[1], {
+      login: 'synthetic.two',
+      email: 'two@example.test',
+      accountId: '000100014',
+      password: '',
+      emailPassword: ''
+    });
+  }
+});
+test('TZ13 duplicate conflicting labels retain both raw values and report ambiguity', async () => {
+  const text =
+    'Login FB\tsynthetic.one\nID Account\t000100013\nEmail password\tFIRST_SYNTHETIC\nMail password\tSECOND_SYNTHETIC';
+  const result = await classify(text);
+  assert.equal(result.records.length, 1);
+  const record = result.records[0];
+  assert.equal(record.data.emailPassword, '');
+  assert.ok(
+    record.warnings.some((w) => w.code === 'AMBIGUOUS_FIELD' && w.column === 'emailPassword')
+  );
+  for (const value of ['FIRST_SYNTHETIC', 'SECOND_SYNTHETIC'])
+    assert.ok(record.unrecognized.some((entry) => entry.value === value));
+});
+test('TZ13 requested aliases also work in ordinary header tables', async () => {
+  const headers = ['Login FB', 'ID Account', 'Date of Birth', 'Cookie JSON'];
+  const values = ['synthetic.one', '000100013', '1991-09-18', fields.cookies];
+  const result = await classify(headers.join('\t') + '\n' + values.join('\t'));
+  assert.equal(result.records.length, 1);
+  assertFields(result.records[0], {
+    login: values[0],
+    accountId: values[1],
+    birthDate: values[2],
+    cookies: values[3]
+  });
+});
+test('TZ13 global manual assignment overrides headers and selected schemas across formats', async () => {
+  for (const format of ['txt', 'csv', 'tsv', 'json']) {
+    const text =
+      format === 'json'
+        ? JSON.stringify([{ Email: 'synthetic@example.test', Password: 'SYNTHETIC_ACCOUNT' }])
+        : `Email${format === 'csv' ? ',' : '\t'}Password\nsynthetic@example.test${format === 'csv' ? ',' : '\t'}SYNTHETIC_ACCOUNT`;
+    const result = await classify(text, format, { mapping: { Email: 'emailPassword' } });
+    assert.equal(result.records[0].data.emailPassword, 'synthetic@example.test', format);
+    assert.equal(result.records[0].data.email, '', format);
+    assert.equal(result.records[0].fieldSources.emailPassword[0].method, 'manual');
+  }
+  const result = await classify(
+    'synthetic.login:SYNTHETIC_PASS:one@example.test:SYNTHETIC_MAIL:SYNTHETIC_2FA:000100013',
+    'txt',
+    { schema: 'credentials6', mapping: { column_2: 'token' } }
+  );
+  assert.equal(result.records[0].extended.login, 'synthetic.login');
+  assert.equal(result.records[0].data.password, '');
+  assert.equal(result.records[0].data.token, 'SYNTHETIC_PASS');
+});
