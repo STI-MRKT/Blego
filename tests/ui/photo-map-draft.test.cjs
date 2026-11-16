@@ -141,24 +141,65 @@ for (const bulk of [false, true])
         return { x: r.x + r.width / 2, y: r.y + r.height / 2, endX: r.x + p.x, endY: r.y + p.y };
       });
       assert.ok(Math.hypot(drag.endX - drag.x, drag.endY - drag.y) >= 12);
+      await canvas.evaluate(async (c) => {
+        const { state } = await import('/js/state.js');
+        c.addEventListener(
+          'pointerup',
+          (event) => {
+            const r = c.getBoundingClientRect();
+            window.mapPointerEvidence = {
+              x: event.clientX - r.left,
+              y: event.clientY - r.top,
+              width: r.width,
+              height: r.height,
+              clientX: event.clientX,
+              clientY: event.clientY,
+              view: structuredClone(state.photoMap.view)
+            };
+          },
+          { once: true, capture: true }
+        );
+      });
       await page.mouse.move(drag.x, drag.y);
       await page.mouse.down();
-      await page.mouse.move(drag.endX, drag.endY, { steps: 5 });
+      await page.mouse.move(Math.round(drag.endX), Math.round(drag.endY), { steps: 5 });
       await page.mouse.up();
+      // Native mouse events are pixel-quantized. Verify the coordinate actually selected
+      // by the pointer, then retain the strict GPS readback checks below.
+      const pointer = await page.evaluate(() => window.mapPointerEvidence);
+      assert.ok(pointer, 'the real pointerup event must reach the canvas');
+      assert.ok(Math.hypot(pointer.clientX - drag.endX, pointer.clientY - drag.endY) <= 1.5);
+      const { unproject } = await import('../../shared/photo-map.mjs');
+      const expectedDrop = unproject(pointer, pointer.view, pointer.width, pointer.height);
+      assert.ok(Math.abs(expectedDrop.latitude - 48.8566) > 0.00005, 'marker must move');
       await waitForAsync(
         page,
-        async (id) => {
+        async ({ id, expectedDrop }) => {
           const { state } = await import('/js/state.js');
+          const gps = state.imageWorkspace.overrides[id].find((o) => o.field === 'gps').value;
           return (
             !state.imagesBusy &&
-            Math.abs(
-              state.imageWorkspace.overrides[id].find((o) => o.field === 'gps').value.latitude -
-                48.8567
-            ) < 1e-7
+            Math.abs(gps.latitude - expectedDrop.latitude) < 1e-7 &&
+            Math.abs(gps.longitude - expectedDrop.longitude) < 1e-7
           );
         },
-        id
-      );
+        { id, expectedDrop }
+      ).catch(async (error) => {
+        console.error(
+          'MAP_DRAG_DIAGNOSTICS',
+          await page.evaluate(async (id) => {
+            const { state } = await import('/js/state.js');
+            return {
+              pointer: window.mapPointerEvidence,
+              view: state.photoMap.view,
+              actual: state.imageWorkspace.overrides[id],
+              busy: state.imagesBusy
+            };
+          }, id),
+          drag
+        );
+        throw error;
+      });
 
       const beforePreview = await page.evaluate(async (id) => {
         const { state } = await import('/js/state.js');

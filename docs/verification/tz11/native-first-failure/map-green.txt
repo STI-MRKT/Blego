@@ -1,0 +1,11 @@
+✔ TZ9 20 photos: Brazil to Italy automatically loads city tiles and exports matching GPS (13876.319405ms)
+✔ map drag retains dirty date through actual preview and export (4084.427345ms)
+✔ map drag retains other photos pending GPS and dates through actual preview and export (4157.442556ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23102.266272

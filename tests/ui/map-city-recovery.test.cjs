@@ -160,8 +160,18 @@ test(
     // This assertion exposes the original defect before requiring new diagnostics.
     await page.locator('#geo-country').fill('IT');
     await page.locator('#geo-country').press('Tab');
+    // A change can replace the canvas before its first animation frame on native macOS.
+    // Wait for the renderer's actual diagnostic; do not infer loading from the action promise.
+    await page.waitForFunction(
+      () => document.getElementById('photo-map-canvas')?.dataset.background === 'true'
+    );
     assert.equal(await page.locator('#photo-map-canvas').getAttribute('data-background'), 'true');
     await page.locator('#geo-city').selectOption('osm:relation:41485');
+    // A change can replace the canvas before its first animation frame on native macOS.
+    // Wait for the renderer's actual diagnostic; do not infer loading from the action promise.
+    await page.waitForFunction(
+      () => document.getElementById('photo-map-canvas')?.dataset.background === 'true'
+    );
     assert.equal(await page.locator('#photo-map-canvas').getAttribute('data-background'), 'true');
     await page.locator('[data-action="geo-generate"]').click();
     await waitForAsync(page, async () => {
