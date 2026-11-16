@@ -1083,7 +1083,7 @@ document.addEventListener('click', async (event) => {
       state.archiveView=null;state.archiveQuery={};
       state.archives=await window.blego.listArchives();
       await importPage(state.importData.offset);toast('Сохранено');
-    } catch {toast('Не удалось сохранить архив','err');target.disabled=false;}
+    } catch (error) {toast(error.message.includes('ARCHIVE_2FA_ORIGINAL_NOT_ALLOWED')?'Исходный файл содержит 2FA. Отключите включение оригинала в ZIP, чтобы сохранить семь полей.':'Не удалось сохранить архив','err');target.disabled=false;}
     return;
   }
   if(action==='classifier-facebook-link'){try{await window.blego.linkFacebookImport({operationId:state.importData?.operationId,recordId:target.dataset.row});toast('Локальные сведения связаны; проверка Facebook не выполнялась');}catch{toast('Не удалось связать сведения. Проверьте ID и ссылку профиля.','err');}return;}

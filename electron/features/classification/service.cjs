@@ -1,8 +1,13 @@
 const { Worker } = require('node:worker_threads');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
-const { EXTENDED_FIELDS } = require('../../../shared/classifier-recognition.mjs');
-const { CORE_FIELDS, CLASSIFIER_FIELDS } = require('../../../shared/classifier.mjs');
+const { EXTENDED_FIELDS, recognizeValue } = require('../../../shared/classifier-recognition.mjs');
+const {
+  CORE_FIELDS,
+  CLASSIFIER_FIELDS,
+  fieldForHeader,
+  validBirthDate
+} = require('../../../shared/classifier.mjs');
 function archiveText(records) {
   return [
     CORE_FIELDS.join('\t'),
@@ -86,6 +91,19 @@ function createClassificationService({ allowTestRules = false, clock = () => new
       parsed,
       options,
       ...classified,
+      containsTwoFactor:
+        classified.records.some((r) => r.extended.twoFactorCode) ||
+        parsed.records.some((r) =>
+          (r.sourceEntries || []).some((e) => {
+            const value = String(e.value ?? '');
+            return (
+              (fieldForHeader(e.header || e.column) === 'twoFactorCode' && value) ||
+              recognizeValue(value, fieldForHeader, validBirthDate, (s) =>
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+              ).key === 'twoFactorCode'
+            );
+          })
+        ),
       status:
         unresolved.length || !classified.records.length ? 'preview_partial' : 'preview_complete',
       unresolved,

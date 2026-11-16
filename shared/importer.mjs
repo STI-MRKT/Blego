@@ -217,11 +217,12 @@ export function parseText(text, format, options = {}) {
   if (
     format === 'txt' &&
     options.classification &&
-    !options.schema &&
+    (!options.schema || ['credentials6', 'account5', 'mixedA'].includes(options.schema)) &&
     options.headers !== true &&
-    wantsStructuredText(text, fieldForHeader)
+    (['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
+      wantsStructuredText(text, fieldForHeader))
   ) {
-    const result = structuredRecords(text);
+    const result = structuredRecords(text, options);
     ({ records, columns, delimiter, headerless, structured } = result);
     diagnostics.push(...result.diagnostics);
   } else if (format === 'json') {

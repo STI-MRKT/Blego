@@ -1,0 +1,397 @@
+✖ TZ11 TXT: labelled : (63.273847ms)
+✖ TZ11 TXT: labelled :: (4.282421ms)
+✖ TZ11 TXT: labelled ; (3.979088ms)
+✖ TZ11 TXT: labelled | (2.777224ms)
+✖ TZ11 TXT: labelled  /  (2.289059ms)
+✖ TZ11 TXT: labelled  \\  (4.131984ms)
+✖ TZ11 TXT: B explicitly confirmed (1.522263ms)
+✖ TZ11 TXT: B header (1.528276ms)
+✖ TZ11 TXT: C confirmed (1.848713ms)
+✖ TZ11 TXT: A confirmed mixed (0.858822ms)
+✖ TZ11 TXT: missing mail password (1.585761ms)
+✖ TZ11 TXT: empty mail password (4.350279ms)
+✖ TZ11 TXT: backup separate (1.547461ms)
+✖ TZ11 TXT: quoted password separators (2.269188ms)
+✖ TZ11 TXT: URL paths and UA preserved (1.622171ms)
+✖ TZ11 TXT: nested multiline cookie (4.611309ms)
+✖ TZ11 TXT: Russian and English comments (4.309963ms)
+✖ TZ11 TXT: 2fa URL is distinct (1.245478ms)
+✖ TZ11 TXT: no invented passwords in bare tuple (1.064656ms)
+✖ TZ11 TXT: mixed records do not transfer secrets (0.988856ms)
+✖ TZ11 TXT: repeat layout (0.90046ms)
+✔ TZ11 TXT: unconfirmed filesystem path untouched (1.046965ms)
+✖ TZ11 TXT: conflicting email not selected (0.773647ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 1
+ℹ fail 22
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 209.443155
+
+✖ failing tests:
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled : (63.273847ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled :: (4.282421ms)
+  AssertionError [ERR_ASSERTION]: twoFactorCode
+  + actual - expected
+
+  + undefined
+  - 'SYNTHETIC_2FA'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:13:72)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'SYNTHETIC_2FA',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled ; (3.979088ms)
+  AssertionError [ERR_ASSERTION]: twoFactorCode
+  + actual - expected
+
+  + undefined
+  - 'SYNTHETIC_2FA'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:13:72)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'SYNTHETIC_2FA',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled | (2.777224ms)
+  AssertionError [ERR_ASSERTION]: twoFactorCode
+  + actual - expected
+
+  + undefined
+  - 'SYNTHETIC_2FA'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:13:72)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'SYNTHETIC_2FA',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled  /  (2.289059ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: labelled  \\  (4.131984ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: B explicitly confirmed (1.522263ms)
+  Error: INVALID_SCHEMA
+      at classifyRecords (file:///workspace/BLEGO-final/shared/classifier.mjs:98:72)
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:8:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: B header (1.528276ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:9:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: C confirmed (1.848713ms)
+  Error: INVALID_SCHEMA
+      at classifyRecords (file:///workspace/BLEGO-final/shared/classifier.mjs:98:72)
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:8:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: A confirmed mixed (0.858822ms)
+  Error: INVALID_QUOTE
+      at failure (file:///workspace/BLEGO-final/shared/contracts.mjs:14:24)
+      at delimited (file:///workspace/BLEGO-final/shared/importer.mjs:71:34)
+      at parseText (file:///workspace/BLEGO-final/shared/importer.mjs:274:18)
+      at parseInput (file:///workspace/BLEGO-final/shared/importer.mjs:409:18)
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:7:21)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    code: 'INVALID_QUOTE',
+    stage: 'parse',
+    details: { line: 1 }
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: missing mail password (1.585761ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: empty mail password (4.350279ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:9:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: backup separate (1.547461ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: quoted password separators (2.269188ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: URL paths and UA preserved (1.622171ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: nested multiline cookie (4.611309ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  4 !== 1
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:9:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 4,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: Russian and English comments (4.309963ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: 2fa URL is distinct (1.245478ms)
+  AssertionError [ERR_ASSERTION]: twoFactorCode
+  + actual - expected
+
+  + undefined
+  - 'SYNTHETIC_CODE'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:13:72)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'SYNTHETIC_CODE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: no invented passwords in bare tuple (1.064656ms)
+  AssertionError [ERR_ASSERTION]: row 0 email
+  + actual - expected
+
+  + 'sample_login:FAKE_ACCOUNT:one@example.test:FAKE_MAIL:SYNTHETIC_2FA:10001'
+  - 'one@example.test'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'sample_login:FAKE_ACCOUNT:one@example.test:FAKE_MAIL:SYNTHETIC_2FA:10001',
+    expected: 'one@example.test',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: mixed records do not transfer secrets (0.988856ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: repeat layout (0.90046ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit/classifier-v143.test.cjs:4:29
+✖ TZ11 TXT: conflicting email not selected (0.773647ms)
+  AssertionError [ERR_ASSERTION]: row 0 accountId
+
+  '' !== '10001'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:12:47)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '10001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

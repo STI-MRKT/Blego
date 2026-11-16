@@ -12,7 +12,25 @@ const strongStart = (s) =>
   );
 const isUA = (s) =>
   /^(?:(?:user[ -]?agent|ua)\s*[:=]\s*)?(?:Mozilla|Dalvik|Opera)\//i.test(s.trimStart());
+function confirmedHeader(text) {
+  const first = text.split(/\r?\n/, 1)[0];
+  for (const delimiter of [':', '/', '\\\\']) {
+    const names = first.split(delimiter).map((s) => s.trim());
+    if (names.length >= 2 && names.every(fieldForHeader)) return { delimiter, names };
+  }
+  return null;
+}
+function labelledStart(text) {
+  const label = /^\s*([\p{L}\p{N}_ -]{1,40}?)\s*[:=]/u.exec(text);
+  return label && fieldForHeader(label[1]);
+}
 export function wantsStructuredText(text, headerFor) {
+  if (
+    confirmedHeader(text) ||
+    /:[^\r\n]*@/.test(text) ||
+    /(?:^|\n)\s*(?:login|twofactorcode|2fa)\s*[:=]/i.test(text)
+  )
+    return true;
   if (
     !text.includes('|') &&
     !text.includes('::') &&
@@ -67,7 +85,9 @@ function nextCookieOwner(text, start) {
   }
   return null;
 }
-export function structuredRecords(text) {
+export function structuredRecords(text, options = {}) {
+  const header = confirmedHeader(text);
+  const colonSchema = options.schema === 'credentials6';
   const rows = [],
     diagnostics = [];
   let fields = [],
@@ -80,6 +100,8 @@ export function structuredRecords(text) {
     escaped = false,
     quoteStart = false;
   let hasCookie = false;
+  let syntaxEnd = -1,
+    colonTuple = false;
   const rowWarnings = [];
   function field(end) {
     if (fields.length >= maxFields) throw problem('TOO_MANY_FIELDS');
@@ -158,7 +180,7 @@ export function structuredRecords(text) {
       if (c === '\n') line++;
       continue;
     }
-    if (!newline && !'[\{\"|;\t'.includes(c) && !(c === ':' && text[i + 1] === ':')) continue;
+    if (!newline && !'[\{\"|;\t:/\\'.includes(c)) continue;
     const current = text.slice(cellStart, i);
     if (
       (c === '[' || c === '{') &&
@@ -171,15 +193,47 @@ export function structuredRecords(text) {
       quoteStart = true;
       continue;
     }
-    const delimiter = text.startsWith('::', i)
-      ? '::'
-      : c === '|' || c === '\t'
-        ? c
-        : c === ';' &&
-            !isUA(current) &&
-            !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
-          ? ';'
+    if (i > syntaxEnd) {
+      const start = text.lastIndexOf('\n', i - 1) + 1,
+        end = text.indexOf('\n', i);
+      syntaxEnd = end < 0 ? text.length : end;
+      const lineText = text.slice(start, syntaxEnd);
+      colonTuple =
+        !labelledStart(lineText) &&
+        !/[|;\t]|::/.test(lineText) &&
+        !lineText.includes('://') &&
+        /:[^\r\n]*@[^\s:@]+\.[^\s:]+/.test(lineText);
+    }
+    const length = c === '\\' && text[i + 1] === '\\' ? 2 : 1;
+    const nextLabel = labelledStart(text.slice(i + length, i + length + 100));
+    const composite =
+      isUA(current) ||
+      /^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?(?:https?:\/\/|[A-Za-z]:\\)/iu.test(current);
+    const extra =
+      c === ':' &&
+      (!text.startsWith('::', i) || colonSchema || header?.delimiter === ':') &&
+      ((nextLabel && !fieldForHeader(current.trim())) ||
+        (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
+        ? ':'
+        : (c === '/' || (c === '\\' && length === 2)) &&
+            ((nextLabel && (!composite || /\s/.test(text[i - 1] || ''))) ||
+              (header?.delimiter === text.slice(i, i + length) &&
+                current.trim() &&
+                /\s/.test(text[i - 1] || '') &&
+                /\s/.test(text[i + length] || '')))
+          ? text.slice(i, i + length)
           : null;
+    const delimiter =
+      extra ||
+      (text.startsWith('::', i)
+        ? '::'
+        : c === '|' || c === '\t'
+          ? c
+          : c === ';' &&
+              !isUA(current) &&
+              !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
+            ? ';'
+            : null);
     if (delimiter) {
       const next = i + delimiter.length;
       const upcoming = text.slice(next, next + 300).trimStart();
@@ -270,13 +324,22 @@ export function structuredRecords(text) {
     rows.splice(0, rows.length, ...useful);
     diagnostics.splice(0, diagnostics.length, ...retained);
   }
+  if (header && rows.length) {
+    rows.shift();
+    for (const [index, record] of rows.entries()) {
+      record.id = String(index + 1);
+      record.sourceEntries.forEach((entry, i) => {
+        entry.header = header.names[i] || null;
+      });
+    }
+  }
   const width = rows.reduce((n, r) => Math.max(n, r.sourceEntries.length), 0);
   return {
     records: rows,
     diagnostics,
     columns: Array.from({ length: width }, (_, i) => `column_${i + 1}`),
     delimiter: 'mixed',
-    headerless: true,
+    headerless: !header,
     structured: true
   };
 }

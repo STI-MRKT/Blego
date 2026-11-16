@@ -1,0 +1,53 @@
+✖ TZ11 TXT: slash header protects URL and UA (52.557339ms)
+✔ TZ11 TXT: labelled : (7.305153ms)
+✔ TZ11 TXT: labelled :: (2.434088ms)
+✔ TZ11 TXT: labelled ; (4.700922ms)
+✔ TZ11 TXT: labelled | (1.623312ms)
+✔ TZ11 TXT: labelled  /  (2.863927ms)
+✔ TZ11 TXT: labelled  \\  (1.646362ms)
+✔ TZ11 TXT: B explicitly confirmed (1.423812ms)
+✔ TZ11 TXT: B header (1.900434ms)
+✔ TZ11 TXT: C confirmed (1.799249ms)
+✔ TZ11 TXT: A confirmed mixed (3.167682ms)
+✔ TZ11 TXT: missing mail password (1.271078ms)
+✔ TZ11 TXT: empty mail password (1.831267ms)
+✔ TZ11 TXT: backup separate (1.303803ms)
+✔ TZ11 TXT: quoted password separators (1.612206ms)
+✔ TZ11 TXT: URL paths and UA preserved (2.197718ms)
+✔ TZ11 TXT: nested multiline cookie (1.457028ms)
+✔ TZ11 TXT: Russian and English comments (15.826277ms)
+✔ TZ11 TXT: 2fa URL is distinct (0.982522ms)
+✔ TZ11 TXT: no invented passwords in bare tuple (1.14908ms)
+✔ TZ11 TXT: mixed records do not transfer secrets (0.75473ms)
+✔ TZ11 TXT: repeat layout (1.205698ms)
+✔ TZ11 TXT: unconfirmed filesystem path untouched (0.715806ms)
+✔ TZ11 TXT: conflicting email not selected (0.975501ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 23
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 209.659917
+
+✖ failing tests:
+
+test at tests/unit/classifier-v143.test.cjs:5:3
+✖ TZ11 TXT: slash header protects URL and UA (52.557339ms)
+  AssertionError [ERR_ASSERTION]: row 0 password
+  + actual - expected
+
+  + 'www.facebook.com'
+  - 'FAKE'
+
+      at TestContext.<anonymous> (/workspace/BLEGO-final/tests/unit/classifier-v143.test.cjs:18:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'www.facebook.com',
+    expected: 'FAKE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
