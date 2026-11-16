@@ -1,3 +1,4 @@
+import { closeGeneratorPicker, refreshGeneratorPicker } from './ui/generator-picker.js';
 import { imageDraftPlan, hasImageChanges } from './services/photo-plan.js';
 import { createBiographyEditor } from './services/biography.js';
 import { biographyStatus } from './ui/biography.js';
@@ -90,6 +91,7 @@ async function loadBioCities(country) {
   state.bioCities=rows;
   const list=document.getElementById('bio-cities');
   if(list)list.replaceChildren(...rows.map(row=>{const option=document.createElement('option');option.value=row.city;option.textContent=row.postalCode;return option;}));
+  refreshGeneratorPicker();
 }
 function setBiographyWorkspace(snapshot) {
   state.bioEditor?.dispose();state.bioParamsEditor?.dispose();
@@ -152,6 +154,7 @@ function renderAll() {
 }
 
 function renderView() {
+  closeGeneratorPicker();
   const container = document.getElementById('view');
   if (!container) {
     renderAll();
@@ -600,7 +603,8 @@ function bindView() {
       }else if(key==='city'){
         const matches=state.bioCities.filter(row=>row.city.normalize('NFKC').toLocaleLowerCase()===el.value.trim().normalize('NFKC').toLocaleLowerCase());
         const postals=[...new Set(matches.map(row=>row.postalCode).filter(Boolean))];
-        editor.update({city:el.value,postalCode:postals.length===1?postals[0]:''});
+        const selected=matches.find(row=>row.postalCode===el.dataset.pickerPostal);
+        editor.update({city:el.value,postalCode:selected?.postalCode || (postals.length===1?postals[0]:'')});
       }else editor.update({[key]:el.value});
     };
     if(el.tagName==='INPUT')el.oninput=change;else el.onchange=change;
