@@ -5,7 +5,7 @@ const { test } = require('node:test'),
   path = require('node:path');
 const { _electron } = require('playwright');
 test(
-  'proxy UI keeps original gauge, plaintext input, explicit reputation and honest blocked result',
+  'proxy UI keeps original gauge, plaintext input, consented reputation and honest blocked result',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-proxy-ui-'));
@@ -30,7 +30,10 @@ test(
     await page.locator('[data-view="network"]').click();
     assert.equal(await page.locator('.gauge').isVisible(), true);
     assert.equal(await page.locator('#proxy-input').getAttribute('type'), 'text');
-    assert.equal(await page.locator('#proxy-reputation').isChecked(), false);
+    assert.equal(await page.locator('#proxy-reputation').count(), 0);
+    await app.evaluate(({ dialog }) => {
+      dialog.showMessageBox = async () => ({ response: 0 });
+    });
     await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
       state.settings = await window.blego.updateSettings({ proxyEnabled: true });

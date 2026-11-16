@@ -33,10 +33,9 @@ const {
 const { createClassificationService } = require('./features/classification/service.cjs');
 const classification = createClassificationService();
 const { createArchiveService } = require('./features/archive/service.cjs');
-const { checkProxy } = require('./features/proxy/service.cjs');
 const { secretVault } = require('./local/secrets.cjs');
 const { createProxycheckProvider } = require('./features/proxy/proxycheck.cjs');
-let vault, reputationProvider;
+let vault, reputationProvider, consentedProxyCheck;
 let proxyController = null;
 const { createNewsService } = require('./features/news/service.cjs');
 const { normalizeFacebookTargets, normalizeTarget } = require('./features/facebook/normalize.cjs');
@@ -52,11 +51,31 @@ async function initialize() {
     require('./features/generator/biography-workspace.cjs').createBiographyWorkspace({ store });
   vault = secretVault(store, safeStorage);
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
+  consentedProxyCheck = require('./features/proxy/consent.cjs').createConsentedProxyChecker({
+    store,
+    providers: [reputationProvider],
+    prompt: async () => {
+      const choice = await dialog.showMessageBox(mainWindow, {
+        type: 'question',
+        title: 'IP Trust',
+        message: 'Разрешить проверку репутации IP?',
+        detail:
+          'При проверке соединения BLEGO отправит только выходной IP сервису proxycheck.io. Адрес прокси, логин и пароль не передаются. Выбор сохранится; проверка соединения работает и без согласия.',
+        buttons: ['Без проверки репутации', 'Разрешить'],
+        defaultId: 0,
+        cancelId: 0,
+        noLink: true
+      });
+      return choice.response === 1;
+    }
+  });
   poolCatalog = createPoolCatalog({ store });
   const publicSession = session.fromPartition('facebook-public-anonymous', { cache: false });
   facebook = createFacebookService({
     store,
-    transport: require('./features/facebook/transport.cjs').createElectronPublicTransport(publicSession)
+    transport: require('./features/facebook/transport.cjs').createElectronPublicTransport(
+      publicSession
+    )
   });
   friends = require('./features/friends/service.cjs').createFriendsService({ store });
   geo = require('./features/geo/service.cjs').createGeoService({ store });
@@ -348,9 +367,7 @@ async function initialize() {
         const c = new AbortController();
         proxyController = c;
         try {
-          return await checkProxy(request, c.signal, {
-            providers: request?.reputation === true ? [reputationProvider] : []
-          });
+          return await consentedProxyCheck(request, c.signal);
         } finally {
           if (proxyController === c) proxyController = null;
         }
@@ -524,6 +541,7 @@ async function initialize() {
       lastCard: () => store.get('lastCard') || null,
       clearCard: () => clearCard(store),
       settingsUpdate: (patch) => {
+        if (Object.hasOwn(patch || {}, 'proxyReputationConsent')) throw Error('USE_CONSENT_DIALOG');
         if (Object.hasOwn(patch || {}, 'archiveRoot')) throw Error('USE_DIRECTORY_DIALOG');
         const next = { ...getSettings(store), ...patch };
         for (const c of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB'])

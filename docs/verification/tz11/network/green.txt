@@ -1,0 +1,10 @@
+✔ TZ11 persisted Trust consent gates provider calls, ignores renderer flag and sends only exit IP (73.369386ms)
+✔ TZ11 Network omits reputation checkbox without removing either quality gauge (4.655143ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 164.548842

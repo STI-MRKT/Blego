@@ -12,6 +12,7 @@ const defaults = {
   includeOriginal: false,
   newsEnabled: true,
   proxyEnabled: true,
+  proxyReputationConsent: null,
   facebookEnabled: true,
   newsInterval: 30,
   newsSources: [],
@@ -30,6 +31,8 @@ function validateSettings(patch) {
   for (const [key, value] of Object.entries(patch)) {
     if (!Object.hasOwn(defaults, key) || ['__proto__', 'constructor', 'prototype'].includes(key))
       throw Error('INVALID_SETTINGS');
+    if (key === 'proxyReputationConsent' && value !== null && typeof value !== 'boolean')
+      throw Error('INVALID_BOOLEAN');
     if (key === 'country' && !countries.includes(value)) throw Error('INVALID_COUNTRY');
     if (key === 'type' && !['model', 'tech', 'crypto'].includes(value)) throw Error('INVALID_TYPE');
     if (

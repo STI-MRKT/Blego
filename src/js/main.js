@@ -793,14 +793,12 @@ async function runProxyCheck(fullTest = false) {
   const value = state.network.proxyInput.trim();
   state.network.proxyFullTest = fullTest;
   if(fullTest){state.network.speed=null;state.network.speedRoute=value?'proxy':'direct';}
-  const reputation = document.getElementById('proxy-reputation')?.checked === true;
-  state.network.reputation = reputation;
   state.network.proxyLoading = true;
   state.network.proxy = null;
   state.network.proxyError = '';
   renderView();
   try {
-    const result = await checkProxy(value, { reputation, fullTest });
+    const result = await checkProxy(value, { fullTest });
     if(value === state.network.proxyInput.trim()){state.network.proxy=result;if(fullTest)state.network.speed=result.speed;}
     else state.network.proxyError='Proxy address changed. Check again.';
   } catch (error) {
