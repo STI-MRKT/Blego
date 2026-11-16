@@ -1,0 +1,156 @@
+{
+  "at": "2026-11-16T08:39:03.842Z",
+  "host": "darwin-arm64",
+  "facebook": {
+    "status": "BLOCKED",
+    "targets": [
+      {
+        "target": "https://www.facebook.com/meta",
+        "result": "UNKNOWN",
+        "reason": "PUBLIC_PREVIEW_ONLY",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T08:39:07.814Z",
+        "durationMs": 732
+      },
+      {
+        "target": "https://www.facebook.com/nasa",
+        "result": "UNKNOWN",
+        "reason": "PUBLIC_PREVIEW_ONLY",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T08:39:10.099Z",
+        "durationMs": 2269
+      },
+      {
+        "target": "https://www.facebook.com/zuck",
+        "result": "UNKNOWN",
+        "reason": "PUBLIC_PREVIEW_ONLY",
+        "httpStatus": 200,
+        "checkedAt": "2026-11-16T08:39:11.603Z",
+        "durationMs": 1501
+      }
+    ],
+    "scope": "Actual application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.",
+    "confirmedUnavailableTarget": "BLOCKED: no independently confirmed unavailable target supplied"
+  },
+  "map": {
+    "status": "PASS",
+    "reason": null,
+    "cityId": "osm:relation:41485",
+    "center": {
+      "longitude": 12.54510095,
+      "latitude": 41.89879626417336
+    },
+    "mode": "after",
+    "points": 20,
+    "rendered": 6,
+    "required": 6,
+    "tiles": [
+      {
+        "z": 9,
+        "x": 272,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 273,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 274,
+        "y": 189
+      },
+      {
+        "z": 9,
+        "x": 272,
+        "y": 190
+      },
+      {
+        "z": 9,
+        "x": 273,
+        "y": 190
+      },
+      {
+        "z": 9,
+        "x": 274,
+        "y": 190
+      }
+    ],
+    "message": "OpenStreetMap загружен",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  },
+  "trustProvider": {
+    "status": "BLOCKED",
+    "sampleIp": "8.8.8.8",
+    "sources": [
+      {
+        "id": "proxycheck.io",
+        "status": "ok",
+        "ip": "8.8.8.8",
+        "risk": 100,
+        "scale": [
+          0,
+          100
+        ],
+        "type": "Business",
+        "asn": "AS15169",
+        "provider": "Google LLC",
+        "country": "United States",
+        "vpn": false,
+        "tor": false,
+        "updatedAt": "2026-11-15T23:01:26Z",
+        "warning": null,
+        "proxy": false,
+        "hosting": false,
+        "expiresAt": "2026-11-16T08:39:12.195Z",
+        "cached": false,
+        "confidence": 100,
+        "compromised": false,
+        "scraper": false,
+        "checkedAt": "2026-11-16T08:39:12.195Z"
+      }
+    ],
+    "assessment": {
+      "name": "IP Trust",
+      "version": "proxycheck-v3-100-minus-risk",
+      "score": null,
+      "trustScore": null,
+      "trustSource": null,
+      "status": "insufficient_data",
+      "factors": [],
+      "description": "100 minus provider risk; not a safety guarantee or connection quality."
+    },
+    "scope": "Explicit QA lookup of one fixed public DNS IP using the app provider adapter, without keys or proxy credentials. This is provider evidence, not proof of a user proxy route."
+  },
+  "mapBefore": {
+    "status": "PASS",
+    "reason": null,
+    "center": {
+      "longitude": -46.63,
+      "latitude": -23.55
+    },
+    "mode": "before",
+    "points": 20,
+    "rendered": 3,
+    "required": 3,
+    "tiles": [
+      {
+        "z": 17,
+        "x": 48557,
+        "y": 74362
+      },
+      {
+        "z": 17,
+        "x": 48558,
+        "y": 74362
+      },
+      {
+        "z": 17,
+        "x": 48559,
+        "y": 74362
+      }
+    ],
+    "message": "OpenStreetMap загружен",
+    "scope": "Actual OSM city viewport and Canvas pixels in Electron; synthetic 20-photo GPS plan, no metadata sent to provider"
+  }
+}
