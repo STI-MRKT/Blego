@@ -10,6 +10,10 @@ test(
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-bio-pairs-'));
+    // This restart scenario starts after onboarding; the first-run tour has its own GUI test.
+    const store = await require('../../electron/local/store.cjs').openStore(root);
+    store.set('tourSeen', true);
+    store.close();
     let app;
     t.after(async () => {
       if (app) await app.close();

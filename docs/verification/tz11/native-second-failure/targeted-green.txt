@@ -1,0 +1,11 @@
+✔ TZ11 BIO copies six organization values independently, regenerates pairs and restores manual city after native restart (2550.786468ms)
+✔ unified copy: all sections, 51 import rows, selection/filter, formats, privacy, keyboard, image pixels and saved preferences (8044.034096ms)
+✔ native window resizes across all nine sections without overflow, lost forms or inaccessible navigation (17907.246815ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29706.819435
