@@ -171,6 +171,14 @@
 .ux-settings [data-setting-help]{display:block;font-weight:400;letter-spacing:normal;text-transform:none}
 /* Retry is a conditional new map action; .btn otherwise overrides the UA hidden rule. */
 .photo-map [data-map-action="retry"][hidden] { display:none; }
-/* New card-local News actions wrap without changing the original card palette or grid. */
-.news-copy-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
-.news-copy-actions .btn{font-size:11px;padding:6px 8px}
+/* TZ12: actions occupy the original bottom inset, never a new card row. */
+.news-card{container-type:inline-size}
+.news-card .news-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.news-item-card{position:relative}
+.news-copy-actions{position:absolute;right:11px;bottom:0;display:flex;gap:4px;height:12px}
+.news-copy-actions .copy{width:22px;height:12px;padding:0;border:0;border-radius:3px;background:transparent}
+.news-copy-actions .copy svg{width:10px;height:10px}
+.news-copy-actions .copy:focus-visible{outline:2px solid var(--accent);outline-offset:1px;opacity:1}
+@container(max-width:703px){.news-card .news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container(max-width:465px){.news-card .news-grid{grid-template-columns:minmax(0,1fr)}}
+
