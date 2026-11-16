@@ -1,0 +1,36 @@
+✔ TZ11 BIO generates real organization pairs in eight countries, preserves provenance and independent saved manual values (108.714168ms)
+✔ TZ11 old combined standalone rows are adapted on read without writes or duplicate history (21.114705ms)
+✔ standalone BIO works with no FP and never spends profile contacts or creates FP history (20.823553ms)
+✔ FP generation/clear and BIO generation/save/clear cannot overwrite the other workspace (52.290946ms)
+✔ BIO parameter and value revisions reject stale writes and preserve other generator settings (11.61336ms)
+✔ legacy BIO opens without duplicate records, preserves original FP JSON, and remains available after clear and restart (38.202244ms)
+✔ failed BIO transactions roll back record, current pointer, request marker and parameters (10.944718ms)
+✔ BIO history pagination and suggestions use saved geography despite new control parameters (26.364706ms)
+✔ legacy profiles with disabled optional city remain readable/editable without changing original JSON (34.778123ms)
+✔ autosave debounces edits, announces saved only after persistence, and preserves typing in flight (28.016397ms)
+✔ write failure retains draft and revision, flush rejects, retry commits once (1.310968ms)
+✔ flush before debounce persists latest draft and no-change flush does not write (0.59147ms)
+✔ late suggestions never overwrite manual input or a disposed profile (0.867314ms)
+✔ transition freeze blocks new edits and suggestions, but flush waits for an already requested suggestion before saving (0.963406ms)
+✔ normal close and Cmd+Q wait for flush; stale acknowledgements cannot close; failed save keeps window (2.442057ms)
+✔ successful quit flush reissues quit once; repeated close requests share the pending flush (0.42717ms)
+✔ all eight countries: same-city organizations fill BIO and role matches the selected company (3.740644ms)
+✔ unknown small towns stay empty; no country fallback or cross-country/region/category leakage (1.266205ms)
+✔ regional fallback has actual city, schools remain local, aliases work, ambiguous region fails closed (0.55132ms)
+✔ brands receive thematic/location data without invented personal employment or education (1.289869ms)
+✔ individual suggestions preserve unrelated fields and position uses the current employer only (1.744623ms)
+✔ bundled catalog is extendable factual data with eight-country coverage and compatible roles (4.330657ms)
+✔ ambiguous direct city and alias matches cannot mix organizations from different regions (0.457556ms)
+✔ every bundled country geography has usable full BIO reference coverage without overriding generation cities (37.565248ms)
+✔ source-confirmed postcode disambiguates same-named cities before regional fallback (0.468506ms)
+✔ BIO autosave keeps inputs editable, removes Save/unsaved banner and offers each field regeneration (10.248135ms)
+✔ TZ11 exact catalog adaptation separates names/cities, preserves unknown legacy labels and official city names (19.394844ms)
+✔ TZ11 city edits invalidate late organization and position suggestions as a pair (1.480891ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 385.838597

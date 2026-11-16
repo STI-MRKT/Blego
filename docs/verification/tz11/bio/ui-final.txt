@@ -1,0 +1,18 @@
+✔ TZ11 BIO copies six organization values independently, regenerates pairs and restores manual city after native restart (2944.099795ms)
+✔ BIO automatically fills, autosaves edits/copies, preserves concurrent typing, tabs, 360px and quit/restart (9271.10564ms)
+✔ BIO failed autosave retains draft, blocks normal window close, retries and flushes last input on close (2910.358652ms)
+✔ BIO real catalog fills eight country hubs and bundled localities, leaving sparse towns empty through real generator IPC (4574.696344ms)
+✔ Standalone BIO replacement and clear freeze inputs while IPC is pending and retain saved history (919.027677ms)
+✔ BIO native quit waits for an already requested regeneration and persists its result (1690.793625ms)
+✔ TZ7 independent generators: empty start, both directions, individual copies, clear, parameter drafts and restart (3976.53734ms)
+✔ TZ7 legacy BIO opens repeatedly without duplicates; editing keeps original FP and old archive-compatible JSON (1733.622334ms)
+✔ cross-country BIO history never offers stale city/postal suggestions while loading (1116.527066ms)
+✔ native quit waits for standalone BIO generation and parameter saves without losing either generator (1427.595216ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31355.413784

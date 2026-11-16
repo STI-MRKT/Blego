@@ -54,9 +54,9 @@ export function createBiographyEditor(data, {save, onSaved = () => {}, onChange 
   };
   editor.suggest = (field, request) => {
     if (disposed || editor.suggesting || editor.frozen) return Promise.resolve(false);
-    const keys = field === 'employer' ? ['employer','position'] : [field];
+    const keys = field === 'employer' ? ['employer','employerCity','position'] : ['university','school'].includes(field) ? [field,field+'City'] : [field];
     const captured = keys.map(key => versions[key] || 0);
-    if (field === 'position') { keys.push('employer'); captured.push(versions.employer || 0); }
+    if (field === 'position') { keys.push('employer','employerCity'); captured.push(versions.employer || 0, versions.employerCity || 0); }
     editor.suggesting = true; notify();
     suggestionFlight = (async () => {
       const patch = await request({action:'suggest',recordId:editor.recordId,field,values:{...editor.values}});

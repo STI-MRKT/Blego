@@ -609,7 +609,8 @@ function bindView() {
   }; });
   document.querySelectorAll('[data-bio-institution]').forEach(el => { el.onchange = () => {
     if(!el.value || !state.bioEditor) return;
-    state.bioEditor.update({[el.dataset.bioInstitution]:el.value}); renderView();
+    const field=el.dataset.bioInstitution, organization=state.bioEditor.institutions.find(row=>row.id===el.value&&row.kind===field);
+    if(organization)state.bioEditor.update({[field]:organization.name,[field+'City']:organization.city}); renderView();
   }; });
   const encoding = document.getElementById('import-encoding');
   if (encoding)
