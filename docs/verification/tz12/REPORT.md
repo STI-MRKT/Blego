@@ -3,7 +3,8 @@
 Candidate: **BLEGO 1.4.4 QA**, branch `codex/blego-tz12-news-bio-dictionaries`.
 Incoming verified base: `99c5a3ec074032ea9380de40d8ff78e7318716c9`.
 Exact pre-TZ10 News reference: `7234b07fea6927aae9d08542ac90b481f01787b9` (`295b2a5^`).
-This record does not claim native installation or user acceptance before those gates run.
+Native installed ARM64 acceptance passed at `35226e5a1a071eb534408641b63a922915840caf`.
+Final user acceptance, merge and official release remain pending.
 
 ## Delivered behavior
 
@@ -62,8 +63,10 @@ The coordinator returned the following actual results during implementation:
 | Final integrated suite | `npm run verify`: lint, 195/195 unit, 143/143 integration; no skips | PASS |
 | Final Linux Electron GUI | `BLEGO_HEADLESS=1 npm run test:ui`: 60/60, no skips, 274.386 s | PASS |
 | Visual comparison gate | All 15 News bounds equal original, FP controls equal incoming, no overflow across seven widths | PASS |
-| macOS ARM64 installed application | Run 43845667208: 58/60 GUI; two fixture failures corrected below | FAIL — native rerun pending |
-| DMG / ZIP SHA-256 | Produced only after installed-app acceptance | BLOCKED — pending |
+| macOS ARM64 installed application | Run 43849066820: installed app outside checkout, 60/60 GUI, no skips | PASS |
+| Native runtime and verify | ExifTool read/write/readback; 195/195 unit and 143/143 integration, no skips | PASS |
+| Native installed visual comparison | All News card bounds and FP control bounds match references, no overflow, seven widths | PASS |
+| DMG / ZIP integrity and SHA-256 | Coordinator independently checked outer/inner ZIP integrity and DMG digest from the installer ZIP | PASS |
 
 Final review follow-up: the typeahead buffer now resets when keyboard focus moves
 to another picker. Its focused GUI passed (1/1, 6.4 s) after the earlier complete
@@ -115,14 +118,20 @@ median latency was 2.19–2.74 ms incoming and 2.06–2.30 ms candidate; one can
 sample had a 27.88 ms maximum. This small sample shows comparable typical behavior,
 not a claimed speedup. Raw [incoming](data/performance-incoming.json) and
 [candidate](data/performance-candidate.json) measurements include all three samples.
-The same script will also run on the native QA host.
+The same-host Mac benchmark also completed three 100-profile runs. Incoming totals
+were 313.46 / 259.01 / 274.06 ms; candidate totals were 232.50 / 232.26 / 211.27 ms.
+Per-run median latency was 2.64 / 2.22 / 2.67 ms incoming and 2.05 / 1.83 / 1.87 ms
+candidate. These small samples are observations, not a guaranteed speedup.
 
 Addresses are explicitly synthetic street/house examples with retained source-paired
 city/postal values. They are not verified deliverable residences; independent
 postal-link verification stays at its prior zero. Localized biographies are authored
 texts, with native-speaker editorial review still outstanding. Existing finite pools
 and explicit bulk-mode consent are preserved. Native signing/notarization remains
-outside this unsigned QA build. No merge or official release is authorized here.
+outside this unsigned, unnotarized QA build. The Mac runner is virtualized; its
+results do not guarantee Gatekeeper acceptance on a user’s physical Mac. All visual
+fixtures and generated address examples are synthetic. Final user acceptance is
+still required. No merge or official release is authorized here.
 
 ## Native evidence collection
 
@@ -132,9 +141,9 @@ GUI gate. Unrelated additional photo stress/comparison and public-service observ
 steps are skipped for TZ12 under addendum §21. Native source references and the
 actual installed candidate are captured separately in `release/tz12-visual/`, with
 `installed-candidate-*` labels for the installed binary. Package checksums and the
-install ZIP follow successful installed-app acceptance. The coordinating agent must
-append actual native run, artifact, checksums and any remaining blockers before a
-completion claim.
+install ZIP were produced after successful installed-app acceptance in the second
+native run below. Source-reference captures remain distinct from the installed
+candidate captures; neither uses real user records.
 
 ### Native attempt 1 — run 43845667208
 
@@ -159,5 +168,33 @@ map/settings scenarios, not the TZ12 controls or dictionaries:
 These corrections change only the two GUI test fixtures. No production map,
 settings, scheduler, IPC or default behavior is changed. The coordinator reran
 `tests/unit/map-recovery.test.cjs` (PASS) and both affected cloud Electron GUI
-files (2/2 PASS). The installed ARM64 rerun remains pending; no tests are disabled
-or skipped.
+files (2/2 PASS). The subsequent installed ARM64 rerun passed as recorded below;
+no tests were disabled or skipped.
+
+### Native attempt 2 — run 43849066820 — PASS
+
+- [Successful workflow run](https://github.com/STI-MRKT/Blego/actions/runs/43849066820).
+- Tested code: `35226e5a1a071eb534408641b63a922915840caf` (the first attempt’s two
+  fixture corrections; production TZ12 behavior unchanged).
+- Host: **macOS 15.8.2, arm64, Apple M1 (Virtual)**.
+- Native ExifTool read → write → readback: **PASS**.
+- Native verification: **195/195 unit, 143/143 integration**, no skipped tests.
+- The actual installed `BLEGO.app`, copied outside the repository from the DMG:
+  **60/60 GUI scenarios PASS**, no skipped tests.
+- Native installed visual comparison: **PASS at 360, 390, 480, 576, 768, 980 and
+  1280 px**. All 15 News card bounds match the original reference, FP control
+  bounds match the incoming reference, and no horizontal overflow is present.
+- [QA artifact and installer](https://github.com/STI-MRKT/Blego/actions/runs/43849066820/artifacts/14216458720).
+
+The coordinator independently verified both outer artifact ZIP and inner installer
+ZIP integrity, and recomputed the DMG digest from the inner ZIP. Verified files:
+
+| File | SHA-256 |
+|---|---|
+| `BLEGO-1.4.4-TZ12-macOS-ARM64-install.zip` | `68f561e74c6f99f03ae2826cc6f1cb3af246af81f75485f1c676096cb563444d` |
+| `BLEGO-1.4.4-arm64.dmg` | `94a59449d5cbf1173a360a11e1ce4036a0352ce8e57fa831de5fbc5416a3a217` |
+
+This records native technical acceptance of the unsigned QA candidate. It does
+not replace the owner’s acceptance, Developer ID signing/notarization, or permission
+to merge and publish an official release. This documentation update changes no
+runtime files and does not require a second build of the accepted code SHA.
