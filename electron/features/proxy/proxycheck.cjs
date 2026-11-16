@@ -75,6 +75,7 @@ function createProxycheckProvider({
             ? d.risk
             : null;
         const short = (v) => (typeof v === 'string' ? v.slice(0, 150) : null);
+        const now = clock();
         const data = {
           ip,
           risk,
@@ -91,16 +92,16 @@ function createProxycheckProvider({
           provider: short(entry.network?.provider),
           country: short(entry.location?.country_name),
           updatedAt: short(entry.last_updated),
-          checkedAt: new Date(clock()).toISOString(),
+          checkedAt: new Date(now).toISOString(),
           warning: body.status === 'warning' ? 'PROVIDER_WARNING' : null
         };
         let ttl = d.anonymous === true ? 60000 : 600000;
         const delist = Date.parse(entry.detection_history?.delist_datetime);
-        if (d.anonymous === true && Number.isFinite(delist))
-          ttl = Math.min(ttl, Math.max(0, delist - clock()));
-        data.expiresAt = new Date(clock() + ttl).toISOString();
+        if (d.anonymous === true && Number.isFinite(delist) && delist > now)
+          ttl = Math.min(ttl, delist - now);
+        data.expiresAt = new Date(now + ttl).toISOString();
         if (cache.size >= 128) cache.delete(cache.keys().next().value);
-        cache.set(ip, { data, expiresAt: clock() + ttl });
+        cache.set(ip, { data, expiresAt: now + ttl });
         return data;
       } catch (e) {
         if (signal?.aborted) throw Error('CANCELLED');

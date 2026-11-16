@@ -2,6 +2,7 @@ const fs = require('node:fs'),
   os = require('node:os'),
   path = require('node:path');
 const { _electron } = require('playwright');
+const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
 const args = process.argv.slice(2),
   get = (k) => args[args.indexOf(k) + 1];
 const original = get('--original'),
@@ -89,9 +90,30 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           bioGenerationMs = null;
         if (label !== 'original') {
           await page.locator('[data-tab="bio"]').click();
+          const previousBio = await page.evaluate(async () => {
+            const { state } = await import('/js/state.js');
+            const record = (await window.blego.biography({ action: 'read' })).record;
+            return { persistedId: record?.id || null, editorId: state.bioEditor?.recordId || null };
+          });
           const bioStart = performance.now();
           await page.locator('[data-action="bio-generate"]').click();
-          await page.locator('#bio-mainBio').waitFor();
+          await waitForAsync(
+            page,
+            async ({ persistedId, editorId }) => {
+              const { state } = await import('/js/state.js');
+              const record = (await window.blego.biography({ action: 'read' })).record;
+              return Boolean(
+                record?.id &&
+                record.id !== persistedId &&
+                record.id !== editorId &&
+                record.values?.mainBio &&
+                !state.bioBusy &&
+                state.bioEditor?.recordId === record.id &&
+                document.querySelector('#bio-mainBio')?.value === record.values.mainBio
+              );
+            },
+            previousBio
+          );
           bioGenerationMs = Math.round(performance.now() - bioStart);
           await page.locator('[data-tab="profile"]').click();
           await page.locator('[data-view="import"]').first().click();
@@ -117,7 +139,8 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
           const archiveStart = performance.now();
           await page.locator('#classifier-extra summary').click();
           await page.locator('[data-action="classifier-archive"]').click();
-          await page.waitForFunction(
+          await waitForAsync(
+            page,
             async () => (await import('/js/state.js')).state.importSaved === true
           );
           await page.locator('[data-view="history"]').click();

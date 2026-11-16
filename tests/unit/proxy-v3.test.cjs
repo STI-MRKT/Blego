@@ -112,6 +112,47 @@ test('provider TTL, cancellation and errors cannot leak a key or invent stale tr
     clearInterval(keep);
   }
 });
+test('anonymous delisting shortens TTL only when it is in the future', async () => {
+  const checkedAt = Date.parse('2030-01-01T00:00:00.000Z');
+  for (const [label, delistOffsetMs, ttlMs] of [
+    ['past', -1000, 60000],
+    ['equal', 0, 60000],
+    ['future', 30000, 30000]
+  ]) {
+    let now = checkedAt;
+    let calls = 0;
+    const p = createProxycheckProvider({
+      clock: () => now,
+      fetchImpl: async () => {
+        calls++;
+        return new Response(
+          JSON.stringify({
+            ...payload(100),
+            [ip]: {
+              ...payload(100)[ip],
+              detections: { ...payload(100)[ip].detections, anonymous: true },
+              detection_history: {
+                delist_datetime: new Date(checkedAt + delistOffsetMs).toISOString()
+              }
+            }
+          })
+        );
+      }
+    });
+    const signal = new AbortController().signal;
+    const first = await p.lookup(ip, signal);
+    assert.equal(first.risk, 100, label);
+    assert.equal(first.checkedAt, new Date(checkedAt).toISOString(), label);
+    assert.equal(first.expiresAt, new Date(checkedAt + ttlMs).toISOString(), label);
+    assert.equal(assess([{ id: p.id, status: 'ok', ...first }], ip).score, 0, label);
+    now = checkedAt + ttlMs - 1;
+    assert.equal((await p.lookup(ip, signal)).cached, true, label);
+    assert.equal(calls, 1, label);
+    now = checkedAt + ttlMs;
+    assert.notEqual((await p.lookup(ip, signal)).cached, true, label);
+    assert.equal(calls, 2, label);
+  }
+});
 test('local quality requires three actual attempts and separates loss, RTT and jitter from reputation', () => {
   assert.equal(quality([]).score, null);
   assert.equal(quality([{ ms: 20 }]).score, null);
