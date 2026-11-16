@@ -1,0 +1,60 @@
+{
+  "base": "99c5a3ec074032ea9380de40d8ff78e7318716c9",
+  "newsOriginal": "7234b07fea6927aae9d08542ac90b481f01787b9",
+  "countMethod": "NFKC, trim, lowercase; dictionary atoms and explicit full names globally deduplicated, no Cartesian combinations. Address records are stored city/postal/address tuples (legacy generated combinations excluded).",
+  "uniqueNames": 9232,
+  "uniqueBios": 1680,
+  "explicitAddresses": 0,
+  "countries": {
+    "BR": {
+      "first": 81,
+      "last": 21,
+      "places": 500,
+      "streets": 6
+    },
+    "DE": {
+      "first": 573,
+      "last": 1688,
+      "places": 500,
+      "streets": 8
+    },
+    "ES": {
+      "first": 120,
+      "last": 625,
+      "places": 500,
+      "streets": 8
+    },
+    "FR": {
+      "first": 435,
+      "last": 150,
+      "places": 500,
+      "streets": 6
+    },
+    "GB": {
+      "first": 1563,
+      "last": 473,
+      "places": 6,
+      "streets": 8
+    },
+    "IT": {
+      "first": 617,
+      "last": 2170,
+      "places": 500,
+      "streets": 8
+    },
+    "PL": {
+      "first": 163,
+      "last": 710,
+      "places": 500,
+      "streets": 6
+    },
+    "US": {
+      "first": 1563,
+      "last": 473,
+      "places": 500,
+      "streets": 6
+    }
+  },
+  "biosPerTypeLanguage": 80,
+  "techNames": 275
+}
