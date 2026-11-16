@@ -85,8 +85,15 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
         frames.sort((a, b) => a - b);
         let import1000Ms = null,
           archiveMs = null,
-          mapMs = null;
+          mapMs = null,
+          bioGenerationMs = null;
         if (label !== 'original') {
+          await page.locator('[data-tab="bio"]').click();
+          const bioStart = performance.now();
+          await page.locator('[data-action="bio-generate"]').click();
+          await page.locator('#bio-mainBio').waitFor();
+          bioGenerationMs = Math.round(performance.now() - bioStart);
+          await page.locator('[data-tab="profile"]').click();
           await page.locator('[data-view="import"]').first().click();
           const csv =
             'fullName,accountId,email,geo\n' +
@@ -129,6 +136,7 @@ const reportPath = args.includes('--report') ? get('--report') : 'release/ux-per
         }
         samples.push({
           import1000Ms,
+          bioGenerationMs,
           archiveMs,
           mapMs,
           memory: await app.evaluate(({ app }) =>
