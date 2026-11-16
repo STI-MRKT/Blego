@@ -162,4 +162,96 @@ async function fetchPublicProfile(
   }
   throw Error('FB_TOO_MANY_REDIRECTS');
 }
-module.exports = { fetchPublicProfile, isPublicAddress, withAbort, readHtmlResponse };
+// The isolated Chromium session follows the OS network configuration. It never
+// reads the renderer session, login cookies or imported credentials.
+function createElectronPublicTransport(session, { requestFactory } = {}) {
+  requestFactory ||= (options) => require('electron').net.request(options);
+  return (raw, options = {}) =>
+    fetchPublicProfile(raw, {
+      ...options,
+      request: async (rawUrl, { signal, maxBytes }) => {
+        const url = safeUrl(rawUrl);
+        const resolved = await withAbort(session.resolveHost(url.hostname), signal);
+        if (
+          !resolved.endpoints?.length ||
+          resolved.endpoints.some((item) => !isPublicAddress(item.address))
+        )
+          throw Error('FB_PRIVATE_ADDRESS');
+        signal.throwIfAborted();
+        return new Promise((resolve, reject) => {
+          const request = requestFactory({
+            url: url.href,
+            session,
+            method: 'GET',
+            redirect: 'manual',
+            useSessionCookies: false,
+            credentials: 'omit'
+          });
+          let settled = false;
+          const finish = (error, value) => {
+            if (settled) return;
+            settled = true;
+            signal.removeEventListener('abort', abort);
+            if (error) reject(error);
+            else resolve(value);
+          };
+          const abort = () => {
+            finish(signal.reason || Error('CANCELLED'));
+            request.abort();
+          };
+          signal.addEventListener('abort', abort, { once: true });
+          request.setHeader('Accept', 'text/html');
+          request.setHeader('User-Agent', 'BLEGO/1.4 public profile diagnostics');
+          request.on('login', (_info, callback) => callback());
+          request.on('redirect', (status, _method, location) => {
+            // Chromium fetch rejects manual redirects. ClientRequest exposes the
+            // destination before following it, so the shared allowlist remains authoritative.
+            finish(null, { status, headers: { location }, body: '' });
+            request.abort();
+          });
+          request.on('response', (response) => {
+            const headers = Object.fromEntries(
+              Object.entries(response.headers).map(([k, v]) => [
+                k.toLowerCase(),
+                Array.isArray(v) ? v.join(', ') : v
+              ])
+            );
+            // Chromium has already decompressed the stream.
+            delete headers['content-encoding'];
+            // IncomingMessage headers may be read-only; a PassThrough retains the
+            // common byte/charset checks without mutating Chromium's object.
+            const { PassThrough } = require('node:stream');
+            const stream = new PassThrough();
+            stream.headers = headers;
+            stream.statusCode = response.statusCode;
+            response.on('error', (error) => stream.destroy(error));
+            response.on('aborted', () => stream.destroy(Error('FB_INCOMPLETE_RESPONSE')));
+            stream.on('close', () => {
+              if (!settled) request.abort();
+            });
+            readHtmlResponse(stream, { maxBytes, signal }).then(
+              (value) => {
+                value.diagnostics.transport = 'electron-session';
+                finish(null, value);
+              },
+              (error) => {
+                finish(error);
+                request.abort();
+              }
+            );
+            response.pipe(stream);
+          });
+          request.on('error', (error) => finish(error));
+          if (signal.aborted) return abort();
+          request.end();
+        });
+      }
+    });
+}
+module.exports = {
+  fetchPublicProfile,
+  createElectronPublicTransport,
+  isPublicAddress,
+  withAbort,
+  readHtmlResponse
+};

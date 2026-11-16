@@ -113,3 +113,15 @@ test('TZ11 normalized checker rows retain original input separately from canonic
     delete globalThis.window;
   }
 });
+test('Chromium DNS, TLS, connection and timeout errors retain specific diagnostics', () => {
+  const { networkReason } = require('../../electron/features/facebook/diagnostics.cjs');
+  for (const [code, reason] of [
+    ['ERR_NAME_NOT_RESOLVED', 'FB_DNS_ERROR'],
+    ['ERR_CERT_AUTHORITY_INVALID', 'FB_TLS_ERROR'],
+    ['ERR_CONNECTION_REFUSED', 'FB_CONNECTION_REFUSED'],
+    ['ERR_CONNECTION_RESET', 'FB_CONNECTION_RESET'],
+    ['ERR_CONNECTION_TIMED_OUT', 'FB_TIMEOUT'],
+    ['ERR_INTERNET_DISCONNECTED', 'FB_NETWORK_UNREACHABLE']
+  ])
+    assert.equal(networkReason(Error('net::' + code)), reason);
+});

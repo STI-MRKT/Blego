@@ -2,17 +2,41 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
-const { fetchPublicProfile } = require('../electron/features/facebook/transport.cjs');
+const {
+  fetchPublicProfile,
+  createElectronPublicTransport
+} = require('../electron/features/facebook/transport.cjs');
 const { createFacebookService } = require('../electron/features/facebook/service.cjs');
 const { normalizeTarget } = require('../electron/features/facebook/normalize.cjs');
 const { facebookPresentation } = require('../shared/facebook-presentation.mjs');
 (async () => {
-  const file = process.argv[2];
+  const file = process.argv.find((a) => a.endsWith('.json'));
   if (!file) throw Error('REPORT_PATH_REQUIRED');
+  let fetchProfile = fetchPublicProfile;
+  if (process.versions.electron) {
+    const { app, session } = require('electron');
+    await app.whenReady();
+    fetchProfile = createElectronPublicTransport(
+      session.fromPartition('facebook-public-qa', { cache: false })
+    );
+  }
   const proofs = new Map();
   const service = createFacebookService({
     transport: async (url, options) => {
-      const r = await fetchPublicProfile(url, options);
+      let r;
+      try {
+        r = await fetchProfile(url, options);
+      } catch (error) {
+        proofs.set(url, {
+          errorCode: error.code || error.cause?.code || null,
+          errorName: error.name,
+          diagnostic: String(error.message || '')
+            .replace(/https?:\/\/\S+/g, '[public target]')
+            .slice(0, 160),
+          networkCode: /(?:net::)?ERR_[A-Z_]+/.exec(error.message || '')?.[0] || null
+        });
+        throw error;
+      }
       proofs.set(url, {
         httpStatus: r.status,
         finalUrl: r.url,
@@ -71,7 +95,11 @@ const { facebookPresentation } = require('../shared/facebook-presentation.mjs');
       }))
     })
   );
-})().catch((e) => {
-  console.error(e.code || 'FACEBOOK_QA_FAILED');
-  process.exitCode = 1;
-});
+})()
+  .catch((e) => {
+    console.error(e.code || 'FACEBOOK_QA_FAILED');
+    process.exitCode = 1;
+  })
+  .finally(() => {
+    if (process.versions.electron) require('electron').app.quit();
+  });

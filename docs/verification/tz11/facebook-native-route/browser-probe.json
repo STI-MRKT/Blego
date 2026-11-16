@@ -1,0 +1,27 @@
+{
+  "os": "linux",
+  "arch": "x64",
+  "at": "2026-11-16T06:24:45.361Z",
+  "method": "isolated ordinary Electron navigation, JavaScript enabled, no login",
+  "httpStatus": 200,
+  "finalUrl": "https://www.facebook.com/NASA",
+  "title": "NASA - National Aeronautics and Space Administration | Facebook",
+  "visibleCharacters": 1852,
+  "textSha256": "c6e8e15fdb227f990474aa546e0a1e46f5ab9b9046d172856b7e703754f9c8fa",
+  "result": {
+    "status": "LOGIN_REQUIRED",
+    "publicContent": null,
+    "source": "public_page",
+    "profileName": null,
+    "avatarUrl": null,
+    "objectType": null,
+    "target": "nasa",
+    "canonicalUrl": "https://www.facebook.com/nasa",
+    "availability": "login_required",
+    "reasonCode": "LOGIN_REQUIRED",
+    "httpStatus": 200,
+    "banAssessment": "unknown",
+    "evidenceSummary": "LOGIN_REQUIRED",
+    "parserVersion": "public-evidence-v5"
+  }
+}

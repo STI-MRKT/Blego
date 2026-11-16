@@ -1,0 +1,9 @@
+✔ TZ11 Electron route uses isolated public DNS, anonymous manual redirects and decoded bounded HTML (21.637392ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83.659054

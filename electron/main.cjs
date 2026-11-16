@@ -8,7 +8,8 @@ const {
   clipboard,
   dialog,
   nativeImage,
-  safeStorage
+  safeStorage,
+  session
 } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -52,7 +53,11 @@ async function initialize() {
   vault = secretVault(store, safeStorage);
   reputationProvider = createProxycheckProvider({ getKey: () => vault.get('proxycheck') });
   poolCatalog = createPoolCatalog({ store });
-  facebook = createFacebookService({ store });
+  const publicSession = session.fromPartition('facebook-public-anonymous', { cache: false });
+  facebook = createFacebookService({
+    store,
+    transport: require('./features/facebook/transport.cjs').createElectronPublicTransport(publicSession)
+  });
   friends = require('./features/friends/service.cjs').createFriendsService({ store });
   geo = require('./features/geo/service.cjs').createGeoService({ store });
   images = createImageService({ store, geo });
