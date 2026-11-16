@@ -12,6 +12,7 @@ export function discoverLayouts(parsed, recognize) {
   const groups = new Map();
   if (!parsed.structured) return [];
   for (const record of parsed.records) {
+    if (record.sourceEntries?.some((entry) => entry.labelled)) continue;
     const values = (record.sourceEntries || []).map((entry) => recognize(entry.value));
     if (values.some((value) => value.invalid)) continue;
     const fields = values.map((value) => (value.explicit ? value.key : null));

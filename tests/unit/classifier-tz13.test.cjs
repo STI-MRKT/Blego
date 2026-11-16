@@ -112,3 +112,30 @@ test('TZ13 global manual assignment overrides headers and selected schemas acros
   assert.equal(result.records[0].data.password, '');
   assert.equal(result.records[0].data.token, 'SYNTHETIC_PASS');
 });
+
+test('TZ13 pretty Cookie JSON and invalid-date payloads retain exact source text', async () => {
+  const cookie =
+    '[\r\n\t{"name":"c_user","value":"000100013"},\r\n\t{"name":"xs","value":"SYNTHETIC:;|\\\"quote\\\""}\r\n]';
+  const text = `Login FB\tsynthetic.one\r\nID Account\t000100013\r\nCookie JSON\t${cookie}\r\nDate of Birth\t31/02/2000\r\nPassword\t2fa=SYNTHETIC_LITERAL_PASSWORD`;
+  const result = await classify(text);
+  assert.equal(result.records.length, 1);
+  const record = result.records[0];
+  assert.equal(record.data.cookies, cookie);
+  assert.equal(record.data.password, '2fa=SYNTHETIC_LITERAL_PASSWORD');
+  assert.equal(record.data.birthDate, '');
+  assert.ok(record.warnings.some((w) => w.code === 'INVALID_FIELD'));
+  const entry = record.sourceEntries.find((entry) => entry.header === 'Cookie JSON');
+  assert.equal(text.slice(entry.range.start, entry.range.end), cookie);
+});
+
+test('TZ13 manual row mapping wins over column mapping and strips only actual inline label syntax', async () => {
+  const text = 'id=000100013 | email=synthetic@example.test';
+  const result = await classify(text, 'txt', {
+    mapping: { column_2: 'emailPassword' },
+    recordMapping: { 1: { column_2: 'password' } }
+  });
+  assert.equal(result.records[0].data.password, 'synthetic@example.test');
+  assert.equal(result.records[0].data.emailPassword, '');
+  assert.equal(result.records[0].data.email, '');
+  assert.equal(result.records[0].sourceEntries[1].value, 'email=synthetic@example.test');
+});
