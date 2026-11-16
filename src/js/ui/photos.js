@@ -29,7 +29,7 @@ export function imageErrorMessage(code) {
     METADATA_INVALID_GPS: 'Enter latitude from −90 to 90 and longitude from −180 to 180.',
     METADATA_INVALID_VALUE: 'Enter a value, or choose Keep or Remove.',
     METADATA_INVALID_CAMERA_VALUE: 'Enter a valid positive camera value.',
-    PLAN_STALE: 'The selection or files changed. Preview the changes again.',
+    PLAN_STALE: 'Выбор или файлы изменились. Повторите сохранение.',
     SOURCE_CHANGED: 'The original changed. Add it again before exporting.',
     MAKER_NOTES_CONFIRMATION_REQUIRED:
       'Review the camera warning in More metadata before continuing.',
@@ -70,7 +70,10 @@ function editor(field, values) {
   return `<tr><td>${esc(field)}</td><td>${esc(unique.length > 1 ? 'Different values' : metadataText(value) || '(empty)')}${unique.length === 1 && value != null ? `<button type="button" class="copy tiny always" data-action="copy" data-copy="${esc(metadataText(value))}" aria-label="Copy current ${field}">${I.copy}</button>` : ''}</td><td><select class="input" name="action-${field}">${state.imageEditTarget === 'group' ? '' : `${state.photos.filter((p) => p.selected).length > 1 ? '<option value="unchanged">Leave overrides unchanged</option>' : ''}<option value="inherit">Inherit group</option>`}<option value="keep">Keep</option>${field === 'personalIdentifiers' ? '' : '<option value="set">Set</option>'}<option value="remove">Remove</option></select></td><td>${input}${field !== 'personalIdentifiers' ? inputCopy('value-' + field, field) : ''}</td></tr>`;
 }
 export function readMetadataForm(form) {
-  return readMetadataData(new FormData(form), state.metadataOrigins);
+  const data=new Map(Object.entries(state.metadataDraft || {}));
+  for(const [key,value] of new FormData(form))data.set(key,value);
+  for(const control of form.querySelectorAll('input[type=checkbox][name]'))data.set(control.name,control.checked);
+  return readMetadataData(data, state.metadataOrigins).filter(op=>data.has('action-'+op.field));
 }
 export function readMetadataData(data, origins = {}) {
   return METADATA_FIELDS.map((field) => {
@@ -156,10 +159,10 @@ function geoFileHTML(photo){
 
 export function photosHTML() {
   const selected = state.photos.filter((p) => p.selected && p.view),
-    plan = state.metadataPlan;
+    plan = state.metadataPlan, tools = state.photoTools === true;
   const pageCount=Math.max(1,Math.ceil(state.photos.length/100)), page=Math.min(state.photoPage||0,pageCount-1), pagePhotos=state.photos.slice(page*100,(page+1)*100);
   const pager=pageCount>1?`<div class="head-actions"><button class="btn" data-action="photo-page" data-page="${page-1}" ${page===0?'disabled':''}>Назад</button><span>${page+1} / ${pageCount}</span><button class="btn" data-action="photo-page" data-page="${page+1}" ${page+1>=pageCount?'disabled':''}>Далее</button></div>`:'';
-  return `<div class="page" id="photo-drop"><input type="file" id="photo-input" accept=".jpg,.jpeg,.png,.webp" multiple hidden><div class="page-head"><div><h1>Photos</h1><p class="sub">Edit date or location, preview changes and save copies.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add photos</button><button class="btn" data-action="images-folder" ${state.imagesBusy ? 'disabled' : ''}>Добавить папку</button><button class="btn btn-quiet" data-action="photos-clear" ${!state.photos.length || state.imagesBusy ? 'disabled' : ''}>Clear all</button></div></div>
+  return `<div class="page" id="photo-drop"><input type="file" id="photo-input" accept=".jpg,.jpeg,.png,.webp" multiple hidden><div class="page-head"><div><h1>Photos</h1><p class="sub">Измените дату или GEO и сохраните копии.</p></div><div class="head-actions"><button class="btn" data-action="images-choose" ${state.imagesBusy ? 'disabled' : ''}>Add photos</button><button class="btn" data-action="images-folder" ${state.imagesBusy ? 'disabled' : ''}>Добавить папку</button><button class="btn btn-quiet" data-action="photos-tools" ${state.imagesBusy ? 'disabled' : ''}>${tools ? 'Назад к фото' : 'Другие инструменты'}</button><button class="btn btn-quiet" data-action="photos-clear" ${!state.photos.length || state.imagesBusy ? 'disabled' : ''}>Clear all</button></div></div>
  <div class="photo-stats"><div><b>${state.photos.length}</b><span>photos</span></div><div><b>${selected.length}</b><span>selected</span></div><div class="photo-meter"><i style="width:${Math.min(100, state.photos.length)}%"></i></div></div>
  <p class="sub" id="image-scan-status" role="status">${state.imageScan ? `Найдено: ${state.imageScan.found} · Пропущено: ${state.imageScan.skipped} · Повторов: ${state.imageScan.duplicates}` : state.imagesReading ? 'Поиск и чтение фотографий…' : ''}</p>
  ${state.imageScan?.errors?.length ? `<details><summary>Не удалось прочитать: ${state.imageScan.errors.length}</summary>${state.imageScan.errors.map(e=>`<p>${esc(e.name)} — ${esc(imageErrorMessage(e.code))}</p>`).join('')}</details>`:''}
@@ -169,7 +172,7 @@ export function photosHTML() {
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Original image"><figcaption>${esc(state.imagePreviewName || 'Original image')}</figcaption><button class="btn btn-quiet" data-action="image-preview-close">Close preview</button></figure>` : ''}
  ${
    selected.length
-     ? `<form id="metadata-form"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><div class="net-grid2">${quickEditor('captureDate', selected)}${quickEditor('gps', selected)}</div><button type="submit" class="btn btn-primary">Preview changes</button>
+     ? `<form id="metadata-form"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><div class="net-grid2">${quickEditor('captureDate', selected)}${quickEditor('gps', selected)}</div>${tools ? `<button type="submit" class="btn">Preview changes</button>
  <details id="metadata-advanced" ${openDetails('metadata-advanced')}><summary>More metadata and presets</summary><div class="card pad"><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.filter(
    (f) => !['captureDate', 'gps'].includes(f)
  )
@@ -195,11 +198,11 @@ export function photosHTML() {
        `<button type="button" class="btn" data-action="${action}">${label}</button>`
    )
    .join('')}
- <p class="sub">Originals are kept. Orientation and colour profiles stay unchanged. Saved groups and presets may contain personal metadata. File selection and per-file overrides are session-only.</p></div></details></fieldset></form>`
+ <p class="sub">Originals are kept. Orientation and colour profiles stay unchanged. Saved groups and presets may contain personal metadata. File selection and per-file overrides are session-only.</p></div></details>` : ''}</fieldset></form><button type="button" class="btn btn-primary" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Save copies</button>`
      : ''
  }
  ${
-   plan
+   plan && tools
      ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3>${plan.files
          .map(
            (file) =>
@@ -213,13 +216,13 @@ export function photosHTML() {
          )
          .join(
            ''
-         )}<button class="btn btn-primary" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Save copies</button><details><summary>Details and warnings</summary><p>${esc(plan.warnings.join(', ') || 'No warnings')}</p><p>Personal-metadata removal does not anonymize pixels or unknown blocks.</p>${plan.files.map((file) => `<p>${esc(file.groupName || '')} · ${esc(file.destinationName || '')}</p>`).join('')}</details></div>`
+         )}<details><summary>Details and warnings</summary><p>${esc(plan.warnings.join(', ') || 'No warnings')}</p><p>Personal-metadata removal does not anonymize pixels or unknown blocks.</p>${plan.files.map((file) => `<p>${esc(file.groupName || '')} · ${esc(file.destinationName || '')}</p>`).join('')}</details></div>`
      : ''
  }
  ${state.imagesBusy ? `<button class="btn" data-action="metadata-cancel">${state.geoBusy ? 'Отменить генерацию GEO' : state.imagesReading ? 'Cancel reading' : 'Cancel export'}</button>${!state.imagesReading ? (state.imageWorkspace?.groups || []).map((g) => `<button class="btn" data-action="metadata-cancel-group" data-id="${g.id}">Cancel ${esc(g.name)}</button>`).join('') : ''}` : ''}
  ${
-   state.imagesBusy || Object.keys(state.metadataProgress || {}).length
-     ? `<div class="card pad" data-metadata-progress>${Object.values(state.metadataProgress || {})
+   state.imagesBusy || (tools && Object.keys(state.metadataProgress || {}).length)
+     ? `<div class="card pad" data-metadata-progress>${!tools ? `Обрабатываем фотографии: ${Object.values(state.metadataProgress || {}).filter(f=>['completed','failed','cancelled','no_changes'].includes(f.status)).length}` : Object.values(state.metadataProgress || {})
          .map(
            (file) =>
              `<p data-progress-id="${file.fileId}">${esc(file.name)}: ${esc(file.status)} ${file.error ? esc(imageErrorMessage(file.error)) : ''} ${file.outputName ? copyValue('output filename', file.outputName) : ''}</p>`
@@ -228,20 +231,20 @@ export function photosHTML() {
      : ''
  }
  ${
-   state.metadataExport
-     ? `<div class="card pad"><p>${state.metadataExport.files.filter((f) => f.status === 'completed').length ? `Saved ${state.metadataExport.files.filter((f) => f.status === 'completed').length} copies.` : 'No copies saved.'}</p>${state.metadataExport.files
+   state.metadataExport && (tools || state.metadataExport.files.some(f=>['failed','cancelled'].includes(f.status)))
+     ? `<div class="card pad">${tools ? `<p>${state.metadataExport.files.filter((f) => f.status === 'completed').length ? `Saved ${state.metadataExport.files.filter((f) => f.status === 'completed').length} copies.` : 'No copies saved.'}</p>` : ''}${state.metadataExport.files
          .filter((f) => ['failed', 'cancelled'].includes(f.status))
          .map(
            (f) =>
-             `<label class="fl"><input type="checkbox" data-retry-file="${f.fileId}">${esc(f.name)} — ${esc(f.status)}</label>`
+             `<label class="fl"><input type="checkbox" data-retry-file="${f.fileId}">${esc(f.name)} — ${esc(imageErrorMessage(f.error || (f.status==='cancelled'?'CANCELLED':'EXPORT_FAILED')))}</label>`
          )
          .join(
            ''
-         )}<button class="btn" data-action="metadata-retry">Retry selected files</button><details><summary>Reports and export history</summary><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button>${(state.imageExportHistory || []).map((r) => `<p>${r.files.map((f) => `${esc(f.name)} — ${esc(f.status)}`).join('; ')}</p>`).join('')}</details></div>`
+         )}${state.metadataExport.files.some(f=>['failed','cancelled'].includes(f.status)) ? '<button class="btn" data-action="metadata-retry">Повторить выбранные фотографии</button>' : ''}${tools ? `<details><summary>Reports and export history</summary><button class="btn" data-action="metadata-report" data-format="json">Save JSON report</button><button class="btn" data-action="metadata-report" data-format="txt">Save text report</button>${(state.imageExportHistory || []).map((r) => `<p>${r.files.map((f) => `${esc(f.name)} — ${esc(f.status)}`).join('; ')}</p>`).join('')}</details>` : ''}</div>`
      : ''
  }
- <details id="image-groups-advanced" ${openDetails('image-groups-advanced')}><summary>Groups and reference image</summary>${groupControls()}</details>
- <details><summary>File details</summary><p class="sub">Up to 1000 images, 50 MiB each, 10 GiB queued and 40 megapixels per image. Retained metadata is limited to 64 MiB; two files are processed concurrently. Static JPEG, PNG and WebP. Metadata does not prove authorship or camera provenance.</p>${pagePhotos.map((p) => `<p>${esc(p.name)} · ${(p.size / 1048576).toFixed(2)} MiB · ${esc(p.status)} ${esc(p.error || '')} ${esc(p.view?.warnings?.join(', ') || '')}</p>`).join('')}</details></div>`;
+ ${tools ? `<details id="image-groups-advanced" ${openDetails('image-groups-advanced')}><summary>Groups and reference image</summary>${groupControls()}</details>
+ <details><summary>File details</summary><p class="sub">Up to 1000 images, 50 MiB each, 10 GiB queued and 40 megapixels per image. Retained metadata is limited to 64 MiB; two files are processed concurrently. Static JPEG, PNG and WebP. Metadata does not prove authorship or camera provenance.</p>${pagePhotos.map((p) => `<p>${esc(p.name)} · ${(p.size / 1048576).toFixed(2)} MiB · ${esc(p.status)} ${esc(p.error || '')} ${esc(p.view?.warnings?.join(', ') || '')}</p>`).join('')}</details>` : ''}</div>`;
 }
 
 function groupControls() {

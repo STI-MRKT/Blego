@@ -237,6 +237,7 @@ test(
     await page.locator('[data-view="photos"]').click();
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('[data-action="photos-tools"]').click();
     await page.locator('#metadata-advanced > summary').click();
     await page.locator('[name="action-title"]').selectOption('set');
     await page.locator('[name="value-title"]').fill('Новый заголовок');

@@ -233,7 +233,9 @@ test(
     await app.evaluate(({ dialog }, output) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [output] });
     }, output);
-    await page.locator('#metadata-form [type="submit"]').click();
+    await waitForAsync(page, async () =>
+      Boolean((await import('/js/state.js')).state.metadataPreview)
+    );
     await page.locator('[data-action="metadata-export"]').click();
     await waitForAsync(
       page,

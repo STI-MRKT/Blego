@@ -1,0 +1,12 @@
+✔ group UI preserves drafts, explicit reference fields, save and restart (4797.096999ms)
+✔ TZ11 Photos saves20 individual images with automatic fresh plan and no primary technical panels (13726.134986ms)
+✔ TZ11 Photos saves20 folder images with automatic fresh plan and no primary technical panels (12583.376756ms)
+✔ TZ11 cancel during destination selection cannot export or show success; next save is fresh (1809.349771ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33862.675289

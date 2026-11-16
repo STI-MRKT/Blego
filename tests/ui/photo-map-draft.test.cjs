@@ -169,8 +169,14 @@ for (const bulk of [false, true])
       await app.evaluate(({ dialog }, out) => {
         dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [out] });
       }, out);
-      await page.locator('#metadata-form').evaluate((form) => form.requestSubmit());
-      await page.locator('[data-metadata-plan]').waitFor();
+      await waitForAsync(page, async () =>
+        Boolean((await import('/js/state.js')).state.metadataPreview)
+      );
+      assert.equal(
+        await page.locator('[data-metadata-plan]').count(),
+        0,
+        'primary Photos has no technical preview panel'
+      );
       const afterPreview = await page.evaluate(async (id) => {
         const { state } = await import('/js/state.js');
         return state.imageWorkspace.overrides[id].find((o) => o.field === 'gps').value;

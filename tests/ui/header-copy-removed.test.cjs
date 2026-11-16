@@ -436,6 +436,7 @@ test(
     }, file);
     await page.locator('[data-action="images-choose"]').click();
     await page.locator('#metadata-form').waitFor();
+    await page.locator('[data-action="photos-tools"]').click();
     await page.locator('#image-groups-advanced > summary').click();
     await page.locator('#image-group-name').fill('Group A');
     await page.locator('[data-action="group-create"]').click();
