@@ -97,7 +97,7 @@ function createClassificationService({ allowTestRules = false, clock = () => new
           (r.sourceEntries || []).some((e) => {
             const value = String(e.value ?? '');
             return (
-              (fieldForHeader(e.header || e.column) === 'twoFactorCode' && value) ||
+              (fieldForHeader(e.header || e.column, value) === 'twoFactorCode' && value) ||
               recognizeValue(value, fieldForHeader, validBirthDate, (s) =>
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
               ).key === 'twoFactorCode'

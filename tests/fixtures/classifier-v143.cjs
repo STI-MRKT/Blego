@@ -11,6 +11,16 @@ const fields = {
 const labelled = Object.entries(fields).map(([k, v]) => `${k}=${v}`);
 const cases = [
   {
+    name: '2fa header code',
+    text: 'id|2fa\n10001|SYNTHETIC_2FA',
+    expected: [{ accountId: '10001', twoFactorCode: 'SYNTHETIC_2FA' }]
+  },
+  {
+    name: '2fa header URL',
+    text: 'id|2fa\n10001|https://example.test/2fa',
+    expected: [{ accountId: '10001', twoFactorUrl: 'https://example.test/2fa' }]
+  },
+  {
     name: 'slash header protects URL and UA',
     text: 'id / profileUrl / userAgent / password\n10001 / https://www.facebook.com/10001 / Mozilla/5.0 (X11; Linux) / FAKE',
     expected: [
