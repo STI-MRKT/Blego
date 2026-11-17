@@ -221,16 +221,16 @@ export function structuredRecords(text, options = {}) {
       !labelledIdentity.invalid;
     // A complete labelled UA can end before a known label. Keep colons
     // inside UA comments and product segments intact.
-    const completedUA =
-      isUA(current) && /(?:\)|[\w.-]+\/\d[\w.-]*)\s*$/u.test(current);
+    const completedUA = isUA(current) && /(?:\)|[\w.-]+\/\d[\w.-]*)\s*$/u.test(current);
     // An unrecognised caption may follow an independently validated value,
     // e.g. "Date of Birth:1991-09-18:Инструкция:...".
     // Never infer an opaque password boundary from its punctuation alone.
-    const labelledValue = c === ':' && !composite
-      ? recognizeValue(current, fieldForHeader, validBirthDate, (v) =>
-          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-        )
-      : null;
+    const labelledValue =
+      c === ':' && !composite
+        ? recognizeValue(current, fieldForHeader, validBirthDate, (v) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          )
+        : null;
     const completeAtomicValue =
       labelledValue?.explicit &&
       !labelledValue.invalid &&
@@ -239,9 +239,7 @@ export function structuredRecords(text, options = {}) {
       text.slice(i + 1, i + 150)
     );
     const splitBeforeUnknownCaption =
-      completeAtomicValue &&
-      unknownCaption &&
-      !fieldForHeader(unknownCaption[1]);
+      completeAtomicValue && unknownCaption && !fieldForHeader(unknownCaption[1]);
     const extra =
       c === ':' &&
       (!text.startsWith('::', i) || header?.delimiter === ':') &&
