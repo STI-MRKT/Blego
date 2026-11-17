@@ -7,17 +7,26 @@ test('TZ16 Friends cards match FP language without import or details UI', async 
   const { state } = await import('../../src/js/state.js');
   const { friendsHTML } = await import('../../src/js/ui/friends.js');
   const previous = {
-    friendsRows: state.friendsRows, friendsQuery: state.friendsQuery,
-    friendsGeo: state.friendsGeo, friendsPlatform: state.friendsPlatform
+    friendsRows: state.friendsRows,
+    friendsQuery: state.friendsQuery,
+    friendsGeo: state.friendsGeo,
+    friendsPlatform: state.friendsPlatform
   };
   try {
-    state.friendsRows = [{
-      id: 'synthetic_1', name: 'Sample Creator', geo: 'US',
-      platform: 'Instagram', hue: 180, handle: 'sample.creator',
-      niche: 'Technology', source: 'synthetic test source',
-      notes: 'Only synthetic text',
-      url: 'https://www.instagram.com/sample.creator/'
-    }];
+    state.friendsRows = [
+      {
+        id: 'synthetic_1',
+        name: 'Sample Creator',
+        geo: 'US',
+        platform: 'Instagram',
+        hue: 180,
+        handle: 'sample.creator',
+        niche: 'Technology',
+        source: 'synthetic test source',
+        notes: 'Only synthetic text',
+        url: 'https://www.instagram.com/sample.creator/'
+      }
+    ];
     state.friendsQuery = '';
     state.friendsGeo = '';
     state.friendsPlatform = '';
@@ -41,15 +50,20 @@ test('TZ16 metadata operations permit explicit paired EXIF Make/Model without re
   const { validateOperations } = await import('../../shared/metadata-operations.mjs');
   const { writeArgs } = require('../../electron/features/images/write-policy.cjs');
   const data = new Map([
-    ['action-make', 'set'], ['value-make', 'Canon'],
-    ['action-model', 'set'], ['value-model', 'EOS R5']
+    ['action-make', 'set'],
+    ['value-make', 'Canon'],
+    ['action-model', 'set'],
+    ['value-model', 'EOS R5']
   ]);
-  const ops = readMetadataData(data).filter((op) => ['make','model'].includes(op.field));
-  assert.deepEqual(ops.map(({ origin, ...op }) => op), [
-    { field: 'make', action: 'set', value: 'Canon' },
-    { field: 'model', action: 'set', value: 'EOS R5' }
-  ]);
-  const safe = validateOperations(ops.map(({origin, ...op}) => op));
+  const ops = readMetadataData(data).filter((op) => ['make', 'model'].includes(op.field));
+  assert.deepEqual(
+    ops.map(({ origin, ...op }) => op),
+    [
+      { field: 'make', action: 'set', value: 'Canon' },
+      { field: 'model', action: 'set', value: 'EOS R5' }
+    ]
+  );
+  const safe = validateOperations(ops.map(({ origin, ...op }) => op));
   const args = writeArgs(safe, 'jpeg');
   assert.ok(args.includes('-EXIF:Make=Canon'));
   assert.ok(args.includes('-EXIF:Model=EOS R5'));
