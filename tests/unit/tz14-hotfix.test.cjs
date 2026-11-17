@@ -116,12 +116,12 @@ test('TZ14 every localized type has 160 additional BIOs and statuses', () => {
   }
 });
 
-test('TZ14 Crypto uses 200 crypto-themed brands, Tech gains 160 new brands', () => {
+test('TZ14 Crypto uses 400 crypto-themed brands, Tech gains 160 new brands', () => {
   const tech = resolvePreset('US', 'tech');
   const crypto = resolvePreset('GB', 'crypto');
   const old = require('../../resources/generator/supplements/names-v14.json').brandNames;
   assert.equal(tech.brandNames.length, old.length + EXTRA);
-  assert.equal(crypto.brandNames.length, 200);
+  assert.equal(crypto.brandNames.length, 400);
   assert.equal(tech.namingStrategy, 'brand_name');
   assert.equal(crypto.namingStrategy, 'brand_name');
   assert.equal(crypto.nameGender, null);
