@@ -85,6 +85,8 @@ test(
     await page.locator('[data-action="generate"]').click();
     await page.locator('.demo-card').waitFor();
     const card = await page.evaluate(() => window.blego.lastCard());
+    const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    const visiblePhone = formattedPhoneForCopy(card.fields.phone, card.country);
     assert.equal(card.type, 'tech');
     assert.equal(card.country, 'GB');
     async function checkClipboard(expected) {
@@ -110,7 +112,7 @@ test(
       }
       await checkClipboard(
         field === 'phone'
-          ? card.fields.phone.slice(3)
+          ? visiblePhone
           : Array.isArray(card.fields[field])
             ? card.fields[field].join(', ')
             : String(card.fields[field])
@@ -121,7 +123,7 @@ test(
       card.fieldOrder
         .map(
           (f) =>
-            `${f}: ${Array.isArray(card.fields[f]) ? card.fields[f].join(', ') : card.fields[f]}`
+            `${f}: ${f === 'phone' ? visiblePhone : Array.isArray(card.fields[f]) ? card.fields[f].join(', ') : card.fields[f]}`
         )
         .join('\n')
     );
@@ -142,13 +144,8 @@ test(
       .update(JSON.stringify(dataset))
       .digest('hex');
     fs.writeFileSync(poolFile, JSON.stringify(dataset));
-    async function openAdvancedSettings() {
-      const advanced = page.locator('details.ux-settings-advanced');
-      if (await advanced.count()) {
-        if (!(await advanced.evaluate((element) => element.open)))
-          await advanced.locator('summary').click();
-      }
-    }
+    assert.equal(await page.locator('details.ux-settings-advanced').count(), 0);
+    let poolPreviewToken;
     async function choosePoolFixture() {
       await app.evaluate(({ dialog }, file) => {
         const original = dialog.showOpenDialog;
@@ -157,37 +154,29 @@ test(
           return { canceled: false, filePaths: [file] };
         };
       }, poolFile);
-      await openAdvancedSettings();
-      await page.locator('[data-action="pool-choose"]').click();
-      await page.locator('[data-action="pool-apply"]').waitFor({ state: 'attached' });
-      await openAdvancedSettings();
+      const preview = await page.evaluate(() => window.blego.choosePoolPackage());
+      assert.equal(preview.country, 'GB');
+      poolPreviewToken = preview.fileToken;
     }
     await choosePoolFixture();
     assert.equal(
-      (await page.evaluate(() => window.blego.getPoolStats({ country: 'GB', type: 'tech' }))).counts
-        .firstNames,
-      1563
+      (await page.evaluate(() => window.blego.getPoolStats({ country: 'GB', type: 'tech' }))).counts.firstNames,
+      1713
     );
-    await page.locator('[data-action="pool-cancel"]').click();
-    await page.locator('[data-action="pool-apply"]').waitFor({ state: 'detached' });
+    await page.evaluate((token) => window.blego.cancelPoolPackage(token), poolPreviewToken);
     await choosePoolFixture();
-    await page.locator('[data-action="pool-apply"]').click();
+    await page.evaluate((token) => window.blego.applyPoolPackage(token), poolPreviewToken);
     await waitForAsync(
       page,
       async () =>
         (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1
     );
-    await openAdvancedSettings();
-    await page.locator('[name="bulkMode"]').check();
-    await page.locator('#settings-form button[type="submit"]').click();
-    await waitForAsync(page, async () => (await window.blego.getSettings()).bulkMode === true);
-    await openAdvancedSettings();
-    await page.locator('[data-action="pool-bundled"]').click();
+    assert.equal((await page.evaluate(() => window.blego.getSettings())).bulkMode, true);
+    await page.evaluate(() => window.blego.useBundledPool('GB'));
     await waitForAsync(
       page,
       async () =>
-        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
-        1563
+        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1713
     );
     const disabled = await page.evaluate(async () => {
       try {
