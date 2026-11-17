@@ -90,7 +90,11 @@ test(
     // Sorting is no longer visible; the existing backend sort remains available.
     const ordered = await page.evaluate(() => window.blego.listArchives({ order: 'oldest' }));
     assert.equal(ordered.items[0].originalName, 'Alpha.txt');
-    await page.locator('.hrow').filter({ hasText: 'Alpha.txt' }).locator('[data-action="archive-open"]').click();
+    await page
+      .locator('.hrow')
+      .filter({ hasText: 'Alpha.txt' })
+      .locator('[data-action="archive-open"]')
+      .click();
     await page.getByText('Synthetic Alpha.txt', { exact: true }).waitFor();
     await page.getByRole('button', { name: 'Copy result', exact: true }).click();
     await page.waitForTimeout(30);
