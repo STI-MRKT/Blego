@@ -40,7 +40,7 @@ for (const country of countries) {
       cityPostalPairs: preset.places.length,
       bios: preset.bios.length,
       statuses: preset.statuses.length,
-      categories: preset.categoryPool.length,
+      categories: baseType.categories.length + preset.categoryPool.length,
       roles: preset.positionPool.length,
       brandNames: preset.brandNames.length
     };
