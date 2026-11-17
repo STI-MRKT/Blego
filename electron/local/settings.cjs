@@ -113,7 +113,12 @@ function validUrl(raw) {
   }
 }
 function getSettings(store) {
-  return { ...structuredClone(defaults), ...store.get('settings'), bulkMode: true, bulkConsent: true };
+  return {
+    ...structuredClone(defaults),
+    ...store.get('settings'),
+    bulkMode: true,
+    bulkConsent: true
+  };
 }
 function updateSettings(store, patch) {
   const clean = validateSettings(patch);
