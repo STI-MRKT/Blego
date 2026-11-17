@@ -24,6 +24,16 @@ jobs:
       - run: npm ci
       - name: Lint and formatting
         run: npm run lint
+      - name: Capture formatted sources for review
+        if: failure()
+        run: |
+          ./node_modules/.bin/prettier --write electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs
+          for f in electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs; do
+            echo "BLEGO_FORMATTED_BEGIN:$f"
+            base64 -w0 "$f"
+            echo
+            echo "BLEGO_FORMATTED_END:$f"
+          done
       - name: Targeted Facebook unit tests
         run: node --test tests/unit/facebook-*.test.cjs tests/unit/fbtools-checker-ui.test.cjs
       - name: Targeted Facebook integration tests
