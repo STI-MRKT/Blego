@@ -65,7 +65,17 @@ const CRYPTO_ENDINGS = [
   'Works',
   'Insights',
   'Observatory',
-  'Digest'
+  'Digest',
+  'Brief',
+  'Chronicle',
+  'Monitor',
+  'Dispatch',
+  'Forum',
+  'Compass',
+  'Notebook',
+  'Bulletin',
+  'Workshop',
+  'Directory'
 ];
 const dedupKey = (s) => s.normalize('NFKC').trim().toLocaleLowerCase();
 const cleanText = (value) => String(value || '').trim();
