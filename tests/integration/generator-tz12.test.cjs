@@ -48,10 +48,11 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         { country, type, requestId: `new-${country}-${type}` },
         { store, settings: { bulkMode: true, bulkConsent: true } }
       );
-      const row = preset.addresses.find((candidate) =>
-        candidate.address === profile.fields.address &&
-        candidate.city === profile.fields.city &&
-        candidate.postal === profile.fields.postal
+      const row = preset.addresses.find(
+        (candidate) =>
+          candidate.address === profile.fields.address &&
+          candidate.city === profile.fields.city &&
+          candidate.postal === profile.fields.postal
       );
       assert.ok(row, 'Address, city and postal must belong to one synthetic tuple');
       assert.ok(
