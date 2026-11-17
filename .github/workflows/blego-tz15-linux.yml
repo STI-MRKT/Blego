@@ -1,0 +1,39 @@
+name: BLEGO TZ15 classifier and FB.Tools verification
+on:
+  push:
+    branches:
+      - codex/blego-tz15-fbtools-classifier-integrated-20261117
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Formatter review
+        run: |
+          for file in shared/classifier-structure.mjs shared/classifier.mjs shared/classifier-lexer.mjs shared/classifier-tab-labels.mjs shared/classifier-recognition.mjs tests/unit/classifier-tz15.test.cjs; do
+            echo "FORMAT_START:$file"
+            ./node_modules/.bin/prettier "$file" | base64 -w 0
+            echo
+            echo "FORMAT_END:$file"
+          done
+      - name: Lint
+        run: npm run lint
+      - name: Unit and integration regression
+        run: |
+          npm run test:unit
+          npm run test:integration
+      - name: Targeted native Electron GUI
+        run: |
+          node node_modules/electron/install.js
+          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/classifier-tz13.test.cjs tests/ui/classifier-copy.test.cjs tests/ui/facebook-flow.test.cjs tests/ui/facebook-v14.test.cjs
