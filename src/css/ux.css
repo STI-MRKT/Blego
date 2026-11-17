@@ -216,20 +216,6 @@
   line-height:1.45;resize:vertical;
 }
 .friends-copy-actions{margin-bottom:18px;padding-top:0}
-.friend-card>details{margin-top:14px}
-.friend-card>details>summary{
-  display:inline-flex;align-items:center;gap:7px;list-style:none;
-  max-width:100%;padding:7px 11px;border:1px solid var(--border);
-  border-radius:8px;background:var(--panel-2);color:var(--muted);
-  font-size:12px;font-weight:570;cursor:pointer;
-}
-.friend-card>details>summary::-webkit-details-marker{display:none}
-.friend-card>details>summary::before{
-  content:'›';display:inline-block;font-size:17px;line-height:1;transition:transform .15s;
-}
-.friend-card>details[open]>summary::before{transform:rotate(90deg)}
-.friend-card>details>summary:hover{color:var(--text);border-color:var(--border-2)}
-.friend-card>details>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* TZ15: classifier actions remain accessible without bottom settings panels. */
 .classifier-page .classifier-quick-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 12px;padding:0}
