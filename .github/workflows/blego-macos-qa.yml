@@ -14,6 +14,7 @@ on:
       - codex/blego-friends-news-copy
       - codex/blego-v1-4-3-fixes
       - codex/blego-tz12-news-bio-dictionaries
+      - codex/blego-fbtools-checker
   workflow_dispatch:
     inputs:
       target:
@@ -57,9 +58,9 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
       BLEGO_CAPTURE: release
-      QA_SPEC: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
-      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
-      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
+      QA_SPEC: ${{ github.ref_name == 'codex/blego-fbtools-checker' && 'tz12' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
+      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-fbtools-checker' && '-FBTOOLS' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
+      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-fbtools-checker' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
