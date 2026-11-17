@@ -43,7 +43,7 @@ const { createHash } = require('node:crypto');
     'biography-v143',
     'classifier',
     'classifier-copy',
-    'classifier-tz13',
+    'classifier-tz13', 'classifier-tz15',
     'classifier-v14',
     'classifier-v142',
     'classifier-v143',
