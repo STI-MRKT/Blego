@@ -209,12 +209,14 @@ export function structuredRecords(text, options = {}) {
     const composite =
       isUA(current) ||
       /^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?(?:https?:\/\/|[A-Za-z]:\\)/iu.test(current);
+    const labelledUrl =
+      /^\s*[\p{L}\p{N}_ -]{1,40}[:=]\s*https?:\/\/\S+$/iu.test(current);
     const extra =
       c === ':' &&
       (!text.startsWith('::', i) || header?.delimiter === ':') &&
       ((nextLabel &&
         !fieldForHeader(current.trim()) &&
-        (!composite || /\s/.test(text[i - 1] || ''))) ||
+        (!composite || /\s/.test(text[i - 1] || '') || labelledUrl)) ||
         (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
         ? ':'
         : (c === '/' || (c === '\\' && length === 2)) &&
@@ -232,8 +234,9 @@ export function structuredRecords(text, options = {}) {
         : c === '|' || c === '\t'
           ? c
           : c === ';' &&
-              !isUA(current) &&
-              !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
+              (nextLabel ||
+                (!isUA(current) &&
+                  !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)))
             ? ';'
             : null);
     if (delimiter) {
