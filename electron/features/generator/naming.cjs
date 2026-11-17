@@ -5,13 +5,38 @@ const { normalize } = require('./registry.cjs');
 const supplement = require('../../../resources/generator/supplements/names-v14.json');
 const initializing = new WeakMap();
 const cryptoRoots = [
-  'Chain', 'Ledger', 'Block', 'Node', 'Protocol', 'Vault', 'Token', 'Hash',
-  'Consensus', 'Peer', 'Onchain', 'Merkle', 'Proof', 'Bridge', 'Wallet',
-  'Web3', 'Cryptography', 'Open Network', 'Digital Asset', 'Decentral'
+  'Chain',
+  'Ledger',
+  'Block',
+  'Node',
+  'Protocol',
+  'Vault',
+  'Token',
+  'Hash',
+  'Consensus',
+  'Peer',
+  'Onchain',
+  'Merkle',
+  'Proof',
+  'Bridge',
+  'Wallet',
+  'Web3',
+  'Cryptography',
+  'Open Network',
+  'Digital Asset',
+  'Decentral'
 ];
 const cryptoEndings = [
-  'Atlas', 'Studio', 'Works', 'Collective', 'Foundry', 'Harbor',
-  'Notes', 'Network', 'Field', 'Horizon'
+  'Atlas',
+  'Studio',
+  'Works',
+  'Collective',
+  'Foundry',
+  'Harbor',
+  'Notes',
+  'Network',
+  'Field',
+  'Horizon'
 ];
 // 200 themed roots combined with five compact identity variants to maintain
 // the existing installation-wide unique-name guarantee at 1000+ generations.
