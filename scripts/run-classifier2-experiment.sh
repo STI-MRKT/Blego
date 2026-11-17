@@ -25,3 +25,12 @@ python3 "$project_root/scripts/classifier2_evaluate.py" \
   "$project_root/docs/verification/classifier2/dataset.jsonl" "$temporary_root/B.json" "$report_dir/B-metrics.json"
 python3 "$project_root/scripts/classifier2_crf.py" \
   "$project_root/docs/verification/classifier2/dataset.jsonl" "$temporary_root/B.json" "$report_dir/C-metrics.json"
+python3 "$project_root/scripts/classifier2_control.py" "$temporary_root/control.jsonl"
+node "$project_root/scripts/classifier2_export.cjs" "$baseline_path" \
+  "$temporary_root/control.jsonl" "$temporary_root/control-A.json"
+node "$project_root/scripts/classifier2_export.cjs" "$project_root" \
+  "$temporary_root/control.jsonl" "$temporary_root/control-B.json"
+python3 "$project_root/scripts/classifier2_control_eval.py" \
+  "$project_root/docs/verification/classifier2/dataset.jsonl" "$temporary_root/B.json" \
+  "$temporary_root/control.jsonl" "$temporary_root/control-A.json" "$temporary_root/control-B.json" \
+  "$report_dir/C-metrics.json" "$report_dir/CONTROL-metrics.json"

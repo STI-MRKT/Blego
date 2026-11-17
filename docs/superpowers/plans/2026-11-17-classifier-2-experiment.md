@@ -17,7 +17,7 @@
 - No real credentials, cookie, token or 2FA value in Git, logs or training data.
 - Split by format family; never by randomly sampled rows.
 - Original source spans and record boundaries are gold labels and independently validated.
-- `BLEGO_TZ13_CONTROL_SANITIZED.txt` is a mandatory external control; report BLOCKED until actually available.
+- `BLEGO_TZ13_CONTROL_SANITIZED.txt` is a mandatory external control. One sanitized line was subsequently supplied in chat and must remain excluded from training/tuning; full-file acceptance requires the actual file if it has additional rows.
 - No changes to News, FP, BIO or other unrelated modules.
 
 ## Review Focus
@@ -61,4 +61,4 @@
 
 ## Acceptance gate
 
-Model integration is eligible only if C improves independent-family macro-F1 by at least 0.05 over B, has no worse record integrity, and has zero cross-account transfers. A missing control file blocks final acceptance regardless of synthetic scores.
+Model integration is eligible only if C improves independent-family macro-F1 by at least 0.05 over B, has no worse record integrity, and has zero cross-account transfers. The supplied one-row control is an additional regression gate, not a substitute for independent-family improvement or full-file acceptance.
