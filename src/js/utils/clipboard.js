@@ -54,7 +54,9 @@ export async function copyText(text, button, successMessage, errorMessage) {
       if (!ok) throw Error('CLIPBOARD_FAILED');
     }
     showCopyFeedback(button);
-    if (button) {
+    // Keep text buttons (News/Friends/bulk copy) readable throughout feedback.
+    // Icon-only buttons retain the original short-lived checkmark transition.
+    if (button && !button.textContent.trim()) {
       const previous = button.innerHTML;
       button.innerHTML = I.check;
       setTimeout(() => {
