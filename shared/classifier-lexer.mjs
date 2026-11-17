@@ -219,7 +219,10 @@ export function structuredRecords(text, options = {}) {
     }
     const length = c === '\\' && text[i + 1] === '\\' ? 2 : 1;
     const nextLabel = labelledStart(text.slice(i + length, i + length + 100));
-    const upcomingCell = text.slice(i + length, i + length + 200).split(/[;|\r\n]/, 1)[0].trim();
+    const upcomingCell = text
+      .slice(i + length, i + length + 200)
+      .split(/[;|\r\n]/, 1)[0]
+      .trim();
     const nextSpacedLabel =
       c === ';' &&
       recognizeValue(upcomingCell, fieldForHeader, validBirthDate, (v) =>
