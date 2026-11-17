@@ -63,7 +63,7 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
       );
       if (preset.namingStrategy === 'brand_name')
         assert.ok(preset.brandNames.includes(profile.fields.name));
-      else assert.ok(profile.fields.name.endsWith(' ' + preset.last.at(-1)));
+      else assert.ok(preset.first.some((first) => profile.fields.name.startsWith(first + ' ')));
       assert.equal(profile.nameGender, preset.namingStrategy === 'brand_name' ? null : 'female');
       results.push(profile);
     }
