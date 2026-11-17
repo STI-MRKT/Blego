@@ -111,7 +111,10 @@ const countryCodes = new Set(
     ' '
   )
 );
-const emailValid = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const emailValid = (s) =>
+  /^[^\s@;|]+@[^\s@;|]+\.[^\s@;|]+$/.test(s) &&
+  !/[.]$/.test(s) &&
+  !s.includes('..');
 export function validBirthDate(s) {
   const m = /^(?:(\d{4})-(\d{2})-(\d{2})|(\d{1,2})([./])(\d{1,2})\5(\d{4}))$/.exec(s);
   if (!m) return false;
