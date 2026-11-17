@@ -145,6 +145,45 @@ function quickEditor(field, selected) {
  ${field === 'captureDate' ? `<label class="fl">Time zone<select class="input" name="date-offset-mode"><option value="keep">Keep existing for each image</option><option value="set">Set offset</option><option value="remove">Remove offset</option></select></label><div data-offset-input hidden><label class="fl">UTC offset<div class="cell-box"><input class="input" name="date-offset" placeholder="+03:00 or −05:00">${inputCopy('date-offset', 'time zone')}</div></label></div><details id="date-options" ${openDetails('date-options')}><summary>Date fields</summary><label class="fl"><input type="checkbox" name="date-scope-exif" checked> EXIF date taken</label><label class="fl"><input type="checkbox" name="date-scope-xmp" checked> XMP date taken</label><p class="sub">Other dates stay unchanged.</p></details>` : ''}</section>`;
 }
 
+const CAMERA_DEVICE_PRESETS = [
+  ['Apple','iPhone 16 Pro'], ['Apple','iPhone 15 Pro'],
+  ['Apple','iPhone 14 Pro'], ['Samsung','Galaxy S24 Ultra'],
+  ['Samsung','Galaxy S23'], ['Google','Pixel 9 Pro'],
+  ['Google','Pixel 8'], ['Canon','EOS R5'],
+  ['Canon','EOS R6 Mark II'], ['Nikon','Z6 III'],
+  ['Sony','ILCE-7M4'], ['Sony','ZV-E10 II'],
+  ['FUJIFILM','X-T5'], ['DJI','Mavic 3']
+];
+function deviceEditor(selected) {
+  const current = (field) => {
+    const values = selected.map((photo) =>
+      photo.view?.tags?.find((tag) => tag.field === field)?.value
+    );
+    return values.every((item) => item === values[0]) ? values[0] : 'Разные значения';
+  };
+  return `<section class="card pad photo-device-card">
+    <div class="photo-section-head"><div><h3>Устройство съёмки</h3>
+    <p class="sub">Производитель и модель записываются в EXIF/XMP выбранных копий</p></div></div>
+    <label class="fl" for="photo-device-preset">Готовый профиль устройства
+      <select id="photo-device-preset" class="input"><option value="">Выберите устройство</option>
+      ${CAMERA_DEVICE_PRESETS.map(([make, model]) => `<option value="${esc(make)}|${esc(model)}">${esc(make)} · ${esc(model)}</option>`).join('')}
+      <option value="custom">Другая модель — введите вручную</option></select>
+    </label>
+    <div class="photo-device-fields">
+      ${[['make','Производитель'],['model','Модель устройства']].map(([field, label]) => `
+        <label class="fl">${label}
+          <span class="photo-device-current">Сейчас: ${esc(String(current(field) ?? 'не указано'))}</span>
+          <select class="input" name="action-${field}" aria-label="Действие: ${label}">
+            ${actionOptions()}
+          </select>
+          <input class="input" name="value-${field}" maxlength="120" placeholder="${label}" autocomplete="off">
+        </label>`).join('')}
+    </div>
+    <label class="photo-device-ack"><input type="checkbox" name="confirm-maker"> Подтверждаю изменение производителя/модели при наличии MakerNotes</label>
+    <p class="sub">EXIF не подтверждает подлинность устройства. MakerNotes могут быть несовместимы при изменении модели.</p>
+  </section>`;
+}
+
 function geoControls(){
  const catalogue=state.geoCatalogue||{countries:[],cities:[]};
  const cities=catalogue.cities.filter(c=>c.country===state.geoCountry&&(!state.geoQuery||`${c.name} ${c.region}`.toLowerCase().includes(state.geoQuery.toLowerCase())));
