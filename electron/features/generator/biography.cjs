@@ -28,8 +28,12 @@ const EMOJI = {
 };
 function pageBio(text, type) {
   const pool = EMOJI[type];
-  if (!pool) return text;
-  return `${text} ${pool[randomInt(pool.length)]}`;
+  if (!pool || !text) return text;
+  // Only newly generated prose is decorated; manually edited content and
+  // previously saved profiles are unchanged. Internal dots are meaningful.
+  const clean = String(text).trim().replace(/[.。]+$/u, '').trim();
+  if (/\p{Extended_Pictographic}[\uFE0F\u200D]*$/u.test(clean)) return clean;
+  return `${clean} ${pool[randomInt(pool.length)]}`;
 }
 function bioDefaults(profile) {
   const place = [profile.fields.city, COUNTRIES[profile.country]].filter(Boolean).join(', ');
