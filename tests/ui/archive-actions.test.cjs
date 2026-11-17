@@ -87,9 +87,11 @@ test(
     await page.locator('[name="search"]').press('Enter');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
-      return state.archives.total === 2 && state.archives.items[0].originalName === 'Alpha.txt';
+      return state.archives.total === 2 &&
+        new Set(state.archives.items.map((item) => item.originalName)).size === 2;
     });
-    await page.locator('[data-action="archive-open"]').first().click();
+    // Sorting was removed by TZ14. Open Alpha by stable archive ID, not list order.
+    await page.locator(`[data-action="archive-open"][data-id="${entries[0].archiveId}"]`).click();
     await page.getByText('Synthetic Alpha.txt', { exact: true }).waitFor();
     await page.getByRole('button', { name: 'Copy result', exact: true }).click();
     await page.waitForTimeout(30);
