@@ -20,6 +20,14 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
+      - name: Export Prettier results
+        run: |
+          for file in shared/classifier.mjs tests/ui/news-copy.test.cjs tests/unit/classifier-password-geo-v146.test.cjs; do
+            echo "QA_FORMAT_BEGIN:$file"
+            ./node_modules/.bin/prettier "$file" | base64 -w 0
+            echo
+            echo "QA_FORMAT_END:$file"
+          done
       - name: Password, GEO and News unit regression
         run: node --test tests/unit/classifier-password-geo-v146.test.cjs tests/unit/news-copy.test.cjs
       - name: Full classifier QA
