@@ -115,7 +115,9 @@ test(
     await page.waitForTimeout(150);
     const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
     const generated = await page.evaluate(() => window.blego.lastCard());
-    assert.ok((await clip()).includes(`phone: ${formattedPhoneForCopy(profile.phone, generated.country)}`));
+    assert.ok(
+      (await clip()).includes(`phone: ${formattedPhoneForCopy(profile.phone, generated.country)}`)
+    );
     const pref = await page.evaluate(() => window.blego.copyPreferences());
     assert.ok(Object.keys(pref).some((k) => k.startsWith('generator-')));
     await page.locator('[data-view="import"]').click();
