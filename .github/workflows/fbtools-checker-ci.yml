@@ -1,0 +1,30 @@
+name: FB.Tools Checker targeted QA
+
+on:
+  push:
+    branches:
+      - codex/blego-fbtools-checker
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Lint and formatting
+        run: npm run lint
+      - name: Targeted Facebook unit tests
+        run: node --test tests/unit/facebook-*.test.cjs tests/unit/fbtools-checker-ui.test.cjs
+      - name: Targeted Facebook integration tests
+        run: node --test tests/integration/facebook-*.test.cjs
