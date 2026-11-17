@@ -55,12 +55,18 @@ const aliases = {
   rowNumber: ['№', 'number', 'rownumber'],
   fullName: ['fullname', 'name', 'фио', 'имя'],
   accountId: ['accountid', 'idaccount', 'id', 'uid', 'facebookid'],
-  password: ['password', 'pass', 'passwd', 'пароль'],
+  password: [
+    'password', 'pass', 'passwd', 'пароль',
+    'fbpassword', 'facebookpassword', 'passwordfb', 'passwordfacebook',
+    'accountpassword', 'парольфб', 'парольfacebook'
+  ],
   emailPassword: [
     'emailpassword',
     'mailpassword',
     'emailpass',
     'mailpass',
+    'passwordemail',
+    'passwordmail',
     'парольотпочты',
     'парольпочты'
   ],
@@ -114,6 +120,34 @@ for (const locale of ['en', 'ru']) {
 }
 const isCountry = (value) =>
   countryCodes.has(value) || countryNames.has(value) || countryNames.has(value.toLowerCase());
+
+// A filename is weak evidence, not a user-confirmed field. Match only complete
+// country names, and reject names that mention more than one country.
+const canonicalCountryWords = (value) =>
+  String(value || '')
+    .toLowerCase()
+    .replace(/[^\\p{L}\\p{M}]+/gu, ' ')
+    .trim();
+const countryNameHints = new Map();
+for (const locale of ['en', 'ru']) {
+  const display = new Intl.DisplayNames([locale], { type: 'region' });
+  for (const code of countryCodes) {
+    const name = canonicalCountryWords(display.of(code));
+    if (name.length >= 4) {
+      const existing = countryNameHints.get(name);
+      countryNameHints.set(name, existing && existing !== code ? null : code);
+    }
+  }
+}
+function countryFromFilename(filename) {
+  const name = canonicalCountryWords(String(filename || '').replace(/\\.[^.]+$/, ''));
+  if (!name) return null;
+  const wrapped = ` ${name} `;
+  const matches = new Set();
+  for (const [words, code] of countryNameHints)
+    if (code && wrapped.includes(` ${words} `)) matches.add(code);
+  return matches.size === 1 ? [...matches][0] : null;
+}
 function guess(value) {
   if (emailValid(value)) return 'email';
   if (validBirthDate(value)) return 'birthDate';
@@ -152,6 +186,7 @@ export function classifyRecords(parsed, options = {}) {
   const layouts = discoverLayouts(parsed, (value) =>
     recognizeValue(value, fieldForHeader, validBirthDate, emailValid)
   );
+  const filenameCountry = countryFromFilename(parsed.originalName);
   const records = parsed.records.map((source, index) => {
     const data = Object.fromEntries(CLASSIFIER_FIELDS.map((f) => [f.key, '']));
     data.rowNumber = String(index + 1);
@@ -324,6 +359,11 @@ export function classifyRecords(parsed, options = {}) {
       const profile = profileIdentity(extended.profileUrl);
       if (profile?.conflict || (profile?.id && data.accountId && profile.id !== data.accountId))
         report('IDENTITY_CONFLICT', 'accountId');
+    }
+    if (!data.geo && !candidates.has('geo') && filenameCountry) {
+      data.geo = filenameCountry;
+      fieldSources.geo = [{ column: '__filename__', range: null, method: 'filename-hint' }];
+      report('GEO_FROM_FILENAME', 'geo');
     }
     if (unrecognized.length) report('UNRECOGNIZED_VALUES');
     if (data.cookies && data.accountId) {
