@@ -4,7 +4,11 @@ const { createHash } = require('node:crypto');
 const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
 const addressSupplement = require('../../../resources/generator/supplements/addresses-tz12.json');
 const { namingPreset, nameCount } = require('./naming.cjs');
-const { expandBundledCountry, expandTypeTexts, syntheticAddresses } = require('./pool-expansion.cjs');
+const {
+  expandBundledCountry,
+  expandTypeTexts,
+  syntheticAddresses
+} = require('./pool-expansion.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
   'name',
@@ -87,7 +91,12 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...t,
     ...namingPreset(country, type, c),
     // Imported geography remains authoritative; bundled examples never cross into it.
-    addresses: dataset ? [] : [...addressSupplement.records[country], ...syntheticAddresses(country, c.places, c.streets)],
+    addresses: dataset
+      ? []
+      : [
+          ...addressSupplement.records[country],
+          ...syntheticAddresses(country, c.places, c.streets)
+        ],
     addressDatasetId: dataset ? null : addressSupplement.id,
     bios: expandedTexts.bios,
     bioDatasetId: bioSupplement.id,
