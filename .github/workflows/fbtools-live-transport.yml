@@ -1,0 +1,62 @@
+name: FB.Tools live transport control
+
+on:
+  push:
+    branches:
+      - codex/blego-fbtools-checker
+    paths:
+      - .github/workflows/fbtools-live-transport.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Call provider with two known control UIDs (no mocks)
+        run: |
+          mkdir -p release
+          node <<'NODE'
+          const fs = require('node:fs');
+          const { checkFbTools } = require('./electron/features/facebook/fbtools.cjs');
+          const { normalizeFacebookTargets } = require('./electron/features/facebook/normalize.cjs');
+          const controls = [
+            {uid:'4', expected:'FBTOOLS_VALID'},
+            {uid:'999999999999999', expected:'FBTOOLS_NOEXIST'}
+          ];
+          (async () => {
+            const {targets} = normalizeFacebookTargets(controls.map(x=>x.uid).join('\n'));
+            const results = [];
+            for await (const row of checkFbTools({targets,runId:'github-real-control-'+Date.now()})) {
+              results.push({
+                uid:row.target,
+                reasonCode:row.reasonCode,
+                availability:row.availability,
+                httpStatus:row.httpStatus,
+                source:row.source
+              });
+            }
+            const success = controls.every((x,i)=>results[i]?.uid===x.uid&&results[i]?.reasonCode===x.expected);
+            const report={checkedAt:new Date().toISOString(),kind:'external-provider-real-network-no-mocks',controlInputs:controls,results,success};
+            fs.writeFileSync('release/fbtools-live-transport.json',JSON.stringify(report,null,2)+'\n');
+            console.log(JSON.stringify(report,null,2));
+            if(!success)process.exitCode=1;
+          })().catch(error=>{console.error(error.message);process.exitCode=1;});
+          NODE
+      - name: Upload live transport report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FBTOOLS-live-transport-control
+          retention-days: 5
+          if-no-files-found: warn
+          path: release/fbtools-live-transport.json
