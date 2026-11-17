@@ -13,7 +13,7 @@ export const EXTENDED_FIELDS = [
 ];
 const extendedAliases = new Map(
   Object.entries({
-    login: ['login', 'username', 'логин'],
+    login: ['login', 'loginfb', 'facebooklogin', 'username', 'логин'],
     twoFactorCode: ['twofactorcode', '2facode', '2faкод', 'код2fa'],
     profileUrl: ['profileurl', 'facebookurl', 'profile'],
     mailServiceUrl: ['mailservice', 'mailserviceurl'],
@@ -148,6 +148,29 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
   if (emailValid(value)) return { key: 'email', value };
   if (/^(Mozilla\/\d|Dalvik\/\d|Opera\/\d)/.test(value)) return { key: 'userAgent', value };
   return { value };
+}
+// A separately framed label is authoritative; its literal payload cannot become
+// another label merely because a password starts with e.g. "email=" or "2fa=".
+export function recognizeLabelledValue(label, value, headerFor, validDate, emailValid) {
+  const key = label ? headerFor(label, value) : null;
+  if (!key) return { value };
+  const profile = key === 'accountId' ? profileIdentity(value) : null;
+  const normalized = Boolean(profile?.id && !profile.conflict);
+  const fieldValue = normalized ? profile.id : value;
+  const invalid =
+    (['email', 'backupEmail'].includes(key) && fieldValue && !emailValid(fieldValue)) ||
+    (key === 'birthDate' && fieldValue && !validDate(fieldValue)) ||
+    (key === 'accountId' && fieldValue && !/^\d+$/.test(fieldValue)) ||
+    (key.endsWith('Url') && fieldValue && !safeUrl(fieldValue)) ||
+    (['limit', 'sentCount'].includes(key) && fieldValue && !/^\d+$/.test(fieldValue));
+  return {
+    key,
+    value: fieldValue,
+    normalized,
+    explicit: true,
+    invalid: !!invalid,
+    cookie: key === 'cookies' ? cookieInfo(fieldValue.trim()) : null
+  };
 }
 export function personName(value) {
   return /^[\p{Lu}][\p{L}\p{M}'’-]+(?:\s+[\p{Lu}][\p{L}\p{M}'’-]+){1,3}$/u.test(value);

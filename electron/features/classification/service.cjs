@@ -1,7 +1,11 @@
 const { Worker } = require('node:worker_threads');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
-const { EXTENDED_FIELDS, recognizeValue } = require('../../../shared/classifier-recognition.mjs');
+const {
+  EXTENDED_FIELDS,
+  recognizeValue,
+  recognizeLabelledValue
+} = require('../../../shared/classifier-recognition.mjs');
 const {
   CORE_FIELDS,
   SCHEMAS,
@@ -92,7 +96,10 @@ function createClassificationService({ allowTestRules = false, clock = () => new
         Object.entries(source.data).map(([column, value]) => ({ column, value }));
       for (const [index, entry] of entries.entries()) {
         const rawValue = String(entry.value ?? '');
-        const found = recognizeValue(rawValue, fieldForHeader, validBirthDate, (s) =>
+        const recognize = entry.labelled
+          ? (...args) => recognizeLabelledValue(entry.header, ...args)
+          : recognizeValue;
+        const found = recognize(rawValue, fieldForHeader, validBirthDate, (s) =>
           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
         );
         const named = !parsed.headerless && fieldForHeader(entry.header ?? entry.column, rawValue);

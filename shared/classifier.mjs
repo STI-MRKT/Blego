@@ -3,6 +3,7 @@ import {
   EXTENDED_FIELDS,
   extendedFieldForHeader,
   recognizeValue,
+  recognizeLabelledValue,
   cookieInfo,
   profileIdentity,
   personName,
@@ -53,7 +54,7 @@ const normalize = (s) =>
 const aliases = {
   rowNumber: ['№', 'number', 'rownumber'],
   fullName: ['fullname', 'name', 'фио', 'имя'],
-  accountId: ['accountid', 'id', 'uid', 'facebookid'],
+  accountId: ['accountid', 'idaccount', 'id', 'uid', 'facebookid'],
   password: ['password', 'pass', 'passwd', 'пароль'],
   emailPassword: [
     'emailpassword',
@@ -72,7 +73,7 @@ const aliases = {
     'запасная почта',
     'почта восстановления'
   ],
-  birthDate: ['birthdate', 'birthday', 'dob', 'датарождения'],
+  birthDate: ['birthdate', 'dateofbirth', 'birthday', 'dob', 'датарождения'],
   geo: ['geo', 'country', 'гео', 'страна'],
   userAgent: ['useragent', 'ua'],
   token: ['token', 'accesstoken', 'токен'],
@@ -174,7 +175,9 @@ export function classifyRecords(parsed, options = {}) {
       source.sourceEntries ||
       Object.entries(source.data).map(([column, value]) => ({ column, value }));
     const recognized = entries.map((entry) =>
-      recognizeValue(
+      (entry.labelled
+        ? (...args) => recognizeLabelledValue(entry.header, ...args)
+        : recognizeValue)(
         typeof entry.value === 'string'
           ? entry.value
           : (entry.rawText ?? JSON.stringify(entry.value)),
@@ -223,7 +226,7 @@ export function classifyRecords(parsed, options = {}) {
       const rowMapped = Object.hasOwn(rowMapping, entry.column) ? rowMapping[entry.column] : null;
       const found = recognized[position];
       let inferred = found.key;
-      if (parsed.structured && !inferred && contextual) {
+      if (parsed.structured && !entry.labelled && !inferred && contextual) {
         if (/^\d+$/.test(value) && relatedIds.has(value)) inferred = 'accountId';
         else if (validBirthDate(value)) inferred = 'birthDate';
         else if (isCountry(value)) inferred = 'geo';
@@ -236,21 +239,20 @@ export function classifyRecords(parsed, options = {}) {
       )
         inferred = learned;
       const key =
-        rowMapped || named || schema || mapped || (parsed.structured ? inferred : guess(value));
+        rowMapped || mapped || named || schema || (parsed.structured ? inferred : guess(value));
       const priority = rowMapped
-        ? 5
-        : named
-          ? 4
-          : schema
-            ? 3
-            : mapped
-              ? 2
+        ? 6
+        : mapped
+          ? 5
+          : named
+            ? 4
+            : schema
+              ? 3
               : found.explicit && parsed.structured
                 ? 4
                 : 1;
       const original = { ...entry, value, location: source.location };
-      if (parsed.structured && (!found.explicit || (!rowMapped && !named && !schema && !mapped)))
-        value = found.value;
+      if (parsed.structured && (!named || !found.explicit || found.normalized)) value = found.value;
       if (parsed.structured && found.invalidJSON) report('INVALID_COOKIE_JSON', entry.column);
       if (parsed.structured && found.invalid && !rowMapped && !mapped) {
         report('INVALID_FIELD', entry.column);

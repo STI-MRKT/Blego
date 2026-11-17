@@ -1,6 +1,6 @@
 {
   "name": "blego",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "BLEGO local studio",
   "main": "electron/main.cjs",
   "author": "blemish&alterego",
@@ -21,7 +21,8 @@
     "pack:linux": "npm run prepare:metadata && electron-builder --linux --dir --x64 --publish never",
     "format:check": "prettier --check \"electron/**/*.cjs\" \"shared/*.mjs\" \"tests/**/*.cjs\" \"scripts/*.cjs\"",
     "prepare:metadata": "node scripts/prepare-metadata-runtime.cjs",
-    "pretest:integration": "npm run prepare:metadata"
+    "pretest:integration": "npm run prepare:metadata",
+    "test:classifier": "node scripts/classifier-qa-suite.cjs"
   },
   "devDependencies": {
     "electron": "45.3.1",

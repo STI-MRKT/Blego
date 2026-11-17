@@ -8,6 +8,8 @@ const { createHash } = require('node:crypto');
     get = (k) => args[args.indexOf(k) + 1];
   if (!args.includes('--executable') || !args.includes('--report'))
     throw Error('Usage: --executable <installed-path> --report <json>');
+  const suite = args.includes('--suite') ? get('--suite') : 'all';
+  if (!['all', 'classifier'].includes(suite)) throw Error('UNKNOWN_INSTALLED_TEST_SUITE');
   const executable = fs.realpathSync(get('--executable')),
     report = path.resolve(get('--report')),
     project = fs.realpathSync(path.resolve(__dirname, '..'));
@@ -16,11 +18,14 @@ const { createHash } = require('node:crypto');
   fs.mkdirSync(path.dirname(report), { recursive: true });
   const log = report + '.log';
   const stream = fs.createWriteStream(log, { flags: 'w', mode: 0o600 });
-  const tests = fs
-    .readdirSync(path.join(project, 'tests/ui'))
-    .filter((name) => name.endsWith('.test.cjs'))
-    .sort()
-    .map((name) => 'tests/ui/' + name);
+  const tests =
+    suite === 'classifier'
+      ? require('./classifier-qa-suite.cjs').classifierTests('ui')
+      : fs
+          .readdirSync(path.join(project, 'tests/ui'))
+          .filter((name) => name.endsWith('.test.cjs'))
+          .sort()
+          .map((name) => 'tests/ui/' + name);
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,
     env: {
@@ -46,12 +51,15 @@ const { createHash } = require('node:crypto');
     executable,
     executableSha256: createHash('sha256').update(fs.readFileSync(executable)).digest('hex'),
     codeSha: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+    suite,
     tests,
     log,
     dataIsolation:
       'Every test supplies its own temporary user-data directory; no default user store',
     scope:
-      'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
+      suite === 'classifier'
+        ? 'Actual packaged executable outside checkout: all classifier and archive GUI tests, including TXT/CSV/TSV/JSON import, actual clipboard, manual assignment, export, archive and reset. Synthetic fixtures and controlled dialogs. Unrelated modules are outside this selective run; original customer-file acceptance, signing/notarization and real OS denial cases are separate gates.'
+        : 'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
   };
   fs.writeFileSync(report, JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify(result, null, 2));
