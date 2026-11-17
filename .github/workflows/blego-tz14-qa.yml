@@ -14,23 +14,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
-      - name: Export Prettier-ready files
-        shell: bash
-        run: |
-          for path in electron/features/generator/pool-expansion.cjs electron/features/generator/sources.cjs electron/local/settings.cjs tests/unit/tz14-hotfix.test.cjs; do
-            echo "TZ14_FORMAT_BEGIN:$path"
-            ./node_modules/.bin/prettier "$path" | base64 -w 0
-            echo
-            echo "TZ14_FORMAT_END:$path"
-          done
-      - name: Format in CI to check remaining regressions
-        run: |
-          ./node_modules/.bin/prettier --write electron/features/generator/pool-expansion.cjs electron/features/generator/sources.cjs electron/local/settings.cjs tests/unit/tz14-hotfix.test.cjs
       - name: Lint, hotfix tests and full source regressions
         shell: bash
         run: |
