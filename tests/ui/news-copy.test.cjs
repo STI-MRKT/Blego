@@ -88,12 +88,23 @@ test(
       assert.equal(await page.locator('.page-head [data-copy-action], #copy-actions').count(), 0);
       const opened = await app.evaluate(() => globalThis.openedArticles.length);
       for (const [kind, expected, message] of [
-        ['title', expectedTitle, 'Заголовок скопирован'],
-        ['link', url, 'Ссылка скопирована']
+        ['link', url, 'Ссылка скопирована'],
+        ['title', expectedTitle, 'Заголовок скопирован']
       ]) {
         await page.locator(`[data-news-copy="${kind}"]`).click();
         await page.getByText(message, { exact: true }).last().waitFor();
         assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), expected);
+        assert.equal(
+          await page
+            .locator('.news-item-card')
+            .first()
+            .evaluate((el) => el.classList.contains('news-link-copied')),
+          kind === 'link'
+        );
+        assert.equal(
+          await page.locator('[data-news-copy="link"]').getAttribute('aria-pressed'),
+          String(kind === 'link')
+        );
       }
       assert.equal(await app.evaluate(() => globalThis.openedArticles.length), opened);
       proof.push({
