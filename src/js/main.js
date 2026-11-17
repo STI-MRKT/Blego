@@ -26,6 +26,7 @@ import { loadNews } from './services/news.js';
 import { newsTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
+import { facebookPresentation } from '../../shared/facebook-presentation.mjs';
 
 const shuffle = (list) => {
   const copy = [...list];
@@ -575,6 +576,14 @@ function bindView() {
   for(const [id,key] of [['checker-status-filter','statusFilter'],['checker-sort','sort']]){const el=document.getElementById(id);if(el)el.onchange=()=>{state.checker[key]=el.value;renderView();};}
   const facebookDetails=document.getElementById('facebook-details');
   if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
+  const checkerProvider = document.getElementById('checker-provider');
+  if (checkerProvider) checkerProvider.onchange = () => {
+    if (state.checker.checking) return;
+    state.checker.provider = checkerProvider.value === 'fbtools' ? 'fbtools' : 'direct';
+    state.checker.rows = null;
+    state.checker.checkedInput = null;
+    renderView();
+  };
   const checker = document.getElementById('checker-input');
   if (checker) {
     checker.oninput = (event) => {
@@ -1690,8 +1699,15 @@ document.addEventListener('click', async (event) => {
     }
     return;
   }
+  if (action === 'checker-copy-results') {
+    const lines = (state.checker.rows || []).map((row) =>
+      (row.input || row.id) + '\t' +
+      (row.check ? facebookPresentation(row.check).status : row.link ? 'NOT_CHECKED' : 'INVALID_INPUT'));
+    await copyText(lines.join('\n'));
+    return;
+  }
   if (action === 'checker-clear') {
-    state.checker = { input: '', rows: null };
+    state.checker = { input: '', rows: null, provider: state.checker.provider || 'direct' };
     renderView();
     await window.blego.cancelFacebook();
   }
@@ -1713,7 +1729,7 @@ async function runCheckerStatus(runId = crypto.randomUUID(), onlyTarget=null) {
       if (label) label.textContent = `Проверено ${done} из ${total}`;
       const fill = document.getElementById('checker-progress-fill');
       if (fill) fill.style.width = `${(100 * done) / total}%`;
-    });
+    }, state.checker.provider || 'direct');
     if (state.checker.runId !== runId) return;
     for (const row of state.checker.rows || []){const found=result.results.find(value=>value.canonicalUrl===row.link);if(found)row.check=found;}
   } catch (error) {
