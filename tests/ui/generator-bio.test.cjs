@@ -504,7 +504,9 @@ test(
     const phoneForCopy = formattedPhoneForCopy(fp.fields.phone, fp.country);
     assert.equal(await f.app.evaluate(({ clipboard }) => clipboard.readText()), phoneForCopy);
     await page.locator('[data-action="copy-model"][data-card="true"]').click();
-    assert.ok((await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(phoneForCopy));
+    assert.ok(
+      (await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(phoneForCopy)
+    );
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent BIO before FP');
     const next = await generateBio(page, 'IT', 'Milano', 'model');
@@ -610,7 +612,10 @@ test(
     for (let i = 0; i < 3; i++) {
       const items = await page.evaluate(() => window.blego.biography({ action: 'history' }));
       assert.equal(items.total, 1);
-      await page.evaluate((recordId) => window.blego.biography({ action: 'open', recordId }), items.items[0].id);
+      await page.evaluate(
+        (recordId) => window.blego.biography({ action: 'open', recordId }),
+        items.items[0].id
+      );
       await page.reload();
       await page.locator('[data-tab="bio"]').click();
       await page.locator('#bio-mainBio').waitFor();
@@ -625,7 +630,10 @@ test(
     const history = await page.evaluate(() => window.blego.biography({ action: 'history' }));
     assert.equal(history.total, 1);
     assert.equal(await page.locator('[data-action="bio-open"]').count(), 0);
-    await page.evaluate((recordId) => window.blego.biography({ action: 'open', recordId }), history.items[0].id);
+    await page.evaluate(
+      (recordId) => window.blego.biography({ action: 'open', recordId }),
+      history.items[0].id
+    );
     await page.reload();
     await page.locator('[data-tab="bio"]').click();
     await page.locator('#bio-mainBio').waitFor();
