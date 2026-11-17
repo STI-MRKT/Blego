@@ -56,9 +56,17 @@ const aliases = {
   fullName: ['fullname', 'name', 'фио', 'имя'],
   accountId: ['accountid', 'idaccount', 'id', 'uid', 'facebookid'],
   password: [
-    'password', 'pass', 'passwd', 'пароль',
-    'fbpassword', 'facebookpassword', 'passwordfb', 'passwordfacebook',
-    'accountpassword', 'парольфб', 'парольfacebook'
+    'password',
+    'pass',
+    'passwd',
+    'пароль',
+    'fbpassword',
+    'facebookpassword',
+    'passwordfb',
+    'passwordfacebook',
+    'accountpassword',
+    'парольфб',
+    'парольfacebook'
   ],
   emailPassword: [
     'emailpassword',
