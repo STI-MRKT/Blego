@@ -75,7 +75,7 @@ function syntheticAddresses(data, count = COUNT) {
   for (let i = 0; i < count; i++) {
     const place = data.places[i % data.places.length];
     const number = 20 + i;
-    const address = ['US','GB'].includes(data.code)
+    const address = ['US','GB','FR'].includes(data.code)
       ? number + ' ' + street[i]
       : street[i] + ' ' + number;
     output.push({city:place.city,postal:place.postal,address});
