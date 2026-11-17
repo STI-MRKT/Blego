@@ -38,11 +38,26 @@ const { createHash } = require('node:crypto');
     'classifier-copy'
   ].map((name) => `tests/ui/${name}.test.cjs`);
   const tz15Tests = [
-    'app', 'archive-actions', 'biography-v143', 'classifier', 'classifier-copy',
-    'classifier-tz13', 'classifier-v14', 'classifier-v142', 'classifier-v143',
-    'copy-all-sections', 'facebook-flow', 'facebook-v14', 'friends-bulk-copy',
-    'generator-bio', 'generator-phone-address', 'generator-v14',
-    'header-copy-removed', 'news-copy', 'settings-v14', 'ux-restoration'
+    'app',
+    'archive-actions',
+    'biography-v143',
+    'classifier',
+    'classifier-copy',
+    'classifier-tz13',
+    'classifier-v14',
+    'classifier-v142',
+    'classifier-v143',
+    'copy-all-sections',
+    'facebook-flow',
+    'facebook-v14',
+    'friends-bulk-copy',
+    'generator-bio',
+    'generator-phone-address',
+    'generator-v14',
+    'header-copy-removed',
+    'news-copy',
+    'settings-v14',
+    'ux-restoration'
   ].map((name) => `tests/ui/${name}.test.cjs`);
   const tests =
     suite === 'classifier'
@@ -52,10 +67,10 @@ const { createHash } = require('node:crypto');
         : suite === 'tz15'
           ? tz15Tests
           : fs
-            .readdirSync(path.join(project, 'tests/ui'))
-            .filter((name) => name.endsWith('.test.cjs'))
-            .sort()
-            .map((name) => 'tests/ui/' + name);
+              .readdirSync(path.join(project, 'tests/ui'))
+              .filter((name) => name.endsWith('.test.cjs'))
+              .sort()
+              .map((name) => 'tests/ui/' + name);
   if (tests.some((name) => !fs.existsSync(path.join(project, name))))
     throw Error('MISSING_INSTALLED_APP_TEST');
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
