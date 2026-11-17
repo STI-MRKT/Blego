@@ -209,12 +209,44 @@ export function structuredRecords(text, options = {}) {
     const composite =
       isUA(current) ||
       /^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?(?:https?:\/\/|[A-Za-z]:\\)/iu.test(current);
+    const labelledIdentity =
+      c === ':' && composite && nextLabel
+        ? recognizeValue(current, fieldForHeader, validBirthDate, (v) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          )
+        : null;
+    const completedFacebookId =
+      labelledIdentity?.key === 'accountId' &&
+      labelledIdentity?.normalized === true &&
+      !labelledIdentity.invalid;
+    // A complete labelled UA can end before a known label. Keep colons
+    // inside UA comments and product segments intact.
+    const completedUA = isUA(current) && /(?:\)|[\w.-]+\/\d[\w.-]*)\s*$/u.test(current);
+    // An unrecognised caption may follow an independently validated value,
+    // e.g. "Date of Birth:1991-09-18:Инструкция:...".
+    // Never infer an opaque password boundary from its punctuation alone.
+    const labelledValue =
+      c === ':' && !composite
+        ? recognizeValue(current, fieldForHeader, validBirthDate, (v) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          )
+        : null;
+    const completeAtomicValue =
+      labelledValue?.explicit &&
+      !labelledValue.invalid &&
+      ['birthDate', 'email', 'accountId'].includes(labelledValue.key);
+    const unknownCaption = /^\s*([\p{L}][\p{L}\p{N}_ -]{0,39})\s*:\s*\S/u.exec(
+      text.slice(i + 1, i + 150)
+    );
+    const splitBeforeUnknownCaption =
+      completeAtomicValue && unknownCaption && !fieldForHeader(unknownCaption[1]);
     const extra =
       c === ':' &&
-      (!text.startsWith('::', i) || colonSchema || header?.delimiter === ':') &&
+      (!text.startsWith('::', i) || header?.delimiter === ':') &&
       ((nextLabel &&
         !fieldForHeader(current.trim()) &&
-        (!composite || /\s/.test(text[i - 1] || ''))) ||
+        (!composite || /\s/.test(text[i - 1] || '') || completedFacebookId || completedUA)) ||
+        splitBeforeUnknownCaption ||
         (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
         ? ':'
         : (c === '/' || (c === '\\' && length === 2)) &&
@@ -232,8 +264,9 @@ export function structuredRecords(text, options = {}) {
         : c === '|' || c === '\t'
           ? c
           : c === ';' &&
-              !isUA(current) &&
-              !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)
+              (nextLabel ||
+                (!isUA(current) &&
+                  !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)))
             ? ';'
             : null);
     if (delimiter) {
