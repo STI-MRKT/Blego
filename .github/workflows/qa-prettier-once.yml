@@ -21,6 +21,12 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
+      - name: Export formatted lexer
+        run: |
+          echo QA_FORMAT_BEGIN
+          ./node_modules/.bin/prettier shared/classifier-lexer.mjs | base64 -w 0
+          echo
+          echo QA_FORMAT_END
       - name: Focused multiformat and legacy TZ11
         run: node --test tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-v143.test.cjs tests/integration/classifier-v143.test.cjs
       - name: Full classifier QA
