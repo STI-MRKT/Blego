@@ -268,12 +268,8 @@ test(
       buffer: Buffer.from('Привет\nмир')
     });
     await page.locator('[data-classifier-status]').waitFor();
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[data-action="import-copy"]') })
-      .locator('summary')
-      .first()
-      .click();
+    assert.equal(await page.locator('#classifier-extra').count(), 0);
+    assert.ok(await page.locator('[data-action="import-copy"]').isVisible());
     await page.locator('[data-action="import-copy"]').click();
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'Привет\nмир');
     await page.locator('[data-view="history"]').click();
