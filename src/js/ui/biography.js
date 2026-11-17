@@ -10,11 +10,10 @@ export function biographyHTML(){
  const editor=state.bioEditor;
  const locked=editor?.frozen?'disabled':'';
  const controls=biographyControls();
- if(!editor)return controls+'<section class="card empty"><h3>BIO пока не создано</h3><p>Выберите страну, город и тематику.</p></section>'+biographyHistory();
- return controls+`<section class="card pad biography"><div class="head-actions"><h2>BIO</h2><span role="status">${biographyStatus(editor)}</span><button class="btn btn-quiet" data-action="bio-retry" ${editor.error?'':'hidden style="display:none"'}>Повторить сохранение</button></div><p class="muted">Синтетический пример: работа и образование не подтверждают биографию реального человека.</p><div class="fields">${Object.entries(labels).map(([key,label])=>{
- const institutions=editor.institutions.filter(i=>i.kind===key);
- return `<div class="bio-field field"><label class="field-label" for="bio-${key}">${label}</label><div class="head-actions">${key==='mainBio'?`<textarea ${locked} class="input bio-value" rows="4" id="bio-${key}" data-bio-field="${key}" maxlength="4000">${esc(editor.values[key] || '')}</textarea>`:`<input ${locked} class="input bio-value" id="bio-${key}" data-bio-field="${key}" maxlength="500" value="${esc(editor.values[key] || '')}">`}<button class="copy" data-action="bio-copy" data-field="${key}" aria-label="Копировать ${label}">${I.copy}</button>${!key.endsWith('City') ? `<button class="copy" data-action="bio-regenerate" data-field="${key}" title="Подобрать заново: ${label}" aria-label="Подобрать заново: ${label}" ${editor.suggesting||editor.frozen?'disabled':''}>${I.refresh}</button>` : ''}</div>${['university','school'].includes(key)?`<select ${locked} class="input" data-bio-institution="${key}" aria-label="Выбрать: ${label}"><option value="">${institutions.length?'Выберите учебное заведение':'Нет данных — можно ввести вручную'}</option>${institutions.map(i=>`<option value="${esc(i.id)}">${esc(i.name)} — ${esc(i.city)}</option>`).join('')}</select>`:''}</div>`;
- }).join('')}</div></section>`+biographyHistory();
+ if(!editor)return controls+'<section class="card empty"><h3>BIO пока не создано</h3><p>Выберите страну, город и тематику.</p></section>';
+ return controls+`<section class="card pad biography"><div class="head-actions"><h2>BIO</h2><span role="status">${biographyStatus(editor)}</span><button class="btn btn-quiet" data-action="bio-retry" ${editor.error?'':'hidden style="display:none"'}>Повторить сохранение</button></div><div class="fields">${Object.entries(labels).map(([key,label])=>{
+ return `<div class="bio-field field"><label class="field-label" for="bio-${key}">${label}</label><div class="head-actions">${key==='mainBio'?`<textarea ${locked} class="input bio-value" rows="2" id="bio-${key}" data-bio-field="${key}" maxlength="4000">${esc(editor.values[key] || '')}</textarea>`:`<input ${locked} class="input bio-value" id="bio-${key}" data-bio-field="${key}" maxlength="500" value="${esc(editor.values[key] || '')}">`}<button class="copy" data-action="bio-copy" data-field="${key}" aria-label="Копировать ${label}">${I.copy}</button>${!key.endsWith('City') ? `<button class="copy" data-action="bio-regenerate" data-field="${key}" title="Подобрать заново: ${label}" aria-label="Подобрать заново: ${label}" ${editor.suggesting||editor.frozen?'disabled':''}>${I.refresh}</button>` : ''}</div></div>`;
+ }).join('')}</div></section>`;
 }
 
 function biographyControls(){
@@ -30,7 +29,3 @@ function biographyControls(){
  ${!state.bio?'<button class="btn" data-action="bio-load">Повторить открытие BIO</button>':''}`;
 }
 function editorPresent(){return Boolean(state.bioEditor);}
-function biographyHistory(){
- const h=state.bioHistory;
- return `<details class="card pad"><summary>Сохранённые BIO</summary><div class="head-actions"><button class="btn" data-action="bio-history">Обновить историю</button>${h.items.length?`<select class="input" id="bio-history-record" aria-label="Сохранённое BIO">${h.items.map(r=>`<option value="${esc(r.id)}">${esc(r.parameters.city)} · ${esc(r.parameters.type)} · ${esc(r.createdAt.slice(0,10))}</option>`).join('')}</select><button class="btn" data-action="bio-open" ${state.bioBusy?'disabled':''}>Открыть</button>`:'<span class="muted">Нет записей на этой странице.</span>'}<button class="btn btn-quiet" data-action="bio-history-prev" ${h.offset?'':'disabled'}>Назад</button><button class="btn btn-quiet" data-action="bio-history-next" ${h.offset+h.limit<h.total?'':'disabled'}>Далее</button></div></details>`;
-}
