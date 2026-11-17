@@ -57,13 +57,16 @@ test(
     await app.evaluate(({ dialog }, file) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] });
     }, input);
-    await page.locator('[data-action="friends-import"]').click();
-    await page.locator('[data-friends-preview]').waitFor();
-    await page.locator('[data-action="friends-confirm"]').click();
-    await waitForAsync(page, async () => {
+    assert.equal(await page.locator('[data-action="friends-import"]').count(), 0);
+    assert.equal(await page.locator('.friend-card details').count(), 0);
+    const preview = await page.evaluate(() => window.blego.importFriends());
+    const result = await page.evaluate((token) => window.blego.confirmFriends(token), preview.token);
+    await page.evaluate(async (rows) => {
       const { state } = await import('/js/state.js');
-      return !state.friendsBusy && !state.friendsPreview;
-    });
+      state.friendsRows = rows;
+    }, result.rows);
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('[data-view="friends"]').click();
     const seven = page.locator('[data-friends-copy="seven"]'),
       all = page.locator('[data-friends-copy="all"]');
     const read = () => app.evaluate(({ clipboard }) => clipboard.readText());
