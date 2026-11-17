@@ -198,3 +198,35 @@
 .ux-generator .biography textarea.bio-value{height:auto;min-height:72px}
 .ux-generator .biography .bio-field>select{margin-top:6px}
 .ux-generator #bio-city{padding-right:30px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8a98' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+
+/* TZ14 hotfix: scope layout adjustments to generator/BIO and Friends only. */
+.ux-generator .generator-tabs{margin-bottom:18px}
+.ux-generator .biography .fields{align-items:start}
+.ux-generator .biography .bio-field{
+  align-self:start;min-height:0;padding:12px 14px;gap:8px;
+}
+.ux-generator .biography .bio-field>.head-actions{
+  padding-top:0;gap:8px;min-height:30px;min-width:0;
+}
+.ux-generator .biography .bio-field .bio-value{
+  height:auto;min-height:30px;padding:4px 2px;min-width:0;
+}
+.ux-generator .biography textarea.bio-value{
+  height:auto;min-height:54px;max-height:400px;field-sizing:content;
+  line-height:1.45;resize:vertical;
+}
+.friends-copy-actions{margin-bottom:18px;padding-top:0}
+.friend-card>details{margin-top:14px}
+.friend-card>details>summary{
+  display:inline-flex;align-items:center;gap:7px;list-style:none;
+  max-width:100%;padding:7px 11px;border:1px solid var(--border);
+  border-radius:8px;background:var(--panel-2);color:var(--muted);
+  font-size:12px;font-weight:570;cursor:pointer;
+}
+.friend-card>details>summary::-webkit-details-marker{display:none}
+.friend-card>details>summary::before{
+  content:'›';display:inline-block;font-size:17px;line-height:1;transition:transform .15s;
+}
+.friend-card>details[open]>summary::before{transform:rotate(90deg)}
+.friend-card>details>summary:hover{color:var(--text);border-color:var(--border-2)}
+.friend-card>details>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
