@@ -115,7 +115,12 @@ function validUrl(raw) {
 function getSettings(store) {
   // TZ14: repeat finite non-contact fields in every session, including
   // installations with a legacy persisted bulkMode:false preference.
-  return { ...structuredClone(defaults), ...store.get('settings'), bulkMode: true, bulkConsent: true };
+  return {
+    ...structuredClone(defaults),
+    ...store.get('settings'),
+    bulkMode: true,
+    bulkConsent: true
+  };
 }
 function updateSettings(store, patch) {
   const clean = validateSettings({ ...patch, bulkMode: true, bulkConsent: true });
