@@ -41,6 +41,9 @@ function formatNational(national, country) {
 export function formatPhoneDisplay(value, country) {
   if (value == null) return '';
   if (typeof value !== 'string') return String(value);
+  // Only canonical generated E.164 values may be normalized for display.
+  // Unrecognized legacy imports with user-supplied spacing must stay exact.
+  if (!/^\+\d+$/.test(value)) return value;
   try {
     return formattedPhoneForCopy(value, country);
   } catch {
