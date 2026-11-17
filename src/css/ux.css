@@ -198,3 +198,48 @@
 .ux-generator .biography textarea.bio-value{height:auto;min-height:72px}
 .ux-generator .biography .bio-field>select{margin-top:6px}
 .ux-generator #bio-city{padding-right:30px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8a98' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+
+/* TZ14 hotfix: scoped spacing and compact BIO fields. Do not style other tabs. */
+.ux-generator .generator-mode-tabs { margin-bottom:18px;gap:12px }
+.ux-generator .biography .fields { align-items:start;grid-auto-rows:max-content;gap:12px }
+.ux-generator .biography .bio-field {
+  min-height:0;height:auto;align-self:start;justify-content:flex-start;
+  padding:12px 14px;gap:9px;
+}
+.ux-generator .biography .bio-field>.field-label { margin:0;line-height:1.4 }
+.ux-generator .biography .bio-field>.head-actions { align-items:center;padding-top:0;gap:8px }
+.ux-generator .biography .bio-value {
+  flex:1 1 auto;min-width:0;min-height:32px;height:32px;
+  padding:4px 0;line-height:1.45;
+}
+.ux-generator .biography textarea.bio-value {
+  resize:vertical;min-height:46px;height:auto;max-height:240px;
+  align-self:flex-start;
+}
+.ux-generator .biography .bio-field>.head-actions>.copy {
+  flex:0 0 auto;
+}
+/* Friends-only: actions and details visually separated from the profile grid. */
+.friends-copy-actions {margin-bottom:18px;gap:12px}
+.friend-card .friend-details {margin-top:10px}
+.friend-card .friend-details>summary {
+  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  list-style:none;border:1px solid var(--border);border-radius:8px;
+  background:var(--panel-2);padding:7px 11px;font-size:11px;
+  color:var(--text);font-weight:560;user-select:none;
+}
+.friend-card .friend-details>summary::-webkit-details-marker {display:none}
+.friend-card .friend-details>summary::before {
+  content:'';width:6px;height:6px;border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;transform:rotate(-45deg);
+  transition:transform .15s ease;
+}
+.friend-card .friend-details[open]>summary::before {transform:rotate(45deg)}
+.friend-card .friend-details>summary:hover {border-color:var(--border-2);background:var(--accent-soft)}
+.friend-card .friend-details>summary:focus-visible {outline:2px solid var(--accent);outline-offset:2px}
+.friend-card .friend-details>p {margin:9px 0 0;overflow-wrap:anywhere}
+@media(max-width:600px) {
+  .ux-generator .generator-mode-tabs {margin-bottom:16px}
+  .ux-generator .biography .bio-field {padding:12px}
+  .friends-copy-actions {margin-bottom:16px}
+}
