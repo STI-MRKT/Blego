@@ -1,4 +1,4 @@
-name: QA one-off Prettier export
+name: QA classifier diagnostics
 
 on:
   push:
@@ -9,18 +9,45 @@ permissions:
   contents: read
 
 jobs:
-  format:
+  diagnose:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: codex/blego-tz13-classifier
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
-          cache: npm
-      - run: npm ci
-      - name: Export formatted synthetic test
+      - name: Inspect synthetic delimiter parsing
         run: |
-          echo QA_FORMAT_BEGIN
-          ./node_modules/.bin/prettier tests/unit/classifier-multiformat-qa.test.cjs | base64 -w 0
-          echo
-          echo QA_FORMAT_END
+          node --input-type=module <<'NODE'
+          import { parseInput } from './shared/importer.mjs';
+          import { classifyRecords } from './shared/classifier.mjs';
+          const id = '000100013';
+          const cookie = JSON.stringify([{name:'c_user',value:id},{name:'xs',value:'FAKE:;|NOT_A_SESSION'}]);
+          const cells = [
+            'Login FB:synthetic.login.'+id,
+            'Password:FAKE_ACCOUNT_'+id,
+            'Email:synthetic.'+id+'@example.test',
+            'Email password:FAKE_MAIL_'+id,
+            'ID Account:https://www.facebook.com/profile.php?id='+id,
+            'Date of Birth:1991-09-18',
+            'Инструкция:не входить в тестовый аккаунт',
+            'User-agent:Mozilla/5.0 (Synthetic; Test) Chrome/125',
+            'Cookie:'+cookie
+          ];
+          for (const delimiter of [';','|',':']) {
+            const text=cells.join(delimiter);
+            const parsed=await parseInput({bytes:Buffer.from(text),originalName:'synthetic.txt'},{classification:true});
+            const result=classifyRecords(parsed);
+            console.log('QA_DIAGNOSTIC',JSON.stringify({
+              delimiter,recordCount:result.records.length,
+              cells:parsed.records[0]?.sourceEntries?.map(e=>e.value.slice(0,85)),
+              assigned:result.records.map(r=>({id:r.data.accountId,login:r.extended.login,password:r.data.password,email:r.data.email,emailPassword:r.data.emailPassword,userAgent:r.data.userAgent,cookiePresent:Boolean(r.data.cookies),warnings:r.warnings.map(w=>w.code)}))
+            }));
+          }
+          const tz11='login:password:email:emailPassword:twoFactorCode:accountId\\nsample_login:FAKE_ACCOUNT:one@example.test:::10001';
+          const p=await parseInput({bytes:Buffer.from(tz11),originalName:'synthetic.txt'},{classification:true});
+          const z=classifyRecords(p);
+          console.log('QA_TZ11',JSON.stringify({cells:p.records[0]?.sourceEntries?.map(e=>e.value),assigned:z.records.map(r=>({id:r.data.accountId,login:r.extended.login,email:r.data.email}))}));
+          NODE
