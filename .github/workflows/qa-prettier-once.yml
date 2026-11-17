@@ -1,0 +1,26 @@
+name: QA one-off Prettier export
+
+on:
+  push:
+    branches:
+      - codex/blego-qa-prettier-helper-20261117
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Export formatted synthetic test
+        run: |
+          echo QA_FORMAT_BEGIN
+          ./node_modules/.bin/prettier tests/unit/classifier-multiformat-qa.test.cjs | base64 -w 0
+          echo
+          echo QA_FORMAT_END
