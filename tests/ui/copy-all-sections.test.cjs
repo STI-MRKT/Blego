@@ -257,18 +257,18 @@ test(
     await page.locator('[data-copy-control="personal"]').check();
     assert.ok((await preview()).includes('Synthetic confirmed fixture'));
     await page.locator('[data-action="archive-back"]').click();
-    await page.locator('#archive-filter details > summary').click();
-    await page.locator('#archive-filter [name="order"]').selectOption('oldest');
-    await page.locator('#archive-filter button').click();
+    // TZ14 deliberately removed the archive sort control. Both archive entries
+    // must remain available for filtered copying in the default newest order.
+    assert.equal(await page.locator('#archive-filter [name="order"]').count(), 0);
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
-      return state.archives.items[0]?.originalName === 'old.txt';
+      return state.archives.total === 2;
     });
     await openAdvancedCopy();
     await page.locator('[data-copy-control="scope"]').selectOption('filter');
     assert.deepEqual(
-      JSON.parse(await preview()).map((r) => r.originalName),
-      ['old.txt', 'new.txt']
+      new Set(JSON.parse(await preview()).map((r) => r.originalName)),
+      new Set(['old.txt', 'new.txt'])
     );
 
     const file = await imageFixture(root, 'png');
