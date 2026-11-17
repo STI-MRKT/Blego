@@ -110,11 +110,7 @@ test(
     assert.equal(await page.locator('[data-bio-institution]').count(), 0);
     for (const width of [360, 390, 480, 576, 768, 980, 1280]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const selector of [
-        '#bio-country',
-        '#bio-city',
-        '#bio-type'
-      ]) {
+      for (const selector of ['#bio-country', '#bio-city', '#bio-type']) {
         const control = page.locator(selector);
         await control.scrollIntoViewIfNeeded();
         await control.click();
