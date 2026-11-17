@@ -31,10 +31,10 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
     if (max === capacity)
       return preset.type === 'tech'
         ? 275 + countries.indexOf(preset.country)
-        : (preset.first.length - (preset.type === 'crypto' ? 2 : 1)) * preset.last.length +
-            preset.last.length -
-            1;
-    return max - 1;
+        : preset.type === 'crypto'
+          ? 40 + countries.indexOf(preset.country)
+          : (preset.first.length - 1) * preset.last.length + preset.last.length - 1;
+    return preset?.type === 'crypto' ? Math.min(max - 1, 40 + countries.indexOf(preset.country)) : max - 1;
   });
   const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
   delete require.cache[require.resolve('../../electron/features/generator/service.cjs')];
@@ -63,9 +63,9 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         profile.fields.phone,
         new RegExp(`^\\+${preset.phonePrefix}\\d{${preset.phoneDigits}}$`)
       );
-      if (type === 'tech') assert.ok(preset.brandNames.slice(275).includes(profile.fields.name));
+      if (type !== 'model') assert.ok(preset.brandNames.includes(profile.fields.name));
       else assert.ok(profile.fields.name.endsWith(' ' + preset.last.at(-1)));
-      assert.equal(profile.nameGender, type === 'tech' ? null : 'female');
+      assert.equal(profile.nameGender, type === 'model' ? 'female' : null);
       results.push(profile);
     }
   assert.equal(new Set(results.map((p) => p.fields.phone)).size, results.length);
