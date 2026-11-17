@@ -148,7 +148,11 @@ async function generateProfile(
       if (r.used(f, values[f])) exhausted(f, p);
       r.reserve(f, values[f], id);
     }
-    if (values.bio) values.bio = require('./biography.cjs').pageBio(values.bio, p.type);
+    // Status and BIO follow the same clean, themed presentation on newly
+    // generated cards. Canonical registry reservations remain unchanged.
+    const decorate = require('./biography.cjs').pageBio;
+    if (values.bio) values.bio = decorate(values.bio, p.type);
+    if (values.status) values.status = decorate(values.status, p.type);
     const result = {
       id,
       country: p.country,
