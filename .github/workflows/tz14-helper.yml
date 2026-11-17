@@ -23,7 +23,7 @@ jobs:
       - run: npm ci
       - name: Format changed files for commit
         run: |
-          for file in tests/unit/tz14-hotfix.test.cjs; do
+          for file in tests/ui/archive-actions.test.cjs tests/ui/copy-all-sections.test.cjs tests/ui/generator-v14.test.cjs tests/ui/header-copy-removed.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
@@ -33,5 +33,9 @@ jobs:
         run: |
           node --test tests/unit/tz14-hotfix.test.cjs
           node scripts/tz14-pool-report.cjs /tmp/blego-tz14-pool-report.json
+      - name: Targeted Electron GUI checks
+        run: |
+          node node_modules/electron/install.js
+          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/archive-actions.test.cjs tests/ui/copy-all-sections.test.cjs tests/ui/generator-v14.test.cjs tests/ui/header-copy-removed.test.cjs
       - name: Syntax check
         run: node scripts/check.cjs
