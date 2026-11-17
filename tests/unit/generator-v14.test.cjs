@@ -49,11 +49,20 @@ test('authored pools supplement each person category by 256 new female country-s
         fs.readFileSync(`resources/generator/countries/${country}.json`, 'utf8')
       );
       const p = resolvePreset(country, type);
-      assert.equal(p.namingStrategy, 'person_name');
-      assert.equal(p.nameGender, 'female');
-      assert.deepEqual(p.first, original.first);
-      assert.deepEqual(p.last, original.last);
-      assert.deepEqual(p.personNames, extras);
+      if (type === 'model') {
+        assert.equal(p.namingStrategy, 'person_name');
+        assert.equal(p.nameGender, 'female');
+        assert.deepEqual(p.first.slice(0, original.first.length), original.first);
+        assert.deepEqual(p.last.slice(0, original.last.length), original.last);
+        assert.deepEqual(p.personNames, extras);
+        assert.equal(p.first.length, original.first.length + 160);
+        assert.equal(p.last.length, original.last.length + 160);
+      } else {
+        // Crypto is a themed page/brand strategy like Tech from TZ14.
+        assert.equal(p.namingStrategy, 'brand_name');
+        assert.equal(p.nameGender, null);
+        assert.equal(p.brandNames.length, 200);
+      }
       for (const name of extras) {
         assert.ok(original.first.some((f) => name.startsWith(f + ' ')));
         assert.ok(
