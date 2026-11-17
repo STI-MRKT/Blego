@@ -16,6 +16,7 @@ on:
       - codex/blego-tz12-news-bio-dictionaries
       - codex/blego-tz13-classifier
       - codex/blego-tz13-multiformat-review-20261117
+      - codex/blego-news-copy-restore-20261117
   workflow_dispatch:
     inputs:
       target:
@@ -59,9 +60,9 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
       BLEGO_CAPTURE: release
-      QA_SPEC: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117') && 'tz13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
-      QA_ARCHIVE_TAG: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117') && '-TZ13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
-      QA_BASE_SHA: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117') && '35226e5a1a071eb534408641b63a922915840caf' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
+      QA_SPEC: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && 'tz13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
+      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-news-copy-restore-20261117' && '-TZ13-NEWS' || (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '-TZ13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
+      QA_BASE_SHA: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '35226e5a1a071eb534408641b63a922915840caf' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -99,6 +100,9 @@ jobs:
           set -o pipefail
           if [ "$QA_SPEC" = tz13 ]; then
             npm run test:classifier | tee release/verification-native.log
+            if [ "$GITHUB_REF_NAME" = "codex/blego-news-copy-restore-20261117" ]; then
+              node --test tests/unit/news-copy.test.cjs | tee -a release/verification-native.log
+            fi
           else
             npm run verify | tee release/verification-native.log
           fi
@@ -152,6 +156,9 @@ jobs:
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
+          fi
+          if [ "$GITHUB_REF_NAME" = "codex/blego-news-copy-restore-20261117" ]; then
+            BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node --test --test-concurrency=1 tests/ui/news-copy.test.cjs | tee release/news-copy-installed-native.log
           fi
       - name: Installed photo batch and original UX comparison
         if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
@@ -209,6 +216,7 @@ jobs:
             release/real-photo-*.json
             release/responsive-native.json
             release/verification-native.log
+            release/news-copy-installed-native.log
             release/public-services-native.json
             release/classifier-quality-native.json
             release/classifier-quality-v143-native.json
