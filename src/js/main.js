@@ -8,7 +8,7 @@ import { mountPhotoMap } from './ui/photo-map.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
 import { toast } from './utils/toast.js';
-import { copyText } from './utils/clipboard.js';
+import { copyText, showCopyFeedback } from './utils/clipboard.js';
 import { appHTML } from './ui/shell.js';
 import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
@@ -1247,7 +1247,7 @@ document.addEventListener('click', async (event) => {
     const field=target.dataset.newsCopy;
     if(field!=='title' && field!=='link')return;
     const copiedValue = target.dataset.copy || '';
-    const result = await copyText(copiedValue,null,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
+    const result = await copyText(copiedValue,target,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
     // Only an acknowledged clipboard write may change the visual copy state.
     if (result.ok) {
       state.news.copiedLink = field === 'link' ? copiedValue : null;
@@ -1280,7 +1280,7 @@ document.addEventListener('click', async (event) => {
   if (action === 'import-copy') {
     window.blego
       .copySource(state.importData.operationId)
-      .then((r) => toast(r.ok ? 'Copied' : 'Copy failed; select text manually', r.ok ? '' : 'err'));
+      .then((r) => {if(r.ok)showCopyFeedback(target);toast(r.ok ? 'Copied' : 'Copy failed; select text manually', r.ok ? '' : 'err');});
     return;
   }
   if (action === 'import-reset') {
@@ -1557,6 +1557,7 @@ document.addEventListener('click', async (event) => {
     try {
       const result = await window.blego.copyImage(target.dataset.id);
       if (!result.ok) throw Error(result.code);
+      showCopyFeedback(target);
       toast('Image pixels copied; metadata is not transferred.');
     } catch {
       toast('Image copy failed.', 'err');
