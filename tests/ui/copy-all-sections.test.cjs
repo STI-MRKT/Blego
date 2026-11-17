@@ -113,7 +113,9 @@ test(
     await page.locator('.ux-copy-set').focus();
     await page.keyboard.press('Control+Shift+C');
     await page.waitForTimeout(150);
-    assert.ok((await clip()).includes(`phone: ${profile.phone}`));
+    const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    const generated = await page.evaluate(() => window.blego.lastCard());
+    assert.ok((await clip()).includes(`phone: ${formattedPhoneForCopy(profile.phone, generated.country)}`));
     const pref = await page.evaluate(() => window.blego.copyPreferences());
     assert.ok(Object.keys(pref).some((k) => k.startsWith('generator-')));
     await page.locator('[data-view="import"]').click();
