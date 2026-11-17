@@ -11,24 +11,22 @@ const patterns = Object.freeze({
   GB: { dial: '44', groups: [4, 6] }
 });
 
+// All visible synthetic phone values use XXX-XXX-XXXX. Keep the original
+// country-specific E.164 value in SQLite and in the uniqueness registry.
+function digitsForDisplay(value, rule) {
+  const size = rule.groups.reduce((total, count) => total + count, 0);
+  if (!new RegExp(`^\\\\+${rule.dial}\\\\d{${size}}$`).test(value)) return null;
+  const national = value.slice(rule.dial.length + 1);
+  return national.slice(-10).padStart(10, '0');
+}
 export function formatPhoneDisplay(value, country) {
   if (value == null) return '';
   if (typeof value !== 'string') return String(value);
   const rule = patterns[country];
   if (!rule) return value;
-  const expectedLength = rule.groups.reduce((total, size) => total + size, 0);
-  const match = new RegExp(`^\\+${rule.dial}\\d{${expectedLength}}$`);
-  if (!match.test(value)) return value;
-
-  const digits = value.slice(rule.dial.length + 1);
-  const parts = [];
-  let offset = 0;
-  for (const size of rule.groups) {
-    parts.push(digits.slice(offset, offset + size));
-    offset += size;
-  }
-  if (rule.areaCode) return `+${rule.dial} (${parts[0]}) ${parts[1]}-${parts[2]}`;
-  return `+${rule.dial} ${parts.join(' ')}`;
+  const digits = digitsForDisplay(value, rule);
+  if (!digits) return value;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
 }
 
 // Strip only the known international prefix. Keep national digits as a string, including zeros.
@@ -39,5 +37,8 @@ export function nationalPhoneForCopy(value, country) {
   const digits = value.replace(/\D/g, '');
   if (!digits.startsWith(rule.dial) || digits.length <= rule.dial.length || digits.length > 15)
     throw Error('Номер не соответствует стране профиля');
-  return digits.slice(rule.dial.length);
+  const formatted = formatPhoneDisplay(value, country);
+  if (!/^\\d{3}-\\d{3}-\\d{4}$/.test(formatted))
+    throw Error('Номер не соответствует формату профиля');
+  return formatted;
 }
