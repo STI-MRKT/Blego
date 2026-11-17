@@ -52,10 +52,10 @@ function expectRecord(record, f, source) {
   }
   assert.equal(record.sourceRecord, source);
   for (const entry of record.sourceEntries) {
-    assert.equal(source.slice(
-      entry.range.start - record.range.start,
-      entry.range.end - record.range.start
-    ), entry.value);
+    assert.equal(
+      source.slice(entry.range.start - record.range.start, entry.range.end - record.range.start),
+      entry.value
+    );
   }
 }
 
@@ -64,18 +64,18 @@ for (const [name, delimiter] of [
   ['semicolon', ';'],
   ['colon', ':']
 ]) {
-  test('QA multi-record ' + name + ': keep account boundaries, passwords and literal cookie JSON', async () => {
-    const sourceLines = [
-      row(ids[0], delimiter, true),
-      row(ids[1], delimiter, false)
-    ];
-    const { output } = await classify(sourceLines.join('\n'));
-    assert.equal(output.records.length, 2);
-    expectRecord(output.records[0], expected(ids[0], true), sourceLines[0]);
-    expectRecord(output.records[1], expected(ids[1], false), sourceLines[1]);
-    assert.notEqual(output.records[0].data.accountId, output.records[1].data.accountId);
-    assert.ok(!output.records[1].sourceRecord.includes('FAKE_MAIL_' + ids[0]));
-  });
+  test(
+    'QA multi-record ' + name + ': keep account boundaries, passwords and literal cookie JSON',
+    async () => {
+      const sourceLines = [row(ids[0], delimiter, true), row(ids[1], delimiter, false)];
+      const { output } = await classify(sourceLines.join('\n'));
+      assert.equal(output.records.length, 2);
+      expectRecord(output.records[0], expected(ids[0], true), sourceLines[0]);
+      expectRecord(output.records[1], expected(ids[1], false), sourceLines[1]);
+      assert.notEqual(output.records[0].data.accountId, output.records[1].data.accountId);
+      assert.ok(!output.records[1].sourceRecord.includes('FAKE_MAIL_' + ids[0]));
+    }
+  );
 }
 
 test('QA mixed delimiters: unknown instruction does not shift following labelled values', async () => {
@@ -112,7 +112,10 @@ test('QA double-colon: explicit credentials6 schema preserves two records withou
   assert.equal(output.records[1].data.password, 'FAKE_B');
   assert.equal(output.records[1].data.emailPassword, '');
   assert.equal(output.records[1].data.accountId, ids[1]);
-  assert.deepEqual(output.records.map((r) => r.sourceRecord), lines);
+  assert.deepEqual(
+    output.records.map((r) => r.sourceRecord),
+    lines
+  );
 });
 
 test('QA double-colon without schema: ambiguous opaque credentials are not invented', async () => {
@@ -122,7 +125,10 @@ test('QA double-colon without schema: ambiguous opaque credentials are not inven
   ];
   const { output } = await classify(lines.join('\n'));
   assert.equal(output.records.length, 2);
-  assert.deepEqual(output.records.map((r) => r.sourceRecord), lines);
+  assert.deepEqual(
+    output.records.map((r) => r.sourceRecord),
+    lines
+  );
   assert.equal(output.records[0].data.email, 'a@example.test');
   assert.equal(output.records[1].data.email, 'b@example.test');
   assert.equal(output.records[0].data.password, '');
