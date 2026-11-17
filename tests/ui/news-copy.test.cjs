@@ -95,7 +95,10 @@ test(
         await page.getByText(message, { exact: true }).last().waitFor();
         assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), expected);
         assert.equal(
-          await page.locator('.news-item-card').first().evaluate(el => el.classList.contains('news-link-copied')),
+          await page
+            .locator('.news-item-card')
+            .first()
+            .evaluate((el) => el.classList.contains('news-link-copied')),
           kind === 'link'
         );
         assert.equal(
