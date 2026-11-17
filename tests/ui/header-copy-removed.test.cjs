@@ -38,7 +38,7 @@ test(
     await noHeader();
     const fp = await generate(page);
     await noHeader();
-    const { nationalPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
     for (const field of [
       'name',
       'phone',
@@ -55,17 +55,21 @@ test(
         .click();
       assert.equal(
         await clip(),
-        field === 'phone' ? nationalPhoneForCopy(fp.fields.phone, fp.country) : fp.fields[field],
+        field === 'phone' ? formattedPhoneForCopy(fp.fields.phone, fp.country) : fp.fields[field],
         field
       );
     }
     const { profileText } = await import('../../src/js/services/generator.js');
+    const displayedProfile = profileText(fp).replace(
+      `phone: ${fp.fields.phone}`,
+      `phone: ${formattedPhoneForCopy(fp.fields.phone, fp.country)}`
+    );
     await page.locator('.ux-copy-set').click();
-    assert.equal(await clip(), profileText(fp));
+    assert.equal(await clip(), displayedProfile);
     for (const modifier of ['Control', ...(process.platform === 'darwin' ? ['Meta'] : [])]) {
       await f.app.evaluate(({ clipboard }) => clipboard.writeText('shortcut sentinel'));
       await shortcut(page, `${modifier}+Shift+C`);
-      for (let i = 0; (await clip()) !== profileText(fp); i++) {
+      for (let i = 0; (await clip()) !== displayedProfile; i++) {
         assert.ok(i < 100);
         await page.waitForTimeout(10);
       }
