@@ -1,23 +1,20 @@
-// Raw diagnostic statuses remain available in history. Only current, explicit
-// public-content evidence may produce either of the two decisive UI outcomes.
+// Legacy direct-page logic is preserved only in archive/blego-facebook-direct-legacy-20261117.
 export function facebookPresentation(result) {
-  const current = result?.parserVersion === 'public-evidence-v5' && result.source === 'public_page';
-  if (current && result.publicContent === 'available' && result.availability === 'profile_visible')
-    return { status: 'ACTIVE', tone: 'ok', description: 'Публичный контент доступен' };
-  if (current && result.publicContent === 'unavailable' && result.availability === 'unavailable')
-    return { status: 'BLOCKED', tone: 'err', description: 'Публичный контент недоступен' };
-  const statuses = {
-    login_required: 'LOGIN_REQUIRED',
-    challenge_required: 'CHALLENGE_REQUIRED',
-    request_limited: 'RATE_LIMITED',
-    network_error: 'NETWORK_ERROR',
-    cancelled: 'CANCELLED'
-  };
-  return {
-    status: statuses[result?.availability] || 'UNKNOWN',
-    tone: '',
-    description: ['profile_visible', 'unavailable'].includes(result?.availability)
-      ? 'Результат требует повторной проверки.'
-      : ''
-  };
+  if (result?.availability === 'cancelled')
+    return { status: 'CANCELLED', tone: '', description: 'Проверка отменена.' };
+  if (result?.source === 'fbtools' && result?.parserVersion === 'fbtools-ndjson-v1') {
+    if (result.reasonCode === 'FBTOOLS_VALID')
+      return {
+        status: 'LIVE',
+        tone: 'ok',
+        description: 'По данным check.fb.tools профиль активен (сторонняя проверка).'
+      };
+    if (result.reasonCode === 'FBTOOLS_NOEXIST')
+      return {
+        status: 'DIE',
+        tone: 'err',
+        description: 'check.fb.tools не нашёл профиль. Это не доказательство блокировки.'
+      };
+  }
+  return { status: 'UNKNOWN', tone: '', description: 'Источник не подтвердил состояние профиля.' };
 }

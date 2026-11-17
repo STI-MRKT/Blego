@@ -8,8 +8,7 @@ const {
   clipboard,
   dialog,
   nativeImage,
-  safeStorage,
-  session
+  safeStorage
 } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
@@ -70,13 +69,7 @@ async function initialize() {
     }
   });
   poolCatalog = createPoolCatalog({ store });
-  const publicSession = session.fromPartition('facebook-public-anonymous', { cache: false });
-  facebook = createFacebookService({
-    store,
-    transport: require('./features/facebook/transport.cjs').createElectronPublicTransport(
-      publicSession
-    )
-  });
+  facebook = createFacebookService({ store });
   friends = require('./features/friends/service.cjs').createFriendsService({ store });
   geo = require('./features/geo/service.cjs').createGeoService({ store });
   images = createImageService({ store, geo });

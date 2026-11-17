@@ -1,5 +1,5 @@
 const net = require('node:net');
-const { withAbort } = require('../facebook/transport.cjs');
+const { withAbort } = require('../../local/async.cjs');
 const { isPublicAddress } = require('../../local/network-safety.cjs');
 // API v3 stable 2026-06-24: risk is detections.risk, not confidence.
 function createProxycheckProvider({

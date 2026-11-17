@@ -1,4 +1,4 @@
-// Deterministic anonymous-response fixture for GUI tests; no fake production transport.
+// Deterministic third-party provider fixture for GUI tests; never calls check.fb.tools.
 async function installFacebookFixture(app, delay = 10) {
   await app.evaluate(({ ipcMain }, delay) => {
     globalThis.fbCalls = [];
@@ -11,8 +11,11 @@ async function installFacebookFixture(app, delay = 10) {
         value: {
           results: request.targets.map((target) => ({
             ...target,
-            availability: 'login_required',
-            reasonCode: 'LOGIN_REQUIRED',
+            status: 'AVAILABLE',
+            availability: 'profile_visible',
+            source: 'fbtools',
+            parserVersion: 'fbtools-ndjson-v1',
+            reasonCode: 'FBTOOLS_VALID',
             banAssessment: 'unknown',
             checkedAt: new Date().toISOString(),
             durationMs: delay,
