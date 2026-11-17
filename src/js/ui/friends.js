@@ -20,27 +20,6 @@ function pager(page, count, action) {
     ? `<div class="head-actions"><button class="btn" data-action="${action}" data-page="${page - 1}" ${page === 0 ? 'disabled' : ''}>Назад</button><span>${page + 1} / ${count}</span><button class="btn" data-action="${action}" data-page="${page + 1}" ${page + 1 >= count ? 'disabled' : ''}>Далее</button></div>`
     : '';
 }
-function previewHTML() {
-  const preview = state.friendsPreview;
-  if (!preview) return '';
-  const pages = Math.max(1, Math.ceil(preview.rows.length / 100)),
-    page = Math.max(0, Math.min(state.friendsPreviewPage || 0, pages - 1));
-  const statuses = {
-    new: 'Новая',
-    duplicate: 'Уже есть',
-    incomplete: 'Неполная запись',
-    invalid: 'Некорректная ссылка или поля'
-  };
-  return `<section class="card pad" data-friends-preview><h3>Подтвердите импорт</h3><p>Новых: ${preview.added} · Повторов: ${preview.duplicates} · Неполных: ${preview.incomplete} · Ошибок: ${preview.invalid}</p><p class="sub">Отсутствующие имя, GEO и тематика останутся пустыми.</p>${pager(page, pages, 'friends-preview-page')}<div class="table-wrap"><table class="tbl"><thead><tr><th>Имя</th><th>Ссылка</th><th>GEO</th><th>Результат</th></tr></thead><tbody>${preview.rows
-    .slice(page * 100, (page + 1) * 100)
-    .map(
-      (row) =>
-        `<tr><td>${esc(row.name || '')}</td><td>${esc(row.url || '')}</td><td>${esc(row.geo || '')}</td><td>${statuses[row.status]}</td></tr>`
-    )
-    .join(
-      ''
-    )}</tbody></table></div><div class="head-actions"><button class="btn btn-primary" data-action="friends-confirm" ${!preview.added || state.friendsBusy ? 'disabled' : ''}>Добавить подтверждённые записи</button><button class="btn" data-action="friends-cancel">Отмена</button></div></section>`;
-}
 export function friendsHTML() {
   const all = currentRows(), selected = state.friendsGeo;
   const list = filterFriends(all, currentFilter()), links = uniqueFriendLinks(list);
