@@ -27,6 +27,8 @@ const { createHash } = require('node:crypto');
     'biography-v143',
     'copy-all-sections',
     'friends-bulk-copy',
+    'friends',
+    'photos-v143',
     'generator-bio',
     'generator-phone-address',
     'generator-picker-tz12',
