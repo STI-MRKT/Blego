@@ -3,7 +3,7 @@ import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 import { NEWS_TOPICS } from '../../../shared/news-catalog.mjs';
 function newsCopyButton(item, field, label) {
-  return `<button type="button" class="copy" data-action="news-copy" data-news-copy="${field}" data-copy="${esc(item[field === 'title' ? 'title' : 'link'])}" aria-label="${label}" title="${label}">${field === 'title' ? I.copy : I.link}</button>`;
+  return `<button type="button" class="btn" data-action="news-copy" data-news-copy="${field}" data-copy="${esc(item[field === 'title' ? 'title' : 'link'])}" aria-label="${label}" title="${label}">${I.copy}${label}</button>`;
 }
 function metaValue(value) { return `<span>${esc(value)}</span>`; }
 export function newsBlockHTML() {
