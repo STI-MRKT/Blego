@@ -15,10 +15,8 @@ const CONTROLS = [
 async function main() {
   const executable = process.env.BLEGO_EXECUTABLE;
   const output = path.resolve(process.argv[2] || 'release/fbtools-live-native.json');
-  if (!executable || !fs.existsSync(executable))
-    throw Error('INSTALLED_EXECUTABLE_REQUIRED');
-  if (process.platform !== 'darwin')
-    throw Error('MACOS_REQUIRED');
+  if (!executable || !fs.existsSync(executable)) throw Error('INSTALLED_EXECUTABLE_REQUIRED');
+  if (process.platform !== 'darwin') throw Error('MACOS_REQUIRED');
   fs.mkdirSync(path.dirname(output), { recursive: true });
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-fbtools-native-'));
   const data = path.join(temp, 'user-data');
@@ -53,9 +51,7 @@ async function main() {
     if (await page.locator('#checker-provider').count())
       throw Error('LEGACY_PROVIDER_SELECTOR_PRESENT');
 
-    await page
-      .locator('#checker-input')
-      .fill(CONTROLS.map((item) => item.uid).join('\n'));
+    await page.locator('#checker-input').fill(CONTROLS.map((item) => item.uid).join('\n'));
     await page.locator('[data-action="checker-run"]').click();
 
     // The production IPC path and provider adapter run without test overrides.
@@ -82,14 +78,15 @@ async function main() {
         reasonCode: row.check?.reasonCode,
         httpStatus: row.check?.httpStatus ?? null,
         checkedAt: row.check?.checkedAt,
-        providerError: row.check?.reasonCode?.startsWith('FBTOOLS_') &&
+        providerError:
+          row.check?.reasonCode?.startsWith('FBTOOLS_') &&
           !['FBTOOLS_VALID', 'FBTOOLS_NOEXIST'].includes(row.check.reasonCode)
       }));
     });
 
-    const visibleStatuses = await page.locator('[data-checker-status]').evaluateAll((nodes) =>
-      nodes.map((node) => node.dataset.checkerStatus)
-    );
+    const visibleStatuses = await page
+      .locator('[data-checker-status]')
+      .evaluateAll((nodes) => nodes.map((node) => node.dataset.checkerStatus));
     report.visibleStatuses = visibleStatuses;
 
     await page.locator('[data-action="checker-copy-results"]').click();
@@ -110,11 +107,12 @@ async function main() {
     await page.screenshot({ path: screenshot, fullPage: true });
     report.screenshot = screenshot;
 
-    const statusesMatch = CONTROLS.every((item, index) =>
-      report.results[index]?.uid === item.uid &&
-      report.results[index]?.source === 'fbtools' &&
-      report.results[index]?.status === item.expected &&
-      visibleStatuses[index] === item.expected
+    const statusesMatch = CONTROLS.every(
+      (item, index) =>
+        report.results[index]?.uid === item.uid &&
+        report.results[index]?.source === 'fbtools' &&
+        report.results[index]?.status === item.expected &&
+        visibleStatuses[index] === item.expected
     );
     report.outcome = statusesMatch && report.copy.outcome === 'PASS' ? 'PASS' : 'FAIL';
   } catch (error) {
