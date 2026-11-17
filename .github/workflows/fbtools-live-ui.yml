@@ -53,15 +53,17 @@ jobs:
                 const {state} = await import('/js/state.js');
                 return !state.checker.checking && state.checker.rows?.length===2 && state.checker.rows.every(r=>r.check);
               },null,{timeout:90000});
+              await page.waitForTimeout(300);
               report.checks=await page.evaluate(async()=>{
                 const {state} = await import('/js/state.js');
                 const {facebookPresentation} = await import('/shared/facebook-presentation.mjs');
                 return state.checker.rows.map(r=>({
                   id:r.id,
                   status:facebookPresentation(r.check).status,
-                  http:r.check.httpStatus,
-                  reason:r.check.reasonCode,
-                  source:r.check.source
+                  http:r.check?.httpStatus??null,
+                  reason:r.check?.reasonCode??null,
+                  source:r.check?.source??null,
+                  hasCheck:!!r.check
                 }));
               });
               report.rendered=await page.locator('[data-checker-status]').evaluateAll(a=>a.map(x=>x.dataset.checkerStatus));
