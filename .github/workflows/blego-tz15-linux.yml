@@ -21,12 +21,14 @@ jobs:
       - run: npm ci
       - name: Formatter review
         run: |
-          for file in shared/classifier-structure.mjs shared/classifier.mjs shared/classifier-lexer.mjs shared/classifier-tab-labels.mjs shared/classifier-recognition.mjs tests/unit/classifier-tz15.test.cjs; do
+          for file in electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
             echo "FORMAT_END:$file"
           done
+      - name: Targeted TZ15 unit tests
+        run: node --test tests/unit/classifier-tz15.test.cjs tests/unit/tz15-generator-ux.test.cjs tests/integration/facebook-fbtools.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
