@@ -179,6 +179,8 @@
 .news-copy-actions .btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:6px 8px;max-width:100%}
 .news-copy-actions .btn svg{width:12px;height:12px;flex-shrink:0}
 .news-copy-actions .btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.news-card .news-item-card.news-link-copied{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent-ring)}
+.news-copy-actions .btn[data-news-copy="link"][aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 @container(max-width:703px){.news-card .news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container(max-width:465px){.news-card .news-grid{grid-template-columns:minmax(0,1fr)}}
 
