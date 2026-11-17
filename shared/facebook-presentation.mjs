@@ -1,6 +1,15 @@
 // Raw diagnostic statuses remain available in history. Only current, explicit
 // public-content evidence may produce either of the two decisive UI outcomes.
 export function facebookPresentation(result) {
+  if (result?.source === 'fbtools' && result?.parserVersion === 'fbtools-ndjson-v1') {
+    if (result.reasonCode === 'FBTOOLS_VALID')
+      return { status: 'LIVE', tone: 'ok', description: 'По данным check.fb.tools профиль активен (сторонняя проверка).' };
+    if (result.reasonCode === 'FBTOOLS_NOEXIST')
+      return { status: 'DIE', tone: 'err', description: 'check.fb.tools не нашёл профиль. Это не доказательство блокировки.' };
+    if (result.availability === 'cancelled')
+      return { status: 'CANCELLED', tone: '', description: 'Проверка отменена.' };
+    return { status: 'UNKNOWN', tone: '', description: 'Источник не подтвердил состояние профиля.' };
+  }
   const current = result?.parserVersion === 'public-evidence-v5' && result.source === 'public_page';
   if (current && result.publicContent === 'available' && result.availability === 'profile_visible')
     return { status: 'ACTIVE', tone: 'ok', description: 'Публичный контент доступен' };
