@@ -1,0 +1,101 @@
+name: FB.Tools real BLEGO UI smoke (Linux)
+
+on:
+  push:
+    branches:
+      - codex/blego-fbtools-checker
+    paths:
+      - .github/workflows/fbtools-live-ui.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: |
+          npm ci
+          node node_modules/electron/install.js
+      - name: Check two real control UIDs via BLEGO UI and main process (no stubs)
+        run: |
+          mkdir -p release
+          node <<'NODE'
+          const { _electron } = require('playwright');
+          const fs = require('node:fs');
+          const os = require('node:os');
+          const path = require('node:path');
+          const data = fs.mkdtempSync(path.join(os.tmpdir(),'blego-fbtools-live-'));
+          const report = {date:new Date().toISOString(),environment:'Linux BLEGO source app / actual Electron IPC',provider:'check.fb.tools',checks:[],result:'NOT_RUN'};
+          fs.writeFileSync(path.join(data,'blego-state.json'),'{"tourSeen":true}');
+          let app;
+          (async()=>{
+            try {
+              app = await _electron.launch({
+                args:['.','--ozone-platform=headless','--disable-gpu','--user-data-dir='+data]
+              });
+              const page = await app.firstWindow();
+              await page.locator('[data-view="checker"]').click({timeout:30000});
+              const selectorCount = await page.locator('#checker-provider').count();
+              if (selectorCount) throw Error('LEGACY_CHECKER_PROVIDER_SELECTOR');
+              await page.locator('#checker-input').fill('4\n999999999999999');
+              await page.locator('[data-action="checker-run"]').click();
+              await page.waitForFunction(()=>{
+                const rows=Array.from(document.querySelectorAll('.checker-row'));
+                return rows.length===2 && !document.querySelector('#checker-progress-card') && rows.every(r=>r.querySelector('td:nth-child(3) details'));
+              },null,{timeout:90000});
+              await page.waitForTimeout(300);
+              report.checks=await page.evaluate(async()=>{
+                const {state} = await import('/js/state.js');
+                const {facebookPresentation} = await import('/shared/facebook-presentation.mjs');
+                return state.checker.rows.map(r=>({
+                  id:r.id,
+                  status:facebookPresentation(r.check).status,
+                  http:r.check?.httpStatus??null,
+                  reason:r.check?.reasonCode??null,
+                  source:r.check?.source??null,
+                  hasCheck:!!r.check
+                }));
+              });
+              report.rendered=await page.locator('[data-checker-status]').evaluateAll(a=>a.map(x=>x.dataset.checkerStatus));
+              await page.locator('[data-action="checker-copy-results"]').click();
+              const expected=report.checks.map(r=>r.id+'\t'+r.status).join('\n');
+              for(let i=0;i<30;i++){
+                report.copied=await app.evaluate(({clipboard})=>clipboard.readText());
+                if(report.copied===expected)break;
+                await page.waitForTimeout(100);
+              }
+              report.copyOk=report.copied===expected;
+              await page.screenshot({path:'release/fbtools-live-ui.png',fullPage:true});
+              report.result=report.checks[0]?.status==='LIVE'&&report.checks[1]?.status==='DIE'&&report.checks.every(r=>r.source==='fbtools')&&report.rendered.join(',')==='LIVE,DIE'&&report.copyOk?'PASS':'FAIL';
+            } catch(error){
+              report.result='FAIL';
+              report.error=error?.message||'UNKNOWN';
+            } finally{
+              try{if(app)await app.close()}catch{}
+              fs.writeFileSync('release/fbtools-live-ui.json',JSON.stringify(report,null,2)+'\n');
+              console.log(JSON.stringify(report,null,2));
+              fs.rmSync(data,{recursive:true,force:true});
+              if(report.result!=='PASS')process.exitCode=1;
+            }
+          })().catch(error=>{console.error(error.message);process.exitCode=1;});
+          NODE
+      - name: Upload actual app test result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FBTOOLS-real-BLEGO-ui
+          retention-days: 5
+          if-no-files-found: warn
+          path: |
+            release/fbtools-live-ui.json
+            release/fbtools-live-ui.png

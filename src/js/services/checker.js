@@ -20,7 +20,7 @@ export async function checkProfiles(rows, runId, onProgress) {
     if (result.runId === runId) onProgress?.(++done, targets.length, result);
   });
   try {
-    return await window.blego.checkFacebook({ targets, runId });
+    return await window.blego.checkFacebook({ targets, runId, provider: 'fbtools' });
   } finally {
     unsubscribe();
   }

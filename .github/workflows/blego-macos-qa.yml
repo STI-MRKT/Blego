@@ -14,6 +14,7 @@ on:
       - codex/blego-friends-news-copy
       - codex/blego-v1-4-3-fixes
       - codex/blego-tz12-news-bio-dictionaries
+      - codex/blego-fbtools-checker
   workflow_dispatch:
     inputs:
       target:
@@ -57,9 +58,9 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
       BLEGO_CAPTURE: release
-      QA_SPEC: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
-      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
-      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
+      QA_SPEC: ${{ github.ref_name == 'codex/blego-fbtools-checker' && 'tz12' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
+      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-fbtools-checker' && '-FBTOOLS' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
+      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-fbtools-checker' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -144,6 +145,11 @@ jobs:
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
           fi
+      - name: Live FB.Tools check through installed BLEGO.app (no mocks)
+        if: env.TARGET_ARCH == 'arm64' && github.ref_name == 'codex/blego-fbtools-checker'
+        run: |
+          set -o pipefail
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-fbtools-native.cjs release/fbtools-live-native.json | tee release/fbtools-live-native.log
       - name: Installed photo batch and original UX comparison
         if: env.QA_SPEC != 'tz12'
         run: |
@@ -217,6 +223,9 @@ jobs:
             release/native-darwin-*.json
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
+            release/fbtools-live-native.json
+            release/fbtools-live-native.log
+            release/fbtools-live-native.png
 
       - name: Upload diagnostics on failure
         if: failure()
@@ -228,6 +237,9 @@ jobs:
           path: |
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
+            release/fbtools-live-native.json
+            release/fbtools-live-native.log
+            release/fbtools-live-native.png
             release/native-darwin-*.json
             release/metadata-load-*.json
             release/metadata-ui-batch-*.log

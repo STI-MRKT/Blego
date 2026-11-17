@@ -26,6 +26,7 @@ import { loadNews } from './services/news.js';
 import { newsTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
+import { facebookPresentation } from '../../shared/facebook-presentation.mjs';
 
 const shuffle = (list) => {
   const copy = [...list];
@@ -1666,7 +1667,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'checker-cancel') {
     state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
-    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'request_queue',checkedAt:null};
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'fbtools',checkedAt:null};
     renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
@@ -1688,6 +1689,13 @@ document.addEventListener('click', async (event) => {
     } catch (error) {
       toast(error.message, 'err');
     }
+    return;
+  }
+  if (action === 'checker-copy-results') {
+    const lines = (state.checker.rows || []).map((row) =>
+      (row.input || row.id) + '\t' +
+      (row.check ? facebookPresentation(row.check).status : row.link ? 'NOT_CHECKED' : 'INVALID_INPUT'));
+    await copyText(lines.join('\n'));
     return;
   }
   if (action === 'checker-clear') {

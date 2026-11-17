@@ -155,7 +155,9 @@
 .friend-link{margin-top:9px;height:30px;font-size:11px;justify-content:center;text-decoration:none;width:100%}
 .friend-link svg{width:13px;height:13px}
 .checker-input{height:120px;padding:10px 12px;resize:vertical;font-family:var(--mono);font-size:12px;line-height:1.55}
-.checker-actions{display:flex;align-items:center;gap:8px;margin-top:10px}
+.checker-actions{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.checker-source{font-size:11px}
+.checker-source-note{margin:8px 0 0;font-size:11px}
 .checker-summary{margin-top:12px}
 .checker-row{animation:up .3s ease both}
 .checker-link{display:flex;align-items:center;gap:6px;min-width:0}
