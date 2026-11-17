@@ -22,6 +22,8 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
+      - name: Reject syntax errors before formatting
+        run: node --check tests/integration/generator-tz12.test.cjs
       - name: Export formatted files for review
         shell: bash
         run: |
