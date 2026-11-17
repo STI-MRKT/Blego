@@ -1,0 +1,34 @@
+name: BLEGO TZ14 isolated tests and formatter
+on:
+  push:
+    branches:
+      - codex/blego-tz14-ci-helper-20261117
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/blego-tz14-hotfix-20261117
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Format changed files for commit
+        run: |
+          for file in electron/features/generator/naming.cjs electron/features/generator/pool-expansion.cjs electron/features/generator/sources.cjs electron/local/settings.cjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/generator-v14.test.cjs tests/integration/generator-tz12.test.cjs tests/integration/generator-female.test.cjs tests/ui/generator-phone-address.test.cjs; do
+            echo "FORMAT_START:$file"
+            ./node_modules/.bin/prettier "$file" | base64 -w 0
+            echo
+            echo "FORMAT_END:$file"
+          done
+      - name: All unit tests
+        run: npm run test:unit
+      - name: All integration tests
+        run: npm run test:integration
+      - name: Lint
+        run: npm run lint
