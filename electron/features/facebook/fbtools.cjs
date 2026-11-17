@@ -108,8 +108,13 @@ async function* checkFbTools({
   fetchImpl = globalThis.fetch,
   now = Date.now
 }) {
-  if (!Array.isArray(targets) || targets.length > 100 || typeof runId !== 'string' ||
-      !runId || runId.length > 100)
+  if (
+    !Array.isArray(targets) ||
+    targets.length > 100 ||
+    typeof runId !== 'string' ||
+    !runId ||
+    runId.length > 100
+  )
     throw Error('FB_INPUT_INVALID');
 
   const normalized = targets.map((item) => normalizeTarget(item.canonicalUrl));
@@ -141,8 +146,11 @@ async function* checkFbTools({
 
     if (!response.ok) {
       failure = response.status === 429 ? 'FBTOOLS_RATE_LIMITED' : 'FBTOOLS_HTTP_ERROR';
-    } else if (!String(response.headers?.get?.('content-type') || '').toLowerCase()
-      .includes('application/x-ndjson')) {
+    } else if (
+      !String(response.headers?.get?.('content-type') || '')
+        .toLowerCase()
+        .includes('application/x-ndjson')
+    ) {
       failure = 'FBTOOLS_INVALID_FORMAT';
     } else {
       for await (const event of readEvents(response)) {
@@ -153,8 +161,13 @@ async function* checkFbTools({
         if (event?.event !== 'result') continue;
         const data = event.data;
         const position = data?.id;
-        if (!Number.isInteger(position) || position < 1 ||
-            position > normalized.length || completed.has(position)) continue;
+        if (
+          !Number.isInteger(position) ||
+          position < 1 ||
+          position > normalized.length ||
+          completed.has(position)
+        )
+          continue;
         const target = normalized[position - 1];
         let matches = false;
         try {
