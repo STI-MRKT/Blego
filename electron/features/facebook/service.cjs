@@ -3,9 +3,11 @@ const { normalizeTarget } = require('./normalize.cjs');
 const { inspectResponse, PARSER_VERSION } = require('./inspect.cjs');
 const { STATUSES, networkReason, retryAfterUntil } = require('./diagnostics.cjs');
 const { fetchPublicProfile, withAbort } = require('./transport.cjs');
+const { checkFbTools } = require('./fbtools.cjs');
 function createFacebookService({
   store,
   transport = fetchPublicProfile,
+  fbtools = checkFbTools,
   clock = { now: Date.now, sleep: (ms, signal) => sleep(ms, undefined, { signal }) }
 } = {}) {
   let active = null,
@@ -35,7 +37,7 @@ function createFacebookService({
     cancel() {
       active?.abort();
     },
-    async *check({ targets, runId }) {
+    async *check({ targets, runId, provider = 'direct' }) {
       if (
         !Array.isArray(targets) ||
         targets.length > 100 ||
@@ -43,6 +45,7 @@ function createFacebookService({
         runId.length > 100
       )
         throw Error('FB_INPUT_INVALID');
+      if (!['direct', 'fbtools'].includes(provider)) throw Error('FB_INPUT_INVALID');
       const clean = [
         ...new Map(
           targets.map((target) => {
@@ -56,6 +59,18 @@ function createFacebookService({
       active = controller;
       let paused = null;
       try {
+        if (provider === 'fbtools') {
+          for await (const result of fbtools({
+            targets: clean,
+            runId,
+            signal: controller.signal,
+            now: clock.now
+          })) {
+            if (active !== controller) return;
+            yield result;
+          }
+          return;
+        }
         for (const target of clean) {
           if (active !== controller) return;
           if (controller.signal.aborted) {
