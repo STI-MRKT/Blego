@@ -1,0 +1,33 @@
+name: BLEGO TZ14 hotfix QA (source)
+
+on:
+  push:
+    branches:
+      - codex/blego-tz14-hotfix-ui-pools-20261117
+
+permissions:
+  contents: read
+
+jobs:
+  source-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Lint, hotfix tests and full source regressions
+        shell: bash
+        run: |
+          set +e
+          npm run lint
+          lint=$?
+          node --test tests/unit/tz14-hotfix.test.cjs
+          hotfix=$?
+          npm run verify
+          regressions=$?
+          echo "lint=$lint hotfix=$hotfix regressions=$regressions"
+          if [ "$lint" -ne 0 ] || [ "$hotfix" -ne 0 ] || [ "$regressions" -ne 0 ]; then exit 1; fi
