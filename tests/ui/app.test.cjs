@@ -160,7 +160,8 @@ test(
     }
     await choosePoolFixture();
     assert.equal(
-      (await page.evaluate(() => window.blego.getPoolStats({ country: 'GB', type: 'tech' }))).counts.firstNames,
+      (await page.evaluate(() => window.blego.getPoolStats({ country: 'GB', type: 'tech' }))).counts
+        .firstNames,
       1713
     );
     await page.evaluate((token) => window.blego.cancelPoolPackage(token), poolPreviewToken);
@@ -176,7 +177,8 @@ test(
     await waitForAsync(
       page,
       async () =>
-        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames === 1713
+        (await window.blego.getPoolStats({ country: 'GB', type: 'tech' })).counts.firstNames ===
+        1713
     );
     const disabled = await page.evaluate(async () => {
       try {
