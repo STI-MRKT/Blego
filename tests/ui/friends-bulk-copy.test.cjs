@@ -79,7 +79,10 @@ test(
         page,
         async () => !document.querySelector('[data-friends-copy="all"]').disabled
       );
-      assert.equal(await button.evaluate((element) => element.classList.contains('copy-feedback')), true);
+      assert.equal(
+        await button.evaluate((element) => element.classList.contains('copy-feedback')),
+        true
+      );
       return (await read()).split('\n');
     }
     async function geo(value) {
