@@ -576,14 +576,6 @@ function bindView() {
   for(const [id,key] of [['checker-status-filter','statusFilter'],['checker-sort','sort']]){const el=document.getElementById(id);if(el)el.onchange=()=>{state.checker[key]=el.value;renderView();};}
   const facebookDetails=document.getElementById('facebook-details');
   if(facebookDetails)facebookDetails.ontoggle=()=>{state.checker.notesOpen=facebookDetails.open;};
-  const checkerProvider = document.getElementById('checker-provider');
-  if (checkerProvider) checkerProvider.onchange = () => {
-    if (state.checker.checking) return;
-    state.checker.provider = checkerProvider.value === 'fbtools' ? 'fbtools' : 'direct';
-    state.checker.rows = null;
-    state.checker.checkedInput = null;
-    renderView();
-  };
   const checker = document.getElementById('checker-input');
   if (checker) {
     checker.oninput = (event) => {
@@ -1675,7 +1667,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'checker-cancel') {
     state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
-    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'request_queue',checkedAt:null};
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'fbtools',checkedAt:null};
     renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
@@ -1707,7 +1699,7 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'checker-clear') {
-    state.checker = { input: '', rows: null, provider: state.checker.provider || 'direct' };
+    state.checker = { input: '', rows: null };
     renderView();
     await window.blego.cancelFacebook();
   }
@@ -1729,7 +1721,7 @@ async function runCheckerStatus(runId = crypto.randomUUID(), onlyTarget=null) {
       if (label) label.textContent = `Проверено ${done} из ${total}`;
       const fill = document.getElementById('checker-progress-fill');
       if (fill) fill.style.width = `${(100 * done) / total}%`;
-    }, state.checker.provider || 'direct');
+    });
     if (state.checker.runId !== runId) return;
     for (const row of state.checker.rows || []){const found=result.results.find(value=>value.canonicalUrl===row.link);if(found)row.check=found;}
   } catch (error) {

@@ -13,14 +13,14 @@ export async function parseIds(text) {
     localFacts: normalized.importedFacts?.[row.canonicalUrl] || null
   }));
 }
-export async function checkProfiles(rows, runId, onProgress, provider = 'direct') {
+export async function checkProfiles(rows, runId, onProgress) {
   const targets = [...new Map(rows.map((row) => [row.link, { canonicalUrl: row.link }])).values()];
   let done = 0;
   const unsubscribe = window.blego.onFacebookResult((result) => {
     if (result.runId === runId) onProgress?.(++done, targets.length, result);
   });
   try {
-    return await window.blego.checkFacebook({ targets, runId, provider });
+    return await window.blego.checkFacebook({ targets, runId, provider: 'fbtools' });
   } finally {
     unsubscribe();
   }
