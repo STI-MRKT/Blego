@@ -104,17 +104,12 @@ test(
     await page.locator('#bio-type').selectOption('model');
     await page.locator('[data-action="bio-generate"]').click();
     await page.locator('#bio-mainBio').waitFor();
+    assert.equal(await page.locator('[data-bio-institution]').count(), 0);
     const output = process.env.BLEGO_CAPTURE;
     if (output) fs.mkdirSync(output, { recursive: true });
     for (const width of [360, 390, 480, 576, 768, 980, 1280]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const selector of [
-        '#bio-country',
-        '#bio-city',
-        '#bio-type',
-        '[data-bio-institution="university"]',
-        '[data-bio-institution="school"]'
-      ]) {
+      for (const selector of ['#bio-country', '#bio-city', '#bio-type']) {
         const control = page.locator(selector);
         await control.scrollIntoViewIfNeeded();
         await control.click();

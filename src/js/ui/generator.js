@@ -129,7 +129,7 @@ export function generatorHTML() {
         <p class="sub">Выберите страну, тип и создайте синтетический профиль. Основное — на одном экране.</p></div>
 
     </div>
-    <div class="head-actions" role="group" aria-label="Генераторы"><button class="btn ${state.generatorTab!=='bio'?'btn-primary':'btn-quiet'}" data-action="generator-tab" data-tab="profile" aria-pressed="${state.generatorTab!=='bio'}">ФП</button><button class="btn ${state.generatorTab==='bio'?'btn-primary':'btn-quiet'}" data-action="generator-tab" data-tab="bio" aria-pressed="${state.generatorTab==='bio'}">BIO</button></div>
+    <div class="head-actions generator-tabs" role="group" aria-label="Генераторы"><button class="btn ${state.generatorTab!=='bio'?'btn-primary':'btn-quiet'}" data-action="generator-tab" data-tab="profile" aria-pressed="${state.generatorTab!=='bio'}">ФП</button><button class="btn ${state.generatorTab==='bio'?'btn-primary':'btn-quiet'}" data-action="generator-tab" data-tab="bio" aria-pressed="${state.generatorTab==='bio'}">BIO</button></div>
     ${state.generatorTab==='bio'?biographyHTML():`<div class="card controls ux-primary-controls">
       <div class="ctl ctl-sm"><label class="fl">Страна</label><select class="input" data-input="locale">
         ${Object.entries(LOCALES)

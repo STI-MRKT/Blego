@@ -4,8 +4,50 @@ const { DatabaseSync } = require('node:sqlite');
 const { normalize } = require('./registry.cjs');
 const supplement = require('../../../resources/generator/supplements/names-v14.json');
 const initializing = new WeakMap();
+const cryptoRoots = [
+  'Chain',
+  'Ledger',
+  'Block',
+  'Node',
+  'Protocol',
+  'Vault',
+  'Token',
+  'Hash',
+  'Consensus',
+  'Peer',
+  'Onchain',
+  'Merkle',
+  'Proof',
+  'Bridge',
+  'Wallet',
+  'Web3',
+  'Cryptography',
+  'Open Network',
+  'Digital Asset',
+  'Decentral'
+];
+const cryptoEndings = [
+  'Atlas',
+  'Studio',
+  'Works',
+  'Collective',
+  'Foundry',
+  'Harbor',
+  'Notes',
+  'Network',
+  'Field',
+  'Horizon'
+];
+// 200 themed roots combined with five compact identity variants to maintain
+// the existing installation-wide unique-name guarantee at 1000+ generations.
+const cryptoStyles = ['', 'Research', 'Journal', 'Studio', 'Forum'];
+const cryptoBrandNames = cryptoRoots.flatMap((root) =>
+  cryptoEndings.flatMap((ending) =>
+    cryptoStyles.map((style) => [root, ending, style].filter(Boolean).join(' '))
+  )
+);
 function namingPreset(country, type, dataset) {
-  const brand = type === 'tech';
+  const brand = type === 'tech' || type === 'crypto';
   // Imported country dictionaries remain authoritative for personal names.
   const personNames = brand
     ? []
@@ -19,7 +61,7 @@ function namingPreset(country, type, dataset) {
     namingStrategy: brand ? 'brand_name' : 'person_name',
     nameGender: brand ? null : 'female',
     namingDatasetId: supplement.id,
-    brandNames: brand ? supplement.brandNames : [],
+    brandNames: !brand ? [] : type === 'crypto' ? cryptoBrandNames : supplement.brandNames,
     personNames
   };
 }

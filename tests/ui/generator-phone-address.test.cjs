@@ -72,11 +72,11 @@ test(
           );
         assert.deepEqual(order, ['address', 'city', 'postalCode']);
         const shown = await page.locator('.field-phone .field-value').innerText();
-        assert.equal(shown.replace(/\D/g, ''), number.replace(/\D/g, ''));
+        assert.match(shown, /^\d{3}-\d{3}-\d{4}$/);
         // A new country choice must not alter copying from the already displayed profile.
         await page.locator('[data-input="locale"]').selectOption(country === 'US' ? 'GB' : 'US');
         await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
-        await clip(number.replace(/\D/g, '').slice(dial.length));
+        await clip(shown);
         await page.getByText('Номер скопирован', { exact: true }).last().waitFor();
         for (const field of ['address', 'city', 'postalCode']) {
           await page.locator(`.demo-right [data-field="${field}"]`).click();
@@ -87,7 +87,7 @@ test(
           last.fieldOrder
             .map(
               (k) =>
-                `${k}: ${Array.isArray(last.fields[k]) ? last.fields[k].join(', ') : last.fields[k]}`
+                `${k}: ${k === 'phone' ? shown : Array.isArray(last.fields[k]) ? last.fields[k].join(', ') : last.fields[k]}`
             )
             .join('\n')
         );

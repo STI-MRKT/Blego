@@ -15,6 +15,7 @@ on:
       - codex/blego-v1-4-3-fixes
       - codex/blego-tz12-news-bio-dictionaries
       - codex/blego-tz13-classifier
+      - codex/blego-tz14-hotfix-20261117
       - codex/blego-tz13-multiformat-review-20261117
       - codex/blego-news-copy-restore-20261117
   workflow_dispatch:
@@ -60,9 +61,9 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       BLEGO_CAPTURE_UX: '1'
       BLEGO_CAPTURE: release
-      QA_SPEC: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && 'tz13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
-      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-news-copy-restore-20261117' && '-TZ13-NEWS' || (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '-TZ13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
-      QA_BASE_SHA: ${{ (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '35226e5a1a071eb534408641b63a922915840caf' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
+      QA_SPEC: ${{ github.ref_name == 'codex/blego-tz14-hotfix-20261117' && 'tz14' || (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && 'tz13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && 'tz12' || github.ref_name == 'codex/blego-v1-4-3-fixes' && 'tz11' || github.ref_name == 'codex/blego-friends-news-copy' && 'tz10' || 'tz9' }}
+      QA_ARCHIVE_TAG: ${{ github.ref_name == 'codex/blego-tz14-hotfix-20261117' && '-TZ14' || github.ref_name == 'codex/blego-news-copy-restore-20261117' && '-TZ13-NEWS' || (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '-TZ13' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '-TZ12' || github.ref_name == 'codex/blego-friends-news-copy' && '-TZ10' || '' }}
+      QA_BASE_SHA: ${{ github.ref_name == 'codex/blego-tz14-hotfix-20261117' && 'e333e3729c3417be9afb2a5375b60075d1674095' || (github.ref_name == 'codex/blego-tz13-classifier' || github.ref_name == 'codex/blego-tz13-multiformat-review-20261117' || github.ref_name == 'codex/blego-news-copy-restore-20261117') && '35226e5a1a071eb534408641b63a922915840caf' || github.ref_name == 'codex/blego-tz12-news-bio-dictionaries' && '99c5a3ec074032ea9380de40d8ff78e7318716c9' || github.ref_name == 'codex/blego-v1-4-3-fixes' && '91bc0c66f2eac47d6740f1f3657d7f51d13bee2b' || github.ref_name == 'codex/blego-friends-news-copy' && '7679fed15888f5dd826763a6703865bc6fc8ceb8' || '5f30cf51a0f04da13975a7ecd11b96c488457623' }}
       TARGET_ARCH: ${{ contains(github.event.head_commit.message, '[mac-qa-run-x64]') && 'x64' || inputs.target || 'arm64' }}
     steps:
       - uses: actions/checkout@v4
@@ -118,7 +119,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
       - name: Package baseline14 in the same environment
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           (cd "$RUNNER_TEMP/blego-baseline-reference" && npm run dist:mac -- --${{ env.TARGET_ARCH }} --dir)
           baseline_dir="mac-$TARGET_ARCH"
@@ -126,18 +127,18 @@ jobs:
           ditto "$RUNNER_TEMP/blego-baseline-reference/release/$baseline_dir/BLEGO.app" "$RUNNER_TEMP/BLEGO-baseline14.app"
           ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/Resources/app.asar"
       - name: Comparable manual metadata baseline and candidate
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline14.json
           node scripts/check-metadata-load.cjs release/metadata-load-candidate-manual.json
       - name: Licensed real high-resolution photograph comparison
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           curl --fail --location --retry 2 --max-time 90 --max-filesize 20971520 --output "$RUNNER_TEMP/Fronalpstock-original.jpg" https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg
           node scripts/check-real-photo.cjs "$RUNNER_TEMP/blego-baseline-reference" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-baseline14.json
           node scripts/check-real-photo.cjs "$GITHUB_WORKSPACE" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-candidate.json
       - name: Date and GEO native load acceptance
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: BLEGO_FOLDER_LOAD=1 node scripts/check-metadata-load.cjs release/metadata-load-darwin.json
       - name: Build unsigned DMG
         run: npm run dist:mac -- --${{ env.TARGET_ARCH }}
@@ -152,6 +153,7 @@ jobs:
           ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
           suite=all
           if [ "$QA_SPEC" = tz13 ]; then suite=classifier; fi
+          if [ "$QA_SPEC" = tz14 ]; then suite=tz14; fi
           if ! node scripts/check-installed-app.cjs --suite "$suite" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
@@ -161,7 +163,7 @@ jobs:
             BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node --test --test-concurrency=1 tests/ui/news-copy.test.cjs | tee release/news-copy-installed-native.log
           fi
       - name: Installed photo batch and original UX comparison
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log
           BLEGO_GUI_FOLDER_COUNT=20 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder20-darwin.log
@@ -169,7 +171,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
           node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --baseline-executable "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
       - name: Bounded live public-service observations
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-public-services.cjs release/public-services-native.json
       - name: TZ12 source references and installed candidate visual evidence
         if: env.QA_SPEC == 'tz12'
@@ -183,6 +185,9 @@ jobs:
           node scripts/tz12-dictionary-report.cjs release/tz12-dictionary-counts.json
           node scripts/benchmark-generator-tz12.cjs "$RUNNER_TEMP/blego-baseline-reference" release/tz12-performance-incoming.json
           node scripts/benchmark-generator-tz12.cjs "$GITHUB_WORKSPACE" release/tz12-performance-candidate.json
+      - name: Record TZ14 dictionary audit
+        if: env.QA_SPEC == 'tz14'
+        run: node scripts/tz14-pool-report.cjs release/tz14-dictionary-counts.json
       - name: Record checksums
         run: |
           (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS
@@ -221,6 +226,7 @@ jobs:
             release/classifier-quality-native.json
             release/classifier-quality-v143-native.json
             release/tz12-*.json
+            release/tz14-*.json
             release/tz12-visual/
             release/tz11-*-clipboard.json
             release/tz10-*-clipboard.json

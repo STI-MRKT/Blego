@@ -11,7 +11,7 @@ const {
 const { createArchiveService } = require('../../electron/features/archive/service.cjs');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 test(
-  'original compact archive rows retain filters, individual copying, exact exports, folder and confirmed deletion',
+  'compact archive rows retain search, individual copying, exact exports, folder and confirmed deletion',
   { timeout: 60000 },
   async (t) => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-archive-ui-')),
@@ -72,7 +72,7 @@ test(
     }
     assert.ok(!/Last opened|ZIP:|Source:/.test(await page.locator('#view').textContent()));
     await page.locator('[name="search"]').fill('Beta');
-    await page.getByRole('button', { name: 'Filter', exact: true }).click();
+    await page.locator('[name="search"]').press('Enter');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
       return state.archives.total === 1;
@@ -82,14 +82,18 @@ test(
     await page.waitForTimeout(30);
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'Beta.txt');
     await page.locator('[name="search"]').fill('');
-    await page.locator('#archive-filter details > summary').click();
-    await page.locator('[name="order"]').selectOption('oldest');
-    await page.getByRole('button', { name: 'Filter', exact: true }).click();
+    assert.equal(await page.locator('#archive-filter details').count(), 0);
+    assert.equal(await page.getByRole('button', { name: 'Filter', exact: true }).count(), 0);
+    await page.locator('[name="search"]').press('Enter');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
-      return state.archives.total === 2 && state.archives.items[0].originalName === 'Alpha.txt';
+      return (
+        state.archives.total === 2 &&
+        new Set(state.archives.items.map((item) => item.originalName)).size === 2
+      );
     });
-    await page.locator('[data-action="archive-open"]').first().click();
+    // Sorting was removed by TZ14. Open Alpha by stable archive ID, not list order.
+    await page.locator(`[data-action="archive-open"][data-id="${entries[0].archiveId}"]`).click();
     await page.getByText('Synthetic Alpha.txt', { exact: true }).waitFor();
     await page.getByRole('button', { name: 'Copy result', exact: true }).click();
     await page.waitForTimeout(30);

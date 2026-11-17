@@ -64,7 +64,13 @@ test(
     await clip(bio);
     await page.getByText('BIO скопировано', { exact: true }).waitFor();
     await page.locator('.ux-copy-set').click();
-    const full = { ...card.fields, name, bio };
+    const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    const full = {
+      ...card.fields,
+      name,
+      bio,
+      phone: formattedPhoneForCopy(card.fields.phone, card.country)
+    };
     await clip(
       card.fieldOrder
         .map((f) => `${f}: ${Array.isArray(full[f]) ? full[f].join(', ') : full[f]}`)

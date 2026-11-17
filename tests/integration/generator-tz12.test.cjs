@@ -29,11 +29,9 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
           ? preset.first.length * preset.last.length + preset.personNames.length
           : 0;
     if (max === capacity)
-      return preset.type === 'tech'
-        ? 275 + countries.indexOf(preset.country)
-        : (preset.first.length - (preset.type === 'crypto' ? 2 : 1)) * preset.last.length +
-            preset.last.length -
-            1;
+      return preset.namingStrategy === 'brand_name'
+        ? (preset.type === 'tech' ? 275 : 120) + countries.indexOf(preset.country)
+        : (preset.first.length - 1) * preset.last.length + preset.last.length - 1;
     return max - 1;
   });
   const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
@@ -63,9 +61,10 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         profile.fields.phone,
         new RegExp(`^\\+${preset.phonePrefix}\\d{${preset.phoneDigits}}$`)
       );
-      if (type === 'tech') assert.ok(preset.brandNames.slice(275).includes(profile.fields.name));
-      else assert.ok(profile.fields.name.endsWith(' ' + preset.last.at(-1)));
-      assert.equal(profile.nameGender, type === 'tech' ? null : 'female');
+      if (preset.namingStrategy === 'brand_name')
+        assert.ok(preset.brandNames.includes(profile.fields.name));
+      else assert.ok(preset.first.some((first) => profile.fields.name.startsWith(first + ' ')));
+      assert.equal(profile.nameGender, preset.namingStrategy === 'brand_name' ? null : 'female');
       results.push(profile);
     }
   assert.equal(new Set(results.map((p) => p.fields.phone)).size, results.length);

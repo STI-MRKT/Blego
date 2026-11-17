@@ -5,8 +5,8 @@ const defaults = {
   fieldOrder: [],
   disabledFields: [],
   allowRepeats: [],
-  bulkMode: false,
-  bulkConsent: false,
+  bulkMode: true,
+  bulkConsent: true,
   overrides: {},
   archiveRoot: null,
   includeOriginal: false,
@@ -113,12 +113,17 @@ function validUrl(raw) {
   }
 }
 function getSettings(store) {
-  return { ...structuredClone(defaults), ...store.get('settings') };
+  return {
+    ...structuredClone(defaults),
+    ...store.get('settings'),
+    bulkMode: true,
+    bulkConsent: true
+  };
 }
 function updateSettings(store, patch) {
   const clean = validateSettings(patch);
   return store.transaction(() => {
-    const next = { ...getSettings(store), ...clean };
+    const next = { ...getSettings(store), ...clean, bulkMode: true, bulkConsent: true };
     store.set('settings', next);
     return next;
   });

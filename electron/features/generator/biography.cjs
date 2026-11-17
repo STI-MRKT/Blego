@@ -109,7 +109,7 @@ function generateBiography(profile, { catalog: rows = catalog, bios = [] } = {})
 function suggestBiographyField(
   profile,
   field,
-  { catalog: rows = catalog, bios = [], values = {} } = {}
+  { catalog: rows = catalog, bios = [], positions = [], values = {} } = {}
 ) {
   if (!FIELDS.includes(field)) throw Error('INVALID_BIO');
   if (field === 'mainBio') return { mainBio: choose(bios) || '' };
@@ -118,7 +118,9 @@ function suggestBiographyField(
     const company = options.find(
       (row) => row.kind === 'company' && organizationLabel(row) === values.employer
     );
-    return { position: company ? choose(company.roles[profile.type]) : '' };
+    return {
+      position: company ? choose([...company.roles[profile.type], ...positions]) : ''
+    };
   }
   const generated = generateBiography(profile, { catalog: rows, bios });
   // Replacing the employer also replaces its dependent role, never an unrelated field.
@@ -134,7 +136,7 @@ function bioSuggestions(profile, { store, field, values }) {
     loadDataset(store, profile.country)
   );
   return field
-    ? suggestBiographyField(profile, field, { values, bios: p.bios })
+    ? suggestBiographyField(profile, field, { values, bios: p.bios, positions: p.positionPool })
     : generateBiography(profile, { bios: p.bios });
 }
 function validateBiographyValues(values) {

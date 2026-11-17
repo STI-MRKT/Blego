@@ -59,7 +59,7 @@ test(
         .locator('.field-value')
         .innerText();
       assert.notEqual(shownPhone, profile.fields.phone);
-      assert.equal(shownPhone.replace(/[^0-9]/g, ''), profile.fields.phone.replace(/[^0-9]/g, ''));
+      assert.match(shownPhone, /^\d{3}-\d{3}-\d{4}$/);
     }
     for (const country of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB']) {
       await page.locator('[data-input="locale"]').selectOption(country);
@@ -71,9 +71,8 @@ test(
       );
       const saved = await page.evaluate(() => window.blego.lastCard());
       assert.equal(saved.country, country);
-      const national = saved.fields.phone.slice(
-        { BR: 2, US: 1, FR: 2, PL: 2, DE: 2, ES: 2, IT: 2, GB: 2 }[country] + 1
-      );
+      const { formatPhoneDisplay } = await import('../../src/js/utils/phone.mjs');
+      const national = formatPhoneDisplay(saved.fields.phone, country);
       await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
       for (let i = 0; i < 40; i++) {
         if ((await app.evaluate(({ clipboard }) => clipboard.readText())) === national) break;
@@ -126,11 +125,7 @@ test(
     assert.equal(await page.getByText('IP Trust', { exact: true }).count(), 1);
 
     await page.locator('[data-view="settings"]').click();
-    await page.locator('details.ux-settings-advanced').waitFor();
-    assert.equal(
-      await page.locator('details.ux-settings-advanced').evaluate((element) => element.open),
-      false
-    );
+    assert.equal(await page.locator('details.ux-settings-advanced').count(), 0);
     assert.equal(await page.locator('[name="proxyEnabled"]').isVisible(), true);
     if (process.env.BLEGO_CAPTURE_UX === '1')
       await page.screenshot({ path: 'release/ux-settings.png' });

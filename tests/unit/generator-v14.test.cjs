@@ -40,6 +40,16 @@ test('authored pools supplement each person category by 256 new female country-s
   for (const name of required) assert.ok(tech.brandNames.includes(name));
   assert.equal(new Set(tech.brandNames.map(normalized)).size, tech.brandNames.length);
   assert.ok(tech.brandNames.every((n) => !/[0-9]/.test(n) && n.split(' ').length <= 3));
+  const crypto = resolvePreset('US', 'crypto');
+  assert.equal(crypto.brandNames.length, 1000);
+  assert.equal(new Set(crypto.brandNames.map(normalized)).size, 1000);
+  assert.ok(
+    crypto.brandNames.every((name) =>
+      /(?:Chain|Ledger|Block|Node|Protocol|Vault|Token|Hash|Consensus|Peer|Onchain|Merkle|Proof|Bridge|Wallet|Web3|Cryptography|Open Network|Digital Asset|Decentral)/.test(
+        name
+      )
+    )
+  );
   for (const type of ['model', 'crypto']) {
     const names = Object.values(data.personNames[type]).flat();
     assert.equal(names.length, 256);
@@ -49,11 +59,14 @@ test('authored pools supplement each person category by 256 new female country-s
         fs.readFileSync(`resources/generator/countries/${country}.json`, 'utf8')
       );
       const p = resolvePreset(country, type);
-      assert.equal(p.namingStrategy, 'person_name');
-      assert.equal(p.nameGender, 'female');
-      assert.deepEqual(p.first, original.first);
-      assert.deepEqual(p.last, original.last);
-      assert.deepEqual(p.personNames, extras);
+      const branded = type === 'crypto';
+      assert.equal(p.namingStrategy, branded ? 'brand_name' : 'person_name');
+      assert.equal(p.nameGender, branded ? null : 'female');
+      assert.deepEqual(p.first.slice(0, original.first.length), original.first);
+      assert.deepEqual(p.last.slice(0, original.last.length), original.last);
+      assert.equal(p.first.length, original.first.length + 150);
+      assert.equal(p.last.length, original.last.length + 150);
+      assert.deepEqual(p.personNames, branded ? [] : extras);
       for (const name of extras) {
         assert.ok(original.first.some((f) => name.startsWith(f + ' ')));
         assert.ok(

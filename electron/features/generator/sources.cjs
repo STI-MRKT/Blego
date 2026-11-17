@@ -3,6 +3,14 @@ const path = require('node:path');
 const { createHash } = require('node:crypto');
 const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
 const addressSupplement = require('../../../resources/generator/supplements/addresses-tz12.json');
+const {
+  expandCountry,
+  syntheticAddresses,
+  expandBioPool,
+  expandStatusPool,
+  categoryPool,
+  positionPool
+} = require('./pool-expansion.cjs');
 const { namingPreset, nameCount } = require('./naming.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
@@ -69,9 +77,11 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
   validateSettings(settings);
   if (!countries.includes(country) || !['model', 'tech', 'crypto'].includes(type))
     throw Error('INVALID_PRESET');
-  const c =
+  const baseCountry =
     dataset || JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
-  if (c.code !== country || c.nameGender !== 'female') throw Error('DATASET_INVALID');
+  if (baseCountry.code !== country || baseCountry.nameGender !== 'female')
+    throw Error('DATASET_INVALID');
+  const c = dataset ? baseCountry : expandCountry(baseCountry);
   const t = JSON.parse(fs.readFileSync(path.join(root, `types/${type}.json`), 'utf8'));
   const o = settings.overrides || {};
   if (Object.keys(o).some((k) => !['common', 'types', 'pairs'].includes(k)))
@@ -83,11 +93,23 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...t,
     ...namingPreset(country, type, c),
     // Imported geography remains authoritative; bundled examples never cross into it.
-    addresses: dataset ? [] : addressSupplement.records[country],
+    addresses: dataset
+      ? []
+      : [...addressSupplement.records[country], ...syntheticAddresses(baseCountry)],
     addressDatasetId: dataset ? null : addressSupplement.id,
-    bios: [...t.bios[c.language], ...bioSupplement.bios[type][c.language]],
+    bios: [
+      ...t.bios[c.language],
+      ...bioSupplement.bios[type][c.language],
+      ...expandBioPool(t.bios[c.language], bioSupplement.bios[type][c.language])
+    ],
     bioDatasetId: bioSupplement.id,
-    statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],
+    statuses: [
+      ...(Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language]),
+      ...expandStatusPool(Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language])
+    ],
+    categoryPool: categoryPool(t.categories),
+    positionPool: positionPool(type),
+    expansionDatasetId: 'blego-tz14-derived-150',
     symbols: settings.symbols || '',
     ...o.common,
     ...o.types?.[type],

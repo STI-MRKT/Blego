@@ -1,6 +1,6 @@
 import { resolveFileOperations } from '../../../shared/image-workspace.mjs';
 import { state } from '../state.js';
-import { nationalPhoneForCopy } from './phone.mjs';
+import { formattedPhoneForCopy } from './phone.mjs';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
 import { copyText } from './clipboard.js';
@@ -307,7 +307,12 @@ export async function copyModelValue(
   );
   if(generation !== loading || !sameContext(context,copyContext())) throw Error('COPY_SELECTION_CHANGED');
   if(nationalPhone && !card && id === 'generator' && key === 'phone')
-    return copyText(nationalPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');
+    return copyText(formattedPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');
+  if(card && id === 'generator' && state.demo?.fields?.phone) {
+    const stored = state.demo.fields.phone;
+    const formatted = formattedPhoneForCopy(stored, profileCountry);
+    return copyText(result.text.replace(`phone: ${stored}`, `phone: ${formatted}`), button);
+  }
   return copyText(result.text, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
 }
 document.addEventListener('change', async (event) => {
