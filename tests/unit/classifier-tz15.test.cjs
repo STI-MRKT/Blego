@@ -32,9 +32,13 @@ test('TZ15 real-world-shaped opaque mixed tuple: distinct FB and email passwords
   assert.equal(result.records.length, 1);
   const record = result.records[0];
   for (const [key, value] of Object.entries({
-    password: 'QATest7kL2', emailPassword: 'Mailsecret!4567',
-    email: 'synthetic.one@example.test', accountId: id,
-    fullName: 'Desi Sample', birthDate: '1.11.1998', geo: 'Spain'
+    password: 'QATest7kL2',
+    emailPassword: 'Mailsecret!4567',
+    email: 'synthetic.one@example.test',
+    accountId: id,
+    fullName: 'Desi Sample',
+    birthDate: '1.11.1998',
+    geo: 'Spain'
   }))
     assert.equal(record.data[key], value, key);
   assert.equal(record.extended.limit, '50');
@@ -91,8 +95,14 @@ test('TZ15 uncertain / partial records do not guess secrets', async () => {
 
 test('TZ15 ambiguous unrelated secrets fail closed and remain reviewable', async () => {
   const text = [
-    'OtherABC9', 'a@example.test', 'secondXYZ8', 'MailSecret!3456',
-    '1.11.1998', id, 'Desi Sample', 'GEO Spain'
+    'OtherABC9',
+    'a@example.test',
+    'secondXYZ8',
+    'MailSecret!3456',
+    '1.11.1998',
+    id,
+    'Desi Sample',
+    'GEO Spain'
   ].join(';');
   const { records } = await scan(text);
   assert.equal(records[0].data.password, '');
@@ -112,9 +122,13 @@ test('TZ15 manual field override stays higher priority than record-local inferen
 test('TZ15 labelled or colon-separated values remain authoritative and exact', async () => {
   for (const delim of [';', '|', ':']) {
     const text = [
-      'Login:sample.user', 'Password:QAFbTest@27', 'Email:one@example.test',
-      'Email Password:QAMail!3333', 'ID Account:' + id,
-      'Date of Birth:1.11.1998', 'GEO:Spain'
+      'Login:sample.user',
+      'Password:QAFbTest@27',
+      'Email:one@example.test',
+      'Email Password:QAMail!3333',
+      'ID Account:' + id,
+      'Date of Birth:1.11.1998',
+      'GEO:Spain'
     ].join(delim);
     const { records } = await scan(text);
     assert.equal(records.length, 1);
