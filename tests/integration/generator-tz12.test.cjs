@@ -59,8 +59,14 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
           (place) =>
             place.city === profile.fields.city && place.postal === profile.fields.postal
         ) &&
-        preset.streets.some((street) =>
-          new RegExp('^' + street.replace(/[.*+?^${}()|[\]\\]/g, '\\\\      assert.ok(row, 'Address, city and postal must belong to one synthetic tuple');') + ' [0-9]+
+        preset.streets.some((street) => {
+          const prefix = street + ' ';
+          return (
+            profile.fields.address.startsWith(prefix) &&
+            /^[0-9]+$/.test(profile.fields.address.slice(prefix.length))
+          );
+        });
+      assert.ok(row || fallback, 'Address must belong to a known city/postal and street');
       assert.ok(
         preset.bios.some(
           (bio) =>
