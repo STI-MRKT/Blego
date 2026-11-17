@@ -210,7 +210,12 @@ test('Facebook service uses only FB.Tools and rejects retired direct provider', 
     fbtools: async function* ({ targets: items, runId }) {
       externalCalls += 1;
       for (const item of items)
-        yield { canonicalUrl: item.canonicalUrl, runId, source: 'fbtools', availability: 'unknown' };
+        yield {
+          canonicalUrl: item.canonicalUrl,
+          runId,
+          source: 'fbtools',
+          availability: 'unknown'
+        };
     },
     clock: { now: () => 20000 }
   });
@@ -219,13 +224,14 @@ test('Facebook service uses only FB.Tools and rejects retired direct provider', 
   for await (const row of service.check({ targets: rows, runId: 'default' })) checked.push(row);
   assert.equal(checked.length, 1);
   assert.equal(externalCalls, 1);
-  await assert.rejects(
-    async () => {
-      for await (const row of service.check({ targets: rows, runId: 'retired', provider: 'direct' }))
-        void row;
-    },
-    /FB_INPUT_INVALID/
-  );
-  service.saveManualNote({ targetKey: rows[0].canonicalUrl, status: 'not_blocked', comment: 'Owner' });
+  await assert.rejects(async () => {
+    for await (const row of service.check({ targets: rows, runId: 'retired', provider: 'direct' }))
+      void row;
+  }, /FB_INPUT_INVALID/);
+  service.saveManualNote({
+    targetKey: rows[0].canonicalUrl,
+    status: 'not_blocked',
+    comment: 'Owner'
+  });
   assert.equal(service.notes(rows[0].canonicalUrl)[0].comment, 'Owner');
 });

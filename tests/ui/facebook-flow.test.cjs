@@ -29,11 +29,7 @@ test(
     await installFacebookFixture(app);
     await page.locator('#checker-input').fill('001234567890123456789');
     await page.getByRole('button', { name: 'Check', exact: true }).click();
-    await page
-      .locator('.checker-row')
-      .getByText('LIVE', { exact: true })
-      .first()
-      .waitFor();
+    await page.locator('.checker-row').getByText('LIVE', { exact: true }).first().waitFor();
     assert.equal((await app.evaluate(() => globalThis.fbCalls)).length, 1);
     assert.equal((await app.evaluate(() => globalThis.fbCalls))[0].provider, 'fbtools');
     for (const [label, value] of [
@@ -76,10 +72,7 @@ test(
     );
     await page.getByRole('button', { name: 'Отменить', exact: true }).click();
     await page.waitForTimeout(1200);
-    assert.equal(
-      await page.locator('.checker-row').getByText('LIVE', { exact: true }).count(),
-      0
-    );
+    assert.equal(await page.locator('.checker-row').getByText('LIVE', { exact: true }).count(), 0);
     assert.ok((await page.locator('#view').textContent()).includes('Отменено'));
     assert.ok(!/BANNED|NOT_BANNED/.test(await page.locator('#view').textContent()));
   }

@@ -71,7 +71,9 @@ test(
     await page.locator('#checker-sort').selectOption('id-desc');
     assert.equal(await page.locator('.checker-row').count(), 2);
     await page.locator('.checker-row details summary').first().click();
-    assert.ok((await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR'));
+    assert.ok(
+      (await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR')
+    );
     assert.ok((await page.locator('.checker-row').first().innerText()).includes('09:00'));
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
