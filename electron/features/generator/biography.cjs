@@ -31,7 +31,10 @@ function pageBio(text, type) {
   if (!pool || !text) return text;
   // Only newly generated prose is decorated; manually edited content and
   // previously saved profiles are unchanged. Internal dots are meaningful.
-  const clean = String(text).trim().replace(/[.。]+$/u, '').trim();
+  const clean = String(text)
+    .trim()
+    .replace(/[.。]+$/u, '')
+    .trim();
   if (/\p{Extended_Pictographic}[\uFE0F\u200D]*$/u.test(clean)) return clean;
   return `${clean} ${pool[randomInt(pool.length)]}`;
 }
