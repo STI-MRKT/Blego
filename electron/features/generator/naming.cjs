@@ -13,9 +13,13 @@ const cryptoEndings = [
   'Atlas', 'Studio', 'Works', 'Collective', 'Foundry', 'Harbor',
   'Notes', 'Network', 'Field', 'Horizon'
 ];
-// 200 curated combinations. They are fictional page names, not real entities.
+// 200 themed roots combined with five compact identity variants to maintain
+// the existing installation-wide unique-name guarantee at 1000+ generations.
+const cryptoStyles = ['', 'Research', 'Journal', 'Studio', 'Forum'];
 const cryptoBrandNames = cryptoRoots.flatMap((root) =>
-  cryptoEndings.map((ending) => `${root} ${ending}`)
+  cryptoEndings.flatMap((ending) =>
+    cryptoStyles.map((style) => [root, ending, style].filter(Boolean).join(' '))
+  )
 );
 function namingPreset(country, type, dataset) {
   const brand = type === 'tech' || type === 'crypto';
