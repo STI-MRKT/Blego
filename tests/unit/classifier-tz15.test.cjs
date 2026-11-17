@@ -31,7 +31,6 @@ test('TZ15 real-world-shaped opaque mixed tuple: distinct FB and email passwords
   const result = await scan(text);
   assert.equal(result.records.length, 1);
   const record = result.records[0];
-  if (!record.data.geo) console.log('TZ15_SYNTHETIC_DIAG', JSON.stringify(record.sourceEntries.map(e => ({column:e.column,value:e.value}))), JSON.stringify(record.unrecognized.map(e => e.value)));
   for (const [key, value] of Object.entries({
     password: 'QATest7kL2',
     emailPassword: 'Mailsecret!4567',
@@ -117,7 +116,7 @@ test('TZ15 ambiguous unrelated secrets fail closed and remain reviewable', async
 
 test('TZ15 manual field override stays higher priority than record-local inference', async () => {
   const text = row();
-  const { records } = await scan(text, { mapping: { column_5: 'token' } });
+  const { records } = await scan(text, { mapping: { column_6: 'token' } });
   assert.equal(records[0].data.token, 'Mailsecret!4567');
   assert.equal(records[0].data.emailPassword, '');
   assert.equal(records[0].data.password, 'QATest7kL2');
