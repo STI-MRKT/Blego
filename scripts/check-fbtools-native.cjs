@@ -56,12 +56,12 @@ async function main() {
 
     // The production IPC path and provider adapter run without test overrides.
     await page.waitForFunction(
-      async (count) => {
-        const { state } = await import('/js/state.js');
+      (count) => {
+        const rows = Array.from(document.querySelectorAll('.checker-row'));
         return (
-          !state.checker.checking &&
-          state.checker.rows?.length === count &&
-          state.checker.rows.every((row) => row.check)
+          rows.length === count &&
+          !document.querySelector('#checker-progress-card') &&
+          rows.every((row) => row.querySelector('td:nth-child(3) details'))
         );
       },
       CONTROLS.length,

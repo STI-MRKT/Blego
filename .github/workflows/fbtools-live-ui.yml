@@ -49,9 +49,9 @@ jobs:
               if (selectorCount) throw Error('LEGACY_CHECKER_PROVIDER_SELECTOR');
               await page.locator('#checker-input').fill('4\n999999999999999');
               await page.locator('[data-action="checker-run"]').click();
-              await page.waitForFunction(async()=>{
-                const {state} = await import('/js/state.js');
-                return !state.checker.checking && state.checker.rows?.length===2 && state.checker.rows.every(r=>r.check);
+              await page.waitForFunction(()=>{
+                const rows=Array.from(document.querySelectorAll('.checker-row'));
+                return rows.length===2 && !document.querySelector('#checker-progress-card') && rows.every(r=>r.querySelector('td:nth-child(3) details'));
               },null,{timeout:90000});
               await page.waitForTimeout(300);
               report.checks=await page.evaluate(async()=>{
