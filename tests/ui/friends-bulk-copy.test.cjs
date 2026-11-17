@@ -60,7 +60,10 @@ test(
     assert.equal(await page.locator('[data-action="friends-import"]').count(), 0);
     assert.equal(await page.locator('.friend-card details').count(), 0);
     const preview = await page.evaluate(() => window.blego.importFriends());
-    const result = await page.evaluate((token) => window.blego.confirmFriends(token), preview.token);
+    const result = await page.evaluate(
+      (token) => window.blego.confirmFriends(token),
+      preview.token
+    );
     await page.evaluate(async (rows) => {
       const { state } = await import('/js/state.js');
       state.friendsRows = rows;
