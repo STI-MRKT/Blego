@@ -1,4 +1,5 @@
 name: BLEGO scoped classifier and News QA
+# Retest formatted product and GUI copy state
 
 on:
   push:
@@ -34,6 +35,10 @@ jobs:
         run: npm run test:classifier
       - name: Lint
         run: npm run lint
+      - name: Headless News GUI
+        run: |
+          node node_modules/electron/install.js
+          BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/news-copy.test.cjs
       - name: Classifier quality checks
         run: |
           node scripts/check-classifier-v142.cjs
