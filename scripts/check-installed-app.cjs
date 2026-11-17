@@ -9,7 +9,7 @@ const { createHash } = require('node:crypto');
   if (!args.includes('--executable') || !args.includes('--report'))
     throw Error('Usage: --executable <installed-path> --report <json>');
   const suite = args.includes('--suite') ? get('--suite') : 'all';
-  if (!['all', 'classifier'].includes(suite)) throw Error('UNKNOWN_INSTALLED_TEST_SUITE');
+  if (!['all', 'classifier', 'tz14'].includes(suite)) throw Error('UNKNOWN_INSTALLED_TEST_SUITE');
   const executable = fs.realpathSync(get('--executable')),
     report = path.resolve(get('--report')),
     project = fs.realpathSync(path.resolve(__dirname, '..'));
@@ -18,14 +18,26 @@ const { createHash } = require('node:crypto');
   fs.mkdirSync(path.dirname(report), { recursive: true });
   const log = report + '.log';
   const stream = fs.createWriteStream(log, { flags: 'w', mode: 0o600 });
+  // TZ14 touches FP/BIO, Friends, Archive, Settings and phone copying.
+  // All other GUI modules were already checked against the unchanged PR #18.
+  const tz14Tests = [
+    'archive-actions', 'archive-v141', 'biography-v143', 'copy-all-sections',
+    'friends-bulk-copy', 'generator-bio', 'generator-phone-address',
+    'generator-picker-tz12', 'generator-v14', 'header-copy-removed',
+    'news-copy', 'settings-v14', 'ux-restoration', 'classifier-copy'
+  ].map((name) => `tests/ui/${name}.test.cjs`);
   const tests =
     suite === 'classifier'
       ? require('./classifier-qa-suite.cjs').classifierTests('ui')
-      : fs
-          .readdirSync(path.join(project, 'tests/ui'))
-          .filter((name) => name.endsWith('.test.cjs'))
-          .sort()
-          .map((name) => 'tests/ui/' + name);
+      : suite === 'tz14'
+        ? tz14Tests
+        : fs
+            .readdirSync(path.join(project, 'tests/ui'))
+            .filter((name) => name.endsWith('.test.cjs'))
+            .sort()
+            .map((name) => 'tests/ui/' + name);
+  if (tests.some((name) => !fs.existsSync(path.join(project, name))))
+    throw Error('MISSING_INSTALLED_APP_TEST');
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
     cwd: project,
     env: {
@@ -59,7 +71,9 @@ const { createHash } = require('node:crypto');
     scope:
       suite === 'classifier'
         ? 'Actual packaged executable outside checkout: all classifier and archive GUI tests, including TXT/CSV/TSV/JSON import, actual clipboard, manual assignment, export, archive and reset. Synthetic fixtures and controlled dialogs. Unrelated modules are outside this selective run; original customer-file acceptance, signing/notarization and real OS denial cases are separate gates.'
-        : 'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
+        : suite === 'tz14'
+          ? 'Actual installed macOS application: selected FP/BIO, Friends, Archive, Settings, phone-copy and unchanged News/Classifier GUI regressions, native clipboard and persistence. Other unchanged GUI modules have prior baseline acceptance; signing/notarization and customer-file acceptance are separate gates.'
+          : 'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
   };
   fs.writeFileSync(report, JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify(result, null, 2));
