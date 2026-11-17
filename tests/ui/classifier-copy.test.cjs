@@ -126,12 +126,8 @@ test(
     }
     assert.equal(text.split('\n').length, 52);
     assert.ok(!/FAKE_COOKIE|FAKE_TOKEN|FAKE_UA/.test(text));
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[data-action="classifier-export"]').first() })
-      .locator('summary')
-      .first()
-      .click();
+    assert.equal(await page.locator('#classifier-extra').count(), 0);
+    assert.ok(await page.locator('[data-action="classifier-export"]').first().isVisible());
     const destination = path.join(root, 'result.csv');
     await app.evaluate(({ dialog }, file) => {
       dialog.showSaveDialog = async () => ({ canceled: false, filePath: file });
