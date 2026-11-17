@@ -4,8 +4,12 @@ const { createHash } = require('node:crypto');
 const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
 const addressSupplement = require('../../../resources/generator/supplements/addresses-tz12.json');
 const {
-  expandCountry, syntheticAddresses, expandBioPool, expandStatusPool,
-  categoryPool, positionPool
+  expandCountry,
+  syntheticAddresses,
+  expandBioPool,
+  expandStatusPool,
+  categoryPool,
+  positionPool
 } = require('./pool-expansion.cjs');
 const { namingPreset, nameCount } = require('./naming.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
@@ -75,7 +79,8 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     throw Error('INVALID_PRESET');
   const baseCountry =
     dataset || JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
-  if (baseCountry.code !== country || baseCountry.nameGender !== 'female') throw Error('DATASET_INVALID');
+  if (baseCountry.code !== country || baseCountry.nameGender !== 'female')
+    throw Error('DATASET_INVALID');
   const c = dataset ? baseCountry : expandCountry(baseCountry);
   const t = JSON.parse(fs.readFileSync(path.join(root, `types/${type}.json`), 'utf8'));
   const o = settings.overrides || {};
@@ -88,7 +93,9 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...t,
     ...namingPreset(country, type, c),
     // Imported geography remains authoritative; bundled examples never cross into it.
-    addresses: dataset ? [] : [...addressSupplement.records[country], ...syntheticAddresses(baseCountry)],
+    addresses: dataset
+      ? []
+      : [...addressSupplement.records[country], ...syntheticAddresses(baseCountry)],
     addressDatasetId: dataset ? null : addressSupplement.id,
     bios: [
       ...t.bios[c.language],
