@@ -39,5 +39,5 @@ export const state = {
   },
   photos: [],
   friendsGeo: '',
-  checker: { input: '', rows: null, checking: null }
+  checker: { input: '', rows: null, checking: null, provider: 'direct' }
 };
