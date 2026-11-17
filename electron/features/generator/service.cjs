@@ -126,7 +126,10 @@ async function generateProfile(
       values.number = String(n).padStart(6, '0');
       store.set(`number:${p.country}`, n + 1);
     }
-    if (has('categories') && !values.categories) values.categories = p.categories;
+    if (has('categories') && !values.categories)
+      values.categories = p.categoryPool?.length
+        ? [...p.categories, pick(p.categoryPool)]
+        : p.categories;
     if (has('symbols') && values.symbols === undefined) values.symbols = p.symbols;
     for (const f of p.fieldOrder) if (values[f] === undefined) throw Error('INCOMPLETE_PROFILE');
     if (!r.used('name', values.name)) r.reserve('name', values.name, id);
