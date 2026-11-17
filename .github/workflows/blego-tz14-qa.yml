@@ -5,6 +5,10 @@ on:
     branches:
       - codex/blego-tz14-hotfix-ui-pools-20261117
 
+concurrency:
+  group: blego-tz14-source-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
