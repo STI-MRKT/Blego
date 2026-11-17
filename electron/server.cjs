@@ -147,7 +147,7 @@ async function speedTest({ signal, fetchImpl = fetch } = {}) {
   try {
     while (true) {
       combined.throwIfAborted();
-      const { done, value } = await require('./features/facebook/transport.cjs').withAbort(
+      const { done, value } = await require('./local/async.cjs').withAbort(
         reader.read(),
         combined
       );
