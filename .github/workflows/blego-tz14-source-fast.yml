@@ -34,6 +34,7 @@ jobs:
       - run: ./node_modules/.bin/prettier --write electron/features/generator/pool-expansion.cjs tests/integration/generator-tz12.test.cjs tests/integration/pool-registry-migration.test.cjs tests/ui/archive-actions.test.cjs tests/ui/generator-picker-tz12.test.cjs tests/ui/generator-bio.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/generator-tz12.test.cjs tests/unit/tz14-hotfix.test.cjs
       - name: Verify full unit/integration and targeted hotfix
         run: |
+          node --test tests/integration/generator-tz12.test.cjs
           npm run lint
           node --test tests/unit/tz14-hotfix.test.cjs
           npm run verify
