@@ -126,7 +126,7 @@ const isCountry = (value) =>
 const canonicalCountryWords = (value) =>
   String(value || '')
     .toLowerCase()
-    .replace(/[^\\p{L}\\p{M}]+/gu, ' ')
+    .replace(/[^\p{L}\p{M}]+/gu, ' ')
     .trim();
 const countryNameHints = new Map();
 for (const locale of ['en', 'ru']) {
@@ -140,7 +140,7 @@ for (const locale of ['en', 'ru']) {
   }
 }
 function countryFromFilename(filename) {
-  const name = canonicalCountryWords(String(filename || '').replace(/\\.[^.]+$/, ''));
+  const name = canonicalCountryWords(String(filename || '').replace(/\.[^.]+$/, ''));
   if (!name) return null;
   const wrapped = ` ${name} `;
   const matches = new Set();
