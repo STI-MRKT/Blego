@@ -1,4 +1,4 @@
-name: QA formatting and focused verification
+name: BLEGO classifier QA helper
 
 on:
   push:
@@ -9,22 +9,24 @@ permissions:
   contents: read
 
 jobs:
-  format:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: codex/blego-tz13-classifier
+          ref: codex/blego-tz13-multiformat-review-20261117
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
-      - name: Export formatter result
-        run: |
-          echo QA_FORMAT_BEGIN
-          ./node_modules/.bin/prettier shared/classifier-lexer.mjs | base64 -w 0
-          echo
-          echo QA_FORMAT_END
-      - name: Focused tests
+      - name: Focused multiformat and legacy TZ11
         run: node --test tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-v143.test.cjs tests/integration/classifier-v143.test.cjs
+      - name: Full classifier QA
+        run: npm run test:classifier
+      - name: Lint
+        run: npm run lint
+      - name: Quality gates
+        run: |
+          node scripts/check-classifier-v142.cjs
+          node scripts/check-classifier-v143.cjs /tmp/blego-quality.json
