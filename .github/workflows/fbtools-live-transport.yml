@@ -45,7 +45,7 @@ jobs:
                 source:row.source
               });
             }
-            const success = controls.every((x,i)=>results[i]?.uid===x.uid&&results[i]?.reasonCode===x.expected);
+            const success = controls.every((x)=>results.find((r)=>r.uid===x.uid)?.reasonCode===x.expected);
             const report={checkedAt:new Date().toISOString(),kind:'external-provider-real-network-no-mocks',controlInputs:controls,results,success};
             fs.writeFileSync('release/fbtools-live-transport.json',JSON.stringify(report,null,2)+'\n');
             console.log(JSON.stringify(report,null,2));
