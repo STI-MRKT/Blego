@@ -500,15 +500,11 @@ test(
     assert.equal(fp.biography, undefined);
     await saved(page, 'mainBio', 'Independent BIO before FP');
     await page.locator('[data-action="copy-model"][data-field="phone"]').click();
-    const { nationalPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
-    assert.equal(
-      await f.app.evaluate(({ clipboard }) => clipboard.readText()),
-      nationalPhoneForCopy(fp.fields.phone, fp.country)
-    );
+    const { formattedPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
+    const phoneForCopy = formattedPhoneForCopy(fp.fields.phone, fp.country);
+    assert.equal(await f.app.evaluate(({ clipboard }) => clipboard.readText()), phoneForCopy);
     await page.locator('[data-action="copy-model"][data-card="true"]').click();
-    assert.ok(
-      (await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(fp.fields.phone)
-    );
+    assert.ok((await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(phoneForCopy));
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent BIO before FP');
     const next = await generateBio(page, 'IT', 'Milano', 'model');
@@ -610,13 +606,14 @@ test(
       db.close();
       return { count, original };
     };
+    assert.equal(await page.getByText('Сохранённые BIO').count(), 0);
     for (let i = 0; i < 3; i++) {
-      await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-      await page.locator('[data-action="bio-history"]').click();
-      await page.locator('[data-action="bio-open"]').click();
-      await page.waitForFunction(
-        () => !document.querySelector('[data-action="bio-generate"]').disabled
-      );
+      const items = await page.evaluate(() => window.blego.biography({ action: 'history' }));
+      assert.equal(items.total, 1);
+      await page.evaluate((recordId) => window.blego.biography({ action: 'open', recordId }), items.items[0].id);
+      await page.reload();
+      await page.locator('[data-tab="bio"]').click();
+      await page.locator('#bio-mainBio').waitFor();
     }
     assert.deepEqual(readCounts(), { count: 0, original: json });
     await page.locator('#bio-mainBio').fill('New independent legacy edit');
@@ -625,10 +622,12 @@ test(
     assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
     await page.locator('[data-action="bio-clear"]').click();
     await page.waitForFunction(() => !document.querySelector('#bio-mainBio'));
-    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-    await page.locator('[data-action="bio-history"]').click();
-    assert.equal(await page.locator('#bio-history-record option').count(), 1);
-    await page.locator('[data-action="bio-open"]').click();
+    const history = await page.evaluate(() => window.blego.biography({ action: 'history' }));
+    assert.equal(history.total, 1);
+    assert.equal(await page.locator('[data-action="bio-open"]').count(), 0);
+    await page.evaluate((recordId) => window.blego.biography({ action: 'open', recordId }), history.items[0].id);
+    await page.reload();
+    await page.locator('[data-tab="bio"]').click();
     await page.locator('#bio-mainBio').waitFor();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'New independent legacy edit');
     assert.deepEqual(readCounts(), { count: 1, original: json });
@@ -655,10 +654,9 @@ test(
         return globalThis.bioOriginal(event, arg);
       });
     });
-    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-    await page.locator('[data-action="bio-history"]').click();
-    await page.locator('#bio-history-record').selectOption(gb.id);
-    await page.locator('[data-action="bio-open"]').click();
+    await page.evaluate((recordId) => window.blego.biography({ action: 'open', recordId }), gb.id);
+    await page.reload();
+    await page.locator('[data-tab="bio"]').click();
     await page.waitForFunction(
       () =>
         document.querySelector('#bio-country').value === 'GB' &&
