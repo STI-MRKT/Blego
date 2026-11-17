@@ -30,7 +30,9 @@ test('TZ12 adds >=200 actual unique names, BIOs and address records, retaining e
     const model = resolvePreset(country, 'model');
     assert.equal(model.namingStrategy, 'person_name');
     assert.equal(model.nameGender, 'female');
-    assert.ok(nameAt(model, model.first.length * model.last.length - 1).endsWith(' ' + model.last.at(-1)));
+    assert.ok(
+      nameAt(model, model.first.length * model.last.length - 1).endsWith(' ' + model.last.at(-1))
+    );
     const crypto = resolvePreset(country, 'crypto');
     assert.equal(crypto.namingStrategy, 'brand_name');
     assert.equal(crypto.nameGender, null);
