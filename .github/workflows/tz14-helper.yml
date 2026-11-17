@@ -22,11 +22,15 @@ jobs:
       - run: npm ci
       - name: Format changed files for commit
         run: |
-          for file in tests/ui/app.test.cjs tests/ui/generator-bio.test.cjs tests/ui/generator-picker-tz12.test.cjs scripts/tz14-pool-report.cjs tests/unit/biography-v141.test.cjs tests/unit/pool-catalog.test.cjs tests/integration/pool-registry-migration.test.cjs tests/integration/generator-tz12.test.cjs tests/unit/generator-tz12.test.cjs tests/ui/archive-actions.test.cjs tests/ui/ux-restoration.test.cjs; do
+          for file in tests/unit/tz14-hotfix.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
             echo "FORMAT_END:$file"
           done
+      - name: TZ14 contract tests and pool audit
+        run: |
+          node --test tests/unit/tz14-hotfix.test.cjs
+          node scripts/tz14-pool-report.cjs /tmp/blego-tz14-pool-report.json
       - name: Syntax check
         run: node scripts/check.cjs
