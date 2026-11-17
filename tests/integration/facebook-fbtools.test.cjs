@@ -76,11 +76,10 @@ test('FB.Tools invalid, verify and error never become DIE', async () => {
       ])
   });
   const { facebookPresentation } = await import('../../shared/facebook-presentation.mjs');
-  assert.deepEqual(rows.map((row) => facebookPresentation(row).status), [
-    'UNKNOWN',
-    'UNKNOWN',
-    'UNKNOWN'
-  ]);
+  assert.deepEqual(
+    rows.map((row) => facebookPresentation(row).status),
+    ['UNKNOWN', 'UNKNOWN', 'UNKNOWN']
+  );
 });
 
 test('FB.Tools does not trust a result associated with a mismatched origin', async () => {
@@ -114,15 +113,14 @@ test('FB.Tools malformed or partial NDJSON preserves only matched completed rows
     targets: targets(),
     runId: 'partial',
     fetchImpl: async () =>
-      new Response(
-        JSON.stringify(event(1, FIRST, 'valid')) + '\nthis is not json\n',
-        { headers: { 'content-type': 'application/x-ndjson' } }
-      )
+      new Response(JSON.stringify(event(1, FIRST, 'valid')) + '\nthis is not json\n', {
+        headers: { 'content-type': 'application/x-ndjson' }
+      })
   });
-  assert.deepEqual(rows.map((item) => item.reasonCode), [
-    'FBTOOLS_VALID',
-    'FBTOOLS_INVALID_STREAM'
-  ]);
+  assert.deepEqual(
+    rows.map((item) => item.reasonCode),
+    ['FBTOOLS_VALID', 'FBTOOLS_INVALID_STREAM']
+  );
 });
 
 test('FB.Tools unexpected content-type yields UNKNOWN for every item', async () => {
@@ -138,13 +136,12 @@ test('FB.Tools unprocessed items become UNKNOWN and duplicate result IDs do not 
   const rows = await collect({
     targets: targets(),
     runId: 'incomplete',
-    fetchImpl: async () =>
-      response([event(1, FIRST, 'valid'), event(1, FIRST, 'noexist')])
+    fetchImpl: async () => response([event(1, FIRST, 'valid'), event(1, FIRST, 'noexist')])
   });
-  assert.deepEqual(rows.map((item) => item.reasonCode), [
-    'FBTOOLS_VALID',
-    'FBTOOLS_INCOMPLETE'
-  ]);
+  assert.deepEqual(
+    rows.map((item) => item.reasonCode),
+    ['FBTOOLS_VALID', 'FBTOOLS_INCOMPLETE']
+  );
 });
 
 test('FB.Tools cancellation produces CANCELLED without calling the provider', async () => {
@@ -234,15 +231,11 @@ test('existing Facebook service dispatches opt-in FB.Tools provider while preser
   assert.equal(fbCalls, 1);
   assert.equal(directCalls, 0);
   const direct = [];
-  for await (const row of service.check({ targets: rows, runId: 'default' }))
-    direct.push(row);
+  for await (const row of service.check({ targets: rows, runId: 'default' })) direct.push(row);
   assert.equal(directCalls, 1);
   assert.equal(direct.length, 1);
-  await assert.rejects(
-    async () => {
-      for await (const row of service.check({ targets: rows, runId: 'bad', provider: 'arbitrary' }))
-        void row;
-    },
-    /FB_INPUT_INVALID/
-  );
+  await assert.rejects(async () => {
+    for await (const row of service.check({ targets: rows, runId: 'bad', provider: 'arbitrary' }))
+      void row;
+  }, /FB_INPUT_INVALID/);
 });
