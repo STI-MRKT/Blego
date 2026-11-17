@@ -119,7 +119,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime"
           ln -s "$GITHUB_WORKSPACE/build/metadata-runtime/darwin-$TARGET_ARCH" "$RUNNER_TEMP/blego-baseline-reference/build/metadata-runtime/darwin-$TARGET_ARCH"
       - name: Package baseline14 in the same environment
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           (cd "$RUNNER_TEMP/blego-baseline-reference" && npm run dist:mac -- --${{ env.TARGET_ARCH }} --dir)
           baseline_dir="mac-$TARGET_ARCH"
@@ -127,18 +127,18 @@ jobs:
           ditto "$RUNNER_TEMP/blego-baseline-reference/release/$baseline_dir/BLEGO.app" "$RUNNER_TEMP/BLEGO-baseline14.app"
           ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/Resources/app.asar"
       - name: Comparable manual metadata baseline and candidate
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           BLEGO_QA_PROJECT="$RUNNER_TEMP/blego-baseline-reference" node scripts/check-metadata-load.cjs release/metadata-load-baseline14.json
           node scripts/check-metadata-load.cjs release/metadata-load-candidate-manual.json
       - name: Licensed real high-resolution photograph comparison
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           curl --fail --location --retry 2 --max-time 90 --max-filesize 20971520 --output "$RUNNER_TEMP/Fronalpstock-original.jpg" https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg
           node scripts/check-real-photo.cjs "$RUNNER_TEMP/blego-baseline-reference" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-baseline14.json
           node scripts/check-real-photo.cjs "$GITHUB_WORKSPACE" "$RUNNER_TEMP/Fronalpstock-original.jpg" release/real-photo-candidate.json
       - name: Date and GEO native load acceptance
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: BLEGO_FOLDER_LOAD=1 node scripts/check-metadata-load.cjs release/metadata-load-darwin.json
       - name: Build unsigned DMG
         run: npm run dist:mac -- --${{ env.TARGET_ARCH }}
@@ -162,7 +162,7 @@ jobs:
             BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node --test --test-concurrency=1 tests/ui/news-copy.test.cjs | tee release/news-copy-installed-native.log
           fi
       - name: Installed photo batch and original UX comparison
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: |
           BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-batch-darwin.log
           BLEGO_GUI_FOLDER_COUNT=20 BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-metadata-ui-batch.cjs > release/metadata-ui-folder20-darwin.log
@@ -170,7 +170,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/blego-original-reference/node_modules"
           node scripts/check-ux-performance.cjs --original "$RUNNER_TEMP/blego-original-reference" --baseline "$RUNNER_TEMP/blego-baseline-reference" --baseline-executable "$RUNNER_TEMP/BLEGO-baseline14.app/Contents/MacOS/BLEGO" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/ux-performance-darwin.json
       - name: Bounded live public-service observations
-        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14' && env.QA_SPEC != 'tz14'
+        if: env.QA_SPEC != 'tz12' && env.QA_SPEC != 'tz13' && env.QA_SPEC != 'tz14'
         run: BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-public-services.cjs release/public-services-native.json
       - name: TZ12 source references and installed candidate visual evidence
         if: env.QA_SPEC == 'tz12'
