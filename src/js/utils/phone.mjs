@@ -11,24 +11,29 @@ const patterns = Object.freeze({
   GB: { dial: '44', groups: [4, 6] }
 });
 
+// BLEGO stores country-specific synthetic E.164 strings unchanged. The
+// 10-digit form is a user-facing representation, not an international dialable
+// number. A country may have 9 or 11 national digits: the display is
+// zero-padded or trimmed from the left to match the requested fixed mask.
 export function formatPhoneDisplay(value, country) {
   if (value == null) return '';
   if (typeof value !== 'string') return String(value);
   const rule = patterns[country];
   if (!rule) return value;
-  const expectedLength = rule.groups.reduce((total, size) => total + size, 0);
-  const match = new RegExp(`^\\+${rule.dial}\\d{${expectedLength}}$`);
-  if (!match.test(value)) return value;
-
-  const digits = value.slice(rule.dial.length + 1);
-  const parts = [];
-  let offset = 0;
-  for (const size of rule.groups) {
-    parts.push(digits.slice(offset, offset + size));
-    offset += size;
-  }
-  if (rule.areaCode) return `+${rule.dial} (${parts[0]}) ${parts[1]}-${parts[2]}`;
-  return `+${rule.dial} ${parts.join(' ')}`;
+  const size = rule.groups.reduce((total, n) => total + n, 0);
+  if (!new RegExp(`^\\\\+${rule.dial}\\\\d{${size}}$`).test(value)) return value;
+  return formatTenDigits(value.slice(rule.dial.length + 1));
+}
+function formatTenDigits(digits) {
+  const national = digits.padStart(10, '0').slice(-10);
+  return `${national.slice(0, 3)}-${national.slice(3, 6)}-${national.slice(6)}`;
+}
+export function formattedPhoneForCopy(value, country) {
+  const national = nationalPhoneForCopy(value, country);
+  const rule = patterns[country];
+  const size = rule.groups.reduce((total, n) => total + n, 0);
+  if (national.length !== size) throw Error('Номер не соответствует стране профиля');
+  return formatTenDigits(national);
 }
 
 // Strip only the known international prefix. Keep national digits as a string, including zeros.
