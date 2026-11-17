@@ -72,7 +72,8 @@ test(
           );
         assert.deepEqual(order, ['address', 'city', 'postalCode']);
         const shown = await page.locator('.field-phone .field-value').innerText();
-        assert.match(shown, /^\d{3}-\d{3}-\d{4}$/);
+        const { formatPhoneDisplay } = await import('../../src/js/utils/phone.mjs');
+        assert.equal(shown, formatPhoneDisplay(number, country));
         // A new country choice must not alter copying from the already displayed profile.
         await page.locator('[data-input="locale"]').selectOption(country === 'US' ? 'GB' : 'US');
         await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
