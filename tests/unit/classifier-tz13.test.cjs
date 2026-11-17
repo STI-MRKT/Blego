@@ -28,6 +28,63 @@ test('TZ13 horizontal tab label/value pairs protect separators, quotes and white
   assert.equal(result.records.length, 1);
   assertFields(result.records[0], fields);
 });
+test('TZ13 one-line labelled record tolerates an unpaired instruction and a profile URL as ID', async () => {
+  const profileUrl = 'https://www.facebook.com/profile.php?id=61500000000000';
+  const cookie = '[{"domain":".facebook.com","name":"c_user","value":"61500000000000"}]';
+  const text = [
+    'Login FB',
+    '61500000000000',
+    'Password',
+    'FAKEPASS01',
+    'Сервис входа на почту:',
+    'https://example.invalid',
+    'Email',
+    'demo.fr@example.invalid',
+    'Email password',
+    'FAKEMAILPASS1',
+    'Генерация кодов 2FA - OPEN LINK',
+    'https://example.invalid/2fa/FAKE',
+    'ID Account',
+    profileUrl,
+    'Date of Birth',
+    '01.02.1994',
+    'Token',
+    'EAAB_FAKE_TEST_ONLY',
+    'ИНСТРУКЦИЯ В ТЕЛЕГРАМ БОТЕ / INSTRUCTIONS - @example_bot',
+    'User-agent',
+    'Mozilla/5.0 (Synthetic Test)',
+    'Cookie',
+    cookie
+  ].join('\t');
+  const result = await classify(text);
+  assert.equal(result.records.length, 1);
+  const record = result.records[0];
+  assertFields(record, {
+    login: '61500000000000',
+    password: 'FAKEPASS01',
+    email: 'demo.fr@example.invalid',
+    emailPassword: 'FAKEMAILPASS1',
+    accountId: '61500000000000',
+    birthDate: '01.02.1994',
+    token: 'EAAB_FAKE_TEST_ONLY',
+    userAgent: 'Mozilla/5.0 (Synthetic Test)',
+    cookies: cookie
+  });
+  assert.equal(record.sourceRecord, text);
+  assert.equal(
+    record.sourceEntries.find((entry) => entry.header === 'ID Account').value,
+    profileUrl
+  );
+  assert.ok(record.unrecognized.some((entry) => entry.value === 'https://example.invalid'));
+  assert.ok(record.unrecognized.some((entry) => entry.value.includes('ИНСТРУКЦИЯ')));
+});
+test('TZ13 labelled Facebook profile URL yields its numeric ID without relying on cookies', async () => {
+  const url = 'https://www.facebook.com/profile.php?id=61500000000000';
+  const result = await classify(`Login FB\tsynthetic.fr\tID Account\t${url}`);
+  assert.equal(result.records[0].data.accountId, '61500000000000');
+  assert.equal(result.records[0].sourceEntries[1].value, url);
+  assert.equal(result.records[0].fieldSources.accountId[0].column, 'ID Account');
+});
 test('TZ13 instructions, URLs and unknown labels cannot shift or teach opaque credentials', async () => {
   const text = [
     'Instructions: synthetic fixture, do not sign in',

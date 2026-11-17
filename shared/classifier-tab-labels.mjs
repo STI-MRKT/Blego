@@ -118,18 +118,26 @@ export function tabLabelRecords(text, headerFor) {
       continue;
     }
     const cells = cellsOf(line);
-    const horizontal =
-      cells.length >= 4 &&
-      cells.length % 2 === 0 &&
-      cells.filter((_, index) => index % 2 === 0).every(labelShape) &&
-      cells.filter((_, index) => index % 2 === 0).filter((label) => headerFor(cleanLabel(label)))
-        .length >= 2;
+    const known = (cell) => Boolean(headerFor(cleanLabel(cell)));
+    const horizontal = cells.length >= 4 && known(cells[0]) && cells.filter(known).length >= 2;
     if (horizontal) {
+      const starts = [];
       let offset = line.start;
-      for (let j = 0; j < cells.length; j += 2) {
-        const valueStart = offset + cells[j].length + 1;
-        add(cleanLabel(cells[j]), valueStart, valueStart + cells[j + 1].length, offset, line.line);
-        offset = valueStart + cells[j + 1].length + 1;
+      for (const cell of cells) {
+        starts.push(offset);
+        offset += cell.length + 1;
+      }
+      for (let j = 0; j < cells.length;) {
+        const label = cleanLabel(cells[j]);
+        const nextIsLabel = j + 1 < cells.length && known(cells[j + 1]);
+        if ((known(cells[j]) || labelShape(cells[j])) && j + 1 < cells.length && !nextIsLabel) {
+          const valueStart = starts[j + 1];
+          add(label, valueStart, valueStart + cells[j + 1].length, starts[j], line.line);
+          j += 2;
+        } else {
+          add(null, starts[j], starts[j] + cells[j].length, starts[j], line.line);
+          j++;
+        }
       }
       continue;
     }

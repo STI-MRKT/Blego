@@ -112,3 +112,49 @@ test('TZ13 tab Cookie copy is exact and manual overrides retain confidential 2FA
     )
   );
 });
+
+test('TZ13 worker copies a one-line Facebook label record with an unpaired instruction', async (t) => {
+  const f = await fixture(t),
+    svc = f.classification;
+  const profileUrl = 'https://www.facebook.com/profile.php?id=61500000000000';
+  const text = [
+    'Login FB',
+    '61500000000000',
+    'Password',
+    'FAKEPASS01',
+    'Email',
+    'demo.fr@example.invalid',
+    'Email password',
+    'FAKEMAILPASS1',
+    'ID Account',
+    profileUrl,
+    'Date of Birth',
+    '01.02.1994',
+    'Token',
+    'EAAB_FAKE_TEST_ONLY',
+    'ИНСТРУКЦИЯ В ТЕЛЕГРАМ БОТЕ / INSTRUCTIONS - @example_bot',
+    'User-agent',
+    'Mozilla/5.0 (Synthetic Test)',
+    'Cookie',
+    '[{"name":"c_user","value":"61500000000000"}]'
+  ].join('\t');
+  const result = await svc.read({
+    bytes: Buffer.from(text),
+    originalName: 'synthetic.txt',
+    requestId: 'one-line-instruction'
+  });
+  assert.equal(svc.page(result.operationId).records.length, 1);
+  assert.equal(svc.cell(result.operationId, '1', 'password'), 'FAKEPASS01');
+  assert.equal(svc.cell(result.operationId, '1', 'emailPassword'), 'FAKEMAILPASS1');
+  assert.equal(svc.cell(result.operationId, '1', 'accountId'), '61500000000000');
+  assert.equal(svc.sourceText(result.operationId), text);
+  const row = await svc.exportText(result.operationId, { recordId: '1', format: 'tsv' });
+  const { parseText } = await import('../../shared/importer.mjs');
+  assert.deepEqual(parseText(row, 'tsv').records[0].raw.slice(1, 6), [
+    "'61500000000000",
+    'FAKEPASS01',
+    'FAKEMAILPASS1',
+    'demo.fr@example.invalid',
+    '01.02.1994'
+  ]);
+});

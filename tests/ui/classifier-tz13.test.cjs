@@ -156,5 +156,58 @@ test(
       assert.ok(!saved.resultText.includes(fields.token));
       await page.locator('[data-action="import-reset"]').click();
     }
+    const oneLine = [
+      'Login FB',
+      '61500000000000',
+      'Password',
+      'FAKEPASS01',
+      'Сервис входа на почту:',
+      'https://example.invalid',
+      'Email',
+      'demo.fr@example.invalid',
+      'Email password',
+      'FAKEMAILPASS1',
+      'Генерация кодов 2FA - OPEN LINK',
+      'https://example.invalid/2fa/FAKE',
+      'ID Account',
+      'https://www.facebook.com/profile.php?id=61500000000000',
+      'Date of Birth',
+      '01.02.1994',
+      'Token',
+      'EAAB_FAKE_TEST_ONLY',
+      'ИНСТРУКЦИЯ В ТЕЛЕГРАМ БОТЕ / INSTRUCTIONS - @example_bot',
+      'User-agent',
+      'Mozilla/5.0 (Synthetic Test)',
+      'Cookie',
+      '[{"name":"c_user","value":"61500000000000"}]'
+    ].join('\t');
+    await page.locator('#file-input').setInputFiles({
+      name: 'synthetic-one-line.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from(oneLine)
+    });
+    await page.locator('[data-classifier-status]').waitFor();
+    assert.equal(await page.locator('.classifier-table tbody tr').count(), 1);
+    for (const [field, expectedValue] of [
+      ['accountId', '61500000000000'],
+      ['password', 'FAKEPASS01'],
+      ['emailPassword', 'FAKEMAILPASS1'],
+      ['cookies', '[{"name":"c_user","value":"61500000000000"}]']
+    ]) {
+      await page
+        .locator(
+          `.classifier-table [data-action="${field === 'cookies' ? 'import-cookie-copy' : 'classifier-copy-cell'}"][data-row="1"][data-field="${field}"]`
+        )
+        .click();
+      await clip(expectedValue);
+    }
+    if (process.env.BLEGO_CAPTURE) {
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.waitForFunction(() => !document.querySelector('.toast'));
+      await page.screenshot({
+        path: path.join(process.env.BLEGO_CAPTURE, 'tz13-classifier-one-line.png'),
+        animations: 'disabled'
+      });
+    }
   }
 );

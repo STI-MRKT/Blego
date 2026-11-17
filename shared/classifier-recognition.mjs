@@ -154,18 +154,22 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
 export function recognizeLabelledValue(label, value, headerFor, validDate, emailValid) {
   const key = label ? headerFor(label, value) : null;
   if (!key) return { value };
+  const profile = key === 'accountId' ? profileIdentity(value) : null;
+  const normalized = Boolean(profile?.id && !profile.conflict);
+  const fieldValue = normalized ? profile.id : value;
   const invalid =
-    (['email', 'backupEmail'].includes(key) && value && !emailValid(value)) ||
-    (key === 'birthDate' && value && !validDate(value)) ||
-    (key === 'accountId' && value && !/^\d+$/.test(value)) ||
-    (key.endsWith('Url') && value && !safeUrl(value)) ||
-    (['limit', 'sentCount'].includes(key) && value && !/^\d+$/.test(value));
+    (['email', 'backupEmail'].includes(key) && fieldValue && !emailValid(fieldValue)) ||
+    (key === 'birthDate' && fieldValue && !validDate(fieldValue)) ||
+    (key === 'accountId' && fieldValue && !/^\d+$/.test(fieldValue)) ||
+    (key.endsWith('Url') && fieldValue && !safeUrl(fieldValue)) ||
+    (['limit', 'sentCount'].includes(key) && fieldValue && !/^\d+$/.test(fieldValue));
   return {
     key,
-    value,
+    value: fieldValue,
+    normalized,
     explicit: true,
     invalid: !!invalid,
-    cookie: key === 'cookies' ? cookieInfo(value.trim()) : null
+    cookie: key === 'cookies' ? cookieInfo(fieldValue.trim()) : null
   };
 }
 export function personName(value) {

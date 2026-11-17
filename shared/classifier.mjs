@@ -252,7 +252,7 @@ export function classifyRecords(parsed, options = {}) {
                 ? 4
                 : 1;
       const original = { ...entry, value, location: source.location };
-      if (parsed.structured && (!named || !found.explicit)) value = found.value;
+      if (parsed.structured && (!named || !found.explicit || found.normalized)) value = found.value;
       if (parsed.structured && found.invalidJSON) report('INVALID_COOKIE_JSON', entry.column);
       if (parsed.structured && found.invalid && !rowMapped && !mapped) {
         report('INVALID_FIELD', entry.column);

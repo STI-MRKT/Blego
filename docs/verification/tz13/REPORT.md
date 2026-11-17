@@ -3,6 +3,28 @@
 Candidate: **BLEGO 1.4.5 QA**, branch `codex/blego-tz13-classifier`.
 Base: `35226e5a1a071eb534408641b63a922915840caf` (verified TZ12 product code).
 
+## Follow-up: supplied one-line structure (17 November 2026)
+
+A synthetic example supplied after the initial TZ13 candidate revealed a real
+remaining defect: an unpaired instruction in a horizontal tab sequence caused
+the whole line to be assigned to `Login FB`. Also, `ID Account` with a Facebook
+`profile.php?id=...` URL was rejected as a nonnumeric ID. The horizontal parser
+now locates known labels independently of pair parity, retains unknown and
+unpaired cells for review, and binds each known field to its immediate value.
+For a labelled Facebook profile URL with one unambiguous numeric `id`, the ID
+column receives that number while `sourceEntries` and `sourceRecord` retain the
+literal URL. Conflicting or non-Facebook URLs are not converted to an ID.
+
+The new one-line fixture contains only fake credentials and `example.invalid`.
+It verifies independent account/email passwords, email, birth date, token,
+User-Agent, cookie, raw source and an instruction with no paired value. Worker
+integration checks cell copying and seven-field export; Electron GUI checks
+real clipboard values and captures `gui/tz13-classifier-one-line.png`.
+Linux source scope: 19/19 selected files PASS, no skips; lint and v142/v143
+quality gates PASS; focused GUI PASS. Native Mac acceptance for this follow-up
+requires a new build SHA. The previous installed Mac result for
+`9597a1895e8359de574378ff07a442877e600bab` does not validate this patch.
+
 ## Change and boundaries
 
 Explicit TXT `label<TAB>value` records now bind labels to literal payloads before
