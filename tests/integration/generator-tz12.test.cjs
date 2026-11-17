@@ -54,7 +54,135 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
           candidate.city === profile.fields.city &&
           candidate.postal === profile.fields.postal
       );
-      assert.ok(row, 'Address, city and postal must belong to one synthetic tuple');
+      const fallback =
+        preset.places.some(
+          (place) =>
+            place.city === profile.fields.city && place.postal === profile.fields.postal
+        ) &&
+        preset.streets.some((street) =>
+          new RegExp('^' + street.replace(/[.*+?^${}()|[\]\\]/g, '\\\\      assert.ok(row, 'Address, city and postal must belong to one synthetic tuple');') + ' [0-9]+
+      assert.ok(
+        preset.bios.some(
+          (bio) =>
+            require('../../electron/features/generator/biography.cjs').pageBio(bio, type) ===
+            profile.fields.bio
+        ),
+        'BIO must come from its own localized pool'
+      );
+      if (row) {
+        assert.equal(profile.addressProvenance.kind, 'synthetic');
+        assert.equal(profile.addressProvenance.datasetId, preset.addressDatasetId);
+      } else {
+        assert.equal(profile.addressProvenance, undefined);
+      }
+      assert.ok(profile.fields.email.endsWith('@dayrep.com'));
+      assert.match(
+        profile.fields.phone,
+        new RegExp(`^\\+${preset.phonePrefix}\\d{${preset.phoneDigits}}$`)
+      );
+      if (type !== 'model') assert.ok(preset.brandNames.includes(profile.fields.name));
+      else assert.ok(profile.fields.name.endsWith(' ' + preset.last.at(-1)));
+      assert.equal(profile.nameGender, type === 'model' ? 'female' : null);
+      results.push(profile);
+    }
+  assert.equal(new Set(results.map((p) => p.fields.phone)).size, results.length);
+  assert.equal(new Set(results.map((p) => p.fields.email)).size, results.length);
+  const reopened = await openStore(store.root);
+  try {
+    for (const profile of results) {
+      const row = reopened.db
+        .prepare('SELECT profile FROM requests WHERE request_id=?')
+        .get(`new-${profile.country}-${profile.type}`);
+      assert.deepEqual(JSON.parse(row.profile), profile);
+    }
+  } finally {
+    reopened.close();
+  }
+  mock.restoreAll();
+  for (const file of ['service', 'sources', 'naming'])
+    delete require.cache[require.resolve(`../../electron/features/generator/${file}.cjs`)];
+});
+
+test(
+  'TZ12 100 and 1000 profile runs preserve contacts, history and explicit bulk-mode rules; strict exhaustion stays finite',
+  { timeout: 120000 },
+  async (t) => {
+    const { generateProfile } = require('../../electron/features/generator/service.cjs');
+    const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
+    const { nameCount } = require('../../electron/features/generator/naming.cjs');
+    const store = await fixture(t);
+    const profiles = [],
+      timings = [],
+      checkpoints = [];
+    for (let i = 0; i < 1000; i++) {
+      const country = countries[i % countries.length],
+        type = types[Math.floor(i / countries.length) % types.length];
+      const start = performance.now();
+      const profile = await generateProfile(
+        { country, type, requestId: `bulk-${i}` },
+        { store, settings: { bulkMode: true, bulkConsent: true } }
+      );
+      timings.push(performance.now() - start);
+      profiles.push(profile);
+      for (const field of ['address', 'city', 'postalCode', 'bio', 'name'])
+        assert.ok(profile.fields[field]);
+      assert.ok(profile.fields.email.endsWith('@dayrep.com'));
+      if (i === 99 || i === 999)
+        checkpoints.push({ count: i + 1, elapsedMs: timings.reduce((a, b) => a + b, 0) });
+    }
+    for (const field of ['phone', 'email', 'handle', 'name'])
+      assert.equal(new Set(profiles.map((p) => p.fields[field])).size, 1000, field);
+    assert.equal(store.db.prepare('SELECT COUNT(*) AS n FROM requests').get().n, 1000);
+    const retry = await generateProfile(
+      { country: 'BR', type: 'model', requestId: 'bulk-0' },
+      { store, settings: { bulkMode: true, bulkConsent: true } }
+    );
+    assert.deepEqual(retry, profiles[0]);
+    const strict = await fixture(t);
+    let count = 0,
+      error;
+    try {
+      for (; count < 100; count++)
+        await generateProfile(
+          { country: 'GB', type: 'model', requestId: `strict-${count}` },
+          { store: strict, settings: {} }
+        );
+    } catch (caught) {
+      error = caught;
+    }
+    assert.equal(error?.code, 'POOL_EXHAUSTED');
+    assert.equal(
+      count,
+      6,
+      'GB still has six unique postal values; address examples do not bypass exhaustion'
+    );
+    assert.equal(strict.db.prepare('SELECT COUNT(*) AS n FROM requests').get().n, count);
+    const sorted = [...timings].sort((a, b) => a - b);
+    const result = {
+      checkpoints,
+      uniqueContacts: 1000,
+      strictProfiles: count,
+      strictError: error.code,
+      p50Ms: sorted[500],
+      p95Ms: sorted[950],
+      maxMs: sorted.at(-1),
+      nameCapacity: nameCount(resolvePreset('GB', 'model'))
+    };
+    if (process.env.BLEGO_CAPTURE) {
+      fs.mkdirSync(process.env.BLEGO_CAPTURE, { recursive: true });
+      fs.writeFileSync(
+        path.join(process.env.BLEGO_CAPTURE, 'tz12-generation.json'),
+        JSON.stringify(result, null, 2) + '\n'
+      );
+    }
+    t.diagnostic(JSON.stringify(result));
+  }
+);
+).test(
+            profile.fields.address
+          )
+        );
+      assert.ok(row || fallback, 'Address must be a paired example or a street in a known city');
       assert.ok(
         preset.bios.some(
           (bio) =>
