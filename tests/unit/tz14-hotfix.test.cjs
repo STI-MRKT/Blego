@@ -40,18 +40,18 @@ test('TZ14 all 24 presets expand safe pools without rewriting verified cities', 
   }
 });
 
-test('TZ14 phones show/copy fixed mask, retain leading zero and preserve stored E164', async () => {
+test('TZ16 phone display/copy use country masks, retain trunk and preserve stored E164', async () => {
   const { formatPhoneDisplay, formattedPhoneForCopy } =
     await import('../../src/js/utils/phone.mjs');
   for (const [country, stored, displayed] of [
     ['US', '+13025780387', '302-578-0387'],
-    ['BR', '+5511900000000', '190-000-0000'],
-    ['FR', '+33600000000', '060-000-0000'],
-    ['PL', '+48500000000', '050-000-0000']
+    ['BR', '+5511900000000', '(11) 90000-0000'],
+    ['FR', '+33600000000', '06 00 00 00 00'],
+    ['PL', '+48500000000', '50 000 00 00']
   ]) {
     assert.equal(formatPhoneDisplay(stored, country), displayed);
     assert.equal(formattedPhoneForCopy(stored, country), displayed);
-    assert.match(displayed, /^\d{3}-\d{3}-\d{4}$/);
+    assert.ok(/^[0-9 ()-]+$/.test(displayed));
     assert.ok(stored.startsWith('+'));
   }
 });
@@ -123,7 +123,7 @@ test('TZ14 changed CSS stays scoped to generator/BIO and Friends and preserves N
   const css = fs.readFileSync(path.join(__dirname, '../../src/css/ux.css'), 'utf8');
   assert.match(css, /\.ux-generator \.generator-tabs\s*\{margin-bottom:18px\}/);
   assert.match(css, /\.friends-copy-actions\s*\{margin-bottom:18px/);
-  assert.match(css, /\.friend-card>details>summary/);
+  assert.match(css, /\.fp-friend-card/);
   const { state } = await import('../../src/js/state.js');
   const { newsBlockHTML } = await import('../../src/js/ui/news.js');
   state.settings.newsEnabled = true;
