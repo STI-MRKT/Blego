@@ -29,9 +29,15 @@ test('TZ12 adds >=200 actual unique names, BIOs and address records, retaining e
     );
     for (const type of ['model', 'crypto']) {
       const p = resolvePreset(country, type);
-      assert.equal(p.namingStrategy, 'person_name');
-      assert.equal(p.nameGender, 'female');
-      assert.ok(nameAt(p, p.first.length * p.last.length - 1).endsWith(' ' + p.last.at(-1)));
+      if (type === 'crypto') {
+        assert.equal(p.namingStrategy, 'brand_name');
+        assert.equal(p.nameGender, null);
+        assert.ok(p.brandNames.includes(nameAt(p, p.brandNames.length - 1)));
+      } else {
+        assert.equal(p.namingStrategy, 'person_name');
+        assert.equal(p.nameGender, 'female');
+        assert.ok(nameAt(p, p.first.length * p.last.length - 1).endsWith(' ' + p.last.at(-1)));
+      }
     }
   }
   assert.equal(result.tech.added, 96);
@@ -73,9 +79,9 @@ test('TZ12 synthetic addresses preserve exact source city/postal pairs and natio
   };
   for (const country of countries) {
     const p = resolvePreset(country, 'model');
-    assert.equal(p.addresses.length, 25);
-    assert.deepEqual(p.addresses, after.addresses[country]);
-    assert.equal(new Set(p.addresses.map((row) => normalize(JSON.stringify(row)))).size, 25);
+    assert.equal(p.addresses.length, 175);
+    assert.deepEqual(p.addresses.slice(0, 25), after.addresses[country]);
+    assert.equal(new Set(p.addresses.map((row) => normalize(JSON.stringify(row)))).size, 175);
     for (const row of p.addresses) {
       assert.ok(patterns[country].test(row.postal), `${country}:${row.postal}`);
       assert.ok(
