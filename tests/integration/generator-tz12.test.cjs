@@ -34,7 +34,7 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         : preset.type === 'crypto'
           ? 40 + countries.indexOf(preset.country)
           : (preset.first.length - 1) * preset.last.length + preset.last.length - 1;
-    return preset?.type === 'crypto' ? Math.min(max - 1, 40 + countries.indexOf(preset.country)) : max - 1;
+    return max - 1;
   });
   const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
   delete require.cache[require.resolve('../../electron/features/generator/service.cjs')];
