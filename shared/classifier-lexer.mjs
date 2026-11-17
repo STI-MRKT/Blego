@@ -145,8 +145,7 @@ export function structuredRecords(text, options = {}) {
   for (let i = 0; i < text.length; i++) {
     // Long divider lines separate account data from ancillary notes. Flush the
     // preceding record first; the delimiter itself is never a field or record.
-    if ((i === 0 || text[i - 1] === '\n' || text[i - 1] === '\r') &&
-        !depth.length && !quoteStart) {
+    if ((i === 0 || text[i - 1] === '\n' || text[i - 1] === '\r') && !depth.length && !quoteStart) {
       const boundary = /^[ \t]*(?:={8,}|-{8,})[ \t]*(?:\r\n|\r|\n|$)/.exec(text.slice(i, i + 512));
       if (boundary) {
         const after = i + boundary[0].length;
