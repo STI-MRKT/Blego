@@ -16,11 +16,22 @@ test('TZ14 BIO editor has no institution chooser, disclaimer or saved-history pa
   state.generatorTab = 'bio';
   state.bio = { id: 'synthetic' };
   state.bioEditor = {
-    values: Object.fromEntries([
-      'residence', 'birthplace', 'employer', 'employerCity', 'position',
-      'university', 'universityCity', 'school', 'schoolCity', 'mainBio'
-    ].map((name) => [name, 'Synthetic value'])),
-    institutions: [], dirty: false
+    values: Object.fromEntries(
+      [
+        'residence',
+        'birthplace',
+        'employer',
+        'employerCity',
+        'position',
+        'university',
+        'universityCity',
+        'school',
+        'schoolCity',
+        'mainBio'
+      ].map((name) => [name, 'Synthetic value'])
+    ),
+    institutions: [],
+    dirty: false
   };
   state.bioHistory = { items: [], total: 0, offset: 0, limit: 50 };
   const markup = biographyHTML();
@@ -60,8 +71,7 @@ test('TZ14 Settings removes advanced panel and keeps finite repeats on, contacts
   const p = resolvePreset('US', 'tech', saved);
   for (const key of ['bio', 'status', 'postalCode', 'address', 'number'])
     assert.ok(p.allowRepeats.includes(key), key);
-  for (const key of ['phone', 'email', 'handle'])
-    assert.ok(!p.allowRepeats.includes(key), key);
+  for (const key of ['phone', 'email', 'handle']) assert.ok(!p.allowRepeats.includes(key), key);
 });
 
 test('TZ14 bundled country first/last and synthetic address pools each expand by 160', () => {
@@ -70,10 +80,19 @@ test('TZ14 bundled country first/last and synthetic address pools each expand by
     const p = resolvePreset(country, 'model', {});
     assert.equal(p.first.length, raw.first.length + EXTRA, country + ':first');
     assert.equal(p.last.length, raw.last.length + EXTRA, country + ':last');
-    assert.equal(p.addresses.length, require('../../resources/generator/supplements/addresses-tz12.json').records[country].length + EXTRA, country + ':addresses');
+    assert.equal(
+      p.addresses.length,
+      require('../../resources/generator/supplements/addresses-tz12.json').records[country].length +
+        EXTRA,
+      country + ':addresses'
+    );
     for (const field of ['first', 'last', 'addresses']) {
-      const values = p[field].map((x) => typeof x === 'string' ? x : JSON.stringify(x));
-      assert.equal(new Set(values.map((x) => x.toLowerCase())).size, values.length, country + ':' + field);
+      const values = p[field].map((x) => (typeof x === 'string' ? x : JSON.stringify(x)));
+      assert.equal(
+        new Set(values.map((x) => x.toLowerCase())).size,
+        values.length,
+        country + ':' + field
+      );
     }
   }
 });
@@ -81,7 +100,9 @@ test('TZ14 bundled country first/last and synthetic address pools each expand by
 test('TZ14 every localized type has 160 additional BIOs and statuses', () => {
   const supplement = require('../../resources/generator/supplements/bios-v14.json');
   for (const country of countries) {
-    const lang = JSON.parse(fs.readFileSync(path.join(root, 'countries', country + '.json'))).language;
+    const lang = JSON.parse(
+      fs.readFileSync(path.join(root, 'countries', country + '.json'))
+    ).language;
     for (const type of types) {
       const raw = require('../../resources/generator/types/' + type + '.json');
       const p = resolvePreset(country, type, {});
