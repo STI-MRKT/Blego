@@ -126,6 +126,11 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
   if (key === 'twoFactorUrl' && normalize(m?.[1] || '') === '2fa' && !safeUrl(value))
     key = 'twoFactorCode';
   if (key) {
+    if (key === 'accountId') {
+      const profile = profileIdentity(value);
+      if (profile?.id && !profile.conflict)
+        return { key, value: profile.id, explicit, normalized: true, invalid: false };
+    }
     const invalid =
       (['email', 'backupEmail'].includes(key) && value && !emailValid(value)) ||
       (key === 'birthDate' && value && !validDate(value)) ||
