@@ -1,4 +1,5 @@
 name: BLEGO TZ14 isolated tests and formatter
+# rerun with current source, full history and corrected TZ14 pool tests
 on:
   push:
     branches:
