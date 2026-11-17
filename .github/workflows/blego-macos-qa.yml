@@ -185,6 +185,9 @@ jobs:
           node scripts/tz12-dictionary-report.cjs release/tz12-dictionary-counts.json
           node scripts/benchmark-generator-tz12.cjs "$RUNNER_TEMP/blego-baseline-reference" release/tz12-performance-incoming.json
           node scripts/benchmark-generator-tz12.cjs "$GITHUB_WORKSPACE" release/tz12-performance-candidate.json
+      - name: Record TZ14 dictionary audit
+        if: env.QA_SPEC == 'tz14'
+        run: node scripts/tz14-pool-report.cjs release/tz14-dictionary-counts.json
       - name: Record checksums
         run: |
           (cd release && shasum -a 256 *.dmg) > release/SHA256SUMS
@@ -223,6 +226,7 @@ jobs:
             release/classifier-quality-native.json
             release/classifier-quality-v143-native.json
             release/tz12-*.json
+            release/tz14-*.json
             release/tz12-visual/
             release/tz11-*-clipboard.json
             release/tz10-*-clipboard.json
