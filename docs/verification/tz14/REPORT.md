@@ -24,3 +24,10 @@ Source branch: `codex/blego-tz14-hotfix-20261117`, based on verified BLEGO 1.4.5
 - Selective changes outside News and Classifier. No training, cross-account parsing, or new Facebook Checker integration.
 
 Developer ID signing and Apple notarization are not enabled. Manual acceptance on the owner's Mac remains required.
+
+## TZ14 follow-up QA (2026-11-17)
+
+- Four original macOS GUI failures addressed: archive sort assumption removed, three phone-copy contracts updated.
+- Additional archive full-copy GUI test updated to use unsorted history after removal of the sorting interface.
+- Focused Electron GUI gate passed on Linux with native metadata runtime, run [44079972037](https://github.com/STI-MRKT/Blego/actions/runs/44079972037).
+- Repeat installed native macOS ARM64 acceptance is required at the head of this branch. Preserve PR as draft; do not publish a release before installation ZIP and SHA-256 gates pass.
