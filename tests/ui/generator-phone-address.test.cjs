@@ -78,6 +78,7 @@ test(
         await page.locator('[data-input="locale"]').selectOption(country === 'US' ? 'GB' : 'US');
         await page.getByRole('button', { name: 'Copy phone', exact: true }).click();
         await clip(shown);
+        assert.equal(await page.locator('.field-phone.copy-feedback').count(), 1);
         await page.getByText('Номер скопирован', { exact: true }).last().waitFor();
         for (const field of ['address', 'city', 'postalCode']) {
           await page.locator(`.demo-right [data-field="${field}"]`).click();
