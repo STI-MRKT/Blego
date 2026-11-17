@@ -12,3 +12,7 @@
 
 ## Acceptance criteria
 Installed Mac app must pass selected GUI regression suite `tz15`, native ExifTool read/write/readback, classifier quality checks and ZIP+DMG SHA-256. A live public control request to check.fb.tools is recorded separately because vendor results and access can change independently of application code.
+
+## Follow-up native QA
+
+The first installed macOS ARM64 run [44092982608](https://github.com/STI-MRKT/Blego/actions/runs/44092982608) completed native ExifTool and full verification and passed 20 of 21 scoped GUI tests. One legacy unified-copy GUI fixture still expected the retired direct-provider label `LOGIN_REQUIRED`; the accepted FB.Tools-only implementation intentionally shows `LIVE` in that controlled fixture. The assertion was updated, with no changes to runtime code. Re-run installed-app acceptance on this candidate before installer publication.
