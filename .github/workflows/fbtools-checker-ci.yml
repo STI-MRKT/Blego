@@ -28,8 +28,8 @@ jobs:
       - name: Capture formatted sources for review
         if: failure()
         run: |
-          ./node_modules/.bin/prettier --write electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs tests/ui/facebook-flow.test.cjs tests/ui/facebook-v14.test.cjs
-          for f in electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs tests/ui/facebook-flow.test.cjs tests/ui/facebook-v14.test.cjs; do
+          ./node_modules/.bin/prettier --write electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs tests/ui/facebook-flow.test.cjs tests/ui/facebook-v14.test.cjs scripts/check-fbtools-native.cjs
+          for f in electron/features/facebook/fbtools.cjs shared/facebook-presentation.mjs tests/integration/facebook-fbtools.test.cjs tests/ui/facebook-flow.test.cjs tests/ui/facebook-v14.test.cjs scripts/check-fbtools-native.cjs; do
             echo "BLEGO_FORMATTED_BEGIN:$f"
             base64 -w0 "$f"
             echo
