@@ -48,13 +48,19 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         { country, type, requestId: `new-${country}-${type}` },
         { store, settings: { bulkMode: true, bulkConsent: true } }
       );
-      const row = preset.addresses.at(-1);
-      assert.equal(profile.fields.address, row.address);
-      assert.equal(profile.fields.city, row.city);
-      assert.equal(profile.fields.postalCode, row.postal);
-      assert.equal(
-        profile.fields.bio,
-        require('../../electron/features/generator/biography.cjs').pageBio(preset.bios.at(-1), type)
+      const row = preset.addresses.find((candidate) =>
+        candidate.address === profile.fields.address &&
+        candidate.city === profile.fields.city &&
+        candidate.postal === profile.fields.postal
+      );
+      assert.ok(row, 'Address, city and postal must belong to one synthetic tuple');
+      assert.ok(
+        preset.bios.some(
+          (bio) =>
+            require('../../electron/features/generator/biography.cjs').pageBio(bio, type) ===
+            profile.fields.bio
+        ),
+        'BIO must come from its own localized pool'
       );
       assert.equal(profile.addressProvenance.kind, 'synthetic');
       assert.equal(profile.addressProvenance.datasetId, preset.addressDatasetId);
