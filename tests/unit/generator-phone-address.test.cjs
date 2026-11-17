@@ -18,9 +18,14 @@ test('adjacent phone copy always returns XXX-XXX-XXXX and rejects malformed inpu
     assert.throws(() => nationalPhoneForCopy(`${LOCALES[country].dial} 000123`, country));
   }
   for (const [number, country] of [
-    ['+447700900123', 'US'], ['+12025550199', 'XX'], ['+1', 'US'],
-    ['2025550199', 'US'], ['+1 202 ext99', 'US'], [null, 'BR']
-  ]) assert.throws(() => nationalPhoneForCopy(number, country));
+    ['+447700900123', 'US'],
+    ['+12025550199', 'XX'],
+    ['+1', 'US'],
+    ['2025550199', 'US'],
+    ['+1 202 ext99', 'US'],
+    [null, 'BR']
+  ])
+    assert.throws(() => nationalPhoneForCopy(number, country));
 });
 test('address display order is address/city/postalCode for all 24 presets without changing saved field order or values', async () => {
   const { state } = await import('../../src/js/state.js'),
