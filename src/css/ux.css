@@ -239,3 +239,45 @@
 .classifier-page .classifier-inline-fields>.head-actions{padding:10px 12px;flex-wrap:wrap;gap:10px}
 .classifier-page .classifier-inline-fields>.head-actions>.fl{min-width:min(190px,100%);flex:1}
 .classifier-page .classifier-inline-fields>.btn{margin:0 12px 12px}
+
+/* TZ16 / FP visual vocabulary for Friends and small screens. */
+.friends-grid{grid-template-columns:repeat(auto-fill,minmax(min(232px,100%),1fr));gap:14px;align-items:stretch}
+.fp-friend-card{
+  min-width:0;min-height:278px;padding:18px 18px 16px;gap:10px;
+  border-color:var(--border-2);border-radius:16px;
+  background:radial-gradient(270px 185px at 13% 0%,var(--accent-soft),transparent 74%),var(--panel-2);
+  box-shadow:var(--shadow-sm);
+}
+.fp-friend-card .friend-top{align-items:flex-start}
+.fp-friend-card .avatar.xl{flex-shrink:0;margin-bottom:6px}
+.fp-friend-card .friend-name{font-size:17px;line-height:1.3;font-weight:670;letter-spacing:-.02em;overflow-wrap:anywhere}
+.fp-friend-card .friend-handle{font-size:12px;color:var(--muted);white-space:normal;overflow-wrap:anywhere;line-height:1.45}
+.fp-friend-card .friend-tags{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
+.fp-friend-card .friend-tags .pill{max-width:100%;overflow-wrap:anywhere;white-space:normal}
+.fp-friend-card .friend-note{color:var(--muted);font-size:12px;line-height:1.55;margin:0;overflow-wrap:anywhere}
+.fp-friend-card .friend-actions{margin-top:auto;display:flex;gap:8px;align-items:stretch}
+.fp-friend-card .friend-actions>.btn:last-child{min-width:42px;min-height:38px;flex-shrink:0}
+.fp-friend-card .friend-link{flex:1;min-width:0;min-height:38px;margin-top:0}
+.friends-count{white-space:nowrap}
+.friends-copy-actions{flex-wrap:wrap;gap:10px}
+.friends-copy-actions>.btn{white-space:nowrap}
+.checker-actions>.btn,.checker-actions #checker-count{white-space:nowrap;overflow-wrap:normal;word-break:normal}
+.checker-actions>.btn{min-width:90px;min-height:38px}
+.checker-actions [style*="flex:1"]{min-width:0}
+@media(max-width:640px){
+  .checker-actions{gap:8px;align-items:center}
+  .checker-actions .checker-source{flex:1 0 100%}
+  .checker-actions [style*="flex:1"]{display:none}
+  .checker-actions .btn{flex:0 0 auto;min-width:0;padding:0 12px}
+  .checker-actions .btn-primary{margin-left:auto;min-width:104px;white-space:nowrap}
+  .friends-grid{grid-template-columns:repeat(auto-fit,minmax(min(224px,100%),1fr))}
+  .fp-friend-card{min-height:238px}
+}
+/* Copy feedback: scoped to the clicked value/card; never changes actual data. */
+.copy-feedback{
+  outline:1.5px solid var(--accent)!important;outline-offset:1px;
+  box-shadow:inset 0 0 0 1px var(--accent-ring),0 0 0 2px var(--accent-soft);
+  background-color:var(--accent-soft);
+  transition:background-color .18s,box-shadow .18s;
+}
+button.copy-feedback{color:var(--accent)}
