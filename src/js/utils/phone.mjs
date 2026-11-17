@@ -11,29 +11,49 @@ const patterns = Object.freeze({
   GB: { dial: '44', groups: [4, 6] }
 });
 
-// User-facing 10-digit synthetic number. Persisted E.164 stays unchanged.
+// Local display follows Fake Name Generator country-specific conventions.
+// Existing canonical E.164-style values remain immutable for history/uniqueness.
+function formatNational(national, country) {
+  switch (country) {
+    case 'US':
+      return `${national.slice(0, 3)}-${national.slice(3, 6)}-${national.slice(6)}`;
+    case 'BR':
+      return `(${national.slice(0, 2)}) ${national.slice(2, 7)}-${national.slice(7)}`;
+    case 'FR': {
+      const local = '0' + national;
+      return local.match(/.{1,2}/g).join(' ');
+    }
+    case 'PL':
+      return `${national.slice(0, 2)} ${national.slice(2, 5)} ${national.slice(5, 7)} ${national.slice(7)}`;
+    case 'DE':
+      return `0${national.slice(0, 3)} ${national.slice(3, 6)} ${national.slice(6)}`;
+    case 'ES':
+      return `${national.slice(0, 3)} ${national.slice(3, 6)} ${national.slice(6)}`;
+    case 'IT':
+      return `${national.slice(0, 3)} ${national.slice(3, 6)} ${national.slice(6)}`;
+    case 'GB':
+      return `0${national.slice(0, 4)} ${national.slice(4)}`;
+    default:
+      return national;
+  }
+}
+
 export function formatPhoneDisplay(value, country) {
   if (value == null) return '';
   if (typeof value !== 'string') return String(value);
-  const rule = patterns[country];
-  if (!rule || !value.startsWith('+' + rule.dial)) return value;
-  const national = value.slice(rule.dial.length + 1);
-  const size = rule.groups.reduce((total, n) => total + n, 0);
-  if (national.length !== size || !/^\d+$/.test(national)) return value;
-  return formatTenDigits(national);
+  try {
+    return formattedPhoneForCopy(value, country);
+  } catch {
+    // Leave unexpected legacy/imported numbers unchanged instead of truncating.
+    return value;
+  }
 }
-
-function formatTenDigits(value) {
-  const digits = value.padStart(10, '0').slice(-10);
-  return digits.slice(0, 3) + '-' + digits.slice(3, 6) + '-' + digits.slice(6);
-}
-
 export function formattedPhoneForCopy(value, country) {
   const national = nationalPhoneForCopy(value, country);
   const rule = patterns[country];
   const size = rule.groups.reduce((total, n) => total + n, 0);
   if (national.length !== size) throw Error('Номер не соответствует стране профиля');
-  return formatTenDigits(national);
+  return formatNational(national, country);
 }
 
 // Strip only the known international prefix. Keep national digits as a string, including zeros.
