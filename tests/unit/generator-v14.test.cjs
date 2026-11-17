@@ -61,7 +61,7 @@ test('authored pools supplement each person category by 256 new female country-s
         // Crypto is a themed page/brand strategy like Tech from TZ14.
         assert.equal(p.namingStrategy, 'brand_name');
         assert.equal(p.nameGender, null);
-        assert.equal(p.brandNames.length, 200);
+        assert.equal(p.brandNames.length, 400);
       }
       for (const name of extras) {
         assert.ok(original.first.some((f) => name.startsWith(f + ' ')));
