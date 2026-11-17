@@ -75,17 +75,26 @@ test('TZ14 settings force always-on finite repeats without discarding existing s
   const preset = resolvePreset('GB', 'model', saved);
   for (const field of ['bio', 'status', 'postalCode', 'address', 'number'])
     assert.ok(preset.allowRepeats.includes(field));
-  for (const field of ['phone', 'email', 'handle'])
-    assert.ok(!preset.allowRepeats.includes(field));
+  for (const field of ['phone', 'email', 'handle']) assert.ok(!preset.allowRepeats.includes(field));
 });
 
 test('TZ14 BIO view has compact text area but no institution pickers or history', async () => {
   const { state } = await import('../../src/js/state.js');
   const { biographyHTML } = await import('../../src/js/ui/biography.js');
-  state.bio = { parameters: { country: 'GB', city: 'London', type: 'model' }, record: { id: 'test' } };
+  state.bio = {
+    parameters: { country: 'GB', city: 'London', type: 'model' },
+    record: { id: 'test' }
+  };
   state.bioEditor = {
-    values: { residence: 'London', university: 'University', school: 'School', mainBio: 'Test BIO' },
-    institutions: [], saving: false, dirty: false
+    values: {
+      residence: 'London',
+      university: 'University',
+      school: 'School',
+      mainBio: 'Test BIO'
+    },
+    institutions: [],
+    saving: false,
+    dirty: false
   };
   const html = biographyHTML();
   assert.ok(html.includes('rows="2"'));
@@ -118,7 +127,10 @@ test('TZ14 changed CSS stays scoped to generator/BIO and Friends and preserves N
   const { state } = await import('../../src/js/state.js');
   const { newsBlockHTML } = await import('../../src/js/ui/news.js');
   state.settings.newsEnabled = true;
-  state.news = { topic: 'tech', items: [{ topic: 'tech', title: 'Synthetic', link: 'https://example.test' }] };
+  state.news = {
+    topic: 'tech',
+    items: [{ topic: 'tech', title: 'Synthetic', link: 'https://example.test' }]
+  };
   const html = newsBlockHTML();
   assert.ok(html.includes('Скопировать заголовок'));
   assert.ok(html.includes('Скопировать ссылку'));
