@@ -215,14 +215,12 @@ test(
     await page.locator('#photo-input').setInputFiles(file);
     await waitForAsync(page, async () => !(await import('/js/state.js')).state.imagesBusy);
     await page.locator('[data-action="photos-tools"]').click();
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[name="action-make"]') })
-      .locator('summary')
-      .first()
-      .click();
-    await page.locator('[name="action-make"]').selectOption('set');
-    await page.locator('[name="value-make"]').fill('Synthetic Camera');
+    assert.equal(await page.locator('.photo-device-card').count(), 1);
+    await page.locator('#photo-device-preset').selectOption('Sony|ILCE-7M4');
+    assert.equal(await page.locator('[name="action-make"]').inputValue(), 'set');
+    assert.equal(await page.locator('[name="action-model"]').inputValue(), 'set');
+    assert.equal(await page.locator('[name="value-make"]').inputValue(), 'Sony');
+    assert.equal(await page.locator('[name="value-model"]').inputValue(), 'ILCE-7M4');
     await page.locator('[name="confirm-maker"]').check();
     await app.evaluate(({ ipcMain, dialog }, out) => {
       const channel = 'local:imageGroupPrepare',
@@ -249,6 +247,8 @@ test(
     assert.equal(report.files[0].status, 'completed');
     assert.deepEqual(fs.readFileSync(file), original);
     const tags = (await createEngine().read(path.join(out, report.files[0].outputName))).tags;
-    assert.equal(normalizedValue('make', tags), 'Synthetic Camera');
+    assert.equal(normalizedValue('make', tags), 'Sony');
+    assert.equal(normalizedValue('model', tags), 'ILCE-7M4');
+    assert.equal(await page.locator('.photo-workspace.has-selection').count(), 1);
   }
 );
