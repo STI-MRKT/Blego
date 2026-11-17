@@ -15,8 +15,9 @@ const patterns = Object.freeze({
 // country-specific E.164 value in SQLite and in the uniqueness registry.
 function digitsForDisplay(value, rule) {
   const size = rule.groups.reduce((total, count) => total + count, 0);
-  if (!new RegExp(`^\\\\+${rule.dial}\\\\d{${size}}$`).test(value)) return null;
+  if (!value.startsWith('+' + rule.dial)) return null;
   const national = value.slice(rule.dial.length + 1);
+  if (!/^[0-9]+$/.test(national) || national.length !== size) return null;
   return national.slice(-10).padStart(10, '0');
 }
 export function formatPhoneDisplay(value, country) {
@@ -38,7 +39,7 @@ export function nationalPhoneForCopy(value, country) {
   if (!digits.startsWith(rule.dial) || digits.length <= rule.dial.length || digits.length > 15)
     throw Error('Номер не соответствует стране профиля');
   const formatted = formatPhoneDisplay(value, country);
-  if (!/^\\d{3}-\\d{3}-\\d{4}$/.test(formatted))
+  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(formatted))
     throw Error('Номер не соответствует формату профиля');
   return formatted;
 }
