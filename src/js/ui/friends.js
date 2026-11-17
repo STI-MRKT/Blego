@@ -72,7 +72,7 @@ export function friendsHTML() {
         <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="${esc(friend.id)}">${I.link}Open profile</button><button class="btn" data-action="copy" data-copy="${esc(friend.url)}" data-friend-copy="url" aria-label="Копировать ссылку">${I.copy}</button></div>
         ${
           friend.source
-            ? `<details><summary>Подробнее</summary><p class="sub">${esc(friend.platform)} · ${esc(friend.source)}</p><p>${esc(friend.notes || '')}</p>${Object.entries(
+            ? `<details class="friend-details"><summary>Подробнее</summary><p class="sub">${esc(friend.platform)} · ${esc(friend.source)}</p><p>${esc(friend.notes || '')}</p>${Object.entries(
                 friend.extraFields || {}
               )
                 .map(([key, value]) => `<p>${esc(key)}: ${esc(value)}</p>`)
