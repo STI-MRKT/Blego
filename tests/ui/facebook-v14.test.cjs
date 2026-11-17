@@ -6,7 +6,7 @@ const fs = require('node:fs'),
 const { _electron } = require('playwright');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 test(
-  'Facebook filter/sort keep individual copies and retry one target without losing other results',
+  'FB.Tools-only Checker filters, retries and copies without leaking import data',
   { timeout: 60000 },
   async (t) => {
     const data = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-fb-v14-'));
@@ -33,11 +33,12 @@ test(
           value: {
             results: request.targets.map((x, i) => ({
               ...x,
-              status: i ? 'LOGIN_REQUIRED' : 'NETWORK_ERROR',
-              availability: i ? 'login_required' : 'network_error',
-              reasonCode: i ? 'LOGIN_REQUIRED' : 'FB_DNS_ERROR',
+              status: i ? 'AVAILABLE' : 'UNKNOWN',
+              availability: i ? 'profile_visible' : 'unknown',
+              reasonCode: i ? 'FBTOOLS_VALID' : 'FBTOOLS_NETWORK_ERROR',
               checkedAt: '2026-11-13T06:00:00Z',
-              source: 'public_request',
+              source: 'fbtools',
+              parserVersion: 'fbtools-ndjson-v1',
               durationMs: 12,
               banAssessment: 'unknown'
             }))
@@ -53,7 +54,7 @@ test(
       return !state.checker.checking && state.checker.rows?.every((r) => r.check);
     });
     assert.equal(await page.locator('#checker-status-filter').count(), 1);
-    await page.locator('#checker-status-filter').selectOption('LOGIN_REQUIRED');
+    await page.locator('#checker-status-filter').selectOption('LIVE');
     assert.equal(await page.locator('.checker-row').count(), 1);
     await page.getByRole('button', { name: 'Copy Facebook ID', exact: true }).click();
     await page.waitForTimeout(100);
@@ -70,7 +71,7 @@ test(
     await page.locator('#checker-sort').selectOption('id-desc');
     assert.equal(await page.locator('.checker-row').count(), 2);
     await page.locator('.checker-row details summary').first().click();
-    assert.ok((await page.locator('.checker-row').first().innerText()).includes('DNS'));
+    assert.ok((await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR'));
     assert.ok((await page.locator('.checker-row').first().innerText()).includes('09:00'));
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({

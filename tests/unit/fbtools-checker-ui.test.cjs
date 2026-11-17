@@ -1,25 +1,20 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 
-test('Checker renders selectable FB.Tools provider and third-party statuses without changing direct mode', async () => {
+test('Checker uses only FB.Tools and renders LIVE, copy and privacy notice', async () => {
   const { state } = await import('../../src/js/state.js');
   const { checkerHTML } = await import('../../src/js/ui/checker.js');
   const prior = state.checker;
   try {
-    state.checker = {
-      input: '4',
-      rows: null,
-      provider: 'direct',
-      checking: null
-    };
+    state.checker = { input: '4', rows: null, checking: null };
     const baseline = checkerHTML();
-    assert.match(baseline, /id="checker-provider"/);
-    assert.match(baseline, /Прямая проверка<\/option>/);
-    assert.doesNotMatch(baseline, /Ссылки передаются стороннему сервису/);
+    assert.match(baseline, /Источник: check.fb.tools/);
+    assert.doesNotMatch(baseline, /id="checker-provider"/);
+    assert.doesNotMatch(baseline, /Прямая проверка/);
+    assert.match(baseline, /Ссылки передаются сервису check.fb.tools/);
 
     state.checker = {
       input: '4',
-      provider: 'fbtools',
       checking: null,
       checkedInput: '4',
       rows: [
@@ -37,11 +32,10 @@ test('Checker renders selectable FB.Tools provider and third-party statuses with
         }
       ]
     };
-    const output = checkerHTML();
-    assert.match(output, /check\.fb\.tools/);
-    assert.match(output, /data-checker-status="LIVE"/);
-    assert.match(output, /data-action="checker-copy-results"/);
-    assert.match(output, /Ссылки передаются стороннему сервису/);
+    const result = checkerHTML();
+    assert.match(result, /data-checker-status="LIVE"/);
+    assert.match(result, /data-action="checker-copy-results"/);
+    assert.doesNotMatch(result, /id="checker-provider"/);
   } finally {
     state.checker = prior;
   }

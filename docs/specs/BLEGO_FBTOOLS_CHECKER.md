@@ -1,63 +1,49 @@
-# BLEGO · Facebook Checker · FB.Tools provider (experimental)
+# BLEGO 1.4.4 — Facebook UID Checker: FB.Tools only
 
-## Scope
+Decision (2026-11-17): the direct Facebook public-HTML checker was found
+unreliable and is **retired**. It was preserved in the Git branch:
 
-This integration uses BLEGO's existing Checker page. No separate Python server,
-database, background monitoring or second application is introduced.
+archive/blego-facebook-direct-legacy-20261117
+(legacy revision 746a7ee6b452d9275f020b791b13fc52d541dbd7).
 
-The existing direct public-page diagnostic is unchanged. The user can select
-check.fb.tools in the "Источник" selector. Links are submitted only when the
-user presses Check; switching provider clears the previous results.
+Do not silently restore or automatically fall back to the legacy checker.
+The active BLEGO Checker must offer exactly one provider: check.fb.tools.
+There is no provider toggle and no direct scraping of Facebook pages.
 
-## Transport
+## Current behavior
 
-The provider adapter lives in electron/features/facebook/fbtools.cjs.
+- Existing BLEGO Checker screen, one input area (up to 100 UIDs or links).
+- One Check button, progress, row-level copies, bulk copy, manual retry and cancel.
+- Requests go only through the Electron main process to the fixed HTTPS
+  endpoint POST https://check.fb.tools/api/check/facebook with JSON
+  inputData, userLang and checkFriends=false.
+- Responses are bounded NDJSON streams; validate numeric result id and
+  matching normalized origin, reject unexpected content and report errors.
+- Provider valid -> LIVE; noexist -> DIE; other responses -> UNKNOWN.
+  DIE is a third-party classification and is not proof of an account ban,
+  advertising limitation or formal Meta deletion.
+- HTTPS requests send no Cookie, access token or credentials. No redirect,
+  automatic retry, CAPTCHA solving or proxy rotation.
+- Existing local imported facts and owner notes are preserved. They are
+  never sent to the provider.
 
-- POST https://check.fb.tools/api/check/facebook
-- Content-Type: application/json
-- Accept: application/x-ndjson
-- Body: {"inputData":["https://www.facebook.com/profile.php?id=4"],"userLang":"en","checkFriends":false}
+## Removed from working branch
 
-The adapter consumes start, result, summary and error NDJSON events. Results
-are tied to normalized inputs by both one-based id and matching origin, not
-provider-reported arbitrary links.
+- Electron public-session-based direct Facebook transport,
+  direct-page HTML inspector and associated diagnostics.
+- Direct provider option, old ACTIVE/BLOCKED verdict logic and its
+  obsolete QA scripts/tests.
 
-The connection does not send cookies, credentials, Authorization, or browser
-profile state. No redirects are allowed. No proxy rotation, CAPTCHA handling,
-bypass or automatic retry loop. Input cap: 100 profiles. Request timeout:
-60 seconds. Maximum response: 2 MiB.
+Those files remain recoverable in the archive branch.
 
-## Provider statuses
+## Release gate
 
-| Provider | BLEGO | Meaning |
-| --- | --- | --- |
-| valid | LIVE | Third party reports public profile available |
-| noexist | DIE | Third party reports no public profile found |
-| invalid, verify, error, other | UNKNOWN | No conclusive result |
-| HTTP errors, 429, timeout, partial or malformed body | UNKNOWN | No conclusive result |
+The provider endpoint is undocumented; its website-context behavior
+has been observed, but access from an independently installed Electron
+client requires verification and permitted use. HTTP 403/429, network
+errors, incomplete responses and changed protocol must produce UNKNOWN,
+never fabricated DIE. Verify the installed macOS ARM64 app before release.
 
-The result does not prove an account ban, deletion, Business Manager or
-advertising restriction. The existing direct source remains available.
-
-## Provider stability and release gate
-
-This endpoint was observed in publicly delivered website JavaScript on
-2026-11-17. A known-public UID request succeeded within the website's browser
-context. It is an undocumented internal endpoint; use from a standalone
-Electron application has NOT been independently confirmed.
-
-Use is subject to provider approval and applicable usage restrictions.
-Before any signed app release:
-
-1. Run npm ci, npm run lint, npm run test:unit, npm run test:integration,
-   and the targeted Checker UI tests.
-2. Check positive and negative control UIDs from an installed macOS ARM64
-   application. Confirm an HTTP 429 is UNKNOWN, not DIE.
-3. Test changing provider, retry, cancellation, bulk copy and existing
-   import/notes, without changes to other sections.
-4. If the provider refuses access, display UNKNOWN, keep direct source and
-   do not bypass restrictions.
-
-Coverage:
-- tests/integration/facebook-fbtools.test.cjs
-- tests/unit/fbtools-checker-ui.test.cjs
+User-requested phone-number display preference for the generator:
+XXX-XXX-XXXX, e.g. 936-364-3764. This note does not itself change the
+generator implementation.

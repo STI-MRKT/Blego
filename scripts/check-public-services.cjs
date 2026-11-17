@@ -71,7 +71,7 @@ const fs = require('node:fs'),
     );
     const { facebookPresentation } = await import('../shared/facebook-presentation.mjs');
     report.facebook = {
-      status: checks.some((r) => facebookPresentation(r).status === 'ACTIVE') ? 'PASS' : 'BLOCKED',
+      status: checks.some((r) => facebookPresentation(r).status === 'LIVE') ? 'PASS' : 'BLOCKED',
       targets: checks.map((r) => ({
         target: r.canonicalUrl,
         result: facebookPresentation(r).status,
@@ -82,7 +82,7 @@ const fs = require('node:fs'),
         diagnostics: r.diagnostics
       })),
       scope:
-        'Actual application UI and production IPC/anonymous Electron transport; no mocked requests, authentication or protection bypass. Status denotes live positive-content acceptance, not account ban.',
+        'Actual BLEGO Checker UI and check.fb.tools third-party service, with no mocked request. LIVE denotes the provider classification, not confirmation of Meta account standing.',
       confirmedUnavailableTarget: 'BLOCKED: no independently confirmed unavailable target supplied'
     };
     await page.screenshot({ path: path.join(path.dirname(out), 'tz11-checker-live.png') });

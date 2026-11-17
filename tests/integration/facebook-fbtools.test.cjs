@@ -201,41 +201,31 @@ test('FB.Tools caps response size and does not report false DIE', async () => {
   assert.equal(rows[0].reasonCode, 'FBTOOLS_RESPONSE_TOO_LARGE');
 });
 
-test('existing Facebook service dispatches opt-in FB.Tools provider while preserving default direct transport', async () => {
+test('Facebook service uses only FB.Tools and rejects retired direct provider', async () => {
   const { createFacebookService } = require('../../electron/features/facebook/service.cjs');
-  let fbCalls = 0;
-  let directCalls = 0;
+  let externalCalls = 0;
+  const values = new Map();
   const service = createFacebookService({
-    transport: async (url) => {
-      directCalls += 1;
-      return { url, status: 200, headers: {}, body: '' };
-    },
+    store: { get: (key) => values.get(key), set: (key, val) => values.set(key, val) },
     fbtools: async function* ({ targets: items, runId }) {
-      fbCalls += 1;
-      for (const item of items) {
-        yield {
-          canonicalUrl: item.canonicalUrl,
-          runId,
-          source: 'fbtools',
-          availability: 'unknown'
-        };
-      }
+      externalCalls += 1;
+      for (const item of items)
+        yield { canonicalUrl: item.canonicalUrl, runId, source: 'fbtools', availability: 'unknown' };
     },
-    clock: { now: () => 20000, sleep: async () => {} }
+    clock: { now: () => 20000 }
   });
   const rows = targets('4');
-  const external = [];
-  for await (const row of service.check({ targets: rows, runId: 'provider', provider: 'fbtools' }))
-    external.push(row);
-  assert.equal(external.length, 1);
-  assert.equal(fbCalls, 1);
-  assert.equal(directCalls, 0);
-  const direct = [];
-  for await (const row of service.check({ targets: rows, runId: 'default' })) direct.push(row);
-  assert.equal(directCalls, 1);
-  assert.equal(direct.length, 1);
-  await assert.rejects(async () => {
-    for await (const row of service.check({ targets: rows, runId: 'bad', provider: 'arbitrary' }))
-      void row;
-  }, /FB_INPUT_INVALID/);
+  const checked = [];
+  for await (const row of service.check({ targets: rows, runId: 'default' })) checked.push(row);
+  assert.equal(checked.length, 1);
+  assert.equal(externalCalls, 1);
+  await assert.rejects(
+    async () => {
+      for await (const row of service.check({ targets: rows, runId: 'retired', provider: 'direct' }))
+        void row;
+    },
+    /FB_INPUT_INVALID/
+  );
+  service.saveManualNote({ targetKey: rows[0].canonicalUrl, status: 'not_blocked', comment: 'Owner' });
+  assert.equal(service.notes(rows[0].canonicalUrl)[0].comment, 'Owner');
 });
