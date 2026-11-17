@@ -207,13 +207,15 @@ export function photosHTML() {
  ${state.imageScan?.errors?.length ? `<details><summary>Не удалось прочитать: ${state.imageScan.errors.length}</summary>${state.imageScan.errors.map(e=>`<p>${esc(e.name)} — ${esc(imageErrorMessage(e.code))}</p>`).join('')}</details>`:''}
  ${photoMapHTML()}
  ${pager}
+ <div class="photo-workspace ${selected.length ? 'has-selection' : ''}"><div class="photo-gallery">
  ${state.photos.length ? `<div class="photo-grid">${pagePhotos.map((p) => `<figure class="ph" data-photo-id="${esc(p.fileId)}"><button class="btn-quiet" data-action="image-preview" data-id="${p.fileId}" style="display:block;width:100%;padding:0;border:0" aria-label="View ${esc(p.name)}" ${p.view ? '' : 'disabled'}>${p.thumbnail ? `<img src="${p.thumbnail}" alt="${esc(p.name)}" loading="lazy">` : `<div class="photo-placeholder">${p.status === 'reading' ? 'Reading…' : 'Preview unavailable'}</div>`}</button><button class="ph-del" data-action="photo-remove" data-id="${p.fileId}" aria-label="Remove ${esc(p.name)}" ${state.imagesBusy ? 'disabled' : ''}>${I.x}</button><figcaption><label><input type="checkbox" data-image-select="${p.fileId}" ${p.selected ? 'checked' : ''} ${p.view?.capabilities.writable && !state.imagesBusy ? '' : 'disabled'}><b>${esc(p.name)}</b></label></figcaption><p class="sub photo-source" title="${esc(p.relativePath||p.name)}">${esc(p.relativePath||p.name)}</p><p class="sub">${esc(p.view?.detectedFormat||'')} · ${(p.size/1048576).toFixed(2)} MiB · ${esc(p.status)}<br>${p.view?.tags?.find(t=>t.field==='gps')?.value ? `GPS: ${esc(metadataText(p.view.tags.find(t=>t.field==='gps').value))}`:'Без GEO'}</p><div class="news-actions"><button class="news-copy" data-action="copy" data-copy="${esc(p.name)}" aria-label="Copy filename">${I.copy}Name</button><button class="news-copy" data-action="image-copy" data-id="${p.fileId}" ${p.view && !state.imagesBusy ? '' : 'disabled'}>${I.copy}Image</button></div>${geoFileHTML(p)}${p.status === 'failed' || p.status === 'cancelled' ? `<p class="sub">${p.status === 'cancelled' ? 'Cancelled' : 'Could not read this image.'}</p>` : ''}</figure>`).join('')}</div>` : `<button class="drop photo-drop" style="width:100%" data-action="images-browse"><div class="di">${I.image}</div><h3>Add photos</h3><p>Choose JPEG, PNG or WebP images</p></button>`}
  ${state.imagePreview ? `<figure class="card pad"><img src="${state.imagePreview}" style="max-width:100%;max-height:340px;object-fit:contain" alt="Original image"><figcaption>${esc(state.imagePreviewName || 'Original image')}</figcaption><button class="btn btn-quiet" data-action="image-preview-close">Close preview</button></figure>` : ''}
+ </div><div class="photo-edit-panel">
  ${
    selected.length
-     ? `<form id="metadata-form"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><div class="net-grid2">${quickEditor('captureDate', selected)}${quickEditor('gps', selected)}</div>${tools ? `<button type="submit" class="btn">Preview changes</button>
+     ? `<form id="metadata-form"><fieldset ${state.imagesBusy ? 'disabled' : ''} style="border:0;padding:0"><div class="net-grid2">${quickEditor('captureDate', selected)}${quickEditor('gps', selected)}</div>${deviceEditor(selected)}${tools ? `<button type="submit" class="btn">Preview changes</button>
  <details id="metadata-advanced" ${openDetails('metadata-advanced')}><summary>More metadata and presets</summary><div class="card pad"><div class="table-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Current value</th><th>Action</th><th>New value</th></tr></thead><tbody>${METADATA_FIELDS.filter(
-   (f) => !['captureDate', 'gps'].includes(f)
+   (f) => !['captureDate', 'gps', 'make', 'model'].includes(f)
  )
    .map((field) =>
      editor(
@@ -223,7 +225,7 @@ export function photosHTML() {
    )
    .join(
      ''
-   )}</tbody></table></div><label class="fl"><input type="checkbox" name="confirm-maker"> I reviewed the MakerNotes warning for changes to camera make/model.</label><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label>
+   )}</tbody></table></div><button type="button" class="btn" data-action="group-operations">Apply to ${state.imageEditTarget === 'group' ? 'group' : 'selected files'}</button><label class="fl">Export scope<select class="input" id="image-export-scope"><option value="selection">Selected files</option><option value="group">Current group</option><option value="all">All groups</option></select></label>
  <label class="fl">Preset<select class="input" id="metadata-preset">${(state.metadataPresets || []).map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></label><button type="button" class="btn" data-action="metadata-preset-plan">Preview preset</button><input class="input" id="metadata-preset-name" placeholder="Name for current changes">${[
    ['metadata-preset-save', 'Save current changes as preset'],
    ['metadata-preset-import', 'Import preset'],
@@ -240,6 +242,7 @@ export function photosHTML() {
  <p class="sub">Originals are kept. Orientation and colour profiles stay unchanged. Saved groups and presets may contain personal metadata. File selection and per-file overrides are session-only.</p></div></details>` : ''}</fieldset></form><button type="button" class="btn btn-primary" data-action="metadata-export" ${state.imagesBusy ? 'disabled' : ''}>Save copies</button>`
      : ''
  }
+ </div></div>
  ${
    plan && tools
      ? `<div class="card pad" data-metadata-plan><h3>Before / after</h3>${plan.files
