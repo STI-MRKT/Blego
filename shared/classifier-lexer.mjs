@@ -209,8 +209,16 @@ export function structuredRecords(text, options = {}) {
     const composite =
       isUA(current) ||
       /^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?(?:https?:\/\/|[A-Za-z]:\\)/iu.test(current);
-    const labelledUrl =
-      /^\s*[\p{L}\p{N}_ -]{1,40}[:=]\s*https?:\/\/\S+$/iu.test(current);
+    const labelledIdentity =
+      c === ':' && composite && nextLabel
+        ? recognizeValue(current, fieldForHeader, validBirthDate, (v) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          )
+        : null;
+    const completedFacebookId =
+      labelledIdentity?.key === 'accountId' &&
+      labelledIdentity?.normalized === true &&
+      !labelledIdentity.invalid;
     // A complete labelled UA can end before a known label. Keep colons
     // inside UA comments and product segments intact.
     const completedUA =
@@ -239,7 +247,7 @@ export function structuredRecords(text, options = {}) {
       (!text.startsWith('::', i) || header?.delimiter === ':') &&
       ((nextLabel &&
         !fieldForHeader(current.trim()) &&
-        (!composite || /\s/.test(text[i - 1] || '') || labelledUrl || completedUA)) ||
+        (!composite || /\s/.test(text[i - 1] || '') || completedFacebookId || completedUA)) ||
         splitBeforeUnknownCaption ||
         (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
         ? ':'
