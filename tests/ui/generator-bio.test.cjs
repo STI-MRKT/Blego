@@ -507,7 +507,9 @@ test(
     );
     await page.locator('[data-action="copy-model"][data-card="true"]').click();
     assert.ok(
-      (await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(fp.fields.phone)
+      (await f.app.evaluate(({ clipboard }) => clipboard.readText())).includes(
+        nationalPhoneForCopy(fp.fields.phone, fp.country)
+      )
     );
     await page.locator('[data-tab="bio"]').click();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'Independent BIO before FP');
@@ -610,13 +612,17 @@ test(
       db.close();
       return { count, original };
     };
+    // TZ14 hides saved-BIO history in the UI but retains record retrieval/open.
+    assert.equal(await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).count(), 0);
+    const prior = await page.evaluate(async () =>
+      window.blego.biography({ action: 'history' })
+    );
+    const legacy = prior.items.find((item) => item.id === 'legacy:' + fp.id);
+    assert.ok(legacy, 'Legacy BIO remains in persistent history');
     for (let i = 0; i < 3; i++) {
-      await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-      await page.locator('[data-action="bio-history"]').click();
-      await page.locator('[data-action="bio-open"]').click();
-      await page.waitForFunction(
-        () => !document.querySelector('[data-action="bio-generate"]').disabled
-      );
+      const snapshot = await page.evaluate(async (id) =>
+        window.blego.biography({ action: 'open', recordId: id }), legacy.id);
+      assert.equal(snapshot.record.values.mainBio, 'Old attached BIO');
     }
     assert.deepEqual(readCounts(), { count: 0, original: json });
     await page.locator('#bio-mainBio').fill('New independent legacy edit');
@@ -625,10 +631,15 @@ test(
     assert.deepEqual(await page.evaluate(() => window.blego.lastCard()), fp);
     await page.locator('[data-action="bio-clear"]').click();
     await page.waitForFunction(() => !document.querySelector('#bio-mainBio'));
-    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-    await page.locator('[data-action="bio-history"]').click();
-    assert.equal(await page.locator('#bio-history-record option').count(), 1);
-    await page.locator('[data-action="bio-open"]').click();
+    const savedHistory = await page.evaluate(async () =>
+      window.blego.biography({ action: 'history' })
+    );
+    assert.equal(savedHistory.items.length, 1);
+    const reopened = await page.evaluate(async (id) =>
+      window.blego.biography({ action: 'open', recordId: id }), savedHistory.items[0].id);
+    assert.equal(reopened.record.values.mainBio, 'New independent legacy edit');
+    await page.reload();
+    await page.locator('[data-tab="bio"]').click();
     await page.locator('#bio-mainBio').waitFor();
     assert.equal(await page.locator('#bio-mainBio').inputValue(), 'New independent legacy edit');
     assert.deepEqual(readCounts(), { count: 1, original: json });
@@ -655,10 +666,20 @@ test(
         return globalThis.bioOriginal(event, arg);
       });
     });
-    await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).click();
-    await page.locator('[data-action="bio-history"]').click();
-    await page.locator('#bio-history-record').selectOption(gb.id);
-    await page.locator('[data-action="bio-open"]').click();
+    // Test the retained internal open transition with a temporary test-only
+    // control; the removed saved-BIO UI is never rendered to users.
+    await page.evaluate((recordId) => {
+      const select = document.createElement('select');
+      select.id = 'bio-history-record';
+      select.append(new Option('QA saved BIO', recordId));
+      document.body.append(select);
+      const button = document.createElement('button');
+      button.dataset.action = 'bio-open';
+      document.body.append(button);
+      button.click();
+      button.remove();
+      select.remove();
+    }, gb.id);
     await page.waitForFunction(
       () =>
         document.querySelector('#bio-country').value === 'GB' &&
