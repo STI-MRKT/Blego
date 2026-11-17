@@ -21,10 +21,20 @@ const { createHash } = require('node:crypto');
   // TZ14 touches FP/BIO, Friends, Archive, Settings and phone copying.
   // All other GUI modules were already checked against the unchanged PR #18.
   const tz14Tests = [
-    'archive-actions', 'archive-v141', 'biography-v143', 'copy-all-sections',
-    'friends-bulk-copy', 'generator-bio', 'generator-phone-address',
-    'generator-picker-tz12', 'generator-v14', 'header-copy-removed',
-    'news-copy', 'settings-v14', 'ux-restoration', 'classifier-copy'
+    'archive-actions',
+    'archive-v141',
+    'biography-v143',
+    'copy-all-sections',
+    'friends-bulk-copy',
+    'generator-bio',
+    'generator-phone-address',
+    'generator-picker-tz12',
+    'generator-v14',
+    'header-copy-removed',
+    'news-copy',
+    'settings-v14',
+    'ux-restoration',
+    'classifier-copy'
   ].map((name) => `tests/ui/${name}.test.cjs`);
   const tests =
     suite === 'classifier'
