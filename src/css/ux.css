@@ -281,3 +281,42 @@
   transition:background-color .18s,box-shadow .18s;
 }
 button.copy-feedback{color:var(--accent)}
+
+/* TZ16 MetaPainter: gallery rail + compact editing workspace. */
+.photo-workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin:16px 0 18px;min-width:0;align-items:start}
+.photo-workspace.has-selection{grid-template-columns:minmax(210px,260px) minmax(0,1fr)}
+.photo-gallery,.photo-edit-panel{min-width:0}
+.photo-gallery .photo-grid{grid-template-columns:minmax(0,1fr);gap:10px;margin-top:0;max-height:min(73vh,760px);overflow:auto;padding:2px;scrollbar-gutter:stable}
+.photo-gallery .ph{min-width:0;box-shadow:var(--shadow-sm);border-color:var(--border-2)}
+.photo-gallery .ph img{height:165px;object-fit:cover}
+.photo-gallery .ph figcaption{font-size:11px}
+.photo-gallery .ph figcaption label{display:flex;align-items:center;gap:6px;min-width:0}
+.photo-gallery .ph figcaption b{font-size:11px;overflow-wrap:anywhere}
+.photo-gallery .ph .photo-source{overflow-wrap:anywhere}
+.photo-gallery .ph .news-actions{display:flex;flex-wrap:wrap;gap:6px;padding:6px 8px}
+.photo-edit-panel #metadata-form{min-width:0}
+.photo-edit-panel #metadata-form fieldset{min-width:0}
+.photo-edit-panel .net-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(275px,100%),1fr));gap:12px}
+.photo-edit-panel .card.pad{margin-bottom:12px;min-width:0}
+.photo-edit-panel .card.pad h3{font-size:14px;margin-bottom:8px}
+.photo-device-card{background:linear-gradient(130deg,var(--panel),var(--panel-2));border:1px solid var(--border-2);border-radius:14px}
+.photo-device-card .photo-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.photo-device-card .photo-device-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(215px,100%),1fr));gap:12px;margin-top:12px}
+.photo-device-card .fl{display:block;min-width:0}
+.photo-device-card select,.photo-device-card input.input{width:100%;min-width:0;margin-top:7px}
+.photo-device-card .photo-device-current{display:block;font-size:10px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.photo-device-ack{display:flex;gap:8px;align-items:flex-start;font-size:11px;line-height:1.5;color:var(--muted);margin:12px 0}
+.photo-device-ack input{margin-top:2px;flex-shrink:0}
+.photo-edit-panel [data-action="metadata-export"]{margin-top:6px;min-height:40px;width:100%}
+@media(max-width:1100px){
+  .photo-workspace.has-selection{grid-template-columns:minmax(0,1fr)}
+  .photo-gallery .photo-grid{grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));max-height:280px}
+  .photo-gallery .ph img{height:140px}
+}
+@media(max-width:610px){
+  .photo-workspace{gap:10px;margin-top:10px}
+  .photo-gallery .photo-grid{grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));max-height:320px}
+  .photo-edit-panel .net-grid2{grid-template-columns:1fr}
+  .photo-device-card .photo-device-fields{grid-template-columns:1fr}
+  .photo-edit-panel .card.pad{padding:12px}
+}
