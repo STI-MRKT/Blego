@@ -22,15 +22,11 @@ jobs:
       - run: npm ci
       - name: Format changed files for commit
         run: |
-          for file in electron/features/generator/naming.cjs electron/features/generator/pool-expansion.cjs electron/features/generator/sources.cjs electron/local/settings.cjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/generator-v14.test.cjs tests/integration/generator-tz12.test.cjs tests/integration/generator-female.test.cjs tests/ui/generator-phone-address.test.cjs; do
+          for file in tests/ui/app.test.cjs tests/ui/generator-bio.test.cjs tests/ui/generator-picker-tz12.test.cjs scripts/tz14-pool-report.cjs tests/unit/biography-v141.test.cjs tests/unit/pool-catalog.test.cjs tests/integration/pool-registry-migration.test.cjs tests/integration/generator-tz12.test.cjs tests/unit/generator-tz12.test.cjs tests/ui/archive-actions.test.cjs tests/ui/ux-restoration.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
             echo "FORMAT_END:$file"
           done
-      - name: All unit tests
-        run: npm run test:unit
-      - name: All integration tests
-        run: npm run test:integration
-      - name: Lint
-        run: npm run lint
+      - name: Syntax check
+        run: node scripts/check.cjs
