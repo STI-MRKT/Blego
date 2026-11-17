@@ -39,14 +39,14 @@ const stems = {
   US: nature, GB: nature
 };
 const forms = {
-  BR: ['Rua','Avenida','Travessa','Alameda','Praça','Estrada','Largo','Viela','Passeio','Caminho'],
-  FR: ['Rue','Avenue','Allée','Impasse','Passage','Place','Boulevard','Chemin','Square','Cours'],
-  PL: ['ul.','aleja','plac','skwer','osiedle','bulwar','rondo','pasaż','trakt','deptak'],
-  DE: ['straße','weg','allee','platz','ring','pfad','gasse','ufer','steig','hain'],
-  ES: ['Calle','Avenida','Plaza','Paseo','Camino','Ronda','Travesía','Pasaje','Carrer','Alameda'],
-  IT: ['Via','Viale','Vicolo','Corso','Piazza','Strada','Largo','Passeggiata','Salita','Traversa'],
-  US: ['Street','Lane','Road','Drive','Way','Court','Avenue','Place','Terrace','Walk'],
-  GB: ['Street','Lane','Road','Drive','Way','Close','Mews','Walk','Court','Avenue']
+  BR: ['Rua','Avenida','Travessa','Alameda','Praça','Estrada','Largo','Viela','Passeio','Caminho','Passagem'],
+  FR: ['Rue','Avenue','Allée','Impasse','Passage','Place','Boulevard','Chemin','Square','Cours','Quai'],
+  PL: ['ul.','aleja','plac','skwer','osiedle','bulwar','rondo','pasaż','trakt','deptak','droga'],
+  DE: ['straße','weg','allee','platz','ring','pfad','gasse','ufer','steig','hain','garten'],
+  ES: ['Calle','Avenida','Plaza','Paseo','Camino','Ronda','Travesía','Pasaje','Carrer','Alameda','Glorieta'],
+  IT: ['Via','Viale','Vicolo','Corso','Piazza','Strada','Largo','Passeggiata','Salita','Traversa','Piazzale'],
+  US: ['Street','Lane','Road','Drive','Way','Court','Avenue','Place','Terrace','Walk','Circle'],
+  GB: ['Street','Lane','Road','Drive','Way','Close','Mews','Walk','Court','Avenue','Gardens']
 };
 function streetFor(country, root, form) {
   if (country === 'DE') return root + form;
