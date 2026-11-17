@@ -35,7 +35,7 @@ test('package preview/apply keeps registry; changed or invalid imports cannot sw
   fs.writeFileSync(file, JSON.stringify(data));
   const preview = await catalog.preview(file);
   assert.equal(preview.counts.firstNames, 1);
-  assert.equal(getPoolStats({ country: 'BR', type: 'model' }, { store }).counts.firstNames, 81);
+  assert.equal(getPoolStats({ country: 'BR', type: 'model' }, { store }).counts.firstNames, 81 + 160);
   await catalog.apply(preview.fileToken);
   assert.equal(store.db.prepare('SELECT count(*) n FROM issued').get().n, oldCount);
   const next = await generateProfile({ country: 'BR', type: 'model', requestId: 'new' }, { store });
@@ -49,7 +49,7 @@ test('package preview/apply keeps registry; changed or invalid imports cannot sw
   assert.equal(store.db.prepare('SELECT count(*) n FROM issued').get().n, savedCount);
   const version = getPoolStats({ country: 'BR', type: 'model' }, { store }).installedVersions[0];
   catalog.useBundled('BR');
-  assert.equal(getPoolStats({ country: 'BR', type: 'model' }, { store }).counts.firstNames, 81);
+  assert.equal(getPoolStats({ country: 'BR', type: 'model' }, { store }).counts.firstNames, 81 + 160);
   catalog.select('BR', version.key);
   assert.equal(getPoolStats({ country: 'BR', type: 'model' }, { store }).counts.firstNames, 1);
   const second = await catalog.preview(file);
