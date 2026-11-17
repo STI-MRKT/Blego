@@ -51,6 +51,23 @@ class MetricsTest(unittest.TestCase):
         self.assertGreater(result["boundaryErrors"], 0)
         self.assertEqual(result["crossRecordTransfers"], 0)
 
+    def test_independent_family_confusion_matrices_are_separate(self):
+        cases = [
+            {"id": "one", "split": "test", "family": "horizontal", "records": [
+                {"fields": {"email": "one@example.invalid"}}]},
+            {"id": "two", "split": "test", "family": "positional", "records": [
+                {"fields": {"password": "SYNTHETIC_PASS"}}]},
+        ]
+        predictions = {"results": [
+            {"id": "one", "durationMs": 1, "records": [
+                {"data": {"email": "one@example.invalid"}, "extended": {}}]},
+            {"id": "two", "durationMs": 1, "records": [
+                {"data": {"password": ""}, "extended": {}}]},
+        ]}
+        result = self.module().summarize(cases, predictions)
+        self.assertEqual(result["byFamily"]["horizontal"]["confusion"], {"email->email": 1})
+        self.assertEqual(result["byFamily"]["positional"]["confusion"], {"password->ABSTAIN": 1})
+
 
 if __name__ == "__main__":
     unittest.main()

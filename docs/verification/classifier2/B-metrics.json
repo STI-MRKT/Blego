@@ -3,6 +3,62 @@
     "abstentions": 28,
     "autoFillRate": 0.7971014492753623,
     "boundaryErrors": 0,
+    "byFamily": {
+      "double_colon": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->ABSTAIN": 6,
+          "birthDate->ABSTAIN": 6,
+          "email->email": 6,
+          "emailPassword->ABSTAIN": 4,
+          "login->ABSTAIN": 6,
+          "password->ABSTAIN": 6
+        },
+        "correct": 6,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 28,
+        "records": 6
+      },
+      "horizontal_noisy": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "multiline_mixed": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
     "cases": 12,
     "confusion": {
       "accountId->ABSTAIN": 6,
@@ -221,6 +277,81 @@
     "abstentions": 22,
     "autoFillRate": 0.8804347826086957,
     "boundaryErrors": 0,
+    "byFamily": {
+      "colon_positional": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->ABSTAIN": 6,
+          "email->ABSTAIN": 2,
+          "email->email": 4,
+          "emailPassword->ABSTAIN": 4,
+          "login->ABSTAIN": 6,
+          "password->ABSTAIN": 6
+        },
+        "correct": 4,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 2,
+        "missing": 24,
+        "records": 6
+      },
+      "csv_headers": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "json_objects": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "vertical_tab": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
     "cases": 16,
     "confusion": {
       "accountId->ABSTAIN": 6,
@@ -480,6 +611,45 @@
     "abstentions": 16,
     "autoFillRate": 0.8367346938775511,
     "boundaryErrors": 0,
+    "byFamily": {
+      "pipe_mixed": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->ABSTAIN": 4,
+          "password->ABSTAIN": 6,
+          "token->ABSTAIN": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 30,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 16,
+        "records": 6
+      },
+      "tsv_headers": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
     "cases": 8,
     "confusion": {
       "accountId->accountId": 12,

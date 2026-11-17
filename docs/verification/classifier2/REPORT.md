@@ -28,13 +28,19 @@ The script creates an ephemeral detached checkout of `746a7ee`, executes A and B
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | A — `746a7ee` | 0.462 | 0.261 | 0.333 | 0.257 | 0.565 | 0/18 | 48 | 0 | 23.7 ms |
 | B — deterministic `f60c7ff` | 1.000 | 0.797 | 0.887 | 0.889 | 0.797 | 12/18 | 0 | 0 | 15.6 ms |
-| C — B + offline CRF | 1.000 | 0.797 | 0.887 | 0.889 | 0.797 | 12/18 | 0 | 0 | 39.9 ms |
+| C — B + offline CRF | 1.000 | 0.797 | 0.887 | 0.889 | 0.797 | 12/18 | 0 | 0 | 39.7 ms |
 
 Times are process-local measurements on Linux x64, including parsing; they are not Mac ARM64 performance claims. C includes experimental inference overhead even though its selected confidence cutoff accepted no additions. `auto-filled` is the count of nonempty assignments divided by gold nonempty fields. A boundary error includes a record-count mismatch and an aligned output row whose source entry lies outside that gold record; it does **not** imply data was actually copied across accounts. Cross-record transfers are counted only when a predicted field's value has a unique gold owner in another source record. Unknown ownership is never called a confirmed transfer.
 
 ### Confusion summary on independent families
 
-The complete confusion matrices, per-field precision/recall/F1, and per-file outcomes are in the three machine-readable metrics files. B and C each have 110 correct fields, 28 missing and **zero false assignments**. The 28 omissions are `accountId` 6, `birthDate` 6, `emailPassword` 4, `login` 6 and `password` 6, all in the independent double-colon family. A has 36 correct, 102 missing and 42 false assignments. Neither B nor C transfers a value to another source record in this corpus.
+The complete confusion matrices **for each independent format family** (`test.byFamily.*.confusion`), per-field precision/recall/F1, and per-file outcomes are in the three machine-readable metrics files. B and C each have 110 correct fields, 28 missing and **zero false assignments**. The 28 omissions are `accountId` 6, `birthDate` 6, `emailPassword` 4, `login` 6 and `password` 6, all in the independent double-colon family. A has 36 correct, 102 missing and 42 false assignments. Neither B nor C transfers a value to another source record in this corpus.
+
+| Independent family | A correct / missing / false | B correct / missing / false | C correct / missing / false |
+|---|---:|---:|---:|
+| Noisy horizontal tab | 30 / 22 / 12 | 52 / 0 / 0 | 52 / 0 / 0 |
+| Multiline mixed | 0 / 52 / 30 | 52 / 0 / 0 | 52 / 0 / 0 |
+| Double-colon positional | 6 / 28 / 0 | 6 / 28 / 0 | 6 / 28 / 0 |
 
 ## CRF experiment and gate
 
@@ -46,6 +52,6 @@ The experiment demonstrates only these synthetic families. The unavailable manda
 
 ## Scope and checks
 
-- Python experiment tests: 9 PASS, including exact span/boundary validation, family separation, no raw secret features, CRF marginals/Viterbi and transfer metric semantics.
+- Python experiment tests: 10 PASS, including exact span/boundary validation, family separation, no raw secret features, CRF marginals/Viterbi, per-format confusion matrices and transfer metric semantics.
 - Existing classifier source, UI, copy/export/archive and installed macOS ARM64 behavior are unchanged on this branch. The earlier build `f60c7ff` is evidence only for B, not for a newly integrated C.
 - No DMG or ZIP was produced because C did not pass the inclusion gate and the mandatory control is absent. No release or merge is performed.

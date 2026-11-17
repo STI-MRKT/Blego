@@ -83,6 +83,8 @@ def summarize(cases, predictions, split="test"):
     totals = Counter()
     fields = defaultdict(Counter)
     confusion = Counter()
+    family_counts = defaultdict(Counter)
+    family_confusion = defaultdict(Counter)
     per_case = []
     for case in cases:
         if case["split"] != split:
@@ -98,6 +100,10 @@ def summarize(cases, predictions, split="test"):
         for key, counts in result["fieldCounts"].items():
             fields[key].update(counts)
         confusion.update(result["confusion"])
+        family_counts[case["family"]].update({k: result[k] for k in (
+            "correct", "missing", "falseAssignments", "boundaryErrors", "crossRecordTransfers")})
+        family_counts[case["family"]]["records"] += len(case["records"])
+        family_confusion[case["family"]].update(result["confusion"])
         per_case.append({"id": case["id"], "family": case["family"],
                          "correct": result["correct"], "missing": result["missing"],
                          "falseAssignments": result["falseAssignments"],
@@ -112,12 +118,16 @@ def summarize(cases, predictions, split="test"):
         p = ratio(counts["tp"], counts["tp"] + counts["fp"])
         r = ratio(counts["tp"], counts["tp"] + counts["fn"])
         per_field[key] = {"precision": p, "recall": r, "f1": ratio(2 * p * r, p + r), **counts}
+    by_family = {}
+    for family, counts in sorted(family_counts.items()):
+        by_family[family] = {**counts, "confusion": dict(sorted(family_confusion[family].items()))}
     return {"split": split, **totals, "precision": precision, "recall": recall, "f1": f1,
             "macroF1": ratio(sum(item["f1"] for item in per_field.values()), len(per_field)),
             "autoFillRate": ratio(totals["correct"] + totals["falseAssignments"],
                                   totals["correct"] + totals["missing"]),
             "wholeRecordAccuracy": ratio(totals["wholeRecordsCorrect"], totals["records"]),
             "perField": per_field, "confusion": dict(sorted(confusion.items())),
+            "byFamily": by_family,
             "perCase": per_case}
 
 
