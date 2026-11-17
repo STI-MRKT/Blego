@@ -614,14 +614,14 @@ test(
     };
     // TZ14 hides saved-BIO history in the UI but retains record retrieval/open.
     assert.equal(await page.locator('summary').filter({ hasText: 'Сохранённые BIO' }).count(), 0);
-    const prior = await page.evaluate(async () =>
-      window.blego.biography({ action: 'history' })
-    );
+    const prior = await page.evaluate(async () => window.blego.biography({ action: 'history' }));
     const legacy = prior.items.find((item) => item.id === 'legacy:' + fp.id);
     assert.ok(legacy, 'Legacy BIO remains in persistent history');
     for (let i = 0; i < 3; i++) {
-      const snapshot = await page.evaluate(async (id) =>
-        window.blego.biography({ action: 'open', recordId: id }), legacy.id);
+      const snapshot = await page.evaluate(
+        async (id) => window.blego.biography({ action: 'open', recordId: id }),
+        legacy.id
+      );
       assert.equal(snapshot.record.values.mainBio, 'Old attached BIO');
     }
     assert.deepEqual(readCounts(), { count: 0, original: json });
@@ -635,8 +635,10 @@ test(
       window.blego.biography({ action: 'history' })
     );
     assert.equal(savedHistory.items.length, 1);
-    const reopened = await page.evaluate(async (id) =>
-      window.blego.biography({ action: 'open', recordId: id }), savedHistory.items[0].id);
+    const reopened = await page.evaluate(
+      async (id) => window.blego.biography({ action: 'open', recordId: id }),
+      savedHistory.items[0].id
+    );
     assert.equal(reopened.record.values.mainBio, 'New independent legacy edit');
     await page.reload();
     await page.locator('[data-tab="bio"]').click();
