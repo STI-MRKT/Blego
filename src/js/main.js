@@ -468,6 +468,24 @@ function bindView() {
       }
     }
     syncQuickMetadata();
+    const cameraPreset = metadataForm.querySelector('#photo-device-preset');
+    if (cameraPreset) cameraPreset.onchange = () => {
+      if (cameraPreset.value === 'custom') {
+        metadataForm.elements.namedItem('value-make')?.focus();
+        return;
+      }
+      const [make, model] = cameraPreset.value.split('|');
+      if (!make || !model) return;
+      for (const [field, value] of [['make', make], ['model', model]]) {
+        const input = metadataForm.elements.namedItem('value-' + field);
+        const action = metadataForm.elements.namedItem('action-' + field);
+        if (!input || !action) continue;
+        input.value = value;
+        action.value = 'set';
+        action.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    };
     metadataForm.oninput = (event) => {
       syncQuickMetadata();
       const name = event.target.name || '';
@@ -1628,7 +1646,7 @@ document.addEventListener('click', async (event) => {
     state.friendsCopyBusy=true;syncFriendsCopyActions();
     try {
       const selected=seven?selectSeven(urls,previousFriendsLinks):urls;
-      const result=await copyText(selected.join('\n'),null,friendsCopyMessage(selected.length,seven),'Не удалось скопировать ссылки');
+      const result=await copyText(selected.join('\n'),target,friendsCopyMessage(selected.length,seven),'Не удалось скопировать ссылки');
       if(result.ok && seven)previousFriendsLinks=selected;
     } catch {toast('Не удалось скопировать ссылки','err');}
     finally {state.friendsCopyBusy=false;syncFriendsCopyActions();}
@@ -1706,7 +1724,7 @@ document.addEventListener('click', async (event) => {
     const lines = (state.checker.rows || []).map((row) =>
       (row.input || row.id) + '\t' +
       (row.check ? facebookPresentation(row.check).status : row.link ? 'NOT_CHECKED' : 'INVALID_INPUT'));
-    await copyText(lines.join('\n'));
+    await copyText(lines.join('\n'),target);
     return;
   }
   if (action === 'checker-clear') {
