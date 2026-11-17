@@ -59,7 +59,8 @@ test(
         .locator('.field-value')
         .innerText();
       assert.notEqual(shownPhone, profile.fields.phone);
-      assert.match(shownPhone, /^\d{3}-\d{3}-\d{4}$/);
+      const { formatPhoneDisplay } = await import('../../src/js/utils/phone.mjs');
+      assert.equal(shownPhone, formatPhoneDisplay(profile.fields.phone, profile.country));
     }
     for (const country of ['BR', 'US', 'FR', 'PL', 'DE', 'ES', 'IT', 'GB']) {
       await page.locator('[data-input="locale"]').selectOption(country);
