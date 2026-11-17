@@ -66,7 +66,21 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
             /^[0-9]+$/.test(profile.fields.address.slice(prefix.length))
           );
         });
-      assert.ok(row || fallback, 'Address must belong to a known city/postal and street');
+      assert.ok(
+        row || fallback,
+        'Source address mismatch ' +
+          JSON.stringify({
+            country,
+            type,
+            address: profile.fields.address,
+            city: profile.fields.city,
+            postal: profile.fields.postalCode,
+            streets: preset.streets,
+            knownPlaces: preset.places.length,
+            paired: preset.addresses.length,
+            provenance: profile.addressProvenance || null
+          })
+      );
       assert.ok(
         preset.bios.some(
           (bio) =>
