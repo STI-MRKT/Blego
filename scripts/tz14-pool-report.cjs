@@ -20,8 +20,13 @@ for (const country of countries) {
       streetNames: original.streets.length,
       addresses: addressSupplement.records[country].length,
       cityPostalPairs: original.places.length,
-      bios: baseType.bios[original.language].length + bioSupplement.bios[type][original.language].length,
-      statuses: (Array.isArray(baseType.statuses) ? baseType.statuses : baseType.statuses[original.language]).length,
+      bios:
+        baseType.bios[original.language].length +
+        bioSupplement.bios[type][original.language].length,
+      statuses: (Array.isArray(baseType.statuses)
+        ? baseType.statuses
+        : baseType.statuses[original.language]
+      ).length,
       categories: baseType.categories.length,
       roles: 0,
       // Person-name supplements are explicit personal names; brands are separate.
@@ -39,11 +44,24 @@ for (const country of countries) {
       roles: preset.positionPool.length,
       brandNames: preset.brandNames.length
     };
-    const deltas = Object.fromEntries(Object.keys(before).map((key) => [key, after[key] - before[key]]));
-    for (const key of ['firstNames','lastNames','streetNames','addresses','bios','statuses','categories','roles'])
-      if (deltas[key] < COUNT) throw Error('POOL_NOT_EXPANDED: ' + country + '/' + type + '/' + key);
+    const deltas = Object.fromEntries(
+      Object.keys(before).map((key) => [key, after[key] - before[key]])
+    );
+    for (const key of [
+      'firstNames',
+      'lastNames',
+      'streetNames',
+      'addresses',
+      'bios',
+      'statuses',
+      'categories',
+      'roles'
+    ])
+      if (deltas[key] < COUNT)
+        throw Error('POOL_NOT_EXPANDED: ' + country + '/' + type + '/' + key);
     if (deltas.cityPostalPairs !== 0) throw Error('UNVERIFIED_GEO_MODIFIED');
-    if (type === 'crypto' && preset.brandNames.length < 1000) throw Error('CRYPTO_BRAND_EXHAUSTION');
+    if (type === 'crypto' && preset.brandNames.length < 1000)
+      throw Error('CRYPTO_BRAND_EXHAUSTION');
     report.pools.push({ country, type, before, after, deltas });
   }
 }
@@ -52,15 +70,29 @@ report.officialInstitutions = {
   status: 'unchanged: requires verified official sources'
 };
 report.geoStatus = 'Bundled verified city/postal source pairs remain unchanged';
-report.phone = 'Stored E.164 values remain unchanged; only displayed/copied value follows XXX-XXX-XXXX';
+report.phone =
+  'Stored E.164 values remain unchanged; only displayed/copied value follows XXX-XXX-XXXX';
 const output = process.argv[2];
 if (output) fs.writeFileSync(path.resolve(output), JSON.stringify(report, null, 2) + '\n');
-console.log(JSON.stringify({
-  presets: report.pools.length,
-  minimumAdded: Math.min(...report.pools.flatMap((p) =>
-    ['firstNames','lastNames','streetNames','addresses','bios','statuses','categories','roles']
-      .map((k) => p.deltas[k]))),
-  changedVerifiedGeo: 0,
-  cryptoBrandsPerCountry: report.pools.find((p) => p.type === 'crypto').after.brandNames,
-  institutions: report.officialInstitutions.count
-}));
+console.log(
+  JSON.stringify({
+    presets: report.pools.length,
+    minimumAdded: Math.min(
+      ...report.pools.flatMap((p) =>
+        [
+          'firstNames',
+          'lastNames',
+          'streetNames',
+          'addresses',
+          'bios',
+          'statuses',
+          'categories',
+          'roles'
+        ].map((k) => p.deltas[k])
+      )
+    ),
+    changedVerifiedGeo: 0,
+    cryptoBrandsPerCountry: report.pools.find((p) => p.type === 'crypto').after.brandNames,
+    institutions: report.officialInstitutions.count
+  })
+);
