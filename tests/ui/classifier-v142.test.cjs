@@ -44,12 +44,8 @@ test(
         )
         .isDisabled()
     );
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[data-action="classifier-archive"]') })
-      .locator('summary')
-      .first()
-      .click();
+    assert.equal(await page.locator('#classifier-extra').count(), 0);
+    assert.ok(await page.locator('[data-action="classifier-archive"]').isVisible());
     await page.locator('[data-action="classifier-archive"]').click();
     await page.getByText('Сохранено в архиве', { exact: true }).waitFor();
     const saved = await page.evaluate(async () => {
