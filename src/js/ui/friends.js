@@ -52,7 +52,7 @@ export function friendsHTML() {
   return `<div class="page">
     <div class="page-head">
       <div><h1>Friends</h1><p class="sub">Профили по GEO. Выберите регион или найдите нужную карточку.</p></div>
-      <div class="head-actions"><span class="pill">${list.length} / ${all.length} profiles</span><button class="btn" data-action="friends-import" ${state.friendsBusy ? 'disabled' : ''}>Импортировать Friends</button></div>
+      <div class="head-actions"><span class="pill friends-count">${list.length} / ${all.length} profiles</span></div>
     </div>
     <form id="friends-search" class="controls"><label class="fl">Поиск<input class="input" id="friends-query" value="${esc(state.friendsQuery || '')}"></label><label class="fl">Площадка<select class="input" id="friends-platform"><option value="">Все</option>${platforms.map((platform) => `<option ${state.friendsPlatform === platform ? 'selected' : ''}>${esc(platform)}</option>`).join('')}</select></label><button class="btn" type="submit">Найти</button></form>
     <div class="geo-filter">
@@ -60,25 +60,17 @@ export function friendsHTML() {
       ${geos.map((geo) => `<button class="geo-chip ${selected === geo ? 'on' : ''}" data-action="friends-geo" data-geo="${esc(geo)}">${esc(geo)} <b>${count(geo)}</b></button>`).join('')}
     </div>
     <div class="head-actions friends-copy-actions"><button class="btn" data-action="friends-copy" data-friends-copy="seven" ${links.length < 7 || state.friendsCopyBusy ? 'disabled' : ''}>${I.copy}Скопировать 7</button><button class="btn" data-action="friends-copy" data-friends-copy="all" ${!links.length || state.friendsCopyBusy ? 'disabled' : ''}>${I.copy}Скопировать все</button><span class="sub" data-friends-copy-empty aria-live="polite">${links.length ? '' : 'Нет доступных ссылок'}</span></div>
-    ${previewHTML()}${pager(page, pages, 'friends-page')}
+    ${pager(page, pages, 'friends-page')}
     <div class="friends-grid">
       ${list
         .slice(page * 100, (page + 1) * 100)
         .map(
-          (friend) => `<article class="friend-card">
-        <div class="friend-top"><div class="avatar lg" style="--h:${Number(friend.hue) || 240}">${esc(initialsOf(friend.name || ''))}</div><span class="pill tiny">${esc(friend.geo)}</span></div>
+          (friend) => `<article class="friend-card fp-friend-card" data-copy-surface>
+        <div class="friend-top"><div class="avatar xl" style="--h:${Number(friend.hue) || 240}">${esc(initialsOf(friend.name || ''))}</div><span class="pill tiny">${esc(friend.geo)}</span></div>
         <div class="friend-name">${esc(friend.name || friend.url)}${friend.name ? `<button class="copy tiny always" data-action="copy" data-copy="${esc(friend.name)}" aria-label="Копировать имя">${I.copy}</button>` : ''}</div>
-        <div class="friend-handle mono">${friend.handle ? '@' + esc(friend.handle) : ''}</div><div class="friend-niche">${esc(friend.niche)}</div>
-        <div class="head-actions"><button class="btn friend-link" data-action="friends-open" data-id="${esc(friend.id)}">${I.link}Open profile</button><button class="btn" data-action="copy" data-copy="${esc(friend.url)}" data-friend-copy="url" aria-label="Копировать ссылку">${I.copy}</button></div>
-        ${
-          friend.source
-            ? `<details><summary>Подробнее</summary><p class="sub">${esc(friend.platform)} · ${esc(friend.source)}</p><p>${esc(friend.notes || '')}</p>${Object.entries(
-                friend.extraFields || {}
-              )
-                .map(([key, value]) => `<p>${esc(key)}: ${esc(value)}</p>`)
-                .join('')}</details>`
-            : ''
-        }
+        <div class="friend-handle mono">${friend.handle ? '@' + esc(friend.handle) : ''}</div><div class="row-chips friend-tags">${friend.niche ? `<button class="pill accent" data-action="copy" data-copy="${esc(friend.niche)}" aria-label="Копировать тематику">${esc(friend.niche)}</button>` : ''}</div>${friend.notes ? `<p class="friend-note">${esc(friend.notes.slice(0, 180))}</p>` : ''}
+        <div class="head-actions friend-actions"><button class="btn friend-link" data-action="friends-open" data-id="${esc(friend.id)}">${I.link}Open profile</button><button class="btn" data-action="copy" data-copy="${esc(friend.url)}" data-friend-copy="url" aria-label="Копировать ссылку">${I.copy}</button></div>
+
       </article>`
         )
         .join('')}
