@@ -145,6 +145,11 @@ jobs:
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
             exit 1
           fi
+      - name: Live FB.Tools check through installed BLEGO.app (no mocks)
+        if: env.TARGET_ARCH == 'arm64' && github.ref_name == 'codex/blego-fbtools-checker'
+        run: |
+          set -o pipefail
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node scripts/check-fbtools-native.cjs release/fbtools-live-native.json | tee release/fbtools-live-native.log
       - name: Installed photo batch and original UX comparison
         if: env.QA_SPEC != 'tz12'
         run: |
@@ -218,6 +223,9 @@ jobs:
             release/native-darwin-*.json
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
+            release/fbtools-live-native.json
+            release/fbtools-live-native.log
+            release/fbtools-live-native.png
 
       - name: Upload diagnostics on failure
         if: failure()
@@ -229,6 +237,9 @@ jobs:
           path: |
             release/installed-darwin-*.json
             release/installed-darwin-*.json.log
+            release/fbtools-live-native.json
+            release/fbtools-live-native.log
+            release/fbtools-live-native.png
             release/native-darwin-*.json
             release/metadata-load-*.json
             release/metadata-ui-batch-*.log
