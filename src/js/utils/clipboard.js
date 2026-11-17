@@ -4,7 +4,7 @@ import { toast } from './toast.js';
 import { checkCopyText } from '../../../shared/copy-format.mjs';
 
 const flashTimeouts = new WeakMap();
-function showCopyFeedback(button) {
+export function showCopyFeedback(button) {
   if (!button || typeof button.closest !== 'function') return;
   const surface = button.closest(
     '[data-copy-surface], .field, .bio-field, .friend-card, .ph, .checker-row, .news-item-card, .demo-left, .classifier-table td'
