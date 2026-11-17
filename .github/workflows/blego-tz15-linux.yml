@@ -21,7 +21,7 @@ jobs:
       - run: npm ci
       - name: Formatter review
         run: |
-          for file in shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
+          for file in scripts/check-installed-app.cjs shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
