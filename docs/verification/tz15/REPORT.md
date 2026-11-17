@@ -16,3 +16,13 @@ Installed Mac app must pass selected GUI regression suite `tz15`, native ExifToo
 ## Follow-up native QA
 
 The first installed macOS ARM64 run [44092982608](https://github.com/STI-MRKT/Blego/actions/runs/44092982608) completed native ExifTool and full verification and passed 20 of 21 scoped GUI tests. One legacy unified-copy GUI fixture still expected the retired direct-provider label `LOGIN_REQUIRED`; the accepted FB.Tools-only implementation intentionally shows `LIVE` in that controlled fixture. The assertion was updated, with no changes to runtime code. Re-run installed-app acceptance on this candidate before installer publication.
+
+
+## Final TZ16 responsive acceptance candidate — 2026-11-17
+- [Full Linux lint/unit/integration and targeted native Electron GUI PASS — run 44101020846](https://github.com/STI-MRKT/Blego/actions/runs/44101020846).
+- National phone formats for US, BR, FR, PL, DE, ES, IT and GB; canonical stored values and uniqueness retained.
+- Friends UI imports/details hidden, legacy Friends data remains; FP-style cards and responsive copy bar.
+- MetaPainter split-pane responsive editing and camera device Make/Model selection, actual MakerNotes acknowledgement and EXIF readback regression included.
+- Copied values highlighted only after successful clipboard operation, including FP field, Friends, News, original classifier source, Checker, images.
+- News nav icon replaced with newspaper, no News feed/style changes.
+- **Native Mac QA must still pass on this exact candidate before publishing the unsigned DMG and installation ZIP.**
