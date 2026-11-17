@@ -40,17 +40,22 @@ test(
     });
     let page = await app.firstWindow();
     await page.locator('[data-view="friends"]').click();
-    assert.equal(
-      await page.getByRole('button', { name: 'Импортировать Friends', exact: true }).count(),
-      1
-    );
+    assert.equal(await page.locator('[data-action="friends-import"]').count(), 0);
+    assert.equal(await page.locator('.friend-card details').count(), 0);
+    assert.equal(await page.locator('.fp-friend-card').count(), FRIENDS.length);
+    // Import API remains for migration, but the product UI no longer exposes it.
     await app.evaluate(({ dialog }, file) => {
       dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [file] });
     }, input);
-    await page.getByRole('button', { name: 'Импортировать Friends', exact: true }).click();
-    await page.locator('[data-friends-preview]').waitFor();
-    assert.equal(await page.locator('.friend-card').count(), FRIENDS.length);
-    await page.getByRole('button', { name: 'Добавить подтверждённые записи', exact: true }).click();
+    const preview = await page.evaluate(() => window.blego.importFriends());
+    assert.equal(preview.added, 2);
+    const result = await page.evaluate((token) => window.blego.confirmFriends(token), preview.token);
+    await page.evaluate(async (rows) => {
+      const { state } = await import('/js/state.js');
+      state.friendsRows = rows;
+    }, result.rows);
+    await page.locator('[data-view="photos"]').click();
+    await page.locator('[data-view="friends"]').click();
     await page.waitForFunction(
       (expected) => document.querySelectorAll('.friend-card').length === expected,
       FRIENDS.length + 2
