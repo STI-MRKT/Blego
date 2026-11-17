@@ -153,6 +153,7 @@ jobs:
           ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
           suite=all
           if [ "$QA_SPEC" = tz13 ]; then suite=classifier; fi
+          if [ "$QA_SPEC" = tz14 ]; then suite=tz14; fi
           if ! node scripts/check-installed-app.cjs --suite "$suite" --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-darwin-${{ env.TARGET_ARCH }}.json; then
             echo "::error::Packaged app validation failed; diagnostics:"
             cat release/installed-darwin-${{ env.TARGET_ARCH }}.json.log || true
