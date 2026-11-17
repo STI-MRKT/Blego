@@ -101,7 +101,8 @@ test(
       assert.deepEqual(parseText(row, 'tsv').records[0].raw, expected);
       await page.locator('[data-action="classifier-copy-table"]').click();
       await clip(row);
-      await page.locator('#classifier-extra > summary').click();
+      assert.equal(await page.locator('#classifier-extra').count(), 0);
+      assert.ok(await page.locator('[data-action="import-copy"]').isVisible());
       await page.locator('[data-action="import-copy"]').click();
       await clip(text);
       const destination = path.join(root, `export-${format}.csv`);
