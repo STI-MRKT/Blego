@@ -38,7 +38,10 @@ export function nationalPhoneForCopy(value, country) {
   const digits = value.replace(/\D/g, '');
   if (!digits.startsWith(rule.dial) || digits.length <= rule.dial.length || digits.length > 15)
     throw Error('Номер не соответствует стране профиля');
-  const formatted = formatPhoneDisplay(value, country);
+  const expectedLength = rule.groups.reduce((sum, n) => sum + n, 0);
+  if (digits.length !== rule.dial.length + expectedLength)
+    throw Error('Номер не соответствует стране профиля');
+  const formatted = formatPhoneDisplay('+' + digits, country);
   if (!/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(formatted))
     throw Error('Номер не соответствует формату профиля');
   return formatted;
