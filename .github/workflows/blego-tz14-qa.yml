@@ -25,6 +25,17 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci
+      - name: Export formatted tests
+        shell: bash
+        run: |
+          for file in tests/integration/generator-tz12.test.cjs tests/ui/archive-actions.test.cjs tests/ui/generator-picker-tz12.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/generator-tz12.test.cjs; do
+            echo "TZ14_FORMAT_BEGIN:$file"
+            ./node_modules/.bin/prettier "$file" | base64 -w 0
+            echo
+            echo "TZ14_FORMAT_END:$file"
+          done
+      - name: Format these tests in ephemeral CI before full regression
+        run: ./node_modules/.bin/prettier --write tests/integration/generator-tz12.test.cjs tests/ui/archive-actions.test.cjs tests/ui/generator-picker-tz12.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/generator-tz12.test.cjs
       - name: Lint, hotfix tests and full source regressions
         shell: bash
         run: |
