@@ -1227,7 +1227,18 @@ document.addEventListener('click', async (event) => {
   if (action === 'news-copy') {
     const field=target.dataset.newsCopy;
     if(field!=='title' && field!=='link')return;
-    await copyText(target.dataset.copy || '',null,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
+    const copiedValue = target.dataset.copy || '';
+    const result = await copyText(copiedValue,null,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
+    // Only an acknowledged clipboard write may change the visual copy state.
+    if (result.ok) {
+      state.news.copiedLink = field === 'link' ? copiedValue : null;
+      document.querySelectorAll('.news-item-card').forEach(card => {
+        const linkButton = card.querySelector('[data-news-copy="link"]');
+        const active = Boolean(state.news.copiedLink && linkButton?.dataset.copy === state.news.copiedLink);
+        card.classList.toggle('news-link-copied', active);
+        linkButton?.setAttribute('aria-pressed', String(active));
+      });
+    }
     return;
   }
   if (action === 'copy') {
