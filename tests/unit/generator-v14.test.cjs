@@ -41,8 +41,8 @@ test('authored pools supplement each person category by 256 new female country-s
   assert.equal(new Set(tech.brandNames.map(normalized)).size, tech.brandNames.length);
   assert.ok(tech.brandNames.every((n) => !/[0-9]/.test(n) && n.split(' ').length <= 3));
   const crypto = resolvePreset('US', 'crypto');
-  assert.equal(crypto.brandNames.length, 200);
-  assert.equal(new Set(crypto.brandNames.map(normalized)).size, 200);
+  assert.equal(crypto.brandNames.length, 1000);
+  assert.equal(new Set(crypto.brandNames.map(normalized)).size, 1000);
   assert.ok(crypto.brandNames.every((name) => /(?:Chain|Ledger|Block|Node|Protocol|Vault|Token|Hash|Consensus|Peer|Onchain|Merkle|Proof|Bridge|Wallet|Web3|Cryptography|Open Network|Digital Asset|Decentral)/.test(name)));
   for (const type of ['model', 'crypto']) {
     const names = Object.values(data.personNames[type]).flat();
