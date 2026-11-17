@@ -2,20 +2,70 @@
 // No real identity, confirmed institution or verified postal location is invented.
 const EXTRA = 160;
 const TECH_ROOTS = [
-  'Circuit', 'Vector', 'Cloud', 'Pixel', 'Syntax', 'Data', 'Signal', 'Compute',
-  'Kernel', 'Interface', 'Quantum', 'Algorithm', 'Spectrum', 'Platform',
-  'Neural', 'Open Source', 'Robotics', 'Digital', 'Protocol', 'Vertex'
+  'Circuit',
+  'Vector',
+  'Cloud',
+  'Pixel',
+  'Syntax',
+  'Data',
+  'Signal',
+  'Compute',
+  'Kernel',
+  'Interface',
+  'Quantum',
+  'Algorithm',
+  'Spectrum',
+  'Platform',
+  'Neural',
+  'Open Source',
+  'Robotics',
+  'Digital',
+  'Protocol',
+  'Vertex'
 ];
 const CRYPTO_ROOTS = [
-  'Ledger', 'Consensus', 'Onchain', 'Blockchain', 'Digital Asset', 'Token',
-  'Wallet', 'Custody', 'Decentralized', 'Cryptography', 'Settlement',
-  'Smart Contract', 'Rollup', 'Validation', 'Block', 'Web3', 'Network',
-  'Protocol', 'Chain', 'Distributed Ledger'
+  'Ledger',
+  'Consensus',
+  'Onchain',
+  'Blockchain',
+  'Digital Asset',
+  'Token',
+  'Wallet',
+  'Custody',
+  'Decentralized',
+  'Cryptography',
+  'Settlement',
+  'Smart Contract',
+  'Rollup',
+  'Validation',
+  'Block',
+  'Web3',
+  'Network',
+  'Protocol',
+  'Chain',
+  'Distributed Ledger'
 ];
-const TECH_ENDINGS = ['Studio', 'Journal', 'Research', 'Notes', 'Lab', 'Review', 'Works', 'Insights'];
+const TECH_ENDINGS = [
+  'Studio',
+  'Journal',
+  'Research',
+  'Notes',
+  'Lab',
+  'Review',
+  'Works',
+  'Insights'
+];
 const CRYPTO_ENDINGS = [
-  'Studio', 'Journal', 'Research', 'Notes', 'Lab', 'Review',
-  'Works', 'Insights', 'Observatory', 'Digest'
+  'Studio',
+  'Journal',
+  'Research',
+  'Notes',
+  'Lab',
+  'Review',
+  'Works',
+  'Insights',
+  'Observatory',
+  'Digest'
 ];
 const dedupKey = (s) => s.normalize('NFKC').trim().toLocaleLowerCase();
 const cleanText = (value) => String(value || '').trim();
@@ -23,13 +73,14 @@ const cleanText = (value) => String(value || '').trim();
 function combinations(root, endings, base = []) {
   const used = new Set(base.map(dedupKey));
   const result = [];
-  for (const a of root) for (const b of endings) {
-    const value = a + ' ' + b;
-    if (!used.has(dedupKey(value))) {
-      result.push(value);
-      used.add(dedupKey(value));
+  for (const a of root)
+    for (const b of endings) {
+      const value = a + ' ' + b;
+      if (!used.has(dedupKey(value))) {
+        result.push(value);
+        used.add(dedupKey(value));
+      }
     }
-  }
   return result;
 }
 
@@ -61,7 +112,8 @@ function combinationsOfPhrases(values, count = EXTRA, join = ' ') {
   const out = [];
   for (let i = 0; i < base.length && out.length < count; i++) {
     for (let j = 1; j < base.length && out.length < count; j++) {
-      const first = base[i], second = base[(i + j) % base.length];
+      const first = base[i],
+        second = base[(i + j) % base.length];
       if (first === second) continue;
       const phrase = first + join + second;
       if (phrase.length > 500 || seen.has(dedupKey(phrase))) continue;
