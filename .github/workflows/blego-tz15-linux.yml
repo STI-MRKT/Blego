@@ -9,6 +9,7 @@ on:
       - codex/blego-classifier-layout-headers-20261118
       - codex/blego-news-hide-partial-source-warning-20261118
       - codex/blego-tz19-adaptive-confirmed-layouts-20261118
+      - codex/blego-tz20-order-text-fixtures-20261118
 permissions:
   contents: read
 jobs:
@@ -44,6 +45,8 @@ jobs:
         run: node --test tests/unit/news-partial-warning.test.cjs
       - name: TZ19 adaptive + confirmed-layout tests
         run: node --test tests/unit/tz19-adaptive-layouts.test.cjs tests/unit/tz19-adaptive-ui.test.cjs
+      - name: TZ20 order-envelope regression
+        run: node --test tests/unit/tz20-order-fixtures.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
