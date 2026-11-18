@@ -43,7 +43,9 @@ export function inferRecordStructure(
   // Long account IDs are sufficient when DOB/name are absent; complete
   // date + ID + name anchors also qualify. Short IDs in fragmented prose
   // alone must not turn two arbitrary addresses into assigned roles.
-  const hasOwnerEvidence = ids.length === 1 && (uidLike.test(values[ids[0]]) || anchored);
+  const hasOwnerEvidence =
+    ids.length === 1 &&
+    (uidLike.test(recognized[ids[0]]?.value || values[ids[0]]) || anchored);
   const hasExplicitBackup = recognized.some(
     (r) => r.key === 'backupEmail' && r.explicit && !r.invalid
   );
