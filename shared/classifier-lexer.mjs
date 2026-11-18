@@ -221,11 +221,17 @@ export function structuredRecords(text, options = {}) {
         end = text.indexOf('\n', i);
       syntaxEnd = end < 0 ? text.length : end;
       const lineText = text.slice(start, syntaxEnd);
+      // The account-order family starts with an email and a *bare* secret,
+      // then an ID and cookie JSON. Only this anchored prefix permits ':' as
+      // a delimiter; it must not split colons inside JSON, URLs or User-Agent.
+      const accountColonTuple =
+        /^[^\s:;|@]+@[^\s:;|@]+\.[^\s:;|@]+:[^:;|\r\n]{4,128}:\d{13,20}:\s*\[/u.test(lineText);
       colonTuple =
-        !labelledStart(lineText) &&
-        !/[|;\t]|::/.test(lineText) &&
-        !lineText.includes('://') &&
-        /:[^\r\n]*@[^\s:@]+\.[^\s:]+/.test(lineText);
+        accountColonTuple ||
+        (!labelledStart(lineText) &&
+          !/[|;\t]|::/.test(lineText) &&
+          !lineText.includes('://') &&
+          /:[^\r\n]*@[^\s:@]+\.[^\s:]+/.test(lineText));
     }
     const length = c === '\\' && text[i + 1] === '\\' ? 2 : 1;
     const nextLabel = labelledStart(text.slice(i + length, i + length + 100));
