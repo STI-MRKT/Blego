@@ -95,7 +95,9 @@ test('TZ20 colon account can span blank lines before Cookie JSON', async () => {
     '',
     cookie('61500000123456') + ':' + agent
   ].join('\n');
-  const source = [receipt, a, row('second@example.test', 'SYNTHETIC_FB_2', '61500000123457')].join('\n');
+  const source = [receipt, a, row('second@example.test', 'SYNTHETIC_FB_2', '61500000123457')].join(
+    '\n'
+  );
   const { parsed, result } = await scan(source, {
     headers: false,
     columnOrder: 'Email|Пароль|Fb_ID|Cookie|User-Agent'
@@ -119,24 +121,29 @@ test('TZ20 standalone order number is not an account in short two-email rows', a
   const source = ['Номер заказа: 000001', '', a, b].join('\n');
   const { parsed } = await scan(source, { headers: false });
   assert.equal(parsed.records.length, 2);
-  assert.deepEqual(parsed.records.map((item) => item.sourceRecord), [a, b]);
+  assert.deepEqual(
+    parsed.records.map((item) => item.sourceRecord),
+    [a, b]
+  );
 });
 
 test('TZ20 multiline vertical credentials form records, not one row per field', async () => {
-  const group = (uid, first, backup, fb, mail) => [
-    first,
-    '',
-    fb + ';',
-    '',
-    backup,
-    mail + ';',
-    '',
-    'AAAA BBBB CCCC DDDD;',
-    '',
-    uid
-  ].join('\n');
-  const a = group('61500000123456', 'one@example.test', 'backup@example.test', 'SYNTH_FB_1', 'SYNTH_MAIL_1');
-  const b = group('61500000123457', 'two@example.test', 'other@example.test', 'SYNTH_FB_2', 'SYNTH_MAIL_2');
+  const group = (uid, first, backup, fb, mail) =>
+    [first, '', fb + ';', '', backup, mail + ';', '', 'AAAA BBBB CCCC DDDD;', '', uid].join('\n');
+  const a = group(
+    '61500000123456',
+    'one@example.test',
+    'backup@example.test',
+    'SYNTH_FB_1',
+    'SYNTH_MAIL_1'
+  );
+  const b = group(
+    '61500000123457',
+    'two@example.test',
+    'other@example.test',
+    'SYNTH_FB_2',
+    'SYNTH_MAIL_2'
+  );
   const text = a + '\n\n\n' + b;
   const { parsed, result } = await scan(text, {
     headers: false,
@@ -155,7 +162,9 @@ test('TZ20 uniquely anchored account colon layout infers one FB password without
   assert.equal(result.records.length, 1);
   assert.equal(result.records[0].data.password, 'SYNTHETIC_FB_1');
   assert.equal(result.records[0].data.accountId, '61500000123456');
-  assert.ok(result.records[0].warnings.some((warning) => warning.code === 'CREDENTIAL_LAYOUT_INFERRED'));
+  assert.ok(
+    result.records[0].warnings.some((warning) => warning.code === 'CREDENTIAL_LAYOUT_INFERRED')
+  );
 });
 
 test('TZ20 conflicting Cookie owner does not infer an account password', async () => {
@@ -191,13 +200,22 @@ test('TZ20 compound double-colon row keeps Cookie JSON, UA and source intact', a
 
 test('TZ20 two-email semicolon rows remain separate and preserve raw values', async () => {
   const make = (uid, first, backup) =>
-    [first, 'SYNTHETIC_FB_1', backup, 'SYNTHETIC_MAIL_1',
-      'AAAA BBBB CCCC DDDD', 'https://www.facebook.com/profile.php?id=' + uid].join(';');
+    [
+      first,
+      'SYNTHETIC_FB_1',
+      backup,
+      'SYNTHETIC_MAIL_1',
+      'AAAA BBBB CCCC DDDD',
+      'https://www.facebook.com/profile.php?id=' + uid
+    ].join(';');
   const a = make('61500000123456', 'first@example.test', 'backup@example.test');
   const b = make('61500000123457', 'second@example.test', 'other@example.test');
   const source = ['Номер заказа: 000001', '', a, b].join('\n');
   const { parsed } = await scan(source, { headers: false });
   assert.equal(parsed.records.length, 2);
   assert.equal(parsed.records[0].sourceEntries.length, 6);
-  assert.deepEqual(parsed.records.map((r) => r.sourceRecord), [a, b]);
+  assert.deepEqual(
+    parsed.records.map((r) => r.sourceRecord),
+    [a, b]
+  );
 });
