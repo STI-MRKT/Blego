@@ -5,8 +5,12 @@ test('TZ19 classifier exposes explicit pattern memory controls without storing s
   const { state } = await import('../../src/js/state.js');
   const { importHTML } = await import('../../src/js/ui/import.js');
   const keys = [
-    'importStep', 'importData', 'classifierOptions', 'classifierSavedCount',
-    'classifierDetailRow', 'imagesBusy'
+    'importStep',
+    'importData',
+    'classifierOptions',
+    'classifierSavedCount',
+    'classifierDetailRow',
+    'imagesBusy'
   ];
   const previous = Object.fromEntries(keys.map((key) => [key, state[key]]));
   try {
@@ -15,10 +19,14 @@ test('TZ19 classifier exposes explicit pattern memory controls without storing s
       operationId: 'synthetic-operation',
       status: 'preview_partial',
       counts: { total: 1 },
-      records: [{
-        id: '1', data: { rowNumber: '1', email: 'synthetic@example.test' },
-        extended: {}, warnings: []
-      }],
+      records: [
+        {
+          id: '1',
+          data: { rowNumber: '1', email: 'synthetic@example.test' },
+          extended: {},
+          warnings: []
+        }
+      ],
       sourceColumns: ['column_1', 'column_2'],
       offset: 0,
       filteredTotal: 1
