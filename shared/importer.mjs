@@ -1,6 +1,7 @@
 import { MAX_INPUT_BYTES, failure } from './contracts.mjs';
 import { fieldForHeader, isHeaderCandidate } from './classifier.mjs';
 import { wantsStructuredText, structuredRecords } from './classifier-lexer.mjs';
+import { verticalAccountRecords } from './classifier-vertical.mjs';
 import { tabLabelRecords } from './classifier-tab-labels.mjs';
 function diagnostic(code, location = {}, recordId = null, level = 'warning') {
   return { code, location, recordId, level };
@@ -264,11 +265,19 @@ export function parseText(text, format, options = {}) {
     delimiter = null,
     headerless = false;
   let structured = false;
+  const vertical =
+    format === 'txt' && options.classification && !options.schema && options.headers !== true &&
+    !receipt.receipt
+      ? verticalAccountRecords(text)
+      : null;
   const labelled =
     format === 'txt' && options.classification && !options.schema && options.headers !== true
       ? tabLabelRecords(text, fieldForHeader)
       : null;
-  if (labelled) {
+  if (vertical) {
+    ({ records, columns, delimiter, headerless, structured } = vertical);
+    diagnostics.push(...vertical.diagnostics);
+  } else if (labelled) {
     ({ records, columns, delimiter, headerless, structured } = labelled);
     diagnostics.push(...labelled.diagnostics);
   } else if (
