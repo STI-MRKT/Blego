@@ -20,24 +20,6 @@ export function inferRecordStructure(
   if (identityConflict || !entries.length || entries.length > 64) return roles;
   const values = entries.map(normalize);
   const emails = recognized.flatMap((r, i) => (r.key === 'email' && !r.invalid ? [i] : []));
-  // Preserve two distinct email addresses even when optional identity/date/name
-  // fields are absent. A single explicit Email label takes precedence; otherwise
-  // the first address in this record is primary and the other requires review.
-  const hasExplicitBackup = recognized.some(
-    (r) => r.key === 'backupEmail' && r.explicit && !r.invalid
-  );
-  if (
-    emails.length === 2 &&
-    !hasExplicitBackup &&
-    values[emails[0]].toLowerCase() !== values[emails[1]].toLowerCase()
-  ) {
-    const labelledPrimary = emails.filter((i) => recognized[i].explicit);
-    const primary = labelledPrimary.length === 1 ? labelledPrimary[0] : emails[0];
-    const secondary = emails.find((i) => i !== primary);
-    roles.set(secondary, 'backupEmail');
-  }
-  // Other unlabelled roles still require stronger, independent record anchors.
-  if (entries.length < 5) return roles;
   const dates = values.flatMap((value, i) => (birthDate(value) ? [i] : []));
   const labelledIds = recognized.flatMap((r, i) =>
     r.key === 'accountId' && !r.invalid ? [i] : []
@@ -57,7 +39,26 @@ export function inferRecordStructure(
     dates.length === 1 &&
     ids.length === 1 &&
     names.length === 1;
-  if (!anchored) return roles;
+  // Promote the second email only when it is tied to a coherent record.
+  // Long account IDs are sufficient when DOB/name are absent; complete
+  // date + ID + name anchors also qualify. Short IDs in fragmented prose
+  // alone must not turn two arbitrary addresses into assigned roles.
+  const hasOwnerEvidence = ids.length === 1 && (uidLike.test(values[ids[0]]) || anchored);
+  const hasExplicitBackup = recognized.some(
+    (r) => r.key === 'backupEmail' && r.explicit && !r.invalid
+  );
+  if (
+    hasOwnerEvidence &&
+    emails.length === 2 &&
+    !hasExplicitBackup &&
+    values[emails[0]].toLowerCase() !== values[emails[1]].toLowerCase()
+  ) {
+    const labelledPrimary = emails.filter((i) => recognized[i].explicit);
+    const primary = labelledPrimary.length === 1 ? labelledPrimary[0] : emails[0];
+    const secondary = emails.find((i) => i !== primary);
+    roles.set(secondary, 'backupEmail');
+  }
+  if (!anchored || entries.length < 5) return roles;
   if (looseIds.length === 1) roles.set(looseIds[0], 'accountId');
   roles.set(dates[0], 'birthDate');
   roles.set(names[0], 'fullName');
