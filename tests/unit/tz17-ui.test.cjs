@@ -15,12 +15,14 @@ test('TZ17 shows undefined passwords explicitly and disables empty-value copy', 
     state.importData = {
       status: 'preview_partial',
       counts: { total: 1 },
-      records: [{
-        id: '1',
-        data: { rowNumber: '1', accountId: '61500000123456', email: 'one@example.test' },
-        extended: {},
-        warnings: []
-      }],
+      records: [
+        {
+          id: '1',
+          data: { rowNumber: '1', accountId: '61500000123456', email: 'one@example.test' },
+          extended: {},
+          warnings: []
+        }
+      ],
       sourceColumns: [],
       offset: 0,
       filteredTotal: 1
