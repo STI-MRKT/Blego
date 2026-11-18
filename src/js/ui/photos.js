@@ -179,7 +179,7 @@ function deviceEditor(selected) {
           <input class="input" name="value-${field}" maxlength="120" placeholder="${label}" autocomplete="off">
         </label>`).join('')}
     </div>
-    <label class="photo-device-ack"><input type="checkbox" name="confirm-maker"> Подтверждаю изменение производителя/модели при наличии MakerNotes</label>
+    <label class="photo-device-ack"><input type="checkbox" name="confirm-maker" ${state.metadataDraft?.['confirm-maker'] === false ? '' : 'checked'}> Подтверждаю изменение производителя/модели при наличии MakerNotes</label>
     <p class="sub">EXIF не подтверждает подлинность устройства. MakerNotes могут быть несовместимы при изменении модели.</p>
   </section>`;
 }
@@ -205,7 +205,7 @@ function exportedCopiesHTML(report) {
     <div class="photo-export-list">${saved
       .map((file) => `<p data-exported-copy="${esc(file.fileId)}"><b>${esc(file.name)}</b> → ${copyValue('Копировать имя готового файла', file.outputName || '')}</p>`)
       .join('')}</div>
-    <p class="sub">В Finder даты «Создан» и «Изменён» относятся к файлу. Дату съёмки и камеру проверяйте во встроенных метаданных EXIF готовой фотографии (например, через «Просмотр» → «Показать инспектор»).</p>
+    <p class="sub">В Finder даты «Создан» и «Изменён» относятся к файлу. Дату съёмки и камеру проверяйте во встроенных метаданных EXIF готовой фотографии (например, через «Просмотр» → «Показать инспектор»). Spotlight может обновлять сведения Finder с задержкой; это не задержка записи EXIF. Если сведения пока старые, проверьте именно файл с суффиксом _meta_.</p>
   </section>`;
 }
 export function photosHTML() {
