@@ -39,6 +39,10 @@ test(
     await page.locator('[data-action="photos-tools"]').click();
     const makerConfirmation = page.locator('[name="confirm-maker"]');
     assert.equal(await makerConfirmation.isChecked(), true);
+    const makerText = await page.locator('.photo-device-card').innerText();
+    assert.ok(!makerText.includes('Подтверждаю изменение производителя/модели'));
+    assert.ok(!makerText.includes('EXIF не подтверждает подлинность устройства'));
+    assert.ok(!makerText.includes('MakerNotes могут быть несовместимы'));
     await makerConfirmation.uncheck();
     assert.equal(await makerConfirmation.isChecked(), false);
     await makerConfirmation.check();
