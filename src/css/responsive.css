@@ -119,3 +119,15 @@
   .proxy-card .mini-head{flex-wrap:wrap;gap:6px}
   .proxy-card .mini-head .pill{max-width:100%;white-space:normal;height:auto;min-height:19px;overflow-wrap:anywhere}
 }
+
+/* TZ21 String Decoder */
+@media(max-width:1040px){
+  .decoder-grid{grid-template-columns:minmax(0,1fr)}
+  .decoder-textarea{min-height:190px}
+}
+@media(max-width:600px){
+  .decoder-panel{padding:12px}
+  .decoder-output{min-height:150px;max-height:340px}
+  .decoder-output-head .btn{width:100%}
+  .decoder-actions .btn{flex:1 1 auto}
+}
