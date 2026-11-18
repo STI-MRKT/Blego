@@ -67,8 +67,14 @@ test(
     await page.locator('#checker-sort').selectOption('id-desc');
     assert.equal(await page.locator('.checker-row').count(), 2);
     assert.equal(await page.locator('[data-checker-status="UNKNOWN"]').count(), 1);
-    assert.equal(await page.locator('[data-checker-status="UNKNOWN"] .checker-status-icon svg').count(), 1);
-    assert.equal((await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR'), false);
+    assert.equal(
+      await page.locator('[data-checker-status="UNKNOWN"] .checker-status-icon svg').count(),
+      1
+    );
+    assert.equal(
+      (await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR'),
+      false
+    );
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'synthetic.txt',
