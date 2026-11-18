@@ -55,7 +55,7 @@ const normalize = (s) =>
 const aliases = {
   rowNumber: ['№', 'number', 'rownumber'],
   fullName: ['fullname', 'name', 'фио', 'имя'],
-  accountId: ['accountid', 'idaccount', 'id', 'uid', 'facebookid'],
+  accountId: ['accountid', 'idaccount', 'id', 'uid', 'facebookid', 'fbid'],
   password: [
     'password',
     'pass',
@@ -97,6 +97,63 @@ const aliases = {
 const aliasMap = new Map(
   Object.entries(aliases).flatMap(([k, names]) => names.map((n) => [normalize(n), k]))
 );
+// Recognize unsupported *column names* as headers without assigning their
+// values to unrelated data fields. These terms occur in mixed FB exports.
+const headerOnly = new Set(
+  [
+    'фамилия',
+    'surname',
+    'lastname',
+    'пол',
+    'gender',
+    'возраст',
+    'age',
+    'proxy',
+    'прокси',
+    'статус',
+    'status',
+    'статус профиля',
+    'статус входа',
+    'cookie status',
+    'дата регистрации',
+    'дата создания',
+    'дата проверки',
+    'дата обновления',
+    'дата добавления',
+    'последняя активность',
+    'дата',
+    'время ответа',
+    'город',
+    'city',
+    'язык',
+    'language',
+    'телефон',
+    'phone',
+    'подписчики',
+    'followers',
+    'following',
+    'verified',
+    'live',
+    'ссылка',
+    'ссылка на профиль',
+    'проверка профиля',
+    'проверка id',
+    'итоговый статус',
+    'причина',
+    'причина блокировки',
+    'комментарий',
+    'примечание',
+    'валидность',
+    'результат',
+    'существует',
+    'доступен',
+    'заблокирован',
+    'доступность',
+    'http status',
+    'обложка',
+    'фото профиля'
+  ].map(normalize)
+);
 export const fieldForHeader = (header, value) => {
   const field = aliasMap.get(normalize(header)) || extendedFieldForHeader(header);
   return field === 'twoFactorUrl' &&
@@ -106,6 +163,8 @@ export const fieldForHeader = (header, value) => {
     ? 'twoFactorCode'
     : field;
 };
+export const isHeaderCandidate = (header) =>
+  Boolean(fieldForHeader(header) || headerOnly.has(normalize(header)));
 const countryCodes = new Set(
   'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW'.split(
     ' '
@@ -167,6 +226,26 @@ function guess(value) {
 }
 export function classifyRecords(parsed, options = {}) {
   if (options.schema && !Object.hasOwn(SCHEMAS, options.schema)) throw Error('INVALID_SCHEMA');
+  // An explicitly supplied header order is a safe alternative to guessing
+  // opaque login/password strings in source files with no header row.
+  if (options.columnOrder != null && typeof options.columnOrder !== 'string')
+    throw Error('INVALID_LAYOUT');
+  if ((options.columnOrder || '').length > 2048) throw Error('INVALID_LAYOUT');
+  const suppliedColumns = String(options.columnOrder || '').trim()
+    ? String(options.columnOrder)
+        .split(/\||::|;|\t/)
+        .map((part) => part.trim())
+    : [];
+  if (
+    suppliedColumns.length &&
+    (suppliedColumns.length < 2 ||
+      suppliedColumns.length > 64 ||
+      suppliedColumns.some((part) => !part || part.length > 80) ||
+      !suppliedColumns.some((part) => fieldForHeader(part)))
+  )
+    throw Error('INVALID_LAYOUT');
+  const suppliedLayout = suppliedColumns.map((part) => fieldForHeader(part) || null);
+
   const mapping = options.mapping || {};
   if (
     typeof mapping !== 'object' ||
@@ -219,6 +298,11 @@ export function classifyRecords(parsed, options = {}) {
     const entries =
       source.sourceEntries ||
       Object.entries(source.data).map(([column, value]) => ({ column, value }));
+    const layoutMatches =
+      parsed.headerless && suppliedLayout.length && entries.length === suppliedLayout.length;
+    if (parsed.headerless && suppliedLayout.length && !layoutMatches)
+      report('LAYOUT_WIDTH_MISMATCH');
+
     const recognized = entries.map((entry) =>
       (entry.labelled
         ? (...args) => recognizeLabelledValue(entry.header, ...args)
@@ -282,6 +366,7 @@ export function classifyRecords(parsed, options = {}) {
           : null;
       const mapped = Object.hasOwn(mapping, entry.column) ? mapping[entry.column] : null;
       const rowMapped = Object.hasOwn(rowMapping, entry.column) ? rowMapping[entry.column] : null;
+      const ordered = layoutMatches ? suppliedLayout[position] : null;
       const found = recognized[position];
       let inferred = structure.get(position) || found.key;
       if (parsed.structured && !entry.labelled && !inferred && contextual) {
@@ -296,11 +381,22 @@ export function classifyRecords(parsed, options = {}) {
         (!inferred || (!found.explicit && inferred === 'email' && learned === 'backupEmail'))
       )
         inferred = learned;
+      const guessed = parsed.structured ? inferred : parsed.headerless ? guess(value) : null;
       const key =
-        rowMapped || mapped || namedRole || schema || (parsed.structured ? inferred : guess(value));
+        rowMapped ||
+        mapped ||
+        namedRole ||
+        schema ||
+        ordered ||
+        (suppliedLayout.length &&
+        parsed.headerless &&
+        !layoutMatches &&
+        ['password', 'emailPassword'].includes(guessed)
+          ? null
+          : guessed);
       const priority = rowMapped
         ? 6
-        : mapped
+        : mapped || ordered
           ? 5
           : named
             ? 4
@@ -332,15 +428,17 @@ export function classifyRecords(parsed, options = {}) {
         method:
           rowMapped || mapped
             ? 'manual'
-            : named || found.explicit
-              ? 'label'
-              : schema
-                ? 'schema'
-                : learned === key
-                  ? 'repeated-layout'
-                  : structure.get(position) === key
-                    ? 'record-local-layout'
-                    : 'syntax-context'
+            : ordered
+              ? 'manual-layout'
+              : named || found.explicit
+                ? 'label'
+                : schema
+                  ? 'schema'
+                  : learned === key
+                    ? 'repeated-layout'
+                    : structure.get(position) === key
+                      ? 'record-local-layout'
+                      : 'syntax-context'
       });
     });
     // Heuristic assignments remain reviewable and never override manual/labelled

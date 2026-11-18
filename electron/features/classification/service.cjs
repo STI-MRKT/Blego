@@ -200,6 +200,7 @@ function createClassificationService({ allowTestRules = false, clock = () => new
           encoding: options.encoding,
           headers: options.headers,
           schema: options.schema,
+          columnOrder: options.columnOrder,
           mapping: options.mapping,
           recordMapping: options.recordMapping
         }

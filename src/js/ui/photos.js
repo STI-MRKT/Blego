@@ -179,8 +179,9 @@ function deviceEditor(selected) {
           <input class="input" name="value-${field}" maxlength="120" placeholder="${label}" autocomplete="off">
         </label>`).join('')}
     </div>
-    <label class="photo-device-ack"><input type="checkbox" name="confirm-maker" ${state.metadataDraft?.['confirm-maker'] === false ? '' : 'checked'}> Подтверждаю изменение производителя/модели при наличии MakerNotes</label>
-    <p class="sub">EXIF не подтверждает подлинность устройства. MakerNotes могут быть несовместимы при изменении модели.</p>
+    <label class="photo-device-ack" aria-label="Подтверждение изменения производителя и модели">
+      <input type="checkbox" name="confirm-maker" aria-label="Разрешить изменение производителя и модели" ${state.metadataDraft?.['confirm-maker'] === false ? '' : 'checked'}>
+    </label>
   </section>`;
 }
 

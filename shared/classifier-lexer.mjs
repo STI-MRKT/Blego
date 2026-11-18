@@ -25,6 +25,16 @@ function labelledStart(text) {
   return label && fieldForHeader(label[1]);
 }
 export function wantsStructuredText(text, headerFor) {
+  // A known delimited header is a table, not the first record.
+  // Unknown columns can be recognized as headers without becoming data roles.
+  const firstLine = text.split(/\r?\n/, 1)[0];
+  const possibleHeaders = firstLine.split(/\||::|;|\t/).map((part) => part.trim());
+  if (
+    possibleHeaders.length >= 3 &&
+    possibleHeaders.filter(headerFor).length >= 2 &&
+    possibleHeaders.filter(headerFor).length >= possibleHeaders.length / 2
+  )
+    return false;
   if (
     confirmedHeader(text) ||
     /:[^\r\n]*@/.test(text) ||

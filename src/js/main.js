@@ -647,6 +647,20 @@ function bindView() {
     encoding.onchange = (e) => {
       state.importEncoding = e.target.value;
     };
+  const columnOrder = document.getElementById('classifier-column-order');
+  if (columnOrder)
+    columnOrder.oninput = () => {
+      const opts = (state.classifierOptions ||= {});
+      opts.columnOrder = columnOrder.value;
+      if (columnOrder.value.trim()) {
+        opts.headers = 'no';
+        opts.schema = '';
+        const headersSelect = document.getElementById('classifier-headers');
+        const schemaSelect = document.getElementById('classifier-schema');
+        if (headersSelect) headersSelect.value = 'no';
+        if (schemaSelect) schemaSelect.value = '';
+      }
+    };
   for (const [id,key] of [['classifier-schema','schema'],['classifier-headers','headers']]) {
     const el = document.getElementById(id);
     if (el) el.onchange = () => { state.classifierOptions ||= {}; state.classifierOptions[key] = el.value; };
@@ -731,7 +745,7 @@ async function generate() {
 
 function classificationOptions() {
   const o = state.classifierOptions || {};
-  return {schema:o.schema || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, encoding:state.importEncoding || undefined};
+  return {schema:o.schema || undefined, columnOrder:o.columnOrder?.trim() || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, encoding:state.importEncoding || undefined};
 }
 async function handleFile(file) {
   invalidateImportCopies();
