@@ -5,6 +5,7 @@ on:
       - codex/blego-tz15-fbtools-classifier-integrated-20261117
       - codex/blego-tz17-adaptive-classifier-20261118
       - codex/blego-metapainter-export-inspection-20261118
+      - codex/blego-metapainter-default-confirm-finder-20261118
 permissions:
   contents: read
 jobs:
