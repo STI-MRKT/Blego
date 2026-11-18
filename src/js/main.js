@@ -1106,7 +1106,7 @@ document.addEventListener('click', async (event) => {
     setTimeout(() => {
       if (state.decoder !== draft || draft.request !== id || state.view !== 'decoder') return;
       try {
-        Object.assign(draft, decodeString(input, format), { status: 'success', error: '' });
+        Object.assign(draft, decodeString(input, format), { format, status: 'success', error: '' });
       } catch (error) {
         draft.status = 'error';
         draft.error = error.code || error.message || 'DECODE_FAILED';
