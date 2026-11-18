@@ -152,3 +152,38 @@ test('TZ19 saved patterns are explicit, survive service restart, and contain no 
     reopened.close();
   }
 });
+
+test('TZ19 a per-record manual password mapping can teach a structurally anchored layout', async () => {
+  const data = new Map();
+  const store = {
+    get: (key) => data.get(key),
+    set: (key, value) => data.set(key, value)
+  };
+  const source = [uid, 'known@example.test', 'known.login', 'EXAMPLE_PASS'].join('|');
+  const other = ['61500000123457', 'new@example.test', 'new.login', 'NEW_PASS'].join('|');
+  const input = (line) => ({
+    requestId: randomUUID(),
+    originalName: 'synthetic.txt',
+    bytes: Buffer.from(line)
+  });
+  const service = createClassificationService({ getStore: () => store });
+  try {
+    const result = await service.read(input(source), { headers: false });
+    await service.reclassify(result.operationId, {
+      headers: false,
+      rememberLayout: true,
+      recordMapping: {
+        '1': { column_3: 'login', column_4: 'password' }
+      }
+    });
+    assert.equal(service.savedLayouts().length, 1);
+    const second = await service.read(input(other), { headers: false });
+    const row = service.page(second.operationId, 0).records[0];
+    assert.equal(row.data.accountId, '61500000123457');
+    assert.equal(row.data.email, 'new@example.test');
+    assert.equal(row.extended.login, 'new.login');
+    assert.equal(row.data.password, 'NEW_PASS');
+  } finally {
+    service.close();
+  }
+});
