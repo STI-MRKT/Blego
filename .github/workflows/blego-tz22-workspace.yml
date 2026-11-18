@@ -1,0 +1,38 @@
+name: BLEGO TZ22 workspace snapshot
+on:
+  push:
+    branches: [codex/blego-tz22-ui-sites-photo-pool-20261118]
+    paths: [.github/workflows/blego-tz22-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Source snapshot
+        run: git archive --format=tar.gz HEAD > "$RUNNER_TEMP/blego-tz22-source.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-TZ22-source
+          path: ${{ runner.temp }}/blego-tz22-source.tar.gz
+          retention-days: 3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Offline verification runtime
+        run: |
+          cp "$(command -v node)" "$RUNNER_TEMP/node"
+          tar -czf "$RUNNER_TEMP/blego-tz22-dependencies.tar.gz" node_modules
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-TZ22-offline-runtime
+          path: |
+            ${{ runner.temp }}/blego-tz22-dependencies.tar.gz
+            ${{ runner.temp }}/node
+          retention-days: 3
