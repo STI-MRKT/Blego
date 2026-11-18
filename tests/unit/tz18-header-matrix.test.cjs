@@ -56,62 +56,62 @@ const layouts = [
 
 const uid = '61500000123456';
 const values = {
-  'Логин': 'sample.user',
-  'Пароль': 'SYNTHETIC_PASSWORD_123',
-  'Fb_ID': uid,
-  'ID': uid,
-  'Имя': 'Иван',
-  'Фамилия': 'Петров',
+  Логин: 'sample.user',
+  Пароль: 'SYNTHETIC_PASSWORD_123',
+  Fb_ID: uid,
+  ID: uid,
+  Имя: 'Иван',
+  Фамилия: 'Петров',
   'Дата рождения': '1999-05-03',
-  'Cookie': JSON.stringify({ c_user: uid, xs: 'SYNTHETIC' }),
+  Cookie: JSON.stringify({ c_user: uid, xs: 'SYNTHETIC' }),
   'User-Agent': 'Mozilla/5.0',
-  'Proxy': '127.0.0.1:8080',
-  'Пол': 'male',
-  'Страна': 'RU',
-  'ГЕО': 'RU',
+  Proxy: '127.0.0.1:8080',
+  Пол: 'male',
+  Страна: 'RU',
+  ГЕО: 'RU',
   'Дата регистрации': '2020-04-01',
-  'Token': 'SYNTHETIC_TOKEN',
+  Token: 'SYNTHETIC_TOKEN',
   'Дата создания': '2021-03-02',
-  'Статус': 'LIVE',
+  Статус: 'LIVE',
   '2FA': 'SYNTHETIC_2FA',
-  'Email': 'synthetic@example.test',
-  'Телефон': '936-364-3764',
+  Email: 'synthetic@example.test',
+  Телефон: '936-364-3764',
   'Дата проверки': '2026-11-18',
-  'Результат': 'LIVE',
+  Результат: 'LIVE',
   'Дата обновления': '2023-12-04',
-  'Возраст': '27',
-  'Город': 'Moscow',
-  'Аватар': 'https://example.test/avatar.jpg',
+  Возраст: '27',
+  Город: 'Moscow',
+  Аватар: 'https://example.test/avatar.jpg',
   'Ссылка на профиль': 'https://www.facebook.com/profile.php?id=' + uid,
-  'Друзья': '100',
-  'Подписчики': '200',
-  'Язык': 'ru',
-  'Ссылка': 'https://www.facebook.com/profile.php?id=' + uid,
+  Друзья: '100',
+  Подписчики: '200',
+  Язык: 'ru',
+  Ссылка: 'https://www.facebook.com/profile.php?id=' + uid,
   'Статус профиля': 'ACTIVE',
   'Фото профиля': 'https://example.test/profile.jpg',
-  'Обложка': 'https://example.test/cover.jpg',
-  'Verified': 'false',
-  'Валидность': 'valid',
-  'Существует': 'yes',
-  'Доступен': 'yes',
-  'Заблокирован': 'no',
-  'Причина': 'none',
-  'Комментарий': 'synthetic note',
+  Обложка: 'https://example.test/cover.jpg',
+  Verified: 'false',
+  Валидность: 'valid',
+  Существует: 'yes',
+  Доступен: 'yes',
+  Заблокирован: 'no',
+  Причина: 'none',
+  Комментарий: 'synthetic note',
   'Причина блокировки': 'none',
   'HTTP Status': '200',
   'Время ответа': '123',
-  'Дата': '2026-11-18',
-  'Live': 'true',
-  'Followers': '123',
-  'Following': '456',
+  Дата: '2026-11-18',
+  Live: 'true',
+  Followers: '123',
+  Following: '456',
   'Статус входа': 'OK',
   'Cookie Status': 'valid',
   'Проверка профиля': 'done',
   'Проверка ID': 'done',
   'Итоговый статус': 'LIVE',
   'Последняя активность': '2026-11-01',
-  'Доступность': 'yes',
-  'Примечание': 'synthetic',
+  Доступность: 'yes',
+  Примечание: 'synthetic',
   'Дата добавления': '2026-10-01'
 };
 
@@ -132,8 +132,16 @@ test('TZ18 all provided pipe-header layouts map password and ID by label without
     const { parsed, result } = await scan(header + '\n' + dataRow);
     assert.equal(result.records.length, 1, header);
     assert.equal(result.records[0].sourceRecord, dataRow, header);
-    assert.equal(result.records[0].data.password, columns.includes('Пароль') ? values['Пароль'] : '', header);
-    assert.equal(result.records[0].data.accountId, columns.some((name) => ['Fb_ID','ID'].includes(name)) ? uid : '', header);
+    assert.equal(
+      result.records[0].data.password,
+      columns.includes('Пароль') ? values['Пароль'] : '',
+      header
+    );
+    assert.equal(
+      result.records[0].data.accountId,
+      columns.some((name) => ['Fb_ID', 'ID'].includes(name)) ? uid : '',
+      header
+    );
     if (columns.includes('Логин'))
       assert.equal(result.records[0].extended.login, values['Логин'], header);
     assert.equal(parsed.headerless, false, header);
@@ -152,7 +160,9 @@ test('TZ18 unsupported registration/check date headers never become birth date',
 
 test('TZ18 supplied column order resolves unlabelled passwords without guessing', async () => {
   const schema = 'Логин|Пароль|Fb_ID|Имя|Фамилия|Дата рождения';
-  const row = ['sample.user','SYNTHETIC_PASSWORD_123',uid,'Иван','Петров','1999-05-03'].join('|');
+  const row = ['sample.user', 'SYNTHETIC_PASSWORD_123', uid, 'Иван', 'Петров', '1999-05-03'].join(
+    '|'
+  );
   const { result } = await scan(row, { headers: false, columnOrder: schema });
   assert.equal(result.records.length, 1);
   assert.equal(result.records[0].data.password, 'SYNTHETIC_PASSWORD_123');
@@ -162,7 +172,7 @@ test('TZ18 supplied column order resolves unlabelled passwords without guessing'
 
 test('TZ18 wrong-width positional schema never assigns a password from shifted columns', async () => {
   const schema = 'Логин|Пароль|Fb_ID|Cookie|Имя';
-  const row = ['sample.user',uid,'Иван'].join('|');
+  const row = ['sample.user', uid, 'Иван'].join('|');
   const { result } = await scan(row, { headers: false, columnOrder: schema });
   assert.equal(result.records.length, 1);
   assert.equal(result.records[0].data.password, '');
