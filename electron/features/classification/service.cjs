@@ -15,6 +15,7 @@ const {
 } = require('../../../shared/classifier.mjs');
 const {
   confirmedLayout,
+  observedType,
   sanitizeConfirmedLayouts,
   appendConfirmedLayouts
 } = require('../../../shared/classifier-adaptive.mjs');
@@ -75,11 +76,12 @@ function createClassificationService({
           (SCHEMAS[options.schema]?.length === entries.length
             ? SCHEMAS[options.schema][position]
             : null) ||
-          // Strong typed anchors can complement a partially confirmed layout.
+          // Strong typed anchors can complement a partially confirmed layout,
+          // even when the source contains an unlabelled long account ID.
           (['accountId', 'email', 'cookies', 'userAgent', 'profileUrl'].includes(
-            recognized[position].key
+            observedType(recognized[position], validBirthDate)
           )
-            ? recognized[position].key
+            ? observedType(recognized[position], validBirthDate)
             : null)
       );
       const layout = confirmedLayout(roles, recognized, validBirthDate);
