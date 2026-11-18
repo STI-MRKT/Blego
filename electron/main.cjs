@@ -30,7 +30,7 @@ const {
   loadDataset
 } = require('./features/generator/catalog.cjs');
 const { createClassificationService } = require('./features/classification/service.cjs');
-const classification = createClassificationService();
+const classification = createClassificationService({ getStore: () => store });
 const { createArchiveService } = require('./features/archive/service.cjs');
 const { secretVault } = require('./local/secrets.cjs');
 const { createProxycheckProvider } = require('./features/proxy/proxycheck.cjs');
@@ -430,6 +430,8 @@ async function initialize() {
         classification.read(arg, { ...arg.options, encoding: arg.encoding || undefined }),
       importPage: (arg) => classification.page(arg.operationId, arg.offset, arg.options),
       importReclassify: (arg) => classification.reclassify(arg.operationId, arg.options),
+      classifierLayouts: () => classification.savedLayouts(),
+      classifierLayoutsClear: () => classification.clearSavedLayouts(),
       importCell: (arg) => classification.cell(arg.operationId, arg.recordId, arg.field),
       importExportText: (arg) =>
         classification.exportText(arg.operationId, { recordId: arg.recordId, format: arg.format }),
