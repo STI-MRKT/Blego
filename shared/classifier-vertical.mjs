@@ -6,6 +6,14 @@ const identifier = /^\d{13,20}$/u;
 const recovery = /^(?:[A-Z0-9]{4}\s+){3}[A-Z0-9]{4}$/u;
 
 export function verticalAccountRecords(text) {
+  // This unusual fallback must not scan or allocate per-line objects for
+  // large already supported ordinary TXT/CSV imports.
+  if (text.length > 8 * 1024 * 1024) return null;
+  const idLines = text.match(/^[ \t]*\d{13,20}[ \t]*$/gm);
+  if (!idLines || idLines.length < 2 || idLines.length > 10000) return null;
+  if (!recovery.test('AAAA BBBB CCCC DDDD') ||
+      !/(?:[A-Z0-9]{4}[ \t]+){3}[A-Z0-9]{4};?[ \t]*$/m.test(text))
+    return null;
   const entries = [];
   let start = 0;
   let lineNumber = 1;
