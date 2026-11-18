@@ -43,6 +43,7 @@ test(
       await page.locator('#decoder-result-panel').innerText(),
       /Уровней декодирования: 1/
     );
+    assert.equal(await page.locator('#decoder-format').inputValue(), 'auto');
     await page.locator('[data-action="decoder-copy"]').click();
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), '{\n  "ok": true\n}');
 
