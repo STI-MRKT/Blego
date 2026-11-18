@@ -35,6 +35,14 @@ test(
     await page.locator('[data-view="photos"]').click();
     await page.locator('#photo-input').setInputFiles(file);
     await waitForAsync(page, async () => !(await import('/js/state.js')).state.imagesBusy);
+    // The advanced camera-change consent starts selected, but remains revocable.
+    await page.locator('[data-action="photos-tools"]').click();
+    const makerConfirmation = page.locator('[name="confirm-maker"]');
+    assert.equal(await makerConfirmation.isChecked(), true);
+    await makerConfirmation.uncheck();
+    assert.equal(await makerConfirmation.isChecked(), false);
+    await makerConfirmation.check();
+    await page.locator('[data-action="photos-tools"]').click();
     const make = page.locator('[name="value-make"]');
     const model = page.locator('[name="value-model"]');
     await make.fill('Canon');
