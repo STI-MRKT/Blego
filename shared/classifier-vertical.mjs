@@ -18,7 +18,11 @@ export function verticalAccountRecords(text) {
   for (let i = 0; i <= text.length; i++) {
     if (i !== text.length && text[i] !== '\r' && text[i] !== '\n') continue;
     const raw = text.slice(start, i);
-    const value = raw.trim().replace(/^\uFEFF/u, '').replace(/;$/u, '').trim();
+    const value = raw
+      .trim()
+      .replace(/^\uFEFF/u, '')
+      .replace(/;$/u, '')
+      .trim();
     if (value)
       entries.push({
         value,
