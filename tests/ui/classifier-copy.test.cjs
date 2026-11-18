@@ -75,7 +75,7 @@ test(
       await button.click();
       await clip(value);
       const empty = page.locator(`.classifier-table [data-row="2"][data-field="${field}"]`);
-      assert.equal(await empty.evaluate((b) => b.previousElementSibling.textContent), '');
+      assert.equal(await empty.evaluate((b) => b.previousElementSibling.textContent), 'Не определён');
       assert.equal(await empty.isDisabled(), true);
     }
     if (process.env.BLEGO_CAPTURE) {
