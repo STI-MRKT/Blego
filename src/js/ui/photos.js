@@ -196,6 +196,18 @@ function geoFileHTML(photo){
  return `<p class="sub" data-geo-file="${esc(photo.fileId)}">Сгенерировано · ${esc(op.origin.name)} · ${esc(city?.source||'Локальный каталог')}${city?.userSupplied?' (источник пользователя)':''}<br>${copyValue('latitude',op.value.latitude)}, ${copyValue('longitude',op.value.longitude)}</p><button type="button" class="btn btn-quiet" data-action="geo-regenerate-one" data-id="${esc(photo.fileId)}" ${state.imagesBusy?'disabled':''}>Повторить GEO</button>`;
 }
 
+function exportedCopiesHTML(report) {
+  const saved = (report?.files || []).filter((file) => file.status === 'completed');
+  if (!saved.length) return '';
+  return `<section class="card pad photo-export-summary" data-export-summary>
+    <h3>Сохранено копий: ${saved.length}</h3>
+    <p class="sub">Исходные фотографии не изменены. Готовые файлы находятся в выбранной папке экспорта:</p>
+    <div class="photo-export-list">${saved
+      .map((file) => `<p data-exported-copy="${esc(file.fileId)}"><b>${esc(file.name)}</b> → ${copyValue('Копировать имя готового файла', file.outputName || '')}</p>`)
+      .join('')}</div>
+    <p class="sub">В Finder даты «Создан» и «Изменён» относятся к файлу. Дату съёмки и камеру проверяйте во встроенных метаданных EXIF готовой фотографии (например, через «Просмотр» → «Показать инспектор»).</p>
+  </section>`;
+}
 export function photosHTML() {
   const selected = state.photos.filter((p) => p.selected && p.view),
     plan = state.metadataPlan, tools = state.photoTools === true;
@@ -272,6 +284,7 @@ export function photosHTML() {
          .join('')}</div>`
      : ''
  }
+ ${exportedCopiesHTML(state.metadataExport)}
  ${
    state.metadataExport && (tools || state.metadataExport.files.some(f=>['failed','cancelled'].includes(f.status)))
      ? `<div class="card pad">${tools ? `<p>${state.metadataExport.files.filter((f) => f.status === 'completed').length ? `Saved ${state.metadataExport.files.filter((f) => f.status === 'completed').length} copies.` : 'No copies saved.'}</p>` : ''}${state.metadataExport.files
