@@ -168,3 +168,18 @@
 .checker-bar{height:4px;border-radius:99px;background:var(--panel-3);overflow:hidden;margin-top:9px}
 .checker-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .25s}
 .copy.tiny.always{opacity:.55}
+
+/* TZ21 String Decoder — uses the existing panel, button and typography tokens. */
+.decoder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;margin-top:12px}
+.decoder-panel{display:flex;flex-direction:column;gap:12px;min-width:0}
+.decoder-panel .fl{margin:0}
+.decoder-textarea{display:block;width:100%;min-height:290px;resize:vertical;overflow-wrap:anywhere;line-height:1.6;font-family:var(--mono);font-size:12px}
+.decoder-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.decoder-actions .btn svg,.decoder-output-head .btn svg{width:14px;height:14px}
+.decoder-output-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.decoder-output-head h2{font-size:13px;font-weight:650;letter-spacing:-.01em}
+.decoder-summary{display:block;color:var(--faint);font-size:10.5px;line-height:1.5;margin-top:5px}
+.decoder-output{margin:0;min-height:225px;max-height:570px;overflow:auto;border-radius:10px;border:1px solid var(--border);padding:14px;background:var(--panel-2);color:var(--text);font-family:var(--mono);font-size:11.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;user-select:text}
+.decoder-placeholder{padding:48px 16px;text-align:center;color:var(--faint);font-size:12px}
+.decoder-error{padding:12px 14px;background:var(--err-soft);color:var(--err);border:1px solid var(--border);border-radius:10px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.decoder-privacy{margin-top:12px;font-size:11px}

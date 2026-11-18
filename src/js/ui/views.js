@@ -8,6 +8,7 @@ import { networkHTML } from './network.js';
 import { photosHTML } from './photos.js';
 import { friendsHTML } from './friends.js';
 import { checkerHTML } from './checker.js';
+import { decoderHTML } from './decoder.js';
 
 export function viewHTML() {
   switch (state.view) {
@@ -27,6 +28,8 @@ export function viewHTML() {
       return friendsHTML();
     case 'checker':
       return checkerHTML();
+    case 'decoder':
+      return decoderHTML();
     default:
       return generatorHTML();
   }
