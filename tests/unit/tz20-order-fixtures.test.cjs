@@ -39,15 +39,18 @@ test('TZ20 only payload is classified after an explicit order envelope', async (
   });
   assert.equal(parsed.text, source, 'retain source text for exact spans');
   assert.equal(parsed.records.length, 2, 'order header and instruction are not account records');
-  assert.deepEqual(parsed.records.map((r) => r.sourceRecord), [a, b]);
-  assert.deepEqual(result.records.map((r) => r.data.password), [
-    'SYNTHETIC_FB_1',
-    'SYNTHETIC_FB_2'
-  ]);
-  assert.deepEqual(result.records.map((r) => r.data.accountId), [
-    '61500000123456',
-    '61500000123457'
-  ]);
+  assert.deepEqual(
+    parsed.records.map((r) => r.sourceRecord),
+    [a, b]
+  );
+  assert.deepEqual(
+    result.records.map((r) => r.data.password),
+    ['SYNTHETIC_FB_1', 'SYNTHETIC_FB_2']
+  );
+  assert.deepEqual(
+    result.records.map((r) => r.data.accountId),
+    ['61500000123456', '61500000123457']
+  );
   assert.equal(result.records[0].data.cookies, cookie('61500000123456'));
   assert.equal(result.records[0].data.userAgent, agent);
 });
@@ -63,7 +66,9 @@ test('TZ20 colon tuple with nested Cookie and UA punctuation does not split insi
 
 test('TZ20 explicit order footer is ignored without losing preceding records', async () => {
   const a = row('first@example.test', 'SYNTHETIC_FB_1', '61500000123456');
-  const text = [receipt, a, '--------------------', 'Специальное предложение после заказа'].join('\n');
+  const text = [receipt, a, '--------------------', 'Специальное предложение после заказа'].join(
+    '\n'
+  );
   const { parsed } = await scan(text, { headers: false });
   assert.equal(parsed.records.length, 1);
   assert.equal(parsed.records[0].sourceRecord, a);
