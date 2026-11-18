@@ -142,3 +142,33 @@ test('TZ15 labelled or colon-separated values remain authoritative and exact', a
     assert.equal(record.data.email, 'one@example.test', delim);
   }
 });
+
+test('diagnostic: fully anchored unlabelled ordinary distinct passwords remain unassigned', async () => {
+  const values = [
+    'FbSample123', 'one@example.test', 'MailSample456', '1.11.1998',
+    id, 'Desi Sample', 'GEO Spain'
+  ];
+  const { parsed, records } = await scan(values.join(';'));
+  assert.equal(parsed.structured, true);
+  assert.equal(records.length, 1);
+  assert.equal(records[0].data.email, 'one@example.test');
+  assert.equal(records[0].data.birthDate, '1.11.1998');
+  assert.equal(records[0].data.accountId, id);
+  assert.equal(records[0].data.fullName, 'Desi Sample');
+  assert.equal(records[0].data.password, '');
+  assert.equal(records[0].data.emailPassword, '');
+  assert.ok(records[0].unrecognized.some((item) => item.value === 'FbSample123'));
+  assert.ok(records[0].unrecognized.some((item) => item.value === 'MailSample456'));
+});
+
+test('diagnostic: the same two passwords are retained with explicit field labels', async () => {
+  const values = [
+    'Password:FbSample123', 'Email:one@example.test',
+    'Email Password:MailSample456', 'Date of Birth:1.11.1998',
+    'ID Account:' + id, 'Name:Desi Sample', 'GEO:Spain'
+  ];
+  const { records } = await scan(values.join(';'));
+  assert.equal(records.length, 1);
+  assert.equal(records[0].data.password, 'FbSample123');
+  assert.equal(records[0].data.emailPassword, 'MailSample456');
+});
