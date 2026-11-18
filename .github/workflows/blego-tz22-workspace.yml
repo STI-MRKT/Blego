@@ -35,7 +35,7 @@ jobs:
           from pathlib import Path
           import base64, hashlib, io, tarfile
           payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
-          expected = '4c1d573957acf4368b735411217a2fea9273a85e973f18be425e9690ed84c1df'
+          expected = '07f732e50231c2f68de4e969c7e2094e2f99e2a92673a27c7c39657701c4668d'
           assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
           with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
               for item in archive.getmembers():
