@@ -269,6 +269,13 @@ export function classifyRecords(parsed, options = {}) {
       else if (typeof value === 'number') value = entry.rawText ?? String(value);
       else value = String(value);
       const named = parsed.headerless ? null : fieldForHeader(entry.header ?? entry.column, value);
+      // Explicit 'Email' repeated twice in one record has two distinct slots.
+      // Preserve the first as primary and promote the inferred second address.
+      // Manual row/column mappings retain higher precedence.
+      const namedRole =
+        named === 'email' && structure.get(position) === 'backupEmail'
+          ? 'backupEmail'
+          : named;
       const schema =
         options.schema &&
         (!['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
@@ -292,7 +299,7 @@ export function classifyRecords(parsed, options = {}) {
       )
         inferred = learned;
       const key =
-        rowMapped || mapped || named || schema || (parsed.structured ? inferred : guess(value));
+        rowMapped || mapped || namedRole || schema || (parsed.structured ? inferred : guess(value));
       const priority = rowMapped
         ? 6
         : mapped
