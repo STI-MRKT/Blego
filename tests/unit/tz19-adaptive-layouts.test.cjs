@@ -1,10 +1,15 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
-const { createClassificationService } = require('../../electron/features/classification/service.cjs');
+const {
+  createClassificationService
+} = require('../../electron/features/classification/service.cjs');
 
 const uid = '61500000123456';
-const cookie = JSON.stringify([{ name: 'c_user', value: uid }, { name: 'xs', value: 'SYNTHETIC_COOKIE' }]);
+const cookie = JSON.stringify([
+  { name: 'c_user', value: uid },
+  { name: 'xs', value: 'SYNTHETIC_COOKIE' }
+]);
 const layoutA = {
   version: 1,
   roles: ['login', 'password', 'email', 'accountId', 'cookies'],
@@ -35,8 +40,10 @@ test('TZ19 existing good labelled records remain unchanged with or without learn
   ].join('|');
   const before = await scan(text);
   const after = await scan(text, { learnedLayouts: [layoutA, layoutB] });
-  assert.deepEqual(after.records.map((r) => ({ data: r.data, extended: r.extended })),
-    before.records.map((r) => ({ data: r.data, extended: r.extended })));
+  assert.deepEqual(
+    after.records.map((r) => ({ data: r.data, extended: r.extended })),
+    before.records.map((r) => ({ data: r.data, extended: r.extended }))
+  );
   assert.equal(after.records[0].data.password, 'EXAMPLE_FB_1');
   assert.equal(after.records[0].data.emailPassword, 'EXAMPLE_MAIL_2');
 });
@@ -74,7 +81,8 @@ test('TZ19 contradictory or ambiguous template matches never guess a password', 
   assert.ok(records[0].unrecognized.some((field) => field.value === 'SYNTHETIC_PASS_2'));
 
   const oneAnchor = ['synthetic.login', 'SYNTHETIC_PASS_1', uid, 'SYNTHETIC_RANDOM'].join('|');
-  const template = { version: 1,
+  const template = {
+    version: 1,
     roles: ['login', 'password', 'accountId', null],
     anchors: [null, null, 'accountId', null]
   };
@@ -94,11 +102,19 @@ test('TZ19 saved patterns are explicit, survive service restart, and contain no 
     bytes: Buffer.from(line)
   });
   const line = ['synthetic.login', 'SYNTHETIC_PASS_1', 'one@example.test', uid, cookie].join('|');
-  const next = ['next.login', 'NEXT_PASS_ONLY', 'next@example.test', '61500000123457',
-    JSON.stringify([{ name: 'c_user', value: '61500000123457' }])].join('|');
+  const next = [
+    'next.login',
+    'NEXT_PASS_ONLY',
+    'next@example.test',
+    '61500000123457',
+    JSON.stringify([{ name: 'c_user', value: '61500000123457' }])
+  ].join('|');
   const service = createClassificationService({ getStore: () => store });
   try {
-    const first = await service.read(input(line), { headers: false, columnOrder: 'Логин|Пароль|Email|Fb_ID|Cookie' });
+    const first = await service.read(input(line), {
+      headers: false,
+      columnOrder: 'Логин|Пароль|Email|Fb_ID|Cookie'
+    });
     assert.equal(service.savedLayouts().length, 0, 'read-only inference never trains itself');
     await service.reclassify(first.operationId, {
       headers: false,
@@ -109,7 +125,13 @@ test('TZ19 saved patterns are explicit, survive service restart, and contain no 
     assert.equal(saved.length, 1);
     assert.equal(saved[0].version, 1);
     const stored = JSON.stringify([...values]);
-    for (const secret of ['synthetic.login', 'SYNTHETIC_PASS_1', uid, 'one@example.test', 'SYNTHETIC_COOKIE'])
+    for (const secret of [
+      'synthetic.login',
+      'SYNTHETIC_PASS_1',
+      uid,
+      'one@example.test',
+      'SYNTHETIC_COOKIE'
+    ])
       assert.equal(stored.includes(secret), false, 'no values stored: ' + secret);
   } finally {
     service.close();
