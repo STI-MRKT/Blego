@@ -101,18 +101,57 @@ const aliasMap = new Map(
 // values to unrelated data fields. These terms occur in mixed FB exports.
 const headerOnly = new Set(
   [
-    'фамилия', 'surname', 'lastname', 'пол', 'gender', 'возраст', 'age',
-    'proxy', 'прокси', 'статус', 'status', 'статус профиля',
-    'статус входа', 'cookie status', 'дата регистрации', 'дата создания',
-    'дата проверки', 'дата обновления', 'дата добавления',
-    'последняя активность', 'дата', 'время ответа',
-    'город', 'city', 'язык', 'language', 'телефон', 'phone',
-    'подписчики', 'followers', 'following', 'verified', 'live',
-    'ссылка', 'ссылка на профиль', 'проверка профиля',
-    'проверка id', 'итоговый статус', 'причина', 'причина блокировки',
-    'комментарий', 'примечание', 'валидность', 'результат',
-    'существует', 'доступен', 'заблокирован', 'доступность',
-    'http status', 'обложка', 'фото профиля'
+    'фамилия',
+    'surname',
+    'lastname',
+    'пол',
+    'gender',
+    'возраст',
+    'age',
+    'proxy',
+    'прокси',
+    'статус',
+    'status',
+    'статус профиля',
+    'статус входа',
+    'cookie status',
+    'дата регистрации',
+    'дата создания',
+    'дата проверки',
+    'дата обновления',
+    'дата добавления',
+    'последняя активность',
+    'дата',
+    'время ответа',
+    'город',
+    'city',
+    'язык',
+    'language',
+    'телефон',
+    'phone',
+    'подписчики',
+    'followers',
+    'following',
+    'verified',
+    'live',
+    'ссылка',
+    'ссылка на профиль',
+    'проверка профиля',
+    'проверка id',
+    'итоговый статус',
+    'причина',
+    'причина блокировки',
+    'комментарий',
+    'примечание',
+    'валидность',
+    'результат',
+    'существует',
+    'доступен',
+    'заблокирован',
+    'доступность',
+    'http status',
+    'обложка',
+    'фото профиля'
   ].map(normalize)
 );
 export const fieldForHeader = (header, value) => {
@@ -193,7 +232,9 @@ export function classifyRecords(parsed, options = {}) {
     throw Error('INVALID_LAYOUT');
   if ((options.columnOrder || '').length > 2048) throw Error('INVALID_LAYOUT');
   const suppliedColumns = String(options.columnOrder || '').trim()
-    ? String(options.columnOrder).split(/\||::|;|\t/).map((part) => part.trim())
+    ? String(options.columnOrder)
+        .split(/\||::|;|\t/)
+        .map((part) => part.trim())
     : [];
   if (
     suppliedColumns.length &&
@@ -341,9 +382,18 @@ export function classifyRecords(parsed, options = {}) {
       )
         inferred = learned;
       const guessed = parsed.structured ? inferred : parsed.headerless ? guess(value) : null;
-      const key = rowMapped || mapped || namedRole || schema || ordered ||
-        (suppliedLayout.length && parsed.headerless && !layoutMatches &&
-         ['password', 'emailPassword'].includes(guessed) ? null : guessed);
+      const key =
+        rowMapped ||
+        mapped ||
+        namedRole ||
+        schema ||
+        ordered ||
+        (suppliedLayout.length &&
+        parsed.headerless &&
+        !layoutMatches &&
+        ['password', 'emailPassword'].includes(guessed)
+          ? null
+          : guessed);
       const priority = rowMapped
         ? 6
         : mapped || ordered
@@ -381,14 +431,14 @@ export function classifyRecords(parsed, options = {}) {
             : ordered
               ? 'manual-layout'
               : named || found.explicit
-              ? 'label'
-              : schema
-                ? 'schema'
-                : learned === key
-                  ? 'repeated-layout'
-                  : structure.get(position) === key
-                    ? 'record-local-layout'
-                    : 'syntax-context'
+                ? 'label'
+                : schema
+                  ? 'schema'
+                  : learned === key
+                    ? 'repeated-layout'
+                    : structure.get(position) === key
+                      ? 'record-local-layout'
+                      : 'syntax-context'
       });
     });
     // Heuristic assignments remain reviewable and never override manual/labelled
