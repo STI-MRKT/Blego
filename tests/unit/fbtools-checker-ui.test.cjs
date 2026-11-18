@@ -36,6 +36,9 @@ test('Checker uses only FB.Tools and renders LIVE, copy and privacy notice', asy
     assert.match(result, /data-checker-status="LIVE"/);
     assert.match(result, /data-action="checker-copy-results"/);
     assert.doesNotMatch(result, /id="checker-provider"/);
+    assert.doesNotMatch(result, /Повторить эту цель|<summary>Подробности<\\/summary>|По данным check\\.fb\\.tools/);
+    assert.match(result, /checker-status-icon/);
+    assert.doesNotMatch(result, /Copy uncertainty reason/);
   } finally {
     state.checker = prior;
   }
