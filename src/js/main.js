@@ -647,6 +647,11 @@ function bindView() {
     encoding.onchange = (e) => {
       state.importEncoding = e.target.value;
     };
+  const rememberLayout = document.getElementById('classifier-remember-layout');
+  if (rememberLayout)
+    rememberLayout.onchange = () => {
+      (state.classifierOptions ||= {}).rememberLayout = rememberLayout.checked;
+    };
   const columnOrder = document.getElementById('classifier-column-order');
   if (columnOrder)
     columnOrder.oninput = () => {
@@ -745,7 +750,7 @@ async function generate() {
 
 function classificationOptions() {
   const o = state.classifierOptions || {};
-  return {schema:o.schema || undefined, columnOrder:o.columnOrder?.trim() || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, encoding:state.importEncoding || undefined};
+  return {schema:o.schema || undefined, columnOrder:o.columnOrder?.trim() || undefined, headers:o.headers === 'yes' ? true : o.headers === 'no' ? false : undefined, mapping:o.mapping || {}, recordMapping:o.recordMapping || {}, rememberLayout:o.rememberLayout === true, encoding:state.importEncoding || undefined};
 }
 async function handleFile(file) {
   invalidateImportCopies();
@@ -772,6 +777,7 @@ async function handleFile(file) {
   try {
     const bytes = new Uint8Array(await file.arrayBuffer());
     if (state.importRequest !== id) return;
+    state.classifierSavedCount = (await window.blego.classifierLayouts()).length;
     const result = await window.blego.readInput({
       requestId: id,
       originalName: file.name,
@@ -825,6 +831,7 @@ async function reclassifyInput() {
   try {
     await window.blego.reclassify({operationId,options:classificationOptions()});
     if(state.importEpoch !== epoch) return;
+    state.classifierSavedCount = (await window.blego.classifierLayouts()).length;
     state.classifierQuery=''; state.classifierDescending=false;
     state.importStep='preview'; await importPage(0);
   } catch(error) {if(state.importEpoch===epoch) {state.importStep='preview';toast(error.message==='CONFIDENTIAL_FIELD_MAPPING'?'Код 2FA нельзя включать в обычный экспорт. Оставьте для него отдельное поле 2FA.':'Не удалось применить соответствие', 'err');}}
@@ -1236,6 +1243,17 @@ document.addEventListener('click', async (event) => {
     const key=target.dataset.field; state.classifierRevealed[key]=!state.classifierRevealed[key];
     const open=[...document.querySelectorAll('#classifier-record-details details')].map(d=>d.open);
     renderView();document.querySelectorAll('#classifier-record-details details').forEach((d,i)=>{d.open=open[i];});return;
+  }
+  if (action === 'classifier-forget-layouts') {
+    if (state.importStep === 'loading') return;
+    try {
+      await window.blego.classifierLayoutsClear();
+      state.classifierSavedCount = 0;
+      (state.classifierOptions ||= {}).rememberLayout = false;
+      toast('Сохранённые схемы очищены');
+      await reclassifyInput();
+    } catch { toast('Не удалось очистить схемы', 'err'); }
+    return;
   }
   if(action==='classifier-apply-record'){await reclassifyInput();return;}
   if (action === 'classifier-apply') {await reclassifyInput(); return;}
