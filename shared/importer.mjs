@@ -266,7 +266,10 @@ export function parseText(text, format, options = {}) {
     headerless = false;
   let structured = false;
   const vertical =
-    format === 'txt' && options.classification && !options.schema && options.headers !== true &&
+    format === 'txt' &&
+    options.classification &&
+    !options.schema &&
+    options.headers !== true &&
     !receipt.receipt
       ? verticalAccountRecords(text)
       : null;
