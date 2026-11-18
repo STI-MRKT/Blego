@@ -306,3 +306,7 @@ button.copy-feedback{color:var(--accent)}
   .photo-device-card .photo-device-fields{grid-template-columns:1fr}
   .photo-edit-panel .card.pad{padding:12px}
 }
+
+/* Checker result symbols: blocked-style icon without claiming an unconfirmed ban. */
+.checker-status-icon{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:0 0 13px}
+.checker-status-icon svg{width:13px;height:13px;display:block}
