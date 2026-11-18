@@ -87,3 +87,64 @@ test('TZ20 ordinary already supported labelled TXT is not rewritten', async () =
   assert.equal(result.records[0].data.accountId, '61500000123456');
   assert.equal(parsed.records[0].sourceRecord, text);
 });
+
+test('TZ20 colon account can span blank lines before Cookie JSON', async () => {
+  const a = [
+    'split@example.test:SYNTHETIC_FB_SPLIT:61500000123456:',
+    '',
+    '',
+    cookie('61500000123456') + ':' + agent
+  ].join('\n');
+  const source = [receipt, a, row('second@example.test', 'SYNTHETIC_FB_2', '61500000123457')].join('\n');
+  const { parsed, result } = await scan(source, {
+    headers: false,
+    columnOrder: 'Email|Пароль|Fb_ID|Cookie|User-Agent'
+  });
+  assert.equal(parsed.records.length, 2);
+  assert.equal(parsed.records[0].sourceRecord, a);
+  assert.equal(result.records[0].data.password, 'SYNTHETIC_FB_SPLIT');
+  assert.equal(result.records[0].data.cookies, cookie('61500000123456'));
+});
+
+test('TZ20 standalone order number is not an account in short two-email rows', async () => {
+  const a = [
+    'first@example.test',
+    'SYNTHETIC_FB_1',
+    'mail@example.test',
+    'SYNTHETIC_MAIL_1',
+    'AAAA BBBB CCCC DDDD',
+    'https://www.facebook.com/profile.php?id=61500000123456'
+  ].join(';');
+  const b = a.replaceAll('61500000123456', '61500000123457');
+  const source = ['Номер заказа: 000001', '', a, b].join('\n');
+  const { parsed } = await scan(source, { headers: false });
+  assert.equal(parsed.records.length, 2);
+  assert.deepEqual(parsed.records.map((item) => item.sourceRecord), [a, b]);
+});
+
+test('TZ20 multiline vertical credentials form records, not one row per field', async () => {
+  const group = (uid, first, backup, fb, mail) => [
+    first,
+    '',
+    fb + ';',
+    '',
+    backup,
+    mail + ';',
+    '',
+    'AAAA BBBB CCCC DDDD;',
+    '',
+    uid
+  ].join('\n');
+  const a = group('61500000123456', 'one@example.test', 'backup@example.test', 'SYNTH_FB_1', 'SYNTH_MAIL_1');
+  const b = group('61500000123457', 'two@example.test', 'other@example.test', 'SYNTH_FB_2', 'SYNTH_MAIL_2');
+  const text = a + '\n\n\n' + b;
+  const { parsed, result } = await scan(text, {
+    headers: false,
+    columnOrder: 'Email|Пароль|BackupEmail|EmailPassword|Дополнительное поле|Fb_ID'
+  });
+  assert.equal(parsed.records.length, 2);
+  assert.equal(parsed.records[0].sourceRecord, a);
+  assert.equal(result.records[0].data.password, 'SYNTH_FB_1');
+  assert.equal(result.records[0].data.emailPassword, 'SYNTH_MAIL_1');
+  assert.equal(result.records[1].data.accountId, '61500000123457');
+});
