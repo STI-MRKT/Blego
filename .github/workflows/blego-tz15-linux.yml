@@ -50,6 +50,8 @@ jobs:
         run: node --test tests/unit/tz20-order-fixtures.test.cjs
       - name: String Decoder focused unit tests
         run: node --test tests/unit/tz21-string-decoder.test.cjs tests/unit/tz21-string-decoder-ui.test.cjs
+      - name: String Decoder focused Electron GUI
+        run: xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/tz21-string-decoder.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
