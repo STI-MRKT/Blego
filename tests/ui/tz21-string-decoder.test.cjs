@@ -59,7 +59,12 @@ test(
     );
     const embeddedStatus = await page.evaluate(async () => {
       const { state } = await import('/js/state.js');
-      return { status: state.decoder.status, error: state.decoder.error, format: state.decoder.format, inputLength: state.decoder.input.length };
+      return {
+        status: state.decoder.status,
+        error: state.decoder.error,
+        format: state.decoder.format,
+        inputLength: state.decoder.input.length
+      };
     });
     assert.equal(embeddedStatus.status, 'success', JSON.stringify(embeddedStatus));
     assert.match(await page.locator('#decoder-result').innerText(), /"type": "synthetic"/);
