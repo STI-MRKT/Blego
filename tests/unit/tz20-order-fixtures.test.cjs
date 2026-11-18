@@ -148,3 +148,24 @@ test('TZ20 multiline vertical credentials form records, not one row per field', 
   assert.equal(result.records[0].data.emailPassword, 'SYNTH_MAIL_1');
   assert.equal(result.records[1].data.accountId, '61500000123457');
 });
+
+test('TZ20 uniquely anchored account colon layout infers one FB password without supplied order', async () => {
+  const a = row('first@example.test', 'SYNTHETIC_FB_1', '61500000123456');
+  const { result } = await scan([receipt, a].join('\n'), { headers: false });
+  assert.equal(result.records.length, 1);
+  assert.equal(result.records[0].data.password, 'SYNTHETIC_FB_1');
+  assert.equal(result.records[0].data.accountId, '61500000123456');
+  assert.ok(result.records[0].warnings.some((warning) => warning.code === 'CREDENTIAL_LAYOUT_INFERRED'));
+});
+
+test('TZ20 conflicting Cookie owner does not infer an account password', async () => {
+  const a = [
+    'first@example.test',
+    'SYNTHETIC_FB_1',
+    '61500000123456',
+    cookie('61500000999999'),
+    agent
+  ].join(':');
+  const { result } = await scan([receipt, a].join('\n'), { headers: false });
+  assert.equal(result.records[0].data.password, '');
+});
