@@ -101,7 +101,14 @@ test('TZ17 labelled permutations keep two emails and optional cookies without sh
 });
 
 test('TZ17 arbitrary unmatched secrets remain reviewable instead of being swapped', async () => {
-  const text = ['unknownA123', uid, 'mail@example.test', 'unknownB456', 'Desi Sample', '1.11.1998'].join(';');
+  const text = [
+    'unknownA123',
+    uid,
+    'mail@example.test',
+    'unknownB456',
+    'Desi Sample',
+    '1.11.1998'
+  ].join(';');
   const { result } = await scan(text);
   const row = result.records[0];
   assert.equal(row.data.password, '');
