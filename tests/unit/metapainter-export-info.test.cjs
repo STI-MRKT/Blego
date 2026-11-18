@@ -39,6 +39,7 @@ test('MetaPainter always exposes exported copy names in the simple view', async 
     assert.ok(html.includes('Исходные фотографии не изменены'));
     assert.ok(html.includes('EXIF'));
     assert.ok(html.includes('Finder'));
+    assert.ok(html.includes('Spotlight'));
   } finally {
     Object.assign(state, prior);
   }
