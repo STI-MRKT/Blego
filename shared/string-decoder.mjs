@@ -27,15 +27,17 @@ function decodeUTF8(bytes) {
 
 function base64Bytes(text, format) {
   let compact = text.replace(/\s/g, '');
-  const valid = format === 'base64url'
-    ? /^[A-Za-z0-9_-]*={0,2}$/.test(compact)
-    : /^[A-Za-z0-9+/]*={0,2}$/.test(compact);
+  const valid =
+    format === 'base64url'
+      ? /^[A-Za-z0-9_-]*={0,2}$/.test(compact)
+      : /^[A-Za-z0-9+/]*={0,2}$/.test(compact);
   if (
     !compact ||
     !valid ||
     compact.length % 4 === 1 ||
     (compact.includes('=') && compact.length % 4 !== 0)
-  ) invalid('INVALID_BASE64');
+  )
+    invalid('INVALID_BASE64');
   if (format === 'base64url') compact = compact.replace(/-/g, '+').replace(/_/g, '/');
   try {
     const binary = atob(compact);
@@ -49,17 +51,14 @@ function base64Bytes(text, format) {
 
 function hexBytes(input) {
   const compact = input.replace(/0x/gi, '').replace(/[\s:]/g, '');
-  if (!compact || compact.length % 2 !== 0 || /[^a-f\d]/i.test(compact))
-    invalid('INVALID_HEX');
+  if (!compact || compact.length % 2 !== 0 || /[^a-f\d]/i.test(compact)) invalid('INVALID_HEX');
   const bytes = new Uint8Array(compact.length / 2);
-  for (let i = 0; i < bytes.length; i++)
-    bytes[i] = parseInt(compact.slice(i * 2, i * 2 + 2), 16);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(compact.slice(i * 2, i * 2 + 2), 16);
   return bytes;
 }
 
 function decodeOne(input, format) {
-  if (format === 'base64' || format === 'base64url')
-    return decodeUTF8(base64Bytes(input, format));
+  if (format === 'base64' || format === 'base64url') return decodeUTF8(base64Bytes(input, format));
   if (format === 'hex') return decodeUTF8(hexBytes(input));
   if (format === 'url') {
     try {
@@ -87,7 +86,8 @@ function likelyAutoFormat(value) {
   if (
     /^(?:\s*(?:0x)?[a-f\d]{2}(?:(?:\s+|:)+|$))+$/i.test(trimmed) ||
     (/^[a-f\d]+$/i.test(trimmed) && trimmed.length >= 8 && trimmed.length % 2 === 0)
-  ) return 'hex';
+  )
+    return 'hex';
   const compact = trimmed.replace(/\s/g, '');
   // Plain multi-word prose is not enough evidence for Base64 autodetection.
   if (/\s/.test(trimmed) && !/[=+/_-\d]/.test(compact)) return null;
@@ -96,7 +96,8 @@ function likelyAutoFormat(value) {
     compact.length % 4 !== 1 &&
     /^[A-Za-z0-9+/_-]*={0,2}$/.test(compact) &&
     /[A-Za-z]/.test(compact)
-  ) return /[-_]/.test(compact) ? 'base64url' : 'base64';
+  )
+    return /[-_]/.test(compact) ? 'base64url' : 'base64';
   return null;
 }
 
@@ -138,8 +139,7 @@ function embeddedJSON(input) {
     let compact = token;
     // Preserve valid trailing padding. For concatenated unpadded rows,
     // trim only incomplete trailing groups, never the JSON root bytes.
-    if (!compact.includes('='))
-      compact = compact.slice(0, compact.length - (compact.length % 4));
+    if (!compact.includes('=')) compact = compact.slice(0, compact.length - (compact.length % 4));
     if (!compact || compact.length > MAX_INPUT_LENGTH) continue;
     let decoded;
     try {
@@ -180,9 +180,10 @@ export function decodeString(input, format = 'auto') {
       if (step === 0 && format === 'auto' && isJSON(current) === undefined) {
         const matches = embeddedJSON(current);
         if (matches.length) {
-          current = matches.length === 1
-            ? matches[0]
-            : matches.map((text, index) => 'Фрагмент ' + (index + 1) + ':\n' + text).join('\n\n');
+          current =
+            matches.length === 1
+              ? matches[0]
+              : matches.map((text, index) => 'Фрагмент ' + (index + 1) + ':\n' + text).join('\n\n');
           embedded = true;
           fragments = matches.length;
           detected.push('base64 (встроенный JSON)');
@@ -199,9 +200,10 @@ export function decodeString(input, format = 'auto') {
       if (step === 0 && format === 'auto') {
         const matches = embeddedJSON(current);
         if (matches.length) {
-          current = matches.length === 1
-            ? matches[0]
-            : matches.map((text, index) => 'Фрагмент ' + (index + 1) + ':\n' + text).join('\n\n');
+          current =
+            matches.length === 1
+              ? matches[0]
+              : matches.map((text, index) => 'Фрагмент ' + (index + 1) + ':\n' + text).join('\n\n');
           embedded = true;
           fragments = matches.length;
           detected.push('base64 (встроенный JSON)');
@@ -228,15 +230,16 @@ export function decodeString(input, format = 'auto') {
   return { output, format: lastFormat, layers, json, embedded, fragments, detected };
 }
 
-export const decoderErrorMessage = (code) => ({
-  EMPTY_INPUT: 'Вставьте строку для декодирования.',
-  INVALID_INPUT: 'Неверный тип входных данных.',
-  INPUT_TOO_LARGE: 'Строка превышает 2 МиБ. Разделите её на части.',
-  OUTPUT_TOO_LARGE: 'Результат превышает допустимый размер 4 МиБ.',
-  INVALID_BASE64: 'Некорректный Base64: проверьте алфавит и символы заполнения.',
-  INVALID_URL: 'Некорректное URL-кодирование: проверьте последовательности %XX и UTF-8.',
-  INVALID_HEX: 'Некорректный Hex: нужны пары шестнадцатеричных символов.',
-  INVALID_UTF8: 'Декодированные байты не являются корректным текстом UTF-8.',
-  UNSUPPORTED_FORMAT: 'Неизвестный формат кодирования.',
-  FORMAT_NOT_DETECTED: 'Не удалось определить кодировку. Выберите формат вручную.'
-}[code] || 'Не удалось декодировать строку.');
+export const decoderErrorMessage = (code) =>
+  ({
+    EMPTY_INPUT: 'Вставьте строку для декодирования.',
+    INVALID_INPUT: 'Неверный тип входных данных.',
+    INPUT_TOO_LARGE: 'Строка превышает 2 МиБ. Разделите её на части.',
+    OUTPUT_TOO_LARGE: 'Результат превышает допустимый размер 4 МиБ.',
+    INVALID_BASE64: 'Некорректный Base64: проверьте алфавит и символы заполнения.',
+    INVALID_URL: 'Некорректное URL-кодирование: проверьте последовательности %XX и UTF-8.',
+    INVALID_HEX: 'Некорректный Hex: нужны пары шестнадцатеричных символов.',
+    INVALID_UTF8: 'Декодированные байты не являются корректным текстом UTF-8.',
+    UNSUPPORTED_FORMAT: 'Неизвестный формат кодирования.',
+    FORMAT_NOT_DETECTED: 'Не удалось определить кодировку. Выберите формат вручную.'
+  })[code] || 'Не удалось декодировать строку.';
