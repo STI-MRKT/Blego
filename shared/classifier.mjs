@@ -273,9 +273,7 @@ export function classifyRecords(parsed, options = {}) {
       // Preserve the first as primary and promote the inferred second address.
       // Manual row/column mappings retain higher precedence.
       const namedRole =
-        named === 'email' && structure.get(position) === 'backupEmail'
-          ? 'backupEmail'
-          : named;
+        named === 'email' && structure.get(position) === 'backupEmail' ? 'backupEmail' : named;
       const schema =
         options.schema &&
         (!['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
