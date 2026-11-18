@@ -187,6 +187,24 @@ function guess(value) {
 }
 export function classifyRecords(parsed, options = {}) {
   if (options.schema && !Object.hasOwn(SCHEMAS, options.schema)) throw Error('INVALID_SCHEMA');
+  // An explicitly supplied header order is a safe alternative to guessing
+  // opaque login/password strings in source files with no header row.
+  if (options.columnOrder != null && typeof options.columnOrder !== 'string')
+    throw Error('INVALID_LAYOUT');
+  if ((options.columnOrder || '').length > 2048) throw Error('INVALID_LAYOUT');
+  const suppliedColumns = String(options.columnOrder || '').trim()
+    ? String(options.columnOrder).split(/\||::|;|\t/).map((part) => part.trim())
+    : [];
+  if (
+    suppliedColumns.length &&
+    (suppliedColumns.length < 2 ||
+      suppliedColumns.length > 64 ||
+      suppliedColumns.some((part) => !part || part.length > 80) ||
+      !suppliedColumns.some((part) => fieldForHeader(part)))
+  )
+    throw Error('INVALID_LAYOUT');
+  const suppliedLayout = suppliedColumns.map((part) => fieldForHeader(part) || null);
+
   const mapping = options.mapping || {};
   if (
     typeof mapping !== 'object' ||
@@ -239,6 +257,11 @@ export function classifyRecords(parsed, options = {}) {
     const entries =
       source.sourceEntries ||
       Object.entries(source.data).map(([column, value]) => ({ column, value }));
+    const layoutMatches =
+      parsed.headerless && suppliedLayout.length && entries.length === suppliedLayout.length;
+    if (parsed.headerless && suppliedLayout.length && !layoutMatches)
+      report('LAYOUT_WIDTH_MISMATCH');
+
     const recognized = entries.map((entry) =>
       (entry.labelled
         ? (...args) => recognizeLabelledValue(entry.header, ...args)
@@ -302,6 +325,7 @@ export function classifyRecords(parsed, options = {}) {
           : null;
       const mapped = Object.hasOwn(mapping, entry.column) ? mapping[entry.column] : null;
       const rowMapped = Object.hasOwn(rowMapping, entry.column) ? rowMapping[entry.column] : null;
+      const ordered = layoutMatches ? suppliedLayout[position] : null;
       const found = recognized[position];
       let inferred = structure.get(position) || found.key;
       if (parsed.structured && !entry.labelled && !inferred && contextual) {
@@ -316,11 +340,13 @@ export function classifyRecords(parsed, options = {}) {
         (!inferred || (!found.explicit && inferred === 'email' && learned === 'backupEmail'))
       )
         inferred = learned;
-      const key =
-        rowMapped || mapped || namedRole || schema || (parsed.structured ? inferred : guess(value));
+      const guessed = parsed.structured ? inferred : parsed.headerless ? guess(value) : null;
+      const key = rowMapped || mapped || namedRole || schema || ordered ||
+        (suppliedLayout.length && parsed.headerless && !layoutMatches &&
+         ['password', 'emailPassword'].includes(guessed) ? null : guessed);
       const priority = rowMapped
         ? 6
-        : mapped
+        : mapped || ordered
           ? 5
           : named
             ? 4
@@ -352,7 +378,9 @@ export function classifyRecords(parsed, options = {}) {
         method:
           rowMapped || mapped
             ? 'manual'
-            : named || found.explicit
+            : ordered
+              ? 'manual-layout'
+              : named || found.explicit
               ? 'label'
               : schema
                 ? 'schema'
