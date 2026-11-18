@@ -13,6 +13,13 @@ const {
   fieldForHeader,
   validBirthDate
 } = require('../../../shared/classifier.mjs');
+const {
+  confirmedLayout,
+  sanitizeConfirmedLayouts,
+  appendConfirmedLayouts
+} = require('../../../shared/classifier-adaptive.mjs');
+const SAVED_LAYOUTS_KEY = 'classifier:confirmed-layouts-v1';
+const emailValid = (value) => /^[^\s@;|]+@[^\s@;|]+\.[^\s@;|]+$/.test(value);
 function archiveText(records) {
   return [
     CORE_FIELDS.join('\t'),
@@ -25,9 +32,57 @@ function archiveText(records) {
     )
   ].join('\n');
 }
-function createClassificationService({ allowTestRules = false, clock = () => new Date() } = {}) {
+function createClassificationService({
+  allowTestRules = false,
+  clock = () => new Date(),
+  getStore = () => null
+} = {}) {
   const operations = new Map(),
     jobs = new Map();
+  const savedLayouts = () =>
+    sanitizeConfirmedLayouts(getStore()?.get(SAVED_LAYOUTS_KEY));
+  const clearSavedLayouts = () => {
+    const store = getStore();
+    if (store) store.set(SAVED_LAYOUTS_KEY, []);
+    return [];
+  };
+  function rememberConfirmedLayouts(parsed, options) {
+    if (options.rememberLayout !== true || !parsed.headerless || !getStore()) return;
+    const fieldNames = String(options.columnOrder || '').trim()
+      ? String(options.columnOrder).split(/\||::|;|\t/).map((part) => fieldForHeader(part.trim()) || null)
+      : null;
+    const candidates = [];
+    for (const record of parsed.records) {
+      if (candidates.length >= 16) break;
+      const entries = record.sourceEntries || [];
+      if (entries.length < 2 || entries.length > 64) continue;
+      const recognized = entries.map((entry) =>
+        recognizeValue(String(entry.value ?? ''), fieldForHeader, validBirthDate, emailValid)
+      );
+      const manual = options.recordMapping?.[record.id] || {};
+      const hasManual = Object.keys(manual).length > 0 ||
+        Object.keys(options.mapping || {}).length > 0 ||
+        (fieldNames?.length === entries.length) ||
+        Boolean(SCHEMAS[options.schema]?.length === entries.length);
+      if (!hasManual) continue; // Never train from merely guessed fields.
+      const roles = entries.map((entry, position) =>
+        manual[entry.column] ||
+        options.mapping?.[entry.column] ||
+        (fieldNames?.length === entries.length ? fieldNames[position] : null) ||
+        (SCHEMAS[options.schema]?.length === entries.length
+          ? SCHEMAS[options.schema][position] : null) ||
+        // Strong typed anchors can complement a partially confirmed layout.
+        (['accountId', 'email', 'cookies', 'userAgent', 'profileUrl']
+          .includes(recognized[position].key) ? recognized[position].key : null)
+      );
+      const layout = confirmedLayout(roles, recognized, validBirthDate);
+      if (layout) candidates.push(layout);
+    }
+    if (!candidates.length) return;
+    const store = getStore();
+    store.set(SAVED_LAYOUTS_KEY, appendConfirmedLayouts(savedLayouts(), candidates));
+  }
+
   function get(id) {
     const o = operations.get(id);
     if (!o) throw Error('UNKNOWN_OPERATION');
@@ -202,7 +257,8 @@ function createClassificationService({ allowTestRules = false, clock = () => new
           schema: options.schema,
           columnOrder: options.columnOrder,
           mapping: options.mapping,
-          recordMapping: options.recordMapping
+          recordMapping: options.recordMapping,
+          learnedLayouts: savedLayouts()
         }
       },
       resourceLimits: { maxOldGenerationSizeMb: 512 }
@@ -247,7 +303,9 @@ function createClassificationService({ allowTestRules = false, clock = () => new
       id
     );
     if (!operations.has(id)) throw Error('CANCELLED');
-    return adopt(parsed, classified, merged, id);
+    const result = adopt(parsed, classified, merged, id);
+    rememberConfirmedLayouts(parsed, merged);
+    return result;
   }
   function confirmClassification(id, decision) {
     const o = get(id);
@@ -390,6 +448,8 @@ function createClassificationService({ allowTestRules = false, clock = () => new
       return text;
     },
     reclassify,
+    savedLayouts,
+    clearSavedLayouts,
     cancel,
     sourceText: (id) => get(id).parsed.text,
     close() {
