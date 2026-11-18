@@ -11,9 +11,7 @@ export function verticalAccountRecords(text) {
   if (text.length > 8 * 1024 * 1024) return null;
   const idLines = text.match(/^[ \t]*\d{13,20}[ \t]*$/gm);
   if (!idLines || idLines.length < 2 || idLines.length > 10000) return null;
-  if (!recovery.test('AAAA BBBB CCCC DDDD') ||
-      !/(?:[A-Z0-9]{4}[ \t]+){3}[A-Z0-9]{4};?[ \t]*$/m.test(text))
-    return null;
+  if (!/(?:[A-Z0-9]{4}[ \t]+){3}[A-Z0-9]{4};?[ \t]*$/m.test(text)) return null;
   const entries = [];
   let start = 0;
   let lineNumber = 1;
