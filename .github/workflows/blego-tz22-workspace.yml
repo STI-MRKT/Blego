@@ -1,38 +1,115 @@
-name: BLEGO TZ22 workspace snapshot
+name: BLEGO TZ22 macOS ARM64 installable DMG
+
 on:
   push:
     branches: [codex/blego-tz22-ui-sites-photo-pool-20261118]
-    paths: [.github/workflows/blego-tz22-workspace.yml]
+    paths: ['.github/workflows/blego-tz22-workspace.yml']
+  workflow_dispatch:
+
 permissions:
   contents: read
+
+concurrency:
+  group: blego-tz22-macos-arm64
+  cancel-in-progress: false
+
 jobs:
-  snapshot:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 90
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
-      - name: Source snapshot
-        run: git archive --format=tar.gz HEAD > "$RUNNER_TEMP/blego-tz22-source.tar.gz"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: BLEGO-TZ22-source
-          path: ${{ runner.temp }}/blego-tz22-source.tar.gz
-          retention-days: 3
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
           cache: npm
-      - run: npm ci
-      - name: Offline verification runtime
+      - name: Restore exact TZ22 source changes
+        shell: bash
         run: |
-          cp "$(command -v node)" "$RUNNER_TEMP/node"
-          tar -czf "$RUNNER_TEMP/blego-tz22-dependencies.tar.gz" node_modules
-      - uses: actions/upload-artifact@v4
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
+          expected = '79df37ef1d72bb788c9b056f2539dfb0b4bdcfc14ac9b9d3a60ed40fa497e9bd'
+          assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
+      - name: Install locked dependencies and Electron
+        run: |
+          npm ci
+          node node_modules/electron/install.js
+      - name: Restore validated native Perl cache
+        uses: actions/cache@v4
         with:
-          name: BLEGO-TZ22-offline-runtime
+          path: build/metadata-runtime/darwin-arm64
+          key: blego-verified-perl-5.40.1-macOS-arm64-v1
+      - name: Prepare macOS metadata runtime
+        run: bash scripts/prepare-metadata-darwin.sh
+      - name: Native metadata readback gate
+        run: |
+          mkdir -p release
+          node scripts/check-metadata-native.cjs --target darwin-arm64 --root build/metadata-runtime/darwin-arm64 --report release/native-metadata-arm64.json
+      - name: Lint and focused unit regression
+        run: |
+          npm run lint
+          node --test tests/unit/tz22-*.test.cjs
+      - name: Integration regression
+        run: npm run test:integration
+      - name: Native Electron TZ22 interface checks
+        run: node --test --test-concurrency=1 tests/ui/tz22-workspace.test.cjs
+      - name: Build unsigned Apple Silicon DMG
+        run: npm run dist:mac -- --arm64
+      - name: Mount DMG and check installed app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mountpoint="$RUNNER_TEMP/blego-mounted"
+          mkdir -p "$mountpoint"
+          hdiutil verify release/BLEGO-1.4.6-arm64.dmg
+          hdiutil attach release/BLEGO-1.4.6-arm64.dmg -readonly -nobrowse -mountpoint "$mountpoint"
+          trap 'hdiutil detach "$mountpoint"' EXIT
+          ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          test -x "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO"
+          ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
+          node scripts/check-installed-app.cjs --suite tz22 --executable "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" --report release/installed-arm64.json || { cat release/installed-arm64.json.log; exit 1; }
+      - name: Create installation ZIP and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release && shasum -a 256 BLEGO-1.4.6-arm64.dmg > SHA256SUMS)
+          printf 'BLEGO 1.4.6 TZ22 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is not notarized or Developer ID signed.\n' > release/INSTALL-RU.txt
+          (cd release && zip -9 BLEGO-1.4.6-TZ22-macOS-ARM64-install.zip BLEGO-1.4.6-arm64.dmg SHA256SUMS INSTALL-RU.txt)
+          unzip -t release/BLEGO-1.4.6-TZ22-macOS-ARM64-install.zip
+          shasum -a 256 release/BLEGO-1.4.6-TZ22-macOS-ARM64-install.zip
+      - name: Upload verified macOS installation archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-1.4.6-TZ22-macOS-ARM64-install
+          if-no-files-found: error
+          retention-days: 7
           path: |
-            ${{ runner.temp }}/blego-tz22-dependencies.tar.gz
-            ${{ runner.temp }}/node
+            release/BLEGO-1.4.6-TZ22-macOS-ARM64-install.zip
+            release/SHA256SUMS
+            release/installed-arm64.json
+            release/native-metadata-arm64.json
+      - name: Attach failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-1.4.6-TZ22-macOS-failure-logs
+          if-no-files-found: ignore
           retention-days: 3
+          path: |
+            release/*.json
+            release/*.log
+            release/*.yml
