@@ -59,22 +59,16 @@ test(
     await page.getByRole('button', { name: 'Copy Facebook ID', exact: true }).click();
     await page.waitForTimeout(100);
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), '456');
-    await page.locator('[data-action="checker-retry-one"]').click();
-    await waitForAsync(page, async () => {
-      const { state } = await import('/js/state.js');
-      return !state.checker.checking;
-    });
-    const calls = await app.evaluate(() => globalThis.v14Calls);
-    assert.equal(calls[1].length, 1);
-    assert.equal(calls[1][0].canonicalUrl, 'https://www.facebook.com/profile.php?id=456');
+    assert.equal(await page.locator('[data-action="checker-retry-one"]').count(), 0);
+    assert.equal(await page.locator('.checker-row details').count(), 0);
+    assert.equal(await page.locator('.checker-row .faint').count(), 0);
+    assert.equal((await app.evaluate(() => globalThis.v14Calls)).length, 1);
     await page.locator('#checker-status-filter').selectOption('');
     await page.locator('#checker-sort').selectOption('id-desc');
     assert.equal(await page.locator('.checker-row').count(), 2);
-    await page.locator('.checker-row details summary').first().click();
-    assert.ok(
-      (await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR')
-    );
-    assert.ok((await page.locator('.checker-row').first().innerText()).includes('09:00'));
+    assert.equal(await page.locator('[data-checker-status="UNKNOWN"]').count(), 1);
+    assert.equal(await page.locator('[data-checker-status="UNKNOWN"] .checker-status-icon svg').count(), 1);
+    assert.equal((await page.locator('.checker-row').first().innerText()).includes('FBTOOLS_NETWORK_ERROR'), false);
     await page.locator('[data-view="import"]').click();
     await page.locator('#file-input').setInputFiles({
       name: 'synthetic.txt',
