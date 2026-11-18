@@ -31,6 +31,10 @@ jobs:
           done
       - name: Targeted TZ15 unit tests
         run: node --test tests/unit/metapainter-export-info.test.cjs tests/unit/tz17-ui.test.cjs tests/unit/tz17-adaptive.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/tz15-generator-ux.test.cjs tests/integration/facebook-fbtools.test.cjs
+      - name: MetaPainter focused Electron GUI
+        run: |
+          node node_modules/electron/install.js
+          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/metapainter-export-info.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
