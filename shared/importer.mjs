@@ -207,8 +207,51 @@ function jsonEntries(text) {
   }
   return rows;
 }
+// Only a recognized receipt envelope is masked. Using spaces preserves UTF-16
+// offsets, field ranges and original source text; payload bytes are untouched.
+// Unrelated TXT, including already supported formats, is never filtered.
+function receiptPayload(text) {
+  const start = /^(?:[ \t\r\n]|\uFEFF)*Номер заказа[ \t]*:[ \t]*\d{1,12}[ \t]*$/im.exec(text.slice(0, 500));
+  if (!start) return { text, receipt: false };
+  const marker = /^[ \t]*Ваш заказ[ \t]*:[ \t]*\r?$/gim;
+  let found;
+  while ((found = marker.exec(text))) if (found.index < 12000) break;
+  const end = found && found.index < 12000
+    ? (() => {
+        const newline = text.indexOf('\n', found.index + found[0].length);
+        return newline < 0 ? text.length : newline + 1;
+      })()
+    : (() => {
+        // Some short receipts contain only a number followed by value rows.
+        const lineEnd = text.indexOf('\n', start.index);
+        const remainder = text.slice(lineEnd + 1);
+        const accountRows = remainder.split(/\r?\n/).filter((line) =>
+          /^[^\s:;|]+@[^\s:;|]+\.[^:;|\s]+[;|]/u.test(line.trim().replace(/^\uFEFF/, ''))
+        );
+        return accountRows.length >= 2 ? lineEnd + 1 : -1;
+      })();
+  if (end < 0) return { text, receipt: false };
+  let masked = text.slice(0, end).replace(/[^\r\n]/g, ' ') + text.slice(end);
+  const after = masked.slice(end);
+  const foot = /^-{10,}[ \t]*\r?$(?:\r?\n)?/gm;
+  for (const match of after.matchAll(foot)) {
+    const tail = after.slice(match.index + match[0].length);
+    if (tail.length <= 1024 && !/@[^\s;|:]+\.[^\s;|:]+/.test(tail)) {
+      const from = end + match.index;
+      masked = masked.slice(0, from) + masked.slice(from).replace(/[^\r\n]/g, ' ');
+      break;
+    }
+  }
+  return { text: masked, receipt: true };
+}
+
 export function parseText(text, format, options = {}) {
   text = text.replace(/^\uFEFF/, '');
+  const sourceText = text;
+  const receipt = format === 'txt' && options.classification && options.headers !== true
+    ? receiptPayload(text)
+    : { text, receipt: false };
+  text = receipt.text;
   const diagnostics = [];
   let records = [],
     columns = [],
@@ -228,6 +271,7 @@ export function parseText(text, format, options = {}) {
     (!options.schema || ['credentials6', 'account5', 'mixedA'].includes(options.schema)) &&
     options.headers !== true &&
     (['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
+      receipt.receipt ||
       wantsStructuredText(text, isHeaderCandidate))
   ) {
     const result = structuredRecords(text, options);
@@ -348,7 +392,7 @@ export function parseText(text, format, options = {}) {
     else seen.set(key, r.id);
   }
   return {
-    text,
+    text: sourceText,
     records,
     columns,
     delimiter,
