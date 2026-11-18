@@ -173,7 +173,7 @@ test('TZ19 a per-record manual password mapping can teach a structurally anchore
       headers: false,
       rememberLayout: true,
       recordMapping: {
-        '1': { column_3: 'login', column_4: 'password' }
+        1: { column_3: 'login', column_4: 'password' }
       }
     });
     assert.equal(service.savedLayouts().length, 1);
