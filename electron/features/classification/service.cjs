@@ -39,8 +39,7 @@ function createClassificationService({
 } = {}) {
   const operations = new Map(),
     jobs = new Map();
-  const savedLayouts = () =>
-    sanitizeConfirmedLayouts(getStore()?.get(SAVED_LAYOUTS_KEY));
+  const savedLayouts = () => sanitizeConfirmedLayouts(getStore()?.get(SAVED_LAYOUTS_KEY));
   const clearSavedLayouts = () => {
     const store = getStore();
     if (store) store.set(SAVED_LAYOUTS_KEY, []);
@@ -49,7 +48,9 @@ function createClassificationService({
   function rememberConfirmedLayouts(parsed, options) {
     if (options.rememberLayout !== true || !parsed.headerless || !getStore()) return;
     const fieldNames = String(options.columnOrder || '').trim()
-      ? String(options.columnOrder).split(/\||::|;|\t/).map((part) => fieldForHeader(part.trim()) || null)
+      ? String(options.columnOrder)
+          .split(/\||::|;|\t/)
+          .map((part) => fieldForHeader(part.trim()) || null)
       : null;
     const candidates = [];
     for (const record of parsed.records) {
@@ -60,20 +61,26 @@ function createClassificationService({
         recognizeValue(String(entry.value ?? ''), fieldForHeader, validBirthDate, emailValid)
       );
       const manual = options.recordMapping?.[record.id] || {};
-      const hasManual = Object.keys(manual).length > 0 ||
+      const hasManual =
+        Object.keys(manual).length > 0 ||
         Object.keys(options.mapping || {}).length > 0 ||
-        (fieldNames?.length === entries.length) ||
+        fieldNames?.length === entries.length ||
         Boolean(SCHEMAS[options.schema]?.length === entries.length);
       if (!hasManual) continue; // Never train from merely guessed fields.
-      const roles = entries.map((entry, position) =>
-        manual[entry.column] ||
-        options.mapping?.[entry.column] ||
-        (fieldNames?.length === entries.length ? fieldNames[position] : null) ||
-        (SCHEMAS[options.schema]?.length === entries.length
-          ? SCHEMAS[options.schema][position] : null) ||
-        // Strong typed anchors can complement a partially confirmed layout.
-        (['accountId', 'email', 'cookies', 'userAgent', 'profileUrl']
-          .includes(recognized[position].key) ? recognized[position].key : null)
+      const roles = entries.map(
+        (entry, position) =>
+          manual[entry.column] ||
+          options.mapping?.[entry.column] ||
+          (fieldNames?.length === entries.length ? fieldNames[position] : null) ||
+          (SCHEMAS[options.schema]?.length === entries.length
+            ? SCHEMAS[options.schema][position]
+            : null) ||
+          // Strong typed anchors can complement a partially confirmed layout.
+          (['accountId', 'email', 'cookies', 'userAgent', 'profileUrl'].includes(
+            recognized[position].key
+          )
+            ? recognized[position].key
+            : null)
       );
       const layout = confirmedLayout(roles, recognized, validBirthDate);
       if (layout) candidates.push(layout);
