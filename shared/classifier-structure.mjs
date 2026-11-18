@@ -38,7 +38,7 @@ export function inferRecordStructure(
     (recognized[i].key === 'fullName' &&
       !recognized[i].invalid &&
       personName(recognized[i].value)) ||
-    (!typed(recognized[i]) && personName(value))
+    (!typed(recognized[i]) && personName(value) && /\p{Ll}/u.test(value))
       ? [i]
       : []
   );
