@@ -89,6 +89,8 @@ function likelyAutoFormat(value) {
     (/^[a-f\d]+$/i.test(trimmed) && trimmed.length >= 8 && trimmed.length % 2 === 0)
   ) return 'hex';
   const compact = trimmed.replace(/\s/g, '');
+  // Plain multi-word prose is not enough evidence for Base64 autodetection.
+  if (/\s/.test(trimmed) && !/[=+/_-\d]/.test(compact)) return null;
   if (
     compact.length >= 8 &&
     compact.length % 4 !== 1 &&
@@ -133,8 +135,11 @@ function embeddedJSON(input) {
     const token = match[2];
     if (!/^(?:W[wy3]|e[wy])/i.test(token)) continue;
     const format = /[-_]/.test(token) ? 'base64url' : 'base64';
-    let compact = token.replace(/=+$/, '');
-    compact = compact.slice(0, compact.length - (compact.length % 4));
+    let compact = token;
+    // Preserve valid trailing padding. For concatenated unpadded rows,
+    // trim only incomplete trailing groups, never the JSON root bytes.
+    if (!compact.includes('='))
+      compact = compact.slice(0, compact.length - (compact.length % 4));
     if (!compact || compact.length > MAX_INPUT_LENGTH) continue;
     let decoded;
     try {
