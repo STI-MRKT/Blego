@@ -1,5 +1,5 @@
 import { MAX_INPUT_BYTES, failure } from './contracts.mjs';
-import { fieldForHeader } from './classifier.mjs';
+import { fieldForHeader, isHeaderCandidate } from './classifier.mjs';
 import { wantsStructuredText, structuredRecords } from './classifier-lexer.mjs';
 import { tabLabelRecords } from './classifier-tab-labels.mjs';
 function diagnostic(code, location = {}, recordId = null, level = 'warning') {
@@ -228,7 +228,7 @@ export function parseText(text, format, options = {}) {
     (!options.schema || ['credentials6', 'account5', 'mixedA'].includes(options.schema)) &&
     options.headers !== true &&
     (['credentials6', 'account5', 'mixedA'].includes(options.schema) ||
-      wantsStructuredText(text, fieldForHeader))
+      wantsStructuredText(text, isHeaderCandidate))
   ) {
     const result = structuredRecords(text, options);
     ({ records, columns, delimiter, headerless, structured } = result);
@@ -282,7 +282,7 @@ export function parseText(text, format, options = {}) {
     delimiter = format === 'tsv' ? '\t' : delimiterOf(text, options.classification) || ',';
     const rows = delimited(text, delimiter, options.classification);
     const firstCells = (rows[0]?.cells || []).filter((v) => v !== '');
-    const namedCount = firstCells.filter(fieldForHeader).length;
+    const namedCount = firstCells.filter(isHeaderCandidate).length;
     const confidentHeaders =
       firstCells.length === 1
         ? namedCount === 1
