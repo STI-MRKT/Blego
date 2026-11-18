@@ -225,7 +225,9 @@ export function structuredRecords(text, options = {}) {
       // then an ID and cookie JSON. Only this anchored prefix permits ':' as
       // a delimiter; it must not split colons inside JSON, URLs or User-Agent.
       const accountColonTuple =
-        /^[^\s:;|@]+@[^\s:;|@]+\.[^\s:;|@]+:[^:;|\r\n]{4,128}:\d{13,20}:\s*(?:\[|$)/u.test(lineText);
+        /^[^\s:;|@]+@[^\s:;|@]+\.[^\s:;|@]+:[^:;|\r\n]{4,128}:\d{13,20}:\s*(?:\[|$)/u.test(
+          lineText
+        );
       const continuingColonTuple =
         colonTuple && fields.length > 0 && !text.slice(cellStart, start).trim();
       colonTuple =
