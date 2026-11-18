@@ -70,6 +70,25 @@ export function inferRecordStructure(
     const secondary = emails.find((i) => i !== primary);
     roles.set(secondary, 'backupEmail');
   }
+  // A verified order tuple has email:opaque-secret:FB-ID:Cookie as its
+  // unique prefix. The Cookie c_user must identify the same Facebook ID.
+  // No transfer between records, no filename-level or weak value-only guess.
+  const cookieOwners = recognized[3]?.cookie?.owners || [];
+  if (
+    entries.length >= 4 &&
+    entries.length <= 8 &&
+    emails.length === 1 &&
+    recognized[0]?.key === 'email' &&
+    !typed(recognized[1]) &&
+    passwordShape(values[1]) &&
+    uidLike.test(values[2]) &&
+    recognized[3]?.key === 'cookies' &&
+    cookieOwners.length === 1 &&
+    cookieOwners[0] === values[2]
+  ) {
+    roles.set(1, 'password');
+    if (!typed(recognized[2])) roles.set(2, 'accountId');
+  }
   if (!anchored || entries.length < 5) return roles;
   if (looseIds.length === 1) roles.set(looseIds[0], 'accountId');
   roles.set(dates[0], 'birthDate');
