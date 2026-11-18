@@ -116,3 +116,18 @@ test('TZ17 arbitrary unmatched secrets remain reviewable instead of being swappe
   assert.ok(row.unrecognized.some((entry) => entry.value === 'unknownA123'));
   assert.ok(row.unrecognized.some((entry) => entry.value === 'unknownB456'));
 });
+
+test('TZ17 labelled name and date can anchor reordered unlabelled credentials', async () => {
+  const text = [
+    'Mailsecret!4567',
+    'Name:Desi Sample',
+    'Date of Birth:1.11.1998',
+    'ID Account:' + uid,
+    'FbSample123',
+    'Email:one@example.test'
+  ].join(';');
+  const { result } = await scan(text);
+  assert.equal(result.records.length, 1);
+  assert.equal(result.records[0].data.password, 'FbSample123');
+  assert.equal(result.records[0].data.emailPassword, 'Mailsecret!4567');
+});
