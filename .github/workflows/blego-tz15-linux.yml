@@ -7,6 +7,7 @@ on:
       - codex/blego-metapainter-export-inspection-20261118
       - codex/blego-metapainter-default-confirm-finder-20261118
       - codex/blego-classifier-layout-headers-20261118
+      - codex/blego-news-hide-partial-source-warning-20261118
 permissions:
   contents: read
 jobs:
@@ -38,6 +39,8 @@ jobs:
           npm run prepare:metadata
           node node_modules/electron/install.js
           xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/metapainter-export-info.test.cjs
+      - name: News partial-source warning regression
+        run: node --test tests/unit/news-partial-warning.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
