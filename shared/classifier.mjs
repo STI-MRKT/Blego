@@ -1,4 +1,5 @@
 import { discoverLayouts, matchingLayout } from './classifier-layouts.mjs';
+import { matchConfirmedLayout } from './classifier-adaptive.mjs';
 import { inferRecordStructure } from './classifier-structure.mjs';
 import {
   EXTENDED_FIELDS,
@@ -335,6 +336,17 @@ export function classifyRecords(parsed, options = {}) {
             identityConflict
           })
         : new Map();
+    // Only unresolved, headerless fields can benefit from a user-confirmed
+    // structural template. Existing explicit and deterministic rules win.
+    const confirmed =
+      parsed.structured &&
+      parsed.headerless &&
+      !options.schema &&
+      !suppliedLayout.length &&
+      !identityConflict
+        ? matchConfirmedLayout(options.learnedLayouts, recognized, validBirthDate)
+        : null;
+    let appliedConfirmed = false;
     const rowMapping = options.recordMapping?.[source.id] || {};
     if (
       typeof rowMapping !== 'object' ||
@@ -381,6 +393,14 @@ export function classifyRecords(parsed, options = {}) {
         (!inferred || (!found.explicit && inferred === 'email' && learned === 'backupEmail'))
       )
         inferred = learned;
+      const savedRole = confirmed?.[position] || null;
+      const confirmedUsed =
+        savedRole &&
+        (!inferred || (!found.explicit && inferred === 'email' && savedRole === 'backupEmail'));
+      if (confirmedUsed) {
+        inferred = savedRole;
+        appliedConfirmed = true;
+      }
       const guessed = parsed.structured ? inferred : parsed.headerless ? guess(value) : null;
       const key =
         rowMapped ||
@@ -404,9 +424,11 @@ export function classifyRecords(parsed, options = {}) {
               ? 3
               : found.explicit && parsed.structured
                 ? 4
-                : structure.has(position)
-                  ? 2
-                  : 1;
+                : confirmedUsed
+                  ? 3
+                  : structure.has(position)
+                    ? 2
+                    : 1;
       const original = { ...entry, value, location: source.location };
       if (parsed.structured && (!named || !found.explicit || found.normalized)) value = found.value;
       if (parsed.structured && found.invalidJSON) report('INVALID_COOKIE_JSON', entry.column);
@@ -430,17 +452,20 @@ export function classifyRecords(parsed, options = {}) {
             ? 'manual'
             : ordered
               ? 'manual-layout'
-              : named || found.explicit
-                ? 'label'
-                : schema
-                  ? 'schema'
-                  : learned === key
-                    ? 'repeated-layout'
-                    : structure.get(position) === key
-                      ? 'record-local-layout'
-                      : 'syntax-context'
+              : confirmedUsed
+                ? 'confirmed-layout'
+                : named || found.explicit
+                  ? 'label'
+                  : schema
+                    ? 'schema'
+                    : learned === key
+                      ? 'repeated-layout'
+                      : structure.get(position) === key
+                        ? 'record-local-layout'
+                        : 'syntax-context'
       });
     });
+    if (appliedConfirmed) report('CONFIRMED_LAYOUT_APPLIED');
     // Heuristic assignments remain reviewable and never override manual/labelled
     // fields. Warn once per role, without exposing the credential itself.
     for (const key of ['password', 'emailPassword', 'backupEmail']) {
