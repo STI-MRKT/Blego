@@ -16,6 +16,8 @@ import { startTour } from './ui/tour.js';
 let workspaceInteracted = false;
 for (const event of ['pointerdown', 'keydown']) document.addEventListener(event, () => { workspaceInteracted = true; }, { once: true, capture: true });
 import { newsBlockHTML } from './ui/news.js';
+import { decoderResultHTML } from './ui/decoder.js';
+import { decodeString } from '../../shared/string-decoder.mjs';
 import { friendsCopyLinks, syncFriendsCopyActions } from './ui/friends.js';
 import { selectSeven, friendsCopyMessage } from '../../shared/friends-copy.mjs';
 let previousFriendsLinks = [];
@@ -411,6 +413,36 @@ function syncQuickMetadata() {
 }
 function bindView() {
   mountCopyActions();
+  const decoderInput = document.getElementById('decoder-input');
+  const invalidateDecoderResult = () => {
+    const draft = state.decoder;
+    draft.request++;
+    draft.status = 'idle';
+    draft.output = '';
+    draft.error = '';
+    const result = document.getElementById('decoder-result-panel');
+    if (result) result.innerHTML = decoderResultHTML();
+    const page = document.getElementById('decoder-page');
+    if (page) page.dataset.decoderStatus = 'idle';
+  };
+  if (decoderInput) {
+    decoderInput.oninput = () => {
+      state.decoder.input = decoderInput.value;
+      invalidateDecoderResult();
+    };
+    decoderInput.onkeydown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        event.preventDefault();
+        document.querySelector('[data-action="decoder-decode"]')?.click();
+      }
+    };
+  }
+  const decoderFormat = document.getElementById('decoder-format');
+  if (decoderFormat)
+    decoderFormat.onchange = () => {
+      state.decoder.format = decoderFormat.value;
+      invalidateDecoderResult();
+    };
   mountPhotoMap({onMove:async(fileId,value)=>{
     if(state.imagesBusy)return;
     stashImageDraft();state.imagesBusy=true;
@@ -1048,6 +1080,42 @@ document.addEventListener('click', async (event) => {
   if (!target) return;
   const action = target.dataset.action;
 
+  if (action === 'decoder-clear') {
+    const previous = state.decoder;
+    state.decoder = {
+      input: '', format: previous.format, status: 'idle', output: '', error: '',
+      layers: 0, detected: [], json: false, embedded: false, fragments: 0,
+      request: previous.request + 1
+    };
+    renderView();
+    return;
+  }
+  if (action === 'decoder-copy') {
+    if (state.decoder.status === 'success')
+      await copyText(state.decoder.output, target, 'Результат скопирован');
+    return;
+  }
+  if (action === 'decoder-decode') {
+    const draft = state.decoder;
+    const id = ++draft.request;
+    const input = draft.input;
+    const format = draft.format;
+    draft.status = 'loading';
+    draft.error = '';
+    renderView();
+    setTimeout(() => {
+      if (state.decoder !== draft || draft.request !== id || state.view !== 'decoder') return;
+      try {
+        Object.assign(draft, decodeString(input, format), { status: 'success', error: '' });
+      } catch (error) {
+        draft.status = 'error';
+        draft.error = error.code || error.message || 'DECODE_FAILED';
+        draft.output = '';
+      }
+      renderView();
+    }, 0);
+    return;
+  }
   if (action === 'archive-page') {
     state.archiveQuery = { ...state.archiveQuery, offset: Number(target.dataset.offset) };
     window.blego
@@ -1105,6 +1173,10 @@ document.addEventListener('click', async (event) => {
     return;
   }
   if (action === 'set-view') {
+    if (state.view === 'decoder' && target.dataset.view !== 'decoder') {
+      state.decoder.request++;
+      if (state.decoder.status === 'loading') state.decoder.status = 'idle';
+    }
     if(state.view==='photos'&&target.dataset.view!=='photos')invalidateImagePreview();
     state.cookieRow=null;state.classifierRevealed={};
     state.view = target.dataset.view;
