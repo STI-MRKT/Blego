@@ -39,5 +39,6 @@ export const state = {
   },
   photos: [],
   friendsGeo: '',
-  checker: { input: '', rows: null, checking: null }
+  checker: { input: '', rows: null, checking: null },
+  decoder: { input: '', format: 'auto', status: 'idle', output: '', error: '', layers: 0, detected: [], json: false, embedded: false, fragments: 0, request: 0 }
 };
