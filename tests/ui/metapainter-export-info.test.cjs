@@ -7,6 +7,7 @@ const { _electron } = require('playwright');
 const { imageFixture } = require('../fixtures/images.cjs');
 const { waitForAsync } = require('../fixtures/wait-for-async.cjs');
 const { createEngine } = require('../../electron/features/images/engine.cjs');
+const { execFileSync } = require('node:child_process');
 const { normalizedValue } = require('../../electron/features/images/policy.cjs');
 
 test(
@@ -63,6 +64,21 @@ test(
     assert.equal(normalizedValue('make', tags), 'Canon');
     assert.equal(normalizedValue('model', tags), 'EOS R5');
     assert.equal(normalizedValue('captureDate', tags).local, '2012-03-04T05:06:07');
+    if (process.platform === 'darwin') {
+      const output = execFileSync(
+        '/usr/bin/xcrun',
+        [
+          'swift',
+          path.join(__dirname, '../../scripts/check-meta-imageio.swift'),
+          exported,
+          'Canon',
+          'EOS R5',
+          '2012:03:04 05:06:07'
+        ],
+        { encoding: 'utf8', timeout: 90000 }
+      );
+      assert.match(output, /IMAGEIO_EXIF_VERIFIED/);
+    }
     // This is the file to inspect in Finder, NOT the unchanged original.
     const summary = await page.locator('[data-exported-copy]').first().innerText();
     assert.ok(summary.includes(report.files[0].outputName));
