@@ -53,10 +53,14 @@ test(
       .locator('#decoder-input')
       .fill('sample@example.test:DEMO_PASS:61500000123456:' + embedded);
     await page.locator('[data-action="decoder-decode"]').click();
-    await waitForAsync(
-      page,
-      async () => (await import('/js/state.js')).state.decoder.status === 'success'
+    await waitForAsync(page, async () =>
+      ['success', 'error'].includes((await import('/js/state.js')).state.decoder.status)
     );
+    const embeddedStatus = await page.evaluate(async () => {
+      const { state } = await import('/js/state.js');
+      return { status: state.decoder.status, error: state.decoder.error, format: state.decoder.format, inputLength: state.decoder.input.length };
+    });
+    assert.equal(embeddedStatus.status, 'success', JSON.stringify(embeddedStatus));
     assert.match(await page.locator('#decoder-result').innerText(), /"type": "synthetic"/);
     assert.doesNotMatch(await page.locator('#decoder-result').innerText(), /DEMO_PASS/);
 
