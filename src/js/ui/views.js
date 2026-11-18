@@ -28,6 +28,8 @@ export function viewHTML() {
       return friendsHTML();
     case 'checker':
       return checkerHTML();
+    case 'decoder':
+      return decoderHTML();
     default:
       return generatorHTML();
   }
