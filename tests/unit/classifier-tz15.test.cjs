@@ -145,8 +145,13 @@ test('TZ15 labelled or colon-separated values remain authoritative and exact', a
 
 test('diagnostic: fully anchored unlabelled ordinary distinct passwords remain unassigned', async () => {
   const values = [
-    'FbSample123', 'one@example.test', 'MailSample456', '1.11.1998',
-    id, 'Desi Sample', 'GEO Spain'
+    'FbSample123',
+    'one@example.test',
+    'MailSample456',
+    '1.11.1998',
+    id,
+    'Desi Sample',
+    'GEO Spain'
   ];
   const { parsed, records } = await scan(values.join(';'));
   assert.equal(parsed.structured, true);
@@ -163,9 +168,13 @@ test('diagnostic: fully anchored unlabelled ordinary distinct passwords remain u
 
 test('diagnostic: the same two passwords are retained with explicit field labels', async () => {
   const values = [
-    'Password:FbSample123', 'Email:one@example.test',
-    'Email Password:MailSample456', 'Date of Birth:1.11.1998',
-    'ID Account:' + id, 'Name:Desi Sample', 'GEO:Spain'
+    'Password:FbSample123',
+    'Email:one@example.test',
+    'Email Password:MailSample456',
+    'Date of Birth:1.11.1998',
+    'ID Account:' + id,
+    'Name:Desi Sample',
+    'GEO:Spain'
   ];
   const { records } = await scan(values.join(';'));
   assert.equal(records.length, 1);

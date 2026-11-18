@@ -17,10 +17,16 @@ export function inferRecordStructure(
   { birthDate, personName, identityConflict = false } = {}
 ) {
   const roles = new Map();
-  if (identityConflict || entries.length < 5 || entries.length > 64) return roles;
+  if (identityConflict || !entries.length || entries.length > 64) return roles;
   const values = entries.map(normalize);
   const emails = recognized.flatMap((r, i) => (r.key === 'email' && !r.invalid ? [i] : []));
-  const dates = values.flatMap((value, i) => (birthDate(value) ? [i] : []));
+  const dates = values.flatMap((value, i) =>
+    birthDate(
+      recognized[i].key === 'birthDate' && !recognized[i].invalid ? recognized[i].value : value
+    )
+      ? [i]
+      : []
+  );
   const labelledIds = recognized.flatMap((r, i) =>
     r.key === 'accountId' && !r.invalid ? [i] : []
   );
@@ -29,7 +35,12 @@ export function inferRecordStructure(
   );
   const ids = [...new Set([...labelledIds, ...looseIds])];
   const names = values.flatMap((value, i) =>
-    !typed(recognized[i]) && personName(value) ? [i] : []
+    (recognized[i].key === 'fullName' &&
+      !recognized[i].invalid &&
+      personName(recognized[i].value)) ||
+    (!typed(recognized[i]) && personName(value) && /\p{Ll}/u.test(value))
+      ? [i]
+      : []
   );
   // Strong, independent anchors prevent guessing passwords from prose or
   // unrelated text. A damaged/mixed account or vague role fails closed.
@@ -39,25 +50,37 @@ export function inferRecordStructure(
     dates.length === 1 &&
     ids.length === 1 &&
     names.length === 1;
-  if (!anchored) return roles;
+  // Promote the second email only when it is tied to a coherent record.
+  // Long account IDs are sufficient when DOB/name are absent; complete
+  // date + ID + name anchors also qualify. Short IDs in fragmented prose
+  // alone must not turn two arbitrary addresses into assigned roles.
+  const hasOwnerEvidence =
+    ids.length === 1 && (uidLike.test(recognized[ids[0]]?.value || values[ids[0]]) || anchored);
+  const hasExplicitBackup = recognized.some(
+    (r) => r.key === 'backupEmail' && r.explicit && !r.invalid
+  );
+  if (
+    hasOwnerEvidence &&
+    emails.length === 2 &&
+    !hasExplicitBackup &&
+    values[emails[0]].toLowerCase() !== values[emails[1]].toLowerCase()
+  ) {
+    const labelledPrimary = emails.filter((i) => recognized[i].explicit);
+    const primary = labelledPrimary.length === 1 ? labelledPrimary[0] : emails[0];
+    const secondary = emails.find((i) => i !== primary);
+    roles.set(secondary, 'backupEmail');
+  }
+  if (!anchored || entries.length < 5) return roles;
   if (looseIds.length === 1) roles.set(looseIds[0], 'accountId');
   roles.set(dates[0], 'birthDate');
   roles.set(names[0], 'fullName');
-  // Two distinct addresses in the same anchored account are kept separately.
-  // Explicit backup-email labels override this guess in classifyRecords.
-  if (
-    emails.length === 2 &&
-    values[emails[0]].toLowerCase() !== values[emails[1]].toLowerCase() &&
-    !recognized[emails[1]].explicit
-  )
-    roles.set(emails[1], 'backupEmail');
-
   const possibleMail = values.flatMap((value, i) =>
     !typed(recognized[i]) && mailPassLike.test(value) ? [i] : []
   );
   // The suffix is an account-format clue, NOT universal proof of a password.
-  // Require a unique candidate following an identified email in this record.
-  const mail = possibleMail.length === 1 && possibleMail[0] > emails[0] ? possibleMail[0] : -1;
+  // Require one unique candidate and strong anchors within this same record;
+  // a variable field order may put the password before its email.
+  const mail = possibleMail.length === 1 ? possibleMail[0] : -1;
   if (mail >= 0) roles.set(mail, 'emailPassword');
 
   const secrets = values.flatMap((value, i) =>

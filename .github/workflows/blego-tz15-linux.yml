@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - codex/blego-tz15-fbtools-classifier-integrated-20261117
+      - codex/blego-tz17-adaptive-classifier-20261118
 permissions:
   contents: read
 jobs:
@@ -21,14 +22,14 @@ jobs:
       - run: npm ci
       - name: Formatter review
         run: |
-          for file in tests/unit/tz16-ux.test.cjs tests/ui/classifier-tz15.test.cjs tests/ui/facebook-v14.test.cjs tests/unit/fbtools-checker-ui.test.cjs tests/ui/friends-bulk-copy.test.cjs tests/ui/friends.test.cjs tests/ui/photos-v143.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/phone-display.test.cjs tests/unit/tz14-hotfix.test.cjs tests/ui/generator-phone-address.test.cjs tests/ui/ux-restoration.test.cjs scripts/check-installed-app.cjs shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
+          for file in shared/classifier-structure.mjs tests/unit/tz17-ui.test.cjs shared/classifier.mjs tests/unit/tz17-adaptive.test.cjs tests/unit/tz16-ux.test.cjs tests/ui/classifier-tz15.test.cjs tests/ui/facebook-v14.test.cjs tests/unit/fbtools-checker-ui.test.cjs tests/ui/friends-bulk-copy.test.cjs tests/ui/friends.test.cjs tests/ui/photos-v143.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/phone-display.test.cjs tests/unit/tz14-hotfix.test.cjs tests/ui/generator-phone-address.test.cjs tests/ui/ux-restoration.test.cjs scripts/check-installed-app.cjs shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
             echo "FORMAT_END:$file"
           done
       - name: Targeted TZ15 unit tests
-        run: node --test tests/unit/classifier-tz15.test.cjs tests/unit/tz15-generator-ux.test.cjs tests/integration/facebook-fbtools.test.cjs
+        run: node --test tests/unit/tz17-ui.test.cjs tests/unit/tz17-adaptive.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/tz15-generator-ux.test.cjs tests/integration/facebook-fbtools.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
