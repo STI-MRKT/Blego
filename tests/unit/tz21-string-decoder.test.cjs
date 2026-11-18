@@ -14,14 +14,20 @@ test('TZ21 Base64 and Base64 URL-safe preserve Unicode and pretty-print JSON', a
   assert.equal(first.json, true);
   assert.equal(first.layers, 1);
   assert.equal(first.format, 'base64');
-  const safe = encode('Русский текст + /').replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
+  const safe = encode('Русский текст + /')
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+    .replace(/=+$/, '');
   assert.equal(decodeString(safe, 'base64url').output, 'Русский текст + /');
 });
 
 test('TZ21 whitespace Base64, percent encoding and hex bytes decode strictly', async () => {
   const { decodeString } = await decoder();
   assert.equal(decodeString(' SGVs\n bG8= ', 'base64').output, 'Hello');
-  assert.equal(decodeString('%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82+world', 'url').output, 'Привет world');
+  assert.equal(
+    decodeString('%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82+world', 'url').output,
+    'Привет world'
+  );
   assert.equal(decodeString('48 65 6c 6c 6f', 'hex').output, 'Hello');
   assert.equal(decodeString('0x48 0x65 0x6c 0x6c 0x6f', 'hex').output, 'Hello');
 });
@@ -72,7 +78,9 @@ test('TZ21 empty, too large, plain text and unsafe format are handled without ex
   assert.throws(() => decodeString(' \n ', 'auto'), { code: 'EMPTY_INPUT' });
   assert.throws(() => decodeString('sample text', 'auto'), { code: 'FORMAT_NOT_DETECTED' });
   assert.throws(() => decodeString('abc', 'unsafe'), { code: 'UNSUPPORTED_FORMAT' });
-  assert.throws(() => decodeString('a'.repeat(MAX_INPUT_LENGTH + 1), 'base64'), { code: 'INPUT_TOO_LARGE' });
+  assert.throws(() => decodeString('a'.repeat(MAX_INPUT_LENGTH + 1), 'base64'), {
+    code: 'INPUT_TOO_LARGE'
+  });
   const html = '<script>globalThis.malicious=true</script>';
   const result = decodeString(encode(html), 'base64');
   assert.equal(result.output, html);
