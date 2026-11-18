@@ -4,6 +4,8 @@ import { I } from '../icons.js';
 import { esc } from '../utils/dom.js';
 export const facebookLabels = {fbtools_live:'LIVE',fbtools_die:'DIE',unknown:'UNKNOWN',cancelled:'CANCELLED'};
 const statuses={fbtools_live:'LIVE',fbtools_die:'DIE',unknown:'UNKNOWN',cancelled:'CANCELLED'};
+const copy = (label, value) => value == null || value === '' ? '' : `<button class="copy tiny always" data-action="copy" data-copy="${esc(value)}" aria-label="${esc(label)}">${I.copy}</button>`;
+const when = (value) => value ? new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Europe/Moscow' }).format(new Date(value)) + ' МСК' : 'Запрос не выполнялся';
 // The checker uses concise status-only rows; diagnostic codes remain in the data model.
 const statusOf = (row) => facebookPresentation(row.check).status;
 export function checkerHTML(){
