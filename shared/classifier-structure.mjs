@@ -20,7 +20,11 @@ export function inferRecordStructure(
   if (identityConflict || !entries.length || entries.length > 64) return roles;
   const values = entries.map(normalize);
   const emails = recognized.flatMap((r, i) => (r.key === 'email' && !r.invalid ? [i] : []));
-  const dates = values.flatMap((value, i) => (birthDate(value) ? [i] : []));
+  const dates = values.flatMap((value, i) =>
+    birthDate(recognized[i].key === 'birthDate' && !recognized[i].invalid ? recognized[i].value : value)
+      ? [i]
+      : []
+  );
   const labelledIds = recognized.flatMap((r, i) =>
     r.key === 'accountId' && !r.invalid ? [i] : []
   );
@@ -29,7 +33,10 @@ export function inferRecordStructure(
   );
   const ids = [...new Set([...labelledIds, ...looseIds])];
   const names = values.flatMap((value, i) =>
-    !typed(recognized[i]) && personName(value) ? [i] : []
+    (recognized[i].key === 'fullName' && !recognized[i].invalid && personName(recognized[i].value)) ||
+    (!typed(recognized[i]) && personName(value))
+      ? [i]
+      : []
   );
   // Strong, independent anchors prevent guessing passwords from prose or
   // unrelated text. A damaged/mixed account or vague role fails closed.
