@@ -13,6 +13,7 @@ const NAV = [
     { view: 'photos', icon: I.image, label: 'Photos' },
     { view: 'friends', icon: I.users, label: 'Friends' },
     { view: 'checker', icon: I.shield, label: 'Checker' },
+    { view: 'decoder', icon: I.code, label: 'Декодер строк' },
     { view: 'history', icon: I.clock, label: 'Archive' }
   ] }
 ];
