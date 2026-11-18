@@ -46,12 +46,8 @@ test(
     await page.waitForTimeout(100);
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'SYNTHETIC_2FA');
     await page.locator('[data-action="classifier-close-details"]').click();
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[data-action="classifier-archive"]') })
-      .locator('summary')
-      .first()
-      .click();
+    assert.equal(await page.locator('#classifier-extra').count(), 0);
+    assert.ok(await page.locator('[data-action="classifier-archive"]').isVisible());
     await page.locator('[data-action="classifier-archive"]').click();
     await page.getByText('Сохранено в архиве', { exact: true }).waitFor();
     const saved = await page.evaluate(async () => {

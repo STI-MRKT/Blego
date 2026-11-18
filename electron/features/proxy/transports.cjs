@@ -1,7 +1,7 @@
 const https = require('node:https');
 const net = require('node:net');
 const { resolvePublic } = require('../../local/network-safety.cjs');
-const { withAbort } = require('../facebook/transport.cjs');
+const { withAbort } = require('../../local/async.cjs');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const { SocksProxyAgent } = require('socks-proxy-agent');
 function parseProxy(raw) {

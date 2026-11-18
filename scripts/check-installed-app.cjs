@@ -9,7 +9,8 @@ const { createHash } = require('node:crypto');
   if (!args.includes('--executable') || !args.includes('--report'))
     throw Error('Usage: --executable <installed-path> --report <json>');
   const suite = args.includes('--suite') ? get('--suite') : 'all';
-  if (!['all', 'classifier', 'tz14'].includes(suite)) throw Error('UNKNOWN_INSTALLED_TEST_SUITE');
+  if (!['all', 'classifier', 'tz14', 'tz15'].includes(suite))
+    throw Error('UNKNOWN_INSTALLED_TEST_SUITE');
   const executable = fs.realpathSync(get('--executable')),
     report = path.resolve(get('--report')),
     project = fs.realpathSync(path.resolve(__dirname, '..'));
@@ -26,6 +27,8 @@ const { createHash } = require('node:crypto');
     'biography-v143',
     'copy-all-sections',
     'friends-bulk-copy',
+    'friends',
+    'photos-v143',
     'generator-bio',
     'generator-phone-address',
     'generator-picker-tz12',
@@ -36,16 +39,41 @@ const { createHash } = require('node:crypto');
     'ux-restoration',
     'classifier-copy'
   ].map((name) => `tests/ui/${name}.test.cjs`);
+  const tz15Tests = [
+    'app',
+    'archive-actions',
+    'biography-v143',
+    'classifier',
+    'classifier-copy',
+    'classifier-tz13',
+    'classifier-tz15',
+    'classifier-v14',
+    'classifier-v142',
+    'classifier-v143',
+    'copy-all-sections',
+    'facebook-flow',
+    'facebook-v14',
+    'friends-bulk-copy',
+    'generator-bio',
+    'generator-phone-address',
+    'generator-v14',
+    'header-copy-removed',
+    'news-copy',
+    'settings-v14',
+    'ux-restoration'
+  ].map((name) => `tests/ui/${name}.test.cjs`);
   const tests =
     suite === 'classifier'
       ? require('./classifier-qa-suite.cjs').classifierTests('ui')
       : suite === 'tz14'
         ? tz14Tests
-        : fs
-            .readdirSync(path.join(project, 'tests/ui'))
-            .filter((name) => name.endsWith('.test.cjs'))
-            .sort()
-            .map((name) => 'tests/ui/' + name);
+        : suite === 'tz15'
+          ? tz15Tests
+          : fs
+              .readdirSync(path.join(project, 'tests/ui'))
+              .filter((name) => name.endsWith('.test.cjs'))
+              .sort()
+              .map((name) => 'tests/ui/' + name);
   if (tests.some((name) => !fs.existsSync(path.join(project, name))))
     throw Error('MISSING_INSTALLED_APP_TEST');
   const child = spawn(process.execPath, ['--test', '--test-concurrency=1', ...tests], {
@@ -83,7 +111,9 @@ const { createHash } = require('node:crypto');
         ? 'Actual packaged executable outside checkout: all classifier and archive GUI tests, including TXT/CSV/TSV/JSON import, actual clipboard, manual assignment, export, archive and reset. Synthetic fixtures and controlled dialogs. Unrelated modules are outside this selective run; original customer-file acceptance, signing/notarization and real OS denial cases are separate gates.'
         : suite === 'tz14'
           ? 'Actual installed macOS application: selected FP/BIO, Friends, Archive, Settings, phone-copy and unchanged News/Classifier GUI regressions, native clipboard and persistence. Other unchanged GUI modules have prior baseline acceptance; signing/notarization and customer-file acceptance are separate gates.'
-          : 'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
+          : suite === 'tz15'
+            ? 'Installed BLEGO.app, 20 targeted classifier credentials, archive, copied secrets, News, FB.Tools-only Checker, generator/BIO and unchanged workflow GUI tests; live third-party provider is separately verified; signing/notarization and customer-file acceptance are distinct gates.'
+            : 'Actual packaged executable outside checkout: local workflows, native clipboard API, metadata export, groups/reference, saved settings and restart. Dialog choices are controlled test fixtures. Signing/notarization and real OS denial/window-manager cases are separate gates.'
   };
   fs.writeFileSync(report, JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify(result, null, 2));

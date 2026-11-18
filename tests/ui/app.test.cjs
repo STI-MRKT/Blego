@@ -198,7 +198,7 @@ test(
       .locator('#checker-input')
       .fill('0012345678901234567890123\nhttps://facebook.com/groups');
     await page.locator('[data-action="checker-run"]').click();
-    await page.locator('.checker-row').getByText('LOGIN_REQUIRED', { exact: true }).waitFor();
+    await page.locator('.checker-row').getByText('LIVE', { exact: true }).waitFor();
     await page.locator('#facebook-details > summary').click();
     await page.locator('#fb-note-status-0').waitFor();
     await page.locator('[aria-label="Copy Facebook ID"]').first().click();
@@ -268,12 +268,8 @@ test(
       buffer: Buffer.from('Привет\nмир')
     });
     await page.locator('[data-classifier-status]').waitFor();
-    await page
-      .locator('details')
-      .filter({ has: page.locator('[data-action="import-copy"]') })
-      .locator('summary')
-      .first()
-      .click();
+    assert.equal(await page.locator('#classifier-extra').count(), 0);
+    assert.ok(await page.locator('[data-action="import-copy"]').isVisible());
     await page.locator('[data-action="import-copy"]').click();
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'Привет\nмир');
     await page.locator('[data-view="history"]').click();

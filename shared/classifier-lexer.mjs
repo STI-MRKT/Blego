@@ -143,6 +143,19 @@ export function structuredRecords(text, options = {}) {
     quoted = escaped = quoteStart = false;
   }
   for (let i = 0; i < text.length; i++) {
+    // Long divider lines separate account data from ancillary notes. Flush the
+    // preceding record first; the delimiter itself is never a field or record.
+    if ((i === 0 || text[i - 1] === '\n' || text[i - 1] === '\r') && !depth.length && !quoteStart) {
+      const boundary = /^[ \t]*(?:={8,}|-{8,})[ \t]*(?:\r\n|\r|\n|$)/.exec(text.slice(i, i + 512));
+      if (boundary) {
+        const after = i + boundary[0].length;
+        row(i, after);
+        if (/\r|\n/.test(boundary[0])) line++;
+        recordLine = line;
+        i = after - 1;
+        continue;
+      }
+    }
     const c = text[i],
       newline = c === '\n' || c === '\r';
     if (newline && depth.length) {
@@ -206,6 +219,15 @@ export function structuredRecords(text, options = {}) {
     }
     const length = c === '\\' && text[i + 1] === '\\' ? 2 : 1;
     const nextLabel = labelledStart(text.slice(i + length, i + length + 100));
+    const upcomingCell = text
+      .slice(i + length, i + length + 200)
+      .split(/[;|\r\n]/, 1)[0]
+      .trim();
+    const nextSpacedLabel =
+      c === ';' &&
+      recognizeValue(upcomingCell, fieldForHeader, validBirthDate, (v) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+      ).explicit;
     const composite =
       isUA(current) ||
       /^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?(?:https?:\/\/|[A-Za-z]:\\)/iu.test(current);
@@ -265,6 +287,7 @@ export function structuredRecords(text, options = {}) {
           ? c
           : c === ';' &&
               (nextLabel ||
+                nextSpacedLabel ||
                 (!isUA(current) &&
                   !/^\s*(?:[\p{L}\p{N}_ -]{1,40}[:=]\s*)?https?:\/\//iu.test(current)))
             ? ';'

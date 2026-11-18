@@ -1,4 +1,5 @@
 import { discoverLayouts, matchingLayout } from './classifier-layouts.mjs';
+import { inferRecordStructure } from './classifier-structure.mjs';
 import {
   EXTENDED_FIELDS,
   extendedFieldForHeader,
@@ -110,7 +111,8 @@ const countryCodes = new Set(
     ' '
   )
 );
-const emailValid = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const emailValid = (s) =>
+  /^[^\s@;|]+@[^\s@;|]+\.[^\s@;|]+$/.test(s) && !/[.]$/.test(s) && !s.includes('..');
 export function validBirthDate(s) {
   const m = /^(?:(\d{4})-(\d{2})-(\d{2})|(\d{1,2})([./])(\d{1,2})\5(\d{4}))$/.exec(s);
   if (!m) return false;
@@ -241,6 +243,14 @@ export function classifyRecords(parsed, options = {}) {
     const hasGeo = recognized.some((r) => r.key === 'geo' || isCountry(r.value || ''));
     const layout = matchingLayout(layouts, recognized);
     const layoutValid = Boolean(layout);
+    const structure =
+      parsed.structured && !options.schema
+        ? inferRecordStructure(entries, recognized, {
+            birthDate: validBirthDate,
+            personName,
+            identityConflict
+          })
+        : new Map();
     const rowMapping = options.recordMapping?.[source.id] || {};
     if (
       typeof rowMapping !== 'object' ||
@@ -268,7 +278,7 @@ export function classifyRecords(parsed, options = {}) {
       const mapped = Object.hasOwn(mapping, entry.column) ? mapping[entry.column] : null;
       const rowMapped = Object.hasOwn(rowMapping, entry.column) ? rowMapping[entry.column] : null;
       const found = recognized[position];
-      let inferred = found.key;
+      let inferred = structure.get(position) || found.key;
       if (parsed.structured && !entry.labelled && !inferred && contextual) {
         if (/^\d+$/.test(value) && relatedIds.has(value)) inferred = 'accountId';
         else if (validBirthDate(value)) inferred = 'birthDate';
@@ -293,7 +303,9 @@ export function classifyRecords(parsed, options = {}) {
               ? 3
               : found.explicit && parsed.structured
                 ? 4
-                : 1;
+                : structure.has(position)
+                  ? 2
+                  : 1;
       const original = { ...entry, value, location: source.location };
       if (parsed.structured && (!named || !found.explicit || found.normalized)) value = found.value;
       if (parsed.structured && found.invalidJSON) report('INVALID_COOKIE_JSON', entry.column);
@@ -321,9 +333,20 @@ export function classifyRecords(parsed, options = {}) {
                 ? 'schema'
                 : learned === key
                   ? 'repeated-layout'
-                  : 'syntax-context'
+                  : structure.get(position) === key
+                    ? 'record-local-layout'
+                    : 'syntax-context'
       });
     });
+    // Heuristic assignments remain reviewable and never override manual/labelled
+    // fields. Warn once per role, without exposing the credential itself.
+    for (const key of ['password', 'emailPassword', 'backupEmail']) {
+      if ([...(candidates.get(key) || [])].some((item) => item.method === 'record-local-layout'))
+        report(
+          key === 'backupEmail' ? 'SECOND_EMAIL_SAME_RECORD' : 'CREDENTIAL_LAYOUT_INFERRED',
+          key
+        );
+    }
     for (const [key, values] of candidates) {
       const best = Math.max(...values.map((v) => v.priority));
       const bestValues = values.filter((v) => v.priority === best);

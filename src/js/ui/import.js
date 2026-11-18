@@ -13,7 +13,7 @@ function cellHTML(record, field) {
 }
 
 const extraLabels = {login:'Логин',twoFactorCode:'Код 2FA',profileUrl:'Ссылка профиля',mailServiceUrl:'Почтовый сервис',twoFactorUrl:'Ссылка 2FA',avatarUrl:'Аватар',documentUrl:'Документ',limit:'Лимит',fpStatus:'FP',sentCount:'Отправлено',friendsInfo:'Друзья'};
-const warningLabels = {GEO_FROM_FILENAME:'ГЕО взято из имени файла — проверьте страну',IDENTITY_CONFLICT:'ID в источниках различаются',COOKIE_ID_CONFLICT:'ID не совпадает с владельцем cookie',AMBIGUOUS_FIELD:'Несколько вариантов поля',INVALID_FIELD:'Неверное значение поля',UNRECOGNIZED_VALUES:'Остались нераспознанные значения',INVALID_JSON_CELL:'Повреждённый JSON',INVALID_COOKIE_JSON:'Повреждённый JSON cookie',UNCLOSED_QUOTE:'Незакрытая кавычка',DUPLICATE:'Повтор записи',MISSING_CELL:'Пропущено поле',EXTRA_CELL:'Дополнительное поле'};
+const warningLabels = {CREDENTIAL_LAYOUT_INFERRED:'Пароли определены по структуре одной записи — проверьте соответствие',SECOND_EMAIL_SAME_RECORD:'Обнаружена вторая почта в записи — проверьте её назначение',GEO_FROM_FILENAME:'ГЕО взято из имени файла — проверьте страну',IDENTITY_CONFLICT:'ID в источниках различаются',COOKIE_ID_CONFLICT:'ID не совпадает с владельцем cookie',AMBIGUOUS_FIELD:'Несколько вариантов поля',INVALID_FIELD:'Неверное значение поля',UNRECOGNIZED_VALUES:'Остались нераспознанные значения',INVALID_JSON_CELL:'Повреждённый JSON',INVALID_COOKIE_JSON:'Повреждённый JSON cookie',UNCLOSED_QUOTE:'Незакрытая кавычка',DUPLICATE:'Повтор записи',MISSING_CELL:'Пропущено поле',EXTRA_CELL:'Дополнительное поле'};
 function detailValue(record, key, label, raw) {
   const revealed=state.classifierRevealed?.[key]===true;
   const value=String(raw??'');
@@ -46,10 +46,16 @@ export function importHTML() {
   ${busy?'<div class="card pad"><p>Обработка файла…</p><div class="progress"><i></i></div></div>':''}
   ${p&&!busy?`<div class="summary" data-classifier-status="${esc(p.status)}"><span class="s-chip">${p.counts.total} записей</span></div>
   <div class="head-actions"><input class="input" id="classifier-query" placeholder="Поиск" aria-label="Поиск записей" value="${esc(state.classifierQuery||'')}"><button class="btn" data-action="classifier-filter">Найти</button><select class="input" id="classifier-sort" aria-label="Порядок записей"><option value="ascending">По порядку</option><option value="descending" ${state.classifierDescending?'selected':''}>С конца</option></select><label class="fl"><input type="checkbox" id="classifier-warnings-only" ${state.classifierWarningsOnly?'checked':''}> Требуют проверки</label></div>
+  <div class="head-actions classifier-quick-actions">
+    <button class="btn btn-quiet" data-action="import-copy">Копировать исходный текст</button>
+    <button class="btn btn-quiet" data-action="classifier-export" data-format="tsv">Экспорт TSV</button>
+    <button class="btn btn-quiet" data-action="classifier-export" data-format="csv">Экспорт CSV</button>
+    <button class="btn btn-primary" data-action="classifier-archive" ${!p.counts.total||state.importSaved?'disabled':''}>${state.importSaved?'Сохранено в архиве':partial?'Сохранить распознанное в архив':'Сохранить в архив'}</button>
+  </div>
+  ${!confirmed?`<details class="classifier-inline-fields" id="classifier-options"><summary>Настроить поля</summary>${optionsHTML(p)}</details>`:''}
   <div class="table-wrap"><table class="tbl classifier-table"><thead><tr>${CLASSIFIER_FIELDS.map(f=>`<th>${esc(f.label)}</th>`).join('')}</tr></thead><tbody>${p.records.map(r=>`<tr>${CLASSIFIER_FIELDS.map(f=>cellHTML(r,f)).join('')}</tr>`).join('')}</tbody></table></div>
   ${recordDetailsHTML(p,confirmed)}<div class="head-actions"><button class="btn" data-action="import-page" data-offset="${Math.max(0,p.offset-50)}" ${p.offset===0?'disabled':''}>Previous</button><span class="sub">${p.records.length?p.offset+1:0}–${p.offset+p.records.length} / ${p.filteredTotal}</span><button class="btn" data-action="import-page" data-offset="${p.offset+50}" ${p.offset+50>=p.filteredTotal?'disabled':''}>Next</button></div>
-  ${!confirmed?`<details class="card pad" id="classifier-options"><summary>Уточнить поля</summary>${optionsHTML(p)}</details>`:''}
-  <details class="card pad" id="classifier-extra" ${state.classifierExtraOpen?'open':''}><summary>Дополнительно</summary><div class="head-actions"><button class="btn" data-action="import-copy">Copy source text</button><button class="btn" data-action="classifier-export" data-format="tsv">Экспорт TSV</button><button class="btn" data-action="classifier-export" data-format="csv">Экспорт CSV</button><button class="btn" data-action="classifier-archive" ${!p.counts.total||state.importSaved?'disabled':''}>${state.importSaved?'Сохранено в архиве':partial?'Сохранить распознанное в архив':'Сохранить в архив'}</button></div><p class="sub">Строка, таблица и экспорт: ФИО, ID, два пароля, почта, дата рождения и ГЕО.</p>${p.diagnostics.length?'<p class="sub">Есть предупреждения: проверьте неоднозначные поля и соответствие ID в cookie.</p>':''}</details>`:''}
+`:''}
   ${!p&&!busy?`<label class="drop" id="drop" for="file-input"><div class="di">${I.upload}</div><h3>Drop your file here</h3><p>or browse your computer</p><input type="file" id="file-input" accept=".txt,.csv,.tsv,.json" hidden></label><button class="btn btn-quiet" data-action="import-sample">Load synthetic sample</button>`:''}
   </div>`;
 }

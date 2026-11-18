@@ -151,6 +151,10 @@ export function recognizeValue(raw, headerFor, validDate, emailValid) {
   if (cookie && !cookie.invalid) return { key: 'cookies', value, cookie };
   if (cookie?.invalid) return { invalidJSON: true, value };
   if (emailValid(value)) return { key: 'email', value };
+  // Only one trailing punctuation mark is stripped for unlabelled mail
+  // addresses. The original source text and offsets remain available.
+  if (value.endsWith('.') && emailValid(value.slice(0, -1)))
+    return { key: 'email', value: value.slice(0, -1), normalized: true };
   if (/^(Mozilla\/\d|Dalvik\/\d|Opera\/\d)/.test(value)) return { key: 'userAgent', value };
   return { value };
 }

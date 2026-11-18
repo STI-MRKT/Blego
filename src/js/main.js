@@ -8,7 +8,7 @@ import { mountPhotoMap } from './ui/photo-map.js';
 import { state } from './state.js';
 import { $ } from './utils/dom.js';
 import { toast } from './utils/toast.js';
-import { copyText } from './utils/clipboard.js';
+import { copyText, showCopyFeedback } from './utils/clipboard.js';
 import { appHTML } from './ui/shell.js';
 import { viewHTML } from './ui/views.js';
 import { renderModal } from './ui/modal.js';
@@ -26,6 +26,7 @@ import { loadNews } from './services/news.js';
 import { newsTopic } from '../../shared/news-catalog.mjs';
 import { getNetworkInfo, getIpInfo, getPing, getSpeed, checkProxy } from './services/network.js';
 import { parseIds, checkProfiles } from './services/checker.js';
+import { facebookPresentation } from '../../shared/facebook-presentation.mjs';
 
 const shuffle = (list) => {
   const copy = [...list];
@@ -467,6 +468,24 @@ function bindView() {
       }
     }
     syncQuickMetadata();
+    const cameraPreset = metadataForm.querySelector('#photo-device-preset');
+    if (cameraPreset) cameraPreset.onchange = () => {
+      if (cameraPreset.value === 'custom') {
+        metadataForm.elements.namedItem('value-make')?.focus();
+        return;
+      }
+      const [make, model] = cameraPreset.value.split('|');
+      if (!make || !model) return;
+      for (const [field, value] of [['make', make], ['model', model]]) {
+        const input = metadataForm.elements.namedItem('value-' + field);
+        const action = metadataForm.elements.namedItem('action-' + field);
+        if (!input || !action) continue;
+        input.value = value;
+        action.value = 'set';
+        action.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    };
     metadataForm.oninput = (event) => {
       syncQuickMetadata();
       const name = event.target.name || '';
@@ -1228,7 +1247,7 @@ document.addEventListener('click', async (event) => {
     const field=target.dataset.newsCopy;
     if(field!=='title' && field!=='link')return;
     const copiedValue = target.dataset.copy || '';
-    const result = await copyText(copiedValue,null,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
+    const result = await copyText(copiedValue,target,field==='title'?'Заголовок скопирован':'Ссылка скопирована');
     // Only an acknowledged clipboard write may change the visual copy state.
     if (result.ok) {
       state.news.copiedLink = field === 'link' ? copiedValue : null;
@@ -1261,7 +1280,7 @@ document.addEventListener('click', async (event) => {
   if (action === 'import-copy') {
     window.blego
       .copySource(state.importData.operationId)
-      .then((r) => toast(r.ok ? 'Copied' : 'Copy failed; select text manually', r.ok ? '' : 'err'));
+      .then((r) => {if(r.ok)showCopyFeedback(target);toast(r.ok ? 'Copied' : 'Copy failed; select text manually', r.ok ? '' : 'err');});
     return;
   }
   if (action === 'import-reset') {
@@ -1538,6 +1557,7 @@ document.addEventListener('click', async (event) => {
     try {
       const result = await window.blego.copyImage(target.dataset.id);
       if (!result.ok) throw Error(result.code);
+      showCopyFeedback(target);
       toast('Image pixels copied; metadata is not transferred.');
     } catch {
       toast('Image copy failed.', 'err');
@@ -1627,7 +1647,7 @@ document.addEventListener('click', async (event) => {
     state.friendsCopyBusy=true;syncFriendsCopyActions();
     try {
       const selected=seven?selectSeven(urls,previousFriendsLinks):urls;
-      const result=await copyText(selected.join('\n'),null,friendsCopyMessage(selected.length,seven),'Не удалось скопировать ссылки');
+      const result=await copyText(selected.join('\n'),target,friendsCopyMessage(selected.length,seven),'Не удалось скопировать ссылки');
       if(result.ok && seven)previousFriendsLinks=selected;
     } catch {toast('Не удалось скопировать ссылки','err');}
     finally {state.friendsCopyBusy=false;syncFriendsCopyActions();}
@@ -1677,7 +1697,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'checker-cancel') {
     state.checker.runId=null;state.checker.checking=null;state.checker.cancelled=true;
-    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'request_queue',checkedAt:null};
+    for(const row of state.checker.rows||[])if(row.link&&!row.check)row.check={status:'CANCELLED',availability:'cancelled',reasonCode:'CANCELLED',source:'fbtools',checkedAt:null};
     renderView();await window.blego.cancelFacebook();return;
   }
   if (action === 'facebook-open') {
@@ -1699,6 +1719,13 @@ document.addEventListener('click', async (event) => {
     } catch (error) {
       toast(error.message, 'err');
     }
+    return;
+  }
+  if (action === 'checker-copy-results') {
+    const lines = (state.checker.rows || []).map((row) =>
+      (row.input || row.id) + '\t' +
+      (row.check ? facebookPresentation(row.check).status : row.link ? 'NOT_CHECKED' : 'INVALID_INPUT'));
+    await copyText(lines.join('\n'),target);
     return;
   }
   if (action === 'checker-clear') {

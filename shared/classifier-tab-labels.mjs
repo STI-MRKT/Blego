@@ -108,7 +108,7 @@ export function tabLabelRecords(text, headerFor) {
   }
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (!line.text.trim()) {
+    if (!line.text.trim() || /^[ \t]*(?:={8,}|-{8,})[ \t]*$/.test(line.text)) {
       flush();
       continue;
     }

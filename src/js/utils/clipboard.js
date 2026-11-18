@@ -3,6 +3,26 @@ import { t } from '../i18n.js';
 import { toast } from './toast.js';
 import { checkCopyText } from '../../../shared/copy-format.mjs';
 
+const flashTimeouts = new WeakMap();
+export function showCopyFeedback(button) {
+  if (!button || typeof button.closest !== 'function') return;
+  const surface = button.closest(
+    '[data-copy-surface], .field, .bio-field, .friend-card, .ph, .checker-row, .news-item-card, .demo-left, .classifier-table td'
+  );
+  for (const node of surface && surface !== button ? [surface, button] : [button]) {
+    const previous = flashTimeouts.get(node);
+    if (previous) clearTimeout(previous);
+    node.classList.add('copy-feedback');
+    flashTimeouts.set(
+      node,
+      setTimeout(() => {
+        node.classList.remove('copy-feedback');
+        flashTimeouts.delete(node);
+      }, 1500)
+    );
+  }
+}
+
 export async function copyText(text, button, successMessage, errorMessage) {
   try {
     text = text == null ? '' : String(text);
@@ -33,7 +53,10 @@ export async function copyText(text, button, successMessage, errorMessage) {
       }
       if (!ok) throw Error('CLIPBOARD_FAILED');
     }
-    if (button) {
+    showCopyFeedback(button);
+    // Keep text buttons (News/Friends/bulk copy) readable throughout feedback.
+    // Icon-only buttons retain the original short-lived checkmark transition.
+    if (button && !button.textContent.trim()) {
       const previous = button.innerHTML;
       button.innerHTML = I.check;
       setTimeout(() => {
