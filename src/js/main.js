@@ -487,8 +487,14 @@ function bindView() {
       }
     };
     metadataForm.oninput = (event) => {
-      syncQuickMetadata();
       const name = event.target.name || '';
+      // Typing a replacement value is an explicit Set action; otherwise the
+      // default Inherit/Keep silently discards it when exporting a copy.
+      if (name.startsWith('value-') && String(event.target.value || '').trim()) {
+        const action = metadataForm.elements.namedItem('action-' + name.slice(6));
+        if (action && action.value !== 'set') action.value = 'set';
+      }
+      syncQuickMetadata();
       const field = name.startsWith('action-')
         ? name.slice(7)
         : name.startsWith('value-')
