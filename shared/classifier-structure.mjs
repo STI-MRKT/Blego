@@ -21,7 +21,9 @@ export function inferRecordStructure(
   const values = entries.map(normalize);
   const emails = recognized.flatMap((r, i) => (r.key === 'email' && !r.invalid ? [i] : []));
   const dates = values.flatMap((value, i) =>
-    birthDate(recognized[i].key === 'birthDate' && !recognized[i].invalid ? recognized[i].value : value)
+    birthDate(
+      recognized[i].key === 'birthDate' && !recognized[i].invalid ? recognized[i].value : value
+    )
       ? [i]
       : []
   );
@@ -33,7 +35,9 @@ export function inferRecordStructure(
   );
   const ids = [...new Set([...labelledIds, ...looseIds])];
   const names = values.flatMap((value, i) =>
-    (recognized[i].key === 'fullName' && !recognized[i].invalid && personName(recognized[i].value)) ||
+    (recognized[i].key === 'fullName' &&
+      !recognized[i].invalid &&
+      personName(recognized[i].value)) ||
     (!typed(recognized[i]) && personName(value))
       ? [i]
       : []
