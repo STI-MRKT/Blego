@@ -169,3 +169,35 @@ test('TZ20 conflicting Cookie owner does not infer an account password', async (
   const { result } = await scan([receipt, a].join('\n'), { headers: false });
   assert.equal(result.records[0].data.password, '');
 });
+
+test('TZ20 compound double-colon row keeps Cookie JSON, UA and source intact', async () => {
+  const uid = '61500000123456';
+  const compound = [
+    'first@example.test',
+    'EAAB_SYNTHETIC_ACCESS_TOKEN',
+    agent,
+    '',
+    cookie(uid),
+    'SYNTHETIC_FB_1',
+    'backup@example.test;SYNTHETIC_MAIL_1;1998-01-02;' + uid + ';Example Person;GEO Spain'
+  ].join(' :: ');
+  const source = [receipt, compound].join('\n');
+  const { parsed } = await scan(source, { headers: false });
+  assert.equal(parsed.records.length, 1);
+  assert.equal(parsed.records[0].sourceRecord, compound);
+  assert.ok(parsed.records[0].sourceEntries.some((entry) => entry.value === cookie(uid)));
+  assert.ok(parsed.records[0].sourceEntries.some((entry) => entry.value === agent));
+});
+
+test('TZ20 two-email semicolon rows remain separate and preserve raw values', async () => {
+  const make = (uid, first, backup) =>
+    [first, 'SYNTHETIC_FB_1', backup, 'SYNTHETIC_MAIL_1',
+      'AAAA BBBB CCCC DDDD', 'https://www.facebook.com/profile.php?id=' + uid].join(';');
+  const a = make('61500000123456', 'first@example.test', 'backup@example.test');
+  const b = make('61500000123457', 'second@example.test', 'other@example.test');
+  const source = ['Номер заказа: 000001', '', a, b].join('\n');
+  const { parsed } = await scan(source, { headers: false });
+  assert.equal(parsed.records.length, 2);
+  assert.equal(parsed.records[0].sourceEntries.length, 6);
+  assert.deepEqual(parsed.records.map((r) => r.sourceRecord), [a, b]);
+});
