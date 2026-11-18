@@ -27,7 +27,7 @@ jobs:
       - run: npm ci
       - name: Formatter review
         run: |
-          for file in electron/features/classification/service.cjs shared/classifier-adaptive.mjs tests/unit/tz19-adaptive-layouts.test.cjs tests/unit/tz18-header-matrix.test.cjs tests/unit/metapainter-export-info.test.cjs tests/ui/metapainter-export-info.test.cjs shared/classifier-structure.mjs tests/unit/tz17-ui.test.cjs shared/classifier.mjs tests/unit/tz17-adaptive.test.cjs tests/unit/tz16-ux.test.cjs tests/ui/classifier-tz15.test.cjs tests/ui/facebook-v14.test.cjs tests/unit/fbtools-checker-ui.test.cjs tests/ui/friends-bulk-copy.test.cjs tests/ui/friends.test.cjs tests/ui/photos-v143.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/phone-display.test.cjs tests/unit/tz14-hotfix.test.cjs tests/ui/generator-phone-address.test.cjs tests/ui/ux-restoration.test.cjs scripts/check-installed-app.cjs shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
+          for file in tests/unit/tz19-adaptive-ui.test.cjs electron/features/classification/service.cjs shared/classifier-adaptive.mjs tests/unit/tz19-adaptive-layouts.test.cjs tests/unit/tz18-header-matrix.test.cjs tests/unit/metapainter-export-info.test.cjs tests/ui/metapainter-export-info.test.cjs shared/classifier-structure.mjs tests/unit/tz17-ui.test.cjs shared/classifier.mjs tests/unit/tz17-adaptive.test.cjs tests/unit/tz16-ux.test.cjs tests/ui/classifier-tz15.test.cjs tests/ui/facebook-v14.test.cjs tests/unit/fbtools-checker-ui.test.cjs tests/ui/friends-bulk-copy.test.cjs tests/ui/friends.test.cjs tests/ui/photos-v143.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/phone-display.test.cjs tests/unit/tz14-hotfix.test.cjs tests/ui/generator-phone-address.test.cjs tests/ui/ux-restoration.test.cjs scripts/check-installed-app.cjs shared/classifier-lexer.mjs electron/features/generator/biography.cjs electron/features/generator/service.cjs tests/unit/tz15-generator-ux.test.cjs; do
             echo "FORMAT_START:$file"
             ./node_modules/.bin/prettier "$file" | base64 -w 0
             echo
@@ -43,7 +43,7 @@ jobs:
       - name: News partial-source warning regression
         run: node --test tests/unit/news-partial-warning.test.cjs
       - name: TZ19 adaptive + confirmed-layout tests
-        run: node --test tests/unit/tz19-adaptive-layouts.test.cjs
+        run: node --test tests/unit/tz19-adaptive-layouts.test.cjs tests/unit/tz19-adaptive-ui.test.cjs
       - name: Lint
         run: npm run lint
       - name: Unit and integration regression
