@@ -5,8 +5,14 @@ test('MetaPainter always exposes exported copy names in the simple view', async 
   const { state } = await import('../../src/js/state.js');
   const { photosHTML } = await import('../../src/js/ui/photos.js');
   const keys = [
-    'photos', 'photoTools', 'metadataPlan', 'metadataExport',
-    'metadataProgress', 'imagesBusy', 'imagesReading', 'imageScan'
+    'photos',
+    'photoTools',
+    'metadataPlan',
+    'metadataExport',
+    'metadataProgress',
+    'imagesBusy',
+    'imagesReading',
+    'imageScan'
   ];
   const prior = Object.fromEntries(keys.map((key) => [key, state[key]]));
   try {
