@@ -455,14 +455,14 @@ export function classifyRecords(parsed, options = {}) {
               : confirmedUsed
                 ? 'confirmed-layout'
                 : named || found.explicit
-                ? 'label'
-                : schema
-                  ? 'schema'
-                  : learned === key
-                    ? 'repeated-layout'
-                    : structure.get(position) === key
-                      ? 'record-local-layout'
-                      : 'syntax-context'
+                  ? 'label'
+                  : schema
+                    ? 'schema'
+                    : learned === key
+                      ? 'repeated-layout'
+                      : structure.get(position) === key
+                        ? 'record-local-layout'
+                        : 'syntax-context'
       });
     });
     if (appliedConfirmed) report('CONFIRMED_LAYOUT_APPLIED');
