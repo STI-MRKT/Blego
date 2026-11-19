@@ -45,7 +45,7 @@ const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
         .locator('.news-item-card .news-title')
         .evaluateAll((els) => els.map((e) => ({ title: e.textContent, link: e.href })));
       assert.equal(links.length, Math.min(40, snapshot.items.length));
-      assert.ok(snapshot.items.length > 0, `${topic} must have articles in the bundled ten-day seed`);
+      assert.ok(snapshot.items.length >= 10, `${topic} must have at least ten articles in the bundled ten-day seed`);
       const now = Date.now(), cutoff = now - 10 * 24 * 60 * 60 * 1000;
       assert.ok(snapshot.items.every((item) => Number.isFinite(item.publishedAt) && item.publishedAt >= cutoff && item.publishedAt <= now + 60 * 60 * 1000), `${topic} contains an article outside the ten-day window`);
       assert.equal(new Set(links.map((l) => l.link)).size, links.length);
@@ -57,7 +57,7 @@ const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
         unique: snapshot.items.length,
         displayed: links.length,
         lastSuccessfulAt: snapshot.lastSuccessfulAt,
-        status: links.length > 0 ? 'PASS' : 'BLOCKED',
+        status: links.length >= 10 ? 'PASS' : 'BLOCKED',
         links
       });
     }
