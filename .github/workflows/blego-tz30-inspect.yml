@@ -164,3 +164,14 @@ jobs:
           grep -R -n -E 'Unresolved records|Copy unresolved text|Cookie files|Save Cookie' src electron shared || true
           echo '===== SOURCE PARSER LOCATIONS ====='
           grep -R -n -E 'classifyOrder|parseOrder|layout|parse.*receipt' shared/classifier* electron/features/import | head -80 || true
+      - name: Inspect archive open view and copy actions
+        shell: bash
+        run: |
+          echo '===== HISTORY RESTORED ====='
+          sed -n '1,150p' src/js/ui/history.js
+          echo '===== ARCHIVE OPEN VIEW SERVICE ====='
+          grep -R -n "openArchive\|archiveCookie\|cookieFiles\|unresolvedText" electron/features/archive | head -90 || true
+          echo '===== ARCHIVE ACTIONS ====='
+          grep -n 'archive-cookie-one\|archive-export-cookies\|archive-open' src/js/main.js | head -45
+          echo '===== CLASSIFIER PAGE FN ====='
+          sed -n '785,885p' src/js/main.js
