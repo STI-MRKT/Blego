@@ -53,7 +53,7 @@ test(
                 source: 'Test publication',
                 topic,
                 link: 'https://example.com/' + topic,
-                publishedAt: 1700000000000,
+                publishedAt: Date.now(),
                 author: 'Test author'
               }
             ],
@@ -89,7 +89,7 @@ test(
     const { openStore } = require('../../electron/local/store.cjs');
     const { NEWS_SOURCES } = require('../../shared/news-catalog.mjs');
     const source = NEWS_SOURCES.find((s) => s.topic === 'finance');
-    const savedAt = '2026-11-01T12:34:56.000Z';
+    const savedAt = '2026-11-18T12:34:56.000Z';
     const store = await openStore(root);
     store.db
       .prepare(
