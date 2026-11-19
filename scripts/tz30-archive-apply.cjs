@@ -90,8 +90,8 @@
   });
   edit('src/js/ui/history.js',s=>{
     s=swap(s,"  ['geo', 'GEO']\n];", "  ['geo', 'GEO'],\n  ['cookies', 'Cookie']\n];",'archive cookie field');
-    s=swap(s,"function recordField(row, index, key, label, cookieFile) {\n  const value",[
-      "function recordField(row, index, key, label) {",
+    s=swap(s,"function recordField(row, index, key, label) {\n  const value",[
+      "function recordField(row, index, key, label, cookieFile) {",
       "  if (key === 'cookies') {",
       "    const available = Boolean(cookieFile);",
       '    return `<button type="button" class="field archive-record-field archive-cookie-field" data-action="archive-cookie-copy" data-row="${index}" aria-label="Copy Cookie for record ${index + 1}" ${available ? "" : "disabled"}><span class="field-main"><span class="field-label">COOKIE</span><span class="field-value archive-record-value">${available ? "Copy full Cookie" : "—"}</span></span></button>`;',
