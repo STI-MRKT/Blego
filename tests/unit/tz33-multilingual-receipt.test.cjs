@@ -173,7 +173,10 @@ test('TZ33 localized quantity must match the number of parsed account rows', asy
   const { shopReceiptRecords } = await import('../../shared/classifier-shop-receipt.mjs');
   const locale = locales.find((item) => item.code === 'zh');
   const source = makeReceipt({ ...locale, quantity: '７ 件' });
-  assert.equal(shopReceiptRecords(source), null);
+  const parsed = shopReceiptRecords(source);
+  assert.equal(parsed.records.length, 6);
+  assert.ok(parsed.diagnostics.some((item) => item.code === 'RECEIPT_QUANTITY_MISMATCH'));
+  assert.equal(parsed.diagnostics.find((item) => item.code === 'RECEIPT_QUANTITY_MISMATCH').expectedCount, 7);
 });
 
 test('TZ33 non-Facebook localized order receipts do not activate the Facebook decoder', async () => {
