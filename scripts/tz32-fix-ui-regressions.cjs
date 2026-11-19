@@ -120,10 +120,11 @@ update('src/js/main.js', (source) => {
       "  const target = event.target instanceof Element ? event.target.closest('[data-action]') : null;",
       "  if (!target) return;",
       "  const action = target.dataset.action;",
-      "  if ((action === 'copy-model' || action === 'copy') && (target.getAttribute('aria-label') === 'Copy phone' || (target.dataset.source === 'generator' && target.dataset.field === 'phone'))) {",
+      "  const phoneButton = event.composedPath().find((node) => node instanceof Element && node.getAttribute('aria-label') === 'Copy phone');",
+      "  if (phoneButton) {",
       "    event.preventDefault(); event.stopImmediatePropagation();",
-      "    try { const card = await window.blego.lastCard(); const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country); await copyText(value, target, 'Номер скопирован'); }",
-      "    catch (error) { toast(error.message, 'err'); }",
+      "    try { const card = await window.blego.lastCard(); const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country); state.lastPhoneCapture = true; state.lastPhoneValue = value; await copyText(value, phoneButton, 'Номер скопирован'); }",
+      "    catch (error) { state.lastPhoneError = error.message; toast(error.message, 'err'); }",
       "    return;",
       "  }",
       "  if (action === 'bio-copy') {",
@@ -141,21 +142,24 @@ update('src/js/main.js', (source) => {
       "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
       "    event.preventDefault(); event.stopImmediatePropagation();",
       "    state.lastArchiveCapture = true;",
-      "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
-      "    if (!operationId || !state.importData) return;",
+      "    const epoch = state.importEpoch;",
+      "    const operationId = state.importData?.operationId || state.importData?.id || null;",
+      "    state.lastArchiveOperationId = operationId; state.lastArchiveStatus = state.importData?.status || null;",
+      "    if (!operationId || !state.importData) { state.lastArchiveError = 'MISSING_OPERATION_ID'; return; }",
       "    target.disabled = true;",
       "    try {",
-      "      await window.blego.confirmClassification({ operationId, decision: state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete' });",
-      "      if (state.importEpoch !== epoch) return;",
+      "      const decision = state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete';",
+      "      await window.blego.confirmClassification({ operationId, decision });",
+      "      if (state.importEpoch !== epoch) { state.lastArchiveError = 'STALE_AFTER_CONFIRM'; return; }",
       "      const savedArchive = await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
-      "      if (state.importEpoch !== epoch) return;",
-      "      if (action === 'classifier-archive') state.importSaved = true;",
       "      state.lastArchiveSave = savedArchive;",
-      "      state.archiveView = null; state.archiveQuery = {};",
+      "      if (state.importEpoch !== epoch) { state.lastArchiveError = 'STALE_AFTER_SAVE'; return; }",
+      "      if (action === 'classifier-archive') state.importSaved = true;",
+      "      state.lastArchiveError = null; state.archiveView = null; state.archiveQuery = {};",
       "      state.archives = await window.blego.listArchives();",
       "      await importPage(state.importData.offset);",
       "      toast('Сохранено');",
-      "    } catch (error) { toast(error.message || 'Не удалось сохранить архив', 'err'); if (target.isConnected) target.disabled = false; }",
+      "    } catch (error) { state.lastArchiveError = error?.message || String(error); toast(state.lastArchiveError, 'err'); if (target.isConnected) target.disabled = false; }",
       "    return;",
       "  }",
       "}, true);"
@@ -325,7 +329,7 @@ update('tests/ui/classifier-copy.test.cjs', (source) => {
   const next = "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
   if (s.includes(old)) s = s.replace(old, next);
   const oldCount = '    assert.equal(archives.items.length, 1);';
-  const newCount = "    const archiveDebug = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return { saved: state.lastArchiveSave, visible: state.archives, capture: state.lastArchiveCapture === true, importedSaved: state.importSaved === true }; });\n    assert.equal(archives.items.length, 1, JSON.stringify({ archives, archiveDebug }));";
+  const newCount = "    const archiveDebug = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return { saved: state.lastArchiveSave, visible: state.archives, capture: state.lastArchiveCapture === true, importedSaved: state.importSaved === true, operationId: state.lastArchiveOperationId, status: state.lastArchiveStatus, error: state.lastArchiveError, phoneCapture: state.lastPhoneCapture === true, phoneValue: state.lastPhoneValue, phoneError: state.lastPhoneError }; });\n    assert.equal(archives.items.length, 1, JSON.stringify({ archives, archiveDebug }));";
   if (s.includes(oldCount)) s = s.replace(oldCount, newCount);
   return s;
 }, 'classifier GUI assertions use current empty label and archive state');
