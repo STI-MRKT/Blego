@@ -1,0 +1,245 @@
+name: BLEGO TZ32 news and receipt parser verification
+
+on:
+  push:
+    branches: [codex/blego-tz32-news-10day-txt-20261119]
+    paths: ['.github/workflows/blego-tz32-smoke.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blego-tz32-smoke
+  cancel-in-progress: false
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 90
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Restore exact TZ22 source changes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
+          expected = '07f732e50231c2f68de4e969c7e2094e2f99e2a92673a27c7c39657701c4668d'
+          assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
+      - name: Restore TZ23 refinements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'b39165471ef232d1382fb8b4ac83b73a8bb4a5576bce6851078bb53d6e623e56', 'TZ23 payload checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.7'
+      - name: Restore TZ25 archive and adaptive classifier improvements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz25-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'c0593936aae96e70efa32c162ceaa43460b81b591670b3dea675a1c76c5ce8af', 'TZ25 overlay integrity check failed'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.8'
+      - name: Restore TZ26 phone GEO hotfix
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz26-phone-geo.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '7dc72b063294f1ae806f90a2b66176118060237327acbf6f836ca4f31e97115d', 'TZ26 hotfix integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.9'
+      - name: Restore TZ27 experimental structural parser
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz27-dynamic-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'f0dfa9de362a122722d38dd0a74b4c5aad3d6806fac98612715587223d98e698', 'TZ27 integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.10'
+      - name: Restore TZ28 fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz28-fixes-overlay.b64').read_text().splitlines()),validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '6cadac355d04db8a29890bea6ad57959f164e8c6c20470fbcee8db54e4327643','TZ28 overlay integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(),f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.11'
+      - name: Restore TZ29 copy, photo and classifier fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz29-overlay.b64').read_text().splitlines()), validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'ce9ca2e07594b5cc08f261e04226ea061600983f7438a2095f95491cd23d2995','TZ29 overlay checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          rm -f shared/classifier-dynamic.mjs tests/unit/tz27-dynamic-parser.test.cjs tests/integration/tz27-dynamic-parser.test.cjs tests/ui/tz27-dynamic-parser.test.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.12'
+          test ! -e shared/classifier-dynamic.mjs
+      - name: Inspect reconstructed source without credentials
+        shell: bash
+        run: |
+          echo '===== SOURCE PATHS ====='
+          find src/js/ui src/js -maxdepth 2 -iname '*import*' -o -iname '*news*'
+          echo '===== IMPORT UI ====='
+          sed -n '1,240p' src/js/ui/import.js
+          echo '===== ACTIONS IN MAIN ====='
+          grep -nE 'classifier-copy|classifier-(filter|sort)|import-cookie-copy|cookie-files|cookie-files|Cookie files|unresolved' src/js/main.js src/js/ui/import.js || true
+          echo '===== CURRENT NEWS LOGIC ====='
+          sed -n '865,926p' src/js/main.js
+          echo '===== TZ29 TESTS ====='
+          ls -l tests/unit/tz29* tests/ui/tz29* 2>/dev/null || true
+          echo '===== VERSION ====='
+          node -p "require('./package.json').version"
+      - name: Inspect classifier actions and legacy widgets
+        shell: bash
+        run: |
+          echo '===== CLASSIFIER ACTION HANDLERS ====='
+          sed -n '1850,2085p' src/js/main.js
+          echo '===== LEGACY BLOCK REFERENCES ====='
+          grep -R -n -E 'Unresolved records|Copy unresolved text|Cookie files|Save Cookie' src electron shared || true
+          echo '===== SOURCE PARSER LOCATIONS ====='
+          grep -R -n -E 'classifyOrder|parseOrder|layout|parse.*receipt' shared/classifier* electron/features/import | head -80 || true
+      - name: Inspect archive open view and copy actions
+        shell: bash
+        run: |
+          echo '===== HISTORY RESTORED ====='
+          sed -n '1,150p' src/js/ui/history.js
+          echo '===== ARCHIVE OPEN VIEW SERVICE ====='
+          grep -R -n "openArchive\|archiveCookie\|cookieFiles\|unresolvedText" electron/features/archive | head -90 || true
+          echo '===== ARCHIVE ACTIONS ====='
+          grep -n 'archive-cookie-one\|archive-export-cookies\|archive-open' src/js/main.js | head -45
+          echo '===== CLASSIFIER PAGE FN ====='
+          sed -n '785,885p' src/js/main.js
+      - name: Inspect archive ZIP accessors
+        shell: bash
+        run: |
+          echo '===== ARCHIVE SERVICE ====='
+          sed -n '1,350p' electron/features/archive/service.cjs
+          echo '===== ARCHIVE OPEN CLICK ====='
+          sed -n '1580,1705p' src/js/main.js
+          echo '===== IMPORT PAGING FUNCTION ====='
+          grep -nE 'async function importPage\(|function importPage\(' src/js/main.js
+          echo '===== CSS ====='
+          grep -R -n 'archive-record-field\|archive-cookie-card' src/css | head -35
+      - name: Validate TZ30 patch application and syntax
+        shell: bash
+        run: |
+          node scripts/tz30-apply.cjs
+          node scripts/tz30-archive-apply.cjs
+          node scripts/tz30-columns-apply.cjs
+          node scripts/tz30-footer-apply.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/history.js
+          node --check src/js/ui/import.js
+          node --check electron/main.cjs
+          node --check electron/preload.cjs
+          node --check electron/features/archive/service.cjs
+          node --check electron/features/news/service.cjs
+          node --check electron/features/news/feeds.cjs
+          node --check shared/news-catalog.mjs
+          echo "TZ30_PATCH_SYNTAX_PASS"
+      # Archive field mapping preserves original keys; display reads a separate cookie map.
+      - name: TZ30 focused regressions (synthetic fixtures)
+        shell: bash
+        run: |
+          node scripts/tz30-classifier-apply.cjs
+          node --input-type=module -e "import { validBirthDate } from './shared/classifier.mjs'; console.log('TZ30 date support:',validBirthDate('16-03-2002'))"
+          npm ci
+          node --test tests/unit/tz30-order-fixtures.test.cjs tests/integration/tz30-news.test.cjs tests/integration/tz30-archive.test.cjs
+      - name: TZ31 apply and test classifier entire-column copy on Electron
+        shell: bash
+        run: |
+          node scripts/tz31-column-copy-apply.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/import.js
+          node -e "const fs=require('node:fs');const html=fs.readFileSync('src/js/ui/import.js','utf8');if(!html.includes('classifier-copy-field')||!html.includes('classifier-copy-column-button'))process.exit(1)"
+          node node_modules/electron/install.js
+          node --test --test-concurrency=1 tests/ui/tz31-column-copy.test.cjs
+
+      - name: Apply TZ32 News, receipt parser and ten-day tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz32-apply.cjs
+          node scripts/tz32-news-report-apply.cjs
+          node --check shared/importer.mjs
+          node --check electron/features/news/feeds.cjs
+          node --check electron/features/news/service.cjs
+          node --check electron/main.cjs
+          node --check src/js/ui/news.js
+          npm ci
+          node --test tests/unit/tz32-order-37798.test.cjs tests/unit/tz32-news-ui.test.cjs tests/integration/tz32-news-window.test.cjs
+      - name: Live News source and ten-day seed preflight
+        continue-on-error: true
+        shell: bash
+        run: |
+          node scripts/check-news-live.cjs release/news-live-tz32.json resources/news-seed.json
+          node - <<'NODE'
+          const r=require('./release/news-live-tz32.json');
+          console.log('TZ32_NEWS_COUNTS',JSON.stringify(r.topics.map(t=>({topic:t.topic,unique:t.unique,successful:t.successful,errors:t.sources.filter(s=>s.status!=='ok').map(s=>({id:s.id,errorName:s.errorName,errorCode:s.errorCode,code:s.code}))}))));
+          NODE
