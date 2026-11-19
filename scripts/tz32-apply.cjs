@@ -114,7 +114,7 @@
       "    }",
       "  }"
     ].join('\n');
-    s=replace(s,insertAt,seedFn+'\\n'+insertAt,'seed cache function');
+    s=replace(s,insertAt,seedFn+'\n'+insertAt,'seed cache function');
     s=replace(s,
       "  function cancel() {",
       "  seedCache(seed);\n  function cancel() {",
