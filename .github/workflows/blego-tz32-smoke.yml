@@ -3,7 +3,7 @@ name: BLEGO TZ32 news and receipt parser verification
 on:
   push:
     branches: [codex/blego-tz32-news-10day-txt-20261119]
-    paths: ['.github/workflows/blego-tz32-smoke.yml', 'scripts/tz32-apply.cjs']
+    paths: ['.github/workflows/blego-tz32-smoke.yml', 'scripts/tz32-apply.cjs', 'scripts/tz32-fix-electron-test-user-data-dir.cjs']
   workflow_dispatch:
 
 permissions:
@@ -237,6 +237,12 @@ jobs:
           node scripts/tz32-legacy-test-compat.cjs
           npx prettier --write 'tests/**/*.cjs' 'scripts/*.cjs'
           node --test tests/unit/tz22-classifier-formats.test.cjs tests/unit/tz32-order-37798.test.cjs tests/unit/tz32-news-ui.test.cjs tests/integration/tz32-news-window.test.cjs
+      - name: Focused GUI isolation regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz32-fix-electron-test-user-data-dir.cjs
+          node --test --test-concurrency=1 tests/ui/app.test.cjs tests/ui/biography-v143.test.cjs tests/ui/archive-v141.test.cjs tests/ui/classifier-copy.test.cjs
       - name: Live News source and ten-day seed preflight
         continue-on-error: true
         shell: bash
