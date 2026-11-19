@@ -202,3 +202,9 @@ jobs:
           node --check electron/features/news/feeds.cjs
           node --check shared/news-catalog.mjs
           echo "TZ30_PATCH_SYNTAX_PASS"
+      - name: TZ30 focused regressions (synthetic fixtures)
+        shell: bash
+        run: |
+          node scripts/tz30-classifier-apply.cjs
+          npm ci
+          node --test tests/unit/tz30-order-fixtures.test.cjs tests/integration/tz30-news.test.cjs tests/integration/tz30-archive.test.cjs
