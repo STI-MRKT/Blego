@@ -247,7 +247,15 @@ export function shopReceiptRecords(text) {
     lineNumber++;
   }
 
-  if (!records.length || records.length !== quantity) return null;
+  if (!records.length) return null;
+  if (records.length !== quantity) {
+    diagnostics.push({
+      code: 'RECEIPT_QUANTITY_MISMATCH',
+      expectedCount: quantity,
+      actualCount: records.length,
+      level: 'warning'
+    });
+  }
   return {
     records,
     diagnostics,
