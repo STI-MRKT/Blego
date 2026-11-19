@@ -233,3 +233,14 @@ jobs:
             echo "TZ32_TEST_SOURCE $file"
             nl -ba "$file" | head -185
           done
+      - name: Inspect current Friends and category photo UI contracts
+        shell: bash
+        run: |
+          echo "TZ32_FRIENDS_RENDER_SOURCE"
+          sed -n '1,225p' src/js/ui/friends.js
+          echo "TZ32_PHOTO_POOL_RENDER_SOURCE"
+          sed -n '1,265p' src/js/ui/photo-pool.js
+          echo "TZ32_GENERATOR_TABS"
+          grep -n -C 4 'data-tab' src/js/ui/generator.js | head -40 || true
+          echo "TZ32_DECODER_TITLES"
+          grep -n -E 'Decoder|decoder|Format|Формат' src/js/ui/decoder.js | head -25
