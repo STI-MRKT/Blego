@@ -72,7 +72,7 @@ test(
     }
     assert.ok(!/Last opened|ZIP:|Source:/.test(await page.locator('#view').textContent()));
     await page.locator('[name="search"]').fill('Beta');
-    await page.getByRole('button', { name: 'Filter', exact: true }).click();
+    await page.locator('[name="search"]').press('Enter');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
       return state.archives.total === 1;
@@ -82,14 +82,19 @@ test(
     await page.waitForTimeout(30);
     assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), 'Beta.txt');
     await page.locator('[name="search"]').fill('');
-    await page.locator('#archive-filter details > summary').click();
-    await page.locator('[name="order"]').selectOption('oldest');
-    await page.getByRole('button', { name: 'Filter', exact: true }).click();
+    await page.locator('[name="search"]').press('Enter');
     await waitForAsync(page, async () => {
       const { state } = await import('/js/state.js');
-      return state.archives.total === 2 && state.archives.items[0].originalName === 'Alpha.txt';
+      return state.archives.total === 2;
     });
-    await page.locator('[data-action="archive-open"]').first().click();
+    // Sorting is no longer visible; the existing backend sort remains available.
+    const ordered = await page.evaluate(() => window.blego.listArchives({ order: 'oldest' }));
+    assert.equal(ordered.items[0].originalName, 'Alpha.txt');
+    await page
+      .locator('.hrow')
+      .filter({ hasText: 'Alpha.txt' })
+      .locator('[data-action="archive-open"]')
+      .click();
     await page.getByText('Synthetic Alpha.txt', { exact: true }).waitFor();
     await page.getByRole('button', { name: 'Copy result', exact: true }).click();
     await page.waitForTimeout(30);

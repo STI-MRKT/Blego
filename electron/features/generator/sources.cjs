@@ -4,6 +4,11 @@ const { createHash } = require('node:crypto');
 const bioSupplement = require('../../../resources/generator/supplements/bios-v14.json');
 const addressSupplement = require('../../../resources/generator/supplements/addresses-tz12.json');
 const { namingPreset, nameCount } = require('./naming.cjs');
+const {
+  expandBundledCountry,
+  expandTypeTexts,
+  syntheticAddresses
+} = require('./pool-expansion.cjs');
 const { countries, validateSettings } = require('../../local/settings.cjs');
 const fields = [
   'name',
@@ -69,10 +74,13 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
   validateSettings(settings);
   if (!countries.includes(country) || !['model', 'tech', 'crypto'].includes(type))
     throw Error('INVALID_PRESET');
-  const c =
-    dataset || JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
+  const bundled = JSON.parse(fs.readFileSync(path.join(root, `countries/${country}.json`), 'utf8'));
+  const c = dataset || expandBundledCountry(bundled);
   if (c.code !== country || c.nameGender !== 'female') throw Error('DATASET_INVALID');
   const t = JSON.parse(fs.readFileSync(path.join(root, `types/${type}.json`), 'utf8'));
+  const localBios = [...t.bios[c.language], ...bioSupplement.bios[type][c.language]];
+  const localStatuses = Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language];
+  const expandedTexts = expandTypeTexts(type, c.language, localBios, localStatuses);
   const o = settings.overrides || {};
   if (Object.keys(o).some((k) => !['common', 'types', 'pairs'].includes(k)))
     throw Error('INVALID_RULES');
@@ -83,11 +91,16 @@ function resolvePreset(country, type, settings = {}, dataset = null) {
     ...t,
     ...namingPreset(country, type, c),
     // Imported geography remains authoritative; bundled examples never cross into it.
-    addresses: dataset ? [] : addressSupplement.records[country],
+    addresses: dataset
+      ? []
+      : [
+          ...addressSupplement.records[country],
+          ...syntheticAddresses(country, c.places, c.streets)
+        ],
     addressDatasetId: dataset ? null : addressSupplement.id,
-    bios: [...t.bios[c.language], ...bioSupplement.bios[type][c.language]],
+    bios: expandedTexts.bios,
     bioDatasetId: bioSupplement.id,
-    statuses: Array.isArray(t.statuses) ? t.statuses : t.statuses[c.language],
+    statuses: expandedTexts.statuses,
     symbols: settings.symbols || '',
     ...o.common,
     ...o.types?.[type],

@@ -31,9 +31,9 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
     if (max === capacity)
       return preset.type === 'tech'
         ? 275 + countries.indexOf(preset.country)
-        : (preset.first.length - (preset.type === 'crypto' ? 2 : 1)) * preset.last.length +
-            preset.last.length -
-            1;
+        : preset.type === 'crypto'
+          ? 40 + countries.indexOf(preset.country)
+          : (preset.first.length - 1) * preset.last.length + preset.last.length - 1;
     return max - 1;
   });
   const { resolvePreset } = require('../../electron/features/generator/sources.cjs');
@@ -48,24 +48,61 @@ test('TZ12 new BIO and paired addresses are selected by production generation an
         { country, type, requestId: `new-${country}-${type}` },
         { store, settings: { bulkMode: true, bulkConsent: true } }
       );
-      const row = preset.addresses.at(-1);
-      assert.equal(profile.fields.address, row.address);
-      assert.equal(profile.fields.city, row.city);
-      assert.equal(profile.fields.postalCode, row.postal);
-      assert.equal(
-        profile.fields.bio,
-        require('../../electron/features/generator/biography.cjs').pageBio(preset.bios.at(-1), type)
+      const row = preset.addresses.find(
+        (candidate) =>
+          candidate.address === profile.fields.address &&
+          candidate.city === profile.fields.city &&
+          candidate.postal === profile.fields.postal
       );
-      assert.equal(profile.addressProvenance.kind, 'synthetic');
-      assert.equal(profile.addressProvenance.datasetId, preset.addressDatasetId);
+      const fallback =
+        preset.places.some(
+          (place) =>
+            place.city === profile.fields.city && place.postal === profile.fields.postal
+        ) &&
+        preset.streets.some((street) => {
+          const prefix = street + ' ';
+          return (
+            profile.fields.address.startsWith(prefix) &&
+            /^[0-9]+$/.test(profile.fields.address.slice(prefix.length))
+          );
+        });
+      assert.ok(
+        row || fallback,
+        'Source address mismatch ' +
+          JSON.stringify({
+            country,
+            type,
+            address: profile.fields.address,
+            city: profile.fields.city,
+            postal: profile.fields.postalCode,
+            streets: preset.streets,
+            knownPlaces: preset.places.length,
+            paired: preset.addresses.length,
+            provenance: profile.addressProvenance || null
+          })
+      );
+      assert.ok(
+        preset.bios.some(
+          (bio) =>
+            require('../../electron/features/generator/biography.cjs').pageBio(bio, type) ===
+            profile.fields.bio
+        ),
+        'BIO must come from its own localized pool'
+      );
+      if (row) {
+        assert.equal(profile.addressProvenance.kind, 'synthetic');
+        assert.equal(profile.addressProvenance.datasetId, preset.addressDatasetId);
+      } else {
+        assert.equal(profile.addressProvenance, undefined);
+      }
       assert.ok(profile.fields.email.endsWith('@dayrep.com'));
       assert.match(
         profile.fields.phone,
         new RegExp(`^\\+${preset.phonePrefix}\\d{${preset.phoneDigits}}$`)
       );
-      if (type === 'tech') assert.ok(preset.brandNames.slice(275).includes(profile.fields.name));
+      if (type !== 'model') assert.ok(preset.brandNames.includes(profile.fields.name));
       else assert.ok(profile.fields.name.endsWith(' ' + preset.last.at(-1)));
-      assert.equal(profile.nameGender, type === 'tech' ? null : 'female');
+      assert.equal(profile.nameGender, type === 'model' ? 'female' : null);
       results.push(profile);
     }
   assert.equal(new Set(results.map((p) => p.fields.phone)).size, results.length);

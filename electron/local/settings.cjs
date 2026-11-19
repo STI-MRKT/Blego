@@ -5,8 +5,8 @@ const defaults = {
   fieldOrder: [],
   disabledFields: [],
   allowRepeats: [],
-  bulkMode: false,
-  bulkConsent: false,
+  bulkMode: true,
+  bulkConsent: true,
   overrides: {},
   archiveRoot: null,
   includeOriginal: false,
@@ -113,10 +113,17 @@ function validUrl(raw) {
   }
 }
 function getSettings(store) {
-  return { ...structuredClone(defaults), ...store.get('settings') };
+  // TZ14: repeat finite non-contact fields in every session, including
+  // installations with a legacy persisted bulkMode:false preference.
+  return {
+    ...structuredClone(defaults),
+    ...store.get('settings'),
+    bulkMode: true,
+    bulkConsent: true
+  };
 }
 function updateSettings(store, patch) {
-  const clean = validateSettings(patch);
+  const clean = validateSettings({ ...patch, bulkMode: true, bulkConsent: true });
   return store.transaction(() => {
     const next = { ...getSettings(store), ...clean };
     store.set('settings', next);

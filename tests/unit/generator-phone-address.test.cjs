@@ -1,21 +1,21 @@
 const { test } = require('node:test'),
   assert = require('node:assert/strict');
-test('adjacent phone copy uses the profile country, preserves national zeros and never synthesizes a trunk prefix', async () => {
+test('adjacent phone copy always returns XXX-XXX-XXXX and rejects malformed input', async () => {
   const { nationalPhoneForCopy } = await import('../../src/js/utils/phone.mjs');
   const cases = [
-    ['BR', '+55 (11) 98765-4321', '11987654321'],
-    ['US', '+1 202 555 0199', '2025550199'],
-    ['FR', '+33 6 00 00 00 01', '600000001'],
-    ['PL', '+48 500 000 001', '500000001'],
-    ['DE', '+49 151 23456789', '15123456789'],
-    ['ES', '+34 600 000 001', '600000001'],
-    ['IT', '+39 02 0012 0034', '0200120034'],
-    ['GB', '+44 7700 900123', '7700900123']
+    ['BR', '+55 (11) 98765-4321', '198-765-4321'],
+    ['US', '+1 202 555 0199', '202-555-0199'],
+    ['FR', '+33 6 00 00 00 01', '060-000-0001'],
+    ['PL', '+48 500 000 001', '050-000-0001'],
+    ['DE', '+49 151 2345 678', '151-234-5678'],
+    ['ES', '+34 600 000 001', '060-000-0001'],
+    ['IT', '+39 02 0012 0034', '020-012-0034'],
+    ['GB', '+44 7700 900123', '770-090-0123']
   ];
-  for (const [country, number, national] of cases) {
-    assert.equal(nationalPhoneForCopy(number, country), national, country);
+  for (const [country, number, expected] of cases) {
+    assert.equal(nationalPhoneForCopy(number, country), expected, country);
     const { LOCALES } = await import('../../src/js/data/locales.js');
-    assert.equal(nationalPhoneForCopy(`${LOCALES[country].dial} 000123`, country), '000123');
+    assert.throws(() => nationalPhoneForCopy(`${LOCALES[country].dial} 000123`, country));
   }
   for (const [number, country] of [
     ['+447700900123', 'US'],

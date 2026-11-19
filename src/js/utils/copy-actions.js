@@ -1,6 +1,6 @@
 import { resolveFileOperations } from '../../../shared/image-workspace.mjs';
 import { state } from '../state.js';
-import { nationalPhoneForCopy } from './phone.mjs';
+import { formatPhoneDisplay, nationalPhoneForCopy } from './phone.mjs';
 import { esc } from './dom.js';
 import { toast } from './toast.js';
 import { copyText } from './clipboard.js';
@@ -308,7 +308,15 @@ export async function copyModelValue(
   if(generation !== loading || !sameContext(context,copyContext())) throw Error('COPY_SELECTION_CHANGED');
   if(nationalPhone && !card && id === 'generator' && key === 'phone')
     return copyText(nationalPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');
-  return copyText(result.text, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
+  // The card copy follows the visible phone format while the stored E.164
+  // source and contact uniqueness registry remain untouched.
+  const content = card && id === 'generator' && state.demo?.fields?.phone
+    ? result.text.replaceAll(
+        state.demo.fields.phone,
+        formatPhoneDisplay(state.demo.fields.phone, profileCountry)
+      )
+    : result.text;
+  return copyText(content, button, !card && id === 'generator' ? ({ name: 'Имя скопировано', bio: 'BIO скопировано' }[key]) : undefined);
 }
 document.addEventListener('change', async (event) => {
   try {

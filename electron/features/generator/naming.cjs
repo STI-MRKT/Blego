@@ -3,9 +3,10 @@ const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
 const { normalize } = require('./registry.cjs');
 const supplement = require('../../../resources/generator/supplements/names-v14.json');
+const { brandNamesFor } = require('./pool-expansion.cjs');
 const initializing = new WeakMap();
 function namingPreset(country, type, dataset) {
-  const brand = type === 'tech';
+  const brand = type === 'tech' || type === 'crypto';
   // Imported country dictionaries remain authoritative for personal names.
   const personNames = brand
     ? []
@@ -19,7 +20,7 @@ function namingPreset(country, type, dataset) {
     namingStrategy: brand ? 'brand_name' : 'person_name',
     nameGender: brand ? null : 'female',
     namingDatasetId: supplement.id,
-    brandNames: brand ? supplement.brandNames : [],
+    brandNames: brand ? brandNamesFor(type, supplement.brandNames) : [],
     personNames
   };
 }

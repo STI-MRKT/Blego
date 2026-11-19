@@ -35,8 +35,8 @@ test('female personal / brand strategies cover 24 presets, preserves old cards a
         { country, type, requestId: `${country}-${type}` },
         { store }
       );
-      assert.equal(card.nameGender, type === 'tech' ? null : 'female');
-      if (type === 'tech') assert.ok(preset.brandNames.includes(card.fields.name));
+      assert.equal(card.nameGender, type === 'model' ? 'female' : null);
+      if (type !== 'model') assert.ok(preset.brandNames.includes(card.fields.name));
       else assert.ok(preset.first.some((name) => card.fields.name.startsWith(name + ' ')));
       assert.equal(card.datasetVersion, preset.datasetVersion);
       assert.ok(card.fields.email && card.fields.phone);

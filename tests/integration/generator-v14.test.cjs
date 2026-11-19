@@ -31,7 +31,7 @@ test('TECH finite brands exhaust across countries and restart; explicit repeats 
     p = resolvePreset('US', 'tech', bulk);
   assert.equal(p.namingStrategy, 'brand_name');
   // TZ12 adds 96 authored names to the retained 275-entry finite pool.
-  assert.equal(p.brandNames.length, 275 + 96);
+  assert.equal(p.brandNames.length, 275 + 96 + 160);
   const names = new Set(),
     emails = new Set();
   for (let i = 0; i < p.brandNames.length; i++) {

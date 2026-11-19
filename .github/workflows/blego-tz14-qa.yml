@@ -1,0 +1,50 @@
+name: BLEGO TZ14 hotfix QA (source)
+
+on:
+  push:
+    branches:
+      - codex/blego-tz14-hotfix-ui-pools-20261117
+
+concurrency:
+  group: blego-tz14-source-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  source-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci
+      - name: Export formatted hotfix sources
+        shell: bash
+        run: |
+          for file in electron/features/generator/pool-expansion.cjs tests/integration/generator-tz12.test.cjs tests/integration/pool-registry-migration.test.cjs tests/ui/archive-actions.test.cjs tests/ui/generator-picker-tz12.test.cjs tests/ui/generator-bio.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/generator-tz12.test.cjs tests/unit/tz14-hotfix.test.cjs; do
+            echo "TZ14_FORMAT_BEGIN:$file"
+            ./node_modules/.bin/prettier "$file" | base64 -w 0
+            echo
+            echo "TZ14_FORMAT_END:$file"
+          done
+      - name: Validate formatted hotfix sources on ephemeral CI copy
+        run: ./node_modules/.bin/prettier --write electron/features/generator/pool-expansion.cjs tests/integration/generator-tz12.test.cjs tests/integration/pool-registry-migration.test.cjs tests/ui/archive-actions.test.cjs tests/ui/generator-picker-tz12.test.cjs tests/ui/generator-bio.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/generator-tz12.test.cjs tests/unit/tz14-hotfix.test.cjs
+      - name: Lint, hotfix tests and full source regressions
+        shell: bash
+        run: |
+          set +e
+          npm run lint
+          lint=$?
+          node --test tests/unit/tz14-hotfix.test.cjs
+          hotfix=$?
+          npm run verify
+          regressions=$?
+          echo "lint=$lint hotfix=$hotfix regressions=$regressions"
+          if [ "$lint" -ne 0 ] || [ "$hotfix" -ne 0 ] || [ "$regressions" -ne 0 ]; then exit 1; fi

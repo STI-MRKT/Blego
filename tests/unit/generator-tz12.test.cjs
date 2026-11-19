@@ -27,12 +27,16 @@ test('TZ12 adds >=200 actual unique names, BIOs and address records, retaining e
       after.data[country].last.slice(0, before.data[country].last.length),
       before.data[country].last
     );
-    for (const type of ['model', 'crypto']) {
-      const p = resolvePreset(country, type);
-      assert.equal(p.namingStrategy, 'person_name');
-      assert.equal(p.nameGender, 'female');
-      assert.ok(nameAt(p, p.first.length * p.last.length - 1).endsWith(' ' + p.last.at(-1)));
-    }
+    const model = resolvePreset(country, 'model');
+    assert.equal(model.namingStrategy, 'person_name');
+    assert.equal(model.nameGender, 'female');
+    assert.ok(
+      nameAt(model, model.first.length * model.last.length - 1).endsWith(' ' + model.last.at(-1))
+    );
+    const crypto = resolvePreset(country, 'crypto');
+    assert.equal(crypto.namingStrategy, 'brand_name');
+    assert.equal(crypto.nameGender, null);
+    assert.equal(crypto.brandNames.length, 400);
   }
   assert.equal(result.tech.added, 96);
 });
@@ -73,9 +77,9 @@ test('TZ12 synthetic addresses preserve exact source city/postal pairs and natio
   };
   for (const country of countries) {
     const p = resolvePreset(country, 'model');
-    assert.equal(p.addresses.length, 25);
-    assert.deepEqual(p.addresses, after.addresses[country]);
-    assert.equal(new Set(p.addresses.map((row) => normalize(JSON.stringify(row)))).size, 25);
+    assert.equal(p.addresses.length, 25 + 160);
+    assert.deepEqual(p.addresses.slice(0, 25), after.addresses[country]);
+    assert.equal(new Set(p.addresses.map((row) => normalize(JSON.stringify(row)))).size, 25 + 160);
     for (const row of p.addresses) {
       assert.ok(patterns[country].test(row.postal), `${country}:${row.postal}`);
       assert.ok(
@@ -84,7 +88,9 @@ test('TZ12 synthetic addresses preserve exact source city/postal pairs and natio
         )
       );
       assert.ok(!/[\p{Cc}\p{Cf}]/u.test(row.address));
-      assert.ok((['US', 'GB', 'FR'].includes(country) ? /^\d+ / : / \d+$/).test(row.address));
+      if (p.addresses.indexOf(row) < 25)
+        assert.ok((['US', 'GB', 'FR'].includes(country) ? /^\d+ / : / \d+$/).test(row.address));
+      else assert.ok(/ [0-9]+$/.test(row.address));
     }
     assert.deepEqual(resolvePreset(country, 'model', {}, after.data[country]).addresses, []);
   }
