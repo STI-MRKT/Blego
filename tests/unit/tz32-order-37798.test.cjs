@@ -25,7 +25,8 @@ test('TZ32 English order receipt with Your product marker preserves six tabular 
     ...rows
   ].join('\\n');
   const parsed=await parseInput({bytes:Buffer.from(source,'utf8'),originalName:'synthetic-order.txt'},{classification:true});
-  console.log('TZ32_RECEIPT_DEBUG',JSON.stringify({records:parsed.records.length,headerless:parsed.headerless,structured:parsed.structured,delimiter:parsed.delimiter,firstColumns:parsed.records[0]?.sourceEntries?.length,firstLine:parsed.records[0]?.sourceRecord?.slice(0,100)}));\n  assert.equal(parsed.records.length,6);
+  console.log('TZ32_RECEIPT_DEBUG',JSON.stringify({records:parsed.records.length,headerless:parsed.headerless,structured:parsed.structured,delimiter:parsed.delimiter,firstColumns:parsed.records[0]?.sourceEntries?.length,firstLine:parsed.records[0]?.sourceRecord?.slice(0,100)}));
+  assert.equal(parsed.records.length,6);
   assert.ok(parsed.records.every((record)=>record.sourceEntries.length===11));
   assert.ok(parsed.records.every((record)=>!/Order number|Product quantity|Review text|Your product/.test(record.sourceRecord)));
   assert.equal(parsed.records[2].sourceEntries[6].value,'-');
