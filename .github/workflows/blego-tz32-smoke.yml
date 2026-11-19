@@ -226,3 +226,9 @@ jobs:
           node --check shared/importer.mjs
           node --test tests/unit/tz32-receipt.test.cjs tests/integration/tz32-news-window.test.cjs
           node scripts/tz32-news-probe.cjs
+      - name: Validate updated historical contract tests against current 1.4.15
+        shell: bash
+        run: |
+          node scripts/tz32-legacy-test-compat.cjs
+          npx prettier --write tests/unit/*.test.cjs scripts/tz32-legacy-test-compat.cjs
+          npm run test:unit
