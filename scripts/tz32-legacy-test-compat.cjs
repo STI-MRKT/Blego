@@ -43,6 +43,7 @@
     ["        url: 'https://www.instagram.com/sample.creator/'",
       "        url: 'https://www.facebook.com/profile.php?id=615000000000123',\n        copyUrl: 'https://www.facebook.com/profile.php?id=615000000000123'",
       'canonical copy URL'],
+    ['/friend-tags/','/friend-top/','current Friends card hierarchy'],
     ['    assert.match(html, /data-action="friends-open"/);',
       '    assert.match(html, /aria-label="Copy profile URL"/);',
       'actual record action']
