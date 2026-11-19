@@ -43,8 +43,8 @@ update('src/js/main.js', (source) => {
     "  if (action === 'copy-model') {",
     "    try {",
     "      if (target.dataset.source === 'generator' && target.dataset.field === 'phone') {",
-    "        const card = await window.blego.lastCard();
-        const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country);",
+    "        const card = await window.blego.lastCard();",
+    "        const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country);",
     "        await copyText(value, target, 'Номер скопирован');",
     "      } else {",
     "        await copyModelValue(target.dataset.source, target.dataset.row, target.dataset.field, target, { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true', nationalPhone: target.dataset.nationalPhone === 'true' });",
