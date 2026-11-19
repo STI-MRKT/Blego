@@ -221,7 +221,7 @@ jobs:
           node node_modules/electron/install.js
           node --test --test-concurrency=1 tests/ui/tz31-column-copy.test.cjs
 
-      # Re-run after correcting generated patch block separators.
+      # Re-run after correcting seed function insertion newline.
       - name: Apply TZ32 News, receipt parser and ten-day tests
         shell: bash
         run: |
