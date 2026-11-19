@@ -14,7 +14,7 @@ const catalog = ['fashion', 'ai'].map((topic) => ({
   url: `https://example.com/${topic}`
 }));
 const xml = (topic) =>
-  `<rss><channel>${Array.from({ length: 24 }, (_, i) => `<item><guid>${topic}-${i}</guid><title>${topic} ${i}</title><link>https://example.com/${topic}/${i}?utm_source=rss</link></item>`).join('')}</channel></rss>`;
+  `<rss><channel>${Array.from({ length: 24 }, (_, i) => `<item><guid>${topic}-${i}</guid><title>${topic} ${i}</title><link>https://example.com/${topic}/${i}?utm_source=rss</link><pubDate>${new Date().toUTCString()}</pubDate></item>`).join('')}</channel></rss>`;
 async function setup(t) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-topics-'));
   const store = await openStore(dir);
