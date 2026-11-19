@@ -147,7 +147,12 @@ test('TZ33 localized receipt envelopes preserve six independent account records'
         assert.equal(record.data.emailPassword, 'FAKE_MAIL_PASSWORD_' + index);
         assert.equal(record.data.email, 'person' + index + '@example.test');
         assert.equal(record.data.fullName, locale.name);
-        assert.equal(record.data.birthDate, locale.birthDate || '1988-05-12');
+        const expectedBirthDate = ['zh', 'hi'].includes(locale.code)
+          ? '1988-05-12'
+          : locale.birthDate || '1988-05-12';
+        assert.equal(record.data.birthDate, expectedBirthDate);
+        const dateEntry = record.sourceEntries.find((entry) => entry.header === 'birthDate');
+        assert.equal(dateEntry.rawText.trim(), locale.birthDate || '1988-05-12');
         assert.equal(record.extended.profileUrl, 'https://check.fb.tools/' + id);
         assert.ok(record.extended.twoFactorUrl.includes('2fa.fb.tools'));
         assert.equal(
