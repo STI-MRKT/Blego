@@ -43,7 +43,8 @@ update('src/js/main.js', (source) => {
     "  if (action === 'copy-model') {",
     "    try {",
     "      if (target.dataset.source === 'generator' && target.dataset.field === 'phone') {",
-    "        const value = formattedPhoneForCopy(state.demo?.fields?.phone || '', state.demo?.country);",
+    "        const card = await window.blego.lastCard();
+        const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country);",
     "        await copyText(value, target, 'Номер скопирован');",
     "      } else {",
     "        await copyModelValue(target.dataset.source, target.dataset.row, target.dataset.field, target, { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true', nationalPhone: target.dataset.nationalPhone === 'true' });",
@@ -186,12 +187,14 @@ update('tests/ui/archive-v141.test.cjs', (source) => {
   if (s.includes(oldPreLoop)) s = s.replace(oldPreLoop, newPreLoop);
 
   const oldPreRestart = "    assert.ok((await page.locator('pre').first().textContent()).includes('person1@example.test'));";
+  const oldPreExclude = "    assert.ok(!(await page.locator('pre').first().textContent()).includes('excluded@example.test'));";
   const newPreRestart = [
     "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return Boolean(state.archiveView?.resultText); });",
     "    const restartedArchiveText = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return state.archiveView.resultText; });",
     "    assert.ok(restartedArchiveText.includes('person1@example.test'));"
   ].join(NL);
   if (s.includes(oldPreRestart)) s = s.replace(oldPreRestart, newPreRestart);
+  if (s.includes(oldPreExclude)) s = s.replace(oldPreExclude, "    assert.ok(!restartedArchiveText.includes('excluded@example.test'));");
   return s;
 }, 'archive GUI test follows archive state and result model');
 
@@ -200,5 +203,8 @@ update('tests/ui/classifier-copy.test.cjs', (source) => {
   const old = "    await page.getByText('Сохранено в архиве', { exact: true }).waitFor();";
   const next = "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
   if (s.includes(old)) s = s.replace(old, next);
+  const oldCount = '    assert.equal(archives.items.length, 1);';
+  const newCount = "    const archiveDebug = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return { saved: state.lastArchiveSave, visible: state.archives }; });\n    assert.equal(archives.items.length, 1, JSON.stringify({ archives, archiveDebug }));";
+  if (s.includes(oldCount)) s = s.replace(oldCount, newCount);
   return s;
 }, 'classifier GUI assertions use current empty label and archive state');
