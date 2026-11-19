@@ -245,6 +245,7 @@ jobs:
       - name: Full source verification
         run: |
           npx prettier --write 'electron/**/*.cjs' 'shared/*.mjs' 'tests/**/*.cjs' 'scripts/*.cjs'
+          node scripts/tz32-legacy-test-compat.cjs
           npm run verify
           npm run test:ui
       - name: Build unsigned Apple Silicon DMG
