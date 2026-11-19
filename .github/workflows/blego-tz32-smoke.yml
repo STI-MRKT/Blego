@@ -234,7 +234,9 @@ jobs:
           node --check electron/main.cjs
           node --check src/js/ui/news.js
           npm ci
-          node --test tests/unit/tz32-order-37798.test.cjs tests/unit/tz32-news-ui.test.cjs tests/integration/tz32-news-window.test.cjs
+          node scripts/tz32-legacy-test-compat.cjs
+          npx prettier --write 'tests/**/*.cjs' 'scripts/*.cjs'
+          node --test tests/unit/tz22-classifier-formats.test.cjs tests/unit/tz32-order-37798.test.cjs tests/unit/tz32-news-ui.test.cjs tests/integration/tz32-news-window.test.cjs
       - name: Live News source and ten-day seed preflight
         continue-on-error: true
         shell: bash
