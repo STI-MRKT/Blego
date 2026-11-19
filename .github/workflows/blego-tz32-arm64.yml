@@ -222,6 +222,22 @@ jobs:
           key: blego-verified-perl-5.40.1-macOS-arm64-v1
       - name: Prepare macOS metadata runtime
         run: bash scripts/prepare-metadata-darwin.sh
+      - name: Fetch last ten days of live News and build offline seed
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/check-news-live.cjs release/news-live-tz32.json resources/news-seed.json
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('release/news-live-tz32.json','utf8'));
+          const seed=JSON.parse(fs.readFileSync('resources/news-seed.json','utf8'));
+          if(r.windowDays!==10 || seed.windowDays!==10)throw Error('News history window is not ten days');
+          const insufficient=r.topics.filter(t=>t.unique<10);
+          if(insufficient.length)throw Error('Insufficient recent articles: '+insufficient.map(t=>t.topic+':'+t.unique).join(','));
+          const cutoff=Date.now()-10*24*60*60*1000;
+          if(seed.items.some(i=>!Number.isFinite(i.publishedAt)||i.publishedAt<cutoff||i.publishedAt>Date.now()+60*60*1000))throw Error('Offline seed contains an article outside the ten-day window');
+          console.log('TZ32_NEWS_ACCEPTANCE',JSON.stringify({topics:r.topics.map(t=>({topic:t.topic,articles:t.unique,sources:t.successful})),seedItems:seed.items.length}));
+          NODE
       - name: Native metadata readback gate
         run: |
           mkdir -p release
