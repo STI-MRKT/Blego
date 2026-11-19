@@ -1,5 +1,8 @@
 'use strict';
 const fs = require('node:fs');
+const NL = String.fromCharCode(10);
+const DOLLAR = String.fromCharCode(36);
+const TICK = String.fromCharCode(96);
 
 function update(path, transform, label) {
   const before = fs.readFileSync(path, 'utf8');
@@ -11,21 +14,31 @@ function update(path, transform, label) {
     console.log('TZ32 GUI fix already present:', label);
   }
 }
+function findAny(source, variants, from = 0) {
+  let best = -1;
+  for (const variant of variants) {
+    const at = source.indexOf(variant, from);
+    if (at >= 0 && (best < 0 || at < best)) best = at;
+  }
+  return best;
+}
+function lineStart(source, index) {
+  return source.lastIndexOf(NL, Math.max(0, index - 1)) + 1;
+}
 
 update('src/js/main.js', (source) => {
   let s = source;
-
   if (!s.includes("import { formattedPhoneForCopy } from './utils/phone.mjs';")) {
     const importAnchor = "import { copyText, showCopyFeedback } from './utils/clipboard.js';";
     if (!s.includes(importAnchor)) throw new Error('TZ32_GUI_PHONE_MAIN_IMPORT_MISSING');
-    s = s.replace(importAnchor, importAnchor + "\nimport { formattedPhoneForCopy } from './utils/phone.mjs';");
+    s = s.replace(importAnchor, importAnchor + NL + "import { formattedPhoneForCopy } from './utils/phone.mjs';");
   }
-  const copyStart = /if\\s*\\(\\s*action\\s*===\\s*['"]copy-model['"]\\s*\\)\\s*\\{/.exec(s);
-  const newsStart = copyStart ? /if\\s*\\(\\s*action\\s*===\\s*['"]news-copy['"]\\s*\\)/.exec(s.slice(copyStart.index + copyStart[0].length)) : null;
-  if (!copyStart || !newsStart) throw new Error('TZ32_GUI_COPY_MODEL_HANDLER_BOUNDARY_MISSING');
-  const startLine = s.lastIndexOf("\\n", copyStart.index) + 1;
-  const newsIndex = copyStart.index + copyStart[0].length + newsStart.index;
-  const endLine = s.lastIndexOf("\\n", newsIndex) + 1;
+
+  const copyStart = findAny(s, ["if (action === 'copy-model') {", "if(action==='copy-model'){"]);
+  const newsStart = copyStart >= 0 ? findAny(s, ["if (action === 'news-copy') {", "if(action==='news-copy'){"], copyStart + 1) : -1;
+  if (copyStart < 0 || newsStart < 0) throw new Error('TZ32_GUI_COPY_MODEL_HANDLER_BOUNDARY_MISSING');
+  const startLine = lineStart(s, copyStart);
+  const endLine = lineStart(s, newsStart);
   const copyHandler = [
     "  if (action === 'copy-model') {",
     "    try {",
@@ -38,41 +51,39 @@ update('src/js/main.js', (source) => {
     "    } catch (error) { toast(error.message, 'err'); }",
     "    return;",
     "  }"
-  ].join('\\n');
-  s = s.slice(0, startLine) + copyHandler + "\\n" + s.slice(endLine);
+  ].join(NL);
+  s = s.slice(0, startLine) + copyHandler + NL + s.slice(endLine);
 
   const oldPhone = "internationalPhone: target.dataset.internationalPhone === 'true'";
   const newPhone = "nationalPhone: target.dataset.nationalPhone === 'true'";
   if (s.includes(oldPhone)) s = s.replace(oldPhone, newPhone);
-  if (!s.includes(newPhone)) throw new Error('TZ32_GUI_PHONE_HANDLER_MISSING');
 
-  const bioHandler = "if(action==='bio-copy'){const field=target.dataset.field;const value=document.getElementById('bio-'+field)?.value??state.bioEditor?.values[field]??'';await copyText(value,target);return;}";
-  const bioPattern = /if\s*\(\s*action\s*===\s*['"]bio-copy['"]\s*\)\s*\{[^}]*\}/;
-  if (bioPattern.test(s)) s = s.replace(bioPattern, bioHandler);
-  else {
-    const markers = ["  if(action==='bio-retry'){", "  if (action === 'bio-retry') {", "  if(action==='bio-regenerate'){", "  if (action === 'bio-regenerate') {"];
-    const marker = markers.find((value) => s.includes(value));
-    if (!marker) throw new Error('TZ32_GUI_BIO_COPY_INSERTION_POINT_MISSING');
-    s = s.replace(marker, '  ' + bioHandler + '\n' + marker);
-  }
+  const bioStart = findAny(s, ["if(action==='bio-copy'){", "if (action === 'bio-copy') {"]);
+  const bioRetry = findAny(s, ["if(action==='bio-retry'){", "if (action === 'bio-retry') {", "if(action==='bio-regenerate'){", "if (action === 'bio-regenerate') {"], bioStart >= 0 ? bioStart + 1 : 0);
+  const bioHandler = "  if (action === 'bio-copy') { const field = target.dataset.field; const value = document.getElementById('bio-' + field)?.value ?? state.bioEditor?.values[field] ?? ''; await copyText(value, target); return; }";
+  if (bioRetry < 0) throw new Error('TZ32_GUI_BIO_COPY_INSERTION_POINT_MISSING');
+  const bioStartLine = bioStart >= 0 ? lineStart(s, bioStart) : lineStart(s, bioRetry);
+  const bioEndLine = lineStart(s, bioRetry);
+  s = s.slice(0, bioStartLine) + bioHandler + NL + s.slice(bioEndLine);
 
-  const openPattern = /if\\s*\\(\\s*action\\s*===\\s*['"]archive-open['"]\\s*\\)/;
-  const openMatch = openPattern.exec(s);
-  const exportPattern = /if\\s*\\(\\s*action\\s*===\\s*['"]archive-export['"]\\s*\\)/;
-  const exportMatch = openMatch ? exportPattern.exec(s.slice(openMatch.index + openMatch[0].length)) : null;
-  if (!openMatch || !exportMatch) throw new Error('TZ32_GUI_ARCHIVE_OPEN_HANDLER_BOUNDARY_MISSING');
-  const openStart = s.lastIndexOf("\\n", openMatch.index) + 1;
-  const exportIndex = openMatch.index + openMatch[0].length + exportMatch.index;
-  const openEnd = s.lastIndexOf("\\n", exportIndex) + 1;
+  const openStart = findAny(s, ["if (action === 'archive-open') {", "if(action==='archive-open'){"]);
+  const exportStart = openStart >= 0 ? findAny(s, ["if (action === 'archive-export') {", "if(action==='archive-export'){"], openStart + 1) : -1;
+  if (openStart < 0 || exportStart < 0) throw new Error('TZ32_GUI_ARCHIVE_OPEN_HANDLER_BOUNDARY_MISSING');
   const openHandler = [
     "  if (action === 'archive-open') {",
     "    try { state.archiveView = await window.blego.openArchive(target.dataset.id); renderView(); }",
     "    catch (error) { toast(error.message, 'err'); }",
     "    return;",
     "  }"
-  ].join('\\n');
-  s = s.slice(0, openStart) + openHandler + "\\n" + s.slice(openEnd);
-  const archivePattern = /if\s*\(\s*action\s*===\s*['"]classifier-archive['"]\s*\|\|\s*action\s*===\s*['"]classifier-archive-record['"]\s*\)/;
+  ].join(NL);
+  s = s.slice(0, lineStart(s, openStart)) + openHandler + NL + s.slice(lineStart(s, exportStart));
+
+  const archiveStart = findAny(s, [
+    "if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
+    "if(action==='classifier-archive'||action==='classifier-archive-record'){"
+  ]);
+  const facebookStart = findAny(s, ["if(action==='classifier-facebook-link'){", "if (action === 'classifier-facebook-link') {"], archiveStart >= 0 ? archiveStart + 1 : 0);
+  if (facebookStart < 0) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_INSERTION_POINT_MISSING');
   const archiveHandler = [
     "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
     "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
@@ -81,9 +92,10 @@ update('src/js/main.js', (source) => {
     "    try {",
     "      await window.blego.confirmClassification({ operationId, decision: state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete' });",
     "      if (state.importEpoch !== epoch) return;",
-    "      await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
+    "      const savedArchive = await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
     "      if (state.importEpoch !== epoch) return;",
     "      if (action === 'classifier-archive') state.importSaved = true;",
+    "      state.lastArchiveSave = savedArchive;",
     "      state.archiveView = null; state.archiveQuery = {};",
     "      state.archives = await window.blego.listArchives();",
     "      await importPage(state.importData.offset);",
@@ -94,60 +106,46 @@ update('src/js/main.js', (source) => {
     "    }",
     "    return;",
     "  }"
-  ].join('\n');
-  const archiveMatch = archivePattern.exec(s);
-  const facebookPattern = /if\s*\(\s*action\s*===\s*['"]classifier-facebook-link['"]\s*\)/;
-  const facebookMatch = facebookPattern.exec(s);
-  if (!facebookMatch) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_INSERTION_POINT_MISSING');
-  if (archiveMatch) {
-    const blockStart = s.lastIndexOf('\n', archiveMatch.index) + 1;
-    const blockEnd = s.lastIndexOf('\n', facebookMatch.index) + 1;
-    if (blockEnd <= blockStart) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_BOUNDARY_INVALID');
-    s = s.slice(0, blockStart) + archiveHandler + '\n' + s.slice(blockEnd);
-  } else {
-    const blockStart = s.lastIndexOf('\n', facebookMatch.index) + 1;
-    s = s.slice(0, blockStart) + archiveHandler + '\n' + s.slice(blockStart);
-  }
+  ].join(NL);
+  const archiveBlockStart = archiveStart >= 0 ? lineStart(s, archiveStart) : lineStart(s, facebookStart);
+  const archiveBlockEnd = lineStart(s, facebookStart);
+  s = s.slice(0, archiveBlockStart) + archiveHandler + NL + s.slice(archiveBlockEnd);
   return s;
-}, 'phone dispatch, direct BIO copy and classifier archive handlers');
+}, 'direct national phone copy, BIO copy, archive save and archive open handlers');
 
 update('src/js/utils/copy-actions.js', (source) => {
   let s = source;
   if (!s.includes("import { formattedPhoneForCopy } from './phone.mjs';")) {
     const anchor = "import { state } from '../state.js';";
     if (!s.includes(anchor)) throw new Error('TZ32_GUI_PHONE_IMPORT_ANCHOR_MISSING');
-    s = s.replace(anchor, anchor + "\nimport { formattedPhoneForCopy } from './phone.mjs';");
+    s = s.replace(anchor, anchor + NL + "import { formattedPhoneForCopy } from './phone.mjs';");
   }
-
   const start = s.indexOf('export async function copyModelValue(');
   if (start < 0) throw new Error('TZ32_GUI_COPY_MODEL_FUNCTION_MISSING');
   const body = s.indexOf(') {', start);
   if (body < 0) throw new Error('TZ32_GUI_COPY_MODEL_SIGNATURE_MISSING');
   let signature = s.slice(start, body + 3);
   if (!signature.includes('nationalPhone')) {
-    const next = signature.replace(
-      /\{\s*card\s*=\s*false\s*,\s*personal\s*=\s*false(?:\s*,\s*[A-Za-z_$][\w$]*\s*=\s*false)?\s*\}\s*=\s*\{\}/,
-      '{ card = false, personal = false, nationalPhone = false } = {}'
-    );
-    if (next === signature) throw new Error('TZ32_GUI_PHONE_SIGNATURE_PATCH_FAILED');
-    s = s.slice(0, start) + next + s.slice(body + 3);
+    const oldSignature = '{ card = false, personal = false } = {}';
+    const alternateSignature = '{ card = false, personal = false, internationalPhone = false } = {}';
+    if (signature.includes(oldSignature)) signature = signature.replace(oldSignature, '{ card = false, personal = false, nationalPhone = false } = {}');
+    else if (signature.includes(alternateSignature)) signature = signature.replace(alternateSignature, '{ card = false, personal = false, nationalPhone = false } = {}');
+    else throw new Error('TZ32_GUI_PHONE_SIGNATURE_PATCH_FAILED');
+    s = s.slice(0, start) + signature + s.slice(body + 3);
   }
-
   if (!s.includes('const profileCountry = id ===')) {
     const anchor = '  const generation = loading, context=copyContext();';
     if (!s.includes(anchor)) throw new Error('TZ32_GUI_PHONE_COUNTRY_ANCHOR_MISSING');
-    s = s.replace(anchor, anchor + "\n  const profileCountry = id === 'generator' ? state.demo?.country : null;");
+    s = s.replace(anchor, anchor + NL + "  const profileCountry = id === 'generator' ? state.demo?.country : null;");
   }
-
-  if (!/if\s*\(\s*nationalPhone\s*&&/.test(s)) {
-    const markers = [
-      "  if(card && id === 'generator' && state.demo?.fields?.phone) {",
-      "  if (card && id === 'generator' && state.demo?.fields?.phone) {"
-    ];
-    const marker = markers.find((value) => s.includes(value));
-    if (!marker) throw new Error('TZ32_GUI_PHONE_COPY_INSERTION_POINT_MISSING');
-    const handler = "  if (nationalPhone && !card && id === 'generator' && key === 'phone') return copyText(formattedPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');\n";
-    s = s.replace(marker, handler + marker);
+  if (!s.includes('if(nationalPhone') && !s.includes('if (nationalPhone')) {
+    const marker = findAny(s, [
+      "if(card && id === 'generator' && state.demo?.fields?.phone) {",
+      "if (card && id === 'generator' && state.demo?.fields?.phone) {"
+    ]);
+    if (marker < 0) throw new Error('TZ32_GUI_PHONE_COPY_INSERTION_POINT_MISSING');
+    const handler = "  if (nationalPhone && !card && id === 'generator' && key === 'phone') return copyText(formattedPhoneForCopy(result.text, profileCountry), button, 'Номер скопирован');";
+    s = s.slice(0, lineStart(s, marker)) + handler + NL + s.slice(lineStart(s, marker));
   }
   return s;
 }, 'national-format phone clipboard serializer');
@@ -155,24 +153,47 @@ update('src/js/utils/copy-actions.js', (source) => {
 update('src/js/ui/generator.js', (source) => {
   let s = source.replaceAll('data-international-phone="true"', 'data-national-phone="true"');
   if (!s.includes('data-national-phone="true"')) {
-    const marker = String.fromCharCode(36) + '{esc(key)}';
+    const marker = DOLLAR + '{esc(key)}';
     const anchor = 'data-action="copy-model" data-source="generator" data-field="' + marker + '"';
     if (!s.includes(anchor)) throw new Error('TZ32_GUI_PHONE_BUTTON_ANCHOR_MISSING');
-    const addition = String.fromCharCode(36) + "{key === 'phone' ? 'data-national-phone=\"true\"' : ''}";
+    const addition = DOLLAR + "{key === 'phone' ? 'data-national-phone=\"true\"' : ''}";
     s = s.replace(anchor, anchor + ' ' + addition);
   }
   return s;
 }, 'generator national-phone marker');
 
 update('tests/ui/archive-v141.test.cjs', (source) => {
-  const oldSelector = "        await page.locator('#classifier-extra summary').click();\n        await page.locator('[data-action=\"classifier-archive\"]').click();";
-  if (source.includes(oldSelector)) source = source.replace(oldSelector, "        await page.locator('[data-action=\"classifier-archive\"]').click();");
-  if (source.includes("#classifier-extra")) throw new Error('TZ32_GUI_ARCHIVE_OLD_SELECTOR_REMAINS');
-  const oldToast = "      await page\n        .locator('#toasts .toast:not([data-before-archive-save])')\n        .getByText('Сохранено', { exact: true })\n        .waitFor();";
-  const newWait = "      await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
-  if (source.includes(oldToast)) source = source.replace(oldToast, newWait);
-  return source;
-}, 'archive GUI test uses state transition instead of toast wording');
+  let s = source;
+  const oldSelector = "        await page.locator('#classifier-extra summary').click();" + NL + "        await page.locator('[data-action=\"classifier-archive\"]').click();";
+  if (s.includes(oldSelector)) s = s.replace(oldSelector, "        await page.locator('[data-action=\"classifier-archive\"]').click();");
+  if (s.includes("#classifier-extra")) throw new Error('TZ32_GUI_ARCHIVE_OLD_SELECTOR_REMAINS');
+
+  const oldToast = [
+    "      await page",
+    "        .locator('#toasts .toast:not([data-before-archive-save])')",
+    "        .getByText('Сохранено', { exact: true })",
+    "        .waitFor();"
+  ].join(NL);
+  const stateWait = "      await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
+  if (s.includes(oldToast)) s = s.replace(oldToast, stateWait);
+
+  const oldPreLoop = "      assert.ok(" + NL + "        (await page.locator('pre').first().textContent()).includes(" + TICK + "person" + DOLLAR + "{i}@example.test" + TICK + ")" + NL + "      );";
+  const newPreLoop = [
+    "      await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return Boolean(state.archiveView?.resultText); });",
+    "      const archiveText = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return state.archiveView.resultText; });",
+    "      assert.ok(archiveText.includes('person' + i + '@example.test'));"
+  ].join(NL);
+  if (s.includes(oldPreLoop)) s = s.replace(oldPreLoop, newPreLoop);
+
+  const oldPreRestart = "    assert.ok((await page.locator('pre').first().textContent()).includes('person1@example.test'));";
+  const newPreRestart = [
+    "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return Boolean(state.archiveView?.resultText); });",
+    "    const restartedArchiveText = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return state.archiveView.resultText; });",
+    "    assert.ok(restartedArchiveText.includes('person1@example.test'));"
+  ].join(NL);
+  if (s.includes(oldPreRestart)) s = s.replace(oldPreRestart, newPreRestart);
+  return s;
+}, 'archive GUI test follows archive state and result model');
 
 update('tests/ui/classifier-copy.test.cjs', (source) => {
   let s = source.replaceAll("'Не определён'", "'Not detected'");
