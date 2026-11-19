@@ -107,6 +107,7 @@
        '${FIELDS.map(([key,label]) => "<button type=\\"button\\" class=\\"btn btn-quiet archive-column-copy\\" data-action=\\"archive-copy-column\\" data-field=\\"" + esc(key) + "\\" aria-label=\\"Copy column " + esc(label) + "\\">" + esc(label) + "</button>").join("")}' +
        '</div>';
     s=swap(s, '<div class="archive-record-list" id="archive-record-list">',buttons+'<div class="archive-record-list" id="archive-record-list">','archive column actions');
+    s=s.replace(/^[\t ]+$/gm,'');
     return s;
   });
   edit('src/js/main.js',s=>{
