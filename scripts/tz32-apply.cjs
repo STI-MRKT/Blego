@@ -18,10 +18,10 @@
     const lines=s.split('\n');
     const startIndex=lines.findIndex((line)=>line.includes('const start =') && line.includes('Номер заказа'));
     if(startIndex<0)throw Error('TZ32 order start anchor missing');
-    lines[startIndex]="  const russianStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*$/im.exec(";
-    const noStartIndex=lines.findIndex((line)=>line.trim()==='if (!start) return { text, receipt: false };');
-    if(noStartIndex<0)throw Error('TZ32 receipt start guard missing');
-    lines.splice(noStartIndex,0,
+    const statementEnd=lines.findIndex((line,index)=>index>startIndex && index<startIndex+6 && line.trim()===');');
+    if(statementEnd<0)throw Error('TZ32 order start statement end missing');
+    lines.splice(startIndex,statementEnd-startIndex+1,
+      "  const russianStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));",
       "  const englishStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Order number[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));",
       "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
       "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
