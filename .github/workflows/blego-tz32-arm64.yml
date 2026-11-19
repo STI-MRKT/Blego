@@ -247,6 +247,7 @@ jobs:
         run: |
           npx prettier --write 'electron/**/*.cjs' 'shared/*.mjs' 'tests/**/*.cjs' 'scripts/*.cjs'
           node scripts/tz32-legacy-test-compat.cjs
+          node scripts/tz32-fix-ui-regressions.cjs
           npx prettier --write 'tests/**/*.cjs' 'scripts/*.cjs'
           npm run verify
           node scripts/tz32-fix-electron-test-user-data-dir.cjs
