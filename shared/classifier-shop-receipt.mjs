@@ -134,7 +134,7 @@ function sectionMarker(text) {
 
 function quantityValue(value) {
   const normalized = digitsToAscii(value).normalize('NFKC').trim();
-  const match = /^(\d{1,6})(?:\s*(?:pcs?\.?|pieces?|шт\.?|штук(?:а|и)?|ед\.?|stück(?:e)?|stk\.?|szt(?:uk|y)?\.?|ks|kus(?:ů|u)?|个|件|件数|पीस|नग|इकाई))?$/iu.exec(normalized);
+  const match = /^(\d{1,6})(?:\s*(?:pcs?\.?|pieces?|шт\.?|штук(?:а|и)?|ед(?:\.?|иниц(?:а|ы)?)?|stück(?:e)?|stk\.?|szt(?:uk|uki|y)?\.?|ks|kus(?:ů|u|y)?|个|件|件数|पीस|नग|इकाई))?$/iu.exec(normalized);
   return match ? Number(match[1]) : null;
 }
 
