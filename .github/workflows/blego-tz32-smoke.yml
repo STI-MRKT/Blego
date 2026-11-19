@@ -235,6 +235,7 @@ jobs:
           node --check src/js/ui/news.js
           npm ci
           node scripts/tz32-legacy-test-compat.cjs
+          node scripts/tz32-fix-ui-regressions.cjs
           npx prettier --write 'tests/**/*.cjs' 'scripts/*.cjs'
           node --test tests/unit/tz22-classifier-formats.test.cjs tests/unit/tz32-order-37798.test.cjs tests/unit/tz32-news-ui.test.cjs tests/integration/tz32-news-window.test.cjs
       - name: Focused GUI isolation regressions
