@@ -1,16 +1,16 @@
-name: BLEGO TZ32 verified macOS ARM64 candidate DMG
+name: BLEGO TZ33 multilingual receipt parser verified macOS ARM64 DMG
 
 on:
   push:
-    branches: [codex/blego-tz32-news-10days-and-txt-20261119]
-    paths: ['.github/workflows/blego-tz32-candidate.yml']
+    branches: [codex/blego-tz33-multilingual-receipts-20261119]
+    paths: ['.github/workflows/blego-tz32-candidate.yml', 'scripts/tz32-parser-apply.cjs', 'scripts/tz33-multilingual-apply.cjs', 'shared/classifier-shop-receipt.mjs', 'tests/unit/tz33-multilingual-receipt.test.cjs']
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: blego-tz32-macos-arm64-candidate
+  group: blego-tz33-multilingual-macos-arm64
   cancel-in-progress: false
 
 jobs:
@@ -206,12 +206,21 @@ jobs:
           const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
           const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
           if(pkg.version!=='1.4.14')throw Error('TZ32 requires BLEGO 1.4.14');
-          pkg.version='1.4.15';
+          pkg.version='1.4.16';
           lock.version='1.4.15';
           if(lock.packages?.[''])lock.packages[''].version='1.4.15';
           fs.writeFileSync('package.json', JSON.stringify(pkg,null,2)+'\n');
           fs.writeFileSync('package-lock.json', JSON.stringify(lock,null,2)+'\n');
           NODE
+      - name: Apply TZ33 multilingual receipt and encoding support
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz33-multilingual-apply.cjs
+          node --check shared/classifier-shop-receipt.mjs
+          node --check shared/importer.mjs
+          node --check scripts/tz32-parser-apply.cjs
+          node --check scripts/tz33-multilingual-apply.cjs
       - name: Install locked dependencies and Electron
         run: |
           npm ci
@@ -244,6 +253,7 @@ jobs:
         run: |
           npm run test:unit
           node --test tests/unit/tz32-receipt.test.cjs tests/integration/tz32-news-window.test.cjs
+          node --test tests/unit/tz33-multilingual-receipt.test.cjs
       - name: Native Electron TZ32 workflow checks
         run: node --test --test-concurrency=1 tests/ui/tz29-workflows.test.cjs tests/ui/tz26-phone-geo.test.cjs tests/ui/tz28-fixes.test.cjs tests/ui/tz31-column-copy.test.cjs
       - name: Build unsigned Apple Silicon DMG
@@ -254,21 +264,21 @@ jobs:
           set -euo pipefail
           mountpoint="$RUNNER_TEMP/blego-mounted"
           mkdir -p "$mountpoint"
-          hdiutil verify release/BLEGO-1.4.15-arm64.dmg
+          hdiutil verify release/BLEGO-1.4.16-arm64.dmg
           hdiutil attach release/BLEGO-1.4.15-arm64.dmg -readonly -nobrowse -mountpoint "$mountpoint"
           trap 'hdiutil detach "$mountpoint"' EXIT
           ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
           test -x "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO"
           ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
           BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node --test --test-concurrency=1 tests/ui/tz29-workflows.test.cjs tests/ui/tz26-phone-geo.test.cjs tests/ui/tz28-fixes.test.cjs tests/ui/tz31-column-copy.test.cjs
-          node -e "require('node:fs').writeFileSync('release/installed-arm64.json', JSON.stringify({status:'PASS',suite:'tz32-full-regression-news-txt',platform:process.platform,arch:process.arch,commit:process.env.GITHUB_SHA},null,2))"
+          node -e "require('node:fs').writeFileSync('release/installed-arm64.json', JSON.stringify({status:'PASS',suite:'tz33-multilingual-receipt-news',platform:process.platform,arch:process.arch,commit:process.env.GITHUB_SHA},null,2))"
       - name: Create installation ZIP and hashes
         shell: bash
         run: |
           set -euo pipefail
           (cd release && shasum -a 256 BLEGO-1.4.15-arm64.dmg > SHA256SUMS)
-          printf 'BLEGO 1.4.15 TZ32 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
-          (cd release && zip -9 BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip BLEGO-1.4.15-arm64.dmg SHA256SUMS INSTALL.txt)
+          printf 'BLEGO 1.4.15 TZ33 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
+          (cd release && zip -9 BLEGO-1.4.15-TZ33-macOS-ARM64.zip BLEGO-1.4.15-arm64.dmg SHA256SUMS INSTALL.txt)
           unzip -t release/BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip
           shasum -a 256 release/BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip
       - name: Upload verified macOS installation archive
