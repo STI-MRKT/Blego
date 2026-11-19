@@ -195,6 +195,7 @@ jobs:
           set -euo pipefail
           node scripts/tz32-parser-apply.cjs
           node scripts/tz32-news-apply.cjs
+          node scripts/tz32-legacy-test-compat.cjs
           node --check shared/classifier-shop-receipt.mjs
           node --check shared/importer.mjs
           node --check electron/features/news/feeds.cjs
