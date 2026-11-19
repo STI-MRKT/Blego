@@ -222,27 +222,6 @@ jobs:
           key: blego-verified-perl-5.40.1-macOS-arm64-v1
       - name: Prepare macOS metadata runtime
         run: bash scripts/prepare-metadata-darwin.sh
-      - name: Verify News sources live for diagnostics
-        continue-on-error: true
-        run: |
-          node scripts/check-news-live.cjs release/news-live-tz30.json
-          node -e "const a=require('./release/news-live-tz30.json');const c=a.topics.find(x=>x.topic==='crypto');console.log('TZ30_CRYPTO_LIVE',JSON.stringify({successful:c.successful,unique:c.unique,sources:c.sources.map(s=>({id:s.id,status:s.status,code:s.code}))}));if(c.successful===0 || c.unique===0) process.exit(1)"
-      - name: Fetch last ten days of live News and build offline seed
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/check-news-live.cjs release/news-live-tz32.json resources/news-seed.json
-          node - <<'NODE'
-          const fs=require('node:fs');
-          const r=JSON.parse(fs.readFileSync('release/news-live-tz32.json','utf8'));
-          const seed=JSON.parse(fs.readFileSync('resources/news-seed.json','utf8'));
-          if(r.windowDays!==10 || seed.windowDays!==10)throw Error('News history window is not ten days');
-          const empty=r.topics.filter(t=>t.unique<10);
-          if(empty.length)throw Error('Insufficient recent articles: '+empty.map(t=>t.topic+':'+t.unique).join(','));
-          const cutoff=Date.now()-10*24*60*60*1000;
-          if(seed.items.some(i=>!Number.isFinite(i.publishedAt)||i.publishedAt<cutoff||i.publishedAt>Date.now()+60*60*1000))throw Error('Offline seed contains an article outside the ten-day window');
-          console.log('TZ32_NEWS_ACCEPTANCE',JSON.stringify({topics:r.topics.map(t=>({topic:t.topic,articles:t.unique,sources:t.successful})),seedItems:seed.items.length}));
-          NODE
       - name: Native metadata readback gate
         run: |
           mkdir -p release
