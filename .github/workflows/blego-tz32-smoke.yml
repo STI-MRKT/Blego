@@ -211,7 +211,7 @@ jobs:
           node --input-type=module -e "import { validBirthDate } from './shared/classifier.mjs'; console.log('TZ30 date support:',validBirthDate('16-03-2002'))"
           npm ci
           node --test tests/unit/tz30-order-fixtures.test.cjs tests/integration/tz30-news.test.cjs tests/integration/tz30-archive.test.cjs
-      # TZ32 parser hook tolerates prior overlay formatting.
+      # TZ32 parser now precedes legacy encoded-account reader in the TZ29 source.
       - name: Apply TZ32 and verify RSS, ten days, and six-record TXT
         shell: bash
         run: |
