@@ -50,7 +50,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import base64, hashlib, io, tarfile
-          encoded = ''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines() for i in (1,2))
+          encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
           payload = base64.b64decode(encoded, validate=True)
           assert hashlib.sha256(payload).hexdigest() == '406c1b1439f2e8baf03e02a0e043ff9a5ea2eb484757900a3f9a8b115207348c', 'TZ23 payload checksum mismatch'
           with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
