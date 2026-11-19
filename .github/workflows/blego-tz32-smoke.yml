@@ -3,7 +3,7 @@ name: BLEGO TZ32 news and receipt parser verification
 on:
   push:
     branches: [codex/blego-tz32-news-10day-txt-20261119]
-    paths: ['.github/workflows/blego-tz32-smoke.yml']
+    paths: ['.github/workflows/blego-tz32-smoke.yml', 'scripts/tz32-apply.cjs']
   workflow_dispatch:
 
 permissions:
