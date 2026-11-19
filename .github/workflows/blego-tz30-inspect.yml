@@ -203,6 +203,7 @@ jobs:
           node --check electron/features/news/feeds.cjs
           node --check shared/news-catalog.mjs
           echo "TZ30_PATCH_SYNTAX_PASS"
+      # Archive cookie mapping now preserves the legacy records array contract.
       - name: TZ30 focused regressions (synthetic fixtures)
         shell: bash
         run: |
