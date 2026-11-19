@@ -15,27 +15,23 @@
     return s;
   });
   edit('shared/importer.mjs',s=>{
-    s=replace(s,
-      "  const start = /^(?:[ \\\\t\\\\r\\\\n]|\\\\uFEFF)*Номер заказа[ \\\\t]*:[ \\\\t]*\\\\d{1,12}[ \\\\t]*$/im.exec(",
-      "  const start = /^(?:[ \\\\t\\\\r\\\\n]|\\\\uFEFF)*(?:Номер заказа|Order number)[ \\\\t]*:[ \\\\t]*#?\\\\d{1,12}[ \\\\t]*$/im.exec(",
-      'English order envelope');
-    s=replace(s,
-      "  const marker = /^[ \\\\t]*Ваш заказ[ \\\\t]*:[ \\\\t]*\\\\r?$/gim;",
-      "  const marker = /^[ \\\\t]*(?:(?:={2,}[ \\\\t]*)?Your product(?:[ \\\\t]*={2,})?|Ваш заказ[ \\\\t]*:)[ \\\\t]*\\\\r?$/gim;\n  marker.lastIndex = start.index + start[0].length;",
-      'Your product section marker');
-    s=replace(s,
-      "  if (end < 0) return { text, receipt: false };",
-      "  if (end < 0) return { text, receipt: false };",
-      'receipt end guard');
-    const old="  return { text: masked, receipt: true };";
-    const next=[
-      "  const productTitle = /^Product title:[ \\\\t]*Facebook[ \\\\t]*-[ \\\\t]*United Kingdom.*\\\\bPage\\\\b.*\\\\bPhone removed\\\\b.*\\\\bEmail\\\\b.*\\\\b2FA\\\\b.*\\\\bCookies\\\\b/im.test(text.slice(0, 1200));",
-      "  const quantity = /^(?:Product quantity|Количество товара)[ \\\\t]*:[ \\\\t]*(\\\\d{1,4})/im.exec(text.slice(0, 1200));",
-      "  return { text: masked, receipt: true, layout: productTitle ? 'facebook-uk-page-email-2fa-cookies' : null, expectedRecords: quantity ? Number(quantity[1]) : null };"
-    ].join('\\n');
-    s=replace(s,old,next,'receipt layout metadata');
-    const marker="    ({ records, columns, delimiter, headerless, structured } = result);";
-    const layout=[
+    const lines=s.split('\n');
+    const startIndex=lines.findIndex((line)=>line.includes('const start =') && line.includes('Номер заказа'));
+    if(startIndex<0)throw Error('TZ32 order start anchor missing');
+    lines[startIndex]="  const start = /^(?:[ \\t\\r\\n]|\\uFEFF)*(?:Номер заказа|Order number)[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(";
+    const markerIndex=lines.findIndex((line)=>line.includes('const marker =') && line.includes('Ваш заказ'));
+    if(markerIndex<0)throw Error('TZ32 order marker anchor missing');
+    lines[markerIndex]="  const marker = /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?|Ваш заказ[ \\t]*:)[ \\t]*\\r?$/gim;";
+    lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
+    const returnIndex=lines.findIndex((line)=>line.trim()==='return { text: masked, receipt: true };');
+    if(returnIndex<0)throw Error('TZ32 receipt return anchor missing');
+    lines.splice(returnIndex,1,
+      "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
+      "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
+      "  return { text: masked, receipt: true, layout: productTitle ? 'facebook-uk-page-email-2fa-cookies' : null, expectedRecords: quantity ? Number(quantity[1]) : null };")
+    s=lines.join('\n');
+    const marker = "    ({ records, columns, delimiter, headerless, structured } = result);";
+    const layout = [
       marker,
       "    if (receipt.layout === 'facebook-uk-page-email-2fa-cookies' && receipt.expectedRecords === result.records.length && result.records.length > 0 && result.records.every((record) => record.sourceEntries?.length === 11)) {",
       "      const headers = ['', 'Login', 'Email', 'Password', '2FA', 'Full Name', 'Date of Birth', 'Profile URL', '', 'User-Agent', 'Cookies'];",
@@ -49,7 +45,8 @@
       "      headerless = false;",
       "    }"
     ].join('\\n');
-    s=replace(s,marker,layout,'receipt column map');
+    if(!s.includes(marker))throw Error('TZ32 receipt column map anchor missing');
+    s=s.replace(marker,layout);
     return s;
   });
   edit('electron/features/news/service.cjs',s=>{
