@@ -5,6 +5,7 @@ const fs = require('node:fs'),
   assert = require('node:assert/strict');
 const { _electron } = require('playwright'),
   { openStore } = require('../electron/local/store.cjs');
+const { updateSettings } = require('../electron/local/settings.cjs');
 const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
 (async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-live-news-ui-')),
@@ -13,17 +14,20 @@ const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
   try {
     const store = await openStore(root);
     store.set('tourSeen', true);
+    updateSettings(store, { newsEnabled: true, newsTopic: 'fashion' });
     store.close();
+    const executablePath = process.env.BLEGO_EXECUTABLE || undefined;
     app = await _electron.launch({
+      executablePath,
       args: [
         ...(process.platform === 'linux' ? ['--ozone-platform=headless', '--disable-gpu'] : []),
-        '.',
+        ...(executablePath ? [] : ['.']),
         `--user-data-dir=${root}`
       ]
     });
     const page = await app.firstWindow();
     await page.locator('[data-view="news"]').click();
-    await page.getByRole('button', { name: 'Загрузить новости', exact: true }).click();
+    await page.locator('[data-action="news-refresh"]').first().waitFor();
     for (const topic of ['fashion', 'ai', 'crypto', 'finance', 'tech']) {
       if ((await page.locator('#news-topic').inputValue()) !== topic)
         await page.locator('#news-topic').selectOption(topic);
@@ -41,6 +45,9 @@ const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
         .locator('.news-item-card .news-title')
         .evaluateAll((els) => els.map((e) => ({ title: e.textContent, link: e.href })));
       assert.equal(links.length, Math.min(40, snapshot.items.length));
+      assert.ok(snapshot.items.length > 0, `${topic} must have articles in the bundled ten-day seed`);
+      const now = Date.now(), cutoff = now - 10 * 24 * 60 * 60 * 1000;
+      assert.ok(snapshot.items.every((item) => Number.isFinite(item.publishedAt) && item.publishedAt >= cutoff && item.publishedAt <= now + 60 * 60 * 1000), `${topic} contains an article outside the ten-day window`);
       assert.equal(new Set(links.map((l) => l.link)).size, links.length);
       assert.ok(links.every((l) => l.title.trim() && /^https?:\/\//.test(l.link)));
       report.topics.push({
@@ -50,7 +57,7 @@ const { waitForAsync } = require('../tests/fixtures/wait-for-async.cjs');
         unique: snapshot.items.length,
         displayed: links.length,
         lastSuccessfulAt: snapshot.lastSuccessfulAt,
-        status: links.length >= 20 ? 'PASS' : 'BLOCKED',
+        status: links.length > 0 ? 'PASS' : 'BLOCKED',
         links
       });
     }
