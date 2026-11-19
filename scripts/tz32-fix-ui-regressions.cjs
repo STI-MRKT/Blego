@@ -30,29 +30,40 @@ update('src/js/main.js', (source) => {
   }
 
   const archivePattern = /if\s*\(\s*action\s*===\s*['"]classifier-archive['"]\s*\|\|\s*action\s*===\s*['"]classifier-archive-record['"]\s*\)/;
-  if (!archivePattern.test(s)) {
-    const markers = ["  if(action==='classifier-facebook-link')", "  if (action === 'classifier-facebook-link')"];
-    const marker = markers.find((value) => s.includes(value));
-    if (!marker) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_INSERTION_POINT_MISSING');
-    const handler = [
-      "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
-      "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
-      "    target.disabled = true;",
-      "    try {",
-      "      await window.blego.confirmClassification({ operationId, decision: state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete' });",
-      "      if (state.importEpoch !== epoch) return;",
-      "      await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
-      "      if (state.importEpoch !== epoch) return;",
-      "      if (action === 'classifier-archive') state.importSaved = true;",
-      "      state.archiveView = null; state.archiveQuery = {};",
-      "      state.archives = await window.blego.listArchives();",
-      "      await importPage(state.importData.offset);",
-      "      toast('Сохранено');",
-      "    } catch { toast('Не удалось сохранить архив', 'err'); target.disabled = false; }",
-      "    return;",
-      "  }"
-    ].join('\n');
-    s = s.replace(marker, handler + '\n' + marker);
+  const archiveHandler = [
+    "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
+    "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
+    "    if (!operationId || !state.importData) return;",
+    "    target.disabled = true;",
+    "    try {",
+    "      await window.blego.confirmClassification({ operationId, decision: state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete' });",
+    "      if (state.importEpoch !== epoch) return;",
+    "      await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
+    "      if (state.importEpoch !== epoch) return;",
+    "      if (action === 'classifier-archive') state.importSaved = true;",
+    "      state.archiveView = null; state.archiveQuery = {};",
+    "      state.archives = await window.blego.listArchives();",
+    "      await importPage(state.importData.offset);",
+    "      toast('Сохранено');",
+    "    } catch (error) {",
+    "      toast(error.message || 'Не удалось сохранить архив', 'err');",
+    "      if (target.isConnected) target.disabled = false;",
+    "    }",
+    "    return;",
+    "  }"
+  ].join('\n');
+  const archiveMatch = archivePattern.exec(s);
+  const facebookPattern = /if\s*\(\s*action\s*===\s*['"]classifier-facebook-link['"]\s*\)/;
+  const facebookMatch = facebookPattern.exec(s);
+  if (!facebookMatch) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_INSERTION_POINT_MISSING');
+  if (archiveMatch) {
+    const blockStart = s.lastIndexOf('\n', archiveMatch.index) + 1;
+    const blockEnd = s.lastIndexOf('\n', facebookMatch.index) + 1;
+    if (blockEnd <= blockStart) throw new Error('TZ32_GUI_ARCHIVE_HANDLER_BOUNDARY_INVALID');
+    s = s.slice(0, blockStart) + archiveHandler + '\n' + s.slice(blockEnd);
+  } else {
+    const blockStart = s.lastIndexOf('\n', facebookMatch.index) + 1;
+    s = s.slice(0, blockStart) + archiveHandler + '\n' + s.slice(blockStart);
   }
   return s;
 }, 'phone dispatch, direct BIO copy and classifier archive handlers');
