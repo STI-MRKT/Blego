@@ -1,0 +1,372 @@
+{
+  "A": {
+    "abstentions": 3,
+    "autoFillRate": 0.7777777777777778,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "supplied_control": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "NONE->profileUrl": 1,
+          "accountId->accountId": 1,
+          "birthDate->birthDate": 1,
+          "cookies->cookies": 1,
+          "email->email": 1,
+          "emailPassword->ABSTAIN": 1,
+          "login->accountId": 1,
+          "password->ABSTAIN": 1,
+          "token->ABSTAIN": 1,
+          "userAgent->userAgent": 1
+        },
+        "correct": 5,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 2,
+        "missing": 4,
+        "records": 1
+      }
+    },
+    "cases": 1,
+    "confusion": {
+      "NONE->profileUrl": 1,
+      "accountId->accountId": 1,
+      "birthDate->birthDate": 1,
+      "cookies->cookies": 1,
+      "email->email": 1,
+      "emailPassword->ABSTAIN": 1,
+      "login->accountId": 1,
+      "password->ABSTAIN": 1,
+      "token->ABSTAIN": 1,
+      "userAgent->userAgent": 1
+    },
+    "correct": 5,
+    "crossRecordTransfers": 0,
+    "durationMs": 17.216862000000006,
+    "f1": 0.6250000000000001,
+    "falseAssignments": 2,
+    "macroF1": 0.5,
+    "missing": 4,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 5,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 2,
+        "family": "supplied_control",
+        "id": "supplied-sanitized-control",
+        "missing": 4
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "birthDate": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "email": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "emailPassword": {
+        "f1": 0.0,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "login": {
+        "f1": 0.0,
+        "fn": 1,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "password": {
+        "f1": 0.0,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "profileUrl": {
+        "f1": 0.0,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "token": {
+        "f1": 0.0,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      }
+    },
+    "precision": 0.7142857142857143,
+    "recall": 0.5555555555555556,
+    "records": 1,
+    "split": "control",
+    "wholeRecordAccuracy": 0.0,
+    "wholeRecordsCorrect": 0
+  },
+  "B": {
+    "abstentions": 0,
+    "autoFillRate": 1.0,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "supplied_control": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 1,
+          "birthDate->birthDate": 1,
+          "cookies->cookies": 1,
+          "email->email": 1,
+          "emailPassword->emailPassword": 1,
+          "login->login": 1,
+          "password->password": 1,
+          "token->token": 1,
+          "userAgent->userAgent": 1
+        },
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 1
+      }
+    },
+    "cases": 1,
+    "confusion": {
+      "accountId->accountId": 1,
+      "birthDate->birthDate": 1,
+      "cookies->cookies": 1,
+      "email->email": 1,
+      "emailPassword->emailPassword": 1,
+      "login->login": 1,
+      "password->password": 1,
+      "token->token": 1,
+      "userAgent->userAgent": 1
+    },
+    "correct": 9,
+    "crossRecordTransfers": 0,
+    "durationMs": 12.497701,
+    "f1": 1.0,
+    "falseAssignments": 0,
+    "macroF1": 1.0,
+    "missing": 0,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "supplied_control",
+        "id": "supplied-sanitized-control",
+        "missing": 0
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "birthDate": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "email": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "emailPassword": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "login": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "password": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "token": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      }
+    },
+    "precision": 1.0,
+    "recall": 1.0,
+    "records": 1,
+    "split": "control",
+    "wholeRecordAccuracy": 1.0,
+    "wholeRecordsCorrect": 1
+  },
+  "C": {
+    "abstentions": 0,
+    "autoFillRate": 1.0,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "supplied_control": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 1,
+          "birthDate->birthDate": 1,
+          "cookies->cookies": 1,
+          "email->email": 1,
+          "emailPassword->emailPassword": 1,
+          "login->login": 1,
+          "password->password": 1,
+          "token->token": 1,
+          "userAgent->userAgent": 1
+        },
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 1
+      }
+    },
+    "cases": 1,
+    "confusion": {
+      "accountId->accountId": 1,
+      "birthDate->birthDate": 1,
+      "cookies->cookies": 1,
+      "email->email": 1,
+      "emailPassword->emailPassword": 1,
+      "login->login": 1,
+      "password->password": 1,
+      "token->token": 1,
+      "userAgent->userAgent": 1
+    },
+    "correct": 9,
+    "crossRecordTransfers": 0,
+    "durationMs": 15.617590000117836,
+    "f1": 1.0,
+    "falseAssignments": 0,
+    "macroF1": 1.0,
+    "missing": 0,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "supplied_control",
+        "id": "supplied-sanitized-control",
+        "missing": 0
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "birthDate": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "email": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "emailPassword": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "login": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "password": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "token": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1
+      }
+    },
+    "precision": 1.0,
+    "recall": 1.0,
+    "records": 1,
+    "split": "control",
+    "wholeRecordAccuracy": 1.0,
+    "wholeRecordsCorrect": 1
+  },
+  "controlCase": "supplied-sanitized-control",
+  "selectedThreshold": 1.01,
+  "trainedOnControl": false,
+  "tunedOnControl": false
+}

@@ -1,0 +1,894 @@
+{
+  "selectedThreshold": 1.01,
+  "test": {
+    "abstentions": 28,
+    "autoFillRate": 0.7971014492753623,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "double_colon": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->ABSTAIN": 6,
+          "birthDate->ABSTAIN": 6,
+          "email->email": 6,
+          "emailPassword->ABSTAIN": 4,
+          "login->ABSTAIN": 6,
+          "password->ABSTAIN": 6
+        },
+        "correct": 6,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 28,
+        "records": 6
+      },
+      "horizontal_noisy": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "multiline_mixed": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
+    "cases": 12,
+    "confusion": {
+      "accountId->ABSTAIN": 6,
+      "accountId->accountId": 12,
+      "birthDate->ABSTAIN": 6,
+      "birthDate->birthDate": 12,
+      "cookies->cookies": 12,
+      "email->email": 18,
+      "emailPassword->ABSTAIN": 4,
+      "emailPassword->emailPassword": 8,
+      "login->ABSTAIN": 6,
+      "login->login": 12,
+      "password->ABSTAIN": 6,
+      "password->password": 12,
+      "token->token": 12,
+      "userAgent->userAgent": 12
+    },
+    "correct": 110,
+    "crossRecordTransfers": 0,
+    "durationMs": 35.31569899958947,
+    "f1": 0.8870967741935484,
+    "falseAssignments": 0,
+    "macroF1": 0.8888888888888888,
+    "missing": 28,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "horizontal_noisy",
+        "id": "horizontal_noisy-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "horizontal_noisy",
+        "id": "horizontal_noisy-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "horizontal_noisy",
+        "id": "horizontal_noisy-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "horizontal_noisy",
+        "id": "horizontal_noisy-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "multiline_mixed",
+        "id": "multiline_mixed-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "multiline_mixed",
+        "id": "multiline_mixed-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "multiline_mixed",
+        "id": "multiline_mixed-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "multiline_mixed",
+        "id": "multiline_mixed-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 1,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "double_colon",
+        "id": "double_colon-1",
+        "missing": 5
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 2,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "double_colon",
+        "id": "double_colon-2",
+        "missing": 10
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 1,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "double_colon",
+        "id": "double_colon-3",
+        "missing": 5
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 2,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "double_colon",
+        "id": "double_colon-4",
+        "missing": 8
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 0.8,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "tp": 12
+      },
+      "birthDate": {
+        "f1": 0.8,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "tp": 12
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "email": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 18
+      },
+      "emailPassword": {
+        "f1": 0.8,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "tp": 8
+      },
+      "login": {
+        "f1": 0.8,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "tp": 12
+      },
+      "password": {
+        "f1": 0.8,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "tp": 12
+      },
+      "token": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      }
+    },
+    "precision": 1.0,
+    "recall": 0.7971014492753623,
+    "records": 18,
+    "split": "test",
+    "wholeRecordAccuracy": 0.6666666666666666,
+    "wholeRecordsCorrect": 12
+  },
+  "thresholdSelection": [
+    {
+      "eligible": false,
+      "falseAssignments": 6,
+      "macroF1": 0.8518518518518517,
+      "threshold": 0.5
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.7
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.8
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.9
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.95
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.98
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 0.995
+    },
+    {
+      "eligible": true,
+      "falseAssignments": 0,
+      "macroF1": 0.8888888888888888,
+      "threshold": 1.01
+    }
+  ],
+  "train": {
+    "abstentions": 22,
+    "autoFillRate": 0.8804347826086957,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "colon_positional": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->ABSTAIN": 6,
+          "email->ABSTAIN": 2,
+          "email->email": 4,
+          "emailPassword->ABSTAIN": 4,
+          "login->ABSTAIN": 6,
+          "password->ABSTAIN": 6
+        },
+        "correct": 4,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 2,
+        "missing": 24,
+        "records": 6
+      },
+      "csv_headers": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "json_objects": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      },
+      "vertical_tab": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
+    "cases": 16,
+    "confusion": {
+      "accountId->ABSTAIN": 6,
+      "accountId->accountId": 18,
+      "birthDate->birthDate": 18,
+      "cookies->cookies": 18,
+      "email->ABSTAIN": 2,
+      "email->email": 22,
+      "emailPassword->ABSTAIN": 4,
+      "emailPassword->emailPassword": 12,
+      "login->ABSTAIN": 6,
+      "login->login": 18,
+      "password->ABSTAIN": 6,
+      "password->password": 18,
+      "token->token": 18,
+      "userAgent->userAgent": 18
+    },
+    "correct": 160,
+    "crossRecordTransfers": 0,
+    "durationMs": 72.95351100144386,
+    "f1": 0.9248554913294798,
+    "falseAssignments": 2,
+    "macroF1": 0.9272486772486772,
+    "missing": 24,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "vertical_tab",
+        "id": "vertical_tab-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "vertical_tab",
+        "id": "vertical_tab-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "vertical_tab",
+        "id": "vertical_tab-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "vertical_tab",
+        "id": "vertical_tab-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "csv_headers",
+        "id": "csv_headers-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "csv_headers",
+        "id": "csv_headers-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "csv_headers",
+        "id": "csv_headers-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "csv_headers",
+        "id": "csv_headers-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "json_objects",
+        "id": "json_objects-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "json_objects",
+        "id": "json_objects-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "json_objects",
+        "id": "json_objects-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "json_objects",
+        "id": "json_objects-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 1,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "colon_positional",
+        "id": "colon_positional-1",
+        "missing": 4
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 2,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "colon_positional",
+        "id": "colon_positional-2",
+        "missing": 8
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 1,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "colon_positional",
+        "id": "colon_positional-3",
+        "missing": 4
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 0,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 2,
+        "family": "colon_positional",
+        "id": "colon_positional-4",
+        "missing": 8
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 0.8571428571428571,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.75,
+        "tp": 18
+      },
+      "birthDate": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 18
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 18
+      },
+      "email": {
+        "f1": 0.9166666666666666,
+        "fn": 2,
+        "fp": 2,
+        "precision": 0.9166666666666666,
+        "recall": 0.9166666666666666,
+        "tp": 22
+      },
+      "emailPassword": {
+        "f1": 0.8571428571428571,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.75,
+        "tp": 12
+      },
+      "login": {
+        "f1": 0.8571428571428571,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.75,
+        "tp": 18
+      },
+      "password": {
+        "f1": 0.8571428571428571,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.75,
+        "tp": 18
+      },
+      "token": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 18
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 18
+      }
+    },
+    "precision": 0.9876543209876543,
+    "recall": 0.8695652173913043,
+    "records": 24,
+    "split": "train",
+    "wholeRecordAccuracy": 0.75,
+    "wholeRecordsCorrect": 18
+  },
+  "trainSequences": 24,
+  "training": {
+    "durationMs": 1892.095186000006,
+    "features": 67,
+    "finalLoss": 2.2173705704988462,
+    "iterations": 36,
+    "labels": [
+      "NONE",
+      "accountId",
+      "birthDate",
+      "cookies",
+      "email",
+      "emailPassword",
+      "login",
+      "password",
+      "token",
+      "userAgent"
+    ],
+    "success": true
+  },
+  "tune": {
+    "abstentions": 16,
+    "autoFillRate": 0.8367346938775511,
+    "boundaryErrors": 0,
+    "byFamily": {
+      "pipe_mixed": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->ABSTAIN": 4,
+          "password->ABSTAIN": 6,
+          "token->ABSTAIN": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 30,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 16,
+        "records": 6
+      },
+      "tsv_headers": {
+        "boundaryErrors": 0,
+        "confusion": {
+          "accountId->accountId": 6,
+          "birthDate->birthDate": 6,
+          "cookies->cookies": 6,
+          "email->email": 6,
+          "emailPassword->emailPassword": 4,
+          "login->login": 6,
+          "password->password": 6,
+          "token->token": 6,
+          "userAgent->userAgent": 6
+        },
+        "correct": 52,
+        "crossRecordTransfers": 0,
+        "falseAssignments": 0,
+        "missing": 0,
+        "records": 6
+      }
+    },
+    "cases": 8,
+    "confusion": {
+      "accountId->accountId": 12,
+      "birthDate->birthDate": 12,
+      "cookies->cookies": 12,
+      "email->email": 12,
+      "emailPassword->ABSTAIN": 4,
+      "emailPassword->emailPassword": 4,
+      "login->login": 6,
+      "password->ABSTAIN": 6,
+      "password->password": 6,
+      "token->ABSTAIN": 6,
+      "token->token": 6,
+      "userAgent->userAgent": 12
+    },
+    "correct": 82,
+    "crossRecordTransfers": 0,
+    "durationMs": 25.528275999284546,
+    "f1": 0.9111111111111111,
+    "falseAssignments": 0,
+    "macroF1": 0.8888888888888888,
+    "missing": 16,
+    "perCase": [
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "tsv_headers",
+        "id": "tsv_headers-1",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 18,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "tsv_headers",
+        "id": "tsv_headers-2",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 9,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "tsv_headers",
+        "id": "tsv_headers-3",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 16,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "tsv_headers",
+        "id": "tsv_headers-4",
+        "missing": 0
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 5,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "pipe_mixed",
+        "id": "pipe_mixed-1",
+        "missing": 3
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 10,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "pipe_mixed",
+        "id": "pipe_mixed-2",
+        "missing": 6
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 5,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "pipe_mixed",
+        "id": "pipe_mixed-3",
+        "missing": 3
+      },
+      {
+        "boundaryErrors": 0,
+        "correct": 10,
+        "crossRecordTransfers": 0,
+        "error": null,
+        "falseAssignments": 0,
+        "family": "pipe_mixed",
+        "id": "pipe_mixed-4",
+        "missing": 4
+      }
+    ],
+    "perField": {
+      "accountId": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "birthDate": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "cookies": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "email": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      },
+      "emailPassword": {
+        "f1": 0.6666666666666666,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.5,
+        "tp": 4
+      },
+      "login": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 6
+      },
+      "password": {
+        "f1": 0.6666666666666666,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.5,
+        "tp": 6
+      },
+      "token": {
+        "f1": 0.6666666666666666,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.5,
+        "tp": 6
+      },
+      "userAgent": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 12
+      }
+    },
+    "precision": 1.0,
+    "recall": 0.8367346938775511,
+    "records": 12,
+    "split": "tune",
+    "wholeRecordAccuracy": 0.5,
+    "wholeRecordsCorrect": 6
+  }
+}
