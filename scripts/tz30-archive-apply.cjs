@@ -109,8 +109,8 @@
        '</div>';
     s=swap(s, '<div class="archive-record-list" id="archive-record-list">',buttons+'<div class="archive-record-list" id="archive-record-list">','archive column actions');
     s=swap(s,'function recordCard(row, index) {','function recordCard(row, index, cookieFile) {','recordCard cookie mapping');
-    s=swap(s,'recordField(row, index, key, label)).join(', 'recordField(row, index, key, label, cookieFile)).join(', 'record field mapping');
-    s=swap(s,'recordCard(row, start + index)).join(', 'recordCard(row, start + index, view.cookieRecordFiles?.[start + index])).join(', 'view cookie mapping');
+    s=swap(s,"recordField(row, index, key, label)).join(", "recordField(row, index, key, label, cookieFile)).join(", 'record field mapping');
+    s=swap(s,"recordCard(row, start + index)).join(","recordCard(row, start + index, view.cookieRecordFiles?.[start + index])).join(",'view cookie mapping');
     s=s.replace(/^[\t ]+$/gm,'');
     return s;
   });
