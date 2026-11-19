@@ -120,7 +120,7 @@ update('src/js/main.js', (source) => {
       "  const target = event.target instanceof Element ? event.target.closest('[data-action]') : null;",
       "  if (!target) return;",
       "  const action = target.dataset.action;",
-      "  if (action === 'copy-model' && target.dataset.source === 'generator' && target.dataset.field === 'phone') {",
+      "  if ((action === 'copy-model' || action === 'copy') && (target.getAttribute('aria-label') === 'Copy phone' || (target.dataset.source === 'generator' && target.dataset.field === 'phone'))) {",
       "    event.preventDefault(); event.stopImmediatePropagation();",
       "    try { const card = await window.blego.lastCard(); const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country); await copyText(value, target, 'Номер скопирован'); }",
       "    catch (error) { toast(error.message, 'err'); }",
@@ -140,6 +140,7 @@ update('src/js/main.js', (source) => {
       "  }",
       "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
       "    event.preventDefault(); event.stopImmediatePropagation();",
+      "    state.lastArchiveCapture = true;",
       "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
       "    if (!operationId || !state.importData) return;",
       "    target.disabled = true;",
@@ -324,7 +325,7 @@ update('tests/ui/classifier-copy.test.cjs', (source) => {
   const next = "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
   if (s.includes(old)) s = s.replace(old, next);
   const oldCount = '    assert.equal(archives.items.length, 1);';
-  const newCount = "    const archiveDebug = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return { saved: state.lastArchiveSave, visible: state.archives }; });\n    assert.equal(archives.items.length, 1, JSON.stringify({ archives, archiveDebug }));";
+  const newCount = "    const archiveDebug = await page.evaluate(async () => { const { state } = await import('/js/state.js'); return { saved: state.lastArchiveSave, visible: state.archives, capture: state.lastArchiveCapture === true, importedSaved: state.importSaved === true }; });\n    assert.equal(archives.items.length, 1, JSON.stringify({ archives, archiveDebug }));";
   if (s.includes(oldCount)) s = s.replace(oldCount, newCount);
   return s;
 }, 'classifier GUI assertions use current empty label and archive state');
