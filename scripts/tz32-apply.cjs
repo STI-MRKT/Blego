@@ -15,31 +15,27 @@
     return s;
   });
   edit('shared/importer.mjs',s=>{
-    const lines=s.split('\n');
-    const oldStart = String.raw\`  const start = /^(?:[ \\t\\r\\n]|\\uFEFF)*Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*$/im.exec(
-    text.slice(0, 500)
-  );\`;
-    const newStart = [
-      String.raw\`  const russianStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));\`,
-      String.raw\`  const englishStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Order number[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));\`,
-      String.raw\`  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));\`,
-      String.raw\`  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));\`,
-      \`  const start = russianStart || (englishStart && productTitle && quantity ? englishStart : null);\`
+    const oldStart = [
+      "  const start = /^(?:[ \\\\t\\\\r\\\\n]|\\\\uFEFF)*Номер заказа[ \\\\t]*:[ \\\\t]*\\\\d{1,12}[ \\\\t]*$/im.exec(",
+      "    text.slice(0, 500)",
+      "  );"
     ].join('\\n');
-    if (s.includes(oldStart)) s = s.replace(oldStart, newStart);
+    const newStart = [
+      "  const russianStart = /^(?:[ \\\\t\\\\r\\\\n]|\\\\uFEFF)*Номер заказа[ \\\\t]*:[ \\\\t]*\\\\d{1,12}[ \\\\t]*$/im.exec(text.slice(0, 500));",
+      "  const englishStart = /^(?:[ \\\\t\\\\r\\\\n]|\\\\uFEFF)*Order number[ \\\\t]*:[ \\\\t]*#?\\\\d{1,12}[ \\\\t]*$/im.exec(text.slice(0, 500));",
+      "  const productTitle = /^Product title:[ \\\\t]*Facebook[ \\\\t]*-[ \\\\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
+      "  const quantity = /^(?:Product quantity|Количество товара)[ \\\\t]*:[ \\\\t]*(\\\\d{1,4})/im.exec(text.slice(0, 1200));",
+      "  const start = russianStart || (englishStart && productTitle && quantity ? englishStart : null);"
+    ].join('\\n');
+    if (s.includes(oldStart)) s=s.replace(oldStart,newStart);
     else if (!s.includes('const englishStart =') || !s.includes('const russianStart =')) throw Error('TZ32 order start anchor missing');
-    const oldMarker = String.raw\`  const marker = /^[ \\t]*Ваш заказ[ \\t]*:[ \\t]*\\r?$/gim;\`;
-    const newMarker = String.raw\`  const marker = /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?|Ваш заказ[ \\t]*:)[ \\t]*\\r?$/gim;\`;
-    if (s.includes(oldMarker)) s = s.replace(oldMarker, newMarker);
+    const oldMarker = "  const marker = /^[ \\\\t]*Ваш заказ[ \\\\t]*:[ \\\\t]*\\\\r?$/gim;";
+    const newMarker = "  const marker = /^[ \\\\t]*(?:(?:={2,}[ \\\\t]*)?Your product(?:[ \\\\t]*={2,})?|Ваш заказ[ \\\\t]*:)[ \\\\t]*\\\\r?$/gim;";
+    if (s.includes(oldMarker)) s=s.replace(oldMarker,newMarker);
     else if (!s.includes('Your product(?:')) throw Error('TZ32 order marker anchor missing');
-    const lastIndex = \`  marker.lastIndex = start.index + start[0].length;\\n\`;
-    if (!s.includes(lastIndex)) s = s.replace(newMarker, newMarker + '\\n' + lastIndex.trimEnd());
-    return s;
-    const markerIndex=lines.findIndex((line)=>line.includes('const marker =') && line.includes('Ваш заказ'));
-    if(markerIndex<0)throw Error('TZ32 order marker anchor missing');
-    lines[markerIndex]="  const marker = /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?|Ваш заказ[ \\t]*:)[ \\t]*\\r?$/gim;";
-    lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
-    s=lines.join('\n');
+    if (!s.includes('marker.lastIndex = start.index + start[0].length;')) {
+      s=s.replace(newMarker,newMarker+'\\n  marker.lastIndex = start.index + start[0].length;');
+    }
     return s;
   });
   edit('electron/features/news/service.cjs',s=>{
