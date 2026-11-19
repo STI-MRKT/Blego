@@ -25,7 +25,8 @@ for (const name of fs.readdirSync(dir).filter((file) => file.endsWith('.test.cjs
       if (lines[j].includes(']') && !lines[j].includes('\`')) break;
     }
     if (found >= 0) {
-      const [userData] = lines.splice(found, 1);
+      let [userData] = lines.splice(found, 1);
+      if (!userData.trimEnd().endsWith(',')) userData = userData.trimEnd() + ',';
       lines.splice(i, 0, userData);
       moved++;
       changed = true;
