@@ -130,7 +130,7 @@ jobs:
           from pathlib import Path
           import base64,hashlib,io,tarfile
           payload = base64.b64decode(''.join(Path('build-data/tz29-overlay.b64').read_text().splitlines()), validate=True)
-          assert hashlib.sha256(payload).hexdigest() == 'c37de00cf27a472a82fa0c6accd7b3d0589a288f44784686ecae4b91a1fdcb13','TZ29 overlay checksum mismatch'
+          assert hashlib.sha256(payload).hexdigest() == 'ce9ca2e07594b5cc08f261e04226ea061600983f7438a2095f95491cd23d2995','TZ29 overlay checksum mismatch'
           with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
               for entry in archive.getmembers():
                   name=Path(entry.name)
