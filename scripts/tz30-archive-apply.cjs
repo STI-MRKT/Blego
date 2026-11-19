@@ -47,13 +47,13 @@
       "        if (Number.isSafeInteger(index) && !assigned.has(index)) assigned.set(index, name);",
       "      } catch { /* Unverifiable legacy cookie remains unassigned. */ }",
       "    }",
-      "    return { ...data, entry, records: records.map((record, index) => ({ ...record, cookieFile: assigned.get(index) || null })) };"
+      "    return { ...data, entry, records, cookieRecordFiles: records.map((_, index) => assigned.get(index) || null) };"
     ].join('\n'),'map archive cookies to owner');
     s=swap(s,"  async function removeArchive(id) {",[
       "  async function readCookie(id, index) {",
       "    if (!Number.isSafeInteger(index) || index < 0) throw Error('ARCHIVE_COOKIE_INVALID');",
       "    const view = await openArchive(id);",
-      "    const filename = view.records[index]?.cookieFile;",
+      "    const filename = view.cookieRecordFiles[index];",
       "    if (!filename || !Buffer.isBuffer(view.entries[filename])) throw Error('ARCHIVE_COOKIES_UNAVAILABLE');",
       "    return view.entries[filename].toString('utf8');",
       "  }",
@@ -61,8 +61,8 @@
       "    const allowed = new Set(['fullName','accountId','password','emailPassword','email','birthDate','geo','cookies']);",
       "    if (!allowed.has(field)) throw Error('INVALID_ARCHIVE_COLUMN');",
       "    const view = await openArchive(id);",
-      "    const values = view.records.map((record) => field === 'cookies'",
-      "      ? (record.cookieFile ? view.entries[record.cookieFile].toString('utf8') : '')",
+      "    const values = view.records.map((record, index) => field === 'cookies'",
+      "      ? (view.cookieRecordFiles[index] ? view.entries[view.cookieRecordFiles[index]].toString('utf8') : '')",
       "      : String(record[field] ?? ''));",
       "    return values.filter((value) => value.length > 0).join('\\n');",
       "  }",
@@ -77,6 +77,7 @@
       "      archiveCookieRead: ({ id, index }) => archives.readCookie(id, index),",
       "      archiveColumnRead: ({ id, field }) => archives.readColumn(id, field),"
     ].join('\n'),'archive IPC handlers');
+    s=swap(s,"        const r = await archives.openArchive(id);\n        return {","        const r = await archives.openArchive(id);\n        return {\n          cookieRecordFiles: r.cookieRecordFiles,",'expose separate cookie mapping');
     return s;
   });
   edit('electron/preload.cjs',s=>{
@@ -89,10 +90,10 @@
   });
   edit('src/js/ui/history.js',s=>{
     s=swap(s,"  ['geo', 'GEO']\n];", "  ['geo', 'GEO'],\n  ['cookies', 'Cookie']\n];",'archive cookie field');
-    s=swap(s,"function recordField(row, index, key, label) {\n  const value",[
+    s=swap(s,"function recordField(row, index, key, label, cookieFile) {\n  const value",[
       "function recordField(row, index, key, label) {",
       "  if (key === 'cookies') {",
-      "    const available = Boolean(row.cookieFile);",
+      "    const available = Boolean(cookieFile);",
       '    return `<button type="button" class="field archive-record-field archive-cookie-field" data-action="archive-cookie-copy" data-row="${index}" aria-label="Copy Cookie for record ${index + 1}" ${available ? "" : "disabled"}><span class="field-main"><span class="field-label">COOKIE</span><span class="field-value archive-record-value">${available ? "Copy full Cookie" : "—"}</span></span></button>`;',
       "  }",
       "  const value"
@@ -107,6 +108,9 @@
        '${FIELDS.map(([key,label]) => "<button type=\\"button\\" class=\\"btn btn-quiet archive-column-copy\\" data-action=\\"archive-copy-column\\" data-field=\\"" + esc(key) + "\\" aria-label=\\"Copy column " + esc(label) + "\\">" + esc(label) + "</button>").join("")}' +
        '</div>';
     s=swap(s, '<div class="archive-record-list" id="archive-record-list">',buttons+'<div class="archive-record-list" id="archive-record-list">','archive column actions');
+    s=swap(s,'function recordCard(row, index) {','function recordCard(row, index, cookieFile) {','recordCard cookie mapping');
+    s=swap(s,'recordField(row, index, key, label)).join(', 'recordField(row, index, key, label, cookieFile)).join(', 'record field mapping');
+    s=swap(s,'recordCard(row, start + index)).join(', 'recordCard(row, start + index, view.cookieRecordFiles?.[start + index])).join(', 'view cookie mapping');
     s=s.replace(/^[\t ]+$/gm,'');
     return s;
   });
