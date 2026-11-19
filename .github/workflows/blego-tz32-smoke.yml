@@ -216,6 +216,8 @@ jobs:
         shell: bash
         run: |
           node scripts/tz31-column-copy-apply.cjs
+          echo 'TZ32_IMPORTER_RESTORED_BRANCH'
+          grep -n -C 5 -E 'if.*vertical|verticalAccountRecords|tabLabelRecords|structuredRecords|const vertical' shared/importer.mjs || true
           node scripts/tz32-parser-apply.cjs
           node scripts/tz32-news-apply.cjs
           node --check electron/features/news/service.cjs
