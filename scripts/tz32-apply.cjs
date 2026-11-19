@@ -78,7 +78,7 @@
       "                sourceUrl: source.url,",
       "                items,",
       "                received: parseFeed(xml, source, { relevance: false }).length,"
-    ].join('\\n');
+    ].join('\n');
     const newFilter=[
       "              const parsed = parseFeed(xml, source);",
       "              const received = parseFeed(xml, source, { relevance: false }).length;",
@@ -90,7 +90,7 @@
       "                items,",
       "                received,",
       "                accepted: items.length,"
-    ].join('\\n');
+    ].join('\n');
     s=replace(s,oldFilter,newFilter,'ten day feed acceptance');
     s=replace(s,
       "                code: /^[A-Z_]+$/.test(e.message) ? e.message : 'FETCH_FAILED',\n                httpStatus: Number.isInteger(e.httpStatus) ? e.httpStatus : null",
@@ -113,7 +113,7 @@
       "      store.db.prepare('INSERT INTO news VALUES(?,?) ON CONFLICT(source_id) DO UPDATE SET snapshot=excluded.snapshot').run(source.id, JSON.stringify(seeded));",
       "    }",
       "  }"
-    ].join('\\n');
+    ].join('\n');
     s=replace(s,insertAt,seedFn+'\\n'+insertAt,'seed cache function');
     s=replace(s,
       "  function cancel() {",
@@ -137,7 +137,7 @@
       "  news = createNewsService({",
       "    store,",
       "    onUpdate: (snapshot) => {"
-    ].join('\\n');
+    ].join('\n');
     const next=[
       "  let newsSeed = null;",
       "  try {",
@@ -148,7 +148,7 @@
       "    store,",
       "    seed: newsSeed,",
       "    onUpdate: (snapshot) => {"
-    ].join('\\n');
+    ].join('\n');
     return replace(s,old,next,'load bundled news seed');
   });
   console.log('TZ32 ten-day News and receipt parser fixes applied');
