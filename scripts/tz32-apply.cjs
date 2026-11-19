@@ -32,7 +32,7 @@
     }
     const markerIndex=lines.findIndex(line=>line.includes('const marker = /') && line.includes('Ваш заказ'));
     if(markerIndex>=0) {
-      lines[markerIndex]="  const marker = englishStart ? /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?)[ \\t]*\\r?$/gim : /^[ \\t]*Ваш заказ[ \\t]*:[ \\t]*\\r?$/gim;";
+      lines[markerIndex]="  const marker = start === englishStart ? /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?)[ \\t]*\\r?$/gim : /^[ \\t]*Ваш заказ[ \\t]*:[ \\t]*\\r?$/gim;";
       if(!lines[markerIndex+1]?.includes('marker.lastIndex = start.index')) lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
     } else if(!s.includes('Your product(?:')) throw Error('TZ32 order marker anchor missing');
     return lines.join('\n');
