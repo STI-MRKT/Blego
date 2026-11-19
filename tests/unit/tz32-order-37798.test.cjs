@@ -14,7 +14,7 @@ test('TZ32 English order receipt with Your product marker preserves six tabular 
     ])
   ].join('\t'));
   const source=[
-    'Product title: Sample catalog item - Page - Email - Verification - Data',
+    'Product title: Facebook - United Kingdom. 2021-23 - Page - Phone removed - Email - 2FA - Cookies',
     'Order number: #37798',
     'Product quantity: 6 pcs.',
     'Purchase date and time: 29.09.2026, 14:41',
@@ -26,7 +26,17 @@ test('TZ32 English order receipt with Your product marker preserves six tabular 
   ].join('\n');
   const parsed=await parseInput({bytes:Buffer.from(source,'utf8'),originalName:'synthetic-order.txt'},{classification:true});
   assert.equal(parsed.records.length,6);
+  assert.equal(parsed.headerless,false);
   assert.ok(parsed.records.every((record)=>record.sourceEntries.length===11));
+  assert.equal(parsed.records[0].sourceEntries[1].header,'Login');
+  assert.equal(parsed.records[0].sourceEntries[2].header,'Email');
+  assert.equal(parsed.records[0].sourceEntries[3].header,'Password');
+  assert.equal(parsed.records[0].sourceEntries[4].header,'2FA');
+  assert.equal(parsed.records[0].sourceEntries[7].header,'Profile URL');
+  assert.equal(parsed.records[0].sourceEntries[10].header,'Cookies');
+  assert.equal(parsed.records[0].sourceEntries[0].value,'');
+  assert.equal(parsed.records[0].sourceEntries[8].value,'');
+  assert.equal(parsed.records[2].sourceEntries[6].value,'');
   assert.ok(parsed.records.every((record)=>!/Order number|Product quantity|Review text|Your product/.test(record.sourceRecord)));
   assert.equal(parsed.records[2].sourceEntries[6].value,'-');
   assert.match(String(parsed.records[5].sourceEntries[10].value),/sample-5/);
