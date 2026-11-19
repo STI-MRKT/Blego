@@ -43,7 +43,7 @@ jobs:
                   assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
               archive.extractall('.')
           PY
-          test "$(node -p "require('./package.json').version")" = '1.4.7'
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
       - name: Restore TZ23 refinements
         shell: bash
         run: |
