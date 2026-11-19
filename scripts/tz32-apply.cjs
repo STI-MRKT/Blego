@@ -23,7 +23,7 @@
       const statementEnd=lines.findIndex((line,index)=>index>=startIndex && index<startIndex+6 && line.trim()===');');
       if(statementEnd<0) throw Error('TZ32 order start statement end missing');
       lines.splice(startIndex,statementEnd-startIndex+1,
-        "  const russianStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*(?:[=*#-]{1,8}[ \\t]*)?Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*(?:[=*#-]{1,8}[ \\t]*)?$/im.exec(text.slice(0, 500));",
+        "  const russianStart = /Номер заказа[ \\t]*:[ \\t]*\\d{1,12}/i.exec(text.slice(0, 500));",
         "  const englishStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Order number[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));",
         "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
         "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
