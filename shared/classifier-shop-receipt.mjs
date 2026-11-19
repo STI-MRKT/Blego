@@ -24,7 +24,7 @@ const LABELS = {
   product: [
     'Product title', 'Product name',
     'Название товара', 'Наименование товара', 'Товар',
-    'Назва товару', 'Найменування товару',
+    'Назва товару', 'Назва продукту', 'Найменування товару',
     'Produkttitel', 'Produktname', 'Produktbezeichnung',
     'Tytuł produktu', 'Nazwa produktu',
     'Název produktu', 'Název zboží',
