@@ -33,9 +33,47 @@ update('src/js/main.js', (source) => {
 update('src/js/ui/generator.js', (source) => {
   let s = source.replaceAll('data-international-phone="true"', 'data-national-phone="true"');
   if (!s.includes('data-national-phone="true"')) {
-    const anchor = 'data-action="copy-model" data-source="generator" data-field="\${esc(key)}"';
+    const marker = '
+  }
+  return s;
+}, 'generator national-phone marker');
+
+update('tests/ui/archive-v141.test.cjs', (source) => {
+  const old = "        await page.locator('#classifier-extra summary').click();\n        await page.locator('[data-action=\"classifier-archive\"]').click();";
+  const next = "        await page.locator('[data-action=\"classifier-archive\"]').click();";
+  if (source.includes(old)) return source.replace(old, next);
+  if (source.includes("#classifier-extra")) throw new Error('TZ32_GUI_ARCHIVE_OLD_SELECTOR_VARIANT');
+  return source;
+}, 'archive test uses current visible save action');
+
+update('tests/ui/classifier-copy.test.cjs', (source) => {
+  const old = "'Не определён'";
+  if (source.includes(old)) return source.replace(old, "'Not detected'");
+  return source;
+}, 'classifier empty-state assertion follows current UI label');
+ + '{esc(key)}';
+    const anchor = 'data-action="copy-model" data-source="generator" data-field="' + marker + '"';
     if (!s.includes(anchor)) throw new Error('TZ32_GUI_PHONE_BUTTON_ANCHOR_MISSING');
-    s = s.replace(anchor, anchor + ' \${key === \\'phone\\' ? \\'data-national-phone="true"\\' : \\'\\'}');
+    const attribute = '
+  }
+  return s;
+}, 'generator national-phone marker');
+
+update('tests/ui/archive-v141.test.cjs', (source) => {
+  const old = "        await page.locator('#classifier-extra summary').click();\n        await page.locator('[data-action=\"classifier-archive\"]').click();";
+  const next = "        await page.locator('[data-action=\"classifier-archive\"]').click();";
+  if (source.includes(old)) return source.replace(old, next);
+  if (source.includes("#classifier-extra")) throw new Error('TZ32_GUI_ARCHIVE_OLD_SELECTOR_VARIANT');
+  return source;
+}, 'archive test uses current visible save action');
+
+update('tests/ui/classifier-copy.test.cjs', (source) => {
+  const old = "'Не определён'";
+  if (source.includes(old)) return source.replace(old, "'Not detected'");
+  return source;
+}, 'classifier empty-state assertion follows current UI label');
+ + '{key === \\'phone\\' ? \\'data-national-phone="true"\\' : \\'\\'}';
+    s = s.replace(anchor, anchor + ' ' + attribute);
   }
   return s;
 }, 'generator national-phone marker');
