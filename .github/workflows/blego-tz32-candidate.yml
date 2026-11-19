@@ -206,7 +206,7 @@ jobs:
           const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
           const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
           if(pkg.version!=='1.4.14')throw Error('TZ32 requires BLEGO 1.4.14');
-          pkg.version='1.4.16';
+          pkg.version='1.4.15';
           lock.version='1.4.15';
           if(lock.packages?.[''])lock.packages[''].version='1.4.15';
           fs.writeFileSync('package.json', JSON.stringify(pkg,null,2)+'\n');
@@ -265,7 +265,7 @@ jobs:
           mountpoint="$RUNNER_TEMP/blego-mounted"
           mkdir -p "$mountpoint"
           hdiutil verify release/BLEGO-1.4.16-arm64.dmg
-          hdiutil attach release/BLEGO-1.4.15-arm64.dmg -readonly -nobrowse -mountpoint "$mountpoint"
+          hdiutil attach release/BLEGO-1.4.16-arm64.dmg -readonly -nobrowse -mountpoint "$mountpoint"
           trap 'hdiutil detach "$mountpoint"' EXIT
           ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
           test -x "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO"
@@ -276,20 +276,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          (cd release && shasum -a 256 BLEGO-1.4.15-arm64.dmg > SHA256SUMS)
-          printf 'BLEGO 1.4.15 TZ33 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
-          (cd release && zip -9 BLEGO-1.4.15-TZ33-macOS-ARM64.zip BLEGO-1.4.15-arm64.dmg SHA256SUMS INSTALL.txt)
-          unzip -t release/BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip
-          shasum -a 256 release/BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip
+          (cd release && shasum -a 256 BLEGO-1.4.16-arm64.dmg > SHA256SUMS)
+          printf 'BLEGO 1.4.16 TZ33 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
+          (cd release && zip -9 BLEGO-1.4.15-TZ33-macOS-ARM64.zip BLEGO-1.4.16-arm64.dmg SHA256SUMS INSTALL.txt)
+          unzip -t release/BLEGO-1.4.16-TZ33-macOS-ARM64.zip
+          shasum -a 256 release/BLEGO-1.4.16-TZ33-macOS-ARM64.zip
       - name: Upload verified macOS installation archive
         uses: actions/upload-artifact@v4
         with:
-          name: BLEGO-1.4.15-TZ32-macOS-ARM64-candidate
+          name: BLEGO-1.4.16-TZ33-macOS-ARM64
           if-no-files-found: error
           retention-days: 7
           path: |
             release/news-live-tz32.json
-            release/BLEGO-1.4.15-TZ32-macOS-ARM64-candidate.zip
+            release/BLEGO-1.4.16-TZ33-macOS-ARM64.zip
             release/SHA256SUMS
             release/installed-arm64.json
             release/native-metadata-arm64.json
