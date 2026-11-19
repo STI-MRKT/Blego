@@ -261,12 +261,12 @@ export function shopReceiptRecords(text) {
 
 function detectReceiptLanguage(prefix) {
   const sample = prefix.toLocaleLowerCase();
-  if (/(?:номер заказа|название товара|количество товара)/u.test(sample)) return 'ru';
-  if (/(?:номер замовлення|назва товару|кількість товару)/u.test(sample)) return 'uk';
-  if (/(?:bestellnummer|produkttitel|produktmenge)/u.test(sample)) return 'de';
-  if (/(?:numer zamówienia|tytuł produktu|ilość produktu)/u.test(sample)) return 'pl';
-  if (/(?:číslo objednávky|název produktu|množství produktu)/u.test(sample)) return 'cs';
-  if (/(?:订单号|商品标题|商品数量)/u.test(sample)) return 'zh';
-  if (/(?:ऑर्डर नंबर|उत्पाद शीर्षक|उत्पाद मात्रा)/u.test(sample)) return 'hi';
+  if (/(?:номер заказа|название товара|наименование товара|количество товара)/u.test(sample)) return 'ru';
+  if (/(?:номер замовлення|назва товару|найменування товару|кількість товару)/u.test(sample)) return 'uk';
+  if (/(?:bestellnummer|auftragsnummer|produkttitel|produktname|produktbezeichnung|produktmenge|ihre bestellung)/u.test(sample)) return 'de';
+  if (/(?:numer zamówienia|tytuł produktu|nazwa produktu|ilość produktu|twoje zamówienie)/u.test(sample)) return 'pl';
+  if (/(?:číslo objednávky|číslo zakázky|název produktu|název zboží|množství produktu|vaše objednávka)/u.test(sample)) return 'cs';
+  if (/(?:订单号|订单编号|商品标题|产品标题|商品数量|您的订单|您的商品)/u.test(sample)) return 'zh';
+  if (/(?:ऑर्डर नंबर|आदेश संख्या|उत्पाद शीर्षक|उत्पाद का शीर्षक|उत्पाद मात्रा)/u.test(sample)) return 'hi';
   return 'en';
 }
