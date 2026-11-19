@@ -147,6 +147,8 @@ jobs:
           node scripts/tz30-apply.cjs
           node scripts/tz30-archive-apply.cjs
           node scripts/tz30-columns-apply.cjs
+          node scripts/tz30-classifier-apply.cjs
+          node --input-type=module -e "import {validBirthDate} from './shared/classifier.mjs'; if(!validBirthDate('16-03-2002')) process.exit(1)"
           node --check src/js/main.js
           node --check src/js/ui/history.js
           node --check src/js/ui/import.js
