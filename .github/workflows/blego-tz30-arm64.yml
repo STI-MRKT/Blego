@@ -166,11 +166,6 @@ jobs:
           fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
           fs.writeFileSync('package-lock.json',JSON.stringify(lock,null,2)+'\n');
           NODE
-      - name: Verify News sources live for diagnostics
-        continue-on-error: true
-        run: |
-          node scripts/check-news-live.cjs release/news-live-tz30.json
-          node -e "const a=require('./release/news-live-tz30.json');const c=a.topics.find(x=>x.topic==='crypto');console.log('TZ30_CRYPTO_LIVE',JSON.stringify({successful:c.successful,unique:c.unique,sources:c.sources.map(s=>({id:s.id,status:s.status,code:s.code}))}));if(c.successful===0 || c.unique===0) process.exit(1)"
       - name: Install locked dependencies and Electron
         run: |
           npm ci
@@ -182,6 +177,11 @@ jobs:
           key: blego-verified-perl-5.40.1-macOS-arm64-v1
       - name: Prepare macOS metadata runtime
         run: bash scripts/prepare-metadata-darwin.sh
+      - name: Verify News sources live for diagnostics
+        continue-on-error: true
+        run: |
+          node scripts/check-news-live.cjs release/news-live-tz30.json
+          node -e "const a=require('./release/news-live-tz30.json');const c=a.topics.find(x=>x.topic==='crypto');console.log('TZ30_CRYPTO_LIVE',JSON.stringify({successful:c.successful,unique:c.unique,sources:c.sources.map(s=>({id:s.id,status:s.status,code:s.code}))}));if(c.successful===0 || c.unique===0) process.exit(1)"
       - name: Native metadata readback gate
         run: |
           mkdir -p release
