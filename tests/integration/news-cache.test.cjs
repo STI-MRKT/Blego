@@ -13,7 +13,7 @@ const sources = ['one', 'two'].map((id) => ({
   topic: 'tech'
 }));
 const xml = (id) =>
-  `<rss><channel><item><guid>${id}</guid><title>Новость ${id}</title><link>https://example.com/${id}/article</link></item></channel></rss>`;
+  `<rss><channel><item><guid>${id}</guid><title>Новость ${id}</title><link>https://example.com/${id}/article</link><pubDate>${new Date().toUTCString()}</pubDate></item></channel></rss>`;
 test('success → partial failure → total failure → reopen retains per-source cache', async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-news-'));
   let store = await openStore(root);
