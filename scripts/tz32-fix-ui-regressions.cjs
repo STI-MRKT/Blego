@@ -248,6 +248,76 @@ update('tests/ui/archive-v141.test.cjs', (source) => {
   return s;
 }, 'archive GUI test follows archive state and result model');
 
+update('tests/ui/archive-actions.test.cjs', (source) => {
+  const old = "await page.locator(" + TICK + "[data-action=\"archive-open\"][data-id=\"" + DOLLAR + "{entries[0].archiveId}\"]" + TICK + ").click();";
+  return source.includes(old) ? source.replace(old, "await page.locator('.hrow .nm').first().click();") : source;
+}, 'archive actions target the filename control, not the duplicate View button');
+
+update('tests/ui/classifier-tz13.test.cjs', (source) => {
+  return source.replaceAll(
+    "'.classifier-table [data-field=\"emailPassword\"]'",
+    "'.classifier-table [data-row=\"1\"][data-field=\"emailPassword\"]'"
+  );
+}, 'classifier copy test scopes the intended record');
+
+for (const path of ['tests/ui/classifier-v142.test.cjs', 'tests/ui/classifier-v143.test.cjs']) {
+  update(path, (source) => {
+    const old = "    await page.getByText('Сохранено в архиве', { exact: true }).waitFor();";
+    const next = "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
+    return source.includes(old) ? source.replace(old, next) : source;
+  }, 'classifier archive test waits for persisted state');
+}
+
+update('tests/ui/classifier.test.cjs', (source) => {
+  const old = [
+    "      '№',",
+    "      'ФИО',",
+    "      'ID',",
+    "      'Пароль',",
+    "      'Пароль от почты',",
+    "      'Почта',",
+    "      'Дата рождения',",
+    "      'ГЕО',",
+    "      'User-Agent',",
+    "      'Токен',",
+    "      'Куки',",
+    "      'Резервная почта'"
+  ].join(NL);
+  const next = [
+    "      '№',",
+    "      'Full name',",
+    "      'Facebook ID',",
+    "      'Password',",
+    "      'Email password',",
+    "      'Email',",
+    "      'Date of birth',",
+    "      'GEO',",
+    "      'User-Agent',",
+    "      'Token',",
+    "      'Cookie',",
+    "      'backupEmail'"
+  ].join(NL);
+  return source.includes(old) ? source.replace(old, next) : source;
+}, 'classifier header test follows current visible labels');
+
+for (const path of ['tests/ui/news-copy.test.cjs', 'tests/ui/news-topics.test.cjs']) {
+  update(path, (source) => {
+    const old = "await page.getByRole('button', { name: 'Загрузить новости', exact: true }).click();";
+    const next = "await page.locator('[data-action=\"news-refresh\"]').last().click();";
+    return source.includes(old) ? source.replace(old, next) : source;
+  }, 'news tests target the stable refresh action');
+}
+
+for (const path of ['tests/ui/photo-map.test.cjs', 'tests/ui/photo-map-draft.test.cjs']) {
+  update(path, (source) => source.replaceAll('/Без GEO: 1/', '/No GEO: 1/'), 'photo map test uses current English status label');
+}
+
+update('tests/ui/responsive.test.cjs', (source) => {
+  const old = "    await page.getByText('Сохранено в архиве', { exact: true }).waitFor();";
+  const next = "    await page.waitForFunction(async () => { const { state } = await import('/js/state.js'); return state.importSaved === true; });";
+  return source.includes(old) ? source.replace(old, next) : source;
+}, 'responsive archive test waits for saved state');
+
 update('tests/ui/classifier-copy.test.cjs', (source) => {
   let s = source.replaceAll("'Не определён'", "'Not detected'");
   const old = "    await page.getByText('Сохранено в архиве', { exact: true }).waitFor();";
