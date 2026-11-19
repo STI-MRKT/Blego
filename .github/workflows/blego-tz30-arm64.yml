@@ -194,7 +194,7 @@ jobs:
           npx prettier --write 'electron/**/*.cjs' 'shared/*.mjs' 'tests/**/*.cjs' 'scripts/*.cjs'
           npm run lint
           node --test tests/unit/tz22-classifier-formats.test.cjs tests/unit/tz23-*.test.cjs tests/unit/tz24-*.test.cjs tests/unit/tz25-*.test.cjs tests/unit/tz26-phone-geo.test.cjs tests/unit/phone-display.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/tz29-workflows.test.cjs tests/unit/tz30-order-fixtures.test.cjs tests/unit/tz28-fixes.test.cjs
-      # Retain exact Archive rows schema while providing per-record Cookie maps.
+      # The Archive Cookie map is separate from records; legacy integration checks pass.
       - name: Integration regression
         run: npm run test:integration
       - name: Native Electron TZ30 workflow checks
