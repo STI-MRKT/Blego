@@ -206,5 +206,6 @@ jobs:
         shell: bash
         run: |
           node scripts/tz30-classifier-apply.cjs
+          node --input-type=module -e "import { validBirthDate } from './shared/classifier.mjs'; console.log('TZ30 date support:',validBirthDate('16-03-2002'))"
           npm ci
           node --test tests/unit/tz30-order-fixtures.test.cjs tests/integration/tz30-news.test.cjs tests/integration/tz30-archive.test.cjs
