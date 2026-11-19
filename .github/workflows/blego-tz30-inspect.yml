@@ -155,3 +155,12 @@ jobs:
           ls -l tests/unit/tz29* tests/ui/tz29* 2>/dev/null || true
           echo '===== VERSION ====='
           node -p "require('./package.json').version"
+      - name: Inspect classifier actions and legacy widgets
+        shell: bash
+        run: |
+          echo '===== CLASSIFIER ACTION HANDLERS ====='
+          sed -n '1850,2085p' src/js/main.js
+          echo '===== LEGACY BLOCK REFERENCES ====='
+          grep -R -n -E 'Unresolved records|Copy unresolved text|Cookie files|Save Cookie' src electron shared || true
+          echo '===== SOURCE PARSER LOCATIONS ====='
+          grep -R -n -E 'classifyOrder|parseOrder|layout|parse.*receipt' shared/classifier* electron/features/import | head -80 || true
