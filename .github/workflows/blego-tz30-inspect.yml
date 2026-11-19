@@ -186,3 +186,19 @@ jobs:
           grep -nE 'async function importPage\(|function importPage\(' src/js/main.js
           echo '===== CSS ====='
           grep -R -n 'archive-record-field\|archive-cookie-card' src/css | head -35
+      - name: Validate TZ30 patch application and syntax
+        shell: bash
+        run: |
+          node scripts/tz30-apply.cjs
+          node scripts/tz30-archive-apply.cjs
+          node scripts/tz30-columns-apply.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/history.js
+          node --check src/js/ui/import.js
+          node --check electron/main.cjs
+          node --check electron/preload.cjs
+          node --check electron/features/archive/service.cjs
+          node --check electron/features/news/service.cjs
+          node --check electron/features/news/feeds.cjs
+          node --check shared/news-catalog.mjs
+          echo "TZ30_PATCH_SYNTAX_PASS"
