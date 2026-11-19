@@ -23,7 +23,7 @@
       const statementEnd=lines.findIndex((line,index)=>index>=startIndex && index<startIndex+6 && line.trim()===');');
       if(statementEnd<0) throw Error('TZ32 order start statement end missing');
       lines.splice(startIndex,statementEnd-startIndex+1,
-        "  const russianStart = /Номер заказа[ \\t]*:[ \\t]*\\d{1,12}/i.exec(text.slice(0, 500));",
+        "  const russianStart = /(?:Номер заказа|Заказ)[ \\t]*:[ \\t]*\\d{1,12}/i.exec(text.slice(0, 500));",
         "  const englishStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Order number[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));",
         "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
         "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
@@ -32,7 +32,7 @@
     }
     const markerIndex=lines.findIndex(line=>line.includes('const marker = /') && line.includes('Ваш заказ'));
     if(markerIndex>=0) {
-      lines[markerIndex]="  const marker = start === englishStart ? /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?)[ \\t]*\\r?$/gim : /^[ \\t]*(?:[=*#-]{1,8}[ \\t]*)?Ваш заказ[ \\t]*:[ \\t]*(?:[=*#-]{1,8}[ \\t]*)?\\r?$/gim;";
+      lines[markerIndex]="  const marker = start === englishStart ? /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?)[ \\t]*\\r?$/gim : /^[ \\t]*[^A-Za-zА-Яа-я0-9]{0,24}Ваш заказ[ \\t]*:[ \\t]*[^A-Za-zА-Яа-я0-9]{0,24}\\r?$/gim;";
       if(!lines[markerIndex+1]?.includes('marker.lastIndex = start.index')) lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
     } else if(!s.includes('Your product(?:')) throw Error('TZ32 order marker anchor missing');
     return lines.join('\n');
