@@ -278,7 +278,7 @@ jobs:
           set -euo pipefail
           (cd release && shasum -a 256 BLEGO-1.4.16-arm64.dmg > SHA256SUMS)
           printf 'BLEGO 1.4.16 TZ33 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
-          (cd release && zip -9 BLEGO-1.4.15-TZ33-macOS-ARM64.zip BLEGO-1.4.16-arm64.dmg SHA256SUMS INSTALL.txt)
+          (cd release && zip -9 BLEGO-1.4.16-TZ33-macOS-ARM64.zip BLEGO-1.4.16-arm64.dmg SHA256SUMS INSTALL.txt)
           unzip -t release/BLEGO-1.4.16-TZ33-macOS-ARM64.zip
           shasum -a 256 release/BLEGO-1.4.16-TZ33-macOS-ARM64.zip
       - name: Upload verified macOS installation archive
@@ -297,7 +297,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: BLEGO-1.4.15-TZ32-macOS-failure-logs
+          name: BLEGO-1.4.16-TZ33-macOS-failure-logs
           if-no-files-found: ignore
           retention-days: 3
           path: |
