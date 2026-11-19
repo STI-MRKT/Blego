@@ -111,6 +111,56 @@ update('src/js/main.js', (source) => {
   const archiveBlockStart = archiveStart >= 0 ? lineStart(s, archiveStart) : lineStart(s, facebookStart);
   const archiveBlockEnd = lineStart(s, facebookStart);
   s = s.slice(0, archiveBlockStart) + archiveHandler + NL + s.slice(archiveBlockEnd);
+
+  const captureMarker = '/* TZ32_CAPTURE_ACTIONS */';
+  if (!s.includes(captureMarker)) {
+    const captureHandler = [
+      captureMarker,
+      "document.addEventListener('click', async (event) => {",
+      "  const target = event.target instanceof Element ? event.target.closest('[data-action]') : null;",
+      "  if (!target) return;",
+      "  const action = target.dataset.action;",
+      "  if (action === 'copy-model' && target.dataset.source === 'generator' && target.dataset.field === 'phone') {",
+      "    event.preventDefault(); event.stopImmediatePropagation();",
+      "    try { const card = await window.blego.lastCard(); const value = formattedPhoneForCopy(card?.fields?.phone || '', card?.country); await copyText(value, target, 'Номер скопирован'); }",
+      "    catch (error) { toast(error.message, 'err'); }",
+      "    return;",
+      "  }",
+      "  if (action === 'bio-copy') {",
+      "    event.preventDefault(); event.stopImmediatePropagation();",
+      "    try { const field = target.dataset.field; const value = document.getElementById('bio-' + field)?.value ?? ''; await copyText(value, target); }",
+      "    catch (error) { toast(error.message, 'err'); }",
+      "    return;",
+      "  }",
+      "  if (action === 'archive-open') {",
+      "    event.preventDefault(); event.stopImmediatePropagation();",
+      "    try { state.archiveView = await window.blego.openArchive(target.dataset.id); renderView(); }",
+      "    catch (error) { toast(error.message, 'err'); }",
+      "    return;",
+      "  }",
+      "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
+      "    event.preventDefault(); event.stopImmediatePropagation();",
+      "    const operationId = state.importData?.operationId, epoch = state.importEpoch;",
+      "    if (!operationId || !state.importData) return;",
+      "    target.disabled = true;",
+      "    try {",
+      "      await window.blego.confirmClassification({ operationId, decision: state.importData.status === 'preview_partial' ? 'accept_partial' : 'accept_complete' });",
+      "      if (state.importEpoch !== epoch) return;",
+      "      const savedArchive = await window.blego.saveArchive(action === 'classifier-archive-record' ? { operationId, recordId: target.dataset.row } : operationId);",
+      "      if (state.importEpoch !== epoch) return;",
+      "      if (action === 'classifier-archive') state.importSaved = true;",
+      "      state.lastArchiveSave = savedArchive;",
+      "      state.archiveView = null; state.archiveQuery = {};",
+      "      state.archives = await window.blego.listArchives();",
+      "      await importPage(state.importData.offset);",
+      "      toast('Сохранено');",
+      "    } catch (error) { toast(error.message || 'Не удалось сохранить архив', 'err'); if (target.isConnected) target.disabled = false; }",
+      "    return;",
+      "  }",
+      "}, true);"
+    ].join(NL);
+    s += NL + captureHandler + NL;
+  }
   return s;
 }, 'direct national phone copy, BIO copy, archive save and archive open handlers');
 
