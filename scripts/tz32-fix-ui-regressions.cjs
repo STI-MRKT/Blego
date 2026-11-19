@@ -14,6 +14,33 @@ function update(path, transform, label) {
 
 update('src/js/main.js', (source) => {
   let s = source;
+
+  if (!s.includes("import { formattedPhoneForCopy } from './utils/phone.mjs';")) {
+    const importAnchor = "import { copyText, showCopyFeedback } from './utils/clipboard.js';";
+    if (!s.includes(importAnchor)) throw new Error('TZ32_GUI_PHONE_MAIN_IMPORT_MISSING');
+    s = s.replace(importAnchor, importAnchor + "\nimport { formattedPhoneForCopy } from './utils/phone.mjs';");
+  }
+  const copyStart = /if\\s*\\(\\s*action\\s*===\\s*['"]copy-model['"]\\s*\\)\\s*\\{/.exec(s);
+  const newsStart = copyStart ? /if\\s*\\(\\s*action\\s*===\\s*['"]news-copy['"]\\s*\\)/.exec(s.slice(copyStart.index + copyStart[0].length)) : null;
+  if (!copyStart || !newsStart) throw new Error('TZ32_GUI_COPY_MODEL_HANDLER_BOUNDARY_MISSING');
+  const startLine = s.lastIndexOf("\\n", copyStart.index) + 1;
+  const newsIndex = copyStart.index + copyStart[0].length + newsStart.index;
+  const endLine = s.lastIndexOf("\\n", newsIndex) + 1;
+  const copyHandler = [
+    "  if (action === 'copy-model') {",
+    "    try {",
+    "      if (target.dataset.source === 'generator' && target.dataset.field === 'phone') {",
+    "        const value = formattedPhoneForCopy(state.demo?.fields?.phone || '', state.demo?.country);",
+    "        await copyText(value, target, 'Номер скопирован');",
+    "      } else {",
+    "        await copyModelValue(target.dataset.source, target.dataset.row, target.dataset.field, target, { card: target.dataset.card === 'true', personal: target.dataset.personal === 'true', nationalPhone: target.dataset.nationalPhone === 'true' });",
+    "      }",
+    "    } catch (error) { toast(error.message, 'err'); }",
+    "    return;",
+    "  }"
+  ].join('\\n');
+  s = s.slice(0, startLine) + copyHandler + "\\n" + s.slice(endLine);
+
   const oldPhone = "internationalPhone: target.dataset.internationalPhone === 'true'";
   const newPhone = "nationalPhone: target.dataset.nationalPhone === 'true'";
   if (s.includes(oldPhone)) s = s.replace(oldPhone, newPhone);
@@ -29,6 +56,22 @@ update('src/js/main.js', (source) => {
     s = s.replace(marker, '  ' + bioHandler + '\n' + marker);
   }
 
+  const openPattern = /if\\s*\\(\\s*action\\s*===\\s*['"]archive-open['"]\\s*\\)/;
+  const openMatch = openPattern.exec(s);
+  const exportPattern = /if\\s*\\(\\s*action\\s*===\\s*['"]archive-export['"]\\s*\\)/;
+  const exportMatch = openMatch ? exportPattern.exec(s.slice(openMatch.index + openMatch[0].length)) : null;
+  if (!openMatch || !exportMatch) throw new Error('TZ32_GUI_ARCHIVE_OPEN_HANDLER_BOUNDARY_MISSING');
+  const openStart = s.lastIndexOf("\\n", openMatch.index) + 1;
+  const exportIndex = openMatch.index + openMatch[0].length + exportMatch.index;
+  const openEnd = s.lastIndexOf("\\n", exportIndex) + 1;
+  const openHandler = [
+    "  if (action === 'archive-open') {",
+    "    try { state.archiveView = await window.blego.openArchive(target.dataset.id); renderView(); }",
+    "    catch (error) { toast(error.message, 'err'); }",
+    "    return;",
+    "  }"
+  ].join('\\n');
+  s = s.slice(0, openStart) + openHandler + "\\n" + s.slice(openEnd);
   const archivePattern = /if\s*\(\s*action\s*===\s*['"]classifier-archive['"]\s*\|\|\s*action\s*===\s*['"]classifier-archive-record['"]\s*\)/;
   const archiveHandler = [
     "  if (action === 'classifier-archive' || action === 'classifier-archive-record') {",
