@@ -266,7 +266,7 @@ function detectReceiptLanguage(prefix) {
   if (/(?:bestellnummer|auftragsnummer|produkttitel|produktname|produktbezeichnung|produktmenge|ihre bestellung)/u.test(sample)) return 'de';
   if (/(?:numer zamówienia|tytuł produktu|nazwa produktu|ilość produktu|twoje zamówienie)/u.test(sample)) return 'pl';
   if (/(?:číslo objednávky|číslo zakázky|název produktu|název zboží|množství produktu|vaše objednávka)/u.test(sample)) return 'cs';
-  if (/(?:订单号|订单编号|商品标题|产品标题|商品数量|您的订单|您的商品)/u.test(sample)) return 'zh';
+  if (/(?:订单号|订单编号|商品标题|产品标题|商品数量|您的订单|您的商品|訂單號|訂單編號|商品標題|產品標題|商品數量|您的訂單|您的產品)/u.test(sample)) return 'zh';
   if (/(?:ऑर्डर नंबर|आदेश संख्या|उत्पाद शीर्षक|उत्पाद का शीर्षक|उत्पाद मात्रा)/u.test(sample)) return 'hi';
   return 'en';
 }
