@@ -52,7 +52,7 @@ jobs:
           import base64, hashlib, io, tarfile
           encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
           payload = base64.b64decode(encoded, validate=True)
-          assert hashlib.sha256(payload).hexdigest() == '51800905eca5ded0706e945079694b6cd94cd5033dd7d980a0974f79acc402cd', 'TZ23 payload checksum mismatch'
+          assert hashlib.sha256(payload).hexdigest() == 'b39165471ef232d1382fb8b4ac83b73a8bb4a5576bce6851078bb53d6e623e56', 'TZ23 payload checksum mismatch'
           with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
               for item in archive.getmembers():
                   name = Path(item.name)
