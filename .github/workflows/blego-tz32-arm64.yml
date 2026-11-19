@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: blego-tz32-macos-arm64
+  group: blego-tz32-macos-arm64-isolated-gui
   cancel-in-progress: false
 
 jobs:
