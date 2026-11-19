@@ -1,0 +1,245 @@
+name: BLEGO TZ30 archive and News fixes macOS ARM64 DMG
+
+on:
+  push:
+    branches: [codex/blego-tz30-news-classifier-20261119]
+    paths: ['.github/workflows/blego-tz30-arm64.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blego-tz30-macos-arm64
+  cancel-in-progress: false
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 90
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Restore exact TZ22 source changes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
+          expected = '07f732e50231c2f68de4e969c7e2094e2f99e2a92673a27c7c39657701c4668d'
+          assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
+      - name: Restore TZ23 refinements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'b39165471ef232d1382fb8b4ac83b73a8bb4a5576bce6851078bb53d6e623e56', 'TZ23 payload checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.7'
+      - name: Restore TZ25 archive and adaptive classifier improvements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz25-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'c0593936aae96e70efa32c162ceaa43460b81b591670b3dea675a1c76c5ce8af', 'TZ25 overlay integrity check failed'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.8'
+      - name: Restore TZ26 phone GEO hotfix
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz26-phone-geo.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '7dc72b063294f1ae806f90a2b66176118060237327acbf6f836ca4f31e97115d', 'TZ26 hotfix integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.9'
+      - name: Restore TZ27 experimental structural parser
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz27-dynamic-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'f0dfa9de362a122722d38dd0a74b4c5aad3d6806fac98612715587223d98e698', 'TZ27 integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.10'
+      - name: Restore TZ28 fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz28-fixes-overlay.b64').read_text().splitlines()),validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '6cadac355d04db8a29890bea6ad57959f164e8c6c20470fbcee8db54e4327643','TZ28 overlay integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(),f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.11'
+      - name: Restore TZ29 copy, photo and classifier fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz29-overlay.b64').read_text().splitlines()), validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'ce9ca2e07594b5cc08f261e04226ea061600983f7438a2095f95491cd23d2995','TZ29 overlay checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          rm -f shared/classifier-dynamic.mjs tests/unit/tz27-dynamic-parser.test.cjs tests/integration/tz27-dynamic-parser.test.cjs tests/ui/tz27-dynamic-parser.test.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.12'
+          test ! -e shared/classifier-dynamic.mjs
+      - name: Apply TZ30 changes on the complete TZ29 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz30-apply.cjs
+          node scripts/tz30-archive-apply.cjs
+          node scripts/tz30-columns-apply.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/history.js
+          node --check src/js/ui/import.js
+          node --check electron/features/archive/service.cjs
+          node --check electron/features/news/service.cjs
+          node --check electron/features/news/feeds.cjs
+          node --check electron/main.cjs
+          node --check electron/preload.cjs
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+          if(pkg.version!=='1.4.12')throw Error('TZ30 requires BLEGO 1.4.12');
+          pkg.version='1.4.13';
+          lock.version='1.4.13';
+          if(lock.packages?.[''])lock.packages[''].version='1.4.13';
+          fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
+          fs.writeFileSync('package-lock.json',JSON.stringify(lock,null,2)+'\n');
+          NODE
+      - name: Verify News sources live for diagnostics
+        continue-on-error: true
+        run: |
+          node scripts/check-news-live.cjs release/news-live-tz30.json
+          node -e "const a=require('./release/news-live-tz30.json');const c=a.topics.find(x=>x.topic==='crypto');console.log('TZ30_CRYPTO_LIVE',JSON.stringify({successful:c.successful,unique:c.unique,sources:c.sources.map(s=>({id:s.id,status:s.status,code:s.code}))}));if(c.successful===0 || c.unique===0) process.exit(1)"
+      - name: Install locked dependencies and Electron
+        run: |
+          npm ci
+          node node_modules/electron/install.js
+      - name: Restore validated native Perl cache
+        uses: actions/cache@v4
+        with:
+          path: build/metadata-runtime/darwin-arm64
+          key: blego-verified-perl-5.40.1-macOS-arm64-v1
+      - name: Prepare macOS metadata runtime
+        run: bash scripts/prepare-metadata-darwin.sh
+      - name: Native metadata readback gate
+        run: |
+          mkdir -p release
+          node scripts/check-metadata-native.cjs --target darwin-arm64 --root build/metadata-runtime/darwin-arm64 --report release/native-metadata-arm64.json
+      - name: Lint and focused unit regression
+        run: |
+          npx prettier --write 'electron/**/*.cjs' 'shared/*.mjs' 'tests/**/*.cjs' 'scripts/*.cjs'
+          npm run lint
+          node --test tests/unit/tz22-classifier-formats.test.cjs tests/unit/tz23-*.test.cjs tests/unit/tz24-*.test.cjs tests/unit/tz25-*.test.cjs tests/unit/tz26-phone-geo.test.cjs tests/unit/phone-display.test.cjs tests/unit/generator-phone-address.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/tz29-workflows.test.cjs tests/unit/tz30-order-fixtures.test.cjs tests/unit/tz28-fixes.test.cjs
+      - name: Integration regression
+        run: npm run test:integration
+      - name: Native Electron TZ30 workflow checks
+        run: node --test --test-concurrency=1 tests/ui/tz29-workflows.test.cjs tests/ui/tz26-phone-geo.test.cjs tests/ui/tz28-fixes.test.cjs
+      - name: Build unsigned Apple Silicon DMG
+        run: npm run dist:mac -- --arm64
+      - name: Mount DMG and check installed app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mountpoint="$RUNNER_TEMP/blego-mounted"
+          mkdir -p "$mountpoint"
+          hdiutil verify release/BLEGO-1.4.13-arm64.dmg
+          hdiutil attach release/BLEGO-1.4.13-arm64.dmg -readonly -nobrowse -mountpoint "$mountpoint"
+          trap 'hdiutil detach "$mountpoint"' EXIT
+          ditto "$mountpoint/BLEGO.app" "$RUNNER_TEMP/BLEGO-qa.app"
+          test -x "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO"
+          ELECTRON_RUN_AS_NODE=1 "$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" scripts/check-packaged-dependencies.cjs "$RUNNER_TEMP/BLEGO-qa.app/Contents/Resources/app.asar"
+          BLEGO_EXECUTABLE="$RUNNER_TEMP/BLEGO-qa.app/Contents/MacOS/BLEGO" node --test --test-concurrency=1 tests/ui/tz29-workflows.test.cjs tests/ui/tz26-phone-geo.test.cjs tests/ui/tz28-fixes.test.cjs
+          node -e "require('node:fs').writeFileSync('release/installed-arm64.json', JSON.stringify({status:'PASS',suite:'tz29-click-copy-photo-phone-classifier',platform:process.platform,arch:process.arch,commit:process.env.GITHUB_SHA},null,2))"
+      - name: Create installation ZIP and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release && shasum -a 256 BLEGO-1.4.13-arm64.dmg > SHA256SUMS)
+          printf 'BLEGO 1.4.13 TZ30 - macOS Apple Silicon (M1/M2/M3/M4)\n\n1. Unzip archive.\n2. Open DMG and drag BLEGO.app into Applications.\n3. The application is unsigned and not notarized by Apple.\n' > release/INSTALL.txt
+          (cd release && zip -9 BLEGO-1.4.13-TZ30-macOS-ARM64-install.zip BLEGO-1.4.13-arm64.dmg SHA256SUMS INSTALL.txt)
+          unzip -t release/BLEGO-1.4.13-TZ30-macOS-ARM64-install.zip
+          shasum -a 256 release/BLEGO-1.4.13-TZ30-macOS-ARM64-install.zip
+      - name: Upload verified macOS installation archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-1.4.13-TZ30-macOS-ARM64-install
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            release/news-live-tz30.json
+            release/BLEGO-1.4.13-TZ30-macOS-ARM64-install.zip
+            release/SHA256SUMS
+            release/installed-arm64.json
+            release/native-metadata-arm64.json
+      - name: Attach failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-1.4.13-TZ30-macOS-failure-logs
+          if-no-files-found: ignore
+          retention-days: 3
+          path: |
+            release/*.json
+            release/*.log
+            release/*.yml
