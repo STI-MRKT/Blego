@@ -57,7 +57,7 @@ test(
             `${topic} Fashion design Artificial intelligence cryptocurrency finance technology — «QA ${globalThis.newsRevision}» ` +
             'complete headline '.repeat(24) +
             'END_MARKER';
-          return `<rss version="2.0"><channel><item><guid>${topic}-${globalThis.newsRevision}</guid><title><![CDATA[${title}]]></title><link>https://example.test/${topic}/${globalThis.newsRevision}?lang=en&amp;edition=qa&amp;item=7&amp;utm_source=rss</link><author>Synthetic author</author></item></channel></rss>`;
+          return `<rss version="2.0"><channel><item><guid>${topic}-${globalThis.newsRevision}</guid><title><![CDATA[${title}]]></title><link>https://example.test/${topic}/${globalThis.newsRevision}?lang=en&amp;edition=qa&amp;item=7&amp;utm_source=rss</link><author>Synthetic author</author><pubDate>${new Date().toUTCString()}</pubDate></item></channel></rss>`;
         }
       });
       for (const [name, handler] of [
