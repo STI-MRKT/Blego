@@ -175,3 +175,14 @@ jobs:
           grep -n 'archive-cookie-one\|archive-export-cookies\|archive-open' src/js/main.js | head -45
           echo '===== CLASSIFIER PAGE FN ====='
           sed -n '785,885p' src/js/main.js
+      - name: Inspect archive ZIP accessors
+        shell: bash
+        run: |
+          echo '===== ARCHIVE SERVICE ====='
+          sed -n '1,350p' electron/features/archive/service.cjs
+          echo '===== ARCHIVE OPEN CLICK ====='
+          sed -n '1580,1705p' src/js/main.js
+          echo '===== IMPORT PAGING FUNCTION ====='
+          grep -nE 'async function importPage\(|function importPage\(' src/js/main.js
+          echo '===== CSS ====='
+          grep -R -n 'archive-record-field\|archive-cookie-card' src/css | head -35
