@@ -18,17 +18,21 @@
     const lines=s.split('\n');
     const startIndex=lines.findIndex((line)=>line.includes('const start =') && line.includes('Номер заказа'));
     if(startIndex<0)throw Error('TZ32 order start anchor missing');
-    lines[startIndex]="  const start = /^(?:[ \\t\\r\\n]|\\uFEFF)*(?:Номер заказа|Order number)[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(";
+    lines[startIndex]="  const russianStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Номер заказа[ \\t]*:[ \\t]*\\d{1,12}[ \\t]*$/im.exec(";
+    const noStartIndex=lines.findIndex((line)=>line.trim()==='if (!start) return { text, receipt: false };');
+    if(noStartIndex<0)throw Error('TZ32 receipt start guard missing');
+    lines.splice(noStartIndex,0,
+      "  const englishStart = /^(?:[ \\t\\r\\n]|\\uFEFF)*Order number[ \\t]*:[ \\t]*#?\\d{1,12}[ \\t]*$/im.exec(text.slice(0, 500));",
+      "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
+      "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
+      "  const start = russianStart || (englishStart && productTitle && quantity ? englishStart : null);")
     const markerIndex=lines.findIndex((line)=>line.includes('const marker =') && line.includes('Ваш заказ'));
     if(markerIndex<0)throw Error('TZ32 order marker anchor missing');
     lines[markerIndex]="  const marker = /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?|Ваш заказ[ \\t]*:)[ \\t]*\\r?$/gim;";
     lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
     const returnIndex=lines.findIndex((line)=>line.trim()==='return { text: masked, receipt: true };');
     if(returnIndex<0)throw Error('TZ32 receipt return anchor missing');
-    lines.splice(returnIndex,1,
-      "  const productTitle = /^Product title:[ \\t]*Facebook[ \\t]*-[ \\t]*United Kingdom.*Page.*Phone removed.*Email.*2FA.*Cookies/im.test(text.slice(0, 1200));",
-      "  const quantity = /^(?:Product quantity|Количество товара)[ \\t]*:[ \\t]*(\\d{1,4})/im.exec(text.slice(0, 1200));",
-      "  return { text: masked, receipt: true, layout: productTitle ? 'facebook-uk-page-email-2fa-cookies' : null, expectedRecords: quantity ? Number(quantity[1]) : null };")
+    lines[returnIndex]="  return { text: masked, receipt: true, layout: englishStart && productTitle ? 'facebook-uk-page-email-2fa-cookies' : null, expectedRecords: englishStart && quantity ? Number(quantity[1]) : null };";
     s=lines.join('\n');
     const marker = "    ({ records, columns, delimiter, headerless, structured } = result);";
     const layout = [
