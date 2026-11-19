@@ -3,7 +3,7 @@ name: BLEGO TZ32 ten-day News, receipt parser and full regression macOS ARM64 DM
 on:
   push:
     branches: [codex/blego-tz32-news-10day-txt-20261119]
-    paths: ['.github/workflows/blego-tz32-arm64.yml']
+    paths: ['.github/workflows/blego-tz32-arm64.yml', 'scripts/tz32-apply.cjs', 'scripts/tz32-legacy-test-compat.cjs']
   workflow_dispatch:
 
 permissions:
