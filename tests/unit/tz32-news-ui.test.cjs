@@ -11,7 +11,7 @@ test('TZ32 News page renders up to forty articles and identifies the ten-day win
         id:'item-'+i,title:'Technology story '+i,link:'https://example.test/'+i,
         source:'Synthetic source',topic,publishedAt:Date.parse('2026-11-18T12:00:00Z')
       })),
-      counts:{tech:45},loading:false,error:'',updatedAt:Date.parse('2026-11-19T12:00:00Z'),
+      counts:{tech:45},loading:false,error:'',updatedAt:0,
       topic,copiedLink:null
     };
     const html = newsBlockHTML();
