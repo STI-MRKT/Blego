@@ -5,7 +5,7 @@
     let s=fs.readFileSync(path,'utf8');
     for(const [needle,replacement,label] of changes) {
       if(!s.includes(needle)) throw Error('TZ32_TEST_COMPAT_ANCHOR:'+path+':'+label);
-      s=s.replace(needle,replacement);
+      s=s.replaceAll(needle,replacement);
     }
     fs.writeFileSync(path,s);
     console.log('TZ32 reviewed legacy assertions:',path);
@@ -30,8 +30,6 @@
     ["'News shows up to 15 cards per topic and never pads sparse feeds'","'News shows up to 40 cards per topic and never pads sparse feeds'",'test name'],
     ['Array.from({ length: 24 }','Array.from({ length: 45 }','over-limit fixture'],
     ["length, 15);","length, 40);",'first card count'],
-    ["length, 15);","length, 40);",'title copy count'],
-    ["length, 15);","length, 40);",'link copy count'],
     ["'Showing 15 stories'","'Showing 40 stories'",'visible count'],
     ["'Article 15'","'Article 40'",'clamped overflow']
   ]);
