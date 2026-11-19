@@ -220,6 +220,7 @@ jobs:
         with:
           path: build/metadata-runtime/darwin-arm64
           key: blego-verified-perl-5.40.1-macOS-arm64-v1
+          save-always: true
       - name: Prepare macOS metadata runtime
         run: bash scripts/prepare-metadata-darwin.sh
       - name: Fetch last ten days of live News and build offline seed
