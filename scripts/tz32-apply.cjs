@@ -44,7 +44,7 @@
       "      }",
       "      headerless = false;",
       "    }"
-    ].join('\\n');
+    ].join('\n');
     if(!s.includes(marker))throw Error('TZ32 receipt column map anchor missing');
     s=s.replace(marker,layout);
     return s;
