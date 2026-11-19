@@ -1,0 +1,157 @@
+name: BLEGO TZ30 inspect reconstructed sources
+
+on:
+  push:
+    branches: [codex/blego-tz30-news-classifier-20261119]
+    paths: ['.github/workflows/blego-tz30-inspect.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blego-tz30-audit
+  cancel-in-progress: false
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 90
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Restore exact TZ22 source changes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
+          expected = '07f732e50231c2f68de4e969c7e2094e2f99e2a92673a27c7c39657701c4668d'
+          assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
+      - name: Restore TZ23 refinements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'b39165471ef232d1382fb8b4ac83b73a8bb4a5576bce6851078bb53d6e623e56', 'TZ23 payload checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.7'
+      - name: Restore TZ25 archive and adaptive classifier improvements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz25-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'c0593936aae96e70efa32c162ceaa43460b81b591670b3dea675a1c76c5ce8af', 'TZ25 overlay integrity check failed'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.8'
+      - name: Restore TZ26 phone GEO hotfix
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz26-phone-geo.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '7dc72b063294f1ae806f90a2b66176118060237327acbf6f836ca4f31e97115d', 'TZ26 hotfix integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.9'
+      - name: Restore TZ27 experimental structural parser
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz27-dynamic-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'f0dfa9de362a122722d38dd0a74b4c5aad3d6806fac98612715587223d98e698', 'TZ27 integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.10'
+      - name: Restore TZ28 fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz28-fixes-overlay.b64').read_text().splitlines()),validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '6cadac355d04db8a29890bea6ad57959f164e8c6c20470fbcee8db54e4327643','TZ28 overlay integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(),f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.11'
+      - name: Restore TZ29 copy, photo and classifier fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz29-overlay.b64').read_text().splitlines()), validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'ce9ca2e07594b5cc08f261e04226ea061600983f7438a2095f95491cd23d2995','TZ29 overlay checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          rm -f shared/classifier-dynamic.mjs tests/unit/tz27-dynamic-parser.test.cjs tests/integration/tz27-dynamic-parser.test.cjs tests/ui/tz27-dynamic-parser.test.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.12'
+          test ! -e shared/classifier-dynamic.mjs
+      - name: Inspect reconstructed source without credentials
+        shell: bash
+        run: |
+          echo '===== SOURCE PATHS ====='
+          find src/js/ui src/js -maxdepth 2 -iname '*import*' -o -iname '*news*'
+          echo '===== IMPORT UI ====='
+          sed -n '1,240p' src/js/ui/import.js
+          echo '===== ACTIONS IN MAIN ====='
+          grep -nE 'classifier-copy|classifier-(filter|sort)|import-cookie-copy|cookie-files|cookie-files|Cookie files|unresolved' src/js/main.js src/js/ui/import.js || true
+          echo '===== CURRENT NEWS LOGIC ====='
+          sed -n '865,926p' src/js/main.js
+          echo '===== TZ29 TESTS ====='
+          ls -l tests/unit/tz29* tests/ui/tz29* 2>/dev/null || true
+          echo '===== VERSION ====='
+          node -p "require('./package.json').version"
