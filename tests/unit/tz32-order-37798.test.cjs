@@ -12,7 +12,7 @@ test('TZ32 English order receipt with Your product marker preserves six tabular 
       {name:'attribute',value:'sample-'+i,flags:{secure:true}},
       {name:'dimension',value:'desktop'}
     ])
-  ].join('\\t'));
+  ].join('\t'));
   const source=[
     'Product title: Sample catalog item - Page - Email - Verification - Data',
     'Order number: #37798',
@@ -23,7 +23,7 @@ test('TZ32 English order receipt with Your product marker preserves six tabular 
     '',
     '=== Your product ===',
     ...rows
-  ].join('\\n');
+  ].join('\n');
   const parsed=await parseInput({bytes:Buffer.from(source,'utf8'),originalName:'synthetic-order.txt'},{classification:true});
   console.log('TZ32_RECEIPT_DEBUG',JSON.stringify({records:parsed.records.length,headerless:parsed.headerless,structured:parsed.structured,delimiter:parsed.delimiter,firstColumns:parsed.records[0]?.sourceEntries?.length,firstLine:parsed.records[0]?.sourceRecord?.slice(0,100)}));
   assert.equal(parsed.records.length,6);
