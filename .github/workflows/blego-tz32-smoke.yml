@@ -227,8 +227,6 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/tz32-apply.cjs
-          echo 'TZ32_DIAGNOSTIC_SYNTHETIC_TEST_FIXTURE'
-          sed -n '1,110p' tests/unit/tz22-classifier-formats.test.cjs
           node scripts/tz32-news-report-apply.cjs
           node --check shared/importer.mjs
           node --check electron/features/news/feeds.cjs
