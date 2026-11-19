@@ -30,27 +30,7 @@
     if(markerIndex<0)throw Error('TZ32 order marker anchor missing');
     lines[markerIndex]="  const marker = /^[ \\t]*(?:(?:={2,}[ \\t]*)?Your product(?:[ \\t]*={2,})?|Ваш заказ[ \\t]*:)[ \\t]*\\r?$/gim;";
     lines.splice(markerIndex+1,0,"  marker.lastIndex = start.index + start[0].length;");
-    const returnIndex=lines.findIndex((line)=>line.trim()==='return { text: masked, receipt: true };');
-    if(returnIndex<0)throw Error('TZ32 receipt return anchor missing');
-    lines[returnIndex]="  return { text: masked, receipt: true, layout: englishStart && productTitle ? 'facebook-uk-page-email-2fa-cookies' : null, expectedRecords: englishStart && quantity ? Number(quantity[1]) : null };";
     s=lines.join('\n');
-    const marker = "    ({ records, columns, delimiter, headerless, structured } = result);";
-    const layout = [
-      marker,
-      "    if (receipt.layout === 'facebook-uk-page-email-2fa-cookies' && receipt.expectedRecords === result.records.length && result.records.length > 0 && result.records.every((record) => record.sourceEntries?.length === 11)) {",
-      "      const headers = ['', 'Login', 'Email', 'Password', '2FA', 'Full Name', 'Date of Birth', 'Profile URL', '', 'User-Agent', 'Cookies'];",
-      "      for (const record of result.records) {",
-      "        for (const [index, entry] of record.sourceEntries.entries()) {",
-      "          entry.header = headers[index];",
-      "          entry.labelled = true;",
-      "          if (index === 0 || index === 8 || String(entry.value ?? '').trim() === '-') entry.value = '';",
-      "        }",
-      "      }",
-      "      headerless = false;",
-      "    }"
-    ].join('\n');
-    if(!s.includes(marker))throw Error('TZ32 receipt column map anchor missing');
-    s=s.replace(marker,layout);
     return s;
   });
   edit('electron/features/news/service.cjs',s=>{
