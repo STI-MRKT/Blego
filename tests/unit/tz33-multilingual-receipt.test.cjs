@@ -165,13 +165,14 @@ test('TZ33 localized receipt envelopes preserve six independent account records'
 });
 
 test('TZ33 localized quantity must match the number of parsed account rows', async () => {
+  const { shopReceiptRecords } = await import('../../shared/classifier-shop-receipt.mjs');
   const locale = locales.find((item) => item.code === 'zh');
   const source = makeReceipt({ ...locale, quantity: '７ 件' });
-  const { parsed } = await classify(source);
-  assert.notEqual(parsed.records.length, 6);
+  assert.equal(shopReceiptRecords(source), null);
 });
 
 test('TZ33 non-Facebook localized order receipts do not activate the Facebook decoder', async () => {
+  const { shopReceiptRecords } = await import('../../shared/classifier-shop-receipt.mjs');
   const source = [
     '商品标题: 文具',
     '订单号: ３７７９８',
@@ -179,8 +180,7 @@ test('TZ33 non-Facebook localized order receipts do not activate the Facebook de
     '=== 您的商品 ===',
     '-\tExample'
   ].join('\n');
-  const { parsed } = await classify(source);
-  assert.notEqual(parsed.records.length, 6);
+  assert.equal(shopReceiptRecords(source), null);
 });
 
 const legacyFixtures = [
