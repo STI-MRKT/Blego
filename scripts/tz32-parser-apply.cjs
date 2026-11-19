@@ -12,9 +12,9 @@
   repl("    !receipt.receipt\n      ? verticalAccountRecords(text)",
        "    !receipt.receipt && !shop\n      ? verticalAccountRecords(text)",
        "skip generic vertical on shop receipt");
-  repl("  if (vertical) {",
-       "  if (shop) {\n    ({ records, columns, delimiter, headerless, structured } = shop);\n    diagnostics.push(...shop.diagnostics);\n  } else if (vertical) {",
-       "receipt precedence");
+  repl("  if (encoded) {",
+       "  if (shop) {\n    ({ records, columns, delimiter, headerless, structured } = shop);\n    diagnostics.push(...shop.diagnostics);\n  } else if (encoded) {",
+       "receipt precedence over encoded/vertical/labelled");
   fs.writeFileSync(p,s);
   console.log('TZ32 classifier: specific English receipt before generic TXT lexer');
 })();
