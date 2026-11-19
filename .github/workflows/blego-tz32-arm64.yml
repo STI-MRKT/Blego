@@ -3,7 +3,7 @@ name: BLEGO TZ32 ten-day News, receipt parser and full regression macOS ARM64 DM
 on:
   push:
     branches: [codex/blego-tz32-news-10day-txt-20261119]
-    paths: ['.github/workflows/blego-tz32-arm64.yml', 'scripts/tz32-apply.cjs', 'scripts/tz32-legacy-test-compat.cjs']
+    paths: ['.github/workflows/blego-tz32-arm64.yml', 'scripts/tz32-apply.cjs', 'scripts/tz32-legacy-test-compat.cjs', 'scripts/tz32-fix-electron-test-user-data-dir.cjs']
   workflow_dispatch:
 
 permissions:
@@ -248,6 +248,7 @@ jobs:
           node scripts/tz32-legacy-test-compat.cjs
           npx prettier --write 'tests/**/*.cjs' 'scripts/*.cjs'
           npm run verify
+          node scripts/tz32-fix-electron-test-user-data-dir.cjs
           node scripts/tz32-ui-sweep.cjs
       - name: Upload isolated GUI regression report
         if: always()
