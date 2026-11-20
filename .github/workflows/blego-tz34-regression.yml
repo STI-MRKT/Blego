@@ -1,0 +1,28 @@
+name: BLEGO TZ34 dual-password classifier regression
+
+on:
+  push:
+    branches: [codex/blego-tz34-dual-password-receipt-20261120]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  classifier-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx prettier --check shared/classifier-structure.mjs tests/unit/tz34-dual-password-receipt.test.cjs
+      - run: node --test tests/unit/tz34-dual-password-receipt.test.cjs
+      # The full historical suite needs the separate release workflow's
+      # TZ22–TZ33 overlays. This gate checks the changed classifier and
+      # adjacent contracts against the committed source.
+      - run: node --test tests/unit/classifier.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-password-geo-v146.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs
+      - run: node --test tests/integration/classification-contract.test.cjs tests/integration/classifier-production.test.cjs
