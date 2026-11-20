@@ -20,5 +20,8 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: node --test tests/unit/tz34-dual-password-receipt.test.cjs
-      - run: npm run test:unit
+      # The full historical suite needs the separate release workflow's
+      # TZ22–TZ33 overlays. This gate checks the changed classifier and
+      # adjacent contracts against the committed source.
+      - run: node --test tests/unit/classifier.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-password-geo-v146.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs
       - run: node --test tests/integration/classification-contract.test.cjs tests/integration/classifier-production.test.cjs
