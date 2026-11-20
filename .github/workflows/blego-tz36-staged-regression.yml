@@ -266,4 +266,4 @@ jobs:
           }
           NODE
       - name: Two supplied order layout regressions
-        run: node --test tests/unit/tz36-order-layouts.test.cjs
+        run: node --test tests/unit/tz36-order-layouts.test.cjs tests/unit/classifier-tz15.test.cjs tests/unit/classifier-multiformat-qa.test.cjs
