@@ -81,6 +81,52 @@ edit('src/js/ui/photos.js',source=>{
   return source;
 });
 
+// Migrate historical DOM assertions for deliberately removed configuration UI.
+// The classifier's backend-learning regression tests remain untouched.
+edit('tests/unit/tz15-generator-ux.test.cjs',source=>{
+  source=once(source,
+    "test('TZ15 classifier bottom panels removed, with field mapping and export still accessible'",
+    "test('TZ37 classifier removes configuration panels while retaining archive and export'",
+    'TZ15_TEST_TITLE');
+  source=once(source,
+    'assert.match(html, /id="classifier-options"/);',
+    'assert.doesNotMatch(html, /id="classifier-options"/);',
+    'TZ15_OPTIONS_HIDDEN');
+  source=once(source,
+    'assert.match(html, /data-classifier-map/);',
+    'assert.doesNotMatch(html, /data-classifier-map/);',
+    'TZ15_MAPPING_HIDDEN');
+  return source;
+});
+
+edit('tests/unit/tz19-adaptive-ui.test.cjs',source=>{
+  source=once(source,
+    "test('TZ19 classifier exposes explicit pattern memory controls without storing source values in UI'",
+    "test('TZ37 hides advanced pattern-memory controls but preserves safe backend layouts'",
+    'TZ19_TEST_TITLE');
+  const old=[
+    '    assert.match(html, /id="classifier-remember-layout"/);',
+    '    assert.doesNotMatch(html, /id="classifier-remember-layout" checked/);',
+    '    assert.match(html, /Сохранено схем: 2/);',
+    '    assert.match(html, /data-action="classifier-forget-layouts"/);',
+    '    assert.match(html, /Пароли, Cookie, токены и содержимое TXT в шаблоны не записываются/);',
+    '    state.classifierOptions.rememberLayout = true;',
+    '    html = importHTML();',
+    '    assert.match(html, /id="classifier-remember-layout" checked/);'
+  ].join('\n');
+  const updated=[
+    '    assert.doesNotMatch(html, /id="classifier-remember-layout"/);',
+    '    assert.doesNotMatch(html, /data-action="classifier-forget-layouts"/);',
+    '    assert.doesNotMatch(html, /id="classifier-options"/);',
+    '    assert.match(html, /data-action="classifier-export"/);',
+    '    assert.match(html, /data-action="classifier-copy-column"/);',
+    '    state.classifierOptions.rememberLayout = true;',
+    '    html = importHTML();',
+    '    assert.doesNotMatch(html, /id="classifier-remember-layout"/);'
+  ].join('\n');
+  return once(source,old,updated,'TZ19_MEMORY_PANEL_HIDDEN');
+});
+
 const cssPath='src/css/tz24.css';
 if(!fs.existsSync(cssPath))throw Error('TZ37_RESTORED_STYLES_MISSING');
 fs.appendFileSync(cssPath,[
