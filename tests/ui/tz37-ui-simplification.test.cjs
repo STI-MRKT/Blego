@@ -42,6 +42,10 @@ test('TZ37 classifier has only search/export/actions, archives Cookies by defaul
     password: 'FAKE_TEST_ONLY', cookies: cookie
   };
   const page = await app.firstWindow();
+  page.on('pageerror', (error) => console.log('TZ37_RENDERER_ERROR', error.message));
+  page.on('crash', () => console.log('TZ37_RENDERER_CRASH'));
+  page.on('close', () => console.log('TZ37_WINDOW_CLOSED'));
+  app.process().on('exit', (code, signal) => console.log('TZ37_ELECTRON_EXIT', code, signal));
   await page.locator('[data-view="import"]').click();
   await page.locator('#file-input').setInputFiles({
     name: 'synthetic-cookie.json', mimeType: 'application/json',
@@ -56,6 +60,7 @@ test('TZ37 classifier has only search/export/actions, archives Cookies by defaul
   assert.equal(await page.locator('.classifier-table [data-action="classifier-copy-column"][data-field="cookies"]').count(), 1);
 
   await page.locator('[data-action="classifier-archive"]').click();
+  await page.waitForFunction(async () => Boolean((await import('/js/state.js')).state.importSaved), null, { timeout: 15000 });
   await page.locator('[data-view="history"]').click();
   await page.locator('.hrow .nm').filter({ hasText: 'synthetic-cookie.json' }).click();
   const card = page.locator('.archive-cookie-field').first();
