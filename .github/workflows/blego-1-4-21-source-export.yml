@@ -1,0 +1,326 @@
+name: BLEGO 1.4.21 complete restored source export
+
+on:
+  push:
+    branches: [codex/blego-1-4-21-source-export-20261120]
+    paths: ['.github/workflows/blego-1-4-21-source-export.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Restore exact TZ22 source changes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz22-delta.b64').read_text().splitlines()), validate=True)
+          expected = '07f732e50231c2f68de4e969c7e2094e2f99e2a92673a27c7c39657701c4668d'
+          assert hashlib.sha256(payload).hexdigest() == expected, 'TZ22 archive checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe archive path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.6'
+      - name: Restore TZ23 refinements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(''.join(Path(f'build-data/tz23-delta-part{i}.b64').read_text().splitlines()) for i in (1,2))
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'b39165471ef232d1382fb8b4ac83b73a8bb4a5576bce6851078bb53d6e623e56', 'TZ23 payload checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for item in archive.getmembers():
+                  name = Path(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk(), f'unsafe path: {item.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.7'
+      - name: Restore TZ25 archive and adaptive classifier improvements
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz25-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'c0593936aae96e70efa32c162ceaa43460b81b591670b3dea675a1c76c5ce8af', 'TZ25 overlay integrity check failed'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.8'
+      - name: Restore TZ26 phone GEO hotfix
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz26-phone-geo.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '7dc72b063294f1ae806f90a2b66176118060237327acbf6f836ca4f31e97115d', 'TZ26 hotfix integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.9'
+      - name: Restore TZ27 experimental structural parser
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, io, tarfile
+          encoded = ''.join(Path('build-data/tz27-dynamic-overlay.b64').read_text().splitlines())
+          payload = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'f0dfa9de362a122722d38dd0a74b4c5aad3d6806fac98612715587223d98e698', 'TZ27 integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload), mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name = Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.10'
+      - name: Restore TZ28 fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz28-fixes-overlay.b64').read_text().splitlines()),validate=True)
+          assert hashlib.sha256(payload).hexdigest() == '6cadac355d04db8a29890bea6ad57959f164e8c6c20470fbcee8db54e4327643','TZ28 overlay integrity mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(),f'unsafe file: {entry.name}'
+              archive.extractall('.')
+          PY
+          test "$(node -p "require('./package.json').version")" = '1.4.11'
+      - name: Restore TZ29 copy, photo and classifier fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,hashlib,io,tarfile
+          payload = base64.b64decode(''.join(Path('build-data/tz29-overlay.b64').read_text().splitlines()), validate=True)
+          assert hashlib.sha256(payload).hexdigest() == 'ce9ca2e07594b5cc08f261e04226ea061600983f7438a2095f95491cd23d2995','TZ29 overlay checksum mismatch'
+          with tarfile.open(fileobj=io.BytesIO(payload),mode='r:xz') as archive:
+              for entry in archive.getmembers():
+                  name=Path(entry.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not entry.issym() and not entry.islnk(), f'unsafe path: {entry.name}'
+              archive.extractall('.')
+          PY
+          rm -f shared/classifier-dynamic.mjs tests/unit/tz27-dynamic-parser.test.cjs tests/integration/tz27-dynamic-parser.test.cjs tests/ui/tz27-dynamic-parser.test.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.12'
+          test ! -e shared/classifier-dynamic.mjs
+      - name: Apply TZ30 changes on the complete TZ29 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz30-apply.cjs
+          node scripts/tz30-archive-apply.cjs
+          node scripts/tz30-columns-apply.cjs
+          node scripts/tz30-footer-apply.cjs
+          node scripts/tz30-classifier-apply.cjs
+          node --input-type=module -e "import {validBirthDate} from './shared/classifier.mjs'; if(!validBirthDate('16-03-2002')) process.exit(1)"
+          node --check src/js/main.js
+          node --check src/js/ui/history.js
+          node --check src/js/ui/import.js
+          node --check electron/features/archive/service.cjs
+          node --check electron/features/news/service.cjs
+          node --check electron/features/news/feeds.cjs
+          node --check electron/main.cjs
+          node --check electron/preload.cjs
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+          if(pkg.version!=='1.4.12')throw Error('TZ30 requires BLEGO 1.4.12');
+          pkg.version='1.4.13';
+          lock.version='1.4.13';
+          if(lock.packages?.[''])lock.packages[''].version='1.4.13';
+          fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
+          fs.writeFileSync('package-lock.json',JSON.stringify(lock,null,2)+'\n');
+          NODE
+      - name: Apply TZ31 visible classifier bulk-copy controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz31-column-copy-apply.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/import.js
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+          if(pkg.version !== '1.4.13') throw Error('TZ31 requires BLEGO 1.4.13');
+          pkg.version='1.4.14';
+          lock.version='1.4.14';
+          if(lock.packages?.[''])lock.packages[''].version='1.4.14';
+          fs.writeFileSync('package.json', JSON.stringify(pkg,null,2)+'\n');
+          fs.writeFileSync('package-lock.json', JSON.stringify(lock,null,2)+'\n');
+          const ui=fs.readFileSync('src/js/ui/import.js','utf8');
+          if(!ui.includes('classifier-copy-field') || !ui.includes('classifier-copy-column-button'))throw Error('TZ31 copy interface missing');
+          NODE
+      - name: Apply TZ32 TXT and live News fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz32-parser-apply.cjs
+          node scripts/tz32-news-apply.cjs
+          node scripts/tz32-legacy-test-compat.cjs
+          node --check shared/classifier-shop-receipt.mjs
+          node --check shared/importer.mjs
+          node --check electron/features/news/feeds.cjs
+          node --check electron/features/news/service.cjs
+          node --check src/js/ui/news.js
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+          if(pkg.version!=='1.4.14')throw Error('TZ32 requires BLEGO 1.4.14');
+          pkg.version='1.4.15';
+          lock.version='1.4.15';
+          if(lock.packages?.[''])lock.packages[''].version='1.4.15';
+          fs.writeFileSync('package.json', JSON.stringify(pkg,null,2)+'\n');
+          fs.writeFileSync('package-lock.json', JSON.stringify(lock,null,2)+'\n');
+          NODE
+      - name: Apply TZ33 multilingual receipt and encoding support
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz33-multilingual-apply.cjs
+          node --check shared/classifier-shop-receipt.mjs
+          node --check shared/importer.mjs
+          node --check scripts/tz32-parser-apply.cjs
+          node --check scripts/tz33-multilingual-apply.cjs
+      - name: Apply TZ34 account-owner classifier fix after reconstructing release source
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz34-dual-password-apply.cjs
+          node --check shared/classifier-structure.mjs
+          node --check scripts/tz34-dual-password-apply.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.17'
+      - name: Apply TZ35 missing FIO and empty-column alignment
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz35-release-apply.cjs
+          node --check shared/classifier-structure.mjs
+          node --check src/js/main.js
+          node --check scripts/tz35-release-apply.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.18'
+      - name: Apply TZ36 2FA and copy-icon layout changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz36-order-apply.cjs
+          node --check shared/classifier-lexer.mjs
+          node --check shared/classifier-structure.mjs
+          node --check src/js/ui/import.js
+          node --check src/js/main.js
+          test "$(node -p "require('./package.json').version")" = '1.4.19'
+      - name: Apply TZ37 simplified UI after restoring release sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz37-ui-simplify-apply.cjs
+          node --check src/js/ui/import.js
+          node --check src/js/ui/history.js
+          node --check src/js/ui/photos.js
+          node --check src/js/main.js
+          node --check scripts/tz37-ui-simplify-apply.cjs
+          test "$(node -p "require('./package.json').version")" = '1.4.20'
+      - name: Apply TZ38 native macOS country-select safety hotfix
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/tz38-geo-country-hotfix.cjs
+          node --check src/js/main.js
+          node --check src/js/ui/photos.js
+          test "$(node -p "require('./package.json').version")" = '1.4.21'
+      - name: Verify complete 1.4.21 release sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node -p "require('./package.json').version")" = '1.4.21'
+          node --check src/js/main.js
+          node --check src/js/ui/photos.js
+          node --check src/js/ui/import.js
+          node --check scripts/tz38-geo-country-hotfix.cjs
+          node --check electron/main.cjs
+          grep -Fq '<select class="input" id="geo-country"' src/js/ui/photos.js
+          ! grep -Fq 'for (const pickerId of' src/js/main.js
+      - name: Archive complete, fully restored source tree
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, os, pathlib, subprocess, zipfile
+          root=pathlib.Path.cwd()
+          out=root/'release-source'
+          out.mkdir(exist_ok=True)
+          target=out/'BLEGO-1.4.21-complete-source.zip'
+          excluded={'.git','node_modules','release','release-source','dist','out','coverage','.cache','build','test-results','playwright-report'}
+          tracked=subprocess.check_output(['git','ls-files','-c','-o','--exclude-standard','-z']).split(b'\0')
+          sources=sorted({os.fsdecode(item) for item in tracked if item})
+          rootname='BLEGO-1.4.21-source'
+          count=0
+          with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True) as archive:
+            for name in sources:
+              relative=pathlib.PurePosixPath(name)
+              if any(part in excluded for part in relative.parts):
+                continue
+              path=root/name
+              if not path.is_file() or path.is_symlink():
+                continue
+              archive.write(path,f'{rootname}/{relative.as_posix()}')
+              count+=1
+            readme=(
+              'BLEGO 1.4.21 — полный исходный код приложения, восстановленный из релизной цепочки TZ22–TZ38.\n'
+              'Базовый коммит: d505f5bbd283114c307ecbbe31ebfe545ed103d6\n'
+              'Проверенный macOS ARM64 выпуск: GitHub Actions #44713647275 (PASS).\n'
+              'Архив включает исходники Electron/JS/CSS, ресурсы, тесты, build-data и скрипты сборки.\n'
+              'node_modules и готовые установщики исключены.\n'
+              'После распаковки: npm ci; npm run dist:mac -- --arm64 (в macOS).\n'
+              'Все кодовые патчи релиза уже применены в файлах этого архива; повторно запускать TZ*-apply скрипты не требуется.\n'
+            )
+            archive.writestr(f'{rootname}/SOURCE-README.txt',readme)
+          with zipfile.ZipFile(target) as z:
+            assert z.testzip() is None
+            assert f'{rootname}/package.json' in z.namelist()
+            assert f'{rootname}/src/js/ui/photos.js' in z.namelist()
+            assert f'{rootname}/electron/main.cjs' in z.namelist()
+          digest=hashlib.sha256(target.read_bytes()).hexdigest()
+          (out/'SHA256SUMS').write_text(f'{digest}  {target.name}\n',encoding='utf-8')
+          print(f'SOURCE_OK files={count} bytes={target.stat().st_size} sha256={digest}')
+          PY
+      - name: Upload source ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLEGO-1.4.21-complete-source
+          path: |
+            release-source/BLEGO-1.4.21-complete-source.zip
+            release-source/SHA256SUMS
+          retention-days: 7
+          if-no-files-found: error
