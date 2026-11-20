@@ -7,6 +7,7 @@
     recognized[cookieIndex]?.cookie?.owners?.length === 1 &&
     recognized[cookieIndex].cookie.owners[0] === owners[0];
   const pipePrefix =
+    entries.length >= 9 &&
     recognized[0]?.key === 'email' &&
     !typed(recognized[1]) &&
     passwordShape(values[1]) &&
