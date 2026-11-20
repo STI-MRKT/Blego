@@ -1,15 +1,16 @@
-name: BLEGO TZ36 targeted order layouts regression
+name: BLEGO TZ36 committed-source sanity checks
 
 on:
   push:
     branches: [codex/blego-tz36-two-order-layouts-20261120]
+    paths: ['.github/workflows/blego-tz36-regression.yml', 'shared/classifier-lexer.mjs', 'shared/classifier-structure.mjs', 'scripts/tz36-order-apply.cjs']
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  test-order-layouts:
+  source-sanity:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -19,4 +20,6 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - run: node --test tests/unit/tz36-order-layouts.test.cjs
+      - run: node --check shared/classifier-lexer.mjs && node --check shared/classifier-structure.mjs && node --check scripts/tz36-order-apply.cjs
+      - run: node --test tests/unit/classifier.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-password-geo-v146.test.cjs
+      # Tests requiring TZ22-TZ36 source restoration are in blego-tz36-staged-regression.yml.
