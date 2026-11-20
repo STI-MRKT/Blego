@@ -19,7 +19,7 @@ jobs:
           node-version: '24.22.1'
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - run: npx prettier --check shared/classifier-structure.mjs tests/unit/tz34-dual-password-receipt.test.cjs
+      - run: npx prettier --write shared/classifier-structure.mjs tests/unit/tz34-dual-password-receipt.test.cjs && git diff -- shared/classifier-structure.mjs tests/unit/tz34-dual-password-receipt.test.cjs && git diff --exit-code -- shared/classifier-structure.mjs tests/unit/tz34-dual-password-receipt.test.cjs
       - run: node --test tests/unit/tz34-dual-password-receipt.test.cjs
       # The full historical suite needs the separate release workflow's
       # TZ22–TZ33 overlays. This gate checks the changed classifier and
