@@ -79,11 +79,7 @@ test('TZ34 receipt: recover two distinct passwords per row despite extra BM IDs'
     assert.equal(row.data.email, expected.email, 'email owner ' + index);
     assert.equal(row.data.accountId, expected.id, 'cookie-owned account ID ' + index);
     assert.equal(row.data.password, expected.password, 'Facebook password ' + index);
-    assert.equal(
-      row.data.emailPassword,
-      expected.emailPassword,
-      'email password ' + index
-    );
+    assert.equal(row.data.emailPassword, expected.emailPassword, 'email password ' + index);
     assert.notEqual(row.data.password, row.data.emailPassword);
     assert.notEqual(row.data.accountId, expected.bm1);
     assert.notEqual(row.data.accountId, expected.bm2);
