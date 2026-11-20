@@ -1,0 +1,13 @@
+    // A mailbox credential in pipe-delimited order receipts may be a single
+    // email:password cell immediately before a Cookie JSON cell. Split only
+    // this narrow shape, never colons in links, User-Agent or Cookie values.
+    const afterMailColon = text.slice(i + 1, i + 180);
+    const mailPipe = afterMailColon.indexOf('|');
+    const mailSecret = mailPipe < 0 ? '' : afterMailColon.slice(0, mailPipe).trim();
+    const mailboxTuple =
+      c === ':' &&
+      !text.startsWith('::', i) &&
+      /^[^\s@;|:]+@[^\s@;|:]+\.[^\s@;|:]+$/u.test(current.trim()) &&
+      /^(?=.{7,128}$)[^\s;|:]+![0-9]{3,5}$/u.test(mailSecret) &&
+      mailPipe >= 0 &&
+      /^\s*\[\s*\{/u.test(afterMailColon.slice(mailPipe + 1));

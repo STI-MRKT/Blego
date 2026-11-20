@@ -46,9 +46,9 @@ test(
     });
     await page.locator('[data-classifier-status]').waitFor();
 
-    const field = page.locator('#classifier-copy-field');
-    const button = page.locator('#classifier-copy-column-button');
-    assert.equal(await button.isVisible(), true);
+    const columnButton = (key) => page.locator('.classifier-table [data-action="classifier-copy-column"][data-field="' + key + '"]');
+    assert.equal(await page.locator('.classifier-bulk-copy').count(), 0);
+    assert.equal(await columnButton('fullName').isVisible(), true);
 
     async function clipboardEquals(expected) {
       for (let attempt = 0; attempt < 120; attempt++) {
@@ -59,24 +59,22 @@ test(
       assert.equal(await app.evaluate(({ clipboard }) => clipboard.readText()), expected);
     }
 
-    await field.selectOption('fullName');
-    await button.click();
+    await columnButton('fullName').click();
     await clipboardEquals(records.map((row) => row.fullName).join('\n'));
 
     // No password is populated anywhere: preserve 63 empty record slots.
-    await field.selectOption('emailPassword');
-    await button.click();
+    await columnButton('emailPassword').click();
     await clipboardEquals('\n'.repeat(records.length - 1));
 
     await page.locator('#classifier-query').fill('Group A Person');
     await page.locator('[data-action="classifier-filter"]').click();
     const filtered = records.filter((row) => row.fullName.includes('Group A Person'));
-    await page
-      .getByText(`Все ${filtered.length} записей с учётом фильтра, включая другие страницы`)
-      .waitFor();
+    await page.waitForFunction(
+      (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
+      filtered.length
+    );
     await page.locator('#classifier-sort').selectOption('descending');
-    await field.selectOption('backupEmail');
-    await button.click();
+    await columnButton('backupEmail').click();
     await clipboardEquals(
       filtered
         .map((row) => row.backupEmail)
