@@ -278,7 +278,7 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Focused regression
         run: |
-          node --test tests/unit/classifier.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs tests/unit/tz35-missing-name.test.cjs tests/unit/tz36-order-layouts.test.cjs
+          node --test tests/unit/classifier.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs tests/unit/tz35-missing-name.test.cjs tests/unit/tz36-order-layouts.test.cjs tests/unit/tz15-generator-ux.test.cjs tests/unit/tz19-adaptive-ui.test.cjs
           node --test tests/integration/classification-contract.test.cjs
       - name: Focused Electron GUI on synthesized data
         run: |
