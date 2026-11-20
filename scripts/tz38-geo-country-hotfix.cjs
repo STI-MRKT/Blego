@@ -31,22 +31,33 @@ rewrite('src/js/main.js', (source) => {
   if (begin < 0 || end < 0 || source.indexOf('showPicker()', begin) < 0)
     throw Error('TZ38_SHOWPICKER_ANCHOR_MISSING');
   source = source.slice(0, begin) + source.slice(end);
-  const oldStart = source.indexOf('if(geoCountry)geoCountry.onchange=');
-  const oldEnd = oldStart < 0 ? -1 : source.indexOf('mountPhotoMap();};', oldStart);
-  if (oldStart < 0 || oldEnd < 0 || source.indexOf('if(geoCountry)geoCountry.onchange=', oldStart + 1) >= 0)
+  const anchor = source.indexOf("const geoCountry = document.getElementById('geo-country');");
+  const oldStart = source.indexOf('  if (geoCountry)', anchor);
+  const oldEnd = oldStart < 0 ? -1 : source.indexOf('  const geoCity =', oldStart);
+  if (anchor < 0 || oldStart < 0 || oldEnd < 0 || oldEnd - oldStart > 1500)
     throw Error('TZ38_COUNTRY_CHANGE_ANCHOR_MISSING');
   const handler = [
-    "if (geoCountry) geoCountry.onchange = () => {",
-    "  const value = geoCountry.value.trim().toUpperCase();",
-    "  const valid = state.geoCatalogue?.countries?.some((country) => country.code === value);",
-    "  state.geoCountry = valid ? value : '';",
-    "  state.geoCity = '';",
-    "  state.geoQuery = '';",
-    "  updateCities();",
-    "  mountPhotoMap();",
-    "};"
+    '  if (geoCountry) {',
+    '    geoCountry.onchange = () => {',
+    "      const value = geoCountry.value.trim().toUpperCase();",
+    "      const valid = state.geoCatalogue?.countries?.some((country) => country.code === value);",
+    "      state.geoCountry = valid ? value : '';",
+    "      state.geoCity = '';",
+    "      state.geoQuery = '';",
+    '      updateCities();',
+    '      mountPhotoMap();',
+    '    };',
+    '  }'
   ].join('\n');
-  source = source.slice(0, oldStart) + handler + source.slice(oldEnd + 'mountPhotoMap();};'.length);
+  source = source.slice(0, oldStart) + handler + '\n\n' + source.slice(oldEnd);
+  // TZ37 also inherited an on-focus showPicker on the city dropdown;
+  // native select already opens on first click and must not re-enter itself.
+  const focusStart = source.indexOf("geoCity.addEventListener('focus'");
+  const focusEnd = focusStart < 0 ? -1 : source.indexOf('geoCity.onchange', focusStart);
+  if (focusStart < 0 || focusEnd < 0 || focusEnd - focusStart > 700 ||
+      !source.slice(focusStart, focusEnd).includes('geoCity.showPicker?.()'))
+    throw Error('TZ38_CITY_FOCUS_SHOWPICKER_ANCHOR_MISSING');
+  source = source.slice(0, focusStart) + source.slice(focusEnd);
   // No native picker may be opened in a pointerdown handler for GEO.
   if (source.includes("for (const pickerId of ['geo-country', 'geo-city'])"))
     throw Error('TZ38_UNSAFE_NATIVE_PICKER_RETAINED');
