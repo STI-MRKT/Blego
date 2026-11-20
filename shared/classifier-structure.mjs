@@ -42,7 +42,9 @@ export function inferRecordStructure(
   const owners = [...new Set(recognized.flatMap((r) => r.cookie?.owners || []))];
   const ownerMatches =
     owners.length === 1
-      ? rawIds.filter((i) => (recognized[i].key === 'accountId' ? recognized[i].value : values[i]) === owners[0])
+      ? rawIds.filter(
+          (i) => (recognized[i].key === 'accountId' ? recognized[i].value : values[i]) === owners[0]
+        )
       : [];
   const ids = ownerMatches.length === 1 ? ownerMatches : rawIds;
   const names = values.flatMap((value, i) =>
