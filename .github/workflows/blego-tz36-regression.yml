@@ -1,0 +1,22 @@
+name: BLEGO TZ36 targeted order layouts regression
+
+on:
+  push:
+    branches: [codex/blego-tz36-two-order-layouts-20261120]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-order-layouts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: node --test tests/unit/tz36-order-layouts.test.cjs
