@@ -80,6 +80,7 @@ test('TZ36 mixed file: 1 pipe row and 4 double-colon rows each have two distinct
     assert.equal(record.data.accountId, id(n + 1));
     assert.equal(record.data.password, example.fbPass);
     assert.equal(record.data.emailPassword, example.mailPass);
+    assert.equal(record.extended.twoFactorCode, '');
     assert.equal(record.sourceRecord, example.line);
     assert.ok(record.data.cookies);
   }
@@ -103,6 +104,7 @@ test('TZ36 pipe receipts: mail:password cell is split, one owner remains per row
     assert.equal(record.data.accountId, id(n + 1));
     assert.equal(record.data.password, example.fbPass);
     assert.equal(record.data.emailPassword, example.mailPass);
+    assert.equal(record.extended.twoFactorCode, 'ABCD EFGH IJKL MNOP QRST UVWX YZAB CDEF');
     assert.equal(record.sourceRecord, example.line);
     assert.ok(record.data.cookies);
   }
