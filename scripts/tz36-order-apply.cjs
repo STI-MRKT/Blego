@@ -120,4 +120,18 @@ const cssPath='src/css/tz24.css';
 if (!fs.existsSync(cssPath)) throw Error('TZ36_TZ24_CSS_NOT_RESTORED');
 const current = fs.readFileSync(cssPath, 'utf8');
 if (!current.includes('TZ36: only the classifier')) fs.appendFileSync(cssPath, css);
+const packagePath = 'package.json';
+const lockPath = 'package-lock.json';
+const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
+if (pkg.version === '1.4.18') {
+  pkg.version = '1.4.19';
+  lock.version = '1.4.19';
+  if (lock.packages?.['']) lock.packages[''].version = '1.4.19';
+  fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + '\n');
+  fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n');
+} else if (pkg.version !== '1.4.19') {
+  throw Error('TZ36_EXPECTED_VERSION_1_4_18_GOT_' + pkg.version);
+}
+
 console.log('TZ36 UI: toolbar hidden, header icons visible, wider column spacing and masked 2FA field');
