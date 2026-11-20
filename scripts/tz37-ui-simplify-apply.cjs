@@ -36,7 +36,7 @@ edit('src/js/ui/import.js',source=>{
   source=source.slice(0,start)+source.slice(end+endKey.length);
   for(const old of ['id="classifier-sort"','id="classifier-warnings-only"','data-action="import-copy"','id="archive-include-cookies"','id="classifier-options"'])
     if(source.includes(old))throw Error('TZ37_STALE_UI_'+old);
-  return source;
+  return source.replace(/[ \t]+$/gm, '');
 });
 
 edit('src/js/ui/history.js',source=>once(
