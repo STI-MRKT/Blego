@@ -234,5 +234,18 @@ jobs:
           test "$(node -p "require('./package.json').version")" = '1.4.18'
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
+      - name: Inspect staged UI wiring (source code only)
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          for (const file of ['src/js/ui/import.js', 'src/js/main.js']) {
+            const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/);
+            for (let i = 0; i < lines.length; i++) {
+              if (/UI_FIELDS|classifier-copy-column|classifier-copy-cell|classifier-reveal|classifierRevealed/.test(lines[i])) {
+                console.log(file, i + 1, lines.slice(Math.max(0, i - 2), i + 5).join('\n').slice(0, 1100));
+              }
+            }
+          }
+          NODE
       - name: Two supplied order layout regressions
         run: node --test tests/unit/tz36-order-layouts.test.cjs
