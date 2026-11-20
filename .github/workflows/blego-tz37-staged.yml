@@ -3,7 +3,7 @@ name: BLEGO TZ37 staged UI compatibility
 on:
   push:
     branches: [codex/blego-tz37-ui-simplification-20261120]
-    paths: ['.github/workflows/blego-tz37-staged.yml', 'scripts/tz37-ui-simplify-apply.cjs', 'tests/ui/tz37-ui-simplification.test.cjs']
+    paths: ['.github/workflows/blego-tz37-staged.yml', 'scripts/tz37-ui-simplify-apply.cjs', 'tests/ui/tz37-ui-simplification.test.cjs', 'tests/ui/tz31-column-copy.test.cjs', 'tests/ui/tz35-column-alignment.test.cjs', 'tests/ui/photos-geo.test.cjs']
   workflow_dispatch:
 
 permissions:
@@ -284,4 +284,4 @@ jobs:
         run: |
           npm run prepare:metadata
           node node_modules/electron/install.js
-          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/tz37-ui-simplification.test.cjs
+          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/tz31-column-copy.test.cjs tests/ui/tz35-column-alignment.test.cjs tests/ui/photos-geo.test.cjs tests/ui/tz37-ui-simplification.test.cjs
