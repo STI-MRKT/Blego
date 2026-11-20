@@ -280,3 +280,8 @@ jobs:
         run: |
           node --test tests/unit/classifier.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs tests/unit/tz35-missing-name.test.cjs tests/unit/tz36-order-layouts.test.cjs
           node --test tests/integration/classification-contract.test.cjs
+      - name: Focused Electron GUI on synthesized data
+        run: |
+          npm run prepare:metadata
+          node node_modules/electron/install.js
+          xvfb-run -a env BLEGO_HEADLESS=1 node --test --test-concurrency=1 tests/ui/tz37-ui-simplification.test.cjs
