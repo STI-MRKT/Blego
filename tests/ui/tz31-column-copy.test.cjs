@@ -58,8 +58,11 @@ test('TZ31: explicit whole-column copy collects all 63 rows; search, order and b
   await expectClipboard(records.map((r) => r.fullName).join('\n'));
   await page.locator('#classifier-query').fill('Group A Person');
   await page.locator('[data-action="classifier-filter"]').click();
-  await page.getByText('Все 7 записей с учётом фильтра, включая другие страницы').waitFor();
   const selected = records.filter((r) => r.fullName.includes('Group A Person'));
+  await page.waitForFunction(
+    (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
+    selected.length
+  );
   await page.locator('#classifier-sort').selectOption('descending');
   await columnButton('fullName').click();
   await expectClipboard(selected.map((r) => r.fullName).reverse().join('\n'));
