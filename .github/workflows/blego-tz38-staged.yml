@@ -274,6 +274,16 @@ jobs:
           if(!photos.includes('geo-city-catalog'))throw Error('TZ37_CITY_CATALOG_MISSING');
           if(!photos.includes('id="geo-city"'))throw Error('TZ37_GEO_CITY_MISSING');
           NODE
+      - name: Inspect reconstructed country handler source
+        run: |
+          node - <<'NODE'
+          const source = require('node:fs').readFileSync('src/js/main.js','utf8');
+          const anchor = source.indexOf("const geoCountry = document.getElementById('geo-country')");
+          if (anchor < 0) throw Error('COUNTRY_HANDLER_MISSING');
+          console.log('COUNTRY_HANDLER_BEGIN');
+          console.log(source.slice(anchor, anchor + 2200));
+          console.log('COUNTRY_HANDLER_END');
+          NODE
       - name: TZ38 native country picker hotfix
         run: |
           node scripts/tz38-geo-country-hotfix.cjs
