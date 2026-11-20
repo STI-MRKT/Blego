@@ -1,0 +1,24 @@
+name: BLEGO TZ34 dual-password classifier regression
+
+on:
+  push:
+    branches: [codex/blego-tz34-dual-password-receipt-20261120]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  classifier-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: node --test tests/unit/tz34-dual-password-receipt.test.cjs
+      - run: npm run test:unit
+      - run: node --test tests/integration/classification-contract.test.cjs tests/integration/classifier-production.test.cjs
