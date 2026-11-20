@@ -3,7 +3,7 @@ name: BLEGO TZ37 simplified classifier, archive Cookie and city GEO macOS ARM64 
 on:
   push:
     branches: [codex/blego-tz37-ui-simplification-20261120]
-    paths: ['.github/workflows/blego-tz37-candidate.yml', 'scripts/tz37-ui-simplify-apply.cjs', 'tests/ui/tz37-ui-simplification.test.cjs']
+    paths: ['.github/workflows/blego-tz37-candidate.yml', 'scripts/tz37-ui-simplify-apply.cjs', 'tests/ui/tz37-ui-simplification.test.cjs', 'tests/ui/tz31-column-copy.test.cjs', 'tests/ui/tz35-column-alignment.test.cjs', 'tests/ui/photos-geo.test.cjs']
   workflow_dispatch:
 
 permissions:
