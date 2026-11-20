@@ -33,7 +33,18 @@ export function inferRecordStructure(
   const looseIds = values.flatMap((value, i) =>
     !typed(recognized[i]) && uidLike.test(value) ? [i] : []
   );
-  const ids = [...new Set([...labelledIds, ...looseIds])];
+  const rawIds = [...new Set([...labelledIds, ...looseIds])];
+  // In order receipts a single account may also carry several 13–20 digit
+  // business-profile IDs. They are not additional account identities. If the
+  // record contains one Cookie c_user owner and exactly one matching ID cell,
+  // use that verified identity when validating credential structure.
+  // Do not infer an identity when Cookie is absent, ambiguous or unmatched.
+  const owners = [...new Set(recognized.flatMap((r) => r.cookie?.owners || []))];
+  const ownerMatches =
+    owners.length === 1
+      ? rawIds.filter((i) => (recognized[i].key === 'accountId' ? recognized[i].value : values[i]) === owners[0])
+      : [];
+  const ids = ownerMatches.length === 1 ? ownerMatches : rawIds;
   const names = values.flatMap((value, i) =>
     (recognized[i].key === 'fullName' &&
       !recognized[i].invalid &&
