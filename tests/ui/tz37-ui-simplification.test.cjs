@@ -122,11 +122,10 @@ test('TZ37 Photos hide exact GPS and altitude editors; GEO city/catalog open wit
   assert.ok((await catalog.innerText()).includes('Import'));
   assert.ok(!(await catalog.innerText()).includes('City of London'));
   const city = page.locator('#geo-city');
-  await city.evaluate((el) => {
-    el.showPicker = () => { el.dataset.firstClick = 'yes'; };
-  });
+  assert.equal(await city.evaluate((el) => el.tagName), 'SELECT');
   await city.click();
-  assert.equal(await city.getAttribute('data-first-click'), 'yes');
+  assert.equal(await city.isVisible(), true);
+  assert.equal(await page.locator('#geo-country').evaluate((el) => el.tagName), 'SELECT');
   const padding = await city.evaluate((el) => Number.parseFloat(getComputedStyle(el).paddingLeft));
   assert.ok(padding >= 12);
 });
