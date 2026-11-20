@@ -57,12 +57,21 @@ export function inferRecordStructure(
   );
   // Strong, independent anchors prevent guessing passwords from prose or
   // unrelated text. A damaged/mixed account or vague role fails closed.
+  // Some verified order receipts omit the name entirely. In that case,
+  // require a matching Cookie owner plus the same email appearing twice in
+  // this record before inferring any unlabelled credential.
+  const verifiedReceiptWithoutName =
+    names.length === 0 &&
+    owners.length === 1 &&
+    ownerMatches.length === 1 &&
+    emails.length === 2 &&
+    recognized[emails[0]].value.toLowerCase() === recognized[emails[1]].value.toLowerCase();
   const anchored =
     emails.length >= 1 &&
     emails.length <= 2 &&
     dates.length === 1 &&
     ids.length === 1 &&
-    names.length === 1;
+    (names.length === 1 || verifiedReceiptWithoutName);
   // Promote the second email only when it is tied to a coherent record.
   // Long account IDs are sufficient when DOB/name are absent; complete
   // date + ID + name anchors also qualify. Short IDs in fragmented prose
@@ -105,7 +114,7 @@ export function inferRecordStructure(
   if (!anchored || entries.length < 5) return roles;
   if (looseIds.length === 1) roles.set(looseIds[0], 'accountId');
   roles.set(dates[0], 'birthDate');
-  roles.set(names[0], 'fullName');
+  if (names.length === 1) roles.set(names[0], 'fullName');
   const possibleMail = values.flatMap((value, i) =>
     !typed(recognized[i]) && mailPassLike.test(value) ? [i] : []
   );
