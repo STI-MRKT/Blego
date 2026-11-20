@@ -104,17 +104,12 @@ edit('tests/unit/tz19-adaptive-ui.test.cjs',source=>{
     "test('TZ19 classifier exposes explicit pattern memory controls without storing source values in UI'",
     "test('TZ37 hides advanced pattern-memory controls but preserves safe backend layouts'",
     'TZ19_TEST_TITLE');
-  const old=[
-    '    assert.match(html, /id="classifier-remember-layout"/);',
-    '    assert.doesNotMatch(html, /id="classifier-remember-layout" checked/);',
-    '    assert.match(html, /Сохранено схем: 2/);',
-    '    assert.match(html, /data-action="classifier-forget-layouts"/);',
-    '    assert.match(html, /Пароли, Cookie, токены и содержимое TXT в шаблоны не записываются/);',
-    '    state.classifierOptions.rememberLayout = true;',
-    '    html = importHTML();',
-    '    assert.match(html, /id="classifier-remember-layout" checked/);'
-  ].join('\n');
+  const start=source.indexOf('    let html = importHTML();');
+  const end=start<0?-1:source.indexOf('  } finally {',start);
+  if(start<0 || end<0 || source.indexOf('    let html = importHTML();',start+1)!==-1)
+    throw Error('TZ37_TZ19_TEST_BODY_MISSING');
   const updated=[
+    '    let html = importHTML();',
     '    assert.doesNotMatch(html, /id="classifier-remember-layout"/);',
     '    assert.doesNotMatch(html, /data-action="classifier-forget-layouts"/);',
     '    assert.doesNotMatch(html, /id="classifier-options"/);',
@@ -124,7 +119,7 @@ edit('tests/unit/tz19-adaptive-ui.test.cjs',source=>{
     '    html = importHTML();',
     '    assert.doesNotMatch(html, /id="classifier-remember-layout"/);'
   ].join('\n');
-  return once(source,old,updated,'TZ19_MEMORY_PANEL_HIDDEN');
+  return source.slice(0,start)+updated+'\n'+source.slice(end);
 });
 
 const cssPath='src/css/tz24.css';
