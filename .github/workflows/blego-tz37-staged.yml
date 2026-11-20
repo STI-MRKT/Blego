@@ -3,7 +3,7 @@ name: BLEGO TZ37 staged UI compatibility
 on:
   push:
     branches: [codex/blego-tz37-ui-simplification-20261120]
-    paths: ['.github/workflows/blego-tz37-staged.yml', 'scripts/tz37-ui-simplify-apply.cjs']
+    paths: ['.github/workflows/blego-tz37-staged.yml', 'scripts/tz37-ui-simplify-apply.cjs', 'tests/ui/tz37-ui-simplification.test.cjs']
   workflow_dispatch:
 
 permissions:
