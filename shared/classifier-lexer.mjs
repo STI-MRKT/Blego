@@ -292,17 +292,17 @@ export function structuredRecords(text, options = {}) {
     const mailboxTuple =
       c === ':' &&
       !text.startsWith('::', i) &&
-      /^[^\\s@;|:]+@[^\\s@;|:]+\\.[^\\s@;|:]+$/u.test(current.trim()) &&
-      /^(?=.{7,128}$)[^\\s;|:]+![0-9]{3,5}$/u.test(mailSecret) &&
+      /^[^\s@;|:]+@[^\s@;|:]+\.[^\s@;|:]+$/u.test(current.trim()) &&
+      /^(?=.{7,128}$)[^\s;|:]+![0-9]{3,5}$/u.test(mailSecret) &&
       mailPipe >= 0 &&
-      /^\\s*\\[\\s*\\{/u.test(afterMailColon.slice(mailPipe + 1));
+      /^\s*\[\s*\{/u.test(afterMailColon.slice(mailPipe + 1));
     const extra =
       c === ':' &&
       (!text.startsWith('::', i) || header?.delimiter === ':') &&
       (mailboxTuple ||
         (nextLabel &&
-        !fieldForHeader(current.trim()) &&
-        (!composite || /\s/.test(text[i - 1] || '') || completedFacebookId || completedUA)) ||
+          !fieldForHeader(current.trim()) &&
+          (!composite || /\s/.test(text[i - 1] || '') || completedFacebookId || completedUA)) ||
         splitBeforeUnknownCaption ||
         (!composite && (colonSchema || colonTuple || header?.delimiter === ':')))
         ? ':'
