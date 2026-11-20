@@ -73,13 +73,10 @@ test(
       (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
       filtered.length
     );
-    await page.locator('#classifier-sort').selectOption('descending');
+    assert.equal(await page.locator('#classifier-sort').count(), 0);
     await columnButton('backupEmail').click();
     await clipboardEquals(
-      filtered
-        .map((row) => row.backupEmail)
-        .reverse()
-        .join('\n')
+      filtered.map((row) => row.backupEmail).join('\n')
     );
   }
 );
