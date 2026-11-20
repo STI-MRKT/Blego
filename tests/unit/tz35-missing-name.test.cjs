@@ -19,7 +19,10 @@ async function classify(lines) {
   return classifyRecords(parsed);
 }
 
-function syntheticRow(index, { missingName = false, wrongOwner = false, differentEmail = false } = {}) {
+function syntheticRow(
+  index,
+  { missingName = false, wrongOwner = false, differentEmail = false } = {}
+) {
   const id = '615000000' + String(index).padStart(5, '0');
   const email = 'receipt' + index + '@example.test';
   const accountPassword = 'SyntheticFb' + index + 'A7';
@@ -66,7 +69,9 @@ function syntheticRow(index, { missingName = false, wrongOwner = false, differen
 }
 
 test('TZ35: 14 French receipt accounts retain two passwords when one record has no FIO', async () => {
-  const fixtures = Array.from({ length: 14 }, (_, i) => syntheticRow(i + 1, { missingName: i === 2 }));
+  const fixtures = Array.from({ length: 14 }, (_, i) =>
+    syntheticRow(i + 1, { missingName: i === 2 })
+  );
   const output = await classify(fixtures.map((item) => item.row));
   assert.equal(output.records.length, fixtures.length);
   for (let i = 0; i < fixtures.length; i++) {
