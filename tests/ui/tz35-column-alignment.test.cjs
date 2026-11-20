@@ -69,9 +69,10 @@ test(
     await page.locator('#classifier-query').fill('Group A Person');
     await page.locator('[data-action="classifier-filter"]').click();
     const filtered = records.filter((row) => row.fullName.includes('Group A Person'));
-    await page
-      .getByText(`Все ${filtered.length} записей с учётом фильтра, включая другие страницы`)
-      .waitFor();
+    await page.waitForFunction(
+      (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
+      filtered.length
+    );
     await page.locator('#classifier-sort').selectOption('descending');
     await columnButton('backupEmail').click();
     await clipboardEquals(
