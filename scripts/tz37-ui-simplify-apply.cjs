@@ -76,9 +76,8 @@ edit('src/js/ui/photos.js',source=>{
   source=once(source,actionMatch,
     '$'+'{'+"field === 'gps' ? actionOptions().replace('<option value=\"set\">Edit</option>', '') : actionOptions()}",
     'DISABLE_MANUAL_GPS_ACTION');
-  source=once(source,
-    /(data-action="geo-generate"[^>]*>[^<]*<\/button>)<p class="sub">[^<]*<\/p>/,
-    '$1','REMOVE_GEO_ALTITUDE_COPY');
+  // Remove an altitude-specific explanation if this localized build includes one.
+  source=source.replace(/<p class="sub">[^<]*(?:altitude|высота)[^<]*<\/p>/iu,'');
   return source;
 });
 
