@@ -286,7 +286,7 @@ jobs:
           sources=sorted({os.fsdecode(item) for item in tracked if item})
           rootname='BLEGO-1.4.21-source'
           count=0
-          with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True) as archive:
+          with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6,allowZip64=True,strict_timestamps=False) as archive:
             for name in sources:
               relative=pathlib.PurePosixPath(name)
               if any(part in excluded for part in relative.parts):
