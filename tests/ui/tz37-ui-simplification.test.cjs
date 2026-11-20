@@ -46,6 +46,11 @@ test('TZ37 classifier has only search/export/actions, archives Cookies by defaul
   page.on('crash', () => console.log('TZ37_RENDERER_CRASH'));
   page.on('close', () => console.log('TZ37_WINDOW_CLOSED'));
   app.process().on('exit', (code, signal) => console.log('TZ37_ELECTRON_EXIT', code, signal));
+  app.process().stderr?.on('data', (part) => {
+    const message = String(part);
+    if (/error|fatal|crash|abort|trace|exception|sqlite|stack/i.test(message))
+      console.log('TZ37_ELECTRON_STDERR', message.slice(0, 1800));
+  });
   await page.locator('[data-view="import"]').click();
   await page.locator('#file-input').setInputFiles({
     name: 'synthetic-cookie.json', mimeType: 'application/json',
