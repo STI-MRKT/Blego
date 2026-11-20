@@ -6,7 +6,7 @@ const path = require('node:path');
 const { _electron } = require('playwright');
 const { openStore } = require('../../electron/local/store.cjs');
 
-test('TZ31: explicit whole-column copy collects all 63 rows; search, order and backup email work', { timeout: 90000 }, async (t) => {
+test('TZ37: header-copy collects all 63 rows; filtered and original order are preserved', { timeout: 90000 }, async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-tz31-column-'));
   const data = path.join(root, 'data');
   const store = await openStore(data);
@@ -63,11 +63,11 @@ test('TZ31: explicit whole-column copy collects all 63 rows; search, order and b
     (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
     selected.length
   );
-  await page.locator('#classifier-sort').selectOption('descending');
+  assert.equal(await page.locator('#classifier-sort').count(), 0);
   await columnButton('fullName').click();
-  await expectClipboard(selected.map((r) => r.fullName).reverse().join('\n'));
+  await expectClipboard(selected.map((r) => r.fullName).join('\n'));
   await page.locator('#classifier-query').fill('');
   await page.locator('[data-action="classifier-filter"]').click();
   await columnButton('backupEmail').click();
-  await expectClipboard(records.map((r) => r.backupEmail).reverse().join('\n'));
+  await expectClipboard(records.map((r) => r.backupEmail).join('\n'));
 });
