@@ -232,6 +232,24 @@ jobs:
           node --check src/js/main.js
           node --check scripts/tz35-release-apply.cjs
           test "$(node -p "require('./package.json').version")" = '1.4.18'
+      - name: Apply TZ36 parser and classifier presentation updates
+        run: |
+          node scripts/tz36-order-apply.cjs
+          node --check shared/classifier-structure.mjs
+          node --check shared/classifier-lexer.mjs
+          node --check src/js/main.js
+          node --check src/js/ui/import.js
+          node --check scripts/tz36-order-apply.cjs
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const ui=fs.readFileSync('src/js/ui/import.js','utf8');
+          const css=fs.readFileSync('src/css/tz24.css','utf8');
+          const app=fs.readFileSync('src/js/main.js','utf8');
+          if(ui.includes('classifier-bulk-copy') || ui.includes('classifier-copy-field'))throw Error('OLD_BULK_BAR_PRESENT');
+          if(!ui.includes('classifier-2fa-reveal') || !ui.includes("key:'twoFactorCode'"))throw Error('2FA_COLUMN_MISSING');
+          if(!app.includes("'backupEmail','twoFactorCode'"))throw Error('2FA_BULK_COPY_MISSING');
+          if(!css.includes('TZ36: only the classifier'))throw Error('CLASSIFIER_SPACING_MISSING');
+          NODE
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
       - name: Inspect staged UI wiring (source code only)
