@@ -35,9 +35,8 @@ test(
       const { state } = await import('/js/state.js');
       return state.photos.length === 3 && !state.imagesBusy;
     });
-    await page.locator('#geo-country').fill('FR');
-    await page.locator('#geo-country').press('Tab');
-    await page.locator('#geo-city-query').fill('Paris');
+    await page.locator('#geo-country').selectOption('FR');
+    assert.equal(await page.locator('#geo-city-query').count(), 0);
     await page.locator('#geo-city').selectOption('osm:relation:71525');
     await page.locator('[data-action="geo-generate"]').click();
     await waitForAsync(page, async () => {

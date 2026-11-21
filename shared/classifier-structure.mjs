@@ -33,7 +33,20 @@ export function inferRecordStructure(
   const looseIds = values.flatMap((value, i) =>
     !typed(recognized[i]) && uidLike.test(value) ? [i] : []
   );
-  const ids = [...new Set([...labelledIds, ...looseIds])];
+  const rawIds = [...new Set([...labelledIds, ...looseIds])];
+  // In order receipts a single account may also carry several 13–20 digit
+  // business-profile IDs. They are not additional account identities. If the
+  // record contains one Cookie c_user owner and exactly one matching ID cell,
+  // use that verified identity when validating credential structure.
+  // Do not infer an identity when Cookie is absent, ambiguous or unmatched.
+  const owners = [...new Set(recognized.flatMap((r) => r.cookie?.owners || []))];
+  const ownerMatches =
+    owners.length === 1
+      ? rawIds.filter(
+          (i) => (recognized[i].key === 'accountId' ? recognized[i].value : values[i]) === owners[0]
+        )
+      : [];
+  const ids = ownerMatches.length === 1 ? ownerMatches : rawIds;
   const names = values.flatMap((value, i) =>
     (recognized[i].key === 'fullName' &&
       !recognized[i].invalid &&
@@ -44,12 +57,21 @@ export function inferRecordStructure(
   );
   // Strong, independent anchors prevent guessing passwords from prose or
   // unrelated text. A damaged/mixed account or vague role fails closed.
+  // Some verified order receipts omit the name entirely. In that case,
+  // require a matching Cookie owner plus the same email appearing twice in
+  // this record before inferring any unlabelled credential.
+  const verifiedReceiptWithoutName =
+    names.length === 0 &&
+    owners.length === 1 &&
+    ownerMatches.length === 1 &&
+    emails.length === 2 &&
+    recognized[emails[0]].value.toLowerCase() === recognized[emails[1]].value.toLowerCase();
   const anchored =
     emails.length >= 1 &&
     emails.length <= 2 &&
     dates.length === 1 &&
     ids.length === 1 &&
-    names.length === 1;
+    (names.length === 1 || verifiedReceiptWithoutName);
   // Promote the second email only when it is tied to a coherent record.
   // Long account IDs are sufficient when DOB/name are absent; complete
   // date + ID + name anchors also qualify. Short IDs in fragmented prose
@@ -89,10 +111,72 @@ export function inferRecordStructure(
     roles.set(1, 'password');
     if (!typed(recognized[2])) roles.set(2, 'accountId');
   }
+  // Position-only credential inference is allowed for these two validated
+  // pipe-order layouts, not for arbitrary unlabelled fields. A profile ID
+  // must agree with the c_user owner from Cookie in the SAME record.
+  const ownedProfile = (profileIndex, cookieIndex) =>
+    owners.length === 1 &&
+    recognized[profileIndex]?.profile?.id === owners[0] &&
+    recognized[cookieIndex]?.cookie?.owners?.length === 1 &&
+    recognized[cookieIndex].cookie.owners[0] === owners[0];
+  const pipePrefix =
+    entries.length >= 9 &&
+    recognized[0]?.key === 'email' &&
+    !typed(recognized[1]) &&
+    passwordShape(values[1]) &&
+    recognized[4]?.key === 'userAgent';
+  const tokenAt = (index) => /^EAAB[A-Za-z0-9_-]{12,}$/u.test(values[index]);
+
+  // FB email | FB password | mail password | token | UA | profile |
+  // Cookie | DOB | name | optional metadata
+  if (
+    entries.length >= 9 &&
+    pipePrefix &&
+    emails.length === 1 &&
+    dates.length === 1 &&
+    dates[0] === 7 &&
+    !typed(recognized[2]) &&
+    mailPassLike.test(values[2]) &&
+    tokenAt(3) &&
+    ownedProfile(5, 6)
+  ) {
+    roles.set(1, 'password');
+    roles.set(2, 'emailPassword');
+    roles.set(7, 'birthDate');
+  }
+
+  // FB email | FB password | DOB | profile | UA | token |
+  // mail email | mail password | Cookie | grouped 2FA | optional blanks
+  if (
+    entries.length >= 9 &&
+    pipePrefix &&
+    emails.length === 2 &&
+    emails[0] === 0 &&
+    emails[1] === 6 &&
+    dates.length === 1 &&
+    dates[0] === 2 &&
+    !typed(recognized[7]) &&
+    mailPassLike.test(values[7]) &&
+    tokenAt(5) &&
+    ownedProfile(3, 8)
+  ) {
+    roles.set(1, 'password');
+    roles.set(2, 'birthDate');
+    roles.set(6, 'backupEmail');
+    roles.set(7, 'emailPassword');
+    // A grouped 32-character base32 secret is a 2FA key, not a password.
+    // Never interpret a 2FA URL, cookie or arbitrary opaque field as this key.
+    if (
+      entries.length > 9 &&
+      !typed(recognized[9]) &&
+      /^(?:[A-Z2-7]{4}\s+){7}[A-Z2-7]{4}$/iu.test(values[9])
+    ) roles.set(9, 'twoFactorCode');
+  }
+
   if (!anchored || entries.length < 5) return roles;
   if (looseIds.length === 1) roles.set(looseIds[0], 'accountId');
   roles.set(dates[0], 'birthDate');
-  roles.set(names[0], 'fullName');
+  if (names.length === 1) roles.set(names[0], 'fullName');
   const possibleMail = values.flatMap((value, i) =>
     !typed(recognized[i]) && mailPassLike.test(value) ? [i] : []
   );

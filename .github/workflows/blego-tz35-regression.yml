@@ -1,0 +1,25 @@
+name: BLEGO TZ35 classifier missing FIO and blank-safe column copy
+
+on:
+  push:
+    branches: [codex/blego-tz35-missing-fio-and-copy-alignment-20261120]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx prettier --check shared/classifier-structure.mjs scripts/tz35-release-apply.cjs tests/unit/tz35-missing-name.test.cjs tests/ui/tz35-column-alignment.test.cjs
+      - run: node --test tests/unit/tz35-missing-name.test.cjs tests/unit/tz34-dual-password-receipt.test.cjs
+      - run: node --test tests/unit/classifier.test.cjs tests/unit/classifier-multiformat-qa.test.cjs tests/unit/classifier-password-geo-v146.test.cjs
+      - run: node --test tests/integration/classification-contract.test.cjs tests/integration/classifier-production.test.cjs

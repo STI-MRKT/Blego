@@ -29,7 +29,7 @@
       "        const rows = Array.isArray(page.records) ? page.records : [];",
       "        const full = await Promise.all(rows.map((row) => window.blego.importCell({ operationId, recordId: row.id, field })));",
       "        if (!unchanged()) return;",
-      "        for (const value of full) if (value !== undefined && value !== null && String(value).length) values.push(String(value));",
+      "        for (const value of full) values.push(value == null ? '' : String(value));",
       "        if (!rows.length || offset + rows.length >= page.filteredTotal) break;",
       "      }",
       "      if (!values.length) toast('No values in this column');",

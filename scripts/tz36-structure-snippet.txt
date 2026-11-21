@@ -1,0 +1,61 @@
+  // Position-only credential inference is allowed for these two validated
+  // pipe-order layouts, not for arbitrary unlabelled fields. A profile ID
+  // must agree with the c_user owner from Cookie in the SAME record.
+  const ownedProfile = (profileIndex, cookieIndex) =>
+    owners.length === 1 &&
+    recognized[profileIndex]?.profile?.id === owners[0] &&
+    recognized[cookieIndex]?.cookie?.owners?.length === 1 &&
+    recognized[cookieIndex].cookie.owners[0] === owners[0];
+  const pipePrefix =
+    entries.length >= 9 &&
+    recognized[0]?.key === 'email' &&
+    !typed(recognized[1]) &&
+    passwordShape(values[1]) &&
+    recognized[4]?.key === 'userAgent';
+  const tokenAt = (index) => /^EAAB[A-Za-z0-9_-]{12,}$/u.test(values[index]);
+
+  // FB email | FB password | mail password | token | UA | profile |
+  // Cookie | DOB | name | optional metadata
+  if (
+    entries.length >= 9 &&
+    pipePrefix &&
+    emails.length === 1 &&
+    dates.length === 1 &&
+    dates[0] === 7 &&
+    !typed(recognized[2]) &&
+    mailPassLike.test(values[2]) &&
+    tokenAt(3) &&
+    ownedProfile(5, 6)
+  ) {
+    roles.set(1, 'password');
+    roles.set(2, 'emailPassword');
+    roles.set(7, 'birthDate');
+  }
+
+  // FB email | FB password | DOB | profile | UA | token |
+  // mail email | mail password | Cookie | grouped 2FA | optional blanks
+  if (
+    entries.length >= 9 &&
+    pipePrefix &&
+    emails.length === 2 &&
+    emails[0] === 0 &&
+    emails[1] === 6 &&
+    dates.length === 1 &&
+    dates[0] === 2 &&
+    !typed(recognized[7]) &&
+    mailPassLike.test(values[7]) &&
+    tokenAt(5) &&
+    ownedProfile(3, 8)
+  ) {
+    roles.set(1, 'password');
+    roles.set(2, 'birthDate');
+    roles.set(6, 'backupEmail');
+    roles.set(7, 'emailPassword');
+    // A grouped 32-character base32 secret is a 2FA key, not a password.
+    // Never interpret a 2FA URL, cookie or arbitrary opaque field as this key.
+    if (
+      entries.length > 9 &&
+      !typed(recognized[9]) &&
+      /^(?:[A-Z2-7]{4}\s+){7}[A-Z2-7]{4}$/iu.test(values[9])
+    ) roles.set(9, 'twoFactorCode');
+  }

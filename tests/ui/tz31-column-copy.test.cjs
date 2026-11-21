@@ -6,7 +6,7 @@ const path = require('node:path');
 const { _electron } = require('playwright');
 const { openStore } = require('../../electron/local/store.cjs');
 
-test('TZ31: explicit whole-column copy collects all 63 rows; search, order and backup email work', { timeout: 90000 }, async (t) => {
+test('TZ37: header-copy collects all 63 rows; filtered and original order are preserved', { timeout: 90000 }, async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blego-tz31-column-'));
   const data = path.join(root, 'data');
   const store = await openStore(data);
@@ -39,10 +39,10 @@ test('TZ31: explicit whole-column copy collects all 63 rows; search, order and b
     buffer: Buffer.from(JSON.stringify(records))
   });
   await page.locator('[data-classifier-status]').waitFor();
-  const field = page.locator('#classifier-copy-field');
-  const copyButton = page.locator('#classifier-copy-column-button');
-  assert.equal(await field.count(), 1);
-  assert.equal(await copyButton.isVisible(), true);
+  const columnButton = (key) => page.locator('.classifier-table [data-action="classifier-copy-column"][data-field="' + key + '"]');
+  assert.equal(await page.locator('.classifier-bulk-copy').count(), 0);
+  assert.equal(await columnButton('fullName').isVisible(), true);
+  assert.equal(await columnButton('fullName').evaluate(el => getComputedStyle(el).opacity), '1');
   assert.ok((await page.locator('.classifier-table [data-action="classifier-copy-column"]').count()) > 1);
 
   async function expectClipboard(value) {
@@ -54,19 +54,20 @@ test('TZ31: explicit whole-column copy collects all 63 rows; search, order and b
     assert.equal(await app.evaluate(({clipboard}) => clipboard.readText()), value);
   }
 
-  await field.selectOption('fullName');
-  await copyButton.click();
+  await columnButton('fullName').click();
   await expectClipboard(records.map((r) => r.fullName).join('\n'));
   await page.locator('#classifier-query').fill('Group A Person');
   await page.locator('[data-action="classifier-filter"]').click();
-  await page.getByText('Все 7 записей с учётом фильтра, включая другие страницы').waitFor();
   const selected = records.filter((r) => r.fullName.includes('Group A Person'));
-  await page.locator('#classifier-sort').selectOption('descending');
-  await copyButton.click();
-  await expectClipboard(selected.map((r) => r.fullName).reverse().join('\n'));
+  await page.waitForFunction(
+    (count) => document.querySelectorAll('.classifier-table tbody tr').length === count,
+    selected.length
+  );
+  assert.equal(await page.locator('#classifier-sort').count(), 0);
+  await columnButton('fullName').click();
+  await expectClipboard(selected.map((r) => r.fullName).join('\n'));
   await page.locator('#classifier-query').fill('');
   await page.locator('[data-action="classifier-filter"]').click();
-  await field.selectOption('backupEmail');
-  await copyButton.click();
-  await expectClipboard(records.map((r) => r.backupEmail).reverse().join('\n'));
+  await columnButton('backupEmail').click();
+  await expectClipboard(records.map((r) => r.backupEmail).join('\n'));
 });
